@@ -1,5 +1,3 @@
-var bcrypt = require('bcrypt');
-
 module.exports = {
 	attributes: {
         first_name: {

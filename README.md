@@ -24,14 +24,14 @@ $ sudo apt-get install npm
 $ sudo apt-get install mongodb
 $ sudo apt-get install redis-server // can use mongo as a session store alternatively
 
-$ sudo npm install sails@beta -g
+$ sudo npm install -g sails
 $ sudo npm install -g bower
 $ sudo npm install -g grunt-cli
 ```
 
 ## Install Dependencies
 ```
-$ npm install ; bower install
+$ npm install
 ```
 
 ## Running The Application
@@ -83,6 +83,15 @@ $ sudo apt-get install libssl-dev
 $ sudo apt-get install build-essential
 $ sudo npm install -g node-gyp
 ```
+
+##### Windows Users
+1. install Python http://www.python.org/download/releases/2.7.5/
+2. Install Visual Studio 2012/13 Express (or other)
+3. Install Windows SDK (for Windows 7 / 8)
+4. Install Win64 OpenSSL v1.0.1g
+5. Then run `npm install bcrypt`
+
+[Source](http://stackoverflow.com/questions/14573488/error-compiling-bcrypt-node-js)
 
 #### npm errors
 If during the prerequisite installation phase you find that npm keeps failing to install packages, cleaning the npm cache may be of use:
