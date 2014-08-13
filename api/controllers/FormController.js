@@ -1,11 +1,10 @@
 /**
  * FormController
  *
- * @description :: Server-side logic for managing Forms
+ * @description :: Server-side logic for managing forms
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-// load universal HATEOAS JSON response and user model definition
 var Q = require('q');    
 
 module.exports = {
@@ -18,9 +17,13 @@ module.exports = {
             // fill promise array with question requests
             var promises = [];
             var questions = [];
-            _.map(form.questions, function(q_id) {
+            _.map(form.form_questions, function(q_id) {
                 promises.push(Question.findOne({id: q_id})
-                    .then(function (question) { return question; })
+                    .then(function (question) { 
+                        delete question.createdAt;
+                        delete question.updatedAt;
+                        return question; 
+                    })
                     .fail(function (err) { return next(err); })
                 );
             });
@@ -31,17 +34,15 @@ module.exports = {
                     questions.push(result.value);
                 });
             }).then(function() {
-                // render ejs view
-                res.view('forms/form.ejs', {
-                    form: form,
-                    questions: questions
-                });
+                delete form.createdAt;
+                delete form.updatedAt;
+                form.form_questions = questions;
+                res.json(form);
             });    
         });
     },
 
     create: function(req, res, next) {
-        var resp = api.init();
         var promises = [];
         var form_questions = req.param('form_questions');
         var question_ids = [];
@@ -57,7 +58,6 @@ module.exports = {
         // wait for question promises to resolve
         Q.allSettled(promises).then(function (results) {
             results.forEach(function (result) {
-                // console.log(result);
                 question_ids.push(result.value);
             });
         }).then(function() {
@@ -70,13 +70,24 @@ module.exports = {
 
             Form.create(form)
             .then(function (created) {
-                Form.publishCreate(created.toJSON());
-                res.json(resp);
+                res.json(form);
             }).fail(function (err) {
-                // console.log(err);
                 res.send(400, err);
             });
         });           
-    }
+    },
+
+    update: function(req, res, nex) {
+        var form = {
+            form_type: req.param('form_type'),
+            form_name: req.param('form_name'),
+            form_title: req.param('form_title'),
+            form_questions: req.param('form_questions')
+        };
+
+        // not implemented yet
+        console.log(form);
+        res.json(form);       
+    }  
 };
 
