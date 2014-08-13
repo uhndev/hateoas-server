@@ -1,0 +1,20 @@
+{
+    "Home": {
+        "Welcome": "Welcome to "   
+    },    
+    "Header": {
+        "MENU_ABOUT": "About",
+        "MENU_USERS": "Users",
+        "MENU_FORMS": "Forms",
+        "MENU_BUILDER": "Form Builder",
+        "MENU_EDIT_PROFILE": "Edit Profile",
+        "MENU_CHANGE_PASSWORD": "Change Password",
+        "MENU_SIGNOUT": "Signout",
+        "MENU_LANG": "Language",
+        "BUTTON_LANG_EN": "English",
+        "BUTTON_LANG_FR": "Francais",
+        "BUTTON_LANG_ES": "Español",
+        "BUTTON_LANG_DE": "Deutsch",
+        "BUTTON_LANG_CH": "中国"
+    }
+}

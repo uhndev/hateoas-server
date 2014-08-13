@@ -1,0 +1,20 @@
+{
+    "Home": {
+        "Welcome": "歡迎光臨 "
+    },
+    "Header": {        
+        "MENU_ABOUT": "關於",
+        "MENU_USERS": "用戶",
+        "MENU_FORMS": "表格",
+        "MENU_BUILDER": "表格建設者",
+        "MENU_EDIT_PROFILE": "編輯個人資料",
+        "MENU_CHANGE_PASSWORD": "更改密碼",
+        "MENU_SIGNOUT": "註銷",
+        "MENU_LANG": "語",        
+        "BUTTON_LANG_EN": "English",
+        "BUTTON_LANG_FR": "Francais",
+        "BUTTON_LANG_ES": "Español",
+        "BUTTON_LANG_DE": "Deutsch",
+        "BUTTON_LANG_CH": "中国"
+    }
+}
