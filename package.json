@@ -48,7 +48,7 @@
   "license": "MIT",
   "devDependencies": {
     "baconjs": "~0.7.20",
-    "connect-redis": "~2.0.0",
+    "connect-redis": "~1.4.5",
     "glob": "~4.0.5",
     "grunt-mocha-cov": "~0.3.0",
     "grunt-mocha-test": "~0.11.0",
