@@ -10,8 +10,6 @@
  * @param  {String|Object} options
  *          - pass string to render specified view
  */
-var api = require('../services/HateoasService.js');
-
 module.exports = function sendOK (data, options) {
   // Get access to `req`, `res`, & `sails`
   var res = this.res;
@@ -54,7 +52,7 @@ module.exports = function sendOK (data, options) {
      sendData(req, res, hateoasResponse);
    })
    .fail(function(err) {
-      sendData(req, res, data);
+     sendData(req, res, data);
    });
 
 };

@@ -35,14 +35,6 @@ module.exports = {
     },
     template: {
       type: 'json'
-    },
-    noMeta: function() {
-      // Prevent the client from ever seeing these attributes
-      var self = this.toObject();
-      delete self.id;
-      delete self.createdAt;
-      delete self.updatedAt;
-      return self;
     }
   }
 };
