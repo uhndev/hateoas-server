@@ -1,7 +1,6 @@
-var url = require('url');
-
 module.exports = {
   create: function(req, res, data) {
+    var url = require('url');
     var address = url.parse(Utils.Path.getFullUrl(req));
 
     /**
@@ -56,6 +55,7 @@ module.exports = {
      */
     function makeResponse(links) {
       var HATEOAS_VERSION = '0.1';
+      var modelName = Utils.Path.toModelName(address.pathname);
 
       var response = {
         version: HATEOAS_VERSION,
@@ -70,8 +70,7 @@ module.exports = {
       }
 
       response.template = _.merge(response.template || {}, 
-                            makeTemplate(Utils.Path
-                              .toModelName(address.pathname)))
+                            makeTemplate(modelName))
 
       return response;
     }

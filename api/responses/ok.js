@@ -11,6 +11,9 @@
  *          - pass string to render specified view
  */
 module.exports = function sendOK (data, options) {
+  var Q = require('q');
+  var url = require('url');
+
   // Get access to `req`, `res`, & `sails`
   var res = this.res;
   var req = this.req;
@@ -47,8 +50,31 @@ module.exports = function sendOK (data, options) {
       });
   }
 
+  /**
+   * Private method that fetches the result count for the current query.
+   */
+  function fetchResultCount(query, modelName) {
+    var models = sails.models;
+    if (_.has(models, modelName)) {
+      var model = models[modelName];
+      if (query.where) {
+        return model.count(JSON.parse(query.where));
+      } 
+      return model.count(query);
+    }
+    return Q.when(0);
+  }
+
+
   HateoasService.create(req, res, data)
    .then(function(hateoasResponse) {
+     var address = url.parse(Utils.Path.getFullUrl(req));
+     var modelName = Utils.Path.toModelName(address.pathname);
+     var query = Utils.Path.getWhere(req.query);
+     return [hateoasResponse, fetchResultCount(query, modelName)];
+   })
+   .spread(function(hateoasResponse, count) {
+     hateoasResponse.total = count;
      sendData(req, res, hateoasResponse);
    })
    .fail(function(err) {

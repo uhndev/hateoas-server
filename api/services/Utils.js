@@ -42,6 +42,15 @@ var self = {
 
     getFullUrl: function getFullUrl(req) {
       return req.protocol + '://' + req.get('host') + req.originalUrl;
+    },
+
+    getWhere: function getWhere(query) {
+      var clone = _.cloneDeep(query);
+      delete clone.limit;
+      delete clone.sort;
+      delete clone.skip;
+
+      return clone;
     }
 
   },
