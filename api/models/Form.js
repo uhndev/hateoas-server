@@ -28,6 +28,16 @@ module.exports = {
         form_questions: {
             type: 'array',
             required: true
+        },
+        // text to appear on submit button
+        form_submitText: {
+            type: 'text',
+            defaultsTo: 'Submit'
+        },
+        // text to appear on cancel button
+        form_cancelText: {
+            type: 'text',
+            defaultsTo: 'Cancel'
         }
     }
 };
