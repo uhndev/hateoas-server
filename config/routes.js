@@ -36,9 +36,6 @@ module.exports.routes = {
     view: 'homepage'
   },
 
-  'get /api/form/:id'         : 'FormController.getOne',
-  'post /api/form'            : 'FormController.create',
-
   'post /auth/login'          : 'AuthController.login',
   'post /auth/register'       : 'AuthController.register',
 
