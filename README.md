@@ -90,6 +90,12 @@ rm -Rf /usr/local/lib/node
 rm -Rf /usr/local/lib/npm
 rm -Rf $HOME/tmp
 ```
+## Manual Patching ##
+
+Searching non-string values does not work with Blueprint routing. Until the fix is release, one must manually patch Sails. Use the fix outlined at the following [link](https://github.com/pAlpha627/sails/commit/8090603f387b303f636a2570c665e1ae40164d79).
+
+Copy the changes to `node_modules/sails/lib/hooks/blueprints/actionUtils.js#tryToParseJSON`.
+
 ## License ##
 (The MIT License)
 
