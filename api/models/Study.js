@@ -1,5 +1,5 @@
 /**
-* Person.js
+* Study.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -8,20 +8,10 @@
 module.exports = {
 
   attributes: {
-    userName: {
+    name: {
       type: 'string',
-      required: true
-    },
-    firstName: {
-      type: 'string',
-      required: true
-    },
-    lastName: {
-      type: 'string',
-      required: true
-    },
-    dob: {
-      type: 'date'
+      required: true,
+      unique: true
     }
   }
 };

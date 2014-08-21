@@ -37,12 +37,19 @@ module.exports = {
                        models[modelName].definition);
         
         attributes = _.map(schema, function(definition, field) {
-            return {
+            var template = {
               'rel': field,
-              'type': definition.type,
+              'type': definition.model || definition.type,
               'prompt': Utils.String.camelCaseToText(field),
               'value': ''
             }
+
+            if (definition.model) {
+              template = _.merge(template, 
+                makeTemplate(definition.model));
+            }
+
+            return template;
         });
       }
       return { data: attributes };
@@ -69,8 +76,10 @@ module.exports = {
                      Utils.Model.removeSystemFields(links));
       }
 
-      response.template = _.merge(response.template || {}, 
+      if (_.isEmpty(response.template)) {
+        response.template = _.merge(response.template || {}, 
                             makeTemplate(modelName))
+      }
 
       return response;
     }
