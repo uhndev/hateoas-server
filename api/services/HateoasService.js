@@ -20,7 +20,7 @@ module.exports = {
         item.href = address.protocol + '//' + address.host 
                       + address.pathname + '/' + item.id;
       }
-      return Utils.Model.removeSystemFields(item);
+      return item;
     }
 
     /**
@@ -76,7 +76,7 @@ module.exports = {
                      Utils.Model.removeSystemFields(links));
       }
 
-      if (_.isEmpty(response.template)) {
+      if (!_.has(response.template, 'data')) {
         response.template = _.merge(response.template || {}, 
                             makeTemplate(modelName))
       }
