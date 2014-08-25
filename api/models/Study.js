@@ -1,18 +1,38 @@
 /**
 * Study.js
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
+* @description :: Study Model
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
 module.exports = {
-
-  attributes: {
-    name: {
-      type: 'string',
-      required: true,
-      unique: true
+    attributes: {
+        "name": {
+            type: 'string',
+            required: true,
+            unique: true,
+        },
+        "REB": {
+            type: 'string',
+            required: true,
+            unique: true,
+        },
+        "PI": {
+            type: 'integer',
+            required: true,
+        },
+        "coordinator": {
+            model: 'user',
+        },
+        "centers": {
+            type: 'array',
+            required: true,
+        },
+        "expiredAt": {
+            type: 'datetime',
+            required: true,
+            defaultsTo: 0,
+        },
     }
-  }
 };
 

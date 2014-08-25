@@ -1,5 +1,5 @@
 /**
-* Person.js
+* Encounter.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -8,22 +8,34 @@
 module.exports = {
 
     attributes: {
-        "firstname": {
+        "study": {
+            model: 'study',
+        },
+        "type": {
+            type: 'string',
+            required: true,
+            defaultsTo: null,
+        },
+        "name": {
+            type: 'string',
+            required: true,
+            defaultsTo: null,
+        },
+        "label": {
             type: 'string',
             required: true,
         },
-        "lastname": {
-            type: 'string',
+        "timeline": {
+            type: 'integer',
             required: true,
+            defaultsTo: 0,
         },
-        "prefix": {
-            type: 'string',
+        "forms": {
+            type: 'json',
         },
-        "gender": {
-            type: 'string',
-        },
-        "DOB": {
-            type: 'date',
+        "permissions": {
+            type: 'json',
+            required: true,
         },
         "expiredAt": {
             type: 'datetime',
