@@ -69,7 +69,7 @@ module.exports = function sendOK (data, options) {
   HateoasService.create(req, res, data)
    .then(function(hateoasResponse) {
      var address = url.parse(Utils.Path.getFullUrl(req));
-     var modelName = Utils.Path.toModelName(address.pathname);
+     var modelName = req.options.model || req.options.controller;
      var query = Utils.Path.getWhere(req.query);
      return [hateoasResponse, fetchResultCount(query, modelName)];
    })
@@ -83,6 +83,7 @@ module.exports = function sendOK (data, options) {
      sendData(req, res, hateoasResponse);
    })
    .fail(function(err) {
+     console.log(err);
      sendData(req, res, data);
    });
 

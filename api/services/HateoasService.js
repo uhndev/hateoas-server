@@ -1,27 +1,24 @@
+
 module.exports = {
+  makeToHATEOAS: function() {
+    return function() {
+      var obj = this.toObject();
+      obj.rel = 'self';
+      obj.href = HateoasService.getSelfLink(this.id);
+
+      if (_.isFunction(this.getResponseLinks)) {
+        obj.links = this.getResponseLinks(this.id);
+      }
+      return obj;
+    }
+  },
+  getSelfLink: function(modelName, id) {
+    return [sails.getBaseUrl() + sails.config.blueprints.prefix,
+      modelName, id].join('/');
+  },
   create: function(req, res, data) {
     var url = require('url');
     var address = url.parse(Utils.Path.getFullUrl(req));
-
-    /**
-     * Adds a "self" link to the item by parsing the url and
-     * the item id. If the item is an array, this function
-     * applies itself to each item.
-     */
-    function addSelfReference(item) {
-      if (_.isArray(item)) {
-        return _.map(item, function(element) {
-          return addSelfReference(element);
-        });
-      }
-
-      if (_.has(item, 'id') && _.isObject(item)) {
-        item.rel = 'self';
-        item.href = address.protocol + '//' + address.host 
-                      + address.pathname + '/' + item.id;
-      }
-      return item;
-    }
 
     /**
      * Private method that creates the data object based on the schema
@@ -62,13 +59,13 @@ module.exports = {
      */
     function makeResponse(links) {
       var HATEOAS_VERSION = '0.1';
-      var modelName = Utils.Path.toModelName(address.pathname);
+      var modelName = req.options.model || req.options.controller;
 
       var response = {
         version: HATEOAS_VERSION,
         rel: 'self',
         href: address.href,
-        items: addSelfReference(data)
+        items: data// HateoasService.setSelfReference(data, modelName)
       };
 
       if (links) {

@@ -4,18 +4,11 @@ var self = {
   /** Start of "String" Utils **/
   "String" : {
     /**
-     * capitalizes a string
-     */
-    capitalize: function capitalize (s) {
-      return s.charAt(0).toUpperCase() + s.slice(1);
-    },
-
-    /**
      * converts camelCase to text by spacing all words and
      * capitalizing the first letter.
      */
     camelCaseToText: function camelCaseToText (camelString) {
-      return self.String.capitalize(
+      return sails.util.str.capitalize(
                camelString.replace(/([A-Z])/g, ' $1')
              );
     }
@@ -25,21 +18,6 @@ var self = {
 
   /** Start of "Path" Utils **/
   "Path" : {
-    /**
-     * finds the model name from an api path.
-     */
-    toModelName: function pathToModelName (path) {
-      var prefix = sails.config.blueprints.prefix;
-      var regEx = new RegExp(prefix.replace(/\//, "\\\/") 
-                    + "\\\/(\\w+)?");
-      var match = path.match(regEx);
-      if (match && _.isArray(match)) {
-        return match[1].toLowerCase();
-      } else {
-        return '';
-      }
-    },
-
     getFullUrl: function getFullUrl(req) {
       return req.protocol + '://' + req.get('host') + req.originalUrl;
     },

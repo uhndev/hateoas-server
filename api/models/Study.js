@@ -5,14 +5,32 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
-module.exports = {
+(function() {
+var HateoasService = require('../services/HateoasService.js');
 
+module.exports = {
   attributes: {
     name: {
       type: 'string',
       required: true,
       unique: true
-    }
+    },
+    getResponseLinks: function(id) {
+      return [
+        { 'rel': 'subjects', 
+          'name': 'subjects', 
+          'prompt': 'subjects', 
+          'href' : [
+            sails.getBaseUrl() +
+            sails.config.blueprints.prefix,
+            'subject?study=' + id
+            ].join('/'), 
+          'render': 'link'
+        }
+      ];
+    },
+    toJSON: HateoasService.makeToHATEOAS.call(this)
   }
 };
 
+}());

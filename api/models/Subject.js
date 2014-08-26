@@ -4,6 +4,8 @@
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
+(function() {
+var HateoasService = require('../services/HateoasService.js');
 
 module.exports = {
 
@@ -23,7 +25,8 @@ module.exports = {
     },
     doe: {
       type: 'date'
-    }
+    },
+    toJSON: HateoasService.makeToHATEOAS.call(this)
   },
   beforeValidation: function(subject, cb) {
     //Auto increment workaround
@@ -38,3 +41,4 @@ module.exports = {
   }
 };
 
+}());
