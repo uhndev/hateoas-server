@@ -65,7 +65,6 @@ module.exports = function sendOK (data, options) {
     return Q.when(0);
   }
 
-
   HateoasService.create(req, res, data)
    .then(function(hateoasResponse) {
      var address = url.parse(Utils.Path.getFullUrl(req));

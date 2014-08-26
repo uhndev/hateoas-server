@@ -18,14 +18,12 @@ module.exports = {
     getResponseLinks: function(id) {
       return [
         { 'rel': 'subjects', 
-          'name': 'subjects', 
-          'prompt': 'subjects', 
+          'prompt': 'Subjects', 
           'href' : [
             sails.getBaseUrl() +
             sails.config.blueprints.prefix,
             'subject?study=' + id
-            ].join('/'), 
-          'render': 'link'
+            ].join('/')
         }
       ];
     },
