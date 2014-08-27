@@ -26,7 +26,7 @@ module.exports = {
     dob: {
       type: 'date'
     },
-    toJSON: HateoasService.makeToHATEOAS.call(this)
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }
 };
 

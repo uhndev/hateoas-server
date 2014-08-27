@@ -1,11 +1,11 @@
 (function() {
 var HATEOAS_VERSION = '0.1';
-
 module.exports = {
-  makeToHATEOAS: function() {
+  makeToHATEOAS: function(model) {
     return function() {
       var obj = this.toObject();
-      obj.href = HateoasService.getSelfLink(this.id);
+      obj.href = HateoasService.getSelfLink(this.id, 
+        model.exports.identity);
 
       if (_.isFunction(this.getResponseLinks)) {
         obj.links = this.getResponseLinks(this.id);
@@ -13,7 +13,10 @@ module.exports = {
       return obj;
     }
   },
-  getSelfLink: function(modelName, id) {
+  getSelfLink: function(id, modelName) {
+    // #here_be_dragons
+    // Figure out how to get the model name within the model itself
+    // in the future.
     return [sails.getBaseUrl() + sails.config.blueprints.prefix,
       modelName, id].join('/');
   },

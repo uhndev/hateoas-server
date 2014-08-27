@@ -26,7 +26,7 @@ module.exports = {
     doe: {
       type: 'date'
     },
-    toJSON: HateoasService.makeToHATEOAS.call(this)
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
   beforeValidation: function(subject, cb) {
     //Auto increment workaround

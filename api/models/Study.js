@@ -17,8 +17,10 @@ module.exports = {
     },
     getResponseLinks: function(id) {
       return [
-        { 'rel': 'subjects', 
+        { 
+          'rel': 'subjects', 
           'prompt': 'Subjects', 
+          'name' : ['/study', this.name, 'subjects'].join('/'),
           'href' : [
             sails.getBaseUrl() +
             sails.config.blueprints.prefix,
@@ -27,7 +29,7 @@ module.exports = {
         }
       ];
     },
-    toJSON: HateoasService.makeToHATEOAS.call(this)
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }
 };
 
