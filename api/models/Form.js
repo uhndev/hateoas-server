@@ -40,7 +40,8 @@ module.exports = {
         form_cancelText: {
             type: 'text',
             defaultsTo: 'Cancel'
-        }
+        },
+        toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 };
 
