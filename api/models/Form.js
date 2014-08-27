@@ -4,6 +4,8 @@
 * @description :: Form Model
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
+(function() {
+var HateoasService = require('../services/HateoasService.js');
 
 module.exports = {
 
@@ -41,3 +43,5 @@ module.exports = {
         }
     }
 };
+
+}());

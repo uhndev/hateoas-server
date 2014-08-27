@@ -8,28 +8,27 @@
 module.exports = {
 
 	attributes: {
-		form_id: {
-			type: 'text',
-			required: true
+    form: {
+      // model: 'form',
+      type: 'string',
+      required: true
+    },
+		subject: {
+			// model: 'subject',
+      type: 'string', 
+      required: true
 		},
-		study_id: {
-			type: 'text',
-			required: true
-		},
-		subject_id: {
-			type: 'text',
-			required: true
-		},
-		user_id: {
-			type: 'text',
+		user: {
+			// model: 'user',
+      type: 'string', 
 			required: true
 		},
 		answers: {
-			type: 'json'
+			type: 'json',
+      required: true
 		},
-		expiresAt: {
-            type: 'datetime',
-            required: true
+		expired: {
+			type: 'boolean'
 		}
 	}
 };
