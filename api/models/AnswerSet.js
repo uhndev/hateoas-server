@@ -11,8 +11,7 @@ module.exports = {
 
 	attributes: {
     form: {
-      // model: 'form',
-      type: 'string',
+      model: 'form',
       required: true
     },
 		subject: {
@@ -20,8 +19,8 @@ module.exports = {
       type: 'string', 
       required: true
 		},
-		user: {
-			// model: 'user',
+		person: {
+			// model: 'person',
       type: 'string', 
 			required: true
 		},
@@ -30,9 +29,26 @@ module.exports = {
       required: true
 		},
 		expired: {
-			type: 'boolean'
+			type: 'boolean',
+      defaultsTo: false
 		},
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
+  },
+  
+  // Set most recent previous answerset to be expired
+  beforeCreate: function(values, cb) {
+    AnswerSet.findOne({ where: {
+      form: values.form, 
+      subject: values.subject,
+      person: values.person
+    }, sort: 'updatedAt DESC'}).exec(function (err, answer) {
+      if (err) return cb(err);
+      if (answer) {
+        answer.expired = true;
+        answer.save();  
+      }
+      cb();      
+    });
   }
 };
 
