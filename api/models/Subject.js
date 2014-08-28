@@ -28,6 +28,29 @@ module.exports = {
     },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
+  findByStudyName: function(studyName, options, cb) {
+    Study.findOneByName(studyName, {}, function found(err, study) {
+      if (err) return cb(err);
+
+      if (!study) {
+        err = new Error();
+        err.message = require('util')
+          .format('Study with name %s does not exist.', studyName);
+        err.status = 404;
+        return cb(err);
+      }
+
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      query.where.study = study.id;
+      delete query.where.name;
+
+      Subject.find(query)
+        .populate('person')
+        .populate('study')
+        .exec(cb);
+    });
+  },
   beforeValidation: function(subject, cb) {
     //Auto increment workaround
     Subject.findOne({ where: {"study": subject.study}, 

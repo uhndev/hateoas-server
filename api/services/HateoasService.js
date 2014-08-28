@@ -4,6 +4,7 @@ module.exports = {
   makeToHATEOAS: function(model) {
     return function() {
       var obj = this.toObject();
+      obj.rel = model.exports.identity;
       obj.href = HateoasService.getSelfLink(this.id, 
         model.exports.identity);
 
@@ -82,7 +83,10 @@ module.exports = {
       var response = {
         version: HATEOAS_VERSION,
         href: address.href,
-        items: dataToJson(data)
+        items: dataToJson(data),
+        template: {
+          rel: modelName
+        }
       };
 
       if (state) {
@@ -93,7 +97,7 @@ module.exports = {
       }
 
       if (!_.has(response.template, 'data')) {
-        response.template = _.merge(response.template || {}, 
+        response.template = _.merge(response.template,
                             makeTemplate(modelName))
       }
 

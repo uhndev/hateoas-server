@@ -48,5 +48,7 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  'get /api/locale'           : 'LocaleController.getLocale'
+  'get /api/locale'              : 'LocaleController.getLocale',
+  'get /api/study/:name'         : { model: 'study', action: 'find' },
+  'get /api/study/:name/subject' : 'SubjectController.findByStudyName'
 };
