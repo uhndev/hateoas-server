@@ -13,7 +13,11 @@ module.exports = function(req, res, next) {
   // or if this is the last policy, the controller
   //if (req.session.authenticated) {
   sails.log.debug("[QDB]: policy request");
-  res.set('X-POLICY', 'Hello');
+  var tok = SessionService.generateToken(req);
+  sails.log.debug(tok);
+  res.set('X-DADOS-KEY', tok);
+  sails.log.debug("[QDB]: policy resp");
+  SessionService.validateToken(req, tok);
   return next();
   //}
 

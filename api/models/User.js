@@ -1,15 +1,14 @@
-var bcrypt = require('bcrypt');
 
 module.exports = {
 	attributes: {
-        first_name: {
-            type: 'string',
-            required: true
-        },
-        last_name: {
-            type: 'string',
-            required: true
-        },
+    first_name: {
+        type: 'string',
+        required: true
+    },
+    last_name: {
+        type: 'string',
+        required: true
+    },
 		username: {
 			type: 'string',
 			required: true,
@@ -20,15 +19,11 @@ module.exports = {
 			required: true,
 			unique: true
 		},
-        role: {
-            type: 'string',
-            enum: ['subject', 'coordinator', 'admin'],
-            required: true
-        },
-		passports: {
-            collection: 'Passport',
-            via: 'user'
-        }
+    role: {
+        type: 'string',
+        enum: ['subject', 'coordinator', 'admin'],
+        required: true
+    },
 	},
 
 	getAll: function() {
