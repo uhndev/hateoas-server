@@ -106,13 +106,21 @@ module.exports = {
       if (!_.has(response.template, 'data')) {
         response.template = _.merge(response.template,
                             makeTemplate(modelName))
+      } else {
+        var required = makeTemplate(modelName);
+        response.template.data = _.unique(
+          response.template.data.concat(required.data),
+          false, function(item, index, list) {
+            return item.name;
+          });
       }
 
       return response;
     }
 
-    return WorkflowState.findOne({ path: address.pathname })
-                        .then(makeResponse);
+    return WorkflowState.findOne({ 
+      path: decodeURIComponent(address.pathname) 
+      }).then(makeResponse);
   }
 };
 
