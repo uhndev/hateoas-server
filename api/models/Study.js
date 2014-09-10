@@ -5,34 +5,34 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+(function() {
+var HateoasService = require('../services/HateoasService.js');
+
 module.exports = {
-    attributes: {
-        "name": {
-            type: 'string',
-            required: true,
-            unique: true,
-        },
-        "REB": {
-            type: 'string',
-            required: true,
-            unique: true,
-        },
-        "PI": {
-            type: 'integer',
-            required: true,
-        },
-        "coordinator": {
-            model: 'user',
-        },
-        "centers": {
-            type: 'array',
-            required: true,
-        },
-        "expiredAt": {
-            type: 'datetime',
-            required: true,
-            defaultsTo: 0,
-        },
-    }
+  attributes: {
+    name: {
+      type: 'string',
+      required: true,
+      unique: true
+    },
+    getResponseLinks: function(id) {
+      return [
+        { 
+          'rel': 'subject', 
+          'prompt': 'Subjects', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() +
+            sails.config.blueprints.prefix,
+            'study',
+            this.name,
+            'subject'
+          ].join('/')
+        }
+      ];
+    },
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+  }
 };
 
+}());

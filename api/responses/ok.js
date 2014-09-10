@@ -23,31 +23,32 @@ module.exports = function sendOK (data, options) {
   function sendData ( req, res, data ) {
     // Set status code
     res.status(200);
+    return res.jsonx(data);
 
-    // If appropriate, serve data as JSON(P)
-    if (req.wantsJSON) {
-      return res.jsonx(data);
-    }
-  
-    // If second argument is a string, we take that to mean it refers to a view.
-    // If it was omitted, use an empty object (`{}`)
-    options = (typeof options === 'string')
-      ? { view: options } 
-      : options || {};
-  
-    // If a view was provided in options, serve it.
-    // Otherwise try to guess an appropriate view, or if that doesn't
-    // work, just send JSON.
-    if (options.view) {
-      return res.view(options.view, { data: data });
-    }
-  
-    // If no second argument provided, try to serve the implied view,
-    // but fall back to sending JSON(P) if no view can be inferred.
-    else return res.guessView({ data: data }, 
-      function couldNotGuessView () {
-        return res.jsonx(data);
-      });
+//    // If appropriate, serve data as JSON(P)
+//    if (req.wantsJSON) {
+//      return res.jsonx(data);
+//    }
+//  
+//    // If second argument is a string, we take that to mean it refers to a view.
+//    // If it was omitted, use an empty object (`{}`)
+//    options = (typeof options === 'string')
+//      ? { view: options } 
+//      : options || {};
+//  
+//    // If a view was provided in options, serve it.
+//    // Otherwise try to guess an appropriate view, or if that doesn't
+//    // work, just send JSON.
+//    if (options.view) {
+//      return res.view(options.view, { data: data });
+//    }
+//  
+//    // If no second argument provided, try to serve the implied view,
+//    // but fall back to sending JSON(P) if no view can be inferred.
+//    else return res.guessView({ data: data }, 
+//      function couldNotGuessView () {
+//        return res.jsonx(data);
+//      });
   }
 
   /**
@@ -65,11 +66,24 @@ module.exports = function sendOK (data, options) {
     return Q.when(0);
   }
 
+  function sanitize(data) {
+    var entityMap = {
+      '<': '&lt;',
+      '>': '&gt;',
+      '&': '&amp;'
+    };
 
-  HateoasService.create(req, res, data)
+    var sanitized = JSON.stringify(data).replace(/[&<>]/g, 
+      function(key) {
+        return entityMap[key];
+      });
+    return JSON.parse(sanitized);
+  }
+
+  HateoasService.create(req, res, sanitize(data))
    .then(function(hateoasResponse) {
      var address = url.parse(Utils.Path.getFullUrl(req));
-     var modelName = Utils.Path.toModelName(address.pathname);
+     var modelName = req.options.model || req.options.controller;
      var query = Utils.Path.getWhere(req.query);
      return [hateoasResponse, fetchResultCount(query, modelName)];
    })
@@ -80,10 +94,16 @@ module.exports = function sendOK (data, options) {
        'content-type': 'application/collection+json; charset=utf-8',
        'allow': 'GET,POST,PUT,DELETE'
      });
+     hateoasResponse.items = hateoasResponse.items;
      sendData(req, res, hateoasResponse);
    })
    .fail(function(err) {
-     sendData(req, res, data);
+     res.status(500);
+     var error = {
+       type: 'danger',
+       message: 'HATEOAS response failure'
+     };
+     return res.jsonx(error);
    });
 
 };

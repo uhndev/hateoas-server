@@ -1,26 +1,45 @@
+(function() {
+var HATEOAS_VERSION = '1.0';
 module.exports = {
+  makeToHATEOAS: function(model) {
+    return function() {
+      var obj = this.toObject();
+      obj.rel = model.exports.identity;
+      obj.href = HateoasService.getSelfLink(model.exports.identity, 
+        this.id);
+
+      if (_.isFunction(this.getResponseLinks)) {
+        obj.links = this.getResponseLinks(this.id);
+      }
+      return obj;
+    }
+  },
+  getSelfLink: function(modelName, id) {
+    // #here_be_dragons
+    // Figure out how to get the model name within the model itself
+    // in the future.
+    var components = [sails.getBaseUrl() + sails.config.blueprints.prefix,
+      modelName];
+
+    if (id) {
+      components.push(id);
+    }
+    
+    return components.join('/');
+  },
   create: function(req, res, data) {
     var url = require('url');
     var address = url.parse(Utils.Path.getFullUrl(req));
 
-    /**
-     * Adds a "self" link to the item by parsing the url and
-     * the item id. If the item is an array, this function
-     * applies itself to each item.
-     */
-    function addSelfReference(item) {
-      if (_.isArray(item)) {
-        return _.map(item, function(element) {
-          return addSelfReference(element);
+    function dataToJson(data) {
+      if (_.isArray(data)) {
+        return _.map(data, function(item) {
+          return dataToJson(item);
         });
       }
-
-      if (_.has(item, 'id') && _.isObject(item)) {
-        item.rel = 'self';
-        item.href = address.protocol + '//' + address.host 
-                      + address.pathname + '/' + item.id;
+      if (_.isObject(data)) {
+        return data.toJSON();
       }
-      return item;
     }
 
     /**
@@ -55,36 +74,54 @@ module.exports = {
       return { data: attributes };
     }
 
+    function addBaseUrl(link) {
+      link.href = sails.getBaseUrl() + link.href;
+    }
+
     /**
      * Private method creates a HATEOAS Response
      * Once the promise has been resolved, the HATEOAS response is
      * constructed from the links object.
      */
-    function makeResponse(links) {
-      var HATEOAS_VERSION = '0.1';
-      var modelName = Utils.Path.toModelName(address.pathname);
+    function makeResponse(state) {
+      var modelName = req.options.model || req.options.controller;
 
       var response = {
         version: HATEOAS_VERSION,
-        rel: 'self',
-        href: address.href,
-        items: addSelfReference(data)
+        href: HateoasService.getSelfLink(modelName),
+        referrer: address.href,
+        items: dataToJson(data),
+        template: {
+          rel: modelName
+        }
       };
 
-      if (links) {
+      if (state) {
+        _.each(state.links, addBaseUrl);
+        _.each(state.queries, addBaseUrl);
         response = _.merge(response, 
-                     Utils.Model.removeSystemFields(links));
+                     Utils.Model.removeSystemFields(state));
       }
 
       if (!_.has(response.template, 'data')) {
-        response.template = _.merge(response.template || {}, 
+        response.template = _.merge(response.template,
                             makeTemplate(modelName))
+      } else {
+        var required = makeTemplate(modelName);
+        response.template.data = _.unique(
+          response.template.data.concat(required.data),
+          false, function(item, index, list) {
+            return item.name;
+          });
       }
 
       return response;
     }
 
-    return WorkflowState.findOne({ path: address.pathname })
-                        .then(makeResponse);
+    return WorkflowState.findOne({ 
+      path: decodeURIComponent(address.pathname) 
+      }).then(makeResponse);
   }
 };
+
+}());

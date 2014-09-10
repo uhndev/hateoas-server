@@ -1,40 +1,36 @@
+/**
+* User.js
+*
+* @description :: TODO: You might write a short summary of how this model works and what it represents here.
+* @docs        :: http://sailsjs.org/#!documentation/models
+*/
+(function() {
+var HateoasService = require('../services/HateoasService.js');
 
 module.exports = {
-	attributes: {
-    first_name: {
-        type: 'string',
-        required: true
+
+  attributes: {
+    username: {
+      type: 'string',
+      required: true,
+      unique: true
     },
-    last_name: {
-        type: 'string',
-        required: true
+    email: {
+      type: 'string',
+      required: true,
+      unique: true
     },
-		username: {
-			type: 'string',
-			required: true,
-			unique: true
-		},
-		email: {
-			type: 'email',
-			required: true,
-			unique: true
-		},
+    password: {
+      type: 'string',
+      required: true
+    },
     role: {
-        type: 'string',
-        enum: ['subject', 'coordinator', 'admin'],
-        required: true
+      type: 'string',
+      enum: ['subject', 'coordinator', 'admin'],
+      required: true
     },
-	},
-
-	getAll: function() {
-		return User.find().then(function (models) {
-			return [models];
-		});
-	},
-
-	getOne: function(id) {
-		return User.findOne(id).then(function (model) {
-			return [model];
-		});
-	}
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+  }
 };
+
+}());

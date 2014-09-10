@@ -5,31 +5,28 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
-module.exports = {
+(function() {
+var HateoasService = require('../services/HateoasService.js');
 
-    attributes: {
-        "firstname": {
-            type: 'string',
-            required: true,
-        },
-        "lastname": {
-            type: 'string',
-            required: true,
-        },
-        "prefix": {
-            type: 'string',
-        },
-        "gender": {
-            type: 'string',
-        },
-        "DOB": {
-            type: 'date',
-        },
-        "expiredAt": {
-            type: 'datetime',
-            required: true,
-            defaultsTo: null,
-        },
-    }
+module.exports = {
+  attributes: {
+    userName: {
+      type: 'string',
+      required: true
+    },
+    firstName: {
+      type: 'string',
+      required: true
+    },
+    lastName: {
+      type: 'string',
+      required: true
+    },
+    dob: {
+      type: 'date'
+    },
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+  }
 };
 
+}());

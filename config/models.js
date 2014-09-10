@@ -18,6 +18,6 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
 
-  migrate: 'safe',
-  connection:'dados_development'
+  migrate: 'alter',
+  connection: 'dados-development'
 };
