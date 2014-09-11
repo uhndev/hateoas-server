@@ -19,6 +19,7 @@ module.exports = function sendOK (data, options) {
   var req = this.req;
 
   sails.log.silly('res.ok() :: Sending 200 ("OK") response');
+  sails.log.silly('Requested URL: ' + req.path);
 
   function sendData ( req, res, data ) {
     // Set status code
@@ -80,7 +81,7 @@ module.exports = function sendOK (data, options) {
     return JSON.parse(sanitized);
   }
 
-  HateoasService.create(req, res, sanitize(data))
+  HateoasService.create(req, res, data)
    .then(function(hateoasResponse) {
      var address = url.parse(Utils.Path.getFullUrl(req));
      var modelName = req.options.model || req.options.controller;
