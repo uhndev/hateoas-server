@@ -73,6 +73,6 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-  headers: 'accept,content-type,allow'
+  headers: 'accept,content-type,allow,x-dados-key'
 
 };
