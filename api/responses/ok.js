@@ -91,7 +91,7 @@ module.exports = function sendOK (data, options) {
    .spread(function(hateoasResponse, count) {
      hateoasResponse.total = count;
      res.set({
-       'Access-Control-Expose-Headers': 'allow,content-type,X-DADOS-KEY',
+       'Access-Control-Expose-Headers': 'allow,content-type',
        'content-type': 'application/collection+json; charset=utf-8',
        'allow': 'GET,POST,PUT,DELETE'
      });
