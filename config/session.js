@@ -56,9 +56,8 @@ module.exports.session = {
   port: 6379,
   ttl: 900,
   db: 0,
-  // pass: <redis auth password>
+  // // pass: <redis auth password>
   prefix: 'sess:'
-
 
   /***************************************************************************
   *                                                                          *
@@ -70,7 +69,7 @@ module.exports.session = {
   // adapter: 'mongo',
   // host: 'localhost',
   // port: 27017,
-  // db: 'sails',
+  // db: 'dados-dev',
   // collection: 'sessions',
 
   /***************************************************************************

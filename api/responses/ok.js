@@ -99,12 +99,12 @@ module.exports = function sendOK (data, options) {
      sendData(req, res, hateoasResponse);
    })
    .fail(function(err) {
-     res.status(500);
-     var error = {
-       type: 'danger',
-       message: 'HATEOAS response failure'
-     };
-     return res.jsonx(error);
+      res.status(500);
+      var error = {
+        type: 'danger',
+        message: 'HATEOAS response failure'
+      };
+      return res.jsonx(error);
    });
 
 };

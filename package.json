@@ -5,6 +5,8 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "bcryptjs": "^2.1.0",
+    "connect-mongo": "^0.8.0",
     "connect-redis": "~1.4.5",
     "ejs": "~2.3.1",
     "grunt": "0.4.5",
@@ -24,11 +26,15 @@
     "include-all": "~0.1.6",
     "lodash": "~3.6.0",
     "moment": "^2.9.0",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
     "rc": "~1.0.1",
     "sails": "~0.11.0",
+    "sails-auth": "^1.0.8",
     "sails-disk": "~0.10.7",
     "sails-mongo": "^0.10.6",
     "sails-mysql": "~0.10.11",
+    "sails-permissions": "^1.0.16",
     "sails-redis": "^0.10.3",
     "socket.io-redis": "^0.1.4",
     "validator": "~3.37.0"
@@ -45,6 +51,7 @@
   "author": "Techna Institute",
   "license": "MIT",
   "devDependencies": {
+    "grunt-hub": "^0.7.0",
     "grunt-mocha-cov": "~0.4.0",
     "grunt-mocha-test": "~0.12.7",
     "mocha": "~2.2.1",

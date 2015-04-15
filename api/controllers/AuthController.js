@@ -1,34 +1,19 @@
-/**
- * AuthController
- *
- * @description :: Server-side logic for managing Authentication
- * @help        :: See http://links.sailsjs.org/docs/controllers
- */
+// api/controllers/AuthController.js
 
-module.exports = {
-	
-	login: function(req, res, next) {
-		var currentUser = {
-			id: 'abc123',
-			username: 'admin',
-			email: 'admin@uhn.ca',
-			first_name: 'John',
-			last_name: 'Admin',
-			role: 'admin'
-		};
-		res.json(currentUser);
-	},
+var _ = require('lodash');
+var _super = require('sails-permissions/api/controllers/AuthController');
 
-	register: function(req, res, next) {
-		var currentUser = {
-			id: 'abc123',
-			username: 'admin',
-			email: 'admin@uhn.ca',
-			first_name: 'John',
-			last_name: 'Admin',
-			role: 'admin'
-		};
-		res.json(currentUser);
-	}
-};
+_.merge(exports, _super);
+_.merge(exports, {
 
+  // Extend with custom logic here by adding additional fields, methods, etc.
+  /**
+   * For example:
+   *
+   * foo: function (bar) {
+   *   bar.x = 1;
+   *   bar.y = 2;
+   *   return _super.foo(bar);
+   * }
+   */
+});

@@ -81,10 +81,6 @@ bower_components
 .tmp
 dump.rdb
 
-
-
-
-
 ################################################
 # Node.js / NPM
 #
@@ -97,10 +93,6 @@ lib-cov
 *.out
 *.pid
 npm-debug.log
-
-
-
-
 
 ################################################
 # Miscellaneous
@@ -116,3 +108,16 @@ npm-debug.log
 nbproject
 .idea
 .node_history
+
+###############################################
+#
+# Assets
+#
+###############################################
+
+assets/*.sw*
+assets/*~
+assets/build/
+assets/bin/
+assets/node_modules/
+assets/vendor/*
