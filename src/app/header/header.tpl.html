@@ -1,5 +1,5 @@
 <div class="container" ng-controller="HeaderCtrl">
-  <nav class="navbar navbar-default" role="navigation" ng-if="AuthService.isAuthorized()">
+  <nav class="navbar navbar-default" role="navigation" ng-if="headerVisible">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
         ng-click="menuCollapsed = ! menuCollapsed">
@@ -20,12 +20,7 @@
             <i class="fa {{ link.icon }}"></i>
             {{ link.prompt }}
           </a>
-        </li>
-        <li>
-          <a href="#" ng-click="gogohateoas()">
-            GOGOHATEOAS
-          </a>
-        </li>        
+        </li>      
         <li>
           <a href="/logout" ng-click="AuthService.logout()">
             Logout
