@@ -13,6 +13,7 @@ angular.module('dados.header', [
    * @param {[type]} $scope
    */
   function ($scope, $state, $location, AuthService) {
+    $scope.headerVisible = true;
     $scope.AuthService = AuthService;
     $scope.navigation = [
       { prompt: 'Studies', href: '/study', icon: 'fa-group' },
@@ -25,12 +26,9 @@ angular.module('dados.header', [
     ];
 
     if (!AuthService.isAuthorized()) {
+      $scope.headerVisible = false;
       $location.url('/login');
     }
-
-    $scope.gogohateoas = function() {
-      $state.go('hateoas');
-    };
 
     function updateActive() {
       var href = $location.path();
