@@ -10,8 +10,13 @@
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
   </head>
   <body>
-    <div ng-include="'header/header.tpl.html'"></div>    
-  	<div class="container" ui-view></div>
+    <div class="navbar-container" ng-include="'header/header.tpl.html'"></div>
+    <alert ng-repeat="message in messages" 
+      type="{{message.type}}" 
+      close="closeAlert($index)">
+      {{message.msg}}
+    </alert> 
+  	<div ui-view></div>
     <footer class="footer">
       <div class="container" ng-controller="ErrorCtrl">
         <div class="footer-inner">

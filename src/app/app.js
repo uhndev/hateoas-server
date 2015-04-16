@@ -1,19 +1,19 @@
 angular.module( 'dados', [
 	'templates-app',
 	'templates-common',
-  'status',
+  'ui.router',
+  'config.interceptors',
 	'dados.auth',
-	'dados.header',
+	'dados.status',
+  'dados.header',
   'dados.workflow',
   'dados.formbuilder',
 	'dados.error',
-    'dados.filters.formatter',
-    'dados.filters.type',
-   'hateoas',
-    'hateoas.queryBuilder',
-  'config.interceptors',
-  'ui.router',
-	'dados.common.services.csrf'
+  'dados.filters.formatter',
+  'dados.filters.type',
+  'dados.common.services.csrf',
+  'hateoas',
+  'hateoas.queryBuilder'
 ])
 // Configure all Providers
 .config( function myAppConfig ($httpProvider, $stateProvider) { 
@@ -23,18 +23,18 @@ angular.module( 'dados', [
   });
 })
 
-.controller( 'AppCtrl', function AppCtrl ( $scope, $state, $location ) {
-  if (_.isEmpty($location.path())) {
-    $location.path('/study');
-  } else {
+.controller('AppCtrl', ['$scope', '$state', '$location',
+  function AppCtrl ( $scope, $state, $location ) {
+    if (_.isEmpty($location.path())) {
+      $location.path('/study');
+    } 
     $state.go('hateoas');
-  }
 
-  $scope.$on('$locationChangeSuccess', function(e, current, prev) {
-    $scope.pageTitle = _.titleCase($location.path()
-                                     .replace(/\//g, ' ')
-                                     .toLowerCase()
-                                     .trim());
-  });
-  
-});
+    $scope.$on('$locationChangeSuccess', function(e, current, prev) {
+      $scope.pageTitle = _.titleCase($location.path()
+                                       .replace(/\//g, ' ')
+                                       .toLowerCase()
+                                       .trim());
+    }); 
+  }
+]);
