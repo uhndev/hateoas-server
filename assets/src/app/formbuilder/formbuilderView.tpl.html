@@ -1,9 +1,4 @@
 <div ng-controller="FormBuilderController">
-  <alert ng-repeat="alert in alerts" 
-    type="{{alert.type}}" 
-    close="closeAlert($index)">
-    {{alert.msg}}
-  </alert>
   <button type="button" 
     class="btn btn-success pull-right" 
     ng-disabled="$scope.form.form_questions === 0" 

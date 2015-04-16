@@ -23,8 +23,8 @@ $stateProvider
         data: { pageTitle: 'Register' }
     });
 })
-.controller('AuthController', ['$scope', '$window', '$location', '$state', '$cookieStore', 'AuthService',
-    function ($scope, $window, $location, $state, $cookieStore, AuthService) {
+.controller('AuthController', ['$scope', '$window', '$location', '$state', '$cookies', 'AuthService',
+    function ($scope, $window, $location, $state, $cookies, AuthService) {
         // check if already logged in
         if (AuthService.isAuthorized()) {
             $location.url('/');
@@ -33,7 +33,7 @@ $stateProvider
         var success = function(user) {
 			if (user) {
                 var now = new Date();
-                $cookieStore.put('user', user, {
+                $cookies.put('user', user, {
                     expires: new Date(now.getTime() + 900000)
                 });
 				$location.url('/study');

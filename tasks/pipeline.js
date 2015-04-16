@@ -23,38 +23,38 @@ var cssFilesToInject = [
 var jsFilesToInject = [
 
   // Load sails.io before everything else
-  'vendor/sails.io.js/dist/sails.io.js',
+  // 'vendor/sails.io.js/dist/sails.io.js',
 
   // Dependencies like jQuery, or Angular are brought in here
-  'vendor/lodash/dist/lodash.js',
-  'vendor/lodash-contrib/dist/lodash-contrib.js',
-  'vendor/jquery/jquery.js',
-  'vendor/jquery-ui/ui/minified/jquery-ui.js',
-  'vendor/angular/angular.js',
-  'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.js',
-  'vendor/angular-loader/angular-loader.js',
-  'vendor/angular-resource/angular-resource.js',
-  'vendor/angular-cookies/angular-cookies.js',
-  'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-  'vendor/angular-resource/angular-resource.js',
-  'vendor/angular-sails/dist/angular-sails.js',
-  'vendor/ace-builds/src-min-noconflict/ace.js',
-  'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
-  'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
-  'vendor/angular-ui-ace/ui-ace.js',
-  'vendor/angular-ui-utils/ui-utils.js',
-  'vendor/angular-ui-sortable/sortable.js',
-  'vendor/angular-ui-router/release/angular-ui-router.js',
-  'vendor/ng-table/ng-table.js',
+  // 'vendor/lodash/dist/lodash.js',
+  // 'vendor/lodash-contrib/dist/lodash-contrib.js',
+  // 'vendor/jquery/jquery.js',
+  // 'vendor/jquery-ui/ui/minified/jquery-ui.js',
+  // 'vendor/angular/angular.js',
+  // 'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.js',
+  // 'vendor/angular-loader/angular-loader.js',
+  // 'vendor/angular-resource/angular-resource.js',
+  // 'vendor/angular-cookies/angular-cookies.js',
+  // 'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+  // 'vendor/angular-resource/angular-resource.js',
+  // 'vendor/angular-sails/dist/angular-sails.js',
+  // 'vendor/ace-builds/src-min-noconflict/ace.js',
+  // 'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
+  // 'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
+  // 'vendor/angular-ui-ace/ui-ace.js',
+  // 'vendor/angular-ui-utils/ui-utils.js',
+  // 'vendor/angular-ui-sortable/sortable.js',
+  // 'vendor/angular-ui-router/release/angular-ui-router.js',
+  // 'vendor/ng-table/ng-table.js',
 
   // plugins
-  'vendor/JSONedit/js/JSONEdit.js',
-  'vendor/ngform-builder/dist/ngform-builder.js',
-  'vendor/nglist-editor/dist/nglist-editor.js',
+  // 'vendor/JSONedit/js/JSONEdit.js',
+  // 'vendor/ngform-builder/dist/ngform-builder.js',
+  // 'vendor/nglist-editor/dist/nglist-editor.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'src/**/*.js'
+  // 'src/**/*.js'
 ];
 
 
@@ -68,8 +68,8 @@ var jsFilesToInject = [
 // templates get spit out to the same file.  Be sure and check out `tasks/README.md`
 // for information on customizing and installing new tasks.
 var templateFilesToInject = [
-  'src/app/**/*.tpl.html',
-  'src/common/**/*.tpl.html'
+  // 'src/app/**/*.tpl.html',
+  // 'src/common/**/*.tpl.html'
 ];
 
 // Prefix relative paths to source files so they point to the proper locations
