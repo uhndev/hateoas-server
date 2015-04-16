@@ -1,36 +1,22 @@
-/**
-* User.js
-*
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
-(function() {
-var HateoasService = require('../services/HateoasService.js');
+// api/models/User.js
 
-module.exports = {
+var _ = require('lodash');
+var _super = require('sails-permissions/api/models/User');
+// var HateoasService = require('../services/HateoasService.js');
 
-  attributes: {
-    username: {
-      type: 'string',
-      required: true,
-      unique: true
-    },
-    email: {
-      type: 'string',
-      required: true,
-      unique: true
-    },
-    password: {
-      type: 'string',
-      required: true
-    },
-    role: {
-      type: 'string',
-      enum: ['subject', 'coordinator', 'admin'],
-      required: true
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  }
-};
+_.merge(exports, _super);
+_.merge(exports, {
 
-}());
+  // Extend with custom logic here by adding additional fields, methods, etc.
+
+  /**
+   * For example:
+   *
+   * foo: function (bar) {
+   *   bar.x = 1;
+   *   bar.y = 2;
+   *   return _super.foo(bar);
+   * }
+   */
+   // toJSON: HateoasService.makeToHATEOAS.call(this, module)
+});

@@ -120,7 +120,7 @@ module.exports = {
 
     return WorkflowState.findOne({ 
       path: decodeURIComponent(address.pathname) 
-      }).then(makeResponse);
+    }).then(makeResponse);
   }
 };
 

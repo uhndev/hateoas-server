@@ -51,7 +51,7 @@ module.exports = {
         .exec(cb);
     });
   },
-  beforeValidation: function(subject, cb) {
+  beforeValidate: function(subject, cb) {
     //Auto increment workaround
     Subject.findOne({ where: {"study": subject.study}, 
       sort:'studyId DESC' } )
