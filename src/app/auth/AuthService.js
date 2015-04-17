@@ -1,16 +1,17 @@
-angular.module('dados.auth.service', ['ngResource', 'ngCookies'])
+angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
        .constant('LOGIN_API', 'http://localhost:1337/auth/local')
        .constant('REGISTER_API', 'http://localhost:1337/auth/local/register')
        .constant('LOGOUT_API', 'http://localhost:1337/logout')
-       .service('AuthService', ['LOGIN_API', 'REGISTER_API', 'LOGOUT_API', '$resource', '$cookies',
-  function AuthService(loginURL, registerURL, logoutURL, $resource, $cookies) {
+       .service('AuthService', ['LOGIN_API', 'REGISTER_API', 'LOGOUT_API', '$resource', '$cookieStore', 'ipCookie',
+  function AuthService(loginURL, registerURL, logoutURL, $resource, $cookieStore, ipCookie) {
     'use strict';
     
     var LoginAuth    = $resource(loginURL);
     var RegisterAuth = $resource(registerURL);
 
     this.isAuthorized = function(onSuccess) {
-      return Boolean($cookies.get('user'));
+      return Boolean(ipCookie('user'));
+      // return Boolean($cookieStore.get('user'));
     };
 
     this.login = function(data, onSuccess, onError) {
@@ -24,7 +25,8 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies'])
     };
 
     this.logout = function(data, onSuccess, onError) {
-      $cookies.remove('user');
+      ipCookie.remove('user');
+      // $cookieStore.remove('user');
       return $resource(logoutURL).query();
     };
   }

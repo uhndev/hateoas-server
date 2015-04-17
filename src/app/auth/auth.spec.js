@@ -1,7 +1,8 @@
 describe('AuthService', function() {
   var AuthService;
   var $httpBackend;
-  var $cookies;
+  var $cookieStore;
+  var ipCookie;
  
   beforeEach(function() {
     module('dados.auth.service');
@@ -9,7 +10,8 @@ describe('AuthService', function() {
  
   beforeEach(inject(function($injector) {
     $httpBackend = $injector.get('$httpBackend');
-    $cookies = $injector.get('$cookies');
+    $cookieStore = $injector.get('$cookieStore');
+    ipCookie = $injector.get('ipCookie');
     AuthService = $injector.get('AuthService');
   }));
  
@@ -42,9 +44,11 @@ describe('AuthService', function() {
       });
 
       it('should return true when user is logged in', function() {
-        $cookies.put('user', {user: 'some value'});
+        ipCookie('user', {user: 'some value'});
+        // $cookieStore.put('user', {user: 'some value'});
         expect(AuthService.isAuthorized()).toBeTruthy();
-        $cookies.remove('user');
+        ipCookie.remove('user');
+        // $cookieStore.remove('user');
       });
     });
 
@@ -63,13 +67,15 @@ describe('AuthService', function() {
 
       it('should save the user token as a cookie', function() {
         var success = function() {
-          $cookies.put('user', { 'user': 'bar' });
+          ipCookie('user', { 'user': 'bar' });
+          // $cookieStore.put('user', { 'user': 'bar' });
         };
         var error = function() {};
         $httpBackend.expectPOST('http://localhost:1337/auth/local').respond();
         AuthService.login({}, success, error);
         $httpBackend.flush();
-        expect($cookies.get('user')).toBeDefined();
+        expect(ipCookie('user')).toBeDefined();
+        // expect($cookieStore.get('user')).toBeDefined();
       });
     });
 
@@ -80,7 +86,8 @@ describe('AuthService', function() {
         $httpBackend.expectGET('http://localhost:1337/logout').respond();
         AuthService.logout(success, error);
         $httpBackend.flush();
-        expect($cookies.get('user')).toBeUndefined();
+        expect(ipCookie('user')).toBeUndefined();
+        // expect($cookieStore.get('user')).toBeUndefined();
       });
     });
   });
