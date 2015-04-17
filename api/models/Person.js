@@ -9,6 +9,7 @@
 var HateoasService = require('../services/HateoasService.js');
 
 module.exports = {
+  schema: true,
   attributes: {
     userName: {
       type: 'string',

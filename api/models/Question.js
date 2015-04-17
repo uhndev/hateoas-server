@@ -6,7 +6,7 @@
 */
 
 module.exports = {
-
+    schema: true,
     attributes: {
         // text, textarea, radio, select, number, checkbox, password, hidden, email
         type: {

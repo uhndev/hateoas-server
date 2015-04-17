@@ -3,55 +3,60 @@
  */
 
 angular.module( 'dados.auth', [
-    'ui.bootstrap',
-    'ui.router',
-    'ngCookies',
-    'dados.auth.service'
+  'ui.bootstrap',
+  'ui.router',
+  'ngCookies',
+  'ipCookie',
+  'dados.auth.service'
 ])
 .config(function config( $stateProvider ) {
-$stateProvider
+  $stateProvider
     .state( 'login', {
-        url: '/login',
-        controller: 'AuthController',
-        templateUrl: 'auth/login.tpl.html',
-        data: { pageTitle: 'Login' }
+      url: '/login',
+      controller: 'AuthController as auth',
+      templateUrl: 'auth/login.tpl.html',
+      data: { pageTitle: 'Login' }
     })
     .state( 'register', {
-        url: '/register',
-        controller: 'AuthController',
-        templateUrl: 'auth/register.tpl.html',
-        data: { pageTitle: 'Register' }
+      url: '/register',
+      controller: 'AuthController as auth',
+      templateUrl: 'auth/register.tpl.html',
+      data: { pageTitle: 'Register' }
     });
 })
-.controller('AuthController', ['$scope', '$window', '$location', '$state', '$cookies', 'AuthService',
-    function ($scope, $window, $location, $state, $cookies, AuthService) {
-        // check if already logged in
-        if (AuthService.isAuthorized()) {
-            $location.url('/');
-        }
+.controller('AuthController', ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
+  function ($location, $state, $cookieStore, ipCookie, AuthService) {
+    // check if already logged in
+    if (AuthService.isAuthorized()) {
+      $location.url('/');
+    }
 
-        var success = function(user) {
-			if (user) {
-                var now = new Date();
-                $cookies.put('user', user, {
-                    expires: new Date(now.getTime() + 900000)
-                });
-				$location.url('/study');
-				$state.go('hateoas');
-			}
-		};
-        var error = function(err) { 
-			$scope.error = err;
-		};
+    var success = function(user) {
+      if (user) {
+        var now = new Date();
+        ipCookie('user', user, {
+          expires: new Date(now.getTime() + 900000)
+        });
+        // $cookieStore.put('user', user, {
+        //   expires: new Date(now.getTime() + 900000)
+        // });
+        $location.url('/study');
+        $state.go('hateoas');
+      }
+    };
 
-        $scope.login = function() {
-            AuthService.login($scope.credentials, success, error);
-        };
+    var error = function(err) { 
+      this.error = err;
+    };
 
-        $scope.register = function(isValid) {
-            if (isValid) {
-                AuthService.register($scope.credentials, success, error);
-            }
-        };
-    } 
+    this.login = function() {
+      AuthService.login(this.credentials, success, error);
+    };
+
+    this.register = function(isValid) {
+      if (isValid) {
+        AuthService.register(this.credentials, success, error);
+      }
+    };
+  } 
 ]);
