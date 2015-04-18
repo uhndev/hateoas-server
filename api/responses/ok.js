@@ -86,7 +86,9 @@ module.exports = function sendOK (data, options) {
      var address = url.parse(Utils.Path.getFullUrl(req));
      var modelName = req.options.model || req.options.controller;
      var query = Utils.Path.getWhere(req.query);
-     return [hateoasResponse, fetchResultCount(query, modelName)];
+
+     return [hateoasResponse, data.length];
+     // return [hateoasResponse, fetchResultCount(query, modelName)];
    })
    .spread(function(hateoasResponse, count) {
      hateoasResponse.total = count;

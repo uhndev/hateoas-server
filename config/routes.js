@@ -23,13 +23,12 @@
 module.exports.routes = {
 
   /***************************************************************************
-  *                                                                          *
-  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-  * etc. depending on your default view engine) your home page.              *
-  *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
-  *                                                                          *
+  * Locale Routes                                                            *
+  ***************************************************************************/  
+  'get /api/locale'                : 'LocaleController.getLocale',
+
+  /***************************************************************************
+  * Authentication Routes                                                    *
   ***************************************************************************/
   'get /logout': 'AuthController.logout',
 
@@ -41,15 +40,12 @@ module.exports.routes = {
   'get /auth/:provider/:action': 'AuthController.callback',
 
   /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  *  If a request to a URL doesn't match any of the custom routes above, it  *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
+  * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/locale'              : 'LocaleController.getLocale',
-  'get /api/study/:name'         : { model: 'study', action: 'find' },
-  'get /api/study/:name/subject' : 'SubjectController.findByStudyName'
+  'get /api/study/:name'           : { model: 'study', action: 'find' },
+  'get /api/study/:name/subject'   : 'SubjectController.findByStudyName',
+  'get /api/study/:name/user'      : 'UserController.findByStudyName',
+  // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
+  // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
+  
 };
