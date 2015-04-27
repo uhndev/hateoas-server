@@ -4,13 +4,13 @@ angular.module('hateoas.controls',
   function(HateoasUtils) {
     // Default constants values for the buttons
     var BTN_TEMPLATES = {
-      'post' : {
+      'create' : {
         method: 'post',
         requiresItem: false,
         prompt: 'New',
         icon: 'fa-file-o'
       },
-      'put' : {
+      'update' : {
         method: 'put',
         requiresItem: true,
         prompt: 'Edit',
@@ -29,6 +29,7 @@ angular.module('hateoas.controls',
      */
     function postLink(scope, element, attribute) {
       var permissions = scope.permissions();
+
       if (permissions && _.isString(permissions)) {
         var allow = permissions.split(',');
         scope.controls = _.reduce(allow, 
