@@ -82,31 +82,55 @@ module.exports = function sendOK (data, options) {
   }
 
   HateoasService.create(req, res, data)
-   .then(function(hateoasResponse) {
-     var address = url.parse(Utils.Path.getFullUrl(req));
-     var modelName = req.options.model || req.options.controller;
-     var query = Utils.Path.getWhere(req.query);
+    .then(function(hateoasResponse) {
+      var address = url.parse(Utils.Path.getFullUrl(req));
+      var modelName = req.options.model || req.options.controller;
+      var query = Utils.Path.getWhere(req.query);
+      var promises = [];
 
-     return [hateoasResponse, data.length];
-     // return [hateoasResponse, fetchResultCount(query, modelName)];
-   })
-   .spread(function(hateoasResponse, count) {
-     hateoasResponse.total = count;
-     res.set({
-       'Access-Control-Expose-Headers': 'allow,content-type',
-       'content-type': 'application/collection+json; charset=utf-8',
-       'allow': 'GET,POST,PUT,DELETE'
-     });
-     hateoasResponse.items = hateoasResponse.items;
-     sendData(req, res, hateoasResponse);
-   })
-   .fail(function(err) {
+      // find for current model/user, which CRUD operations are permitted
+      _.map(['GET','POST','PUT','DELETE'], function(method) {
+        var options = {
+          method: method,
+          model: req.model,
+          user: req.user 
+        }
+        promises.push(PermissionService.findModelPermissions(options)
+          .then(function (permissions) {
+            return permissions;
+          })
+        );
+      });
+      
+      return [hateoasResponse, data.length, promises];
+    })
+    .spread(function(hateoasResponse, count, promises) {
+      var permissions = [];
+      Q.allSettled(promises).then(function (results) {
+        results.forEach(function(result) {
+          permissions.push(result.value[0].action);
+        });
+      }).then(function() {
+        hateoasResponse.total = count;
+        permissions = permissions.join(',');
+        // hateoasControls will read the allow header 
+        // to determine which buttons/actions to render
+        res.set({
+          'Access-Control-Expose-Headers': 'allow,content-type',
+          'content-type': 'application/collection+json; charset=utf-8',
+          'allow': permissions
+        });
+        hateoasResponse.items = hateoasResponse.items;
+        sendData(req, res, hateoasResponse);
+      });      
+    })
+    .fail(function(err) {
       res.status(500);
+      sails.log(err);
       var error = {
         type: 'danger',
         message: 'HATEOAS response failure'
       };
       return res.jsonx(error);
-   });
-
+    });
 };
