@@ -102,7 +102,8 @@ module.exports = function sendOK (data, options) {
         );
       });
       
-      return [hateoasResponse, data.length, promises];
+      // return [hateoasResponse, data.length, promises];
+      return [hateoasResponse, fetchResultCount(query, modelName), promises];
     })
     .spread(function(hateoasResponse, count, promises) {
       var permissions = [];
