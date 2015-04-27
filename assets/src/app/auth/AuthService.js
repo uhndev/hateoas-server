@@ -14,7 +14,11 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
       var auth = Boolean(ipCookie('user'));
       if (!auth) {
         $location.url('/login');
+      } else {
+        this.currentUser = ipCookie('user').username;
+        this.currentRoles = ipCookie('user').roles;
       }
+
       return auth;
       // return Boolean($cookieStore.get('user'));
     };

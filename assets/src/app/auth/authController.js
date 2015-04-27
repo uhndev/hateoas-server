@@ -37,6 +37,7 @@ angular.module( 'dados.auth', [
         ipCookie('user', user, {
           expires: new Date(now.getTime() + 900000)
         });
+        // wait until stable angular 1.3 for cookie expiration support
         // $cookieStore.put('user', user, {
         //   expires: new Date(now.getTime() + 900000)
         // });
