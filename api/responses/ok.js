@@ -67,6 +67,48 @@ module.exports = function sendOK (data, options) {
     return Q.when(0);
   }
 
+  /**
+   * Private method for fetching which CRUD operations are permitted 
+   * for the given model and user.
+   * @param  {[model]}
+   * @param  {[user]}
+   * @return {[promise]}
+   */
+  function fetchPermissions(model, user) {
+    var promises = [];
+    // find for current model/user, which CRUD operations are permitted
+    _.map(['GET','POST','PUT','DELETE'], function(method) {
+      var options = {
+        method: method,
+        model: model,
+        user: user 
+      }
+      promises.push(PermissionService.findModelPermissions(options)
+        .then(function (permissions) {
+          return permissions;
+        })
+      );
+    });
+
+    var permissions = [];
+    var promise = Q.allSettled(promises).then(function (results) {
+      // console.log('------------RESULTS START ------------');
+      // console.log(results);
+      // console.log('------------RESULTS END------------');
+      results.forEach(function(result) {
+        if (result.value.length > 0)
+          permissions.push(result.value[0].action);
+      });
+    }).then(function() {
+      permissions = permissions.join(',');
+      return permissions;
+    }).catch(function (err) {
+      return err;
+    });
+
+    return promise;
+  }
+
   function sanitize(data) {
     var entityMap = {
       '<': '&lt;',
@@ -86,44 +128,21 @@ module.exports = function sendOK (data, options) {
       var address = url.parse(Utils.Path.getFullUrl(req));
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);
-      var promises = [];
-
-      // find for current model/user, which CRUD operations are permitted
-      _.map(['GET','POST','PUT','DELETE'], function(method) {
-        var options = {
-          method: method,
-          model: req.model,
-          user: req.user 
-        }
-        promises.push(PermissionService.findModelPermissions(options)
-          .then(function (permissions) {
-            return permissions;
-          })
-        );
-      });
       
-      // return [hateoasResponse, data.length, promises];
-      return [hateoasResponse, fetchResultCount(query, modelName), promises];
+      // return [hateoasResponse, fetchResultCount(query, modelName)];
+      return [hateoasResponse, fetchResultCount(query, modelName), fetchPermissions(req.model, req.user)];
     })
-    .spread(function(hateoasResponse, count, promises) {
-      var permissions = [];
-      Q.allSettled(promises).then(function (results) {
-        results.forEach(function(result) {
-          permissions.push(result.value[0].action);
-        });
-      }).then(function() {
-        hateoasResponse.total = count;
-        permissions = permissions.join(',');
-        // hateoasControls will read the allow header 
-        // to determine which buttons/actions to render
-        res.set({
-          'Access-Control-Expose-Headers': 'allow,content-type',
-          'content-type': 'application/collection+json; charset=utf-8',
-          'allow': permissions
-        });
-        hateoasResponse.items = hateoasResponse.items;
-        sendData(req, res, hateoasResponse);
-      });      
+    .spread(function(hateoasResponse, count, permissions) {    
+      hateoasResponse.total = count;
+      // hateoasControls will read the allow header 
+      // to determine which buttons/actions to renderi
+      res.set({
+        'Access-Control-Expose-Headers': 'allow,Content-Type',
+        'Content-Type': 'application/collection+json; charset=utf-8',
+        'allow': permissions
+      });
+      hateoasResponse.items = hateoasResponse.items;
+      sendData(req, res, hateoasResponse);
     })
     .fail(function(err) {
       res.status(500);

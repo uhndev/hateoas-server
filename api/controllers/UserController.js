@@ -9,15 +9,34 @@ _.merge(exports, {
 
   // Extend with custom logic here by adding additional fields, methods, etc.
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo(bar);
-   * }
-   */
+  // Overrides sails-auth's UserController.create to include role
+  // create: function (req, res) {
+  //   var role = req.param('role');
+  //   sails.services.passport.protocols.local.register(req.body, function (err, user) {
+  //     if (err) return res.serverError(err);
+
+  //     Promise.bind({}, User.findOne(user.id)
+  //       .populate('roles')
+  //       .then(function (user) {
+  //         this.user = user;
+  //         console.log(this.user);
+  //         return Role.findOne({ name: role });
+  //       })
+  //       .then(function (role) {
+  //         this.user.roles.add(role.id);
+  //         console.log(this.user.roles);
+  //         return this.user.save();
+  //       })
+  //       .then(function (updatedUser) {
+  //         sails.log.silly('role ' + role + 'attached to user ' + this.user.username);
+  //         res.ok(updatedUser);
+  //       })
+  //       .catch(function (err) {
+  //         res.serverError(err);
+  //       })
+  //     );      
+  //   });
+  // },
 
   findByStudyName: function(req, res) {
     var studyName = req.param('name');

@@ -3,8 +3,8 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
        .constant('REGISTER_API', 'http://localhost:1337/auth/local/register')
        .constant('LOGOUT_API', 'http://localhost:1337/logout')
        .service('AuthService', ['LOGIN_API', 'REGISTER_API', 'LOGOUT_API', 
-                                '$location', '$resource', '$cookieStore', 'ipCookie',
-  function AuthService(loginURL, registerURL, logoutURL, $location, $resource, $cookieStore, ipCookie) {
+                                '$rootScope', '$location', '$resource', '$cookieStore', 'ipCookie',
+  function AuthService(loginURL, registerURL, logoutURL, $rootScope, $location, $resource, $cookieStore, ipCookie) {
     'use strict';
     
     var LoginAuth    = $resource(loginURL);
@@ -14,9 +14,11 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
       var auth = Boolean(ipCookie('user'));
       if (!auth) {
         $location.url('/login');
+        $rootScope.$broadcast("events.unauthorized");
       } else {
         this.currentUser = ipCookie('user').username;
         this.currentRoles = ipCookie('user').roles;
+        $rootScope.$broadcast("events.authorized");
       }
 
       return auth;
