@@ -27,8 +27,9 @@ angular.module( 'dados', [
   function AppCtrl ( $scope, $state, $location ) {
     if (_.isEmpty($location.path())) {
       $location.path('/study');
-    } 
-    $state.go('hateoas');
+    } else {
+      $state.go('hateoas');  
+    }    
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
       $scope.pageTitle = _.titleCase($location.path()

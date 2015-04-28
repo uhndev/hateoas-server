@@ -30,22 +30,14 @@ angular.module('dados.header', [
 })
 
 .controller('HeaderCtrl', 
-  ['$scope', '$state', '$location', 'AuthService', 'TABVIEW',
+  ['$rootScope', '$scope', '$state', '$location', 'AuthService', 'TABVIEW',
   /**
    * [HeaderCtrl - controller for managing header items]
    * @param {[type]} $scope
    */
-  function ($scope, $state, $location, AuthService, TABVIEW) {
+  function ($rootScope, $scope, $state, $location, AuthService, TABVIEW) {
     $scope.AuthService = AuthService;
-    $scope.navigation = TABVIEW.ADMIN;
-
-    if (!AuthService.isAuthorized()) {
-      $location.url('/login');
-    } else {
-      console.log(AuthService.currentUser);
-      console.log(AuthService.currentRoles);
-      $scope.navigation = TABVIEW.ADMIN;
-    }
+    $scope.navigation = TABVIEW.SUBJECT;
 
     function updateActive() {
       var href = $location.path();
@@ -54,6 +46,14 @@ angular.module('dados.header', [
           (href.toLowerCase() === link.href.toLowerCase());
       });
     }
+
+    $scope.$on('events.unauthorized', function() {
+      $location.url('/login');
+    });
+
+    $scope.$on('events.authorized', function() {
+      $scope.navigation = TABVIEW.ADMIN;
+    });
 
     $scope.$on('$locationChangeSuccess', updateActive);
     updateActive();
