@@ -82,7 +82,7 @@ module.exports = function sendOK (data, options) {
         method: method,
         model: model,
         user: user 
-      }
+      } 
       promises.push(PermissionService.findModelPermissions(options)
         .then(function (permissions) {
           return permissions;
@@ -92,9 +92,6 @@ module.exports = function sendOK (data, options) {
 
     var permissions = [];
     var promise = Q.allSettled(promises).then(function (results) {
-      // console.log('------------RESULTS START ------------');
-      // console.log(results);
-      // console.log('------------RESULTS END------------');
       results.forEach(function(result) {
         if (result.value.length > 0)
           permissions.push(result.value[0].action);
@@ -128,9 +125,14 @@ module.exports = function sendOK (data, options) {
       var address = url.parse(Utils.Path.getFullUrl(req));
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);
-      
+      var modelPromise = Model.findOne({name: modelName});
+
       // return [hateoasResponse, fetchResultCount(query, modelName)];
-      return [hateoasResponse, fetchResultCount(query, modelName), fetchPermissions(req.model, req.user)];
+      return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
+    })
+    .spread(function(hateoasResponse, count, model) {
+      console.log(model);
+      return [hateoasResponse, count, fetchPermissions(model, req.user)];
     })
     .spread(function(hateoasResponse, count, permissions) {    
       hateoasResponse.total = count;
