@@ -2,6 +2,7 @@
  * Utility script for ensuring that sails.js has lifted fully before running tests.
  */
 
+var Barrels = require('barrels');
 var Sails = require('sails'),
     sails;
 
@@ -16,6 +17,7 @@ before(function(done) {
   console.log('Lifting sails...');
   this.timeout(15000);
   Sails.lift({
+    port: 1336,
     // configuration for testing purposes
     log: {
       level: 'error',
@@ -29,14 +31,25 @@ before(function(done) {
   }, function(err, server) {
     sails = server;
     if (err) return done(err);
-    // here you can load fixtures, etc.
-
+    
+    // Shared request variable
     request = request(sails.hooks.http.app);
+
     // temporarily disable csrf for testing
     sails.config.csrf.grantTokenViaAjax = false;
     sails.config.csrf.protectionEnabled = false;
 
-    done(err, sails);
+    // Load fixtures
+    var barrels = new Barrels();
+
+    // Save original objects in `fixtures` variable
+    fixtures = barrels.data;
+
+    // Populate the DB
+    console.log("Loading fixtures...");
+    barrels.populate(function(err) {
+      done(err, sails);
+    });
   });
 });
 

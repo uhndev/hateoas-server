@@ -25,31 +25,6 @@ module.exports = function sendOK (data, options) {
     // Set status code
     res.status(200);
     return res.jsonx(data);
-
-//    // If appropriate, serve data as JSON(P)
-//    if (req.wantsJSON) {
-//      return res.jsonx(data);
-//    }
-//  
-//    // If second argument is a string, we take that to mean it refers to a view.
-//    // If it was omitted, use an empty object (`{}`)
-//    options = (typeof options === 'string')
-//      ? { view: options } 
-//      : options || {};
-//  
-//    // If a view was provided in options, serve it.
-//    // Otherwise try to guess an appropriate view, or if that doesn't
-//    // work, just send JSON.
-//    if (options.view) {
-//      return res.view(options.view, { data: data });
-//    }
-//  
-//    // If no second argument provided, try to serve the implied view,
-//    // but fall back to sending JSON(P) if no view can be inferred.
-//    else return res.guessView({ data: data }, 
-//      function couldNotGuessView () {
-//        return res.jsonx(data);
-//      });
   }
 
   /**
@@ -125,14 +100,13 @@ module.exports = function sendOK (data, options) {
       var address = url.parse(Utils.Path.getFullUrl(req));
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);
-      var modelPromise = Model.findOne({name: modelName});
+      var modelPromise = Model.findOne({name: modelName})
+        .then(function (model) {
+          return fetchPermissions(model, req.user);
+        });
 
       // return [hateoasResponse, fetchResultCount(query, modelName)];
       return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
-    })
-    .spread(function(hateoasResponse, count, model) {
-      console.log(model);
-      return [hateoasResponse, count, fetchPermissions(model, req.user)];
     })
     .spread(function(hateoasResponse, count, permissions) {    
       hateoasResponse.total = count;

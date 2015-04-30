@@ -42,7 +42,7 @@ module.exports.routes = {
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/study/:name'           : { model: 'study', action: 'find' },
+  'get /api/study/:name'           : 'StudyController.findOne',
   'get /api/study/:name/subject'   : 'SubjectController.findByStudyName',
   'get /api/study/:name/user'      : 'UserController.findByStudyName',
   // 'get /api/study/:name/form'      : 'FormController.findByStudyName',

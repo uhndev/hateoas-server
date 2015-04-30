@@ -4,6 +4,12 @@ angular.module('hateoas.controls',
   function(HateoasUtils) {
     // Default constants values for the buttons
     var BTN_TEMPLATES = {
+      // 'read': {
+      //   method: 'get',
+      //   requiresItem: true,
+      //   prompt: 'Open',
+      //   icon: 'fa-folder-o'
+      // },
       'create' : {
         method: 'post',
         requiresItem: false,
