@@ -3,31 +3,9 @@
  */
 
 angular.module('dados.header', [
+  'dados.header.constants',
   'dados.auth.service'
 ])
-
-.constant("TABVIEW", {
-  "SUBJECT": [
-    { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
-    { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
-  ],
-  "COORDINATOR": [
-    { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-    { prompt: 'Form', href: '/form', icon: 'fa-file-o' },
-    { prompt: 'Answers', href: '/answerset', icon: 'fa-archive' },
-    { prompt: 'People', href: '/person', icon: 'fa-male' },
-    { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
-  ],
-  "ADMIN": [
-    { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-    { prompt: 'Form', href: '/form', icon: 'fa-file-o' },
-    { prompt: 'Answers', href: '/answerset', icon: 'fa-archive' },
-    { prompt: 'People', href: '/person', icon: 'fa-male' },
-    { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
-    { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
-    { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' }
-  ]
-})
 
 .controller('HeaderCtrl', 
   ['$rootScope', '$scope', '$state', '$location', 'AuthService', 'TABVIEW',
@@ -46,6 +24,16 @@ angular.module('dados.header', [
           (href.toLowerCase() === link.href.toLowerCase());
       });
     }
+
+    $scope.status = {
+      isopen: false
+    };
+
+    $scope.toggleDropdown = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.status.isopen = !$scope.status.isopen;
+    };    
 
     $scope.$on('events.unauthorized', function() {
       $location.url('/login');
