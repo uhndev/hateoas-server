@@ -1,7 +1,7 @@
 [
 	{
 		"form_type": "system",
-		"form_name": "user_registration",
+		"form_name": "user",
 		"form_title": "User Registration",
 		"form_submitText": "Submit",
 		"form_cancelText": "Cancel",
@@ -87,7 +87,7 @@
 	},
 	{
 		"form_type": "system",
-		"form_name": "person_registration",
+		"form_name": "person",
 		"form_title": "Person Registration",
 		"form_submitText": "Submit",
 		"form_cancelText": "Cancel",
@@ -156,7 +156,7 @@
 	},
 	{
 		"form_type": "system",
-		"form_name": "create_subject",
+		"form_name": "subject",
 		"form_title": "Create Subject",
 		"form_submitText": "Submit",
 		"form_cancelText": "Cancel",
@@ -225,7 +225,7 @@
 	},
 	{
 		"form_type": "system",
-		"form_name": "create_study",
+		"form_name": "study",
 		"form_title": "Create Study",
 		"form_submitText": "Submit",
 		"form_cancelText": "Cancel",

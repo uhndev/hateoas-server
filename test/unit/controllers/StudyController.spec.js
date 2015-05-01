@@ -122,7 +122,6 @@ describe('The Study Controller', function () {
 					})
 					.expect(201)
 					.end(function(err, res) {
-						console.log(res);
 						var collection = JSON.parse(res.text);
 						collection.name.should.equal('LEAP-HIP');
 						done(err);
