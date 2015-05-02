@@ -13,19 +13,13 @@ angular.module( 'dados.auth', [
   $stateProvider
     .state( 'login', {
       url: '/login',
-      controller: 'AuthController as auth',
+      controller: 'AuthController',
       templateUrl: 'auth/login.tpl.html',
       data: { pageTitle: 'Login' }
-    })
-    .state( 'register', {
-      url: '/register',
-      controller: 'AuthController as auth',
-      templateUrl: 'auth/register.tpl.html',
-      data: { pageTitle: 'Register' }
     });
 })
-.controller('AuthController', ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
-  function ($location, $state, $cookieStore, ipCookie, AuthService) {
+.controller('AuthController', ['$scope', '$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
+  function ($scope, $location, $state, $cookieStore, ipCookie, AuthService) {
     // check if already logged in
     if (AuthService.isAuthorized()) {
       $location.url('/');
@@ -46,17 +40,17 @@ angular.module( 'dados.auth', [
       }
     };
 
-    var error = function(err) { 
-      this.error = err;
+    var error = function(err) {
+      $scope.error = err;
     };
 
-    this.login = function() {
-      AuthService.login(this.credentials, success, error);
+    $scope.login = function() {
+      AuthService.login($scope.credentials, success, error);
     };
 
-    this.register = function(isValid) {
+    $scope.register = function(isValid) {
       if (isValid) {
-        AuthService.register(this.credentials, success, error);
+        AuthService.register($scope.credentials, success, error);
       }
     };
   } 

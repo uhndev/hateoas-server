@@ -56,7 +56,7 @@
 				"field_name": "role",
 				"field_title": "Role",
 				"field_type": "dropdown",
-				"field_value": "public",
+				"field_value": "subject",
 				"field_placeholder": "Select a role",
 				"field_validation": {
 					"rule": "none",
@@ -69,12 +69,12 @@
 					{
 						"option_id": 1,
 						"option_title": "Subject",
-						"option_value": "public"
+						"option_value": "subject"
 					},
 					{
 						"option_id": 2,
 						"option_title": "Coordinator",
-						"option_value": "registered"
+						"option_value": "coordinator"
 					},
 					{
 						"option_id": 3,

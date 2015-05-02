@@ -21,7 +21,7 @@ describe('The Auth Controller', function() {
 		});
 
 		it('should return 403 when logging in with bad credentials', function(done) {
-			login.authenticate('registered', function(agent, resp) {
+			login.authenticate('subject', function(agent, resp) {
 				resp.statusCode.should.be.exactly(403);
 				done();
 			});

@@ -13,9 +13,13 @@ var superagent = require('superagent'),
 module.exports.authenticate = function authenticate(user, done) {
   // Static credential information, which are used within tests.
   var credentials = {
-    registered: {
-      identifier: 'newuser',
-      password: 'user1234'
+    subject: {
+      identifier: 'subject',
+      password: 'subject1234'
+    },
+    coordinator: {
+      identifier: 'coordinator',
+      password: 'coordinator1234'
     },
     admin: {
       identifier: process.env.ADMIN_USERNAME,

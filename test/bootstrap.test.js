@@ -20,7 +20,7 @@ before(function(done) {
     port: 1336,
     // configuration for testing purposes
     log: {
-      level: 'silent',
+      level: 'error',
       noShip: true
     },
     models: {

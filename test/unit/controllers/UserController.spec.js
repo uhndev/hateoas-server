@@ -55,15 +55,31 @@ describe('The User Controller', function () {
 				req.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.send({
-						username: 'newuser',
-						email: 'newuser@example.com',
-						password: 'user1234'
+						username: 'subject',
+						email: 'subject@example.com',
+						password: 'subject1234',
+						role: 'subject'
 					})
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('newuser');
+						collection.items.username.should.equal('subject');
 						newUserId = user.id;
+						done(err);
+					});
+			});
+
+			it('should return bad request if missing role', function (done) {
+				var req = request.post('/api/user');
+				agent.attachCookies(req);
+
+				req.send({
+						username: 'subject',
+						email: 'subject@example.com',
+						password: 'subject1234'
+					})
+					.expect(400)
+					.end(function(err, res) {
 						done(err);
 					});
 			});
@@ -72,18 +88,34 @@ describe('The User Controller', function () {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
-				req.set('Accept', 'application/json')
-					.expect('Content-Type', 'application/json; charset=utf-8')
-					.send({
-						username: 'newuser',
-						email: 'newuser@example.com',
-						password: 'user1234'
+				req.send({
+						username: 'subject',
+						email: 'subject@example.com',
+						password: 'subject1234',
+						role: 'subject'
 					})
 					.expect(500)
-					.end(function(err) {
+					.end(function(err, res) {
 						done(err);
 					});
 			});
+
+			it('should set role to subject if given role DNE', function (done) {
+				var req = request.post('/api/user');
+				agent.attachCookies(req);
+
+				req.send({
+						username: 'newuser',
+						email: 'newuser@example.com',
+						password: 'user1234',
+						role: 'qwerty'
+					})
+					.expect(400)
+					.end(function(err, res) {
+						// console.log(res);
+						done(err);
+					});
+			});			
 		});
 
 		describe('allow correct headers', function() {
@@ -111,10 +143,10 @@ describe('The User Controller', function () {
 		}); 
 	});
 
-	describe('User with Registered Role', function () {
+	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			login.authenticate('registered', function(loginAgent, resp) {
+			login.authenticate('subject', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				done();
@@ -129,6 +161,17 @@ describe('The User Controller', function () {
 				req.send().expect(200).end(function (err, res) {
 					login.logout(done);
 				})
+			});
+		});
+
+		describe('find()', function() {
+			it('should not be able to read users', function (done) {
+				var req = request.get('/api/user');
+				agent.attachCookies(req);
+				req.expect(400)
+					.end(function (err, res) {
+						done(err);
+					});				
 			});
 		});
 
@@ -148,7 +191,7 @@ describe('The User Controller', function () {
 					.end(function (err, res) {
 						// var user = res.body;
 						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User newuser@example.com is not permitted to POST ');
+						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -159,11 +202,11 @@ describe('The User Controller', function () {
 				var req = request.put('/api/user/' + newUserId);
 				agent.attachCookies(req);
 
-				req.send({ email: 'newuserupdated@example.com' })
+				req.send({ email: 'subjectupdated@example.com' })
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.email.should.equal('newuserupdated@example.com');
+						collection.items[0].email.should.equal('subjectupdated@example.com');
 						done(err);
 					});
 			});
@@ -179,6 +222,16 @@ describe('The User Controller', function () {
 						collection.error.should.equal('Cannot perform action [update] on foreign object');
 						done(err);
 					});
+			});
+		});
+
+		describe('delete()', function() {
+			it('should not be able to delete users', function (done) {
+				var req = request.del('/api/user/' + newUserId);
+				agent.attachCookies(req);
+				req.send().expect(400).end(function (err) {
+					done(err);
+				})
 			});
 		});
 	});
