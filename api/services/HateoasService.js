@@ -5,10 +5,7 @@ module.exports = {
     return function() {
       var obj = this.toObject();
       obj.rel = model.exports.identity;
-
-      // only studies should have vanity URLs
-      var id = (obj.rel === 'study') ? this.name : this.id;
-      obj.href = HateoasService.getSelfLink(model.exports.identity, id);    
+      obj.href = HateoasService.getSelfLink(model.exports.identity, this.id);    
 
       if (_.isFunction(this.getResponseLinks)) {
         obj.links = this.getResponseLinks(this.id);

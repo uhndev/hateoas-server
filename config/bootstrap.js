@@ -23,7 +23,7 @@ module.exports.bootstrap = function(cb) {
   fixtures = barrels.data;
 
   // Populate the DB
-  console.log("Loading fixtures...");
+  console.log("Loading sails fixtures...");
 
   var formNames = _.pluck(fixtures.form, 'form_name');
   Form.find({form_name: formNames}).then(function (forms) {

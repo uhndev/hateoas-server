@@ -16,9 +16,18 @@ module.exports = {
       required: true,
       unique: true
     },
-    users: {
-      collection: 'user',
-      via: 'studies'
+    reb: {
+      type: 'string',
+      required: true
+    },
+    collectionCenters: {
+      type: 'array'
+    },
+    pi: {
+      model: 'user' 
+    },
+    coordinator: {
+      model: 'user'
     },
     getResponseLinks: function(id) {
       return [

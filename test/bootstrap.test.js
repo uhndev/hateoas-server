@@ -20,7 +20,7 @@ before(function(done) {
     port: 1336,
     // configuration for testing purposes
     log: {
-      level: 'error',
+      level: 'verbose',
       noShip: true
     },
     models: {
@@ -46,7 +46,7 @@ before(function(done) {
     fixtures = barrels.data;
 
     // Populate the DB
-    console.log("Loading fixtures...");
+    console.log("Loading test fixtures...");
     barrels.populate(function(err) {
       done(err, sails);
     });
