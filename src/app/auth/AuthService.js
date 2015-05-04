@@ -17,7 +17,7 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
         $rootScope.$broadcast("events.unauthorized");
       } else {
         this.currentUser = ipCookie('user').username;
-        this.currentRoles = ipCookie('user').roles;
+        this.currentRole = ipCookie('user').role;
         $rootScope.$broadcast("events.authorized");
       }
 
