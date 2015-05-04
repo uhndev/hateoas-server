@@ -6,6 +6,18 @@
  */
 
 module.exports = {
-	
+
+	findOne: function (req, res, next) {
+		var name = req.param('name');
+		Study.findOne({name: name})
+			.exec(function (err, study) {
+				if (_.isUndefined(study)) {
+					res.status(404).send("Study " + name + " could not be found");
+				} else {
+					res.ok(study);
+				}
+			});
+	}
+
 };
 

@@ -1,0 +1,34 @@
+[
+	{
+		"path": "/api/user",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/1"
+		}
+	},
+	{
+		"path": "/api/person",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/2"
+		}
+	},	
+	{
+		"path": "/api/subject",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/3"
+		}
+	},
+	{
+		"path": "/api/study",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/4"
+		}
+	}
+]

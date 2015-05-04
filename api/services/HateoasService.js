@@ -5,8 +5,10 @@ module.exports = {
     return function() {
       var obj = this.toObject();
       obj.rel = model.exports.identity;
-      obj.href = HateoasService.getSelfLink(model.exports.identity, 
-        this.id);
+
+      // only studies should have vanity URLs
+      var id = (obj.rel === 'study') ? this.name : this.id;
+      obj.href = HateoasService.getSelfLink(model.exports.identity, id);    
 
       if (_.isFunction(this.getResponseLinks)) {
         obj.links = this.getResponseLinks(this.id);
@@ -24,7 +26,7 @@ module.exports = {
     if (id) {
       components.push(id);
     }
-    
+   
     return components.join('/');
   },
   create: function(req, res, data) {
@@ -56,19 +58,19 @@ module.exports = {
                        models[modelName].definition);
         
         attributes = _.map(schema, function(definition, field) {
-            var template = {
-              'name': field,
-              'type': definition.model || definition.type,
-              'prompt': Utils.String.camelCaseToText(field),
-              'value': ''
-            }
+          var template = {
+            'name': field,
+            'type': definition.model || definition.type,
+            'prompt': Utils.String.camelCaseToText(field),
+            'value': ''
+          }
 
-            if (definition.model) {
-              template = _.merge(template, 
-                makeTemplate(definition.model));
-            }
+          if (definition.model) {
+            template = _.merge(template, 
+              makeTemplate(definition.model));
+          }
 
-            return template;
+          return template;
         });
       }
       return { data: attributes };
@@ -76,6 +78,19 @@ module.exports = {
 
     function addBaseUrl(link) {
       link.href = sails.getBaseUrl() + link.href;
+    }
+
+    function checkBaseModel(state) {
+      var modelName = req.options.model || req.options.controller;
+      if (!state) {
+        // if WorkflowState not found, try again with the base model
+        var response = url.parse(HateoasService.getSelfLink(modelName)).pathname;
+        var href = decodeURIComponent(response);
+        return WorkflowState.findOne({
+          path: url.parse(href).pathname
+        });
+      }
+      return state;
     }
 
     /**
@@ -119,8 +134,10 @@ module.exports = {
     }
 
     return WorkflowState.findOne({ 
-      path: decodeURIComponent(address.pathname) 
-    }).then(makeResponse);
+      path: decodeURIComponent(address.pathname)
+    })
+    .then(checkBaseModel)
+    .then(makeResponse);
   }
 };
 

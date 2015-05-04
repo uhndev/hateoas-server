@@ -4,11 +4,13 @@ angular.module('hateoas.controls.controller',
    'hateoas.utils',
    'ngform-builder'])
   .controller('HateoasControlsController', 
-    ['$scope', '$modal', 'HateoasUtils',
+    ['$scope', '$modal', '$location', 
+     'API', 'HateoasUtils',
+ 
     /**
      * Controller for the directive
      */
-    function HateoasControlsController($scope, $modal, HateoasUtils) {
+    function HateoasControlsController($scope, $modal, $location, API, HateoasUtils) {
       // By default, the HateoasService is used. However, the service can be
       // overridden by declaring the service in the directive.
       var Service = HateoasUtils.getService('ControlsService');
@@ -59,7 +61,13 @@ angular.module('hateoas.controls.controller',
        * The default button handler
        */
       $scope.launch = function defaultLauncher(button) {
-        if (button.method === 'delete') {
+        if (button.method === 'get') {
+          if ($scope.item.rel) {
+            var index = $scope.item.href.indexOf(API.prefix) + API.prefix.length;
+            $location.path($scope.item.href.substring(index));
+          }
+        }
+        else if (button.method === 'delete') {
           archive($scope.item);
         } else {
           open(button.method);

@@ -5,6 +5,7 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "barrels": "^1.4.1",
     "bcryptjs": "^2.1.0",
     "coffeelint": "^1.9.3",
     "connect-mongo": "^0.8.0",
@@ -12,6 +13,7 @@
     "ejs": "~2.3.1",
     "include-all": "~0.1.6",
     "lodash": "~3.6.0",
+    "lodash-contrib": "^241.4.10",
     "moment": "^2.9.0",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
@@ -24,8 +26,7 @@
     "sails-permissions": "^1.0.16",
     "sails-redis": "^0.10.3",
     "socket.io-redis": "^0.1.4",
-    "validator": "~3.37.0",
-    "lodash-contrib": "^241.4.10"
+    "validator": "~3.37.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -57,7 +58,7 @@
     "grunt-karma": "^0.10.1",
     "grunt-ngmin": "0.0.3",
     "grunt-sails-linker": "~0.10.1",
-    "grunt-sync": "~0.2.3",    
+    "grunt-sync": "~0.2.3",
     "grunt-hub": "^0.7.0",
     "grunt-mocha-cov": "~0.4.0",
     "grunt-mocha-test": "~0.12.7",
@@ -72,6 +73,6 @@
     "karma-chrome-launcher": "^0.1.7",
     "karma-coffee-preprocessor": "^0.2.1",
     "karma-firefox-launcher": "^0.1.4",
-    "karma-jasmine": "^0.3.5"    
+    "karma-jasmine": "^0.3.5"
   }
 }

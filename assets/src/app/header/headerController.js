@@ -3,38 +3,40 @@
  */
 
 angular.module('dados.header', [
+  'dados.header.constants',
   'dados.auth.service'
 ])
 
 .controller('HeaderCtrl', 
-  ['$scope', '$state', '$location', 'AuthService', 
+  ['$scope', '$state', '$location', 'AuthService', 'TABVIEW',
   /**
    * [HeaderCtrl - controller for managing header items]
    * @param {[type]} $scope
    */
-  function ($scope, $state, $location, AuthService) {
+  function ($scope, $state, $location, AuthService, TABVIEW) {
     $scope.AuthService = AuthService;
-    $scope.navigation = [
-      { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-      { prompt: 'Form', href: '/form', icon: 'fa-file-o' },
-      { prompt: 'Answers', href: '/answerset', icon: 'fa-archive' },
-      { prompt: 'People', href: '/person', icon: 'fa-male' },
-      { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
-      { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
-      { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
-    ];
-
-    if (!AuthService.isAuthorized()) {
-      $location.url('/login');
-    }    
+    // $scope.navigation = TABVIEW.SUBJECT;
 
     function updateActive() {
+      if (AuthService.currentRole) {
+        var view = AuthService.currentRole.toString().toUpperCase();
+        angular.copy(TABVIEW[view], $scope.navigation);
+      }
+
       var href = $location.path();
       _.each($scope.navigation, function(link) {
         link.isActive = 
           (href.toLowerCase() === link.href.toLowerCase());
       });
-    }
+    } 
+
+    $scope.$on('events.unauthorized', function() {
+      $location.url('/login');
+    });
+
+    $scope.$on('events.authorized', function() {
+      $scope.navigation = TABVIEW.ADMIN;
+    });
 
     $scope.$on('$locationChangeSuccess', updateActive);
     updateActive();

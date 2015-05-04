@@ -16,6 +16,10 @@ module.exports = {
       required: true,
       unique: true
     },
+    users: {
+      collection: 'user',
+      via: 'studies'
+    },
     getResponseLinks: function(id) {
       return [
         { 
@@ -23,15 +27,35 @@ module.exports = {
           'prompt': 'Subjects', 
           'name': 'name',
           'href' : [
-            sails.getBaseUrl() +
-            sails.config.blueprints.prefix,
-            'study',
-            this.name,
-            'subject'
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
+          ].join('/')
+        },
+        { 
+          'rel': 'users', 
+          'prompt': 'Users', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
+          ].join('/')
+        },
+        { 
+          'rel': 'form', 
+          'prompt': 'Forms', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
+          ].join('/')
+        },
+        { 
+          'rel': 'encounter', 
+          'prompt': 'Encounters', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'encounter'
           ].join('/')
         }
       ];
-    },
+    },    
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }
 };

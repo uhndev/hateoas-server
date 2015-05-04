@@ -31,7 +31,7 @@ module.exports.policies = {
     'passport',
     'sessionAuth',
     'ModelPolicy',
-    // 'AuditPolicy',
+    'AuditPolicy',
     'OwnerPolicy',
     'PermissionPolicy',
     'RolePolicy'

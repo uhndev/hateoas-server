@@ -22,8 +22,12 @@
       <div class="collapse navbar-collapse" collapse="menuCollapsed">
         <ul class="nav navbar-nav">
           <li ng-repeat="link in navigation"
-            ng-class="{ 'active': link.isActive }">
-            <a href="#{{ link.href }}">
+            ng-class="{ 
+              'active': link.isActive, 
+              'dropdown': link.dropdown
+            }">
+            <!-- Single Link -->
+            <a href="#{{ link.href }}" ng-if="!link.dropdown">
               <i class="fa {{ link.icon }}"></i>
               {{ link.prompt }}
             </a>
@@ -32,6 +36,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a href="/logout" ng-click="AuthService.logout()">
+              <i class="fa fa-sign-out"></i>
               Logout
             </a>
           </li>

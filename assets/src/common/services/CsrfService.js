@@ -5,20 +5,20 @@ angular.module('dados.common.services.csrf', [])
     'use strict';
     var _token = false;
     return {
-      request : function InterceptRequest(config){
+      request: function InterceptRequest(config){
         if (config.url == CSRF_URL || config.method == "GET"){
           return config;
         }
 
-        if (_token){ 
-          config.data._csrf = _token;
-          return config;
-        }
+        // cookie timeouts require refetching of token
+        // if (_token){ 
+        //   config.data._csrf = _token;
+        //   return config;
+        // }
  
         var deferred = $q.defer();
         var $http = $injector.get('$http');
-        $http.get(CSRF_URL)
-             .success(function (response , status , headers){
+        $http.get(CSRF_URL).success(function (response , status , headers){
           if(response._csrf){
             _token = response._csrf;
             config.data._csrf = _token;
