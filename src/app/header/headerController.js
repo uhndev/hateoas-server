@@ -20,7 +20,7 @@ angular.module('dados.header', [
     function updateActive() {
       if (AuthService.currentRole) {
         var view = AuthService.currentRole.toString().toUpperCase();
-        angular.copy(TABVIEW[view], $scope.navigation);
+        $scope.navigation = TABVIEW[view];
       }
 
       var href = $location.path();
