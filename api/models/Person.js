@@ -11,15 +11,15 @@ var HateoasService = require('../services/HateoasService.js');
 module.exports = {
   schema: true,
   attributes: {
-    userName: {
+    username: {
       type: 'string',
       required: true
     },
-    firstName: {
+    firstname: {
       type: 'string',
       required: true
     },
-    lastName: {
+    lastname: {
       type: 'string',
       required: true
     },

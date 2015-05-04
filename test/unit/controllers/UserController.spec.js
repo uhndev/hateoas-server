@@ -165,11 +165,13 @@ describe('The User Controller', function () {
 		});
 
 		describe('find()', function() {
-			it('should not be able to read users', function (done) {
+			it('should only be able to read self user', function (done) {
 				var req = request.get('/api/user');
 				agent.attachCookies(req);
-				req.expect(400)
+				req.expect(200)
 					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items.length.should.equal(1);
 						done(err);
 					});				
 			});
