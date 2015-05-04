@@ -72,8 +72,8 @@ _.merge(exports, {
 
         User.findOne(user.id).populate('roles')
         .then(function(data) {
-          var resp = _.pick(user, 'username');
-          resp.roles = _.pluck(data.roles, 'name');
+          var resp = _.pick(user, 'id', 'username');
+          resp.role = _.without(_.pluck(data.roles, 'name'), 'registered');
 
           sails.log.info('user', resp, 'authenticated successfully');
           return res.json(resp);

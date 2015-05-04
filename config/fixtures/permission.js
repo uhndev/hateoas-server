@@ -57,10 +57,22 @@ function grantSubjectPermissions (roles, models, admin) {
     },
     {
       model: _.find(models, { name: 'User' }).id,
-      action: 'update',
+      action: 'read',
       role: subjectRole.id,
       createdBy: admin.id,
-      relation: 'owner'
+      relation: 'owner'   
+    },
+    {
+      model: _.find(models, { name: 'Form' }).id,
+      action: 'read',
+      role: subjectRole.id,
+      createdBy: admin.id
+    },
+    {
+      model: _.find(models, { name: 'AnswerSet' }).id,
+      action: 'create',
+      role: subjectRole.id,
+      createdBy: admin.id
     }
   ];
 
