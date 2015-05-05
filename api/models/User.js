@@ -13,13 +13,9 @@ _.merge(exports, {
     person: {
       model: 'person'
     },
-    coordinatorStudies: {
+    studies: {
       collection: 'study',
-      via: 'coordinator'
-    },
-    piStudies: {
-      collection: 'study',
-      via: 'pi'
+      via: 'users'
     },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },

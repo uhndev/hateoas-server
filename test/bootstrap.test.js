@@ -20,10 +20,10 @@ before(function(done) {
     port: 1336,
     // configuration for testing purposes
     log: {
-      level: 'verbose',
+      level: 'silent',
       noShip: true
     },
-    models: {
+    models: { 
       connection: 'dados_test',
       migrate: 'drop'
     },

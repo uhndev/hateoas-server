@@ -17,12 +17,17 @@ angular.module('dados.header', [
     $scope.AuthService = AuthService;
     // $scope.navigation = TABVIEW.SUBJECT;
 
-    function updateActive() {
+    function updateHeader() {
       if (AuthService.currentRole) {
         var view = AuthService.currentRole.toString().toUpperCase();
-        $scope.navigation = TABVIEW[view];
+        if (TABVIEW[view] !== $scope.navigation) {
+          angular.copy(TABVIEW[view], $scope.navigation);
+        }
       }
+    }
 
+    function updateActive() {
+      updateHeader();
       var href = $location.path();
       _.each($scope.navigation, function(link) {
         link.isActive = 
@@ -35,7 +40,7 @@ angular.module('dados.header', [
     });
 
     $scope.$on('events.authorized', function() {
-      $scope.navigation = TABVIEW.ADMIN;
+      $scope.navigation = TABVIEW.SUBJECT;
     });
 
     $scope.$on('$locationChangeSuccess', updateActive);

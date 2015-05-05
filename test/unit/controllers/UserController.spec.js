@@ -187,7 +187,8 @@ describe('The User Controller', function () {
 					.send({
 						username: 'newuser1',
 						email: 'newuser1@example.com',
-						password: 'lalalal1234'
+						password: 'lalalal1234',
+						role: 'subject'
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -200,15 +201,15 @@ describe('The User Controller', function () {
 		});
 
 		describe('update()', function () {
-			it('should be able to update themselves', function (done) {
+			it('should not be able to update themselves', function (done) {
 				var req = request.put('/api/user/' + newUserId);
 				agent.attachCookies(req);
 
 				req.send({ email: 'subjectupdated@example.com' })
-					.expect(200)
+					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].email.should.equal('subjectupdated@example.com');
+						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
@@ -221,7 +222,7 @@ describe('The User Controller', function () {
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.error.should.equal('Cannot perform action [update] on foreign object');
+						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});

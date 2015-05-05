@@ -23,11 +23,9 @@ module.exports = {
     collectionCenters: {
       type: 'array'
     },
-    pi: {
-      model: 'user' 
-    },
-    coordinator: {
-      model: 'user'
+    users: {
+      collection: 'user',
+      via: 'studies'
     },
     getResponseLinks: function(id) {
       return [
