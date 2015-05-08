@@ -1,28 +1,35 @@
 angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
        .constant('LOGIN_API', 'http://localhost:1337/auth/local')
-       .constant('REGISTER_API', 'http://localhost:1337/auth/local/register')
        .constant('LOGOUT_API', 'http://localhost:1337/logout')
-       .service('AuthService', ['LOGIN_API', 'REGISTER_API', 'LOGOUT_API', 
+       .service('AuthService', ['LOGIN_API', 'LOGOUT_API', 
                                 '$rootScope', '$location', '$resource', '$cookieStore', 'ipCookie',
-  function AuthService(loginURL, registerURL, logoutURL, $rootScope, $location, $resource, $cookieStore, ipCookie) {
+  function AuthService(loginURL, logoutURL, $rootScope, $location, $resource, $cookieStore, ipCookie) {
     'use strict';
     
-    var LoginAuth    = $resource(loginURL);
-    var RegisterAuth = $resource(registerURL);
+    var LoginAuth = $resource(loginURL);
 
-    this.isAuthorized = function() {
-      var auth = Boolean(ipCookie('user'));
+    this.isAuthenticated = function() {
+      var auth = Boolean(ipCookie('user'));      
       if (!auth) {
-        $location.url('/login');
-        $rootScope.$broadcast("events.unauthorized");
+        this.setUnauthenticated();
       } else {
-        this.currentUser = ipCookie('user').username;
-        this.currentRole = ipCookie('user').role;
-        $rootScope.$broadcast("events.authorized");
+        this.setAuthenticated();
       }
-
       return auth;
-      // return Boolean($cookieStore.get('user'));
+    };
+
+    this.setUnauthenticated = function() {
+      ipCookie.remove('user');
+      delete this.currentUser;
+      delete this.currentRole;      
+      $rootScope.$broadcast("events.unauthorized");
+      $location.url('/login');
+    };
+
+    this.setAuthenticated = function() {
+      this.currentUser = ipCookie('user').username;
+      this.currentRole = ipCookie('user').role;
+      $rootScope.$broadcast("events.authorized");
     };
 
     this.login = function(data, onSuccess, onError) {
@@ -30,13 +37,8 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
       state.$save().then(onSuccess).catch(onError);
     };
 
-    this.register = function(data, onSuccess, onError) {
-      var state = new RegisterAuth(data);
-      state.$save().then(onSuccess).catch(onError);
-    };
-
-    this.logout = function(data, onSuccess, onError) {
-      ipCookie.remove('user');
+    this.logout = function(data, onSuccess, onError) {      
+      this.setUnauthenticated();
       // $cookieStore.remove('user');
       return $resource(logoutURL).query();
     };

@@ -76,7 +76,6 @@ _.merge(exports, {
           resp.role = _.without(_.pluck(data.roles, 'name'), 'registered');
 
           sails.log.info('user', resp, 'authenticated successfully');
-          sails.sockets.blast('status.authenticated', resp);
 
           return res.json(resp);
         });        

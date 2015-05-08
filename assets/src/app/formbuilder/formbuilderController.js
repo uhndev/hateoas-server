@@ -4,51 +4,42 @@ angular.module( 'dados.formbuilder.controller', [
 ])
 
 .controller('FormBuilderController',
-  ['$scope', '$location', '$timeout', '$resource', 
-  function ($scope, $location, $timeout, $resource) {
+  ['$location', '$timeout', '$resource', 'StatusService',
+  function ($location, $timeout, $resource, StatusService) {
+    'use strict';
+
+    var vm = this;
     var api = 'http://localhost:1337/api/form/:id';
     var Resource = $resource(api, {}, {'update': { method: 'PUT' }});
-    $scope.alerts = [];
-    $scope.form = {};
-
-    var addAlert = function(msg) {
-      $scope.alerts.push(msg);
-      $timeout(function() {
-        $scope.closeAlert(0);
-      }, 5000);
-    };
+    vm.form = {};
 
     var pushError = function(err) {
-      addAlert({msg: err.data, type: 'danger'});
+      StatusService.update({msg: err, type: 'danger'});
     };
 
     var query = $location.search();
     // if formURL to load contains a form ID, load it
     if (_.has(query, 'id')) {
       Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
-        angular.copy(form.items, $scope.form);
-        addAlert({msg: 'Loaded form '+$scope.form.form_name+' successfully!', type: 'success'});
+        angular.copy(form.items, vm.form);
+        StatusService.update({msg: 'Loaded form '+vm.form.form_name+' successfully!', type: 'info'});
       }, function (err) {
-        addAlert({msg: 'Unable to load form! ' + err.data, type: 'danger'});
+        StatusService.update({msg: 'Unable to load form! ' + err, type: 'danger'});
       });
     }
 
-    $scope.closeAlert = function(index) {
-      $scope.alerts.splice(index, 1);
-    };
-
-    $scope.saveForm = function() {
-      var resource = new Resource($scope.form);
+    vm.saveForm = function() {
+      var resource = new Resource(vm.form);
       // if current form object has an href attribute, we update
-      if (_.has($scope.form, 'href')) {
-        resource.$update( {id:$scope.form.id} ).then(function (data) {
-          addAlert({msg: 'Updated form '+$scope.form.form_name+' successfully!', type: 'success'});
+      if (_.has(vm.form, 'href')) {
+        resource.$update( {id:vm.form.id} ).then(function (data) {
+          StatusService.update({msg: 'Updated form '+vm.form.form_name+' successfully!', type: 'success'});
         }).catch(pushError);        
       } 
       // otherwise, we create a new form
       else {
         resource.$save().then(function (data) {
-          addAlert({msg: 'Saved form '+$scope.form.form_name+' successfully!', type: 'success'});
+          StatusService.update({msg: 'Saved form '+vm.form.form_name+' successfully!', type: 'success'});
         }).catch(pushError);
       }    
     };

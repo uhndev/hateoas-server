@@ -12,6 +12,7 @@ angular.module( 'dados', [
   'dados.filters.formatter',
   'dados.filters.type',
   'dados.common.services.csrf',
+  'dados.common.services.status',
   'hateoas',
   'hateoas.queryBuilder'
 ])

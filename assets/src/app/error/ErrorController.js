@@ -1,7 +1,7 @@
-angular.module('dados.error.controller', ['dados.common.services.error'])
+angular.module('dados.error.controller', ['sails.io', 'dados.common.services.error'])
 
-.controller('ErrorController', ['$modal', '$timeout', '$sails', 
-	function($modal, $timeout, $sails) {
+.controller('ErrorController', ['$modal', '$timeout', '$sailsSocket', 
+	function($modal, $timeout, $sailsSocket) {
 		var vm = this;
 		var socketErrorModal = null;
 
@@ -23,7 +23,7 @@ angular.module('dados.error.controller', ['dados.common.services.error'])
 					sm.error.message = message;
 
 					sm.reconnect = function() {
-						$sails.socket.connect();
+						$sailsSocket.socket.connect();
 					};
 					sm.sendError = function() {
 						console.log(sm.error);
@@ -38,19 +38,19 @@ angular.module('dados.error.controller', ['dados.common.services.error'])
 
 		vm.socketReady = false; // Wait for socket to connect
 
-		$sails.on('connect', function (data) {
+		$sailsSocket.subscribe('connect', function (data) {
 			closeSocketErrorModal();
 			vm.socketReady = true;
 		});
 
-		$sails.on('disconnect', function (data) {
+		$sailsSocket.subscribe('disconnect', function (data) {
 			$timeout(function() {
 				openSocketErrorModal('The application cannot reach the server... Please wait');
 				vm.socketReady = false;	
 			}, 500);			
 		});
 
-		$sails.on('failure', function (event, data) {
+		$sailsSocket.subscribe('failure', function (event, data) {
 			openSocketErrorModal('The application failed to connect to the server.');
 		});		
 	}
