@@ -9,7 +9,6 @@
  */
 
 var UserController = require('../../../api/controllers/UserController');
-var login = require('../utils/login');
 
 describe('The User Controller', function () {
 
@@ -20,7 +19,7 @@ describe('The User Controller', function () {
 	describe('User with Admin Role', function () {
 		
 		before(function(done) {
-			login.authenticate('admin', function(loginAgent, resp) {
+			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				done();
@@ -28,7 +27,7 @@ describe('The User Controller', function () {
 		});
 
 		after(function(done) {
-			login.logout(done);
+			auth.logout(done);
 		});
 
 		describe('find()', function () {
@@ -40,7 +39,7 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].username.should.equal(process.env.ADMIN_USERNAME);
+						collection.items[0].username.should.equal('admin');
 						adminUserId = collection.items[0].id;
 						done(err);
 					});
@@ -55,15 +54,15 @@ describe('The User Controller', function () {
 				req.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.send({
-						username: 'subject',
-						email: 'subject@example.com',
+						username: 'subject2',
+						email: 'subject2@example.com',
 						password: 'subject1234',
 						role: 'subject'
 					})
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('subject');
+						collection.items.username.should.equal('subject2');
 						newUserId = user.id;
 						done(err);
 					});
@@ -146,7 +145,7 @@ describe('The User Controller', function () {
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			login.authenticate('subject', function(loginAgent, resp) {
+			auth.authenticate('subject', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				done();
@@ -154,12 +153,12 @@ describe('The User Controller', function () {
 		});
 
 		after(function(done) {	  	
-			login.authenticate('admin', function(loginAgent, resp) {
+			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				var req = request.del('/api/user/' + newUserId);
 				agent.attachCookies(req);
 				req.send().expect(200).end(function (err, res) {
-					login.logout(done);
+					auth.logout(done);
 				})
 			});
 		});

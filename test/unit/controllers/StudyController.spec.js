@@ -11,46 +11,32 @@
  */
 
 var StudyController = require('../../../api/controllers/StudyController');
-var login = require('../utils/login'),
-		should = require('should');
 
 describe('The Study Controller', function () {
 
-	var agent, adminUserId, subjectUserId, studyId;
+	var agent, adminUserId, studyId;
 
 	describe('User with Admin Role', function () {
 		
 		before(function(done) {
-			login.authenticate('admin', function(loginAgent, resp) {
+
+			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				adminUserId = JSON.parse(resp.text).id;
 
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-
-				req.send({
-					username: 'subject',
-					email: 'subject@example.com',
-					password: 'subject1234',
-					role: 'subject'
-				})
-				.expect(201)
-				.end(function(err, res) {
-					subjectUserId = JSON.parse(res.text).items.id
-					Study.create({
-						name: 'LEAP',
-						reb: 100,
-						users: [adminUserId]
-					}).then(function (res) {
-						done();
-					});	
+				Study.create({
+					name: 'LEAP',
+					reb: 100,
+					users: [adminUserId]
+				}).then(function (res) {
+					done();
 				});
 			});
 		});
 
 		after(function(done) {
-			login.logout(done);
+			auth.logout(done);
 		});
 
 		describe('find()', function () {
@@ -146,8 +132,8 @@ describe('The Study Controller', function () {
 					.expect(201)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.name.should.equal('LEAP-HIP');
 						studyId = collection.id;
+						collection.name.should.equal('LEAP-HIP');
 						done(err);
 					});
 			});
@@ -197,13 +183,12 @@ describe('The Study Controller', function () {
 			it('should be able to update users of study', function(done) {
 				var req = request.put('/api/study/' + studyId);
 				agent.attachCookies(req);
-
 				req.send({ users: [adminUserId, subjectUserId] })
 					.expect(200)
 					.end(function (err, res) {
 						Study.findOne(studyId).populate('users')
 							.then(function (data) {
-								data.users[0].username.should.equal('test_admin');
+								data.users[0].username.should.equal('admin');
 								data.users[1].username.should.equal('subject');
 								done(err);
 							});
@@ -239,22 +224,15 @@ describe('The Study Controller', function () {
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			login.authenticate('subject', function(loginAgent, resp) {
+			auth.authenticate('subject', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
 		});
 
-		after(function(done) {	  	
-			login.authenticate('admin', function(loginAgent, resp) {
-				agent = loginAgent;
-				var req = request.del('/api/user/' + subjectUserId);
-				agent.attachCookies(req);
-				req.send().expect(200).end(function (err, res) {
-					login.logout(done);
-				})
-			});
+		after(function(done) {
+			auth.logout(done);
 		});
 
 		describe('create()', function () {

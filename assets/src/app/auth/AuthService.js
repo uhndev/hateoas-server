@@ -10,7 +10,7 @@ angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
     var LoginAuth    = $resource(loginURL);
     var RegisterAuth = $resource(registerURL);
 
-    this.isAuthorized = function(onSuccess) {
+    this.isAuthorized = function() {
       var auth = Boolean(ipCookie('user'));
       if (!auth) {
         $location.url('/login');

@@ -14,9 +14,9 @@ describe('The User Model', function() {
 			role: 'admin'
 		};
 
-		it('should begin with only admin user',  function(done) {
+		it('should begin with admin, subject, and coordinator users',  function(done) {
 			User.count(function(err, users) {
-				users.should.be.exactly(1);
+				users.should.be.exactly(3);
 				done();
 			});
 		});

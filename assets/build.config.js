@@ -76,6 +76,7 @@ module.exports = {
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-sails/dist/angular-sails.js',
+      'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/ace-builds/src-min-noconflict/ace.js',
       'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
       'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
@@ -90,10 +91,11 @@ module.exports = {
       'vendor/nglist-editor/dist/nglist-editor.js'
     ],
     css: [
+      'vendor/angular-toastr/dist/angular-toastr.min.css'
     ],
     assets: [
       'vendor/bootstrap/dist/fonts/*',
-      'vendor/font-awesome/fonts/*' 
+      'vendor/font-awesome/fonts/*'      
     ]
   },
 };

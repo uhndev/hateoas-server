@@ -7,11 +7,8 @@ var Sails = require('sails'),
     sails;
 
 request = require('supertest');
-
-// set temporary environment variables for testing
-process.env.ADMIN_USERNAME = 'test_admin';
-process.env.ADMIN_EMAIL = 'test_email@email.com';
-process.env.ADMIN_PASSWORD = 'Test_Password';
+auth = require('./unit/utils/auth');
+should = require('should');
 
 before(function(done) {
   console.log('Lifting sails...');
@@ -48,7 +45,14 @@ before(function(done) {
     // Populate the DB
     console.log("Loading test fixtures...");
     barrels.populate(function(err) {
-      done(err, sails);
+      // done(err, sails);
+      auth.createUser(auth.credentials['subject'].create, function(subId) {
+        subjectUserId = subId;
+        auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+          coordinatorUserId = cooId;
+          done(err, sails);
+        });
+      });
     });
   });
 });

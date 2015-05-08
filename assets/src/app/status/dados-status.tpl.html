@@ -1,0 +1,5 @@
+<alert ng-repeat="message in status.messages" 
+	type="{{message.type}}" 
+	close="status.closeAlert($index)">
+	{{message.msg}}
+</alert>

@@ -7,28 +7,26 @@
 	'post /auth/local'          : 'AuthController.callback'
  */
 
-var AuthController = require('../../../api/controllers/AuthController'),
-		should = require('should'),
-		login = require("../utils/login");
+var AuthController = require('../../../api/controllers/AuthController');
 
 describe('The Auth Controller', function() {
 
 	describe('when accessing Auth API', function() {
 
-		it('should use the correct test database',  function(done) {
+		it('should use the correct test database', function(done) {
 			sails.config.models.connection.should.equal('dados_test');
 			done();
 		});
 
 		it('should return 403 when logging in with bad credentials', function(done) {
-			login.authenticate('subject', function(agent, resp) {
+			auth.authenticate('badlogin', function(agent, resp) {
 				resp.statusCode.should.be.exactly(403);
 				done();
 			});
 		});
 
 		it('should return 200 when logging in with good credentials', function(done) {
-			login.authenticate('admin', function(agent, resp) {
+			auth.authenticate('admin', function(agent, resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
@@ -44,7 +42,7 @@ describe('The Auth Controller', function() {
 		});
 
 		it('should return the username and roles after logging in', function(done) {
-			login.authenticate('admin', function(agent, resp) {
+			auth.authenticate('admin', function(agent, resp) {
 				resp.res.body.should.have.properties('username', 'role')
 				done();
 			});
