@@ -3,10 +3,10 @@
  */
 
 angular.module( 'dados.auth', [
-  'ui.bootstrap',
   'ui.router',
   'ngCookies',
   'ipCookie',
+  'ngSails',
   'dados.auth.service'
 ])
 .config(function config( $stateProvider ) {
@@ -18,8 +18,10 @@ angular.module( 'dados.auth', [
       data: { pageTitle: 'Login' }
     });
 })
-.controller('AuthController', ['$scope', '$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
-  function ($scope, $location, $state, $cookieStore, ipCookie, AuthService) {
+.controller('AuthController', ['$scope', '$sails', '$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
+  function ($scope, $sails, $location, $state, $cookieStore, ipCookie, AuthService) {
+    $scope.error = '';
+    
     // check if already logged in
     if (AuthService.isAuthorized()) {
       $location.url('/');
