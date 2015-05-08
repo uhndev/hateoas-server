@@ -1,4 +1,4 @@
-angular.module('dados.status', ['ngSails', 'toastr'])
+angular.module('dados.status', ['sails.io', 'toastr'])
 
 .config(function(toastrConfig) {
   angular.extend(toastrConfig, {
@@ -22,7 +22,7 @@ angular.module('dados.status', ['ngSails', 'toastr'])
 
 .directive('dadosStatus', function() {
 
-	var StatusController = function($scope, $sails, toastr) {
+	var StatusController = function($rootScope, $sailsSocket, toastr) {
 		var vm = this;
 
 		var sendMessage = function(message) {
@@ -35,21 +35,21 @@ angular.module('dados.status', ['ngSails', 'toastr'])
 	  	}
 		};
 		
-		$sails.on('status.authenticated', function (user) {
+		$rootScope.$on('status.authenticated', function (ev, user) {
 			sendMessage({ 
 				type: 'success', 
 				msg: 'Hi ' + user.username + ', welcome to DADOS!' 
 			});
 		});
 
-	  $sails.on('status.update', function (message) {
+	  $rootScope.$on('status.update', function (ev, message) {
 	  	sendMessage(message);
 	  });
 	};
 
 	return {
 		restrict: 'A',
-		controller: ['$scope', '$sails', 'toastr', StatusController],
+		controller: ['$rootScope', '$sailsSocket', 'toastr', StatusController],
 		controllerAs: 'status'
 	};
 });

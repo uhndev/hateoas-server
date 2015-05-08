@@ -19,18 +19,22 @@ angular.module('dados.header', ['dados.auth.service'])
 })
 
 .directive('dadosHeader', function() {
-	var headerController = function($location, $state, $scope, AuthService, TABVIEW) {
+	var headerController = function($location, $state, $rootScope, AuthService, TABVIEW) {
 		var vm = this;
 
     vm.AuthService = AuthService;
-    // vm.navigation = TABVIEW.SUBJECT;
+    vm.isVisible = AuthService.isAuthenticated();
+
+    if (AuthService.isAuthenticated()) {
+      updateHeader();
+    }
 
     function updateHeader() {
       if (AuthService.currentRole) {
         var view = AuthService.currentRole.toString().toUpperCase();
         if (TABVIEW[view] !== vm.navigation) {
-          angular.copy(TABVIEW[view], vm.navigation);
-        }
+          vm.navigation = TABVIEW[view];
+        }        
       }
     }
 
@@ -41,17 +45,25 @@ angular.module('dados.header', ['dados.auth.service'])
         link.isActive = 
           (href.toLowerCase() === link.href.toLowerCase());
       });
-    } 
+    }
 
-    $scope.$on('events.unauthorized', function() {
-      $location.url('/login');
+    vm.logout = function() {
+      vm.isVisible = false;
+      vm.navigation = [];
+      AuthService.logout();
+    };
+
+    $rootScope.$on('events.unauthorized', function() {
+      vm.isVisible = false;
+      vm.navigation = [];
     });
 
-    $scope.$on('events.authorized', function() {
-      vm.navigation = TABVIEW.SUBJECT;
+    $rootScope.$on('events.authorized', function() {
+      vm.isVisible = true;
+      updateHeader();
     });
 
-    $scope.$on('$locationChangeSuccess', updateActive);
+    $rootScope.$on('$locationChangeSuccess', updateActive);
     updateActive();
 	};
 
@@ -59,7 +71,7 @@ angular.module('dados.header', ['dados.auth.service'])
 		restrict: 'E',
 		replace: true,
 		templateUrl: 'header/dados-header.tpl.html',
-		controller: ['$location', '$state', '$scope', 'AuthService', 'TABVIEW', headerController],
+		controller: ['$location', '$state', '$rootScope', 'AuthService', 'TABVIEW', headerController],
 		controllerAs: 'header'
 	};
 });

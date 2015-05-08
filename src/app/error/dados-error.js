@@ -1,5 +1,5 @@
 angular.module('dados.error', [
-	'ngSails',
+	'sails.io',
 	'dados.error.controller'
 ])
 

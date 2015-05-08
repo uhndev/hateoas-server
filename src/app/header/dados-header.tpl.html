@@ -10,7 +10,7 @@
       </nav>
     </div>
     <div class="menuWrapper">
-      <nav class="navbar navbar-default" role="navigation" ng-if="header.AuthService.isAuthorized()">
+      <nav class="navbar navbar-default" role="navigation" ng-if="header.isVisible">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"
             ng-click="header.menuCollapsed = ! header.menuCollapsed">
@@ -22,21 +22,21 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in header.navigation"
+            <li ng-repeat="link in ::header.navigation"
               ng-class="{ 
                 'active': link.isActive, 
                 'dropdown': link.dropdown
               }">
               <!-- Single Link -->
-              <a href="#{{ link.href }}" ng-if="!link.dropdown">
-                <i class="fa {{ link.icon }}"></i>
-                {{ link.prompt }}
+              <a href="#{{ ::link.href }}" ng-if="!link.dropdown">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }}
               </a>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/logout" ng-click="header.AuthService.logout()">
+              <a href="/logout" ng-click="header.logout()">
                 <i class="fa fa-sign-out"></i>
                 Logout
               </a>

@@ -6,7 +6,6 @@ angular.module( 'dados.auth', [
   'ui.router',
   'ngCookies',
   'ipCookie',
-  'ngSails',
   'dados.auth.service'
 ])
 .config(function config( $stateProvider ) {
@@ -14,16 +13,19 @@ angular.module( 'dados.auth', [
     .state( 'login', {
       url: '/login',
       controller: 'AuthController',
+      controllerAs: 'auth',
       templateUrl: 'auth/login.tpl.html',
       data: { pageTitle: 'Login' }
     });
 })
-.controller('AuthController', ['$scope', '$sails', '$location', '$state', '$cookieStore', 'ipCookie', 'AuthService',
-  function ($scope, $sails, $location, $state, $cookieStore, ipCookie, AuthService) {
-    $scope.error = '';
+.controller('AuthController', ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'StatusService',
+  function ($location, $state, $cookieStore, ipCookie, AuthService, StatusService) {
+
+    var vm = this;
+    vm.error = '';
     
     // check if already logged in
-    if (AuthService.isAuthorized()) {
+    if (AuthService.isAuthenticated()) {
       $location.url('/');
     }
 
@@ -33,6 +35,8 @@ angular.module( 'dados.auth', [
         ipCookie('user', user, {
           expires: new Date(now.getTime() + 900000)
         });
+        AuthService.setAuthenticated();
+        StatusService.authenticated(user);
         // wait until stable angular 1.3 for cookie expiration support
         // $cookieStore.put('user', user, {
         //   expires: new Date(now.getTime() + 900000)
@@ -43,16 +47,16 @@ angular.module( 'dados.auth', [
     };
 
     var error = function(err) {
-      $scope.error = err;
+      vm.error = err;
     };
 
-    $scope.login = function() {
-      AuthService.login($scope.credentials, success, error);
+    vm.login = function() {
+      AuthService.login(vm.credentials, success, error);
     };
 
-    $scope.register = function(isValid) {
+    vm.register = function(isValid) {
       if (isValid) {
-        AuthService.register($scope.credentials, success, error);
+        AuthService.register(vm.credentials, success, error);
       }
     };
   } 

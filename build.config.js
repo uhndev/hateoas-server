@@ -75,7 +75,7 @@ module.exports = {
       'vendor/angular-cookies/angular-cookies.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-resource/angular-resource.js',
-      'vendor/angular-sails/dist/angular-sails.js',
+      'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/ace-builds/src-min-noconflict/ace.js',
       'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
