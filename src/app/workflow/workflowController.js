@@ -1,50 +1,54 @@
-angular.module('dados.workflow.controller', 
-            ['dados.workflow.service'])
-       .constant('DEFAULT_LINK', {
-         path: '',
-         links: [],
-         queries: [],
-         template: {}
-       })
-       .controller('WorkflowController', 
-       ['$scope', '$filter', 'DEFAULT_LINK', 'Workflow',
-function($scope, $filter, DEFAULT_LINK, Workflow) {
+(function() {
   'use strict';
+  angular
+    .module('dados.workflow.controller', ['dados.workflow.service'])
+    .constant('DEFAULT_LINK', {
+      path: '',
+      links: [],
+      queries: [],
+      template: {}
+    })
+    .controller('WorkflowController', WorkflowController);
 
-  $scope.workflows = Workflow.query();
-  $scope.selected = null;   // Selected workflow state
+  WorkflowController.$inject = ['$scope', '$filter', 'DEFAULT_LINK', 'Workflow'];
 
-  var DEFAULT_STATE = {
-    source: null,
-    data: angular.copy(DEFAULT_LINK),
-    string: $filter('json')(DEFAULT_LINK)
-  };
-  $scope.state = angular.copy(DEFAULT_STATE);
+  function WorkflowController($scope, $filter, DEFAULT_LINK, Workflow) {
 
-  $scope.save = Workflow.set;
-  $scope.archive = Workflow.archive;
+    $scope.workflows = Workflow.query();
+    $scope.selected = null;   // Selected workflow state
 
-  $scope.$watch('state.source.path', function(path) {
-    if (!!path) {
-      $scope.state.data = angular.copy($scope.state.source);
-    } else {
-      $scope.state = angular.copy(DEFAULT_STATE);
-    }
-  });
+    var DEFAULT_STATE = {
+      source: null,
+      data: angular.copy(DEFAULT_LINK),
+      string: $filter('json')(DEFAULT_LINK)
+    };
+    $scope.state = angular.copy(DEFAULT_STATE);
 
-  $scope.$watch('state.data', function(json) {
-    if (json) {
-      $scope.state.string = $filter('json')(json);
-    }
-  }, true);
+    $scope.save = Workflow.set;
+    $scope.archive = Workflow.archive;
 
-  $scope.$watch('state.string', function(json) {
-    try {
-      $scope.state.data = JSON.parse(json);
-      $scope.wellFormed = true;
-    } catch(e) {
-      $scope.wellFormed = false;
-    }
-  });
+    $scope.$watch('state.source.path', function(path) {
+      if (!!path) {
+        $scope.state.data = angular.copy($scope.state.source);
+      } else {
+        $scope.state = angular.copy(DEFAULT_STATE);
+      }
+    });
 
-}]);
+    $scope.$watch('state.data', function(json) {
+      if (json) {
+        $scope.state.string = $filter('json')(json);
+      }
+    }, true);
+
+    $scope.$watch('state.string', function(json) {
+      try {
+        $scope.state.data = JSON.parse(json);
+        $scope.wellFormed = true;
+      } catch(e) {
+        $scope.wellFormed = false;
+      }
+    });
+  }
+
+})();

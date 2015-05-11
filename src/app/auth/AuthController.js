@@ -2,25 +2,28 @@
  * Module for handling authentication of users
  */
 
-angular.module( 'dados.auth', [
-  'ui.router',
-  'ngCookies',
-  'ipCookie',
-  'dados.auth.service'
-])
-.config(function config( $stateProvider ) {
-  $stateProvider
-    .state( 'login', {
-      url: '/login',
-      controller: 'AuthController',
-      controllerAs: 'auth',
-      templateUrl: 'auth/login.tpl.html',
-      data: { pageTitle: 'Login' }
-    });
-})
-.controller('AuthController', ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'StatusService',
-  function ($location, $state, $cookieStore, ipCookie, AuthService, StatusService) {
+(function() {
+  'use strict';
+  angular.module('dados.auth', [
+    'ui.router',
+    'ngCookies',
+    'ipCookie',
+    'dados.auth.service'
+  ])
+  .config(function config( $stateProvider ) {
+    $stateProvider
+      .state( 'login', {
+        url: '/login',
+        controller: AuthController,
+        controllerAs: 'auth',
+        templateUrl: 'auth/login.tpl.html',
+        data: { pageTitle: 'Login' }
+      });
+  });
 
+  AuthController.$inject = ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'StatusService'];
+
+  function AuthController($location, $state, $cookieStore, ipCookie, AuthService, StatusService) {
     var vm = this;
     vm.error = '';
     
@@ -60,4 +63,5 @@ angular.module( 'dados.auth', [
       }
     };
   } 
-]);
+})();
+

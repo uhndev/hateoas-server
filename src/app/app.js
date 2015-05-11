@@ -1,31 +1,36 @@
-angular.module( 'dados', [
-	'templates-app',
-	'templates-common',
-  'ui.router',
-  'config.interceptors',
-	'dados.auth',
-	'dados.status',
-  'dados.header',
-  'dados.workflow',
-  'dados.formbuilder',
-	'dados.error',
-  'dados.filters.formatter',
-  'dados.filters.type',
-  'dados.common.services.csrf',
-  'dados.common.services.status',
-  'hateoas',
-  'hateoas.queryBuilder'
-])
-// Configure all Providers
-.config( function myAppConfig ($httpProvider, $stateProvider) { 
-  $httpProvider.interceptors.push('httpRequestInterceptor');
-  $stateProvider.state('hateoas', {
-    template: '<div class="container" hateoas-client></div>'
-  });
-})
+(function() {
+  'use strict';
 
-.controller('AppCtrl', ['$scope', '$state', '$location',
-  function AppCtrl ( $scope, $state, $location ) {
+  angular.module('dados', [
+  	'templates-app',
+  	'templates-common',  
+    'ui.router',
+    'config.interceptors',
+  	'dados.auth',
+  	'dados.status',
+    'dados.header',
+    'dados.workflow',
+    'dados.formbuilder',
+  	'dados.error',
+    'dados.filters.formatter',
+    'dados.filters.type',
+    'dados.common.services.csrf',
+    'dados.common.services.status',
+    'hateoas',
+    'hateoas.queryBuilder'
+  ])
+  // Configure all Providers
+  .config( function DadosConfig ($httpProvider, $stateProvider) { 
+    $httpProvider.interceptors.push('httpRequestInterceptor');
+    $stateProvider.state('hateoas', {
+      template: '<div class="container" hateoas-client></div>'
+    });
+  })
+  .controller('DadosController', DadosController);
+
+  DadosController.$inject = ['$scope', '$state', '$location'];
+  
+  function DadosController($scope, $state, $location) {
     if (_.isEmpty($location.path())) {
       $location.path('/study');
     } else {
@@ -39,4 +44,5 @@ angular.module( 'dados', [
                                        .trim());
     }); 
   }
-]);
+
+})();
