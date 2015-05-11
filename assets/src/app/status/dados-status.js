@@ -1,28 +1,30 @@
-angular.module('dados.status', ['sails.io', 'toastr'])
+(function() {
+	'use strict';	
 
-.config(function(toastrConfig) {
-  angular.extend(toastrConfig, {
-    autoDismiss: true,
-    closeButton: true,
-    iconClasses: {
-      error: 'toast-error',
-      info: 'toast-info',
-      success: 'toast-success',
-      warning: 'toast-warning'
-    },
-    maxOpened: 0,    
-    newestOnTop: true,
-    positionClass: 'toast-top-right',
-    preventDuplicates: false,
-    progressBar: true,
-    tapToDismiss: true,
-    timeOut: 5000
-  });
-})
+	angular.module('dados.status', ['sails.io', 'toastr'])
 
-.directive('dadosStatus', function() {
+	.config(function(toastrConfig) {
+	  angular.extend(toastrConfig, {
+	    autoDismiss: true,
+	    closeButton: true,
+	    positionClass: 'toast-top-right',
+	    progressBar: true,
+	    tapToDismiss: true,
+	    timeOut: 5000
+	  });
+	})
 
-	var StatusController = function($rootScope, $sailsSocket, toastr) {
+	.directive('dadosStatus', function() {
+		return {
+			restrict: 'A',
+			controller: StatusController,
+			controllerAs: 'status'
+		};
+	});
+
+	StatusController.$inject = ['$rootScope', '$sailsSocket', 'toastr'];
+
+	function StatusController($rootScope, $sailsSocket, toastr) {
 		var vm = this;
 
 		var sendMessage = function(message) {
@@ -45,12 +47,5 @@ angular.module('dados.status', ['sails.io', 'toastr'])
 	  $rootScope.$on('status.update', function (ev, message) {
 	  	sendMessage(message);
 	  });
-	};
-
-	return {
-		restrict: 'A',
-		controller: ['$rootScope', '$sailsSocket', 'toastr', StatusController],
-		controllerAs: 'status'
-	};
-});
-
+	}
+})();

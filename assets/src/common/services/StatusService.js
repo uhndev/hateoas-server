@@ -1,6 +1,12 @@
-angular.module('dados.common.services.status', [])
-  .service('StatusService', ['$rootScope', function($rootScope) {
-    'use strict';
+(function(){
+	'use strict';
+
+	angular.module('dados.common.services.status', [])
+  .service('StatusService', StatusService);
+
+  StatusService.$inject = ['$rootScope'];
+
+  function StatusService($rootScope) {
 
     this.authenticated = function(user) {
     	$rootScope.$broadcast('status.authenticated', user);
@@ -9,4 +15,7 @@ angular.module('dados.common.services.status', [])
     this.update = function(message) {
       $rootScope.$broadcast('status.update', message);
     };
-  }]);
+  }
+
+})();
+

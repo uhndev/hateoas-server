@@ -1,12 +1,16 @@
-angular.module('dados.error', [
-	'sails.io',
-	'dados.error.controller'
-])
+(function() {
+	'use strict';
+	angular.module('dados.error', [
+		'sails.io',
+		'dados.error.controller'
+	])
 
-.directive('dadosError', function() {
-	return {
-		restrict: 'A',
-		controller: 'ErrorController',
-		controllerAs: 'error'
-	};
-});
+	.directive('dadosError', function() {
+		return {
+			restrict: 'A',
+			controller: 'ErrorController',
+			controllerAs: 'error'
+		};
+	});
+	
+})();

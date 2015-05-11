@@ -1,23 +1,24 @@
-angular.module( 'dados.formbuilder.controller', [
-  'ngResource',
-  'ngform-builder'
-])
+(function() {
+  'use strict';
+  angular.module( 'dados.formbuilder.controller', [
+    'ngResource',
+    'ngform-builder'
+  ])
+  .constant('FORM_API', 'http://localhost:1337/api/form/:id')
+  .controller('FormBuilderController', FormBuilderController);
+  
+  FormBuilderController.$inject = ['$location', '$timeout', '$resource', 'StatusService', 'FORM_API'];
 
-.controller('FormBuilderController',
-  ['$location', '$timeout', '$resource', 'StatusService',
-  function ($location, $timeout, $resource, StatusService) {
-    'use strict';
-
+  function FormBuilderController($location, $timeout, $resource, StatusService, FORM_API) {
     var vm = this;
-    var api = 'http://localhost:1337/api/form/:id';
-    var Resource = $resource(api, {}, {'update': { method: 'PUT' }});
+    var query = $location.search();
+    var Resource = $resource(FORM_API, {}, {'update': { method: 'PUT' }});
     vm.form = {};
 
     var pushError = function(err) {
       StatusService.update({msg: err, type: 'danger'});
     };
 
-    var query = $location.search();
     // if formURL to load contains a form ID, load it
     if (_.has(query, 'id')) {
       Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
@@ -44,4 +45,5 @@ angular.module( 'dados.formbuilder.controller', [
       }    
     };
   }
-]);
+
+})();

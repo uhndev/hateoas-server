@@ -1,9 +1,16 @@
-angular.module('dados.error.controller', ['sails.io', 'dados.common.services.error'])
+(function(){
+	'use strict';
 
-.controller('ErrorController', ['$modal', '$timeout', '$sailsSocket', 
-	function($modal, $timeout, $sailsSocket) {
+	angular.module('dados.error.controller', ['sails.io', 'dados.common.services.error'])
+
+	.controller('ErrorController', ErrorController);
+
+	ErrorController.$inject = ['$modal', '$timeout', '$sailsSocket'];
+
+	function ErrorController($modal, $timeout, $sailsSocket) {
 		var vm = this;
 		var socketErrorModal = null;
+		vm.socketReady = false; // Wait for socket to connect
 
 		function closeSocketErrorModal() {
 			if (socketErrorModal) {
@@ -36,8 +43,6 @@ angular.module('dados.error.controller', ['sails.io', 'dados.common.services.err
 			});
 		}
 
-		vm.socketReady = false; // Wait for socket to connect
-
 		$sailsSocket.subscribe('connect', function (data) {
 			closeSocketErrorModal();
 			vm.socketReady = true;
@@ -54,4 +59,4 @@ angular.module('dados.error.controller', ['sails.io', 'dados.common.services.err
 			openSocketErrorModal('The application failed to connect to the server.');
 		});		
 	}
-]);
+})();
