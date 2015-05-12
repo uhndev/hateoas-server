@@ -24,7 +24,10 @@ var Auth = {
         username: 'subject',
         email: 'subject@example.com',
         password: 'subject1234',
-        role: 'subject'
+        role: 'subject',
+        prefix: 'Mr.',
+        firstname: 'Sub',
+        lastname: 'Ject'
       },
       login: {
         identifier: 'subject',
@@ -36,7 +39,10 @@ var Auth = {
         username: 'coordinator',
         email: 'coordinator@example.com',
         password: 'coordinator1234',
-        role: 'coordinator'
+        role: 'coordinator',
+        prefix: 'Dr.',
+        firstname: 'Coord',
+        lastname: 'Inator'
       },
       login: {
         identifier: 'coordinator',
@@ -48,7 +54,10 @@ var Auth = {
         username: 'admin',
         email: 'admin@example.com',
         password: 'admin1234',
-        role: 'admin'
+        role: 'admin',
+        prefix: 'Dr.',
+        firstname: 'John',
+        lastname: 'Admin'
       },
       login: {
         identifier: 'admin',
@@ -59,13 +68,17 @@ var Auth = {
 
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
-      var req = request.post('/api/user');
-      agent.attachCookies(req);
-      req.send(credentials)
-      .expect(201)
-      .end(function(err, res) {
-        done(JSON.parse(res.text).items.id);
-      });
+      Role.findOne({name: credentials.role}).exec(function (err, role) {
+        if (err) done(err);
+        var req = request.post('/api/user');
+        agent.attachCookies(req);
+        credentials.role = role.id;
+        req.send(credentials)
+        .expect(201)
+        .end(function(err, res) {
+          done(JSON.parse(res.text).items.id);
+        });  
+      });      
     });    
   },
 

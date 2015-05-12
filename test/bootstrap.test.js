@@ -45,13 +45,20 @@ before(function(done) {
     // Populate the DB
     console.log("Loading test fixtures...");
     barrels.populate(function(err) {
-      // done(err, sails);
-      auth.createUser(auth.credentials['subject'].create, function(subId) {
-        subjectUserId = subId;
-        auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
-          coordinatorUserId = cooId;
-          done(err, sails);
-        });
+      Role.find().exec(function (err, roles) {
+        var roleIds = _.pluck(roles, 'id');
+        adminRoleId = roleIds[0];
+        coordinatorRoleId = roleIds[1];
+        subjectRoleId = roleIds[2];
+
+        // done(err, sails);
+        auth.createUser(auth.credentials['subject'].create, function(subId) {
+          subjectUserId = subId;
+          auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+            coordinatorUserId = cooId;
+            done(err, sails);
+          });
+        });        
       });
     });
   });

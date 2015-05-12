@@ -19,8 +19,7 @@ var grants = {
 exports.create = function (roles, models, admin) {
   return Promise.all([
     grantCoordinatorPermissions(roles, models, admin),
-    grantSubjectPermissions(roles, models, admin),
-    revokeRegisteredPermissions(roles, models, admin)
+    grantSubjectPermissions(roles, models, admin)
   ])
   .then(function (permissions) {
     //sails.log('created', permissions.length, 'permissions');
@@ -82,23 +81,4 @@ function grantSubjectPermissions (roles, models, admin) {
       return Permission.findOrCreate(permission, permission);
     })
   );
-}
-
-function revokeRegisteredPermissions (roles, models, admin) {
-  Role.findOne({ name: 'registered' })
-    .then(function (role) {
-      this.role = role;
-      return Model.findOne({ name: 'User' });
-    })
-    .then(function (model) {
-      return Permission.destroy({
-        model: model.id,
-        action: 'update',
-        role: role.id,
-      });
-    })
-    .then(function () {
-      sails.log('revoked "update" from "registered" on "User"');
-    })
-    .catch(sails.log.error);
 }

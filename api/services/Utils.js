@@ -48,6 +48,14 @@ var self = {
       } 
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
+    },
+
+    extractPersonFields: function extractPersonFields(data) {
+      return {
+        prefix: data.prefix,
+        firstname: data.firstname,
+        lastname: data.lastname
+      };
     }
   }
   /** End of "Model" Utils **/

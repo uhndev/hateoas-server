@@ -70,11 +70,14 @@ _.merge(exports, {
         // will available.
         req.session.authenticated = true;
 
-        User.findOne(user.id).populate('roles')
+        User.findOne(user.id).populate('roles').populate('person')
         .then(function(data) {
           var resp = _.pick(user, 'id', 'username');
-          resp.role = _.without(_.pluck(data.roles, 'name'), 'registered');
-
+          resp.role = _.pluck(data.roles, 'name');
+          if (data.person) {
+            _.merge(resp, Utils.Model.extractPersonFields(data.person));
+          }
+          
           sails.log.info('user', resp, 'authenticated successfully');
 
           return res.json(resp);

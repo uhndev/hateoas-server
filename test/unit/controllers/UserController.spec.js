@@ -22,6 +22,7 @@ describe('The User Controller', function () {
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
+				adminUserId = JSON.parse(resp.text).id;
 				done();
 			});
 		});
@@ -40,7 +41,6 @@ describe('The User Controller', function () {
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items[0].username.should.equal('admin');
-						adminUserId = collection.items[0].id;
 						done(err);
 					});
 			});
@@ -57,13 +57,16 @@ describe('The User Controller', function () {
 						username: 'subject2',
 						email: 'subject2@example.com',
 						password: 'subject1234',
-						role: 'subject'
+						role: subjectRoleId,
+						prefix: 'Ms.',
+						firstname: 'Soob',
+						lastname: 'Jact'
 					})
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.username.should.equal('subject2');
-						newUserId = user.id;
+						newUserId = collection.items.id;
 						done(err);
 					});
 			});
@@ -87,12 +90,7 @@ describe('The User Controller', function () {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
-				req.send({
-						username: 'subject',
-						email: 'subject@example.com',
-						password: 'subject1234',
-						role: 'subject'
-					})
+				req.send(auth.credentials.subject.create)
 					.expect(500)
 					.end(function(err, res) {
 						done(err);
@@ -107,7 +105,10 @@ describe('The User Controller', function () {
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
-						role: 'qwerty'
+						role: 'qwerty',
+						prefix: 'Mrs.',
+						firstname: 'Qwer',
+						lastname: 'Ty'
 					})
 					.expect(400)
 					.end(function(err, res) {

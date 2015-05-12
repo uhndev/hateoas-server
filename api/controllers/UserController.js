@@ -7,40 +7,55 @@ var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUt
 _.merge(exports, _super);
 _.merge(exports, {
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
-
   // Overrides sails-auth's UserController.create to include role
-  create: function (req, res) {
-    var role = req.param('role');
-    Role.findOne({name: role}).then(function (roleObj) {
-      if (_.isUndefined(roleObj)) {
-        return res.badRequest();
-      } else {
-        sails.services.passport.protocols.local.register(req.body, function (err, user) {
-          if (err) return res.serverError(err);
+  create: function (req, res, next) {
+    var username = req.param('username'),
+        email = req.param('email'),
+        password = req.param('password'),
+        role = req.param('role');
+        prefix = req.param('prefix'),
+        firstname = req.param('firstname'),
+        lastname = req.param('lastname');
 
-          Promise.bind({}, User.findOne(user.id)
-            .populate('roles')
-            .then(function (user) {
-              this.user = user;
-              // console.log(this.user);
-              return Role.findOne({ name: role });
-            })
-            .then(function (role) {
-              this.user.roles.add(role.id);
-              // console.log(this.user.roles);
-              return this.user.save();
-            })
-            .then(function (updatedUser) {
-              sails.log.silly('role ' + role + 'attached to user ' + this.user.username);
-              res.ok(updatedUser);
-            })
-            .catch(function (err) {
-              res.serverError(err);
-            })
-          );      
-        });
+    Role.findOne(role).exec(function (err, role) {
+      if (err || _.isUndefined(role)) {
+        return res.badRequest(err); // role not found
       }
+
+      Person.create({
+        prefix: prefix,
+        firstname: firstname,
+        lastname: lastname
+      }).exec(function (err, person) {
+        if (err) res.serverError(err);
+        User.create({
+          username: username,
+          email: email,
+          roles: [role],
+          person: person.id
+        }).exec(function (err, user) {
+          if (err || !user) {
+            person.destroy(function (destroyErr) {
+              next(destroyErr || err);  
+            });
+          } else {
+            Passport.create({
+              protocol : 'local'
+            , password : password
+            , user     : user.id
+            }, function (err, passport) {
+              if (err) {
+                user.destroy(function (destroyErr) {
+                  person.destroy(function (destroyErr) {
+                    next(destroyErr || err);  
+                  });                
+                });
+              }
+              res.ok(user);
+            });            
+          }          
+        });
+      });
     });
   },
 
@@ -50,12 +65,18 @@ _.merge(exports, {
         newEmail = req.param('email'),
         newPassword = req.param('password'),
         newRole = req.param('role');
+        newPrefix = req.param('prefix'),
+        newFirstname = req.param('firstname'),
+        newLastname = req.param('lastname');
 
-    var fields = {};
-    if (newUsername) fields.username = newUsername;
-    if (newEmail) fields.email = newEmail;
+    var userFields = {}, personFields = {};
+    if (newUsername) userFields.username = newUsername;
+    if (newEmail) userFields.email = newEmail;
+    if (newPrefix) personFields.prefix = newPrefix;
+    if (newFirstname) personFields.firstname = newFirstname;
+    if (newLastname) personFields.lastname = newLastname;
 
-    User.update(userId, fields)
+    User.update(userId, userFields)
     .then(function (newUser) {
       if (newPassword) {
         Passport.findOne({
@@ -75,14 +96,13 @@ _.merge(exports, {
     })
     .then(function (newUser) {
       if (newRole) {
-        Promise.bind({}, User.findOne(userId)
-          .populate('roles')  
+        User.findOne(userId)
+          .populate('roles')
+          .populate('person')
           .then(function (user) {
             this.user = user;
-            this.previousRoles = _.filter(this.user.roles, function(role) {
-              return role.name !== 'registered';
-            });
-            return Role.findOne({ name: newRole });
+            this.previousRoles = this.user.roles;
+            return Role.findOne(newRole);
           })
           .then(function (role) {
             // remove old roles
@@ -97,13 +117,15 @@ _.merge(exports, {
             return this.user.save();
           })
           .then(function (updatedUser) {
-            sails.log.silly('resole ' + newRole + 'attached to user ' + this.user.username);
-            res.ok(this.user);
+            sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
+            Person.update(this.user.person.id, personFields).exec(function (err, person) {
+              if (err) res.serverError(err);
+              res.ok(this.user);
+            });            
           })  
           .catch(function (err) {
             return res.serverError(err);
-          })
-        );
+          });
       } else {
         res.ok(newUser);  
       }      

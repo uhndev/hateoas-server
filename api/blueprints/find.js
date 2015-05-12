@@ -41,10 +41,16 @@ module.exports = function findRecords (req, res) {
   .skip( actionUtil.parseSkip(req) )
   .sort( actionUtil.parseSort(req) );
 
+  // If this model has a users collection, populate it
   if (_.any(Model.associations, function (assoc) {
     return (_.has(assoc, 'collection') && assoc.collection === 'user');
   })) {
     query.populate('users');
+  }
+
+  if (req.model.identity === 'user') {
+    query.populate('person');
+    query.populate('roles');
   }
 
   // TODO: .populateEach(req.options);
@@ -63,6 +69,9 @@ module.exports = function findRecords (req, res) {
       });
     }
 
+    /**
+     * Currently used for: [STUDY]
+     */
     // if the model has a users collection, return filtered results depending on role
     if (_.every(matchingRecords, function(record) { return _.has(record, 'users') })) {
       PermissionService.checkPermissions(req, 
@@ -81,8 +90,26 @@ module.exports = function findRecords (req, res) {
           res.serverError(err);
         }
       );
-    } else {
+    } 
+    /**
+     * Currently used for: [USER]
+     */
+    else if (req.model.identity === 'user') {
+      _.map(matchingRecords, function (user) {
+        if (user.person) {
+          _.merge(user, Utils.Model.extractPersonFields(user.person));
+          delete user.person;
+        }
+        if (user.roles) {
+          user.role = _.first(user.roles).id;
+          delete user.roles;
+        }
+      });
+      res.ok(matchingRecords);
+    }
+    else {
       res.ok(matchingRecords);
     }
   });
 };
+

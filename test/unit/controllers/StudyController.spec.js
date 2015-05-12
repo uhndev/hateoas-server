@@ -3,7 +3,7 @@
  * File Location: test/controllers/StudyController.spec.js
  *
  * Tests the following routes:
-  'get /api/study/:name'           : { model: 'study', action: 'find' },
+  'get /api/study/:name'           : 'StudyController.findOne',
   'get /api/study/:name/subject'   : 'SubjectController.findByStudyName',
   'get /api/study/:name/user'      : 'UserController.findByStudyName',
   'get /api/study/:name/form'      : 'FormController.findByStudyName',
@@ -49,6 +49,7 @@ describe('The Study Controller', function () {
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items[0].name.should.equal('LEAP');
+						collection.count.should.equal(1);
 						done(err);
 					});
 			});
@@ -120,6 +121,13 @@ describe('The Study Controller', function () {
 					});
 			});
 
+			after(function (done) {
+				Study.find().exec(function (err, studies) {
+					studies.length.should.equal(2);
+					done();
+				});
+			});
+
 			it('should be able to create a new study', function (done) {
 				var req = request.post('/api/study');
 				agent.attachCookies(req);
@@ -127,7 +135,7 @@ describe('The Study Controller', function () {
 				req.send({
 						name: 'LEAP-HIP',
 						reb: 100,
-						users: [adminUserId]
+						users: [adminUserId, subjectUserId]
 					})
 					.expect(201)
 					.end(function(err, res) {
@@ -233,6 +241,44 @@ describe('The Study Controller', function () {
 
 		after(function(done) {
 			auth.logout(done);
+		});
+
+		describe('find()', function() {
+			it('should only be able to see studies he/she is associated with', function (done) {
+				var req = request.get('/api/study');
+				agent.attachCookies(req);
+				req.set('Accept', 'application/collection+json')
+					.expect('Content-Type', 'application/collection+json; charset=utf-8')
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items[0].name.should.equal('LEAP2');
+						collection.count.should.equal(1);
+						done(err);
+					});
+			});
+		});
+
+		describe('findOne()', function() {
+			it('should be allowed access to study he/she is associated with', function (done) {
+				var req = request.get('/api/study/LEAP2');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items.name.should.equal('LEAP2');
+						done(err);
+					});
+			});
+
+			it('should not be allowed access to restricted study', function (done) {
+				var req = request.get('/api/study/LEAP');
+				agent.attachCookies(req);
+				req.expect(403)
+					.end(function (err, res) {
+						done(err);
+					});
+			});
 		});
 
 		describe('create()', function () {
