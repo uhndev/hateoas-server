@@ -108,7 +108,7 @@ describe('The User Controller', function () {
 				agent.attachCookies(req);
 
 				req.send(auth.credentials.subject.create)
-					.expect(500)
+					.expect(400)
 					.end(function(err, res) {
 						done(err);
 					});
