@@ -6,7 +6,6 @@
   QueryController.$inject = ['$scope'];
 
   function QueryController($scope) {
-    console.log('QUERY');
     $scope.query = $scope.query || {};
     $scope.operators = [];
     $scope.groupOperators = ['and', 'or'];
