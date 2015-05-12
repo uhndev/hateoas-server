@@ -5,12 +5,12 @@ angular.module('hateoas.controls.controller',
    'ngform-builder'])
   .controller('HateoasControlsController', 
     ['$scope', '$modal', '$location', 
-     'API', 'HateoasUtils',
+     'API', 'HateoasUtils', 'StatusService',
  
     /**
      * Controller for the directive
      */
-    function HateoasControlsController($scope, $modal, $location, API, HateoasUtils) {
+    function HateoasControlsController($scope, $modal, $location, API, HateoasUtils, StatusService) {
       // By default, the HateoasService is used. However, the service can be
       // overridden by declaring the service in the directive.
       var Service = HateoasUtils.getService('ControlsService');
@@ -49,7 +49,17 @@ angular.module('hateoas.controls.controller',
           var newItem = _.merge(modalScope.item, item);
           var api = newItem.href || $scope.href;
           //TODO: Handle errors!
-          Service.commit(api, newItem).then(function() {
+          Service.commit(api, newItem).then(function(data) {
+            StatusService.update({
+              type: 'success',
+              msg: 'Item successfully updated!'
+            });
+          }, function (err) {
+            StatusService.update({
+              type: 'error',
+              msg: err.data.raw.err
+            });            
+          }).then(function() {
             $scope.$emit('hateoas.client.refresh');
             modalScope.$destroy();
           });

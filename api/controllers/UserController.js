@@ -26,17 +26,17 @@ _.merge(exports, {
         prefix: prefix,
         firstname: firstname,
         lastname: lastname
-      }).exec(function (err, person) {
-        if (err) res.serverError(err);
+      }).exec(function (perr, person) {
+        if (perr) res.serverError(perr);
         User.create({
           username: username,
           email: email,
           roles: [role],
           person: person.id
-        }).exec(function (err, user) {
-          if (err || !user) {
+        }).exec(function (uerr, user) {
+          if (uerr || !user) {
             person.destroy(function (destroyErr) {
-              next(destroyErr || err);  
+              return res.badRequest(uerr);  
             });
           } else {
             Passport.create({

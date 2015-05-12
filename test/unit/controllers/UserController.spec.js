@@ -41,6 +41,23 @@ describe('The User Controller', function () {
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items[0].username.should.equal('admin');
+						collection.items[1].username.should.equal('subject');
+						collection.items[2].username.should.equal('coordinator');
+						done(err);
+					});
+			});
+			
+			it('should modify response to include extracted person fields', function (done) {
+				var req = request.get('/api/user');
+				agent.attachCookies(req);
+				req.set('Accept', 'application/collection+json')
+					.expect('Content-Type', 'application/collection+json; charset=utf-8')
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						_.all(collection.items.slice(1), function(item) {
+							return _.has(item, 'prefix') && _.has(item, 'firstname') && _.has(item, 'lastname')
+						}).should.be.ok;
 						done(err);
 					});
 			});

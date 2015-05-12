@@ -4,7 +4,14 @@
 		"links": [],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/form/1"
+			"href": "http://localhost:1337/api/form/1",
+			"data": [
+				{"name":"username","type":"string","prompt":"Username","value":""},
+				{"name":"email","type":"string","prompt":"Email","value":""},
+				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
+				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
+				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
+			]			
 		}
 	},
 	{
