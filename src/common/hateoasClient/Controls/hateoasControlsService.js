@@ -8,7 +8,10 @@ angular.module('hateoas.controls.service', ['ngResource'])
        * @returns $promise
        */
       this.commit = function commit(href, item) {
-        var resource = $resource(href, null, { 'update': { method: 'PUT' } });
+        var resource = $resource(href, null, { 
+          'update': { method: 'PUT' },
+          'save': { method: 'POST' }
+        });
         var method = (_.has(item, 'id') ? 'update' : 'save');
         return resource[method](item).$promise;
       };

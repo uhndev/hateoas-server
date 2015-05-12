@@ -38,9 +38,14 @@
 		};
 		
 		$rootScope.$on('status.authenticated', function (ev, user) {
+			var identity = user.username;
+			if (user.prefix && user.lastname) {
+				identity = [user.prefix, user.lastname].join(' ');
+			}
+
 			sendMessage({ 
 				type: 'success', 
-				msg: 'Hi ' + user.username + ', welcome to DADOS!' 
+				msg: 'Hi ' + identity + ', welcome to DADOS!' 
 			});
 		});
 
