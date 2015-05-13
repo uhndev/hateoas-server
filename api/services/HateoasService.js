@@ -5,7 +5,11 @@ module.exports = {
     return function() {
       var obj = this.toObject();
       obj.rel = model.exports.identity;
-      obj.href = HateoasService.getSelfLink(model.exports.identity, this.id);    
+      obj.href = HateoasService.getSelfLink(model.exports.identity, this.id);
+
+      if (_.includes(Utils.Model.SLUG_ROUTES, obj.rel) && this.name) {
+        obj.slug = HateoasService.getSelfLink(model.exports.identity, this.name);
+      }
 
       if (_.isFunction(this.getResponseLinks)) {
         obj.links = this.getResponseLinks(this.id);

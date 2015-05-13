@@ -1,9 +1,12 @@
-angular.module('hateoas.utils', ['hateoas'])
-  .constant('HATEOAS_PREFIX', 'Hateoas')
-  .service('HateoasUtils', 
-    [ '$location', '$injector', 'HATEOAS_PREFIX',
-  function($location, $injector, HATEOAS_PREFIX) {
+(function() {
+  'use strict';
+  angular.module('hateoas.utils', ['hateoas'])
+    .constant('HATEOAS_PREFIX', 'Hateoas')
+    .service('HateoasUtils', HateoasUtils);
 
+  HateoasUtils.$inject = ['$location', '$injector', 'HATEOAS_PREFIX'];
+    
+  function HateoasUtils($location, $injector, HATEOAS_PREFIX) {
     function getFactories(suffix) {
       var model = _.capitalize($location.path().substring(1));
       return {
@@ -25,5 +28,5 @@ angular.module('hateoas.utils', ['hateoas'])
             $injector.get(factories.default) :
             null ));
     };
-
-  }]);
+  }
+})();

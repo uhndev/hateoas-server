@@ -37,6 +37,10 @@ var self = {
   /** Start of "Model" Utils **/
   "Model" : {
     /**
+     * List of routes that allow slugs in lieu of ids
+     */
+    SLUG_ROUTES: ['study'],
+    /**
      * List of system fields that SailsJS will add to all objects
      */
     SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'owner'],
