@@ -1,7 +1,11 @@
-angular.module('hateoas', [
-  'hateoas.view',
-  'hateoas.controls',
-  'hateoas.controller'])
+(function() {
+  'use strict';
+  angular.module('hateoas', [
+    'hateoas.view',
+    'hateoas.controls',
+    'hateoas.controller',
+    'hateoas.itemcontroller'
+  ])
   .constant('API', { 
     protocol: 'http',
     host : 'localhost',
@@ -11,4 +15,7 @@ angular.module('hateoas', [
       return this.protocol + "://" + 
         this.host + ":" + this.port + this.prefix;
     }
-  });
+  })
+  .constant('SLUG_ROUTES', ['study']);
+
+})();

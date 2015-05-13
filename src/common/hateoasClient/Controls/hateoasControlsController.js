@@ -9,13 +9,15 @@
   .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
-    '$scope', '$modal', '$location', 'API', 'HateoasUtils', 'StatusService'
+    '$scope', '$modal', '$location', 
+    'API', 'SLUG_ROUTES', 'HateoasUtils', 'StatusService'
   ];
  
   /**
    * Controller for the directive
    */
-  function HateoasControlsController($scope, $modal, $location, API, HateoasUtils, StatusService) {
+  function HateoasControlsController($scope, $modal, $location, 
+                                      API, SLUG_ROUTES, HateoasUtils, StatusService) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
     var Service = HateoasUtils.getService('ControlsService');
@@ -78,8 +80,9 @@
     $scope.launch = function defaultLauncher(button) {
       if (button.method === 'get') {
         if ($scope.item.rel) {
-          var index = $scope.item.href.indexOf(API.prefix) + API.prefix.length;
-          $location.path($scope.item.href.substring(index));
+          var link = (_.include(SLUG_ROUTES, $scope.item.rel)) ? $scope.item.slug : $scope.item.href;
+          var index = link.indexOf(API.prefix) + API.prefix.length;
+          $location.path(link.substring(index));
         }
       }
       else if (button.method === 'delete') {

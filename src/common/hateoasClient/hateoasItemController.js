@@ -1,20 +1,21 @@
 (function() {
-  'use strict';
-  angular.module('hateoas.controller', [
-    'ngTable', 
-    'hateoas',
-    'hateoas.utils',
-    'dados.common.services.sails'
-  ])
-  .controller('HateoasController', HateoasController);
+	'use strict';
+	angular.module('hateoas.itemcontroller', [
+		'ngTable', 
+		'hateoas',
+		'hateoas.utils',
+		'dados.common.services.sails'
+	])
+	.controller('HateoasItemController', HateoasItemController);
 
-  HateoasController.$inject = [
-    '$scope', '$resource', '$location', 'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
-  ];
-      
-  function HateoasController($scope, $resource, $location, API, TableParams, SailsNgTable, Utils) {
+	HateoasItemController.$inject = [
+		'$scope', '$resource', '$location', 'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
+	];
+
+  function HateoasItemController ($scope, $resource, $location, API, TableParams, SailsNgTable, Utils) {
     $scope.url = API.url() + $location.path();
     $scope.query = { 'where' : {} };
+
     var Resource = $resource($scope.url);
 
     $scope.follow = function(link) {
