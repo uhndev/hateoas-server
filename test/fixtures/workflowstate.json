@@ -13,23 +13,23 @@
 				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
 			]			
 		}
-	},
-	{
-		"path": "/api/person",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/2"
-		}
 	},	
 	{
 		"path": "/api/subject",
 		"links": [],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/form/3"
+			"href": "http://localhost:1337/api/form/2"
 		}
 	},
+	{
+		"path": "/api/person",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/3"
+		}
+	},	
 	{
 		"path": "/api/study",
 		"links": [],

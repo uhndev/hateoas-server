@@ -118,10 +118,23 @@ _.merge(exports, {
           })
           .then(function (updatedUser) {
             sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
-            Person.update(this.user.person.id, personFields).exec(function (err, person) {
-              if (err) res.serverError(err);
-              res.ok(this.user);
-            });            
+            if (!this.user.person) {
+              Person.create(personFields)
+                .then(function (person) {
+                  return person;
+                })
+                .then(function (person) {
+                  User.update(this.user.id, { person: person.id }).exec(function (err, upduser) {
+                    if (err) res.serverError(err);
+                    res.ok(upduser);
+                  });
+                });
+            } else {
+              Person.update(this.user.person.id, personFields).exec(function (err, p) {
+                if (err) res.serverError(err);
+                res.ok(this.user);
+              });
+            }
           })  
           .catch(function (err) {
             return res.serverError(err);
