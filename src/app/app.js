@@ -7,6 +7,7 @@
     'ui.router',
     'config.interceptors',
   	'dados.auth',
+    'dados.study',
   	'dados.status',
     'dados.header',
     'dados.workflow',
