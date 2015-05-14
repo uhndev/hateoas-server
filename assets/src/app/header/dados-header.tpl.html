@@ -1,16 +1,28 @@
 <div class="navbar-container">
-  <div class="container">
-    <div class="headerWrapper">
-      <nav class="navbar navbar-default" role="navigation">
+  <div class="headerWrapper">
+    <div class="container">
+      <div class="row">
         <div class="navbar-header">
           <div class="navbar-brand">
-            <img alt="Brand" src="assets/img/dados.png">
+            <img id="dados-brand" alt="Brand" src="assets/img/dados.png">
           </div>
         </div>
-      </nav>
+      </div>
+      <div class="row">
+        <div class="navbar-header">
+          <div class="navbar-brand">
+            <small id="tagline">
+              An Open Platform for Prospective Data Collection in Clinical and Translational Research
+            </small>
+          </div>
+        </div>        
+      </div>
     </div>
-    <div class="menuWrapper">
-      <nav class="navbar navbar-default" role="navigation" ng-if="header.isVisible">
+  </div>
+
+  <div class="menuWrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible">
+      <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" ng-init="header.menuCollapsed = true"
             ng-click="header.menuCollapsed = ! header.menuCollapsed">
@@ -43,7 +55,7 @@
             </li>
           </ul>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   </div>
 </div>

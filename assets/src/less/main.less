@@ -55,15 +55,22 @@ html, body {
 }
 
 .container {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 /**
  * Navigation
  */
-
- /* Create a medium height at 40px */
+.active {
+  margin-top: 1px;
+  margin-bottom: -1px;
+}
+#tagline {
+  clear: both;
+  font-size: 11px;
+  color: #ccc;
+}
 .navbar-container {
   background-color: @headerColour;
 }
@@ -71,7 +78,8 @@ html, body {
   padding-left: 0px;
 }
 .headerWrapper {
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   .navbar-default {
     background-color: @headerColour;
     border-color: @headerColour;
@@ -129,4 +137,5 @@ html, body {
 @import '../../vendor/ng-table/ng-table.less';
 @import '../../vendor/ngform-builder/dist/less/ngform-builder.less';
 @import '../app/workflow/workflow.less';
+@import '../app/study/studyViewOverview.less';
 

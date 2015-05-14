@@ -14,7 +14,6 @@
 
   function HateoasItemController ($scope, $resource, $location, API, TableParams, SailsNgTable, Utils) {
     $scope.url = API.url() + $location.path();
-    $scope.query = { 'where' : {} };
 
     var Resource = $resource($scope.url);
 
@@ -30,19 +29,6 @@
     $scope.select = function(item) {
       $scope.selected = ($scope.selected === item ? null : item);
     };
-
-    $scope.$watchCollection('query.where', function(newQuery, oldQuery) {
-      if (newQuery && !_.isEqual(newQuery, oldQuery)) {
-        // Page changes will trigger a reload. To reduce the calls to
-        // the server, force a reload only when the user is already on
-        // page 1.
-        if ($scope.tableParams.page() !== 1) {
-          $scope.tableParams.page(1);
-        } else {
-          $scope.tableParams.reload();
-        }
-      }
-    });
 
     $scope.$on('hateoas.client.refresh', function(e) {
       $scope.tableParams.reload();

@@ -73,7 +73,7 @@
 
         var fragment;
         if (pathArr.length === 3) {
-          fragment = '<div ng-controller="HateoasItemController">';
+          fragment = '<div>';
           _.each(ITEM_MODULES, function(module) {
             var templateUrl = [model, '/', model, 
               'View', module, '.tpl.html'].join('');
@@ -93,11 +93,10 @@
 
             fragment += $templateCache.get(templateUrl) || 
               $templateCache.get(defaultUrl);
-          });      
-        }             
-
+          });
+        }
+                 
         fragment += '</div>';
-
         return fragment;
       }
 
