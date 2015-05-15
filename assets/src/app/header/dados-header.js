@@ -8,23 +8,48 @@
 		return {
 			restrict: 'E',
 			replace: true,
+			scope: {
+				submenu: '='
+			},
 			templateUrl: 'header/dados-header.tpl.html',
 			controller: HeaderController,
-			controllerAs: 'header'
+			controllerAs: 'header',
+			bindToController: true
 		};
 	});	
 
-	HeaderController.$inject = ['$location', '$state', '$rootScope', 'AuthService', 'TABVIEW'];
+	HeaderController.$inject = ['$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW'];
 
-	function HeaderController($location, $state, $rootScope, AuthService, TABVIEW) {
+	function HeaderController($location, $state, $rootScope, AuthService, API, TABVIEW) {
 		
 		var vm = this;
-		vm.AuthService = AuthService;
-		vm.isVisible = AuthService.isAuthenticated();
 
-		if (AuthService.isAuthenticated()) {
-			updateHeader();
+		// bindable variables
+		vm.isVisible = AuthService.isAuthenticated();
+		vm.navigation = [];
+
+		// bindable methods
+		vm.logout = logout;
+		vm.follow = follow;
+
+		init();
+
+		///////////////////////////////////////////////////////////////////////////
+		
+		function init() {
+			if (AuthService.isAuthenticated()) {
+				updateHeader();
+			}
+			updateActive();
 		}
+
+		function follow(link) {
+      if (link) {
+        if (link.rel) {
+          $location.path(_.convertRestUrl(link.href, API.prefix));
+        }
+      }
+    }
 
 		function updateHeader() {
 			if (AuthService.currentRole) {
@@ -33,23 +58,33 @@
 					vm.navigation = TABVIEW[view];
 				}        
 			}
-		}
+		}		
 
 		function updateActive() {
 			updateHeader();
 			var href = $location.path();
+
 			_.each(vm.navigation, function(link) {
+				var pathArr = _.pathnameToArray(href);
+				var comparator = (pathArr.length >= 2) ? '/' + _.first(pathArr) : href;
 				link.isActive = 
-					(href.toLowerCase() === link.href.toLowerCase());
+					(comparator.toLowerCase() === link.href.toLowerCase());
+			});
+
+			_.each(vm.submenu.links, function(link) {
+				var clientUrl = _.convertRestUrl(link.href, API.prefix);
+				link.isActive = 
+					($location.path().toLowerCase() === clientUrl.toLowerCase());
 			});
 		}
 
-		vm.logout = function() {
+		function logout() {
 			vm.isVisible = false;
 			vm.navigation = [];
 			AuthService.logout();
-		};
+		}
 
+		// watchers
 		$rootScope.$on('events.unauthorized', function() {
 			vm.isVisible = false;
 			vm.navigation = [];
@@ -61,6 +96,5 @@
 		});
 
 		$rootScope.$on('$locationChangeSuccess', updateActive);
-		updateActive();
 	}
 })();

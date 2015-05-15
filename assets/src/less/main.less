@@ -54,17 +54,45 @@ html, body {
   margin: 0px;
 }
 
+a {
+  cursor: pointer; 
+  cursor: hand;
+}
+
 .container {
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 60px;
+  padding-right: 60px;
 }
 
 /**
  * Navigation
  */
-.active {
-  margin-top: 1px;
-  margin-bottom: -1px;
+#logo_dados {
+  padding-right: 15px;
+  margin-bottom: 5px;
+}
+#subBrand {
+  float: left;
+  position: relative;
+  top: 18px;
+  padding-left: 15px;
+  background: url(img/dottedLine_vert.gif) top left repeat-y;
+  margin: 0;
+  overflow: hidden;
+  height: 34px;  
+}
+#subBrand_site {
+  font-size: 12px;
+  color: #ccc;
+  margin: 0;
+  text-transform: uppercase;
+}
+#subBrand_dep {
+  font-size: 16px;
+  color: #E79851;
+  vertical-align: text-bottom;
+  margin: 0;
+  text-transform: uppercase;
 }
 #tagline {
   clear: both;
@@ -92,10 +120,30 @@ html, body {
   .navbar-default {
     background-color: @menuColour;
     border-color: @menuColour;
-    .navbar-nav > li > a {
-      color: white;
-    }
   }
+}
+.submenuWrapper {
+  margin-bottom: 10px;
+  .navbar {
+    margin-bottom: 0px;
+  } 
+  .navbar-inverse {
+    background-color: @submenuColour;
+    border-color: @submenuColour;
+  }
+  -moz-box-shadow: 0px 4px 7px -2px #666;
+  -webkit-box-shadow: 0px 4px 7px -2px #666;
+  box-shadow: 0px 4px 7px -2px #666;
+}
+.submenu-link-colour {
+  color: @submenuLinkColour;
+}
+
+/**
+ * Collection
+ */
+#Title {
+  color: @orange;
 }
 
 /**
@@ -136,6 +184,8 @@ html, body {
 
 @import '../../vendor/ng-table/ng-table.less';
 @import '../../vendor/ngform-builder/dist/less/ngform-builder.less';
+
 @import '../app/workflow/workflow.less';
 @import '../app/study/studyViewOverview.less';
+
 

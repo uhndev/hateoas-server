@@ -1,50 +1,18 @@
-<div ng-controller="StudyOverviewController as study" class="container-fluid">
-	<div id="Links">
-		<div class="btn-group">
-			<button class="btn btn-default align-right"
-				ng-click="study.follow(link)"
-				ng-repeat="link in ::study.resource.items.links">
-				{{ ::link.prompt }}
-			</button>
-		</div>
-	</div>
-	<br/>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h1 class="panel-title">
-						Study {{::study.resource.items.name}} Overview
-					</h1>
-				</div>
-				<div class="panel-body">
-					<div id="Controls" class="align-right">
-						<hateoas-controls
-							ng-if='study.allow'
-							data-template='study.template'
-							data-href='{{study.resource.href}}'
-							data-permissions="study.allow"
-							data-item='study.resource.items'>
-						</hateoas-controls>
-					</div>
-				</div>
-			</div>
-		</div>
+<div ng-controller="StudyOverviewController as study">
+	<h1 id="Title">
+		Study {{::study.resource.items.name}} Overview
+	</h1>
+	<div id="Controls" class="align-right">
+		<hateoas-controls
+			ng-if='study.allow'
+			data-template='study.template'
+			data-href='{{study.resource.href}}'
+			data-permissions="study.allow"
+			data-item='study.resource.items'>
+		</hateoas-controls>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="panel panel-info">
-						<div class="panel-heading">
-							<h3 class="panel-title">Study Information</h3>
-						</div>
-						<div class="panel-body">
-							<simple-table tabledata="study.info"></simple-table>
-						</div>
-					</div>
-				</div>		
-			</div>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-info">
@@ -72,6 +40,18 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">Study Information</h3>
+						</div>
+						<div class="panel-body">
+							<simple-table tabledata="study.info"></simple-table>
+						</div>
+					</div>
+				</div>		
 			</div>
 		</div>
 		<div class="col-md-6">

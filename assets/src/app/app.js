@@ -32,6 +32,10 @@
   DadosController.$inject = ['$scope', '$state', '$location'];
   
   function DadosController($scope, $state, $location) {
+
+    var vm = this;
+    vm.submenu = {};
+
     if (_.isEmpty($location.path())) {
       $location.path('/study');
     } else {
@@ -39,10 +43,17 @@
     }    
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
+      var prevBaseUrl = _.parseUrl($location, prev)[0];
+      var currBaseUrl = _.first(_.pathnameToArray($location.path()));
+
+      if (prevBaseUrl !== currBaseUrl) {
+        vm.submenu = {};
+      }
+
       $scope.pageTitle = _.titleCase($location.path()
                                        .replace(/\//g, ' ')
                                        .toLowerCase()
-                                       .trim());
+                                       .trim());     
     }); 
   }
 
