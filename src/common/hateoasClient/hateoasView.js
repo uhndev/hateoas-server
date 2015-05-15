@@ -20,12 +20,11 @@
        * @returns array of urls
        */
       function getTemplates(path) {
-        var pathArr = path.split('/');
-        var model = pathArr[1],
-            item = pathArr[2];
+        var pathArr = _.pathnameToArray(path);
+        var model = _.first(pathArr);
 
         var templates;
-        if (pathArr.length === 3) {
+        if (pathArr.length === 2) {
           templates = _.map(ITEM_MODULES, function(module) {
             return [model, '/', model, 'View', module, '.tpl.html'].join('');  
           });
@@ -67,12 +66,11 @@
        */
       function build(path) {
         var defaultViewLocation = 'hateoasClient/Views/hateoasView';
-        var pathArr = path.split('/');
-        var model = pathArr[1],
-            item = pathArr[2];
+        var pathArr = _.pathnameToArray(path);
+        var model = _.first(pathArr);
 
         var fragment;
-        if (pathArr.length === 3) {
+        if (pathArr.length === 2) {
           fragment = '<div>';
           _.each(ITEM_MODULES, function(module) {
             var templateUrl = [model, '/', model, 

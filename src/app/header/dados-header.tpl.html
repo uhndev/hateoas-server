@@ -2,25 +2,27 @@
   <div class="headerWrapper">
     <div class="container">
       <div class="row">
-        <div class="navbar-header">
-          <div class="navbar-brand">
+        <div class="col-md-2">
+          <div id="logo_dados">
             <img id="dados-brand" alt="Brand" src="assets/img/dados.png">
           </div>
         </div>
+        <div id="subBrand">
+          <div id="subBrand_site">TECHNA INSTITUTE</div>
+          <div id="subBrand_dep">EXTREME EDITION</div>
+        </div>
       </div>
       <div class="row">
-        <div class="navbar-header">
-          <div class="navbar-brand">
-            <small id="tagline">
-              An Open Platform for Prospective Data Collection in Clinical and Translational Research
-            </small>
-          </div>
-        </div>        
+        <div class="col-md-12">
+          <small id="tagline">
+            An Open Platform for Prospective Data Collection in Clinical and Translational Research
+          </small>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="menuWrapper">
+  <div class="menuWrapper" collapse="!header.isVisible">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-if="header.isVisible">
       <div class="container">
         <div class="navbar-header">
@@ -36,11 +38,9 @@
           <ul class="nav navbar-nav">
             <li ng-repeat="link in ::header.navigation"
               ng-class="{ 
-                'active': link.isActive, 
-                'dropdown': link.dropdown
+                'active': link.isActive,
               }">
-              <!-- Single Link -->
-              <a href="#{{ ::link.href }}" ng-if="!link.dropdown">
+              <a href="#{{ ::link.href }}">
                 <i class="fa {{ ::link.icon }}"></i>
                 {{ ::link.prompt }}
               </a>
@@ -51,6 +51,36 @@
               <a href="/logout" ng-click="header.logout()">
                 <i class="fa fa-sign-out"></i>
                 Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="submenuWrapper" collapse="!header.isVisible || !header.submenu.links">
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" ng-init="header.submenuCollapsed = true"
+            ng-click="header.submenuCollapsed = ! header.submenuCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" ng-click="header.follow(header.submenu.links[0])">
+            <span class="submenu-link-colour">Selected Study: </span>
+            <span style="color: white">{{header.submenu.links[0].prompt}}</span>
+          <a/>
+        </div>
+        <div class="collapse navbar-collapse" collapse="header.submenuCollapsed">  
+          <ul class="nav navbar-nav">
+            <li ng-repeat="link in header.submenu.links.slice(1)"
+              ng-class="{ 'active': link.isActive }">
+              <a ng-click="header.follow(link)">
+                {{ link.prompt }}
               </a>
             </li>
           </ul>
