@@ -3,6 +3,7 @@
   angular
     .module('dados.study', [
       'ngform-builder',
+      'hateoas',
       'hateoas.controls',
       'dados.common.directives.simpletable'
     ])
@@ -15,9 +16,9 @@
     var vm = this;
 
     // bindable variables
-    vm.allow = [];
+    vm.allow = '';
     vm.template = {};
-    vm.resource = [];
+    vm.resource = {};
     vm.info = {};
     vm.enrollment = {};
     vm.url = API.url() + $location.path();
@@ -82,5 +83,9 @@
     function generateReport() {
       alert('Generating report');
     }
+
+    $scope.$on('hateoas.client.refresh', function(e) {
+      init();
+    });
   }
 })();
