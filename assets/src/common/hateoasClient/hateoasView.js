@@ -148,7 +148,8 @@
 
       return {
         restrict: 'A',
-        link: postLink
+        link: postLink,
+        bindToController: true
       };
     }
 
