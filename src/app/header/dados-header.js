@@ -26,6 +26,7 @@
 
 		// bindable variables
 		vm.isVisible = AuthService.isAuthenticated();
+		vm.currentUser = '';
 		vm.navigation = [];
 
 		// bindable methods
@@ -38,7 +39,7 @@
 		
 		function init() {
 			if (AuthService.isAuthenticated()) {
-				updateHeader();
+				updateHeader();				
 			}
 			updateActive();
 		}
@@ -57,6 +58,15 @@
 				if (TABVIEW[view] !== vm.navigation) {
 					vm.navigation = TABVIEW[view];
 				}        
+			}
+
+			if (AuthService.currentUser) {
+				var user = AuthService.currentUser;
+				var identity = user.username;
+				if (user.prefix && user.lastname) {
+					identity = [user.prefix, user.lastname].join(' ');
+				}
+				vm.currentUser = identity;
 			}
 		}		
 

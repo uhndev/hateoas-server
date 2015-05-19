@@ -32,7 +32,7 @@
     };
 
     this.setAuthenticated = function() {
-      this.currentUser = ipCookie('user').username;
+      this.currentUser = ipCookie('user');
       this.currentRole = ipCookie('user').role;
       $rootScope.$broadcast("events.authorized");
     };
