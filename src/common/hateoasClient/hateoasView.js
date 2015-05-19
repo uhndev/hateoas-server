@@ -82,7 +82,7 @@
               $templateCache.get(defaultUrl);
           });
         } else {
-          fragment = '<div ng-controller="HateoasController">';
+          fragment = '<div ng-controller="HateoasController as hateoas">';
           _.each(VIEW_MODULES, function(module) {
             var templateUrl = [path.substring(1), path, 
               'View', module, '.tpl.html'].join('');
