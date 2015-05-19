@@ -26,6 +26,9 @@ module.exports = {
     doe: {
       type: 'date'
     },
+    collectionCentre: {
+      model: 'collectioncentre'
+    },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
   findByStudyName: function(studyName, options, cb) {

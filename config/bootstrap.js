@@ -13,44 +13,44 @@ var Barrels = require('barrels');
 
 module.exports.bootstrap = function(cb) {
 
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+	// It's very important to trigger this callback method when you are finished
+	// with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
 
-  // Load fixtures
-  var barrels = new Barrels();
+	// Load fixtures
+	var barrels = new Barrels();
 
-  // Save original objects in `fixtures` variable
-  fixtures = barrels.data;
+	// Save original objects in `fixtures` variable
+	fixtures = barrels.data;
 
-  // Populate the DB
-  console.log("Loading sails fixtures...");
+	// Populate the DB
+	console.log("Loading sails fixtures...");
 
-  var formNames = _.pluck(fixtures.form, 'form_name');
-  Form.find({form_name: formNames}).then(function (forms) {
-  	// if forms already loaded in DB, carry on
-  	if (forms.length === fixtures.form.length) {
-  		cb();
-  	} else {
-  		// otherwise, load fixtures for forms
+	var formNames = _.pluck(fixtures.form, 'form_name');
+	Form.find({form_name: formNames}).then(function (forms) {
+		// if forms already loaded in DB, carry on
+		if (forms.length === fixtures.form.length) {
+			cb();
+		} else {
+			// otherwise, load fixtures for forms
 			barrels.populate(['form'], function(err) {
-		  	// after loading form fixtures, create workflows for each
-		  	Form.find().then(function (forms) {
-		  		// take first n items of forms that correspond to workflows		  		
+				// after loading form fixtures, create workflows for each
+				Form.find().then(function (forms) {
+					// take first n items of forms that correspond to workflows		  		
 					var data = _.zip(_.take(forms, fixtures.workflowstate.length), fixtures.workflowstate);
-		  		_.map(data, function (state) {
-		  			var formId = state[0].id,
-		  					formName = state[0].form_name;
-		  			state[1].template.href = 'http://localhost:1337/api/form/' + formId;
-			  	});
-			  	return data;
-		  	})
-		  	.then(function (data) {
-		  		fixtures.workflowstate = _.unzip(data)[1];
-		  		barrels.populate(['workflowstate'], function (err) {
-		  			cb(err);	
-		  		});	  		
-		  	});  	
-		  });  		
-  	}
-  });
+					_.map(data, function (state) {
+						var formId = state[0].id,
+								formName = state[0].form_name;
+						state[1].template.href = 'http://localhost:1337/api/form/' + formId;
+					});
+					return data;
+				})
+				.then(function (data) {
+					fixtures.workflowstate = _.unzip(data)[1];
+					barrels.populate(['workflowstate'], function (err) {
+						cb(err);
+					});	  		
+				});  	
+			});  		
+		}
+	});
 };

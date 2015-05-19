@@ -20,8 +20,9 @@ module.exports = {
       type: 'string',
       required: true
     },
-    collectionCenters: {
-      type: 'array'
+    collectionCentres: {
+      collection: 'collectioncentre',
+      via: 'studyCollectionCentres'
     },
     users: {
       collection: 'user',
