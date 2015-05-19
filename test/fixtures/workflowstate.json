@@ -4,6 +4,7 @@
 		"links": [],
 		"queries": [],
 		"template": {
+			"rel": "user",
 			"href": "http://localhost:1337/api/form/1",
 			"data": [
 				{"name":"username","type":"string","prompt":"Username","value":""},

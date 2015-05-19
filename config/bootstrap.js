@@ -35,7 +35,8 @@ module.exports.bootstrap = function(cb) {
 			barrels.populate(['form'], function(err) {
 		  	// after loading form fixtures, create workflows for each
 		  	Form.find().then(function (forms) {
-					var data = _.zip(forms, fixtures.workflowstate);
+		  		// take first n items of forms that correspond to workflows		  		
+					var data = _.zip(_.take(forms, fixtures.workflowstate.length), fixtures.workflowstate);
 		  		_.map(data, function (state) {
 		  			var formId = state[0].id,
 		  					formName = state[0].form_name;
