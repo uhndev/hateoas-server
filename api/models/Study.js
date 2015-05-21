@@ -20,9 +20,14 @@ module.exports = {
       type: 'string',
       required: true
     },
+    /* collection centres should have the form:
+      {
+        name: 'TGH',
+        contact: userId
+      }
+     */
     collectionCentres: {
-      collection: 'collectioncentre',
-      via: 'studyCollectionCentres'
+      type: 'array'
     },
     users: {
       collection: 'user',
@@ -69,7 +74,7 @@ module.exports = {
           'href' : [
             sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'encounter'
           ].join('/')
-        }
+        }     
       ];
     },    
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

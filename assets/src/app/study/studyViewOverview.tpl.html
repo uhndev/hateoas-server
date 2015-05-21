@@ -18,7 +18,7 @@
 	</div>
 	<hr/>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-7">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-info">
@@ -27,7 +27,7 @@
 						</div>
 						<div class="panel-body">
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<div class="panel panel-success">
 										<div class="panel-heading">
 											<h3 class="panel-title text-center">Total Subjects</h3>
@@ -39,8 +39,26 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-8">
-									<simple-table tabledata="study.enrollment"></simple-table>
+								<div class="col-md-9">
+									<list-editor
+										can-edit="true"
+										can-add-newcol="false"
+										can-add-newrow="true"
+										can-edit-header="false"
+										can-del-row="true"
+										can-del-col="false"										
+										list="study.collectionCentres.tableData"
+										columns="study.collectionCentres.columns"
+										force-reload="study.savedData.forceReload">
+									</list-editor>
+									<button class="btn btn-primary btn-sm"
+										ng-click="study.saveChanges()">
+										Save Changes
+									</button>
+									<button class="btn btn-warning btn-sm"
+										ng-click="study.revertChanges()">
+										Revert Changes
+									</button>
 								</div>
 							</div>
 						</div>
@@ -54,13 +72,13 @@
 							<h3 class="panel-title">Study Information</h3>
 						</div>
 						<div class="panel-body">
-							<simple-table tabledata="study.info"></simple-table>
+							<simple-table columns="study.studyInfo.columns" table-data="study.studyInfo.tableData"></simple-table>
 						</div>
 					</div>
 				</div>		
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<div class="well">
 				<form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
 			</div>

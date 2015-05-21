@@ -7,21 +7,36 @@
         restrict: 'E',
         replace: true,
         scope: {
-          tabledata: '='
+          columns: '=',
+          tableData: '='
         },
         template: '<table class="table table-hover">'+
           '<thead>'+
             '<tr>'+
-              '<th ng-repeat="col in tabledata.columns">{{col}}</th>'+
+              '<th ng-repeat="col in table.columns">{{col}}</th>'+
             '</tr>'+
           '</thead>'+
           '<tbody>'+
-            '<tr ng-repeat="item in tabledata.data">'+
+            '<tr ng-repeat="item in table.tableData">'+
               '<td>{{item.name}}</td>'+
               '<td>{{item.value}}</td>'+
             '</tr>'+
           '</tbody>'+
-        '</table>'
+        '</table>',
+        controller: TableController,
+        controllerAs: 'table',
+        bindToController: true
       };
     });
+
+  TableController.$inject = [];
+
+  function TableController() {
+    var vm = this;
+
+    // bindable variables
+    vm.columns = vm.columns || [];
+    vm.tableData = vm.tableData || [];
+  }
+
 })();
