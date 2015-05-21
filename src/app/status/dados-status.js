@@ -7,7 +7,7 @@
 	  angular.extend(toastrConfig, {
 	    autoDismiss: true,
 	    closeButton: true,
-	    positionClass: 'toast-top-right',
+	    positionClass: 'toast-top-center',
 	    progressBar: true,
 	    tapToDismiss: true,
 	    timeOut: 5000

@@ -5,26 +5,30 @@
       'ngform-builder',
       'hateoas',
       'hateoas.controls',
-      'dados.common.directives.simpletable'
+      'dados.common.directives.simpletable',
+      'dados.common.directives.list-editor'
     ])
     .constant('FORM_NAME', 'survey_tracking')
     .controller('StudyOverviewController', StudyOverviewController);
   
-  StudyOverviewController.$inject = ['$scope', '$resource', '$location', 'API', 'FORM_NAME'];
+  StudyOverviewController.$inject = ['$scope', '$rootScope', '$resource', '$location', 'API', 'FORM_NAME'];
   
-  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME) {
+  function StudyOverviewController($scope, $rootScope, $resource, $location, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
     vm.allow = '';
     vm.template = {};
     vm.resource = {};
-    vm.info = {};
-    vm.enrollment = {};
-    vm.url = API.url() + $location.path();
+    vm.studyInfo = {};
+    vm.collectionCentres = {};
+    vm.savedData = {};
+    vm.url = API.url() + $location.path();    
 
     // bindable methods
     vm.generateReport = generateReport;
+    vm.saveChanges = saveChanges;
+    vm.revertChanges = revertChanges;
 
     init();
 
@@ -39,17 +43,23 @@
         vm.template = data.template;
         vm.resource = angular.copy(data);
         var robj = _.pick(data.items, 'name', 'reb', 'users');
-        vm.info = {
-          columns: ['Name', 'Value'],
-          data: parseData(robj)
+        
+        vm.studyInfo = {
+          columns: [ 'Name', 'Value' ],
+          tableData: parseData(robj)
         };
-        vm.enrollment = {
-          columns: ['Collection Centre', 'Enrolled'],
-          data: [
-            {name: 'PMH', value:62},
-            {name: 'TGH', value:15},
-            {name: 'TWH', value:1}
+
+        vm.collectionCentres = {
+          tableData: data.items.collectionCentres || [],
+          columns: [
+            { title: 'Collection Centres', field: 'name', type: 'text' },
+            { title: 'Contact', field: 'contact', type: 'text'}
           ]
+        };
+        
+        vm.savedData = {
+          forceReload: false,
+          data: angular.copy(vm.collectionCentres)
         };
 
         // initialize submenu
@@ -82,6 +92,16 @@
 
     function generateReport() {
       alert('Generating report');
+    }
+
+    function saveChanges() {
+      angular.copy(vm.collectionCentres, vm.savedData.data);
+      console.log(angular.copy(vm.collectionCentres));
+    }
+
+    function revertChanges() {
+      angular.copy(vm.savedData.data, vm.collectionCentres);
+      vm.savedData.forceReload = !vm.savedData.forceReload;
     }
 
     $scope.$on('hateoas.client.refresh', function(e) {
