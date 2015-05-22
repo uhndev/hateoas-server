@@ -61,13 +61,14 @@ module.exports = {
    * recommended that you use wildcards.
    */
   vendor_files: {
-    js: [
-      'vendor/sails.io.js/dist/sails.io.js',
+    js: [      
       // angular dependencies
-      'vendor/lodash/dist/lodash.js',
-      'vendor/lodash-contrib/dist/lodash-contrib.js',
       'vendor/jquery/jquery.js',
-      'vendor/jquery-ui/ui/jquery-ui.js',
+      'vendor/jquery-ui/ui/jquery-ui.js',      
+      'vendor/lodash/dist/lodash.js',
+      'vendor/lodash-contrib/dist/lodash-contrib.js', 
+      'vendor/sails.io.js/dist/sails.io.js',      
+
       'vendor/angular/angular.js',
       'vendor/angular-loader/angular-loader.js',
       'vendor/angular-resource/angular-resource.js',
@@ -75,23 +76,21 @@ module.exports = {
       'vendor/angular-cookies/angular-cookies.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-resource/angular-resource.js',
+      'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
-      'vendor/ace-builds/src-min-noconflict/ace.js',
-      'vendor/ace-builds/src-min-noconflict/mode-javascript.js',
-      'vendor/ace-builds/src-min-noconflict/worker-javascript.js',
-      'vendor/angular-ui-ace/ui-ace.js',
-      'vendor/angular-ui-utils/ui-utils.js',
-      'vendor/angular-ui-sortable/sortable.js',
-      'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/ng-table/ng-table.js',
+      'vendor/angular-ui-utils/ui-utils.js',
+      'vendor/angular-ui-sortable/sortable.js',  
+      'vendor/ace-builds/src/ace.js',
+      'vendor/ace-builds/src/mode-javascript.js',
+      'vendor/ace-builds/src/worker-javascript.js',
+      'vendor/angular-ui-ace/ui-ace.js',
+               
       // plugins
-      'vendor/JSONedit/js/JSONEdit.js',
-      'vendor/ngform-builder/dist/ngform-builder.js',
-      'vendor/nglist-editor/dist/nglist-editor.js'
+      'vendor/JSONedit/js/JSONEdit.js'
     ],
     css: [
-      'vendor/angular-toastr/dist/angular-toastr.min.css'
     ],
     assets: [
       'vendor/bootstrap/dist/fonts/*',
