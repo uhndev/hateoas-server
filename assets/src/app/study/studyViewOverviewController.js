@@ -2,18 +2,20 @@
   'use strict';
   angular
     .module('dados.study', [
-      'ngform-builder',
-      'hateoas',
-      'hateoas.controls',
-      'dados.common.directives.simpletable',
-      'dados.common.directives.list-editor'
+      'dados.study.service',
+      'dados.common.directives.simpleTable',
+      'dados.common.directives.listEditor',
+      'dados.common.directives.formBuilder.directives.form'
     ])
     .constant('FORM_NAME', 'survey_tracking')
     .controller('StudyOverviewController', StudyOverviewController);
   
-  StudyOverviewController.$inject = ['$scope', '$rootScope', '$resource', '$location', 'API', 'FORM_NAME'];
+  StudyOverviewController.$inject = [
+    '$scope', '$rootScope', '$resource', '$location', 
+    'StudyService', 'StatusService', 'API', 'FORM_NAME'
+  ];
   
-  function StudyOverviewController($scope, $rootScope, $resource, $location, API, FORM_NAME) {
+  function StudyOverviewController($scope, $rootScope, $resource, $location, Study, Status, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
@@ -96,16 +98,17 @@
 
     function saveChanges() {
       angular.copy(vm.collectionCentres, vm.savedData.data);
-      console.log(angular.copy(vm.collectionCentres));
+      var study = new Study({ 'collectionCentres': vm.collectionCentres.tableData });
+      study.$update({ id: vm.resource.items.id }).then(function (data) {
+        Status.update({msg: 'Updated collection centres successfully!', type: 'success'});
+      }).catch(function (err) {
+        Status.update({msg: err, type: 'danger'});
+      });
     }
 
     function revertChanges() {
       angular.copy(vm.savedData.data, vm.collectionCentres);
       vm.savedData.forceReload = !vm.savedData.forceReload;
     }
-
-    $scope.$on('hateoas.client.refresh', function(e) {
-      init();
-    });
   }
 })();
