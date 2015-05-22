@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module('hateoas.modal.controller', [
+  angular.module('dados.common.directives.hateoas.modal.controller', [
     'ui.bootstrap.modal', 
     'dados.common.services.template'
   ])

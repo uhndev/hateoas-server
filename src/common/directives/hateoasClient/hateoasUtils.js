@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module('hateoas.utils', ['hateoas'])
+  angular.module('dados.common.directives.hateoas.utils', [])
     .constant('HATEOAS_PREFIX', 'Hateoas')
     .service('HateoasUtils', HateoasUtils);
 

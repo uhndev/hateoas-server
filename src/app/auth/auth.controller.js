@@ -4,26 +4,17 @@
 
 (function() {
   'use strict';
-  angular.module('dados.auth', [
-    'ui.router',
-    'ngCookies',
-    'ipCookie',
-    'dados.auth.service'
-  ])
-  .config(function config( $stateProvider ) {
-    $stateProvider
-      .state( 'login', {
-        url: '/login',
-        controller: AuthController,
-        controllerAs: 'auth',
-        templateUrl: 'auth/login.tpl.html',
-        data: { pageTitle: 'Login' }
-      });
-  });
 
-  AuthController.$inject = ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'StatusService'];
+  angular
+    .module('dados.auth.controller', [
+      'ngCookies',
+      'ipCookie'
+    ])
+    .controller('AuthController', AuthController);
 
-  function AuthController($location, $state, $cookieStore, ipCookie, AuthService, StatusService) {
+  AuthController.$inject = ['$location', '$state', '$cookieStore', 'ipCookie', 'AuthService', 'toastr'];
+
+  function AuthController($location, $state, $cookieStore, ipCookie, AuthService, toastr) {
     var vm = this;
     vm.error = '';
     
@@ -39,7 +30,7 @@
           expires: new Date(now.getTime() + 900000)
         });
         AuthService.setAuthenticated();
-        StatusService.authenticated(user);
+
         // wait until stable angular 1.3 for cookie expiration support
         // $cookieStore.put('user', user, {
         //   expires: new Date(now.getTime() + 900000)
@@ -63,5 +54,6 @@
       }
     };
   } 
+  
 })();
 

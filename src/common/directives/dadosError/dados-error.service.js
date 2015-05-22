@@ -1,7 +1,9 @@
 (function() {
 	'use strict';
-	angular.module('dados.common.services.error', [])
-	.service('ErrorService', ErrorService);
+
+	angular
+		.module('dados.common.directives.dadosError.service', [])
+		.service('ErrorService', ErrorService);
 
 	function ErrorService() {
 

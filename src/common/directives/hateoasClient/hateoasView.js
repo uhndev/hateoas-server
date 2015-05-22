@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('hateoas.view', [])
+  angular.module('dados.common.directives.hateoas.view', [])
     .constant('VIEW_MODULES', [
       'Links', 'Title', 'Query', 'Controls', 'Collection'
     ])

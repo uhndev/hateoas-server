@@ -1,9 +1,9 @@
 (function(){
 	'use strict';
 
-	angular.module('dados.error.controller', ['sails.io', 'dados.common.services.error'])
-
-	.controller('ErrorController', ErrorController);
+	angular
+		.module('dados.common.directives.dadosError.controller', [])
+		.controller('ErrorController', ErrorController);
 
 	ErrorController.$inject = ['$modal', '$timeout', '$sailsSocket'];
 
@@ -23,7 +23,7 @@
 			closeSocketErrorModal();
 			socketErrorModal = $modal.open({
 				size: 'lg',
-				templateUrl: 'error/dados-error.tpl.html',
+				templateUrl: 'directives/dadosError/dados-error.tpl.html',
 				controller: function ErrorModalCtrl($modalInstance, ErrorService) {
 					var sm = this;
 					sm.error = ErrorService.getInfo();

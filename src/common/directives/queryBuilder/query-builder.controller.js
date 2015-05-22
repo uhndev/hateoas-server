@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module('hateoas.queryController', [])
+  angular.module('dados.common.directives.queryController', [])
   .controller('QueryController', QueryController);
 
   QueryController.$inject = ['$scope'];

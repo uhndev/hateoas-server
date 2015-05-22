@@ -1,7 +1,10 @@
 (function() {
   'use strict';
   angular
-    .module('hateoas.controls', ['hateoas.controls.controller', 'hateoas.utils'])
+    .module('dados.common.directives.hateoas.controls', [
+      'dados.common.directives.hateoas.controls.controller',
+      'dados.common.directives.hateoas.controls.service'
+    ])
     .directive('hateoasControls', [ 'HateoasUtils', 
       
     function(HateoasUtils) {

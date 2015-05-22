@@ -12,10 +12,10 @@
   
   StudyOverviewController.$inject = [
     '$scope', '$rootScope', '$resource', '$location', 
-    'StudyService', 'StatusService', 'API', 'FORM_NAME'
+    'StudyService', 'toastr', 'API', 'FORM_NAME'
   ];
   
-  function StudyOverviewController($scope, $rootScope, $resource, $location, Study, Status, API, FORM_NAME) {
+  function StudyOverviewController($scope, $rootScope, $resource, $location, Study, toastr, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
@@ -100,9 +100,9 @@
       angular.copy(vm.collectionCentres, vm.savedData.data);
       var study = new Study({ 'collectionCentres': vm.collectionCentres.tableData });
       study.$update({ id: vm.resource.items.id }).then(function (data) {
-        Status.update({msg: 'Updated collection centres successfully!', type: 'success'});
+        toastr.success('Updated collection centres successfully!', 'Collection Centre');
       }).catch(function (err) {
-        Status.update({msg: err, type: 'danger'});
+        toastr.error(err, 'Collection Centre');
       });
     }
 
