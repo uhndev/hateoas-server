@@ -1,10 +1,10 @@
 (function() {
   'use strict';
-  angular.module('hateoas', [
-    'hateoas.view',
-    'hateoas.controls',
-    'hateoas.utils',
-    'hateoas.controller'
+  angular.module('dados.common.directives.hateoas', [
+    'dados.common.directives.hateoas.view',
+    'dados.common.directives.hateoas.utils',
+    'dados.common.directives.hateoas.controls',    
+    'dados.common.directives.hateoas.controller'
   ])
   .constant('API', { 
     protocol: 'http',

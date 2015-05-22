@@ -74,7 +74,15 @@ module.exports = {
           'href' : [
             sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'encounter'
           ].join('/')
-        }     
+        },
+        { 
+          'rel': 'collectioncentres', 
+          'prompt': 'Collection Centres', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentres'
+          ].join('/')
+        } 
       ];
     },    
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

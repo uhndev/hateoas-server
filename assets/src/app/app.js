@@ -2,35 +2,50 @@
   'use strict';
 
   angular.module('dados', [
-  	'templates-app',
-  	'templates-common',  
     'ui.router',
+    'toastr',
+    'ngAnimate',
+    'ngResource',
+
+    'templates-app',
+    'templates-common',
     'config.interceptors',
+
   	'dados.auth',
     'dados.study',
-  	'dados.status',
     'dados.header',
     'dados.workflow',
     'dados.formbuilder',
-  	'dados.error',
+
     'dados.filters.formatter',
     'dados.filters.type',
-    'dados.common.services.csrf',
-    'dados.common.services.status',
-    'hateoas',
-    'hateoas.queryBuilder'
+
+    'dados.common.directives.hateoas',
+    'dados.common.services.csrf'
   ])
-  // Configure all Providers
-  .config( function DadosConfig ($httpProvider, $stateProvider) { 
+  .config(dadosConfig)
+  .controller('DadosController', DadosController);
+
+  dadosConfig.$inject = ['$httpProvider', '$stateProvider', 'toastrConfig'];
+
+  function dadosConfig($httpProvider, $stateProvider, toastrConfig) { 
     $httpProvider.interceptors.push('httpRequestInterceptor');
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
-  })
-  .controller('DadosController', DadosController);
 
+    angular.extend(toastrConfig, {
+      autoDismiss: true,
+      closeButton: true,
+      positionClass: 'toast-bottom-right',
+      progressBar: true,
+      tapToDismiss: true,
+      timeOut: 3000
+    });
+  }
+ 
   DadosController.$inject = ['$scope', '$state', '$location'];
-  
+
   function DadosController($scope, $state, $location) {
 
     var vm = this;

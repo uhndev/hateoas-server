@@ -1,12 +1,20 @@
 (function() {
   'use strict';
-  angular.module('dados.auth.service', ['ngResource', 'ngCookies', 'ipCookie'])
-       .constant('LOGIN_API', 'http://localhost:1337/auth/local')
-       .constant('LOGOUT_API', 'http://localhost:1337/logout')
-       .service('AuthService', AuthService);
+  
+  angular
+    .module('dados.auth.service', [
+      'ngCookies',
+      'ipCookie',
+      'ngResource'
+    ])
+    .constant('LOGIN_API', 'http://localhost:1337/auth/local')
+    .constant('LOGOUT_API', 'http://localhost:1337/logout')
+    .service('AuthService', AuthService);
 
-  AuthService.$inject = ['LOGIN_API', 'LOGOUT_API', '$rootScope', '$location',
-                         '$resource', '$cookieStore', 'ipCookie'];                                
+  AuthService.$inject = [
+    'LOGIN_API', 'LOGOUT_API', '$rootScope', '$location',
+    '$resource', '$cookieStore', 'ipCookie'
+  ]; 
 
   function AuthService(loginURL, logoutURL, $rootScope, $location,
                       $resource, $cookieStore, ipCookie) {

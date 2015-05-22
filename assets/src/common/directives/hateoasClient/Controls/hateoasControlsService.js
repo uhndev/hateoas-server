@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('hateoas.controls.service', ['ngResource'])
+    .module('dados.common.directives.hateoas.controls.service', [])
     .service('HateoasControlsService', HateoasControlsService);
 
   HateoasControlsService.$inject = ['$q', '$resource'];

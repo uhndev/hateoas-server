@@ -1,15 +1,13 @@
 (function() {
   'use strict';
-  angular.module( 'dados.formbuilder.controller', [
-    'ngResource',
-    'dados.common.directives.formBuilder'
-  ])
-  .constant('FORM_API', 'http://localhost:1337/api/form/:id')
-  .controller('FormBuilderController', FormBuilderController);
+  angular
+    .module('dados.formbuilder.controller', [])
+    .constant('FORM_API', 'http://localhost:1337/api/form/:id')
+    .controller('FormBuilderController', FormBuilderController);
   
-  FormBuilderController.$inject = ['$location', '$timeout', '$resource', 'StatusService', 'FORM_API'];
+  FormBuilderController.$inject = ['$location', '$timeout', '$resource', 'toastr', 'FORM_API'];
 
-  function FormBuilderController($location, $timeout, $resource, Status, FORM_API) {
+  function FormBuilderController($location, $timeout, $resource, toastr, FORM_API) {
     var vm = this;
     var Resource;
     
@@ -29,15 +27,15 @@
       if (_.has(query, 'id')) {
         Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
           angular.copy(form.items, vm.form);
-          Status.update({msg: 'Loaded form '+vm.form.form_name+' successfully!', type: 'info'});
+          toastr.info('Loaded form '+vm.form.form_name+' successfully!', 'Form');
         }, function (err) {
-          Status.update({msg: 'Unable to load form! ' + err, type: 'danger'});
+          toastr.error('Unable to load form! ' + err, 'Form');
         });
       }
     }
 
     function pushError(err) {
-      Status.update({msg: err, type: 'danger'});
+      toastr.error(err, 'Error');
     }
 
     function saveForm() {
@@ -45,13 +43,13 @@
       // if current form object has an href attribute, we update
       if (_.has(vm.form, 'href')) {
         resource.$update( {id:vm.form.id} ).then(function (data) {
-          Status.update({msg: 'Updated form '+vm.form.form_name+' successfully!', type: 'success'});
+          toastr.success('Updated form '+vm.form.form_name+' successfully!', 'Form');
         }).catch(pushError);        
       } 
       // otherwise, we create a new form
       else {
         resource.$save().then(function (data) {
-          Status.update({msg: 'Saved form '+vm.form.form_name+' successfully!', type: 'success'});
+          toastr.success('Saved form '+vm.form.form_name+' successfully!', 'Form');
         }).catch(pushError);
       }    
     }

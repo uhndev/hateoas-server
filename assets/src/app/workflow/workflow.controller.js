@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('dados.workflow.controller', ['dados.workflow.service'])
+    .module('dados.workflow.controller', [])
     .constant('DEFAULT_LINK', {
       path: '',
       links: [],
