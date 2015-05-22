@@ -1,8 +1,8 @@
 (function() {
   'use strict';
-  angular.module('hateoas.controller', [
+  angular.module('dados.common.directives.hateoas.controller', [
     'ngTable',
-    'hateoas.utils',
+    'dados.common.directives.hateoas.utils',
     'dados.common.services.sails'
   ])
   .controller('HateoasController', HateoasController);

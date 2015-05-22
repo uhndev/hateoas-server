@@ -1,8 +1,9 @@
 (function() {
 	'use strict';
-	angular.module('dados.error', [
+	angular.module('dados.common.directives.dadosError', [
 		'sails.io',
-		'dados.error.controller'
+		'dados.common.directives.dadosError.controller',
+		'dados.common.directives.dadosError.service'
 	])
 
 	.directive('dadosError', function() {

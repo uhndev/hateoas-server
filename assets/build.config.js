@@ -70,6 +70,7 @@ module.exports = {
       'vendor/sails.io.js/dist/sails.io.js',      
 
       'vendor/angular/angular.js',
+      'vendor/angular-animate/angular-animate.js',
       'vendor/angular-loader/angular-loader.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',

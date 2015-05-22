@@ -1,22 +1,8 @@
 (function() {
 	'use strict';	
-	angular.module('dados.header', [
-		'dados.header.constants',
-		'dados.auth.service'
-	])
-	.directive('dadosHeader', function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			scope: {
-				submenu: '='
-			},
-			templateUrl: 'header/dados-header.tpl.html',
-			controller: HeaderController,
-			controllerAs: 'header',
-			bindToController: true
-		};
-	});	
+	angular
+		.module('dados.header.controller', [])
+		.controller('HeaderController', HeaderController);
 
 	HeaderController.$inject = ['$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW'];
 
@@ -107,4 +93,5 @@
 
 		$rootScope.$on('$locationChangeSuccess', updateActive);
 	}
+
 })();

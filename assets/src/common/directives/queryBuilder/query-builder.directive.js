@@ -1,7 +1,9 @@
 (function() {
   'use strict';
   angular
-    .module('hateoas.queryBuilder', ['hateoas.queryController'])
+    .module('dados.common.directives.queryBuilder', [
+      'dados.common.directives.queryController'
+    ])
     .directive('queryBuilder', function() {
       return {
         restrict: 'E',
@@ -11,7 +13,7 @@
           template: '&'
         },
         link: postLink,
-        templateUrl: 'directives/queryBuilder/queryBuilder.tpl.html',
+        templateUrl: 'directives/queryBuilder/query-builder.tpl.html',
         controller: 'QueryController'
       };
     });

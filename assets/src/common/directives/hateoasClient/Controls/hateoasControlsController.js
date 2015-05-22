@@ -1,23 +1,21 @@
 (function() {
   'use strict';
-  angular.module('hateoas.controls.controller', [
-    'hateoas.modal.controller',
-    'hateoas.controls.service',
-    'hateoas.utils',
+  angular.module('dados.common.directives.hateoas.controls.controller', [
+    'dados.common.directives.hateoas.modal.controller',
     'dados.common.directives.formBuilder.directives.form'
   ])
   .controller('HateoasControlsController', HateoasControlsController);
 
   HateoasControlsController.$inject = [
     '$scope', '$modal', '$location', 
-    'API', 'SLUG_ROUTES', 'HateoasUtils', 'StatusService'
+    'API', 'SLUG_ROUTES', 'HateoasUtils', 'toastr'
   ];
  
   /**
    * Controller for the directive
    */
   function HateoasControlsController($scope, $modal, $location, 
-                                      API, SLUG_ROUTES, HateoasUtils, StatusService) {
+                                      API, SLUG_ROUTES, HateoasUtils, toastr) {
     // By default, the HateoasService is used. However, the service can be
     // overridden by declaring the service in the directive.
     var Service = HateoasUtils.getService('ControlsService');
@@ -57,15 +55,9 @@
         var api = newItem.href || $scope.href;
         //TODO: Handle errors!
         Service.commit(api, newItem).then(function(data) {
-          StatusService.update({
-            type: 'success',
-            msg: 'Item successfully updated!'
-          });
+          toastr.success('Item successfully updated!', 'Success');
         }, function (err) {
-          StatusService.update({
-            type: 'error',
-            msg: err.data.raw.err
-          });            
+          toastr.error(err.data.raw.err, 'Error');
         }).then(function() {
           $scope.$emit('hateoas.client.refresh');
           modalScope.$destroy();
