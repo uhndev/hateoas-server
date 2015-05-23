@@ -1,5 +1,7 @@
 module.exports = function() {
 
+var Q = require('q');
+
 var self = {
   /** Start of "String" Utils **/
   "String" : {
@@ -52,17 +54,49 @@ var self = {
       } 
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
-    },
+    }
+  },
+  /** End of "Model" Utils **/
 
+  /** Start of "User" Utils **/
+  "User": {
     extractPersonFields: function extractPersonFields(data) {
       return {
         prefix: data.prefix,
         firstname: data.firstname,
         lastname: data.lastname
       };
+    },
+    
+    populateAndFormat: function populateAndFormat(users) {
+      var promises = [];
+      _.each(users, function (user) {
+        promises.push(User.findOne(user.id)
+          .populate('person')
+          .populate('roles')
+          .then(function (user) {
+            return user;
+          })
+        );
+      });
+      
+      return Q.allSettled(promises).then(function (users) {
+        var userVals = _.pluck(users, 'value');
+        _.map(userVals, function (user) {
+          if (user.person) {
+            _.merge(user, self.User.extractPersonFields(user.person));
+            delete user.person;
+          }
+          if (user.roles) {
+            user.role = _.first(user.roles).id;
+            delete user.roles;
+          }
+        });
+        return userVals;
+      });
     }
   }
-  /** End of "Model" Utils **/
+  /** End of "User" Utils **/
 }
 
 return self;

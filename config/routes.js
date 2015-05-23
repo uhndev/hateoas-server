@@ -48,5 +48,10 @@ module.exports.routes = {
   // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
   // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
   
+  /***************************************************************************
+  * User Routes                                                              *
+  ****************************************************************************/
+  'get /api/user/:id'              : 'UserController.findOne',
+  
   'get /api/role/:name/users'      : 'RoleController.findRoleUsers'  
 };

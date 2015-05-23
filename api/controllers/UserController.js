@@ -7,6 +7,28 @@ var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUt
 _.merge(exports, _super);
 _.merge(exports, {
 
+  findOne: function (req, res, next) {
+    User.findOne(req.param('id'))
+      .populate('studies')
+      .populate('person')
+      .populate('roles')
+    .exec(function (err, matchingRecord) {
+      if (err) res.serverError(err);
+      if(!matchingRecord) return res.notFound('No record found with the specified `id`.');
+
+      console.log(matchingRecord);
+      if (matchingRecord.person) {
+        _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
+        delete matchingRecord.person;
+      }
+      if (matchingRecord.roles) {
+        matchingRecord.role = _.first(matchingRecord.roles).id;
+        delete matchingRecord.roles;
+      }
+      res.ok(matchingRecord);
+    });    
+  },
+
   // Overrides sails-auth's UserController.create to include role
   create: function (req, res, next) {
     var username = req.param('username'),

@@ -19,7 +19,6 @@ describe('The Study Controller', function () {
 	describe('User with Admin Role', function () {
 		
 		before(function(done) {
-
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
@@ -28,7 +27,7 @@ describe('The Study Controller', function () {
 				Study.create({
 					name: 'LEAP',
 					reb: 100,
-					users: [adminUserId]
+					users: [coordinatorUserId]
 				}).then(function (res) {
 					done();
 				});
@@ -227,6 +226,119 @@ describe('The Study Controller', function () {
 					});				
 			});
 		}); 
+	});
+
+	describe('User with Coordinator Role', function () {
+		before(function(done) {
+			auth.authenticate('coordinator', function(loginAgent, resp) {
+				agent = loginAgent;
+				resp.statusCode.should.be.exactly(200);
+				adminUserId = JSON.parse(resp.text).id;
+
+				Study.create({
+					name: 'TEST',
+					reb: 100,
+					users: [coordinatorUserId]
+				}).then(function (res) {
+					done();
+				});
+			});
+		});
+
+		after(function(done) {
+			auth.logout(done);
+		});
+
+		describe('find()', function () {
+			it('should be able to see all studies', function (done) {
+				done();
+			});
+
+			it('should be able to see studies he/she is associated with', function (done) {
+				done();
+			});
+		});
+
+		describe('findOne()', function () {
+			it('should be able to retrieve a specific study by name', function (done) {
+				var req = request.get('/api/study/LEAP');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items.name.should.equal('LEAP');
+						done(err);
+					});				
+			});
+
+			it('should return a 404 if study does not exist', function (done) {
+				var req = request.get('/api/study/DNE');
+				agent.attachCookies(req);
+				req.expect(404)
+					.end(function (err, res) {
+						res.text.should.equal('Study DNE could not be found');
+						done(err);
+					});				
+			});
+
+			it('should retrieve a saved subject form href from the workflowstate', function (done) {
+				var req = request.get('/api/study/LEAP/subject');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.template.should.have.property('href');
+						done(err);
+					});					
+			});
+
+			it('should retrieve a saved user form href from the workflowstate', function (done) {
+				var req = request.get('/api/study/LEAP/user');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.template.should.have.property('href');
+						done(err);
+					});					
+			});	
+		});
+
+		describe('create()', function () {
+
+		});
+
+		describe('update()', function() {
+
+		});
+
+		describe('allow correct headers', function() {
+			it('should return full CRUD access for /api/study', function (done) {
+				var req = request.get('/api/study');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read,create,update,delete');
+						done(err);
+					});
+			});
+
+			it('should return full CRUD access for /api/study/:name', function (done) {
+				var req = request.get('/api/study/LEAP');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read,create,update,delete');
+						done(err);
+					});				
+			});
+		});
+	});
+
+	describe('User with Interviewer Role', function () {
+
 	});
 
 	describe('User with Subject Role', function () {

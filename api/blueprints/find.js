@@ -97,7 +97,7 @@ module.exports = function findRecords (req, res) {
     else if (req.model.identity === 'user') {
       _.map(matchingRecords, function (user) {
         if (user.person) {
-          _.merge(user, Utils.Model.extractPersonFields(user.person));
+          _.merge(user, Utils.User.extractPersonFields(user.person));
           delete user.person;
         }
         if (user.roles) {

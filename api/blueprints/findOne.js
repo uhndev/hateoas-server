@@ -1,4 +1,5 @@
 /**
+ * 
  * Module dependencies
  */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
@@ -39,7 +40,10 @@ module.exports = function findOneRecord (req, res) {
       Model.subscribe(req, matchingRecord);
       actionUtil.subscribeDeep(req, matchingRecord);
     }
-
+    
+    /**
+     * Currently used for: [STUDY]
+     */
     // if the model has a users collection, return filtered results depending on role
     if (_.has(matchingRecord, 'users')) {
       if (_.some(matchingRecord.users, function(user) {

@@ -75,7 +75,7 @@ _.merge(exports, {
           var resp = _.pick(user, 'id', 'username');
           resp.role = _.pluck(data.roles, 'name');
           if (data.person) {
-            _.merge(resp, Utils.Model.extractPersonFields(data.person));
+            _.merge(resp, Utils.User.extractPersonFields(data.person));
           }
           
           sails.log.info('user', resp, 'authenticated successfully');
