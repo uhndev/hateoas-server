@@ -13,6 +13,7 @@
 
   	'dados.auth',
     'dados.study',
+    'dados.user',
     'dados.header',
     'dados.workflow',
     'dados.formbuilder',
@@ -20,7 +21,9 @@
     'dados.filters.formatter',
     'dados.filters.type',
 
+    'dados.common.directives.dadosError',
     'dados.common.directives.hateoas',
+    'dados.common.directives.queryBuilder',
     'dados.common.services.csrf'
   ])
   .config(dadosConfig)
