@@ -16,7 +16,6 @@ _.merge(exports, {
       if (err) res.serverError(err);
       if(!matchingRecord) return res.notFound('No record found with the specified `id`.');
 
-      console.log(matchingRecord);
       if (matchingRecord.person) {
         _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
         delete matchingRecord.person;

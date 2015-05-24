@@ -19,15 +19,8 @@
       },
       templateUrl: 'directives/formBuilder/partials/create.tpl.html',
       controller: 'CreateController',
-      link: {
-        pre: function preLink(scope, element, attr) {
-          var unregister = scope.$watch('form', function (newval, oldval) {
-            if (newval.length > 0) {
-              unregister();
-            }
-          }, true);
-        }
-      }
+      controllerAs: 'fb',
+      bindToController: true
     };
   }
 
