@@ -21,6 +21,16 @@
 				<span class="glyphicon glyphicon-remove"></span>
 				{{item.key}}&nbsp;
 			</button>
+			<isteven-multi-select    
+				input-model="multiInput"    
+				output-model="multiOutput"
+				button-label="prefix firstname lastname"
+				item-label="prefix firstname lastname"
+				output-properties="id"
+				tick-property="ticked"
+				max-labels="10"
+			>
+			</isteven-multi-select>
 			<div class="input-group">
 				<input type="text"
 					ng-list

@@ -11,26 +11,9 @@
 
   angular
     .module('dados.common.directives.formBuilder.directives.form', [])
-    .directive('dynamicName', dynamicName)
     .directive('formDirective', formDirective);
 
-  dynamicName.$inject = ['$compile', '$parse'];
   formDirective.$inject = ['$http', '$compile', '$templateCache'];
-
-  // allows for dynamic form and input names in forms
-  function dynamicName($compile, $parse) {
-    return {
-      restrict: 'A',
-      terminal: true,
-      priority: 100000,
-      link: function(scope, elem) {
-        var name = $parse(elem.attr('dynamic-name'))(scope);
-        elem.removeAttr('dynamic-name');
-        elem.attr('name', name);
-        $compile(elem)(scope);
-      }
-    };
-  }
 
   function formDirective($http, $compile, $templateCache) {
 
@@ -58,9 +41,7 @@
         form:'=',
         onSubmit:'&',
         onCancel:'&'
-      },
-      controller: function($scope){
-      },
+      }
     };
   }
 
