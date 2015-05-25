@@ -19,8 +19,7 @@
         },
         "field_helpertext": "Username must be at least 5 characters long",
         "field_hasOptions": false,
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 2,
@@ -35,8 +34,7 @@
         },
         "field_helpertext": "Missing or invalid email",
         "field_hasOptions": false,
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 3,
@@ -51,8 +49,7 @@
         },
         "field_helpertext": "Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character",
         "field_hasOptions": false,
-        "field_required": false,
-        "field_buffer": []
+        "field_required": false
       },
       {
         "field_id": 4,
@@ -68,7 +65,6 @@
         "field_helpertext": "missing input or invalid",
         "field_hasOptions": true,
         "field_required": true,
-        "field_buffer": [],
         "field_options": [
           {
             "option_id": 1,
@@ -104,8 +100,7 @@
           "expression": ""
         },
         "field_helpertext": "missing input or invalid",
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 6,
@@ -119,8 +114,7 @@
           "expression": ""
         },
         "field_helpertext": "missing input or invalid",
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 7,
@@ -135,8 +129,8 @@
         "field_helpertext": "missing input or invalid",
         "field_hasItem": true,
         "field_required": true,
-        "field_buffer": [],
-        "field_userURL": "http://localhost:1337/api/role"
+        "field_userURL": "http://localhost:1337/api/role",
+        "field_labels": "name"
       }
 		]
 	},
@@ -161,7 +155,6 @@
         "field_helpertext": "missing input or invalid",
         "field_hasOptions": true,
         "field_required": true,
-        "field_buffer": [],
         "field_options": [
           {
             "option_id": 1,
@@ -198,8 +191,7 @@
         },
         "field_helpertext": "You must enter a first name",
         "field_hasOptions": false,
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 3,
@@ -214,8 +206,7 @@
         },
         "field_helpertext": "You must enter a last name",
         "field_hasOptions": false,
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 4,
@@ -231,7 +222,6 @@
         "field_helpertext": "missing input or invalid",
         "field_hasOptions": true,
         "field_required": true,
-        "field_buffer": [],
         "field_options": [
           {
             "option_id": 1,
@@ -258,8 +248,7 @@
         },
         "field_helpertext": "missing input or invalid",
         "field_hasOptions": false,
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       }
     ]
   },
@@ -382,7 +371,8 @@
         "field_helpertext": "missing input or invalid",
         "field_hasItems": true,
         "field_required": false,
-        "field_userURL": "http://localhost:1337/api/user"
+        "field_userURL": "http://localhost:1337/api/user",
+        "field_labels": "username prefix firstname lastname"
       }
     ]
 	},
@@ -407,8 +397,8 @@
         "field_helpertext": "missing input or invalid",
         "field_hasItems": true,
         "field_required": true,
-        "field_buffer": [],
-        "field_userURL": "http://localhost:1337/api/study"
+        "field_userURL": "http://localhost:1337/api/study",
+        "field_labels": "name reb"
       },
       {
         "field_id": 2,
@@ -424,8 +414,8 @@
         "field_helpertext": "missing input or invalid",
         "field_hasItems": true,
         "field_required": true,
-        "field_buffer": [],
-        "field_userURL": "http://localhost:1337/api/user"
+        "field_userURL": "http://localhost:1337/api/user",
+        "field_labels": "username prefix firstname lastname"
       },
       {
         "field_id": 3,
@@ -439,8 +429,7 @@
           "expression": ""
         },
         "field_helpertext": "missing input or invalid",
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       },
       {
         "field_id": 4,
@@ -454,8 +443,7 @@
           "expression": ""
         },
         "field_helpertext": "missing input or invalid",
-        "field_required": true,
-        "field_buffer": []
+        "field_required": true
       }
     ]
   }  
