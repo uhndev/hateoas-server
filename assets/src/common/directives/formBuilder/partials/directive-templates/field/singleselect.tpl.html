@@ -1,4 +1,4 @@
-<ng-form name="sub_form">
+<ng-form name="sub_form" ng-hide="loadError">
 	<div class="form-group">
 		<label for="field.field_id">
 			{{field.field_id}}) {{field.field_title}}
@@ -17,8 +17,8 @@
 				output-properties="id"
 				tick-property="ticked"
 				max-labels="10"
-				helper-elements="all none filter"
 				on-item-click="setValues()"
+				on-reset="fetchData(true)"
 			>
 			</isteven-multi-select>
 		</div>

@@ -24,8 +24,9 @@
 
     // bindable methods
     vm.setValues = setValues;
-
-    fetchData();
+    vm.fetchData = fetchData;
+    
+    fetchData(false);
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +38,8 @@
       }
     }
 
-    function fetchData() {
-      SelectService.loadSelect(vm.url).then(function (data) {
+    function fetchData(refresh) {
+      SelectService.loadSelect(vm.url, refresh).then(function (data) {
         angular.copy(data, vm.input);
         // set selected values if loading form
         if (!_.isEmpty(vm.values)) {
