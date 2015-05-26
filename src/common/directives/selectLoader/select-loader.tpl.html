@@ -10,8 +10,8 @@
 			output-properties="{{select.outputProperties}}"
 			tick-property="ticked"
 			max-labels="10"
-			helper-elements="all none filter"
-			on-item-click="select.setValues()">
+			on-item-click="select.setValues()"
+			on-reset="select.fetchData(true)">
 		</isteven-multi-select>
 	</div>
 	<div ng-switch-default>
@@ -24,9 +24,9 @@
 			output-properties="{{select.outputProperties}}"
 			tick-property="ticked"
 			max-labels="10"
-			helper-elements="all none filter"
 			on-item-click="select.setValues()"
 			on-select-all="select.setValues()"
+			on-reset="select.fetchData(true)"
 			on-select-none="select.values = []">
 		</isteven-multi-select>
 	</div>

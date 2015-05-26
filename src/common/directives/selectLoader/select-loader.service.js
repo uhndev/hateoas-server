@@ -10,9 +10,9 @@
 	function SelectService($http, $q) {
 		var cache = {};
 
-		this.loadSelect = function(url) {
+		this.loadSelect = function(url, refresh) {
 			var deferred;
-			if (!cache[url]) {
+			if (!cache[url] || refresh) {
 				cache[url] = $http.get(url).then(function(response) {
 					return response.data.items;
 				});

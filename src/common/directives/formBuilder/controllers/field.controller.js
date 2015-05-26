@@ -15,9 +15,11 @@
     // bindable variables
     $scope.multiInput = [];
     $scope.multiOutput = [];
+    $scope.loadError = false;
 
     // bindable methods
     $scope.setValues = setValues;
+    $scope.fetchData = fetchData;
     $scope.clearExpr = clearExpr;
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
@@ -36,14 +38,14 @@
         if (newVal) {
           $timeout.cancel(timeoutPromise);
           timeoutPromise = $timeout(function() {
-            fetchData();
+            fetchData(false);
           }, 1500);
         }      
       });
     }
 
     function setValues() {
-      if ($scope.field.field_hasItems) {
+      if ($scope.field.field_hasItems) {        
         $scope.field.field_value = _.pluck($scope.multiOutput, 'id');
       } 
       else if ($scope.field.field_hasItem) {
@@ -51,8 +53,8 @@
       }
     }
 
-    function fetchData() {
-      SelectService.loadSelect($scope.field.field_userURL).then(function (data) {
+    function fetchData(refresh) {
+      SelectService.loadSelect($scope.field.field_userURL, refresh).then(function (data) {
         angular.copy(data, $scope.multiInput);
         // set selected values if loading form
         if ($scope.field.field_value) {
@@ -70,7 +72,9 @@
             }
           });
         }
-      });
+      }).catch(function (err) {
+        $scope.loadError = true;
+      }); 
     }
 
     function clearExpr(field) {
