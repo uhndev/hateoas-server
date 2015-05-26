@@ -2,12 +2,15 @@
   'use strict';
 
   angular
-    .module('dados.common.directives.formBuilder.field.controller', ['isteven-multi-select'])
+    .module('dados.common.directives.formBuilder.field.controller', [
+      'dados.common.directives.selectLoader.service',
+      'isteven-multi-select'
+    ])
     .controller('FieldController', FieldController);
 
-  FieldController.$inject = ['$scope', '$http', '$timeout'];
+  FieldController.$inject = ['$scope', '$http', '$timeout', 'SelectService'];
 
-  function FieldController($scope, $http, $timeout) {
+  function FieldController($scope, $http, $timeout, SelectService) {
 
     // bindable variables
     $scope.multiInput = [];
@@ -27,6 +30,16 @@
       if ($scope.field.field_userURL) {
         fetchData();
       }
+
+      var timeoutPromise;
+      $scope.$watch("field.field_userURL", function (newVal) {
+        if (newVal) {
+          $timeout.cancel(timeoutPromise);
+          timeoutPromise = $timeout(function() {
+            fetchData();
+          }, 1500);
+        }      
+      });
     }
 
     function setValues() {
@@ -39,8 +52,8 @@
     }
 
     function fetchData() {
-      $http.get($scope.field.field_userURL).then(function(response){
-        angular.copy(response.data.items, $scope.multiInput);
+      SelectService.loadSelect($scope.field.field_userURL).then(function (data) {
+        angular.copy(data, $scope.multiInput);
         // set selected values if loading form
         if ($scope.field.field_value) {
           _.each($scope.multiInput, function(item) {
@@ -59,16 +72,6 @@
         }
       });
     }
-
-    var timeoutPromise;
-    $scope.$watch("field.field_userURL", function (newVal) {
-      if (newVal) {
-        $timeout.cancel(timeoutPromise);
-        timeoutPromise = $timeout(function() {
-          fetchData();
-        }, 1500);
-      }      
-    });
 
     function clearExpr(field) {
       field.field_min = '';

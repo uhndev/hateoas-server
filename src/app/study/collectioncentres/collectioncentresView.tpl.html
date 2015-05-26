@@ -1,20 +1,20 @@
-<div ng-controller="StudyOverviewController as study">
+<div ng-controller="CentreController as cc">
 	<div class="row">
 		<div class="pull-left">
 			<h1 id="Title">
-				Study {{::study.resource.items.name}} Overview
+				Study {{::cc.resource.items.name}} Collection Centres
 			</h1>
 		</div>
 		<div class="pull-right">
 			<br/>
 			<div id="Controls" class="align-right">
 				<hateoas-controls
-					ng-if='study.allow'
-					data-template='study.template'
-					data-href='{{study.resource.href}}'
-					data-slug='{{study.resource.slug}}'
-					data-permissions="study.allow"
-					data-item='study.resource.items'>
+					ng-if='cc.allow'
+					data-template='cc.template'
+					data-href='{{cc.resource.href}}'
+					data-slug='{{cc.resource.slug}}'
+					data-permissions="cc.allow"
+					data-item='cc.resource.items'>
 				</hateoas-controls>
 			</div>
 		</div>
@@ -45,13 +45,13 @@
 							<table class="table table-hover">
 								<thead>
 									<tr>
-										<th ng-repeat="col in study.collectionCentres.columns">
+										<th ng-repeat="col in cc.collectionCentres.columns">
 											{{col.title}}
 										</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="row in study.collectionCentres.tableData">
+									<tr ng-repeat="row in cc.collectionCentres.tableData">
 										<td>
 											<input type="text" class="form-control" ng-model="row.name"/>
 										</td>
@@ -59,7 +59,7 @@
 											<select-loader
 												url="user"
 												isAtomic="false"
-												isDisabled="true"
+												isDisabled="false"
 												values="row.contact"
 												labels="prefix firstname lastname"
 												outputProperties="id">
@@ -71,10 +71,10 @@
 									<tr>
 										<td></td>
 										<td>
-											<button class="btn btn-primary btn-xs" ng-click="study.addCentre()" ng-if="!study.addingNew">
+											<button class="btn btn-primary btn-xs" ng-click="cc.addCentre()" ng-if="!cc.addingNew">
 												Add New
 											</button>
-											<button class="btn btn-warning btn-xs" ng-click="study.cancelAdd()" ng-if="study.addingNew">
+											<button class="btn btn-warning btn-xs" ng-click="cc.cancelAdd()" ng-if="cc.addingNew">
 												Cancel
 											</button>
 										</td>
@@ -82,11 +82,11 @@
 								</tfoot>
 							</table>							
 							<button class="btn btn-primary btn-sm"
-								ng-click="study.saveChanges()">
+								ng-click="cc.saveChanges()">
 								Save Changes
 							</button>
 							<button class="btn btn-warning btn-sm"
-								ng-click="study.revertChanges()">
+								ng-click="cc.revertChanges()">
 								Revert Changes
 							</button>
 						</div>
@@ -94,22 +94,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Study Information</h3>
-				</div>
-				<div class="panel-body">
-					<simple-table columns="study.studyInfo.columns" table-data="study.studyInfo.tableData"></simple-table>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="well">
-				<form-directive form="study.clinicalForm" on-submit="study.generateReport()"></form-directive>
-			</div>
-		</div>		
 	</div>
 </div>
