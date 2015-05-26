@@ -11,17 +11,7 @@ module.exports = {
 
 	findOne: function (req, res, next) {
 		var name = req.param('name');
-		PermissionService.checkPermissions(req, function() {
-			Study.findOne({name: name}).populate('users')
-				.exec(function (err, study) {
-					if (err) next(err);
-					if (_.isUndefined(study)) {
-						res.status(404).send("Study " + name + " could not be found");
-					} else {
-						res.ok(study);
-					}
-				});
-		}, function() {
+		var cb = function() {
 			Study.findOne({name: name}).populate('users')
 				.then(function (study) {
 					if (_.some(study.users, function(user) {
@@ -34,22 +24,28 @@ module.exports = {
 						});
 					}
 				}).catch(next);
-		}, next);		
+		};
+
+		PermissionService.checkPermissions(req, 
+			function adminCb() {
+				Study.findOne({name: name}).populate('users')
+					.exec(function (err, study) {
+						if (err) next(err);
+						if (_.isUndefined(study)) {
+							res.status(404).send("Study " + name + " could not be found");
+						} else {
+							res.ok(study);
+						}
+					});
+			},
+			function coordinatorCb() { cb(); },
+			function interviewerCb() { cb(); },
+			function subjectCb() { cb();	}, next);		
 	},
 
 	findCollectionCentres: function (req, res, next) {
 		var name = req.param('name');
-		PermissionService.checkPermissions(req, function() {
-			Study.findOne({name: name}).populate('users')
-				.exec(function (err, study) {
-					if (err) next(err);
-					if (_.isUndefined(study)) {
-						res.status(404).send("Study " + name + " could not be found");
-					} else {
-						res.ok(study);
-					}
-				});
-		}, function() {
+		var cb = function() {
 			Study.findOne({name: name}).populate('users')
 				.then(function (study) {
 					if (_.some(study.users, function(user) {
@@ -62,7 +58,23 @@ module.exports = {
 						});
 					}
 				}).catch(next);
-		}, next);
+		};
+
+		PermissionService.checkPermissions(req, 
+			function adminCb() {
+				Study.findOne({name: name}).populate('users')
+					.exec(function (err, study) {
+						if (err) next(err);
+						if (_.isUndefined(study)) {
+							res.status(404).send("Study " + name + " could not be found");
+						} else {
+							res.ok(study);
+						}
+					});
+			},
+			function coordinatorCb() { cb(); },
+			function interviewerCb() { cb(); },
+			function subjectCb() { cb();	}, next);		
 	}
 
 };

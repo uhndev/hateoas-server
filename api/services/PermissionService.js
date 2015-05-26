@@ -11,13 +11,14 @@ _.extend(PermissionService.prototype, {
   // Extend with custom logic here by adding additional fields and methods,
   // and/or overriding methods in the superclass.
 
-  checkPermissions: function (req, adminCb, subjectCb, next) {
+  checkPermissions: function (req, adminCb, coordinatorCb, interviewerCb, subjectCb, next) {
     Role.findOne(req.permissions[0].role)
       .then(function (role) {
-        if (role.name === 'admin' || role.name === 'coordinator') {
-          adminCb();
-        } else {
-          subjectCb();
+        switch(role.name) {
+          case 'admin': adminCb(); break;
+          case 'coordinator': coordinatorCb(); break;
+          case 'interviewer': interviewerCb(); break;
+          default: subjectCb(); break;
         }
       }).catch(next);    
   }
