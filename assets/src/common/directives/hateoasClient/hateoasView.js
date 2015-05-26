@@ -24,7 +24,16 @@
         var model = _.first(pathArr);
 
         var templates;
-        if (pathArr.length === 2) {
+        if (pathArr.length === 3) {
+          var view = _.last(pathArr);
+          templates = _.map(VIEW_MODULES, function(module) {
+            return [model, '/', view, '/', view, 'View', module, '.tpl.html'].join('');  
+          });
+          templates.push( 
+            [model, '/', view, '/', view, 'View.tpl.html'].join('')
+          );
+        }
+        else if (pathArr.length === 2) {
           templates = _.map(ITEM_MODULES, function(module) {
             return [model, '/', model, 'View', module, '.tpl.html'].join('');  
           });
@@ -70,7 +79,20 @@
         var model = _.first(pathArr);
 
         var fragment;
-        if (pathArr.length === 2) {
+        if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
+          var view = _.last(pathArr);
+          fragment = '<div>';
+          _.each(VIEW_MODULES, function(module) {
+            var templateUrl = [model, '/', view, '/', view, 
+              'View', module, '.tpl.html'].join('');
+            var defaultUrl = [defaultViewLocation, 
+              module, '.tpl.html'].join('');
+
+            fragment += $templateCache.get(templateUrl) || 
+              $templateCache.get(defaultUrl);
+          });
+        }
+        else if (pathArr.length === 2) { // routes like /study/LEAP or /user/:id
           fragment = '<div>';
           _.each(ITEM_MODULES, function(module) {
             var templateUrl = [model, '/', model, 

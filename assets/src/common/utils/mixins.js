@@ -4,7 +4,8 @@
 	_.mixin({
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
-		'convertRestUrl': convertRestUrl
+		'convertRestUrl': convertRestUrl,
+		'inArray': inArray
 	});
 
 	function parseUrl(location, url) {
@@ -19,6 +20,10 @@
 	function convertRestUrl(restURL, prefix) {
 		var index = restURL.indexOf(prefix) + prefix.length;
     return restURL.substring(index);
+	}
+
+	function inArray(arr, item) {
+		return (_.indexOf(arr, item) !== -1);
 	}
 
 })();

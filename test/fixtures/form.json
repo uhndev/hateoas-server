@@ -372,7 +372,7 @@
         "field_hasItems": true,
         "field_required": false,
         "field_userURL": "http://localhost:1337/api/user",
-        "field_labels": "username prefix firstname lastname"
+        "field_labels": "prefix firstname lastname"
       }
     ]
 	},
@@ -415,7 +415,7 @@
         "field_hasItems": true,
         "field_required": true,
         "field_userURL": "http://localhost:1337/api/user",
-        "field_labels": "username prefix firstname lastname"
+        "field_labels": "prefix firstname lastname"
       },
       {
         "field_id": 3,

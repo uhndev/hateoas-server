@@ -1,21 +1,20 @@
 (function() {
   'use strict';
   angular
-    .module('dados.study', [
-      'dados.study.service',
+    .module('dados.study.controller', [
+      'dados.common.directives.selectLoader',
       'dados.common.directives.simpleTable',
-      'dados.common.directives.listEditor',
       'dados.common.directives.formBuilder.directives.form'
     ])
     .constant('FORM_NAME', 'survey_tracking')
     .controller('StudyOverviewController', StudyOverviewController);
   
   StudyOverviewController.$inject = [
-    '$scope', '$rootScope', '$resource', '$location', 
+    '$scope', '$resource', '$location', 
     'StudyService', 'toastr', 'API', 'FORM_NAME'
   ];
   
-  function StudyOverviewController($scope, $rootScope, $resource, $location, Study, toastr, API, FORM_NAME) {
+  function StudyOverviewController($scope, $resource, $location, Study, toastr, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
@@ -29,6 +28,8 @@
 
     // bindable methods
     vm.generateReport = generateReport;
+    vm.addCentre = addCentre;
+    vm.cancelAdd = cancelAdd;
     vm.saveChanges = saveChanges;
     vm.revertChanges = revertChanges;
 
@@ -55,14 +56,11 @@
           tableData: data.items.collectionCentres || [],
           columns: [
             { title: 'Collection Centres', field: 'name', type: 'text' },
-            { title: 'Contact', field: 'contact', type: 'text'}
+            { title: 'Contact', field: 'contact', type: 'multi' }
           ]
         };
         
-        vm.savedData = {
-          forceReload: false,
-          data: angular.copy(vm.collectionCentres)
-        };
+        vm.savedData = angular.copy(vm.collectionCentres);
 
         // initialize submenu
         if (_.has(data.items, 'links')) {
@@ -96,9 +94,22 @@
       alert('Generating report');
     }
 
+    function addCentre() {
+      vm.collectionCentres.tableData.push({name:'', contact:[]});
+      vm.addingNew = true;
+    }
+
+    function cancelAdd() {
+      if (vm.addingNew) {
+        vm.collectionCentres.tableData.pop();
+        vm.addingNew = false;
+      }      
+    }
+
     function saveChanges() {
-      angular.copy(vm.collectionCentres, vm.savedData.data);
+      angular.copy(vm.collectionCentres, vm.savedData);
       var study = new Study({ 'collectionCentres': vm.collectionCentres.tableData });
+      vm.addingNew = false;
       study.$update({ id: vm.resource.items.id }).then(function (data) {
         toastr.success('Updated collection centres successfully!', 'Collection Centre');
       }).catch(function (err) {
@@ -107,8 +118,8 @@
     }
 
     function revertChanges() {
-      angular.copy(vm.savedData.data, vm.collectionCentres);
-      vm.savedData.forceReload = !vm.savedData.forceReload;
+      angular.copy(vm.savedData, vm.collectionCentres);
+      vm.addingNew = false;
     }
   }
 })();
