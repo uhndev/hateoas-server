@@ -14,7 +14,7 @@ var StudyController = require('../../../api/controllers/StudyController');
 
 describe('The Study Controller', function () {
 
-	var agent, adminUserId, studyId;
+	var agent, adminUserId, leapHipAdminId;
 
 	describe('User with Admin Role', function () {
 		
@@ -25,7 +25,7 @@ describe('The Study Controller', function () {
 				adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
-					name: 'LEAP',
+					name: 'LEAP-ADMIN',
 					reb: 100,
 					users: [coordinatorUserId]
 				}).then(function (res) {
@@ -47,7 +47,7 @@ describe('The Study Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('LEAP');
+						collection.items[0].name.should.equal('LEAP-ADMIN');
 						collection.count.should.equal(1);
 						done(err);
 					});
@@ -67,12 +67,12 @@ describe('The Study Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to retrieve a specific study by name', function (done) {
-				var req = request.get('/api/study/LEAP');
+				var req = request.get('/api/study/LEAP-ADMIN');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP');
+						collection.items.name.should.equal('LEAP-ADMIN');
 						done(err);
 					});				
 			});
@@ -88,7 +88,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/subject');
+				var req = request.get('/api/study/LEAP-ADMIN/subject');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -99,7 +99,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved user form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/user');
+				var req = request.get('/api/study/LEAP-ADMIN/user');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -113,7 +113,7 @@ describe('The Study Controller', function () {
 		describe('create()', function () {
 			
 			before(function (done) {
-				Study.findOne({name: 'LEAP-HIP'})
+				Study.findOne({name: 'LEAP-HIP-ADMIN'})
 					.exec(function (err, study) {
 						_.isUndefined(study).should.be.true;
 						done();
@@ -132,15 +132,15 @@ describe('The Study Controller', function () {
 				agent.attachCookies(req);
 
 				req.send({
-						name: 'LEAP-HIP',
+						name: 'LEAP-HIP-ADMIN',
 						reb: 100,
 						users: [adminUserId, subjectUserId]
 					})
 					.expect(201)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						studyId = collection.id;
-						collection.name.should.equal('LEAP-HIP');
+						leapHipAdminId = collection.id;
+						collection.name.should.equal('LEAP-HIP-ADMIN');
 						done(err);
 					});
 			});
@@ -150,7 +150,7 @@ describe('The Study Controller', function () {
 				agent.attachCookies(req);
 
 				req.send({
-						name: 'LEAP-HIP',
+						name: 'LEAP-HIP-ADMIN',
 						reb: 100,
 						users: [adminUserId]
 					})
@@ -163,21 +163,21 @@ describe('The Study Controller', function () {
 
 		describe('update()', function() {
 			it('should be able to update study name', function(done) {
-				var req = request.put('/api/study/' + studyId);
+				var req = request.put('/api/study/' + leapHipAdminId);
 				agent.attachCookies(req);
 
-				req.send({ name: 'LEAP2', reb: 201 })
+				req.send({ name: 'LEAP-HIP2-ADMIN', reb: 201 })
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP2');
+						collection.items.name.should.equal('LEAP-HIP2-ADMIN');
 						collection.items.reb.should.equal('201');
 						done(err);
 					});
 			});
 
 			it('should be able to set no users to a study', function(done) {
-				var req = request.put('/api/study/' + studyId);
+				var req = request.put('/api/study/' + leapHipAdminId);
 				agent.attachCookies(req);
 
 				req.send({ users: [] })
@@ -188,12 +188,12 @@ describe('The Study Controller', function () {
 			});			
 
 			it('should be able to update users of study', function(done) {
-				var req = request.put('/api/study/' + studyId);
+				var req = request.put('/api/study/' + leapHipAdminId);
 				agent.attachCookies(req);
 				req.send({ users: [adminUserId, subjectUserId] })
 					.expect(200)
 					.end(function (err, res) {
-						Study.findOne(studyId).populate('users')
+						Study.findOne(leapHipAdminId).populate('users')
 							.then(function (data) {
 								data.users[0].username.should.equal('admin');
 								data.users[1].username.should.equal('subject');
@@ -216,7 +216,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should return full CRUD access for /api/study/:name', function (done) {
-				var req = request.get('/api/study/LEAP');
+				var req = request.get('/api/study/LEAP-ADMIN');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -236,7 +236,7 @@ describe('The Study Controller', function () {
 				adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
-					name: 'TEST',
+					name: 'LEAP-COORD',
 					reb: 100,
 					users: [coordinatorUserId]
 				}).then(function (res) {
@@ -250,23 +250,25 @@ describe('The Study Controller', function () {
 		});
 
 		describe('find()', function () {
-			it('should be able to see all studies', function (done) {
+			it('should be able to see studies where he/she is associated with a CC', function (done) {
+				// TODO
 				done();
 			});
 
-			it('should be able to see studies he/she is associated with', function (done) {
+			it('should not be able to see studies he/she is not associated with', function (done) {
+				// TODO
 				done();
 			});
 		});
 
 		describe('findOne()', function () {
-			it('should be able to retrieve a specific study by name', function (done) {
-				var req = request.get('/api/study/LEAP');
+			it('should be able to retrieve a specific study by name if associated to a CC', function (done) {
+				var req = request.get('/api/study/LEAP-COORD');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP');
+						collection.items.name.should.equal('LEAP-COORD');
 						done(err);
 					});				
 			});
@@ -282,7 +284,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/subject');
+				var req = request.get('/api/study/LEAP-COORD/subject');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -293,7 +295,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved user form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/user');
+				var req = request.get('/api/study/LEAP-COORD/user');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -305,6 +307,52 @@ describe('The Study Controller', function () {
 		});
 
 		describe('create()', function () {
+			it('should not be able to create studies', function(done) {
+				done();
+			});
+		});
+
+		describe('update()', function() {
+			it('should not be able to update studies', function(done) {
+				done();
+			})
+		});
+
+		describe('allow correct headers', function() {
+			it('should only allow read access for /api/study', function (done) {
+				var req = request.get('/api/study');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read');
+						done(err);
+					});
+			});
+
+			it('should only allow read access for /api/study/:name', function (done) {
+				var req = request.get('/api/study/LEAP-ADMIN');
+				agent.attachCookies(req);
+				req.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read');
+						done(err);
+					});				
+			});
+		});
+	});
+
+	describe('User with Interviewer Role', function () {
+		describe('find()', function() {
+
+		});
+
+		describe('findOne()', function() {
+
+		});
+
+		describe('create()', function() {
 
 		});
 
@@ -313,32 +361,28 @@ describe('The Study Controller', function () {
 		});
 
 		describe('allow correct headers', function() {
-			it('should return full CRUD access for /api/study', function (done) {
+			it('should only allow read access for /api/study', function (done) {
 				var req = request.get('/api/study');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
 						var headers = res.headers['allow'];
-						headers.should.equal('read,create,update,delete');
+						headers.should.equal('read');
 						done(err);
 					});
 			});
 
-			it('should return full CRUD access for /api/study/:name', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var headers = res.headers['allow'];
-						headers.should.equal('read,create,update,delete');
-						done(err);
-					});				
-			});
+			// it('should only allow read access for /api/study/:name', function (done) {
+			// 	var req = request.get('/api/study/LEAP');
+			// 	agent.attachCookies(req);
+			// 	req.expect(200)
+			// 		.end(function (err, res) {
+			// 			var headers = res.headers['allow'];
+			// 			headers.should.equal('read');
+			// 			done(err);
+			// 		});				
+			// });
 		});
-	});
-
-	describe('User with Interviewer Role', function () {
-
 	});
 
 	describe('User with Subject Role', function () {
@@ -356,35 +400,27 @@ describe('The Study Controller', function () {
 		});
 
 		describe('find()', function() {
-			it('should only be able to see studies he/she is associated with', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
-					.expect('Content-Type', 'application/collection+json; charset=utf-8')
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('LEAP2');
-						collection.count.should.equal(1);
-						done(err);
-					});
+			it('should be able to see studies where he/she is associated with a CC', function (done) {
+				// TODO
+				done();
 			});
 		});
 
 		describe('findOne()', function() {
-			it('should be allowed access to study he/she is associated with', function (done) {
-				var req = request.get('/api/study/LEAP2');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP2');
-						done(err);
-					});
+			it('should be allowed access to study he/she is associated with via enrollment in CC', function (done) {
+				// var req = request.get('/api/study/LEAP2');
+				// agent.attachCookies(req);
+				// req.expect(200)
+				// 	.end(function (err, res) {
+				// 		var collection = JSON.parse(res.text);
+				// 		collection.items.name.should.equal('LEAP2');
+				// 		done(err);
+				// 	});
+				done();
 			});
 
 			it('should not be allowed access to restricted study', function (done) {
-				var req = request.get('/api/study/LEAP');
+				var req = request.get('/api/study/LEAP-ADMIN');
 				agent.attachCookies(req);
 				req.expect(403)
 					.end(function (err, res) {
@@ -394,21 +430,19 @@ describe('The Study Controller', function () {
 		});
 
 		describe('create()', function () {
-			it('should not be able to create a new user', function (done) {
-				var req = request.post('/api/user');
+			it('should not be able to create a new study', function (done) {
+				var req = request.post('/api/study');
 				agent.attachCookies(req);
 				
 				req.set('Accept', 'application/json')
 					.expect('Content-Type', 'application/json; charset=utf-8')
 					.send({
-						username: 'newuser1',
-						email: 'newuser1@example.com',
-						password: 'lalalal1234',
-						role: 'admin'
+						name: 'LEAPSUBJECT',
+						reb: 100,
+						users: [subjectUserId]
 					})
 					.expect(400)
 					.end(function (err, res) {
-						// var user = res.body;
 						var collection = JSON.parse(res.text);
 						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
@@ -417,11 +451,11 @@ describe('The Study Controller', function () {
 		});
 
 		describe('update()', function () {
-			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + subjectUserId);
+			it('should not be able to update study', function (done) {
+				var req = request.put('/api/study/' + leapHipAdminId);
 				agent.attachCookies(req);
 
-				req.send({ email: 'newuserupdated@example.com' })
+				req.send({ reb: 2000 })
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -429,19 +463,31 @@ describe('The Study Controller', function () {
 						done(err);
 					});
 			});
+		});
 
-			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + adminUserId);
+		describe('allow correct headers', function() {
+			it('should only allow read access for /api/study', function (done) {
+				var req = request.get('/api/study');
 				agent.attachCookies(req);
-
-				req.send({ email: 'crapadminemail@example.com' })
-					.expect(400)
+				req.expect(200)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
+						var headers = res.headers['allow'];
+						headers.should.equal('read');
 						done(err);
 					});
 			});
+
+			it('should only allow read access for /api/study/:name', function (done) {
+				// var req = request.get('/api/study/LEAP');
+				// agent.attachCookies(req);
+				// req.expect(200)
+				// 	.end(function (err, res) {
+				// 		var headers = res.headers['allow'];
+				// 		headers.should.equal('read');
+				// 		done(err);
+				// 	});		
+				done();		
+			});			
 		});
 	});
 

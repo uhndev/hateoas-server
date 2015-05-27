@@ -75,9 +75,25 @@ module.exports = function findRecords (req, res) {
     // if the model has a users collection, return filtered results depending on role
     if (_.every(matchingRecords, function(record) { return _.has(record, 'users') })) {
       PermissionService.checkPermissions(req, 
-        function() { // for admin/coordinator roles
+        function() { // for admin roles
           res.ok(matchingRecords);
-        }, 
+        },
+        function() { // for coordinator roles
+          var filteredRecords = _.filter(matchingRecords, function (record) {
+            return _.some(record.users, function(user) {
+              return user.id === req.user.id;
+            });
+          });
+          res.ok(filteredRecords);
+        },
+        function() { // for interviewer roles
+          var filteredRecords = _.filter(matchingRecords, function (record) {
+            return _.some(record.users, function(user) {
+              return user.id === req.user.id;
+            });
+          });
+          res.ok(filteredRecords);
+        },
         function() { // for subject roles
           var filteredRecords = _.filter(matchingRecords, function (record) {
             return _.some(record.users, function(user) {

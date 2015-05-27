@@ -4,14 +4,14 @@
 	angular
 		.module('dados.common.directives.selectLoader.controller', [
       'isteven-multi-select',
-			'dados.common.directives.hateoas',
+			'dados.constants',
       'dados.common.directives.selectLoader.service'			
 		])
 		.controller('SelectController', SelectController);
 
-	SelectController.$inject = ['$scope', '$http', 'API', 'SelectService'];
+	SelectController.$inject = ['$scope', 'API', 'SelectService'];
 
-	function SelectController($scope, $http, API, SelectService) {
+	function SelectController($scope, API, SelectService) {
 		var vm = this;
 
 		// bindable variables

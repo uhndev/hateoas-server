@@ -16,7 +16,7 @@ module.exports = {
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-
+  hookTimeout: 60000, // 60 seconds to allow for uglification
   models: {
     connection: 'dados_production'
   },
