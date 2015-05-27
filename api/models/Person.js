@@ -11,10 +11,6 @@ var HateoasService = require('../services/HateoasService.js');
 module.exports = {
   schema: true,
   attributes: {
-    username: {
-      type: 'string',
-      required: true
-    },
     firstname: {
       type: 'string',
       required: true
@@ -22,6 +18,15 @@ module.exports = {
     lastname: {
       type: 'string',
       required: true
+    },
+    prefix: {
+      type: 'string',
+      enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+      required: true
+    },
+    gender: {
+      type: 'string',
+      enum: ['Male', 'Female']
     },
     dob: {
       type: 'date'

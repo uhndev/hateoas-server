@@ -105,13 +105,15 @@ module.exports = function sendOK (data, options) {
           return fetchPermissions(model, req.user);
         });
 
-      // return [hateoasResponse, fetchResultCount(query, modelName)];
-      return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
+      return [hateoasResponse, data.length, fetchResultCount(query, modelName), modelPromise];
+      // return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
     })
-    .spread(function(hateoasResponse, count, permissions) {    
-      hateoasResponse.total = count;
+    .spread(function(hateoasResponse, resultCount, modelCount, permissions) {
+      hateoasResponse.count = resultCount;
+      hateoasResponse.total = modelCount;
+
       // hateoasControls will read the allow header 
-      // to determine which buttons/actions to renderi
+      // to determine which buttons/actions to render
       res.set({
         'Access-Control-Expose-Headers': 'allow,Content-Type',
         'Content-Type': 'application/collection+json; charset=utf-8',

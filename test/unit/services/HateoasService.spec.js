@@ -4,8 +4,6 @@
  */
 
 var HateoasService = require('../../../api/services/HateoasService');
-var login = require('../utils/login');
-var Q = require('q');
 
 describe('HATEOAS Engine', function () {
 
@@ -15,7 +13,7 @@ describe('HATEOAS Engine', function () {
   describe('User with Admin Role', function () {
 		
 		before(function(done) {
-	  	login.authenticate('admin', function(loginAgent, resp) {
+	  	auth.authenticate('admin', function(loginAgent, resp) {
 	  		agent = loginAgent;
 	  		resp.statusCode.should.be.exactly(200);
 	  		done();
@@ -23,7 +21,7 @@ describe('HATEOAS Engine', function () {
 	  });
 
 	  after(function(done) {
-	  	login.logout(done);
+	  	auth.logout(done);
 	  });  
 
 	});

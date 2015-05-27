@@ -7,11 +7,8 @@ var Sails = require('sails'),
     sails;
 
 request = require('supertest');
-
-// set temporary environment variables for testing
-process.env.ADMIN_USERNAME = 'test_admin';
-process.env.ADMIN_EMAIL = 'test_email@email.com';
-process.env.ADMIN_PASSWORD = 'Test_Password';
+auth = require('./unit/utils/auth');
+should = require('should');
 
 before(function(done) {
   console.log('Lifting sails...');
@@ -20,10 +17,10 @@ before(function(done) {
     port: 1336,
     // configuration for testing purposes
     log: {
-      level: 'error',
+      level: 'silent',
       noShip: true
     },
-    models: {
+    models: { 
       connection: 'dados_test',
       migrate: 'drop'
     },
@@ -46,9 +43,20 @@ before(function(done) {
     fixtures = barrels.data;
 
     // Populate the DB
-    console.log("Loading fixtures...");
-    barrels.populate(function(err) {
-      done(err, sails);
+    console.log("Loading test fixtures...");
+    Role.find().exec(function (err, roles) {
+      var roleIds = _.pluck(roles, 'id');
+      adminRoleId = roleIds[0];
+      coordinatorRoleId = roleIds[1];
+      subjectRoleId = roleIds[2];
+
+      auth.createUser(auth.credentials['subject'].create, function(subId) {
+        subjectUserId = subId;
+        auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+          coordinatorUserId = cooId;
+          done(err, sails);
+        });
+      });        
     });
   });
 });

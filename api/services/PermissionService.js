@@ -11,15 +11,17 @@ _.extend(PermissionService.prototype, {
   // Extend with custom logic here by adding additional fields and methods,
   // and/or overriding methods in the superclass.
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo.call(this, bar);
-   * }
-   */
+  checkPermissions: function (req, adminCb, coordinatorCb, interviewerCb, subjectCb, next) {
+    Role.findOne(req.permissions[0].role)
+      .then(function (role) {
+        switch(role.name) {
+          case 'admin': adminCb(); break;
+          case 'coordinator': coordinatorCb(); break;
+          case 'interviewer': interviewerCb(); break;
+          default: subjectCb(); break;
+        }
+      }).catch(next);    
+  }
 });
 
 module.exports = new PermissionService();

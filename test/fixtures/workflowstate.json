@@ -4,15 +4,15 @@
 		"links": [],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/form/1"
-		}
-	},
-	{
-		"path": "/api/person",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/2"
+			"rel": "user",
+			"href": "http://localhost:1337/api/form/1",
+			"data": [
+				{"name":"username","type":"string","prompt":"Username","value":""},
+				{"name":"email","type":"string","prompt":"Email","value":""},
+				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
+				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
+				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
+			]			
 		}
 	},	
 	{
@@ -20,9 +20,17 @@
 		"links": [],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/form/3"
+			"href": "http://localhost:1337/api/form/2"
 		}
 	},
+	{
+		"path": "/api/person",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/3"
+		}
+	},	
 	{
 		"path": "/api/study",
 		"links": [],

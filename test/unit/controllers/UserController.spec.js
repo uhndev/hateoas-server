@@ -9,7 +9,6 @@
  */
 
 var UserController = require('../../../api/controllers/UserController');
-var login = require('../utils/login');
 
 describe('The User Controller', function () {
 
@@ -20,15 +19,16 @@ describe('The User Controller', function () {
 	describe('User with Admin Role', function () {
 		
 		before(function(done) {
-			login.authenticate('admin', function(loginAgent, resp) {
+			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
+				adminUserId = JSON.parse(resp.text).id;
 				done();
 			});
 		});
 
 		after(function(done) {
-			login.logout(done);
+			auth.logout(done);
 		});
 
 		describe('find()', function () {
@@ -40,8 +40,24 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].username.should.equal(process.env.ADMIN_USERNAME);
-						adminUserId = collection.items[0].id;
+						collection.items[0].username.should.equal('admin');
+						collection.items[1].username.should.equal('subject');
+						collection.items[2].username.should.equal('coordinator');
+						done(err);
+					});
+			});
+			
+			it('should modify response to include extracted person fields', function (done) {
+				var req = request.get('/api/user');
+				agent.attachCookies(req);
+				req.set('Accept', 'application/collection+json')
+					.expect('Content-Type', 'application/collection+json; charset=utf-8')
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						_.all(collection.items.slice(1), function(item) {
+							return _.has(item, 'prefix') && _.has(item, 'firstname') && _.has(item, 'lastname')
+						}).should.be.ok;
 						done(err);
 					});
 			});
@@ -55,16 +71,19 @@ describe('The User Controller', function () {
 				req.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.send({
-						username: 'subject',
-						email: 'subject@example.com',
+						username: 'subject2',
+						email: 'subject2@example.com',
 						password: 'subject1234',
-						role: 'subject'
+						role: subjectRoleId,
+						prefix: 'Ms.',
+						firstname: 'Soob',
+						lastname: 'Jact'
 					})
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('subject');
-						newUserId = user.id;
+						collection.items.username.should.equal('subject2');
+						newUserId = collection.items.id;
 						done(err);
 					});
 			});
@@ -88,13 +107,8 @@ describe('The User Controller', function () {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
-				req.send({
-						username: 'subject',
-						email: 'subject@example.com',
-						password: 'subject1234',
-						role: 'subject'
-					})
-					.expect(500)
+				req.send(auth.credentials.subject.create)
+					.expect(400)
 					.end(function(err, res) {
 						done(err);
 					});
@@ -108,7 +122,10 @@ describe('The User Controller', function () {
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
-						role: 'qwerty'
+						role: 'qwerty',
+						prefix: 'Mrs.',
+						firstname: 'Qwer',
+						lastname: 'Ty'
 					})
 					.expect(400)
 					.end(function(err, res) {
@@ -146,7 +163,7 @@ describe('The User Controller', function () {
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			login.authenticate('subject', function(loginAgent, resp) {
+			auth.authenticate('subject', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				done();
@@ -154,12 +171,12 @@ describe('The User Controller', function () {
 		});
 
 		after(function(done) {	  	
-			login.authenticate('admin', function(loginAgent, resp) {
+			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				var req = request.del('/api/user/' + newUserId);
 				agent.attachCookies(req);
 				req.send().expect(200).end(function (err, res) {
-					login.logout(done);
+					auth.logout(done);
 				})
 			});
 		});
@@ -187,7 +204,8 @@ describe('The User Controller', function () {
 					.send({
 						username: 'newuser1',
 						email: 'newuser1@example.com',
-						password: 'lalalal1234'
+						password: 'lalalal1234',
+						role: 'subject'
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -200,15 +218,15 @@ describe('The User Controller', function () {
 		});
 
 		describe('update()', function () {
-			it('should be able to update themselves', function (done) {
+			it('should not be able to update themselves', function (done) {
 				var req = request.put('/api/user/' + newUserId);
 				agent.attachCookies(req);
 
 				req.send({ email: 'subjectupdated@example.com' })
-					.expect(200)
+					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].email.should.equal('subjectupdated@example.com');
+						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
@@ -221,7 +239,7 @@ describe('The User Controller', function () {
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.error.should.equal('Cannot perform action [update] on foreign object');
+						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
