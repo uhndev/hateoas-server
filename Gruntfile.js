@@ -251,8 +251,8 @@ module.exports = function ( grunt ) {
         constants: {
           BASE: { 
             protocol: 'http',
-            host : 'api.dados.com',
-            port: '80',
+            host : 'localhost',
+            port: '1337',
             prefix: '/api'
           }
         }
