@@ -5,21 +5,20 @@
     .module('dados.auth.service', [
       'ngCookies',
       'ipCookie',
-      'ngResource'
+      'ngResource',
+      'dados.auth.constants'
     ])
-    .constant('LOGIN_API', 'http://localhost:1337/auth/local')
-    .constant('LOGOUT_API', 'http://localhost:1337/logout')
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'LOGIN_API', 'LOGOUT_API', '$rootScope', '$location',
+    'AUTH_API', '$rootScope', '$location',
     '$resource', '$cookieStore', 'ipCookie'
   ]; 
 
-  function AuthService(loginURL, logoutURL, $rootScope, $location,
+  function AuthService(Auth, $rootScope, $location,
                       $resource, $cookieStore, ipCookie) {
     
-    var LoginAuth = $resource(loginURL);
+    var LoginAuth = $resource(Auth.LOGIN_API);
 
     this.isAuthenticated = function() {
       var auth = Boolean(ipCookie('user'));      
@@ -53,7 +52,7 @@
     this.logout = function(data, onSuccess, onError) {      
       this.setUnauthenticated();
       // $cookieStore.remove('user');
-      return $resource(logoutURL).query();
+      return $resource(Auth.LOGOUT_API).query();
     };
   }  
 })();

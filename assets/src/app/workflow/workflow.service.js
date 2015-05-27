@@ -2,14 +2,13 @@
   'use strict';
 
   angular
-    .module('dados.workflow.service', ['ngResource', 'toastr'])
-    .constant('WORKFLOWSTATE_API', 'http://localhost:1337/api/workflowState')
+    .module('dados.workflow.service', ['ngResource', 'toastr', 'dados.workflow.constants'])
     .factory('Workflow', WorkflowStateService);
 
   WorkflowStateService.$inject = ['WORKFLOWSTATE_API', '$resource', 'toastr'];
 
-  function WorkflowStateService(url, $resource, toastr) {
-    var Workflow = $resource(url + '/:id', {id : '@id'}, {
+  function WorkflowStateService(WORKFLOWSTATE_API, $resource, toastr) {
+    var Workflow = $resource(WORKFLOWSTATE_API.url + '/:id', {id : '@id'}, {
       'query': { method: 'GET', isArray: false },
       'update' : { method: 'PUT' }
     });

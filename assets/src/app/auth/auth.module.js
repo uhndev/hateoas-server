@@ -2,6 +2,7 @@
   'use strict';
   
   angular.module('dados.auth', [
+    'dados.auth.constants',
     'dados.auth.service',
     'dados.auth.controller'
   ])

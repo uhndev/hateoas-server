@@ -11,6 +11,7 @@
     'templates-common',
     'config.interceptors',
 
+    'dados.constants',
   	'dados.auth',
     'dados.study',
     'dados.user',
