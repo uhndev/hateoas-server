@@ -1,8 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('dados.formbuilder.controller', [])
-    .constant('FORM_API', 'http://localhost:1337/api/form/:id')
+    .module('dados.formbuilder.controller', ['dados.form.constants'])
     .controller('FormBuilderController', FormBuilderController);
   
   FormBuilderController.$inject = ['$location', '$timeout', '$resource', 'toastr', 'FORM_API'];
@@ -22,7 +21,7 @@
 
     function init() {
       var query = $location.search();
-      Resource = $resource(FORM_API, {}, {'update': { method: 'PUT' }});
+      Resource = $resource(FORM_API.url, {}, {'update': { method: 'PUT' }});
       // if formURL to load contains a form ID, load it
       if (_.has(query, 'id')) {
         Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
