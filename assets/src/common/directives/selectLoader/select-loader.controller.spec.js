@@ -81,7 +81,7 @@ describe('select-loader controller', function() {
 			ctrl.setValues();
 			scope.$digest();			
 			httpBackend.flush();
-			expect(ctrl.values).toEqual(["2"]);
+			expect(ctrl.values).toEqual("2");
 		});
 
 		it('should load atomic id and set vm.input ticked value', function() {

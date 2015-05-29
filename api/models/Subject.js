@@ -10,24 +10,26 @@ var HateoasService = require('../services/HateoasService.js');
 module.exports = {
   schema: true,
   attributes: {
-    studyId: {
+    subjectId: {
       type: 'integer',
       autoIncrement: true,
       required: true
     },
-    study: {
-      model: 'study',
-      required: true
-    },
-    person: {
-      model: 'person',
+    user: {
+      model: 'user',
       required: true
     },
     doe: {
       type: 'date'
     },
+    // CCs I am enrolled in as a subject
+    collectionCentres: {
+      collection: 'collectioncentre',
+      via: 'subjects'
+    },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
+
   findByStudyName: function(studyName, options, cb) {
     Study.findOneByName(studyName, {}, function found(err, study) {
       if (err) return cb(err);
@@ -46,11 +48,10 @@ module.exports = {
       delete query.where.name;
 
       Subject.find(query)
-        .populate('person')
-        .populate('study')
         .exec(cb);
     });
   },
+  
   beforeValidate: function(subject, cb) {
     //Auto increment workaround
     Subject.findOne({ where: {"study": subject.study}, 

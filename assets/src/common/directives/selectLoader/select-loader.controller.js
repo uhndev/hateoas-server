@@ -31,7 +31,7 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function setValues() {
-      if (vm.isAtomic === 'true') {
+      if (vm.isAtomic) {
       	vm.values = _.first(_.pluck(vm.output, 'id'));        
       } else {
         vm.values = _.pluck(vm.output, 'id');
@@ -43,15 +43,19 @@
         angular.copy(data, vm.input);
         // set selected values if loading form
         if (!_.isEmpty(vm.values)) {
-          if (vm.isAtomic === 'true') {
+          if (vm.isAtomic) {
             _.each(vm.input, function(item) {
               if (vm.values === item.id) {
                 item.ticked = true;
               }
             });
           } else {
+            var values = vm.values;
+            if (_.all(vm.values, function(v) { return _.has(v, 'id'); })) {
+              values = _.pluck(vm.values, 'id');
+            }
             _.map(vm.input, function(item) {
-              if (_.inArray(vm.values, item.id)) {
+              if (_.inArray(values, item.id)) {
                 item.ticked = true;
               }
             });

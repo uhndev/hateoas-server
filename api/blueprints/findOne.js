@@ -25,9 +25,7 @@ module.exports = function findOneRecord (req, res) {
   var pk = actionUtil.requirePk(req);
 
   var query = Model.findOne(pk);
-  if (_.any(Model.associations, function (assoc) {
-    return (_.has(assoc, 'collection') && assoc.collection === 'user');
-  })) {
+  if (req.model.identity === 'study') {
     query.populate('users');
   }
 

@@ -42,9 +42,7 @@ module.exports = function findRecords (req, res) {
   .sort( actionUtil.parseSort(req) );
 
   // If this model has a users collection, populate it
-  if (_.any(Model.associations, function (assoc) {
-    return (_.has(assoc, 'collection') && assoc.collection === 'user');
-  })) {
+  if (req.model.identity === 'study') {
     query.populate('users');
   }
 

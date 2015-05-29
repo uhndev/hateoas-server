@@ -38,5 +38,13 @@
 		"template": {
 			"href": "http://localhost:1337/api/form/4"
 		}
+	},
+	{
+		"path": "/api/collectioncentre",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/5"
+		}
 	}
 ]

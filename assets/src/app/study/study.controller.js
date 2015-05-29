@@ -49,18 +49,25 @@
         
         vm.studyInfo = {
           columns: [ 'Name', 'Value' ],
-          tableData: parseData(robj)
+          rows: {
+            'name': { title: 'Name', type: 'text' },
+            'reb': { title: 'REB', type: 'text' },
+            'users': { title: 'Users', type: 'users' }
+          },
+          tableData: _.objToPair(robj)
         };
 
         vm.collectionCentres = {
-          tableData: data.items.collectionCentres || [],
+          subjects_total: _.sum(_.pluck(data.items.centreSummary, 'subjects_count')),
+          coordinators_total: _.sum(_.pluck(data.items.centreSummary, 'coordinators_count')),
+          tableData: data.items.centreSummary || [],
           columns: [
             { title: 'Collection Centres', field: 'name', type: 'text' },
-            { title: 'Contact', field: 'contact', type: 'multi' }
+            { title: 'Contact', field: 'contact', type: 'multi' },
+            { title: 'Coordinators/Interviewers', field: 'coordinators_count', type: 'number'},
+            { title: 'Subjects Enrolled', field: 'subjects_count', type: 'number'}
           ]
         };
-        
-        vm.savedData = angular.copy(vm.collectionCentres);
 
         // initialize submenu
         if (_.has(data.items, 'links')) {
@@ -78,15 +85,16 @@
       });
     }
 
-    function parseData(robj) {
-      return _.map(_.keys(robj), function (k) {
-        var resp = { name: 'Study ' + _.camelCase(k) };
-        if (_.isArray(robj[k])) {
-          resp.value = _.pluck(robj[k], 'username').join(', ');
-        } else {
-          resp.value = robj[k];
-        }        
-        return resp;
+    function parseData(obj) {
+      return _.map(_.keys(obj), function (k) {
+        var val = obj[k];
+        if (_.all(obj[k], function(o) { return _.has(o, 'id'); })) {
+          val = _.pluck(obj[k], 'id');
+        }
+        return { 
+          name: k,
+          value: val
+        };
       });
     }
 
@@ -121,5 +129,9 @@
       angular.copy(vm.savedData, vm.collectionCentres);
       vm.addingNew = false;
     }
+
+    $scope.$on('hateoas.client.refresh', function() {
+      init();
+    });
   }
 })();

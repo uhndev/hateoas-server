@@ -18,6 +18,7 @@
     'dados.header',
     'dados.workflow',
     'dados.formbuilder',
+    'dados.collectioncentre',
 
     'dados.filters.formatter',
     'dados.filters.type',

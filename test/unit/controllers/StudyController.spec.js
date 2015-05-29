@@ -82,7 +82,6 @@ describe('The Study Controller', function () {
 				agent.attachCookies(req);
 				req.expect(404)
 					.end(function (err, res) {
-						res.text.should.equal('Study DNE could not be found');
 						done(err);
 					});				
 			});
@@ -278,7 +277,6 @@ describe('The Study Controller', function () {
 				agent.attachCookies(req);
 				req.expect(404)
 					.end(function (err, res) {
-						res.text.should.equal('Study DNE could not be found');
 						done(err);
 					});				
 			});

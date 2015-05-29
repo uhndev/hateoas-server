@@ -7,23 +7,26 @@ var HateoasService = require('../services/HateoasService.js');
 
 _.merge(exports, _super);
 _.merge(exports, {
-
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  
   schema: true,
   attributes: {
     person: {
       model: 'person'
     },
-    studies: {
+    // administrators/PIs of a study
+    studies: { 
       collection: 'study',
       via: 'users'
     },
+    // coordinator/interviewer CCs I am overseeing
+    collectionCentres: {
+      collection: 'collectioncentre',
+      via: 'coordinators'
+    },
     /**
-     * {
-     *   study: studyId,
-     *   role: [coordinatorRoleId or interviewerRoleId],
-     *   collectionCentre: ccName
-     * }
+     * records CC:roleId mappings 
+     * should be of the form:
+     * [ { collectionCentre: CCid1, role: roleId }, { collectionCentre: CCid2, role: roleId2 } ]
      */
     centreAccess: {
       type: 'array'
@@ -53,13 +56,16 @@ _.merge(exports, {
           return cb(err);
         }
 
-        return Utils.User.populateAndFormat(study.users);
+        // TODO: fix query on submenu pages
+        // var query = _.cloneDeep(options);
+        // query.where = query.where || {};
+        // query.where.study = study.id;
+        // delete query.where.name;
+        return Utils.User.populateAndFormat(study.users);  
       })
       .then(function (users) {
         cb(false, users);
       })
-      .catch(function (err) {
-        if (err) return cb(err);
-      });
+      .catch(cb);
   }
 });
