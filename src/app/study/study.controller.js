@@ -10,11 +10,10 @@
     .controller('StudyOverviewController', StudyOverviewController);
   
   StudyOverviewController.$inject = [
-    '$scope', '$resource', '$location', 
-    'StudyService', 'toastr', 'API', 'FORM_NAME'
+    '$scope', '$resource', '$location', 'API', 'FORM_NAME'
   ];
   
-  function StudyOverviewController($scope, $resource, $location, Study, toastr, API, FORM_NAME) {
+  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
@@ -28,10 +27,6 @@
 
     // bindable methods
     vm.generateReport = generateReport;
-    vm.addCentre = addCentre;
-    vm.cancelAdd = cancelAdd;
-    vm.saveChanges = saveChanges;
-    vm.revertChanges = revertChanges;
 
     init();
 
@@ -100,34 +95,6 @@
 
     function generateReport() {
       alert('Generating report');
-    }
-
-    function addCentre() {
-      vm.collectionCentres.tableData.push({name:'', contact:[]});
-      vm.addingNew = true;
-    }
-
-    function cancelAdd() {
-      if (vm.addingNew) {
-        vm.collectionCentres.tableData.pop();
-        vm.addingNew = false;
-      }      
-    }
-
-    function saveChanges() {
-      angular.copy(vm.collectionCentres, vm.savedData);
-      var study = new Study({ 'collectionCentres': vm.collectionCentres.tableData });
-      vm.addingNew = false;
-      study.$update({ id: vm.resource.items.id }).then(function (data) {
-        toastr.success('Updated collection centres successfully!', 'Collection Centre');
-      }).catch(function (err) {
-        toastr.error(err, 'Collection Centre');
-      });
-    }
-
-    function revertChanges() {
-      angular.copy(vm.savedData, vm.collectionCentres);
-      vm.addingNew = false;
     }
 
     $scope.$on('hateoas.client.refresh', function() {

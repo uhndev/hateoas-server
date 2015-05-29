@@ -15,7 +15,7 @@
 		var vm = this;
 
 		// bindable variables
-		vm.url = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
+		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
     vm.output = vm.output || [];
     vm.values = (vm.isAtomic) ? (vm.values || '') : (vm.values || []);
@@ -39,8 +39,13 @@
     }
 
     function fetchData(refresh) {
-      SelectService.loadSelect(vm.url, refresh).then(function (data) {
+      if (!_.isUrl(vm.href)) {
+        vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user';
+      }
+
+      SelectService.loadSelect(vm.href, refresh).then(function (data) {
         angular.copy(data, vm.input);
+        _.map(vm.input, function(inp) { delete inp.ticked; return inp; });
         // set selected values if loading form
         if (!_.isEmpty(vm.values)) {
           if (vm.isAtomic) {

@@ -34,6 +34,8 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      var currStudy = _.getStudyFromUrl($location.path());
+
       var Resource = $resource(vm.url);
       var TABLE_SETTINGS = {
         page: 1,
@@ -53,6 +55,25 @@
             vm.resource = angular.copy(data);
             params.total(data.total);
             $defer.resolve(data.items);
+
+            // initialize submenu
+            if (currStudy && _.has(data, 'links') && data.links.length > 0) {
+              // from workflowstate and current url study
+              // replace wildcards in href with study name
+              _.map(data.links, function(link) {
+                if (link.rel === 'overview' && link.prompt === '*') {
+                   link.prompt = currStudy;
+                }  
+                if (_.contains(link.href, '*')) {
+                  link.href = link.href.replace(/\*/g, currStudy);  
+                }  
+                return link;
+              });
+              var submenu = {
+                links: data.links
+              };
+              angular.copy(submenu, $scope.dados.submenu);
+            }
           });
         }
       });

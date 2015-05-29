@@ -5,7 +5,9 @@
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
 		'convertRestUrl': convertRestUrl,
+		'getStudyFromUrl': getStudyFromUrl,
 		'inArray': inArray,
+		'isUrl': isUrl,
 		'sum': sum,
 		'capitalizeFirst': capitalizeFirst,
 		'objToPair': objToPair
@@ -25,9 +27,22 @@
     return restURL.substring(index);
 	}
 
+	function getStudyFromUrl(pathname) {
+		var arr = pathnameToArray(pathname);
+		if (arr.length >= 2) {
+			return arr[1];
+		}
+		return false;
+	}
+
 	function inArray(arr, item) {
 		return (_.indexOf(arr, item) !== -1);
 	}
+
+	function isUrl(s) {
+  	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+  	return regexp.test(s);
+	}	
 
 	function sum(arr) {
 		return _.reduce(arr, function(sum, num) { return sum + num; }, 0);
