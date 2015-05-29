@@ -16,21 +16,21 @@
 		}
 	},	
 	{
-		"path": "/api/subject",
+		"path": "/api/person",
 		"links": [],
 		"queries": [],
 		"template": {
 			"href": "http://localhost:1337/api/form/2"
 		}
-	},
+	},	
 	{
-		"path": "/api/person",
+		"path": "/api/subject",
 		"links": [],
 		"queries": [],
 		"template": {
 			"href": "http://localhost:1337/api/form/3"
 		}
-	},	
+	},
 	{
 		"path": "/api/study",
 		"links": [],

@@ -86,11 +86,10 @@ module.exports = {
     if (name) fields.name = name;
     if (reb) fields.reb = reb;
     if (users) fields.users = users;
-    console.log(fields);
 
 		Study.update({id: id}, fields).exec(function (err, study) {
 			if (err) return next(err);
-			res.ok(study);
+			res.ok(_.first(study));
 		});
 	}
 	

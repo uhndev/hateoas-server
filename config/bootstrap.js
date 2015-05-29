@@ -35,17 +35,14 @@ module.exports.bootstrap = function(cb) {
 			barrels.populate(['form'], function(err) {
 				// after loading form fixtures, create workflows for each
 				Form.find().then(function (forms) {
-					// take first n items of forms that correspond to workflows		  		
-					var data = _.zip(_.take(forms, fixtures.workflowstate.length), fixtures.workflowstate);
-					_.map(data, function (state) {
-						var formId = state[0].id,
-								formName = state[0].form_name;
-						state[1].template.href = 'http://localhost:1337/api/form/' + formId;
+					_.each(forms, function(form) {
+						var idx = _.findIndex(fixtures.form, { 'form_name': form.form_name });
+						if (fixtures.workflowstate[idx]) {
+							fixtures.workflowstate[idx].template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'form', form.id].join('/');	
+						}						
 					});
-					return data;
 				})
 				.then(function (data) {
-					fixtures.workflowstate = _.unzip(data)[1];
 					barrels.populate(['workflowstate'], function (err) {
 						cb(err);
 					});	  		
