@@ -3,6 +3,7 @@
 
   angular
     .module('dados.common.directives.formBuilder.field.controller', [
+      'dados.common.directives.selectLoader',
       'isteven-multi-select'
     ])
     .controller('FieldController', FieldController);

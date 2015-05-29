@@ -26,10 +26,10 @@ _.merge(exports, {
     /**
      * records CC:roleId mappings 
      * should be of the form:
-     * [ { collectionCentre: CCid1, role: roleId }, { collectionCentre: CCid2, role: roleId2 } ]
+     * { CCid1: roleId, CCid2: roleId2 }
      */
     centreAccess: {
-      type: 'array'
+      type: 'json'
     },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },

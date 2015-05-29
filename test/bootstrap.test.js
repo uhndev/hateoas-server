@@ -14,7 +14,6 @@ before(function(done) {
   console.log('Lifting sails...');
   this.timeout(15000);
   Sails.lift({
-    port: 1336,
     // configuration for testing purposes
     log: {
       level: 'silent',

@@ -2,16 +2,17 @@
   'use strict';
   angular
     .module('dados.user', [
+      'dados.user.service',
       'dados.common.directives.simpleTable',
       'dados.common.directives.listEditor'
     ])
     .controller('UserOverviewController', UserOverviewController);
   
   UserOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API'
+    '$scope', '$resource', '$location', 'UserService', 'toastr', 'API'
   ];
   
-  function UserOverviewController($scope, $resource, $location, API) {
+  function UserOverviewController($scope, $resource, $location, UserAccess, toastr, API) {
     var vm = this;
 
     // bindable variables
@@ -24,6 +25,10 @@
     vm.url = API.url() + $location.path();
 
     // bindable methods
+    vm.addCentre = addCentre;
+    vm.cancelAdd = cancelAdd;
+    vm.saveChanges = saveChanges;
+    vm.revertChanges = revertChanges;
 
     init();
 
@@ -58,13 +63,41 @@
         vm.centreAccess = {
           tableData: data.items.centreAccess || [],
           columns: [
-            { title: 'Study', field: 'study', type: 'text' },
-            { title: 'Role', field: 'role', type: 'text' },
-            { title: 'Collection Centre', field: 'collectionCentre', type: 'text' }
+            { title: 'Study', field: 'study', type: 'single' },
+            { title: 'Role', field: 'role', type: 'single' },
+            { title: 'Collection Centre', field: 'collectionCentre', type: 'single' }
           ]
-        };
+        };      
       });
     }
+
+    function addCentre() {
+      vm.centreAccess.tableData.push({study: '', role:'', collectionCentre: ''});
+      vm.addingNew = true;
+    }
+
+    function cancelAdd() {
+      if (vm.addingNew) {
+        vm.centreAccess.tableData.pop();
+        vm.addingNew = false;
+      }      
+    }
+
+    function saveChanges() {
+      angular.copy(vm.centreAccess, vm.savedData);
+      var access = new UserAccess({ 'collectionCentres': vm.centreAccess.tableData });
+      vm.addingNew = false;
+      access.$update({ id: vm.resource.items.id }).then(function (data) {
+        toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
+      }).catch(function (err) {
+        toastr.error(err, 'Collection Centre');
+      });
+    }
+
+    function revertChanges() {
+      angular.copy(vm.savedData, vm.centreAccess);
+      vm.addingNew = false;
+    }    
 
     $scope.$on('hateoas.client.refresh', function() {
       init();

@@ -6,6 +6,7 @@
 		<span class="glyphicon glyphicon-ok" ng-show="field.field_value && !showValidateError"></span>
 		<div class="row-fluid">
 			<select-loader
+				id="{{field.field_id}}"
 				url="{{field.field_userURL}}"
 				is-atomic="field.field_hasItem"
 				is-disabled="false"
