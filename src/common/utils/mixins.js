@@ -5,7 +5,10 @@
 		'parseUrl': parseUrl,
 		'pathnameToArray': pathnameToArray,
 		'convertRestUrl': convertRestUrl,
-		'inArray': inArray
+		'inArray': inArray,
+		'sum': sum,
+		'capitalizeFirst': capitalizeFirst,
+		'objToPair': objToPair
 	});
 
 	function parseUrl(location, url) {
@@ -24,6 +27,23 @@
 
 	function inArray(arr, item) {
 		return (_.indexOf(arr, item) !== -1);
+	}
+
+	function sum(arr) {
+		return _.reduce(arr, function(sum, num) { return sum + num; }, 0);
+	}
+
+	function capitalizeFirst(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	function objToPair(obj) {
+    return _.map(_.keys(obj), function (k) {
+      return { 
+        name: k,
+        value: obj[k]
+      };
+    });
 	}
 
 })();

@@ -12,8 +12,8 @@
 			restrict: 'E',
 			scope: {
 				url: '@',
-				isAtomic: '@',
-				isDisabled: '@',
+				isAtomic: '=',
+				isDisabled: '=',
 				values: '=',
 				labels: '@',
 				outputProperties: '@'
