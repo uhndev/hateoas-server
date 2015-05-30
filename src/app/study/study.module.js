@@ -3,7 +3,6 @@
 	angular.module('dados.study', [
 		'dados.study.constants',
 	  'dados.study.service',
-	  'dados.study.controller',
-	  'dados.study.collectioncentres'
+	  'dados.study.controller'
 	]);
 })();
