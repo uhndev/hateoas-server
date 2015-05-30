@@ -106,11 +106,13 @@
 							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
 								<div class="col-md-4"><b>REST URL of Item(s) to Load: </b></div>
 								<div class="col-md-8">
-									<select class="form-control" ng-model="field.field_userURL">
+									<input type="text" ng-model="field.field_userURL" class="form-control"
+										placeholder="user"/>
+<!-- 									<select class="form-control" ng-model="field.field_userURL">
 										<option value="study">Study</option>
 										<option value="role">Role</option>
 										<option value="user">User</option>
-									</select>
+									</select> -->
 								</div>
 							</div>
 							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">

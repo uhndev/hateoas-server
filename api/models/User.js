@@ -23,13 +23,9 @@ _.merge(exports, {
       collection: 'collectioncentre',
       via: 'coordinators'
     },
-    /**
-     * records CC:roleId mappings 
-     * should be of the form:
-     * { CCid1: roleId, CCid2: roleId2 }
-     */
     centreAccess: {
-      type: 'json'
+      type: 'json',
+      defaultsTo: {}
     },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
@@ -47,6 +43,7 @@ _.merge(exports, {
   findByStudyName: function(studyName, options, cb) {
     Study.findOneByName(studyName)
       .populate('users')
+      .populate('collectionCentres')    
       .then(function (study) {
         if (!study) {
           err = new Error();
@@ -56,12 +53,54 @@ _.merge(exports, {
           return cb(err);
         }
 
-        // TODO: fix query on submenu pages
-        // var query = _.cloneDeep(options);
-        // query.where = query.where || {};
-        // query.where.study = study.id;
-        // delete query.where.name;
-        return Utils.User.populateAndFormat(study.users);  
+        this.study = study;
+        // TODO: FIX THIS
+        
+        return study.collectionCentres;
+      })
+      .then(function (centres) {
+        return Promise.all(
+          _.map(centres, function (centre) {
+            return CollectionCentre.findOne(centre.id).populate('coordinators');
+          })
+        );
+      })
+      .then(function (centres) {
+        var users = [];
+        _.each(centres, function (centre) {
+          _.each(centre.coordinators, function (coordinator) {
+            // user has access to CC with defined role
+            if (coordinator.centreAccess[centre.id]) {
+              coordinator.access = {
+                role: coordinator.centreAccess[centre.id], // coordinator/interviewer role
+                collectionCentre: centre.name
+              };
+            } else {
+              coordinator.access = {
+                role: 'NONE',
+                collectionCentre: 'NONE'
+              };
+            }
+            users.push(coordinator);
+          });
+        });        
+        return users;
+      })
+      .then(function (users) {
+        var query = _.cloneDeep(options);
+        query.where = query.where || {};
+        delete query.where.name;
+
+        this.coordinators = _.pluck(users, 'id');
+        return User.find(query).populate('person');
+      })
+      .then(function (users) {
+        return Utils.User.populateAndFormat(users);
+      })
+      .then(function (users) {
+        return _.filter(users, function (user) {
+          return _.includes(this.coordinators, user.id);
+        });
       })
       .then(function (users) {
         cb(false, users);

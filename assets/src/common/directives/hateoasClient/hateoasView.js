@@ -77,11 +77,10 @@
         var defaultViewLocation = 'directives/hateoasClient/Views/hateoasView';
         var pathArr = _.pathnameToArray(path);
         var model = _.first(pathArr);
-
         var fragment;
         if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
           var view = _.last(pathArr);
-          fragment = '<div>';
+          fragment = '<div ng-controller="HateoasController as hateoas">';
           _.each(VIEW_MODULES, function(module) {
             var templateUrl = [model, '/', view, '/', view, 
               'View', module, '.tpl.html'].join('');
