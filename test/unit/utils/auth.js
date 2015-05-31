@@ -34,6 +34,21 @@ var Auth = {
         password: 'subject1234'
       }
     },
+    interviewer: {
+      create: {
+        username: 'interviewer',
+        email: 'interviewer@example.com',
+        password: 'interviewer1234',
+        role: 'interviewer',
+        prefix: 'Mr.',
+        firstname: 'Inter',
+        lastname: 'Viewer'
+      },
+      login: {
+        identifier: 'interviewer',
+        password: 'interviewer1234'
+      }
+    },    
     coordinator: {
       create: {
         username: 'coordinator',

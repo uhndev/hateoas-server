@@ -42,7 +42,8 @@ describe('The User Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.items[0].username.should.equal('admin');
 						collection.items[1].username.should.equal('subject');
-						collection.items[2].username.should.equal('coordinator');
+						collection.items[2].username.should.equal('interviewer');
+						collection.items[3].username.should.equal('coordinator');
 						done(err);
 					});
 			});
@@ -160,6 +161,196 @@ describe('The User Controller', function () {
 		}); 
 	});
 
+ 	describe('User with Coordinator Role', function() {
+		before(function(done) {
+			auth.authenticate('coordinator', function(loginAgent, resp) {
+				agent = loginAgent;
+				resp.statusCode.should.be.exactly(200);
+				done();
+			});
+		});
+
+		after(function(done) {
+			auth.logout(done);
+		});
+
+		describe('find()', function () {
+			it('should be able to list all coordinators my collection centres', function (done) {
+				done();
+			});
+		});
+
+		describe('findOne()', function () {
+			it('should be able to read self user', function (done) {
+				var req = request.get('/api/user/' + coordinatorUserId);
+				agent.attachCookies(req);
+				req.expect(200)	
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items.id = coordinatorUserId;
+						done(err);
+					});
+			});
+
+			it('should be able to access a user only if they are in my collection centre', function (done) {
+				done();
+			});
+
+			it('should not be able to access a user not in my collection centre', function (done) {
+				done();
+			});
+		});
+
+		describe('create()', function () {
+			it('should only be able to create new user in collection centres I am part of', function (done) {
+				// TODO
+				done();
+			});
+
+			it('should return bad request if trying to creating user with admin role', function (done) {
+				// TODO
+				done();				
+			});
+
+			it('should only be able to create new user with coordinator or interviewer role', function (done) {
+				// TODO
+				done();
+			});		
+		});
+
+		describe('update()', function() {
+			it('should only be able to update self', function (done) {
+				// TODO
+				done();
+			});
+
+			it('should not be able to update role', function (done) {
+				// TODO
+				done();
+			});
+
+			it('should not be able to update centreAccess', function (done) {
+				// TODO
+				done();				
+			});			
+		});
+
+		describe('delete()', function() {
+			it('should not be able to delete users', function (done) {
+				var req = request.del('/api/user/' + newUserId);
+				agent.attachCookies(req);
+				req.send().expect(400).end(function (err) {
+					done(err);
+				})
+			});
+		});		
+ 	});
+
+ 	describe('User with Interviewer Role', function() {
+		before(function(done) {
+			auth.authenticate('interviewer', function(loginAgent, resp) {
+				agent = loginAgent;
+				resp.statusCode.should.be.exactly(200);
+				done();
+			});
+		});
+
+		after(function(done) {
+			auth.logout(done);
+		});
+
+		describe('find()', function () {
+			it('should not be able to see other coordinators my collection centres', function (done) {
+				done();
+			});
+		});
+
+		describe('findOne()', function () {
+			it('should be able to read self user', function (done) {
+				var req = request.get('/api/user/' + coordinatorUserId);
+				agent.attachCookies(req);
+				req.expect(200)	
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items.id = coordinatorUserId;
+						done(err);
+					});
+			});
+
+			it('should not be able to access a user not in my collection centre', function (done) {
+				done();
+			});
+		});
+
+		describe('create()', function () {
+			it('should not be able to create a new user', function (done) {
+				var req = request.post('/api/user');
+				agent.attachCookies(req);
+				
+				req.set('Accept', 'application/json')
+					.expect('Content-Type', 'application/json; charset=utf-8')
+					.send({
+						username: 'newuser1',
+						email: 'newuser1@example.com',
+						password: 'lalalal1234',
+						role: 'interviewer'
+					})
+					.expect(400)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('User interviewer@example.com is not permitted to POST ');
+						done(err);
+					});
+			});		
+		});
+
+		describe('update()', function() {
+			it('should not be able to update themselves', function (done) {
+				var req = request.put('/api/user/' + newUserId);
+				agent.attachCookies(req);
+
+				req.send({ email: 'subjectupdated@example.com' })
+					.expect(400)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('Cannot perform action [update] on foreign object');
+						done(err);
+					});
+			});
+
+			it('should not be able to update another user', function (done) {
+				var req = request.put('/api/user/' + adminUserId);
+				agent.attachCookies(req);
+
+				req.send({ email: 'crapadminemail@example.com' })
+					.expect(400)
+					.end(function (err, res) {
+						done(err);
+					});
+			});
+
+			it('should not be able to update role', function (done) {
+				// TODO
+				done();
+			});
+
+			it('should not be able to update centreAccess', function (done) {
+				// TODO
+				done();				
+			});		
+		});
+
+		describe('delete()', function() {
+			it('should not be able to delete users', function (done) {
+				var req = request.del('/api/user/' + newUserId);
+				agent.attachCookies(req);
+				req.send().expect(400).end(function (err) {
+					done(err);
+				})
+			});
+		});
+ 	});
+
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
@@ -243,6 +434,16 @@ describe('The User Controller', function () {
 						done(err);
 					});
 			});
+
+			it('should not be able to update role', function (done) {
+				// TODO
+				done();
+			});
+
+			it('should not be able to update centreAccess', function (done) {
+				// TODO
+				done();				
+			});		
 		});
 
 		describe('delete()', function() {

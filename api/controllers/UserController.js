@@ -116,53 +116,63 @@ _.merge(exports, {
       return newUser;
     })
     .then(function (newUser) {
-      if (newRole) {
-        User.findOne(userId)
-          .populate('roles')
-          .populate('person')
-          .then(function (user) {
-            this.user = user;
-            this.previousRoles = this.user.roles;
-            return Role.findOne(newRole);
-          })
-          .then(function (role) {
-            // remove old roles
-            _.each(this.previousRoles, function (prev) {
-              this.user.roles.remove(prev.id);
-            });          
-            return [role, this.user.save()];
-          })
-          .spread(function (role, user) {
-            // add new role
-            this.user.roles.add(role.id);
-            return this.user.save();
-          })
-          .then(function (updatedUser) {
-            sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
-            if (!this.user.person) {
-              Person.create(personFields)
-                .then(function (person) {
-                  return person;
-                })
-                .then(function (person) {
-                  User.update(this.user.id, { person: person.id }).exec(function (err, upduser) {
-                    if (err) res.serverError(err);
-                    res.ok(upduser);
+      PermissionService.getCurrentRole(req).then(function (role) {
+        if (newRole) {
+          User.findOne(userId)
+            .populate('roles')
+            .populate('person')
+            .then(function (user) {
+              this.user = user;
+              this.previousRoles = this.user.roles;
+              return Role.findOne(newRole);
+            })
+            .then(function (role) {
+              // remove old roles only if admin
+              if (role === 'admin') {
+                _.each(this.previousRoles, function (prev) {
+                  this.user.roles.remove(prev.id);
+                });          
+                return [role, this.user.save()];  
+              } else {
+                return [role, this.user];
+              }              
+            })
+            .spread(function (role, user) {
+              // add new role
+              if (role === 'admin') {
+                this.user.roles.add(role.id);
+                return this.user.save();
+              } else {
+                return this.user;
+              }
+            })
+            .then(function (updatedUser) {
+              sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
+              if (!this.user.person) {
+                Person.create(personFields)
+                  .then(function (person) {
+                    return person;
+                  })
+                  .then(function (person) {
+                    User.update(this.user.id, { person: person.id }).exec(function (err, upduser) {
+                      if (err) res.serverError(err);
+                      res.ok(upduser);
+                    });
                   });
+              } else {
+                Person.update(this.user.person.id, personFields).exec(function (err, p) {
+                  if (err) res.serverError(err);
+                  res.ok(this.user);
                 });
-            } else {
-              Person.update(this.user.person.id, personFields).exec(function (err, p) {
-                if (err) res.serverError(err);
-                res.ok(this.user);
-              });
-            }
-          })  
-          .catch(function (err) {
-            return res.serverError(err);
-          });
-      } else {
-        res.ok(newUser);  
-      }      
+              }
+            })  
+            .catch(function (err) {
+              return res.serverError(err);
+            });
+        } else {
+          res.ok(newUser);  
+        } 
+      });
     });
   },
 

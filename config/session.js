@@ -32,7 +32,7 @@ module.exports.session = {
   ***************************************************************************/
 
   cookie: {
-    maxAge: 0.25 * 60 * 60 * 96000
+    maxAge: 3600000 // 1 hour timeout
   },
 
   /***************************************************************************
@@ -54,7 +54,7 @@ module.exports.session = {
 
   host: 'localhost',
   port: 6379,
-  ttl: 900,
+  ttl: 3600, // 1 hour session
   db: 0,
   // // pass: <redis auth password>
   prefix: 'sess:'

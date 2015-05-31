@@ -51,9 +51,12 @@ before(function(done) {
 
       auth.createUser(auth.credentials['subject'].create, function(subId) {
         subjectUserId = subId;
-        auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
-          coordinatorUserId = cooId;
-          done(err, sails);
+        auth.createUser(auth.credentials['interviewer'].create, function(intId) {
+          interviewerUserId = intId;
+          auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+            coordinatorUserId = cooId;
+            done(err, sails);
+          });
         });
       });        
     });
