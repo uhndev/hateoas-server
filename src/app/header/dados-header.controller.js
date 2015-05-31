@@ -57,7 +57,6 @@
 		}		
 
 		function updateActive() {
-			updateHeader();
 			var href = $location.path();
 
 			_.each(vm.navigation, function(link) {
@@ -82,11 +81,13 @@
 
 		// watchers
 		$rootScope.$on('events.unauthorized', function() {
+			console.log('unauthorized');
 			vm.isVisible = false;
 			vm.navigation = [];
 		});
 
 		$rootScope.$on('events.authorized', function() {
+			console.log('authorized');
 			vm.isVisible = true;
 			updateHeader();
 		});

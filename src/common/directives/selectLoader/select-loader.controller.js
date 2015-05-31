@@ -15,6 +15,7 @@
 		var vm = this;
 
 		// bindable variables
+    vm.loadError = false; 
 		vm.href = (vm.url) ? API.url() + '/' + vm.url : API.url() + '/user'; // use user resource by default
     vm.input = vm.input || [];
     vm.output = vm.output || [];
@@ -66,6 +67,9 @@
             });
           }
         }
+      }).catch(function (err) {
+        vm.loadError = true;
+        $scope.$parent.loadError = true;
       });
     }
 	}

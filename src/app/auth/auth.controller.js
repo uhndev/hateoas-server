@@ -27,7 +27,7 @@
       if (user) {
         var now = new Date();
         ipCookie('user', user, {
-          expires: new Date(now.getTime() + 86400000)
+          expires: new Date(now.getTime() + 3600000)
         });
         AuthService.setAuthenticated();
 
