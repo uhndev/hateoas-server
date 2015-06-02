@@ -53,9 +53,7 @@ _.merge(exports, {
           return cb(err);
         }
 
-        this.study = study;
-        // TODO: FIX THIS
-        
+        this.study = study;        
         return study.collectionCentres;
       })
       .then(function (centres) {
@@ -71,37 +69,35 @@ _.merge(exports, {
           _.each(centre.coordinators, function (coordinator) {
             // user has access to CC with defined role
             if (coordinator.centreAccess[centre.id]) {
-              coordinator.access = {
-                role: coordinator.centreAccess[centre.id], // coordinator/interviewer role
-                collectionCentre: centre.name
-              };
+              coordinator.accessRole = coordinator.centreAccess[centre.id]; // coordinator/interviewer role
+              coordinator.accessCollectionCentre = centre.id
             } else {
-              coordinator.access = {
-                role: 'NONE',
-                collectionCentre: 'NONE'
-              };
+              coordinator.accessRole = 'NONE';
+              coordinator.accessCollectionCentre = 'NONE';
             }
             users.push(coordinator);
           });
         });        
-        return users;
-      })
-      .then(function (users) {
-        var query = _.cloneDeep(options);
-        query.where = query.where || {};
-        delete query.where.name;
-
-        this.coordinators = _.pluck(users, 'id');
-        return User.find(query).populate('person');
-      })
-      .then(function (users) {
         return Utils.User.populateAndFormat(users);
+        // return users;
       })
-      .then(function (users) {
-        return _.filter(users, function (user) {
-          return _.includes(this.coordinators, user.id);
-        });
-      })
+      // .then(function (users) {
+      //   // TODO: FIX THIS
+      //   var query = _.cloneDeep(options);
+      //   query.where = query.where || {};
+      //   delete query.where.name;
+
+      //   this.coordinators = _.pluck(users, 'id');
+      //   return User.find(query).populate('person');
+      // })
+      // .then(function (users) {
+      //   return Utils.User.populateAndFormat(users);
+      // })
+      // .then(function (users) {
+      //   return _.filter(users, function (user) {
+      //     return _.includes(this.coordinators, user.id);
+      //   });
+      // })
       .then(function (users) {
         cb(false, users);
       })

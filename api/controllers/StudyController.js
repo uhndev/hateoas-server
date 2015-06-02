@@ -11,69 +11,86 @@ module.exports = {
 
 	findOne: function (req, res, next) {
 		var name = req.param('name');
-		var cb = function() {
-			Study.findOne({name: name}).populate('users')
-				.then(function (study) {
-					if (_.isUndefined(study)) {
-						res.notFound();
-					} else {
-						if (_.some(study.users, function(user) {
-							return user.id === req.user.id;
-						})) {
-							res.ok(study);
-						} else {
-							res.status(403).json({
-								"error": "User "+req.user.email+" is not permitted to GET "
-							});
-						}	
-					}					
-				})
-				.catch(next);
-		};
 
-		PermissionService.checkPermissions(req, 
-			function adminCb() {
-				Study.findOne({name: name})
-					.populate('users')
-					.populate('collectionCentres')
-					.then(function (study) {
-						this.study = study;
-						return study; //res.ok(study);
-					})
-					.then(function (study) {
-						if (_.isUndefined(study)) {
-							return study;
-						} else {
-							return Promise.all(
-								_.map(study.collectionCentres, function (centre) {
-									return CollectionCentre.findOne(centre.id)
-										.populate('contact')
-										.populate('coordinators')
-										.populate('subjects')
-										.then(function (cc) {
-											var ret = _.pick(cc, 'id', 'name');
-											ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-											ret.coordinators_count = cc.coordinators.length || 0;
-											ret.subjects_count = cc.subjects.length || 0;
-											return ret;
-										})
+		Study.findOne({name: name})
+			.populate('users')
+			.populate('collectionCentres')
+			.then(function (study) {
+				this.study = study;
+				console.log(study);
+				return PermissionService.getCurrentRole(req);
+			})
+	    .then(function (role) {
+	      this.role = role;
+	      if (role === 'admin') {
+	        return null;
+	      }
+	      else if (role === 'coordinator' || role === 'interviewer') {
+	        return User.findOne(req.user.id);
+	      }
+	      else {
+	        return Subject.findOne({user: req.user.id});
+	      }
+	    })
+	    .then(function (user) {
+	    	if (this.role === 'admin') {
+	    		return Promise.all(
+						_.map(this.study.collectionCentres, function (centre) {
+							return CollectionCentre.findOne(centre.id)
+								.populate('contact')
+								.populate('coordinators')
+								.populate('subjects')
+								.then(function (cc) {
+									var ret = _.pick(cc, 'id', 'name');
+									ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
+									ret.coordinators_count = cc.coordinators.length || 0;
+									ret.subjects_count = cc.subjects.length || 0;
+									return ret;
 								})
-							);
-						}
-					})
-					.then(function (centres) {
-						if (_.isUndefined(centres)) {
-							res.notFound();
-						} else {
-							this.study.centreSummary = centres;
-							res.ok(this.study);	
-						}						
-					}).catch(next);
-			},
-			cb, //function coordinatorCb() {},
-			cb, //function interviewerCb() {},
-			cb, //function subjectCb() {},
-			next);		
+						})
+					);	
+	    	} 
+	    	else if (this.role === 'coordinator' || this.role === 'interviewer') {
+		    	if (_.some(this.study.collectionCentres, function(centre) {
+	          return !_.isUndefined(user.centreAccess[centre.id]);
+	        })) {
+	        	return Promise.all(
+							_.map(this.study.collectionCentres, function (centre) {
+								return CollectionCentre.findOne(centre.id)
+									.populate('contact')
+									.populate('coordinators')
+									.populate('subjects')
+									.then(function (cc) {
+										var ret = _.pick(cc, 'id', 'name');
+										ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
+										ret.coordinators_count = cc.coordinators.length || 0;
+										ret.subjects_count = cc.subjects.length || 0;
+										return ret;
+									})
+							})
+						);
+	    		} else {
+	    			return null;
+	    		}
+        } else {
+        	return this.study.collectionCentres;
+        }
+	    })
+			.then(function (centres) {
+				if (_.isUndefined(this.study)) {
+					res.notFound();
+				} 
+				else if (_.isNull(centres)) {
+					res.status(403).json({
+            "error": "User "+req.user.email+" is not permitted to GET "
+          });
+        }
+        else {
+					this.study.centreSummary = centres;
+					res.ok(this.study);	
+				}
+			})
+	    .catch(next);
 	},
 
 	update: function (req, res, next) {

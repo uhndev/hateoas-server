@@ -12,8 +12,6 @@ var UserController = require('../../../api/controllers/UserController');
 
 describe('The User Controller', function () {
 
-	var adminUserId;
-	var newUserId;
 	var agent;
 
 	describe('User with Admin Role', function () {
@@ -22,7 +20,7 @@ describe('The User Controller', function () {
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
-				adminUserId = JSON.parse(resp.text).id;
+				globals.users.adminUserId = JSON.parse(resp.text).id;
 				done();
 			});
 		});
@@ -72,19 +70,19 @@ describe('The User Controller', function () {
 				req.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.send({
-						username: 'subject2',
-						email: 'subject2@example.com',
-						password: 'subject1234',
-						role: subjectRoleId,
+						username: 'coordinator2',
+						email: 'coordinator2@example.com',
+						password: 'coordinator21234',
+						role: globals.roles.coordinatorRoleId,
 						prefix: 'Ms.',
-						firstname: 'Soob',
-						lastname: 'Jact'
+						firstname: 'Coord',
+						lastname: 'Inator'
 					})
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('subject2');
-						newUserId = collection.items.id;
+						collection.items.username.should.equal('coordinator2');
+						globals.users.coordinator2 = collection.items.id;
 						done(err);
 					});
 			});
@@ -136,6 +134,10 @@ describe('The User Controller', function () {
 			});			
 		});
 
+ 		describe('update()', function () {
+
+ 		});
+
 		describe('allow correct headers', function() {
 			it('should return full CRUD access for /api/user', function (done) {
 				var req = request.get('/api/user');
@@ -149,7 +151,7 @@ describe('The User Controller', function () {
 			});
 
 			it('should return full CRUD access for /api/user/:id', function (done) {
-				var req = request.get('/api/user/' + adminUserId);
+				var req = request.get('/api/user/' + globals.users.adminUserId);
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
@@ -176,27 +178,30 @@ describe('The User Controller', function () {
 
 		describe('find()', function () {
 			it('should be able to list all coordinators my collection centres', function (done) {
+				// TODO
 				done();
 			});
 		});
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + coordinatorUserId);
+				var req = request.get('/api/user/' + globals.users.coordinatorUserId);
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.id = coordinatorUserId;
+						collection.items.id = globals.users.coordinatorUserId;
 						done(err);
 					});
 			});
 
 			it('should be able to access a user only if they are in my collection centre', function (done) {
+				// TODO
 				done();
 			});
 
 			it('should not be able to access a user not in my collection centre', function (done) {
+				// TODO
 				done();
 			});
 		});
@@ -237,7 +242,7 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + newUserId);
+				var req = request.del('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 				req.send().expect(400).end(function (err) {
 					done(err);
@@ -267,12 +272,12 @@ describe('The User Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + coordinatorUserId);
+				var req = request.get('/api/user/' + globals.users.coordinatorUserId);
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.id = coordinatorUserId;
+						collection.items.id = globals.users.coordinatorUserId;
 						done(err);
 					});
 			});
@@ -306,7 +311,7 @@ describe('The User Controller', function () {
 
 		describe('update()', function() {
 			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + newUserId);
+				var req = request.put('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 
 				req.send({ email: 'subjectupdated@example.com' })
@@ -319,7 +324,7 @@ describe('The User Controller', function () {
 			});
 
 			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + adminUserId);
+				var req = request.put('/api/user/' + globals.users.adminUserId);
 				agent.attachCookies(req);
 
 				req.send({ email: 'crapadminemail@example.com' })
@@ -342,7 +347,7 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + newUserId);
+				var req = request.del('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 				req.send().expect(400).end(function (err) {
 					done(err);
@@ -364,7 +369,7 @@ describe('The User Controller', function () {
 		after(function(done) {	  	
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
-				var req = request.del('/api/user/' + newUserId);
+				var req = request.del('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 				req.send().expect(200).end(function (err, res) {
 					auth.logout(done);
@@ -410,7 +415,7 @@ describe('The User Controller', function () {
 
 		describe('update()', function () {
 			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + newUserId);
+				var req = request.put('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 
 				req.send({ email: 'subjectupdated@example.com' })
@@ -423,7 +428,7 @@ describe('The User Controller', function () {
 			});
 
 			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + adminUserId);
+				var req = request.put('/api/user/' + globals.users.adminUserId);
 				agent.attachCookies(req);
 
 				req.send({ email: 'crapadminemail@example.com' })
@@ -448,7 +453,7 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + newUserId);
+				var req = request.del('/api/user/' + globals.users.coordinator2);
 				agent.attachCookies(req);
 				req.send().expect(400).end(function (err) {
 					done(err);

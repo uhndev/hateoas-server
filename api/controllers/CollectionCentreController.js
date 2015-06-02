@@ -39,19 +39,49 @@ module.exports = {
 		var ccId = req.param('id'),
 				ccName = req.param('name'),
 				ccContact = req.param('contact'),
-				coords = req.param('coordinators'),
+				coordinators = req.param('coordinators'),
+				removeUsers = req.param('removeUsers')
 				subjects = req.param('subjects');
 
-		var ccFields = {};
+		var ccFields = {}, coordFields = {};
     if (ccName) ccFields.name = ccName;
     if (ccContact) ccFields.contact = ccContact;
-    if (coords) ccFields.coordinators = coords;
+    if (coordinators) coordFields.coordinators = coordinators;
+    if (removeUsers) coordFields.removeUsers = removeUsers;
+
     if (subjects) ccFields.subjects = subjects;
 
-		CollectionCentre.update({id: ccId}, ccFields).exec(function (err, centre) {
-			if (err) return next(err);
-			res.ok(centre);
-		});
+    PermissionService.getCurrentRole(req)
+    .then(function (role) {
+    	this.role = role;
+    	return CollectionCentre.findOne(ccId);
+    })
+    .then(function (centre) {
+    	if (this.role === 'admin') {
+    		if (coordFields.coordinators) {
+    			_.each(coordFields.coordinators, function(user) {
+    				centre.coordinators.add(user);		
+    			});    			
+    		}
+    		if (coordFields.removeUsers) {
+    			_.each(coordFields.removeUsers, function(user) {
+    				centre.coordinators.remove(user);
+    			});
+    		}
+    		return centre.save();    		
+    	}
+    	return centre;
+    })
+    .then(function (centre) {
+    	if (role === 'admin') {
+				return CollectionCentre.update({id: ccId}, ccFields);
+			}
+			return centre;
+    })
+    .then(function (centre) {
+    	res.ok(centre);
+    })
+    .catch(next);
 	},
 
 	findByStudyName: function(req, res) {

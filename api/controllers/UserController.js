@@ -81,30 +81,65 @@ _.merge(exports, {
   },
 
   update: function (req, res) {
+    // user params
     var userId = req.param('id'),
         newUsername = req.param('username'),
         newEmail = req.param('email'),
         newPassword = req.param('password'),
         newRole = req.param('role');
-        newPrefix = req.param('prefix'),
+    // person params
+    var newPrefix = req.param('prefix'),
         newFirstname = req.param('firstname'),
         newLastname = req.param('lastname');
 
-    var userFields = {}, personFields = {};
+    // access control params
+    var newCentreAccess = req.param('centreAccess'),
+        oldAccessId = req.param('oldAccessId'),
+        newAccessId = req.param('newAccessId');
+
+    var userFields = {}, personFields = {}, access = {};
     if (newUsername) userFields.username = newUsername;
     if (newEmail) userFields.email = newEmail;
+    if (newCentreAccess) userFields.centreAccess = newCentreAccess;
+    if (oldAccessId) access.oldAccessId = oldAccessId;
+    if (newAccessId) access.newAccessId = newAccessId;
     if (newPrefix) personFields.prefix = newPrefix;
     if (newFirstname) personFields.firstname = newFirstname;
     if (newLastname) personFields.lastname = newLastname;
 
-    User.update(userId, userFields)
+    PermissionService.getCurrentRole(req).then(function (role) {
+      this.role = role;
+      if (role !== 'admin') {
+        delete userFields.centreAccess;
+      }
+      return User.findOne(userId).populate('collectionCentres');
+    })
+    .then(function (newUser) {
+      this.user = newUser;
+      if (newCentreAccess) {        
+        // no change in access restrictions
+        if (_.isEqual(this.user.centreAccess, userFields.centreAccess)) {
+          return newUser;
+        }
+
+        if (access.oldAccessId !== access.newAccessId) {
+          this.user.collectionCentres.remove(oldAccessId);
+          this.user.collectionCentres.add(newAccessId);
+          return this.user.save();
+        }
+      }
+
+      return newUser;
+    })
+    .then(function (user) {
+      return User.update(userId, userFields);
+    })      
     .then(function (newUser) {
       if (newPassword) {
         Passport.findOne({
           user     : newUser[0].id
         }, function (err, passport) {
           if (err) res.serverError(err);
-          // console.log(passport);
           Passport.update(passport.id, {
             password : newPassword
           }, function (err, passport) {
@@ -116,63 +151,62 @@ _.merge(exports, {
       return newUser;
     })
     .then(function (newUser) {
-      PermissionService.getCurrentRole(req).then(function (role) {
-        if (newRole) {
-          User.findOne(userId)
-            .populate('roles')
-            .populate('person')
-            .then(function (user) {
-              this.user = user;
-              this.previousRoles = this.user.roles;
-              return Role.findOne(newRole);
-            })
-            .then(function (role) {
-              // remove old roles only if admin
-              if (role === 'admin') {
-                _.each(this.previousRoles, function (prev) {
-                  this.user.roles.remove(prev.id);
-                });          
-                return [role, this.user.save()];  
-              } else {
-                return [role, this.user];
-              }              
-            })
-            .spread(function (role, user) {
-              // add new role
-              if (role === 'admin') {
-                this.user.roles.add(role.id);
-                return this.user.save();
-              } else {
-                return this.user;
-              }
-            })
-            .then(function (updatedUser) {
-              sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
-              if (!this.user.person) {
-                Person.create(personFields)
-                  .then(function (person) {
-                    return person;
-                  })
-                  .then(function (person) {
-                    User.update(this.user.id, { person: person.id }).exec(function (err, upduser) {
-                      if (err) res.serverError(err);
-                      res.ok(upduser);
-                    });
+      if (newRole) {
+        User.findOne(userId)
+          .populate('roles')
+          .populate('person')
+          .then(function (user) {
+            this.user = user;
+            this.previousRoles = this.user.roles;
+            return Role.findOne(newRole);
+          })
+          .then(function (role) {
+            // remove old roles only if admin
+            if (this.role === 'admin') {
+              _.each(this.previousRoles, function (prev) {
+                this.user.roles.remove(prev.id);
+              });          
+              return [role, this.user.save()];  
+            } else {
+              return [role, this.user];
+            }              
+          })
+          .spread(function (role, user) {
+            // add new role
+            if (this.role === 'admin') {
+              this.user.roles.add(role.id);
+              return this.user.save();
+            } else {
+              return this.user;
+            }
+          })
+          .then(function (updatedUser) {
+            sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
+            if (!this.user.person) {
+              Person.create(personFields)
+                .then(function (person) {
+                  return person;
+                })
+                .then(function (person) {
+                  User.update(this.user.id, { person: person.id }).exec(function (err, upduser) {
+                    if (err) res.serverError(err);
+                    res.ok(upduser);
                   });
-              } else {
-                Person.update(this.user.person.id, personFields).exec(function (err, p) {
-                  if (err) res.serverError(err);
-                  res.ok(this.user);
                 });
-              }
-            })  
-            .catch(function (err) {
-              return res.serverError(err);
-            });
-        } else {
-          res.ok(newUser);  
-        } 
-      });
+            } else {
+              Person.update(this.user.person.id, personFields).exec(function (err, p) {
+                if (err) res.serverError(err);
+                res.ok(this.user);
+              });
+            }
+          })  
+          .catch(function (err) {
+            return res.serverError(err);
+          });
+
+      } else {
+        res.ok(newUser);
+      }
     });
   },
 

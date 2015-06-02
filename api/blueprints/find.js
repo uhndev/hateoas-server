@@ -44,6 +44,7 @@ module.exports = function findRecords (req, res) {
   // If this model has a users collection, populate it
   if (req.model.identity === 'study') {
     query.populate('users');
+    query.populate('collectionCentres');
   }
 
   if (req.model.identity === 'user') {
@@ -72,38 +73,33 @@ module.exports = function findRecords (req, res) {
      */
     // if the model has a users collection, return filtered results depending on role
     if (_.every(matchingRecords, function(record) { return _.has(record, 'users') })) {
-      PermissionService.checkPermissions(req, 
-        function() { // for admin roles
-          res.ok(matchingRecords);
-        },
-        function() { // for coordinator roles
-          var filteredRecords = _.filter(matchingRecords, function (record) {
-            return _.some(record.users, function(user) {
-              return user.id === req.user.id;
-            });
-          });
-          res.ok(filteredRecords);
-        },
-        function() { // for interviewer roles
-          var filteredRecords = _.filter(matchingRecords, function (record) {
-            return _.some(record.users, function(user) {
-              return user.id === req.user.id;
-            });
-          });
-          res.ok(filteredRecords);
-        },
-        function() { // for subject roles
-          var filteredRecords = _.filter(matchingRecords, function (record) {
-            return _.some(record.users, function(user) {
-              return user.id === req.user.id;
-            });
-          });
-          res.ok(filteredRecords);
-        },
-        function (err) { // on error
-          res.serverError(err);
+      PermissionService.getCurrentRole(req).then(function (role) {
+        this.role = role;
+        if (role === 'admin') {
+          return null;
         }
-      );
+        else if (role === 'coordinator' || role === 'interviewer') {
+          return User.findOne(req.user.id);
+        }
+        else {
+          return Subject.findOne({user: req.user.id});
+        }
+      })
+      .then(function (user) {
+        if (user) {
+          var filteredRecords = _.filter(matchingRecords, function (record) {
+            return _.some(record.collectionCentres, function(centre) {
+              return !_.isUndefined(user.centreAccess[centre.id]);
+            });
+          });
+          res.ok(filteredRecords);  
+        } else {
+          res.ok(matchingRecords);
+        }        
+      })
+      .catch(function (err) {
+        res.serverError(err);
+      });
     } 
     /**
      * Currently used for: [USER]

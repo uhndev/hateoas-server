@@ -14,7 +14,7 @@ var StudyController = require('../../../api/controllers/StudyController');
 
 describe('The Study Controller', function () {
 
-	var agent, adminUserId, leapHipAdminId;
+	var agent;
 
 	describe('User with Admin Role', function () {
 		
@@ -22,12 +22,12 @@ describe('The Study Controller', function () {
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
-				adminUserId = JSON.parse(resp.text).id;
+				globals.users.adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
 					name: 'LEAP-ADMIN',
 					reb: 100,
-					users: [coordinatorUserId]
+					users: [globals.users.coordinatorUserId]
 				}).then(function (res) {
 					done();
 				});
@@ -133,12 +133,12 @@ describe('The Study Controller', function () {
 				req.send({
 						name: 'LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [adminUserId, subjectUserId]
+						users: [globals.users.adminUserId, globals.users.coordinatorUserId]
 					})
 					.expect(201)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						leapHipAdminId = collection.id;
+						globals.studies.study2Id = collection.id;
 						collection.name.should.equal('LEAP-HIP-ADMIN');
 						done(err);
 					});
@@ -151,7 +151,7 @@ describe('The Study Controller', function () {
 				req.send({
 						name: 'LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [adminUserId]
+						users: [globals.users.adminUserId]
 					})
 					.expect(500)
 					.end(function(err) {
@@ -162,7 +162,7 @@ describe('The Study Controller', function () {
 
 		describe('update()', function() {
 			it('should be able to update study name', function(done) {
-				var req = request.put('/api/study/' + leapHipAdminId);
+				var req = request.put('/api/study/' + globals.studies.study2Id);
 				agent.attachCookies(req);
 
 				req.send({ name: 'LEAP-HIP2-ADMIN', reb: 201 })
@@ -176,7 +176,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should be able to set no users to a study', function(done) {
-				var req = request.put('/api/study/' + leapHipAdminId);
+				var req = request.put('/api/study/' + globals.studies.study2Id);
 				agent.attachCookies(req);
 
 				req.send({ users: [] })
@@ -187,15 +187,15 @@ describe('The Study Controller', function () {
 			});			
 
 			it('should be able to update users of study', function(done) {
-				var req = request.put('/api/study/' + leapHipAdminId);
+				var req = request.put('/api/study/' + globals.studies.study2Id);
 				agent.attachCookies(req);
-				req.send({ users: [adminUserId, subjectUserId] })
+				req.send({ users: [globals.users.adminUserId, globals.users.interviewerUserId] })
 					.expect(200)
 					.end(function (err, res) {
-						Study.findOne(leapHipAdminId).populate('users')
+						Study.findOne(globals.studies.study2Id).populate('users')
 							.then(function (data) {
 								data.users[0].username.should.equal('admin');
-								data.users[1].username.should.equal('subject');
+								data.users[1].username.should.equal('interviewer');
 								done(err);
 							});
 					});
@@ -232,12 +232,11 @@ describe('The Study Controller', function () {
 			auth.authenticate('coordinator', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
-				adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
 					name: 'LEAP-COORD',
 					reb: 100,
-					users: [coordinatorUserId]
+					users: [globals.users.coordinatorUserId]
 				}).then(function (res) {
 					done();
 				});
@@ -437,7 +436,7 @@ describe('The Study Controller', function () {
 					.send({
 						name: 'LEAPSUBJECT',
 						reb: 100,
-						users: [subjectUserId]
+						users: [globals.users.coordinatorUserId]
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -450,7 +449,7 @@ describe('The Study Controller', function () {
 
 		describe('update()', function () {
 			it('should not be able to update study', function (done) {
-				var req = request.put('/api/study/' + leapHipAdminId);
+				var req = request.put('/api/study/' + globals.studies.study2Id);
 				agent.attachCookies(req);
 
 				req.send({ reb: 2000 })
