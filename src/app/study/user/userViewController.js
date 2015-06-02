@@ -118,19 +118,24 @@
 			access[vm.newUser.collectioncentre] = vm.newUser.role;
 			var cc = new CollectionCentre({ 'coordinators': [vm.newUser.user] });
 			var user = new User({ 'centreAccess': access });
-			
-			cc.$update({ id: vm.newUser.collectioncentre })
-			.then(function(cc) {
-				return user.$update({ id: vm.newUser.user });
-			})
-			.then(function() {
-				toastr.success('Added user to collection centre!', 'Collection Centre');
-				$scope.tableParams.reload();
-			}).catch(function (err) {
-				toastr.error('An error occurred, please check your input and try again later.', 'Collection Centre');
-			}).finally(function () {
-				vm.toggleNew = !vm.toggleNew;
-				vm.newUser = {};
+			var UserObj = $resource(API.url() + '/user/' + vm.newUser.user);
+			UserObj.get(function (data) {				
+				console.log(access);
+				console.log(data.items.centreAccess);
+				_.extend(access, data.items.centreAccess);
+				cc.$update({ id: vm.newUser.collectioncentre })
+				.then(function(cc) {
+					return user.$update({ id: vm.newUser.user });
+				})
+				.then(function() {
+					toastr.success('Added user to collection centre!', 'Collection Centre');
+					$scope.tableParams.reload();
+				}).catch(function (err) {
+					toastr.error('An error occurred, please check your input and try again later.', 'Collection Centre');
+				}).finally(function () {
+					vm.toggleNew = !vm.toggleNew;
+					vm.newUser = {};
+				});			
 			});			
 		}
 
