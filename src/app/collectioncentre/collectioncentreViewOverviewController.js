@@ -2,6 +2,7 @@
   'use strict';
   angular
     .module('dados.collectioncentre', [
+      'dados.collectioncentre.service',
       'dados.common.directives.simpleTable'
     ])
     .controller('CollectionCentreOverviewController', CollectionCentreOverviewController);

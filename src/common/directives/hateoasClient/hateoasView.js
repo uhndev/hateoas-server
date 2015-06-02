@@ -80,7 +80,7 @@
         var fragment;
         if (pathArr.length === 3) { // routes like /study/LEAP/collectioncentres
           var view = _.last(pathArr);
-          fragment = '<div ng-controller="HateoasController as hateoas">';
+          fragment = '<div>';
           _.each(VIEW_MODULES, function(module) {
             var templateUrl = [model, '/', view, '/', view, 
               'View', module, '.tpl.html'].join('');
