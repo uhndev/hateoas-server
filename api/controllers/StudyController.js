@@ -17,7 +17,6 @@ module.exports = {
 			.populate('collectionCentres')
 			.then(function (study) {
 				this.study = study;
-				console.log(study);
 				return PermissionService.getCurrentRole(req);
 			})
 	    .then(function (role) {
@@ -33,28 +32,9 @@ module.exports = {
 	      }
 	    })
 	    .then(function (user) {
-	    	if (this.role === 'admin') {
-	    		return Promise.all(
-						_.map(this.study.collectionCentres, function (centre) {
-							return CollectionCentre.findOne(centre.id)
-								.populate('contact')
-								.populate('coordinators')
-								.populate('subjects')
-								.then(function (cc) {
-									var ret = _.pick(cc, 'id', 'name');
-									ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-									ret.coordinators_count = cc.coordinators.length || 0;
-									ret.subjects_count = cc.subjects.length || 0;
-									return ret;
-								})
-						})
-					);	
-	    	} 
-	    	else if (this.role === 'coordinator' || this.role === 'interviewer') {
-		    	if (_.some(this.study.collectionCentres, function(centre) {
-	          return !_.isUndefined(user.centreAccess[centre.id]);
-	        })) {
-	        	return Promise.all(
+	    	if (this.study) {
+		    	if (this.role === 'admin') {
+		    		return Promise.all(
 							_.map(this.study.collectionCentres, function (centre) {
 								return CollectionCentre.findOne(centre.id)
 									.populate('contact')
@@ -68,13 +48,39 @@ module.exports = {
 										return ret;
 									})
 							})
-						);
-	    		} else {
-	    			return null;
-	    		}
-        } else {
-        	return this.study.collectionCentres;
-        }
+						);	
+		    	} 
+		    	else if (this.role === 'coordinator' || this.role === 'interviewer') {
+			    	if (_.some(this.study.collectionCentres, function(centre) {
+		          return !_.isUndefined(user.centreAccess[centre.id]);
+		        })) {
+		        	return Promise.all(
+								_.map(this.study.collectionCentres, function (centre) {
+									return CollectionCentre.findOne(centre.id)
+										.populate('contact')
+										.populate('coordinators')
+										.populate('subjects')
+										.then(function (cc) {
+											var ret = _.pick(cc, 'id', 'name');
+											ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
+											ret.coordinators_count = cc.coordinators.length || 0;
+											ret.subjects_count = cc.subjects.length || 0;
+											return ret;
+										})
+								})
+							);
+		    		} else {
+	    			 	return null;
+		    		}
+	        } 
+	        else {
+	        	// subject restrictions go here
+	       		return null;	
+	        }	
+	    	} else {
+	    		// study not found
+	    		return null;
+	    	}	    	
 	    })
 			.then(function (centres) {
 				if (_.isUndefined(this.study)) {
