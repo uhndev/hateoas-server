@@ -65,7 +65,7 @@
 						data.template.data = data.template.data.concat([
 							{
 								"name": "accessCollectionCentre",
-								"type": "singleselect",
+								"type": "multiselect",
 								"prompt": "Collection Centre",
 								"value": vm.centreHref
 							},            	
@@ -80,7 +80,9 @@
 						vm.resource = angular.copy(data);
 						
 						_.each(data.items, function (item) {
-							savedAccess[item.id] = item.accessCollectionCentre;
+							savedAccess[item.id] = {};
+							savedAccess[item.id].centreAccess = item.centreAccess;
+							savedAccess[item.id].collectionCentre = item.accessCollectionCentre;
 						});
 
 						params.total(data.total);
@@ -115,18 +117,23 @@
 
 		function addUser() {			
 			var access = {};
-			access[vm.newUser.collectioncentre] = vm.newUser.role;
-			var cc = new CollectionCentre({ 'coordinators': [vm.newUser.user] });
-			var user = new User({ 'centreAccess': access });
-			var UserObj = $resource(API.url() + '/user/' + vm.newUser.user);
-			UserObj.get(function (data) {				
-				console.log(access);
-				console.log(data.items.centreAccess);
+			// set access level for each selected collection centre
+			_.each(vm.newUser.collectioncentre, function (centre) {
+				access[centre] = vm.newUser.role;
+			});
+
+			var UserRes = $resource(API.url() + '/user/' + vm.newUser.user);
+
+			UserRes.get(function (data) {
+				// merge existing centreAccess with new attributes
 				_.extend(access, data.items.centreAccess);
-				cc.$update({ id: vm.newUser.collectioncentre })
-				.then(function(cc) {
-					return user.$update({ id: vm.newUser.user });
-				})
+
+				var user = new User({
+					'centreAccess': access,
+					'isAdding': true,
+					'collectionCentres': vm.newUser.collectioncentre
+				});
+				user.$update({ id: vm.newUser.user })
 				.then(function() {
 					toastr.success('Added user to collection centre!', 'Collection Centre');
 					$scope.tableParams.reload();
@@ -139,27 +146,51 @@
 			});			
 		}
 
-		function saveChanges() {
+		function saveChanges() {		
 			$q.all(_.map(vm.resource.items, function (item) {
-				var oldAccessId = item.accessCollectionCentre;
-				// changed collection centre
-				if (savedAccess[item.id] !== item.accessCollectionCentre) {
-					delete item.centreAccess[savedAccess[item.id]]; // remove old access from centreAccess
-					// specify which collection centre's access should be switched out
-					oldAccessId = savedAccess[item.id];
-					// update the last saved collection centre
-					savedAccess[item.id] = item.accessCollectionCentre;
+				var isAdding = false;
+				var diff = _.difference(savedAccess[item.id].collectionCentre, item.accessCollectionCentre);
+				if (diff.length === 0) {
+					diff = _.difference(item.accessCollectionCentre, savedAccess[item.id].collectionCentre);
+					isAdding = true;
+				} else {
+				  isAdding = false;
 				}
-				// grant access to collection centre with role
-				item.centreAccess[item.accessCollectionCentre] = item.accessRole;
 
-				var access = new User({ 
-					'centreAccess':  item.centreAccess, 
-					'oldAccessId': oldAccessId,
-					'newAccessId': item.accessCollectionCentre
+				var access = {};
+				// set access level for each selected collection centre
+				_.each(item.accessCollectionCentre, function (centre) {
+					access[centre] = item.accessRole;
 				});
-				return access.$update({ id: item.id });
-			})).then(function() {
+				// merge existing centreAccess with new attributes
+				var accessCopy = angular.copy(item.centreAccess);
+				_.extend(accessCopy, access);
+				angular.copy(accessCopy, access);
+
+				if (!isAdding) {
+					_.each(diff, function (centreId) {
+						delete access[centreId];
+					});
+				}
+
+				// only make PUT request if necessary
+				if (!_.isEqual(access, item.centreAccess)) {
+					var user = new User({
+						centreAccess: access,
+						isAdding: isAdding,
+						collectionCentres: diff
+					});
+					return user.$update({ id: item.id });
+				}
+				// console.log({
+				// 	centreAccess: access,
+				// 	isAdding: isAdding,
+				// 	collectionCentres: diff					
+				// });
+
+				return;
+			}))
+			.then(function() {
 				toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
 			}).catch(function (err) {
 				toastr.error(err, 'Collection Centre');
