@@ -40,7 +40,7 @@ _.merge(exports, {
       .catch(next);
   },
 
-  findByStudyName: function(studyName, options, cb) {
+  findByStudyName: function(studyName, roleName, userId, options, cb) {
     Study.findOneByName(studyName)
       .populate('users')
       .populate('collectionCentres')    
@@ -57,6 +57,18 @@ _.merge(exports, {
         return study.collectionCentres;
       })
       .then(function (centres) {
+        if (roleName !== 'admin') {
+          return User.findOne(userId).populate('collectionCentres')
+            .then(function (user) {
+              return _.filter(user.collectionCentres, function (centre) {
+                return _.includes(_.pluck(centres, 'id'), centre.id );
+              });
+            });
+        } 
+        return centres;
+      })
+      .then(function (centres) {
+        // return all coordinators from each study's collection centres
         return Promise.all(
           _.map(centres, function (centre) {
             return CollectionCentre.findOne(centre.id).populate('coordinators');
@@ -64,25 +76,26 @@ _.merge(exports, {
         );
       })
       .then(function (centres) {
-        var users = [];
-        _.each(centres, function (centre) {
-          _.each(centre.coordinators, function (coordinator) {
-            // user has access to CC with defined role
-            if (coordinator.centreAccess[centre.id]) {
-              coordinator.accessRole = coordinator.centreAccess[centre.id]; // coordinator/interviewer role
-              coordinator.accessCollectionCentre = centre.id
-            } else {
-              coordinator.accessRole = 'NONE';
-              coordinator.accessCollectionCentre = 'NONE';
+        var centreIds = _.pluck(centres, 'id');
+        var users = _.uniq(_.flattenDeep(_.pluck(centres, 'coordinators')), 'id');
+
+        _.each(centreIds, function (centreId) {
+          _.each(users, function (user) {
+            if (!user.accessCollectionCentre) {
+              user.accessCollectionCentre = [];
             }
-            users.push(coordinator);
+            if (user.centreAccess[centreId]) {
+              user.accessRole = user.centreAccess[centreId];
+              user.accessCollectionCentre.push(centreId);
+            }
           });
-        });        
+        });       
+
         return Utils.User.populateAndFormat(users);
         // return users;
       })
       // .then(function (users) {
-      //   // TODO: FIX THIS
+      //   // TODO: FIX THIS - unable to query on populated values
       //   var query = _.cloneDeep(options);
       //   query.where = query.where || {};
       //   delete query.where.name;

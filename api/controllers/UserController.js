@@ -94,47 +94,46 @@ _.merge(exports, {
 
     // access control params
     var newCentreAccess = req.param('centreAccess'),
-        oldAccessId = req.param('oldAccessId'),
-        newAccessId = req.param('newAccessId');
+        isAdding = req.param('isAdding'),
+        newCollectionCentres = req.param('collectionCentres');
 
     var userFields = {}, personFields = {}, access = {};
     if (newUsername) userFields.username = newUsername;
     if (newEmail) userFields.email = newEmail;
     if (newCentreAccess) userFields.centreAccess = newCentreAccess;
-    if (oldAccessId) access.oldAccessId = oldAccessId;
-    if (newAccessId) access.newAccessId = newAccessId;
+    if (newCollectionCentres) userFields.collectionCentres = newCollectionCentres;
     if (newPrefix) personFields.prefix = newPrefix;
     if (newFirstname) personFields.firstname = newFirstname;
     if (newLastname) personFields.lastname = newLastname;
 
     PermissionService.getCurrentRole(req).then(function (role) {
       this.role = role;
+      // only admins can make changes to centreAccess
       if (role !== 'admin') {
         delete userFields.centreAccess;
       }
       return User.findOne(userId).populate('collectionCentres');
     })
-    .then(function (newUser) {
-      this.user = newUser;
-      if (newCentreAccess) {        
-        // no change in access restrictions
-        if (_.isEqual(this.user.centreAccess, userFields.centreAccess)) {
-          return newUser;
-        }
-
-        if (access.oldAccessId !== access.newAccessId) {
-          this.user.collectionCentres.remove(oldAccessId);
-          this.user.collectionCentres.add(newAccessId);
-          return this.user.save();
-        }
+    .then(function (user) {  // update collectionCentres if needed
+      this.user = user;
+      if (newCollectionCentres && !_.isEqual(this.user.centreAccess, userFields.centreAccess)) {
+        _.each(userFields.collectionCentres, function (centre) {
+          if (isAdding) {
+            this.user.collectionCentres.add(centre);  
+          } else {
+            this.user.collectionCentres.remove(centre);
+          }          
+        });
+        return this.user.save();
       }
-
-      return newUser;
+      return user;
     })
-    .then(function (user) {
+    .then(function (user) {  // perform update on user model
+      // only update collection centres via add/remove
+      delete userFields.collectionCentres;
       return User.update(userId, userFields);
     })      
-    .then(function (newUser) {
+    .then(function (newUser) { // update password if needed
       if (newPassword) {
         Passport.findOne({
           user     : newUser[0].id
@@ -212,15 +211,16 @@ _.merge(exports, {
 
   findByStudyName: function(req, res) {
     var studyName = req.param('name');
-
-    User.findByStudyName(studyName,
-      { where: actionUtil.parseCriteria(req),
-        limit: actionUtil.parseLimit(req),
-        skip: actionUtil.parseSkip(req),
-        sort: actionUtil.parseSort(req) }, 
-      function(err, users) {
-        if (err) res.serverError(err);
-        res.ok(users);
-      });
+    PermissionService.getCurrentRole(req).then(function (roleName) {
+      User.findByStudyName(studyName, roleName, req.user.id,
+        { where: actionUtil.parseCriteria(req),
+          limit: actionUtil.parseLimit(req),
+          skip: actionUtil.parseSkip(req),
+          sort: actionUtil.parseSort(req) }, 
+        function(err, users) {
+          if (err) res.serverError(err);
+          res.ok(users);
+        });    
+    });    
   }
 });

@@ -37,7 +37,7 @@
             <select-loader
               id="centreInput"
               url="{{studyUser.centreHref}}"
-              is-atomic="true"
+              is-atomic="false"
               is-disabled="false"
               values="studyUser.newUser.collectioncentre"
               labels="name"
@@ -124,6 +124,16 @@
                 output-properties="id">
               </select-loader>
             </div>
+            <div ng-switch-when="multiselect">
+              <select-loader
+                url="{{column.value}}"
+                is-atomic="false"
+                is-disabled="false"
+                values="item[column.name]"
+                labels="name"
+                output-properties="id">
+              </select-loader>
+            </div>            
             <div ng-switch-default>
               {{ item[column.name] | formatter:column }}
             </div>

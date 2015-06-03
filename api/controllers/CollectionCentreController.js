@@ -38,18 +38,14 @@ module.exports = {
 	update: function(req, res, next) {
 		var ccId = req.param('id'),
 				ccName = req.param('name'),
-				ccContact = req.param('contact'),
+				ccContact = req.param('contact'),				
+				isAdding = req.param('isAdding'),
 				coordinators = req.param('coordinators'),
-				removeUsers = req.param('removeUsers')
 				subjects = req.param('subjects');
 
 		var ccFields = {}, coordFields = {};
     if (ccName) ccFields.name = ccName;
     if (ccContact) ccFields.contact = ccContact;
-    if (coordinators) coordFields.coordinators = coordinators;
-    if (removeUsers) coordFields.removeUsers = removeUsers;
-
-    if (subjects) ccFields.subjects = subjects;
 
     PermissionService.getCurrentRole(req)
     .then(function (role) {
@@ -58,13 +54,12 @@ module.exports = {
     })
     .then(function (centre) {
     	if (this.role === 'admin') {
-    		if (coordFields.coordinators) {
-    			_.each(coordFields.coordinators, function(user) {
-    				centre.coordinators.add(user);		
+    		if (isAdding) {
+    			_.each(coordinators, function(user) {
+    				centre.coordinators.add(user);
     			});    			
-    		}
-    		if (coordFields.removeUsers) {
-    			_.each(coordFields.removeUsers, function(user) {
+    		} else {
+    			_.each(coordinators, function(user) {
     				centre.coordinators.remove(user);
     			});
     		}

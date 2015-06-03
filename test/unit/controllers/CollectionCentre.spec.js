@@ -201,7 +201,7 @@ describe('The CollectionCentre Controller', function () {
 				var req = request.put('/api/collectioncentre/' + globals.collectioncentres.cc2Id);
  				agent.attachCookies(req);
 
- 				req.send({ coordinators: [globals.users.adminUserId, globals.users.coordinatorUserId] })
+ 				req.send({ isAdding: true, coordinators: [globals.users.adminUserId, globals.users.coordinatorUserId] })
  					.expect(200)
  					.end(function (err, res) {
  						CollectionCentre.findOne(globals.collectioncentres.cc2Id).populate('coordinators')
