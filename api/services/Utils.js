@@ -1,5 +1,7 @@
 module.exports = function() {
 
+var Q = require('q');
+
 var self = {
   /** Start of "String" Utils **/
   "String" : {
@@ -52,17 +54,47 @@ var self = {
       } 
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
-    },
+    }
+  },
+  /** End of "Model" Utils **/
 
+  /** Start of "User" Utils **/
+  "User": {
     extractPersonFields: function extractPersonFields(data) {
       return {
         prefix: data.prefix,
         firstname: data.firstname,
         lastname: data.lastname
       };
+    },
+    
+    populateAndFormat: function populateAndFormat(users) {
+      return Q.all(
+        _.map(users, function (user) {
+          return User.findOne(user.id).populate('person').populate('roles')
+            .then(function (popUser) {
+              return _.merge(user, popUser);
+            })
+        })
+      ).then(function(users) {
+        _.map(users, function (user) {
+          if (user.person) {
+            _.merge(user, self.User.extractPersonFields(user.person));
+            delete user.person;
+          }
+          if (user.roles) {
+            user.role = _.first(user.roles).id;
+            delete user.roles;
+          }
+        });
+        return users;  
+      })
+      .catch(function (err) {
+        return err;
+      });
     }
   }
-  /** End of "Model" Utils **/
+  /** End of "User" Utils **/
 }
 
 return self;

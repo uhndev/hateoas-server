@@ -1,21 +1,19 @@
 (function() {
   'use strict';
   angular
-    .module('dados.study', [
-      'dados.study.service',
+    .module('dados.study.controller', [
+      'dados.common.directives.selectLoader',
       'dados.common.directives.simpleTable',
-      'dados.common.directives.listEditor',
       'dados.common.directives.formBuilder.directives.form'
     ])
     .constant('FORM_NAME', 'survey_tracking')
     .controller('StudyOverviewController', StudyOverviewController);
   
   StudyOverviewController.$inject = [
-    '$scope', '$rootScope', '$resource', '$location', 
-    'StudyService', 'toastr', 'API', 'FORM_NAME'
+    '$scope', '$resource', '$location', 'API', 'FORM_NAME'
   ];
   
-  function StudyOverviewController($scope, $rootScope, $resource, $location, Study, toastr, API, FORM_NAME) {
+  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME) {
     var vm = this;
 
     // bindable variables
@@ -29,8 +27,6 @@
 
     // bindable methods
     vm.generateReport = generateReport;
-    vm.saveChanges = saveChanges;
-    vm.revertChanges = revertChanges;
 
     init();
 
@@ -48,20 +44,24 @@
         
         vm.studyInfo = {
           columns: [ 'Name', 'Value' ],
-          tableData: parseData(robj)
+          rows: {
+            'name': { title: 'Name', type: 'text' },
+            'reb': { title: 'REB', type: 'text' },
+            'users': { title: 'Users', type: 'users' }
+          },
+          tableData: _.objToPair(robj)
         };
 
         vm.collectionCentres = {
-          tableData: data.items.collectionCentres || [],
+          subjects_total: _.sum(_.pluck(data.items.centreSummary, 'subjects_count')),
+          coordinators_total: _.sum(_.pluck(data.items.centreSummary, 'coordinators_count')),
+          tableData: data.items.centreSummary || [],
           columns: [
             { title: 'Collection Centres', field: 'name', type: 'text' },
-            { title: 'Contact', field: 'contact', type: 'text'}
+            { title: 'Contact', field: 'contact', type: 'multi' },
+            { title: 'Coordinators/Interviewers', field: 'coordinators_count', type: 'number'},
+            { title: 'Subjects Enrolled', field: 'subjects_count', type: 'number'}
           ]
-        };
-        
-        vm.savedData = {
-          forceReload: false,
-          data: angular.copy(vm.collectionCentres)
         };
 
         // initialize submenu
@@ -80,15 +80,16 @@
       });
     }
 
-    function parseData(robj) {
-      return _.map(_.keys(robj), function (k) {
-        var resp = { name: 'Study ' + _.camelCase(k) };
-        if (_.isArray(robj[k])) {
-          resp.value = _.pluck(robj[k], 'username').join(', ');
-        } else {
-          resp.value = robj[k];
-        }        
-        return resp;
+    function parseData(obj) {
+      return _.map(_.keys(obj), function (k) {
+        var val = obj[k];
+        if (_.all(obj[k], function(o) { return _.has(o, 'id'); })) {
+          val = _.pluck(obj[k], 'id');
+        }
+        return { 
+          name: k,
+          value: val
+        };
       });
     }
 
@@ -96,19 +97,8 @@
       alert('Generating report');
     }
 
-    function saveChanges() {
-      angular.copy(vm.collectionCentres, vm.savedData.data);
-      var study = new Study({ 'collectionCentres': vm.collectionCentres.tableData });
-      study.$update({ id: vm.resource.items.id }).then(function (data) {
-        toastr.success('Updated collection centres successfully!', 'Collection Centre');
-      }).catch(function (err) {
-        toastr.error(err, 'Collection Centre');
-      });
-    }
-
-    function revertChanges() {
-      angular.copy(vm.savedData.data, vm.collectionCentres);
-      vm.savedData.forceReload = !vm.savedData.forceReload;
-    }
+    $scope.$on('hateoas.client.refresh', function() {
+      init();
+    });
   }
 })();

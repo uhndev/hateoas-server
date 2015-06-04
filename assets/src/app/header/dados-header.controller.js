@@ -57,7 +57,6 @@
 		}		
 
 		function updateActive() {
-			updateHeader();
 			var href = $location.path();
 
 			_.each(vm.navigation, function(link) {

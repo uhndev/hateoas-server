@@ -47,6 +47,18 @@ module.exports.routes = {
   'get /api/study/:name/user'      : 'UserController.findByStudyName',
   // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
   // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
+  'get /api/study/:name/collectioncentre': 'CollectionCentreController.findByStudyName',
   
-  'get /api/role/:name/users'      : 'RoleController.findRoleUsers'  
+  /***************************************************************************
+  * User Routes                                                              *
+  ****************************************************************************/
+  'get /api/user/:id'              : 'UserController.findOne',
+  'get /api/role/:name/users'      : 'RoleController.findRoleUsers',
+  'get /api/user/:id/access'       : 'CentreAccessController.findUserAccess',
+
+  /***************************************************************************
+  * Collection Centre Routes                                                 *
+  ****************************************************************************/
+  'get /api/collectioncentre/:id/subject'     : 'CollectionCentreController.findSubjects',
+  'get /api/collectioncentre/:id/coordinator' : 'CollectionCentreController.findCoordinators'
 };

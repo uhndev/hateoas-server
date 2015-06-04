@@ -192,6 +192,14 @@ a {
   color: @submenuLinkColour;
 }
 
+#addUserBtn {
+  margin-top: 40px;
+  padding: 9px 15px 9px 15px;
+}
+
+.form-inline > * {
+  margin: 10px 10px;
+}
 /**
  * Collection
  */
@@ -236,12 +244,10 @@ a {
  */
 
 @import '../../vendor/ng-table/ng-table.less';
-@import (inline) '../../vendor/angular-toastr/dist/angular-toastr.css';
-
 @import '../app/workflow/workflow.less';
 @import '../app/study/studyViewOverview.less';
 
 @import '../common/directives/formBuilder/form-builder.less';
 
-
-
+@import (inline) '../../vendor/angular-toastr/dist/angular-toastr.css';
+@import (inline) '../../vendor/angular-multi-select/isteven-multi-select.css';

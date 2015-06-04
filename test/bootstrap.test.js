@@ -9,12 +9,17 @@ var Sails = require('sails'),
 request = require('supertest');
 auth = require('./unit/utils/auth');
 should = require('should');
+globals = {
+  roles: {},
+  users: {},
+  studies: {},
+  collectioncentres: {}
+};
 
 before(function(done) {
   console.log('Lifting sails...');
   this.timeout(15000);
   Sails.lift({
-    port: 1336,
     // configuration for testing purposes
     log: {
       level: 'silent',
@@ -46,15 +51,19 @@ before(function(done) {
     console.log("Loading test fixtures...");
     Role.find().exec(function (err, roles) {
       var roleIds = _.pluck(roles, 'id');
-      adminRoleId = roleIds[0];
-      coordinatorRoleId = roleIds[1];
-      subjectRoleId = roleIds[2];
+      globals.roles.adminRoleId = roleIds[0];
+      globals.roles.coordinatorRoleId = roleIds[1];
+      globals.roles.interviewerRoleId = roleIds[2];
+      globals.roles.subjectRoleId = roleIds[3];
 
       auth.createUser(auth.credentials['subject'].create, function(subId) {
-        subjectUserId = subId;
-        auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
-          coordinatorUserId = cooId;
-          done(err, sails);
+        globals.users.subjectUserId = subId;
+        auth.createUser(auth.credentials['interviewer'].create, function(intId) {
+          globals.users.interviewerUserId = intId;
+          auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+            globals.users.coordinatorUserId = cooId;
+            done(err, sails);
+          });
         });
       });        
     });

@@ -3,38 +3,38 @@
 	<br>
 
 	<div class="well" >
-		<div class="form-fields" ng-hide="previewMode">
+		<div class="form-fields" ng-hide="fb.previewMode">
 			<div class="form-properties">
 				<h3>Form Properties</h3>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Form Type: </label>
 						<div class="col-sm-10">
-							<input type="text" name="form-type" class="form-control" ng-model="form.form_type">
+							<input type="text" name="form-type" class="form-control" ng-model="fb.form.form_type">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Form Name: </label>
 						<div class="col-sm-10">
-							<input type="text" name="form-name" class="form-control" ng-model="form.form_name">
+							<input type="text" name="form-name" class="form-control" ng-model="fb.form.form_name">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Form Title: </label>
 						<div class="col-sm-10">
-							<input type="text" name="form-title" class="form-control" ng-model="form.form_title">
+							<input type="text" name="form-title" class="form-control" ng-model="fb.form.form_title">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Text on Submit: </label>
 						<div class="col-sm-10">
-							<input type="text" name="form-submit-btn" class="form-control" ng-model="form.form_submitText">
+							<input type="text" name="form-submit-btn" class="form-control" ng-model="fb.form.form_submitText">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Text on Cancel: </label>
 						<div class="col-sm-10">
-							<input type="text" name="form-cancel-btn" class="form-control" ng-model="form.form_cancelText">
+							<input type="text" name="form-cancel-btn" class="form-control" ng-model="fb.form.form_cancelText">
 						</div>
 					</div>
 				</form>
@@ -44,18 +44,18 @@
 
 			<h3>Questions</h3>
 			<div class="add-field form-inline">
-				<select ng-model="addField.new" class="form-control" ng-options="type as type.value for type in addField.types">
+				<select ng-model="fb.addField.new" class="form-control" ng-options="type as type.value for type in fb.addField.types">
 				</select>
-				<button type="submit" class="btn" ng-click="addNewField()">
+				<button type="submit" class="btn" ng-click="fb.addNewField()">
 					<span class="glyphicon glyphicon-plus"></span> Add Question
 				</button>
 			</div>
 			<hr>
-			<p ng-show="form.form_questions.length == 0">No questions added yet.</p>
+			<p ng-show="fb.form.form_questions.length == 0">No questions added yet.</p>
 
-			<accordion ui-sortable ng-model="form.form_questions" close-others="accordion.oneAtATime">
-				<div ui-sortable="sortableOptions" ng-model="form.form_questions">
-					<accordion-group ng-repeat="field in form.form_questions" is-open="status.open">
+			<accordion ui-sortable ng-model="fb.form.form_questions" close-others="fb.accordion.oneAtATime">
+				<div ui-sortable="fb.sortableOptions" ng-model="fb.form.form_questions">
+					<accordion-group ng-repeat="field in fb.form.form_questions" is-open="status.open">
 						<accordion-heading>
 							<a class="accordion-toggle">
 								{{field.field_id}}) &nbsp;{{field.field_title}}
@@ -64,7 +64,7 @@
 						</accordion-heading>
 						
 						<div class="accordion-edit">
-							<button class="btn btn-danger pull-right" type="button" ng-click="deleteField(field.field_id)">
+							<button class="btn btn-danger pull-right" type="button" ng-click="fb.deleteField(field.field_id)">
 								<span class="glyphicon glyphicon-trash"></span> Delete
 							</button>
 
@@ -102,12 +102,24 @@
 								<div class="col-md-8">
 									<input type="text" ng-model="field.field_value" class="form-control" value="{{field.field_value}}">
 								</div>
-							</div>
+							</div>							
 							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
 								<div class="col-md-4"><b>REST URL of Item(s) to Load: </b></div>
 								<div class="col-md-8">
 									<input type="text" ng-model="field.field_userURL" class="form-control"
-										placeholder="http://localhost:1337/api/user"/>
+										placeholder="user"/>
+<!-- 									<select class="form-control" ng-model="field.field_userURL">
+										<option value="study">Study</option>
+										<option value="role">Role</option>
+										<option value="user">User</option>
+									</select> -->
+								</div>
+							</div>
+							<div class="row" ng-if="field.field_hasItems || field.field_hasItem">
+								<div class="col-md-4"><b>Labels to show on selection: </b></div>
+								<div class="col-md-8">
+									<input type="text" ng-model="field.field_labels" class="form-control"
+										placeholder="prefix firstname lastname"/>
 								</div>
 							</div>
 							<div class="row" ng-if="field.field_hasOptions">
@@ -123,12 +135,12 @@
 												<input type="text" class="form-control" placeholder="Enter value" 
 												ng-model="option.option_value" value="{{option.option_value}}">
 											</div>
-											<button type="button" class="btn btn-danger right" ng-click="deleteOption(field, option)">
+											<button type="button" class="btn btn-danger right" ng-click="fb.deleteOption(field, option)">
 													-
 											</button>
 										</form>
 									</div>
-									<button class="btn btn-primary btn-sm" type="button" ng-click="addOption(field)">Add Option</button>
+									<button class="btn btn-primary btn-sm" type="button" ng-click="fb.addOption(field)">Add Option</button>
 								</div>
 							</div>
 							<validation-directive field="field"></validation-directive>
@@ -157,30 +169,32 @@
 			</accordion>
 
 			<p class="text-center">
-				<button class="btn btn-primary right" type="button" ng-click="previewOn()">
-					<span class="glyphicon glyphicon-eye-open"></span> Preview Form</button>
-				<button class="btn btn-danger right" type="button" ng-click="reset()"> 
-					<span class="glyphicon glyphicon-refresh"></span> Reset</button>
+				<button class="btn btn-primary right" type="button" ng-click="fb.previewOn()">
+					<span class="glyphicon glyphicon-eye-open"></span> Preview Form
+				</button>
+				<button class="btn btn-danger right" type="button" ng-click="fb.reset()"> 
+					<span class="glyphicon glyphicon-refresh"></span> Reset
+				</button>
 			</p>
 
 			<br><hr>
-			<a ng-show="!showJson" ng-click="showJson = true">Show form json object</a>
-			<a ng-show="showJson" ng-click="showJson = false">Hide form json object</a><br><br>
-			<div ng-show="showJson">
+			<a ng-show="!fb.showJson" ng-click="fb.showJson = true">Show form json object</a>
+			<a ng-show="fb.showJson" ng-click="fb.showJson = false">Hide form json object</a><br><br>
+			<div ng-show="fb.showJson">
 				<h4>Form object content:</h4>
-				<pre>{{ form | json }}</pre>
+				<pre>{{ fb.form | json }}</pre>
 			</div>
 		</div>
 
-		<div class="form-fields-preview" ng-show="previewMode">
+		<div class="form-fields-preview" ng-show="fb.previewMode">
 			<form-directive 
-				form="previewForm" 
+				form="fb.previewForm" 
 				on-submit="submit()" 
 				on-cancel="cancel()">
 			</form-directive>
 			<hr/>
 			<p class="text-center">
-				<button class="btn btn-primary btn-large right" type="button" ng-click="previewOff()">Back to Create Mode</button>
+				<button class="btn btn-primary btn-large right" type="button" ng-click="fb.previewOff()">Back to Create Mode</button>
 			</p>
 		</div>
 	</div>

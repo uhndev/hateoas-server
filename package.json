@@ -60,6 +60,7 @@
     "grunt-mocha-cov": "~0.4.0",
     "grunt-mocha-test": "~0.12.7",
     "grunt-ng-annotate": "^0.10.0",
+    "grunt-ng-constant": "^1.1.0",
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "~0.2.3",
     "karma": "^0.12.31",

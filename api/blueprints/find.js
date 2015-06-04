@@ -42,10 +42,9 @@ module.exports = function findRecords (req, res) {
   .sort( actionUtil.parseSort(req) );
 
   // If this model has a users collection, populate it
-  if (_.any(Model.associations, function (assoc) {
-    return (_.has(assoc, 'collection') && assoc.collection === 'user');
-  })) {
+  if (req.model.identity === 'study') {
     query.populate('users');
+    query.populate('collectionCentres');
   }
 
   if (req.model.identity === 'user') {
@@ -74,22 +73,33 @@ module.exports = function findRecords (req, res) {
      */
     // if the model has a users collection, return filtered results depending on role
     if (_.every(matchingRecords, function(record) { return _.has(record, 'users') })) {
-      PermissionService.checkPermissions(req, 
-        function() { // for admin/coordinator roles
-          res.ok(matchingRecords);
-        }, 
-        function() { // for subject roles
+      PermissionService.getCurrentRole(req).then(function (role) {
+        this.role = role;
+        if (role === 'admin') {
+          return null;
+        }
+        else if (role === 'coordinator' || role === 'interviewer') {
+          return User.findOne(req.user.id);
+        }
+        else {
+          return Subject.findOne({user: req.user.id});
+        }
+      })
+      .then(function (user) {
+        if (user) {
           var filteredRecords = _.filter(matchingRecords, function (record) {
-            return _.some(record.users, function(user) {
-              return user.id === req.user.id;
+            return _.some(record.collectionCentres, function(centre) {
+              return !_.isUndefined(user.centreAccess[centre.id]);
             });
           });
-          res.ok(filteredRecords);
-        },
-        function (err) { // on error
-          res.serverError(err);
-        }
-      );
+          res.ok(filteredRecords);  
+        } else {
+          res.ok(matchingRecords);
+        }        
+      })
+      .catch(function (err) {
+        res.serverError(err);
+      });
     } 
     /**
      * Currently used for: [USER]
@@ -97,7 +107,7 @@ module.exports = function findRecords (req, res) {
     else if (req.model.identity === 'user') {
       _.map(matchingRecords, function (user) {
         if (user.person) {
-          _.merge(user, Utils.Model.extractPersonFields(user.person));
+          _.merge(user, Utils.User.extractPersonFields(user.person));
           delete user.person;
         }
         if (user.roles) {

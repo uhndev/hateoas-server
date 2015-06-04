@@ -8,6 +8,7 @@ exports.create = function () {
   	Role.destroy({name: 'registered'}),
   	Role.destroy({name: 'public'}),
     Role.findOrCreate({ name: 'coordinator' }, { name: 'coordinator' }),
+    Role.findOrCreate({ name: 'interviewer' }, { name: 'interviewer' }),
     Role.findOrCreate({ name: 'subject' }, { name: 'subject' })
   ]);
 };

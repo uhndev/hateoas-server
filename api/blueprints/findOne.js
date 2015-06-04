@@ -1,4 +1,5 @@
 /**
+ * 
  * Module dependencies
  */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
@@ -24,10 +25,9 @@ module.exports = function findOneRecord (req, res) {
   var pk = actionUtil.requirePk(req);
 
   var query = Model.findOne(pk);
-  if (_.any(Model.associations, function (assoc) {
-    return (_.has(assoc, 'collection') && assoc.collection === 'user');
-  })) {
+  if (req.model.identity === 'study') {
     query.populate('users');
+    query.populate('collectionCentres');
   }
 
   query = actionUtil.populateEach(query, req);
@@ -39,21 +39,40 @@ module.exports = function findOneRecord (req, res) {
       Model.subscribe(req, matchingRecord);
       actionUtil.subscribeDeep(req, matchingRecord);
     }
-
-    // if the model has a users collection, return filtered results depending on role
-    if (_.has(matchingRecord, 'users')) {
-      if (_.some(matchingRecord.users, function(user) {
-        return user.id === req.user.id;
-      })) {
-        res.ok(matchingRecord);
-      } else {
-        res.status(403).json({
-          "error": "User "+req.user.email+" is not permitted to GET "
-        });
+    
+    /**
+     * Currently used for: [STUDY]
+     */
+    PermissionService.getCurrentRole(req).then(function (role) {
+      this.role = role;
+      if (role === 'admin') {
+        return null;
       }
-    } else {
-      res.ok(matchingRecord);
-    }
+      else if (role === 'coordinator' || role === 'interviewer') {
+        return User.findOne(req.user.id);
+      }
+      else {
+        return Subject.findOne({user: req.user.id});
+      }
+    })
+    .then(function (user) {
+      if (user) {
+        if (_.some(matchingRecord.collectionCentres, function(centre) {
+          return !_.isUndefined(user.centreAccess[centre.id]);
+        })) {
+          res.ok(matchingRecord);
+        } else {
+          res.status(403).json({
+            "error": "User "+req.user.email+" is not permitted to GET "
+          });
+        } 
+      } else {
+        res.ok(matchingRecord);
+      }   
+    })
+    .catch(function (err) {
+      res.serverError(err);
+    });    
   });
 
 };
