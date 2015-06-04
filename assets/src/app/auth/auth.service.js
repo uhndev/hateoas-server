@@ -21,7 +21,7 @@
     var LoginAuth = $resource(Auth.LOGIN_API);
 
     this.isAuthenticated = function() {
-      var auth = Boolean(ipCookie('user'));      
+      var auth = Boolean(ipCookie('user'));
       if (!auth) {
         this.setUnauthenticated();
       } else {

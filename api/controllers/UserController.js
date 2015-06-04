@@ -81,30 +81,72 @@ _.merge(exports, {
   },
 
   update: function (req, res) {
+    // user params
     var userId = req.param('id'),
         newUsername = req.param('username'),
         newEmail = req.param('email'),
         newPassword = req.param('password'),
         newRole = req.param('role');
-        newPrefix = req.param('prefix'),
+    // person params
+    var newPrefix = req.param('prefix'),
         newFirstname = req.param('firstname'),
         newLastname = req.param('lastname');
+    // access control params
+    var newCentreAccess = req.param('centreAccess'),
+        swapWith = req.param('swapWith'),
+        isAdding = req.param('isAdding'),
+        newCollectionCentres = req.param('collectionCentres');
 
-    var userFields = {}, personFields = {};
+    var userFields = {}, personFields = {}, access = {};
     if (newUsername) userFields.username = newUsername;
     if (newEmail) userFields.email = newEmail;
+    if (newCentreAccess) userFields.centreAccess = newCentreAccess;
+    if (newCollectionCentres) userFields.collectionCentres = newCollectionCentres;
     if (newPrefix) personFields.prefix = newPrefix;
     if (newFirstname) personFields.firstname = newFirstname;
     if (newLastname) personFields.lastname = newLastname;
 
-    User.update(userId, userFields)
-    .then(function (newUser) {
+    PermissionService.getCurrentRole(req).then(function (role) {
+      this.role = role;
+      // only admins can make changes to centreAccess
+      if (role !== 'admin') {
+        delete userFields.centreAccess;
+      }
+      return User.findOne(userId).populate('collectionCentres');
+    })
+    .then(function (user) {  // update collectionCentres if needed
+      this.user = user;
+      if (newCollectionCentres && !_.isEqual(this.user.centreAccess, userFields.centreAccess)) {
+        _.each(userFields.collectionCentres, function (centre) {
+          if (isAdding) {
+            this.user.collectionCentres.add(centre);  
+          } else {
+            this.user.collectionCentres.remove(centre);
+          }          
+        });
+
+        // if swapping centres, isAdding flag will be false so after removing, add in new centres
+        if (swapWith && swapWith.length > 0) {
+          _.each(swapWith, function (centre) {
+            this.user.collectionCentres.add(centre);       
+          });
+        }
+
+        return this.user.save();
+      }
+      return user;
+    })
+    .then(function (user) {  // perform update on user model
+      // only update collection centres via add/remove
+      delete userFields.collectionCentres;
+      return User.update(userId, userFields);
+    })      
+    .then(function (newUser) { // update password if needed
       if (newPassword) {
         Passport.findOne({
           user     : newUser[0].id
         }, function (err, passport) {
           if (err) res.serverError(err);
-          // console.log(passport);
           Passport.update(passport.id, {
             password : newPassword
           }, function (err, passport) {
@@ -126,16 +168,24 @@ _.merge(exports, {
             return Role.findOne(newRole);
           })
           .then(function (role) {
-            // remove old roles
-            _.each(this.previousRoles, function (prev) {
-              this.user.roles.remove(prev.id);
-            });          
-            return [role, this.user.save()];
+            // remove old roles only if admin
+            if (this.role === 'admin') {
+              _.each(this.previousRoles, function (prev) {
+                this.user.roles.remove(prev.id);
+              });          
+              return [role, this.user.save()];  
+            } else {
+              return [role, this.user];
+            }              
           })
           .spread(function (role, user) {
             // add new role
-            this.user.roles.add(role.id);
-            return this.user.save();
+            if (this.role === 'admin') {
+              this.user.roles.add(role.id);
+              return this.user.save();
+            } else {
+              return this.user;
+            }
           })
           .then(function (updatedUser) {
             sails.log.silly('role ' + newRole + 'attached to user ' + this.user.username);
@@ -160,23 +210,28 @@ _.merge(exports, {
           .catch(function (err) {
             return res.serverError(err);
           });
+
       } else {
-        res.ok(newUser);  
-      }      
+        res.ok(newUser);
+      }
+    })
+    .catch(function (err) {
+      res.serverError(err);
     });
   },
 
   findByStudyName: function(req, res) {
     var studyName = req.param('name');
-
-    User.findByStudyName(studyName,
-      { where: actionUtil.parseCriteria(req),
-        limit: actionUtil.parseLimit(req),
-        skip: actionUtil.parseSkip(req),
-        sort: actionUtil.parseSort(req) }, 
-      function(err, users) {
-        if (err) res.serverError(err);
-        res.ok(users);
-      });
+    PermissionService.getCurrentRole(req).then(function (roleName) {
+      User.findByStudyName(studyName, roleName, req.user.id,
+        { where: actionUtil.parseCriteria(req),
+          limit: actionUtil.parseLimit(req),
+          skip: actionUtil.parseSkip(req),
+          sort: actionUtil.parseSort(req) }, 
+        function(err, users) {
+          if (err) res.serverError(err);
+          res.ok(users);
+        });    
+    });    
   }
 });

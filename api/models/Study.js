@@ -21,15 +21,12 @@ module.exports = {
       type: 'string',
       required: true
     },
-    /* collection centres should have the form:
-      {
-        name: 'TGH',
-        contact: userId
-      }
-     */
+    // encapsulates access restrictions of coordinator/interviewer/subjects
     collectionCentres: {
-      type: 'array'
+      collection: 'collectioncentre',
+      via: 'study'
     },
+    // oversees all collection centres as admin/PI
     users: {
       collection: 'user',
       via: 'studies'
@@ -76,11 +73,11 @@ module.exports = {
         ].join('/')
       };
       var collectioncentres = { 
-        'rel': 'collectioncentres', 
+        'rel': 'collectioncentre', 
         'prompt': 'Collection Centres', 
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentres'
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
         ].join('/')
       };
 

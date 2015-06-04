@@ -69,20 +69,15 @@ var self = {
     },
     
     populateAndFormat: function populateAndFormat(users) {
-      var promises = [];
-      _.each(users, function (user) {
-        promises.push(User.findOne(user.id)
-          .populate('person')
-          .populate('roles')
-          .then(function (user) {
-            return user;
-          })
-        );
-      });
-      
-      return Q.allSettled(promises).then(function (users) {
-        var userVals = _.pluck(users, 'value');
-        _.map(userVals, function (user) {
+      return Q.all(
+        _.map(users, function (user) {
+          return User.findOne(user.id).populate('person').populate('roles')
+            .then(function (popUser) {
+              return _.merge(user, popUser);
+            })
+        })
+      ).then(function(users) {
+        _.map(users, function (user) {
           if (user.person) {
             _.merge(user, self.User.extractPersonFields(user.person));
             delete user.person;
@@ -92,7 +87,10 @@ var self = {
             delete user.roles;
           }
         });
-        return userVals;
+        return users;  
+      })
+      .catch(function (err) {
+        return err;
       });
     }
   }

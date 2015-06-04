@@ -122,14 +122,17 @@ module.exports = {
       if (!_.has(response.template, 'data')) {
         response.template = _.merge(response.template,
                             makeTemplate(modelName))
-      } else {
-        var required = makeTemplate(modelName);
-        response.template.data = _.unique(
-          response.template.data.concat(required.data),
-          false, function(item, index, list) {
-            return item.name;
-          });
-      }
+      } 
+      
+      // if template.data is explicitly set in workflow, use it exactly.
+      // else {
+      //   var required = makeTemplate(modelName);
+      //   response.template.data = _.unique(
+      //     response.template.data.concat(required.data),
+      //     false, function(item, index, list) {
+      //       return item.name;
+      //     });
+      // }
 
       return response;
     }

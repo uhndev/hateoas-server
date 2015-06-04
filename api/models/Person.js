@@ -6,33 +6,34 @@
 */
 
 (function() {
-var HateoasService = require('../services/HateoasService.js');
+  
+  var HateoasService = require('../services/HateoasService.js');
 
-module.exports = {
-  schema: true,
-  attributes: {
-    firstname: {
-      type: 'string',
-      required: true
-    },
-    lastname: {
-      type: 'string',
-      required: true
-    },
-    prefix: {
-      type: 'string',
-      enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
-      required: true
-    },
-    gender: {
-      type: 'string',
-      enum: ['Male', 'Female']
-    },
-    dob: {
-      type: 'date'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  }
-};
+  module.exports = {
+    schema: true,
+    attributes: {
+      firstname: {
+        type: 'string',
+        required: true
+      },
+      lastname: {
+        type: 'string',
+        required: true
+      },
+      prefix: {
+        type: 'string',
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        required: true
+      },
+      gender: {
+        type: 'string',
+        enum: ['Male', 'Female']
+      },
+      dob: {
+        type: 'date'
+      },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
+  };
 
 }());

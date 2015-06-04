@@ -12,7 +12,7 @@
     '$scope', '$resource', '$location', 'UserService', 'toastr', 'API'
   ];
   
-  function UserOverviewController($scope, $resource, $location, User, toastr, API) {
+  function UserOverviewController($scope, $resource, $location, UserAccess, toastr, API) {
     var vm = this;
 
     // bindable variables
@@ -22,10 +22,11 @@
     vm.resource = {};
     vm.userInfo = {};
     vm.centreAccess = {};
-    vm.savedData = {};
     vm.url = API.url() + $location.path();
 
     // bindable methods
+    vm.addCentre = addCentre;
+    vm.cancelAdd = cancelAdd;
     vm.saveChanges = saveChanges;
     vm.revertChanges = revertChanges;
 
@@ -49,61 +50,57 @@
         
         vm.userInfo = {
           columns: [ 'Name', 'Value' ],
-          tableData: parseData(robj)
+          rows: {
+            'username': { title: 'Username', type: 'text' },
+            'email': { title: 'Email', type: 'text' },
+            'prefix': { title: 'Prefix', type: 'text' },
+            'firstname': { title: 'Firstname', type: 'text' },
+            'lastname': { title: 'Lastname', type: 'text' }
+          },
+          tableData: _.objToPair(robj)
         };
 
         vm.centreAccess = {
           tableData: data.items.centreAccess || [],
           columns: [
-            { title: 'Study', field: 'study', type: 'text' },
-            { title: 'Role', field: 'role', type: 'text' },
-            { title: 'Collection Centre', field: 'collectionCentre', type: 'text' }
+            { title: 'Study', field: 'study', type: 'single' },
+            { title: 'Role', field: 'role', type: 'single' },
+            { title: 'Collection Centre', field: 'collectionCentre', type: 'single' }
           ]
-        };
-        
-        vm.savedData = {
-          forceReload: false,
-          data: angular.copy(vm.centreAccess)
-        };
-
-        // initialize submenu
-        if (_.has(data.items, 'links')) {
-          var submenu = {
-            href: data.items.slug,
-            name: data.items.name,
-            links: data.items.links
-          };
-          angular.copy(submenu, $scope.dados.submenu);
-        }
+        };      
       });
     }
 
-    function parseData(robj) {
-      return _.map(_.keys(robj), function (k) {
-        return { 
-          name: 'User ' + _.camelCase(k),
-          value: robj[k]
-        };
-      });
+    function addCentre() {
+      vm.centreAccess.tableData.push({study: '', role:'', collectionCentre: ''});
+      vm.addingNew = true;
     }
 
-    function generateReport() {
-      alert('Generating report');
+    function cancelAdd() {
+      if (vm.addingNew) {
+        vm.centreAccess.tableData.pop();
+        vm.addingNew = false;
+      }      
     }
 
     function saveChanges() {
-      angular.copy(vm.centreAccess, vm.savedData.data);
-      var user = new User({ 'centreAccess': vm.centreAccess.tableData });
-      user.$update({ id: vm.resource.items.id }).then(function (data) {
-        toastr.success('Updated user studies successfully!', 'Study');
+      angular.copy(vm.centreAccess, vm.savedData);
+      var access = new UserAccess({ 'collectionCentres': vm.centreAccess.tableData });
+      vm.addingNew = false;
+      access.$update({ id: vm.resource.items.id }).then(function (data) {
+        toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
       }).catch(function (err) {
-        toastr.error(err, 'Study');
+        toastr.error(err, 'Collection Centre');
       });
     }
 
     function revertChanges() {
-      angular.copy(vm.savedData.data, vm.centreAccess);
-      vm.savedData.forceReload = !vm.savedData.forceReload;
-    }
+      angular.copy(vm.savedData, vm.centreAccess);
+      vm.addingNew = false;
+    }    
+
+    $scope.$on('hateoas.client.refresh', function() {
+      init();
+    });
   }
 })();
