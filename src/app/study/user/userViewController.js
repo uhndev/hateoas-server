@@ -149,7 +149,13 @@
 		function saveChanges() {		
 			$q.all(_.map(vm.resource.items, function (item) {
 				var isAdding = false;
+				var swapWith = [];
 				var diff = _.difference(savedAccess[item.id].collectionCentre, item.accessCollectionCentre);
+
+				if (savedAccess[item.id].collectionCentre.length === item.accessCollectionCentre.length) {
+					angular.copy(item.accessCollectionCentre, swapWith);
+				}
+
 				if (diff.length === 0) {
 					diff = _.difference(item.accessCollectionCentre, savedAccess[item.id].collectionCentre);
 					isAdding = true;
@@ -175,19 +181,18 @@
 
 				// only make PUT request if necessary
 				if (!_.isEqual(access, item.centreAccess)) {
-					var user = new User({
-						centreAccess: access,
-						isAdding: isAdding,
-						collectionCentres: diff
-					});
+					var req =  {centreAccess: access};
+					// if collection centre hasnt changed, and centreAccess has, role must have been updated
+					if (!_.isEqual(savedAccess[item.id].collectionCentre, item.accessCollectionCentre)) {
+						req.swapWith = swapWith;
+						req.isAdding = isAdding;
+						req.collectionCentres = diff;
+					}
+						
+					var user = new User(req);
 					return user.$update({ id: item.id });
 				}
-				// console.log({
-				// 	centreAccess: access,
-				// 	isAdding: isAdding,
-				// 	collectionCentres: diff					
-				// });
-
+				
 				return;
 			}))
 			.then(function() {
