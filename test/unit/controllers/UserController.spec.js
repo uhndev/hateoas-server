@@ -12,16 +12,85 @@ var UserController = require('../../../api/controllers/UserController');
 
 describe('The User Controller', function () {
 
-	var agent;
+	var agent, study1, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
-		
+
 		before(function(done) {
 			auth.authenticate('admin', function(loginAgent, resp) {
 				agent = loginAgent;
 				resp.statusCode.should.be.exactly(200);
 				globals.users.adminUserId = JSON.parse(resp.text).id;
-				done();
+				
+				Study.create({
+					name: 'USER-LEAP-ADMIN',
+					reb: 100,
+					users: [globals.users.coordinatorUserId]
+				})
+				.then(function (study) {
+					study1 = study.id;
+					return CollectionCentre.create({
+						name: 'USER-LEAP-ADMIN-TWH',
+						reb: 200,
+						study: study1
+					});
+				})
+				.then(function (centre) {
+					cc1Id = centre.id;
+					return CollectionCentre.create({
+						name: 'USER-LEAP-ADMIN-TGH',
+						reb: 300,
+						study: study1
+					});
+				})			
+				.then(function (centre) {
+					cc2Id = centre.id;
+					return Study.create({
+						name: 'USER-LEAP2-ADMIN',
+						reb: 200,
+						users: [globals.users.coordinatorUserId]
+					})
+				})
+				.then(function (study) {
+					study2 = study.id;
+					return CollectionCentre.create({
+						name: 'USER-LEAP2-ADMIN-TWH',
+						reb: 200,
+						study: study2
+					});
+				})				
+				.then(function (centre) {
+					cc3Id = centre.id;
+					var access = {};
+					access[cc1Id] = globals.roles.coordinatorRoleId;
+					return User.update({id: globals.users.coordinatorUserId}, {
+						centreAccess: access,
+						isAdding: true,
+						collectionCentres: [cc1Id]
+					});
+				})
+				.then(function (centre) {
+					var access = {};
+					access[cc2Id] = globals.roles.interviewerRoleId;
+					return User.update({id: globals.users.interviewerUserId}, {
+						centreAccess: access,
+						isAdding: true,
+						collectionCentres: [cc2Id]
+					});
+				})
+				.then(function (centre) {
+					var access = {};
+					access[cc3Id] = globals.roles.interviewerRoleId;
+					return User.update({id: globals.users.interviewerUserId}, {
+						centreAccess: access,
+						isAdding: true,
+						collectionCentres: [cc3Id]
+					});
+				})				
+				.then(function (user) {
+					done();	
+				})
+				.catch(done);
 			});
 		});
 
@@ -128,14 +197,162 @@ describe('The User Controller', function () {
 					})
 					.expect(400)
 					.end(function(err, res) {
-						// console.log(res);
 						done(err);
 					});
 			});			
 		});
 
  		describe('update()', function () {
+ 			it('should be able to add a user to a collection centre with a role', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				agent.attachCookies(req);
+ 				var obj = {};
+ 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				req.send({
+	 					centreAccess: obj,
+	 					isAdding: true,
+	 					collectionCentres: [cc2Id]
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						collection.items[0].username.should.equal('interviewer');
+ 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.interviewerRoleId);
+ 						done(err);
+ 					});
+ 			});
 
+ 			it('should be able to add a user in a collection centre in another study', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				agent.attachCookies(req);
+ 				var obj = {};
+ 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				req.send({
+	 					centreAccess: obj,
+	 					isAdding: true,
+	 					collectionCentres: [cc2Id]
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						collection.items[0].username.should.equal('interviewer');
+ 						done(err);
+ 					});
+ 			});
+
+ 			it('should retain its existing centreAccess after updating new access', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				agent.attachCookies(req);
+
+ 				var newCentreAccess = {};
+ 				newCentreAccess[cc3Id] = globals.roles.coordinatorRoleId;
+
+ 				User.findOne(globals.users.coordinatorUserId)
+					.then(function (user) {
+					// merge existing centreAccess with new attributes					
+					var accessCopy = _.clone(user.centreAccess);
+					_.extend(accessCopy, newCentreAccess);
+					newCentreAccess = _.clone(accessCopy);
+
+					req.send({
+						centreAccess: newCentreAccess,
+						isAdding: true,
+						collectionCentres: [cc3Id] 					
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
+ 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.coordinatorRoleId);
+ 						done(err);
+ 					});
+				});
+ 			});
+ 			
+ 			it('should be able to update a user\'s role in a collection centre', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				agent.attachCookies(req);
+
+ 				var newCentreAccess = {};
+ 				newCentreAccess[cc3Id] = globals.roles.interviewerRoleId;
+
+ 				User.findOne(globals.users.coordinatorUserId)
+					.then(function (user) {
+					// merge existing centreAccess with new attributes					
+					var accessCopy = _.clone(user.centreAccess);
+					_.extend(accessCopy, newCentreAccess);
+					newCentreAccess = _.clone(accessCopy);
+
+					req.send({
+						centreAccess: newCentreAccess				
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
+ 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						done(err);
+ 					});
+				});
+ 			});
+
+ 			it('should be able to switch a user\'s collection centre', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				agent.attachCookies(req);
+
+ 				var newCentreAccess = {};
+ 				newCentreAccess[cc2Id] = globals.roles.coordinatorRoleId;
+
+ 				User.findOne(globals.users.coordinatorUserId)
+					.then(function (user) {
+					// merge existing centreAccess with new attributes					
+					var accessCopy = _.clone(user.centreAccess);
+					_.extend(accessCopy, newCentreAccess);
+					newCentreAccess = _.clone(accessCopy);
+
+					req.send({
+						centreAccess: newCentreAccess,
+						swapWith: [cc2Id],
+						isAdding: false,
+						collectionCentres: [cc1Id]
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId)
+ 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.coordinatorRoleId);
+ 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						done(err);
+ 					});
+				});
+ 			});
+
+ 			it('should remove the user\'s access if selected none collection centres', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				agent.attachCookies(req);
+
+ 				var newCentreAccess = {};
+
+ 				User.findOne(globals.users.interviewerUserId)
+					.then(function (user) {
+					// merge existing centreAccess with new attributes					
+					var accessCopy = _.clone(user.centreAccess);
+					_.extend(accessCopy, newCentreAccess);
+					newCentreAccess = _.clone(accessCopy);
+
+					req.send({
+						centreAccess: {},
+						isAdding: false,
+						collectionCentres: [cc2Id]
+	 				})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						_.isEmpty(collection.items[0].centreAccess).should.be.ok;
+ 						done(err);
+ 					});
+				});
+ 			});
  		});
 
 		describe('allow correct headers', function() {

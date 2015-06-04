@@ -91,9 +91,9 @@ _.merge(exports, {
     var newPrefix = req.param('prefix'),
         newFirstname = req.param('firstname'),
         newLastname = req.param('lastname');
-
     // access control params
     var newCentreAccess = req.param('centreAccess'),
+        swapWith = req.param('swapWith'),
         isAdding = req.param('isAdding'),
         newCollectionCentres = req.param('collectionCentres');
 
@@ -124,6 +124,14 @@ _.merge(exports, {
             this.user.collectionCentres.remove(centre);
           }          
         });
+
+        // if swapping centres, isAdding flag will be false so after removing, add in new centres
+        if (swapWith && swapWith.length > 0) {
+          _.each(swapWith, function (centre) {
+            this.user.collectionCentres.add(centre);       
+          });
+        }
+
         return this.user.save();
       }
       return user;
@@ -206,6 +214,9 @@ _.merge(exports, {
       } else {
         res.ok(newUser);
       }
+    })
+    .catch(function (err) {
+      res.serverError(err);
     });
   },
 

@@ -7,7 +7,7 @@ var CollectionCentreController = require('../../../api/controllers/CollectionCen
 
 describe('The CollectionCentre Controller', function () {
 
-	var agent;
+	var agent, study1, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
 		
@@ -18,20 +18,20 @@ describe('The CollectionCentre Controller', function () {
 				globals.users.adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
-					name: 'LEAP-CC',
+					name: 'CC-LEAP-ADMIN',
 					reb: 100,
 					users: [globals.users.coordinatorUserId]
 				})
 				.then(function (res) {
-					globals.studies.studyId = res.id;
+					study1 = res.id;
 					return res.id;
 				})
 				.then(function (sid) {
 					CollectionCentre.create({
-						name: 'TWH',
+						name: 'CC-LEAP-ADMIN-TWH',
 						study: sid
 					}).then(function (cc) {
-						globals.collectioncentres.cc1Id = cc.id;
+						cc1Id = cc.id;
 						done();
 					});
 				});
@@ -39,8 +39,8 @@ describe('The CollectionCentre Controller', function () {
 		});
 
 		after(function(done) {
-			CollectionCentre.destroy(globals.collectioncentres.cc1Id).exec(function (err, cc) {
-				Study.destroy(globals.studies.studyId).exec(function (err, cc) {
+			CollectionCentre.destroy(cc1Id).exec(function (err, cc) {
+				Study.destroy(study1).exec(function (err, cc) {
 					if (err) return done(err);
 					auth.logout(done);	
 				});
@@ -56,7 +56,7 @@ describe('The CollectionCentre Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('TWH');
+						collection.items[0].name.should.equal('CC-LEAP-ADMIN-TWH');
 						collection.count.should.equal(1);
 						done(err);
 					});
@@ -74,12 +74,12 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should return collection centre summary totals', function (done) {
-				var req = request.get('/api/study/LEAP-CC');
+				var req = request.get('/api/study/CC-LEAP-ADMIN');
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.centreSummary[0].id.should.equal(globals.collectioncentres.cc1Id);
+						collection.items.centreSummary[0].id.should.equal(cc1Id);
 						done(err);
 					});
 			});
@@ -87,12 +87,12 @@ describe('The CollectionCentre Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to retrieve a specific collection centre', function (done) {
-				var req = request.get('/api/collectioncentre/' + globals.collectioncentres.cc1Id);
+				var req = request.get('/api/collectioncentre/' + cc1Id);
 				agent.attachCookies(req);
 				req.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('TWH');
+						collection.items.name.should.equal('CC-LEAP-ADMIN-TWH');
 						done(err);
 					});				
 			});
@@ -110,7 +110,7 @@ describe('The CollectionCentre Controller', function () {
 		describe('create()', function () {
 			
 			before(function (done) {
-				CollectionCentre.findOne({name: 'TGH'})
+				CollectionCentre.findOne({name: 'CC-LEAP-ADMIN-TGH'})
 					.exec(function (err, centre) {
 						_.isUndefined(centre).should.be.true;
 						done();
@@ -129,14 +129,14 @@ describe('The CollectionCentre Controller', function () {
 				agent.attachCookies(req);
 
 				req.send({
-						name: 'TGH',
-						study: globals.studies.studyId
+						name: 'CC-LEAP-ADMIN-TGH',
+						study: study1
 					})
 					.expect(201)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						globals.collectioncentres.cc2Id = collection.id;
-						collection.name.should.equal('TGH');
+						cc2Id = collection.id;
+						collection.name.should.equal('CC-LEAP-ADMIN-TGH');
 						done(err);
 					});
 			});
@@ -146,8 +146,8 @@ describe('The CollectionCentre Controller', function () {
 				agent.attachCookies(req);
 
 				req.send({
-						name: 'TWH',
-						study: globals.studies.studyId
+						name: 'CC-LEAP-ADMIN-TWH',
+						study: study1
 					})
 					.expect(400)
 					.end(function(err) {
@@ -160,7 +160,7 @@ describe('The CollectionCentre Controller', function () {
 				agent.attachCookies(req);
 
 				req.send({
-						name: 'TGH',
+						name: 'CC-LEAP-ADMIN-TGH',
 						study: 1234
 					})
 					.expect(400)
@@ -172,20 +172,20 @@ describe('The CollectionCentre Controller', function () {
 
 		describe('update()', function() {
 			it('should be able to update name of collection centre', function (done) {
-				var req = request.put('/api/collectioncentre/' + globals.collectioncentres.cc2Id);
+				var req = request.put('/api/collectioncentre/' + cc2Id);
 				agent.attachCookies(req);
 
-				req.send({ name: 'TGH-2' })
+				req.send({ name: 'CC-LEAP-ADMIN-TGH-2' })
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('TGH-2');
+						collection.items[0].name.should.equal('CC-LEAP-ADMIN-TGH-2');
 						done(err);
 					});
 			});
 
 			it('should not be able to switch study of collection centre', function (done) {
-				 var req = request.put('/api/collectioncentre/' + globals.collectioncentres.cc2Id);
+				 var req = request.put('/api/collectioncentre/' + cc2Id);
  				agent.attachCookies(req);
 
  				req.send({ study: 1234 })
@@ -198,13 +198,14 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should be able to add users to this collection centre', function (done) {
-				var req = request.put('/api/collectioncentre/' + globals.collectioncentres.cc2Id);
+				// maybe dont allow this?
+				var req = request.put('/api/collectioncentre/' + cc2Id);
  				agent.attachCookies(req);
 
  				req.send({ isAdding: true, coordinators: [globals.users.adminUserId, globals.users.coordinatorUserId] })
  					.expect(200)
  					.end(function (err, res) {
- 						CollectionCentre.findOne(globals.collectioncentres.cc2Id).populate('coordinators')
+ 						CollectionCentre.findOne(cc2Id).populate('coordinators')
  						.exec(function (err, centres) {
  							centres.coordinators[0].username.should.equal('admin');
  							centres.coordinators[1].username.should.equal('coordinator');
@@ -220,13 +221,13 @@ describe('The CollectionCentre Controller', function () {
 
 			it('should be able to remove users from this collection centre', function (done) {
 				// TODO
-				// var req = request.put('/api/collectioncentre/' + globals.collectioncentres.cc2Id);
+				// var req = request.put('/api/collectioncentre/' + cc2Id);
  				// 	agent.attachCookies(req);
 
 	 			// 	req.send({ coordinators: [globals.users.coordinatorUserId] })
 	 			// 		.expect(200)
 	 			// 		.end(function (err, res) {
-	 			// 			CollectionCentre.findOne(globals.collectioncentres.cc2Id).populate('coordinators')
+	 			// 			CollectionCentre.findOne(cc2Id).populate('coordinators')
 	 			// 			.exec(function (err, centres) {
 	 			// 				centres.coordinators[0].username.should.equal('coordinator');
 	 			// 				done(err);
