@@ -47,26 +47,34 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th ng-repeat="col in user.collectionCentres.columns">
+								<th ng-repeat="col in user.userStudies.columns">
 									{{col.title}}
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in user.collectionCentres.tableData">
-								<td>{{row.name}}</td>
+							<tr ng-repeat="row in user.userStudies.tableData">
 								<td>
 									<select-loader
-										url="user"
+										url="study"
 										is-atomic="true"
 										is-disabled="true"
-										values="row.contact"
-										labels="prefix firstname lastname"
+										values="row.study"
+										labels="name"
 										output-properties="id">
 									</select-loader>
 								</td>
-								<td>{{row.coordinators_count}}</td>
-								<td>{{row.subjects_count}}</td>
+								<td>{{row.name}}</td>
+								<td>
+									<select-loader
+										url="role"
+										is-atomic="true"
+										is-disabled="true"
+										values="user.centreAccess[row.id]"
+										labels="name"
+										output-properties="id">
+									</select-loader>									
+								</td>
 							</tr>
 						</tbody>
 					</table>

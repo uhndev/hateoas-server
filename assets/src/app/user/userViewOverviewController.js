@@ -25,10 +25,6 @@
     vm.url = API.url() + $location.path();
 
     // bindable methods
-    vm.addCentre = addCentre;
-    vm.cancelAdd = cancelAdd;
-    vm.saveChanges = saveChanges;
-    vm.revertChanges = revertChanges;
 
     init();
 
@@ -41,6 +37,8 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);
+        vm.centreAccess = data.items.centreAccess;
+
         var robj = _.pick(data.items, 'username', 'email', 'prefix', 'firstname', 'lastname');
         
         vm.title = _.camelCase(data.items.username);
@@ -60,44 +58,16 @@
           tableData: _.objToPair(robj)
         };
 
-        vm.centreAccess = {
-          tableData: data.items.centreAccess || [],
+        vm.userStudies = {
+          tableData: data.items.collectionCentres || [],
           columns: [
             { title: 'Study', field: 'study', type: 'single' },
-            { title: 'Role', field: 'role', type: 'single' },
-            { title: 'Collection Centre', field: 'collectionCentre', type: 'single' }
+            { title: 'Collection Centre', field: 'collectionCentre', type: 'multi' },
+            { title: 'Role', field: 'role', type: 'single' }            
           ]
         };      
       });
     }
-
-    function addCentre() {
-      vm.centreAccess.tableData.push({study: '', role:'', collectionCentre: ''});
-      vm.addingNew = true;
-    }
-
-    function cancelAdd() {
-      if (vm.addingNew) {
-        vm.centreAccess.tableData.pop();
-        vm.addingNew = false;
-      }      
-    }
-
-    function saveChanges() {
-      angular.copy(vm.centreAccess, vm.savedData);
-      var access = new UserAccess({ 'collectionCentres': vm.centreAccess.tableData });
-      vm.addingNew = false;
-      access.$update({ id: vm.resource.items.id }).then(function (data) {
-        toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-      }).catch(function (err) {
-        toastr.error(err, 'Collection Centre');
-      });
-    }
-
-    function revertChanges() {
-      angular.copy(vm.savedData, vm.centreAccess);
-      vm.addingNew = false;
-    }    
 
     $scope.$on('hateoas.client.refresh', function() {
       init();
