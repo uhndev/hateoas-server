@@ -15,7 +15,7 @@
 				"href": "/api/study/*/subject"
 			},
 			{
-				"rel": "users",
+				"rel": "user",
 				"prompt": "Users",
 				"name": "name",
 				"href": "/api/study/*/user",
@@ -28,10 +28,10 @@
 				"href": "/api/study/*/form"
 			},
 			{
-				"rel": "encounter",
-				"prompt": "Encounters",
+				"rel": "survey",
+				"prompt": "Surveys",
 				"name": "name",
-				"href": "/api/study/*/encounter"
+				"href": "/api/study/*/survey"
 			},
 			{
 				"rel": "collectioncentre",
@@ -78,7 +78,7 @@
 				"isActive": true
 			},
 			{
-				"rel": "users",
+				"rel": "user",
 				"prompt": "Users",
 				"name": "name",
 				"href": "/api/study/*/user"
@@ -90,10 +90,10 @@
 				"href": "/api/study/*/form"
 			},
 			{
-				"rel": "encounter",
-				"prompt": "Encounters",
+				"rel": "survey",
+				"prompt": "Surveys",
 				"name": "name",
-				"href": "/api/study/*/encounter"
+				"href": "/api/study/*/survey"
 			},
 			{
 				"rel": "collectioncentre",
@@ -131,7 +131,7 @@
 				"href": "/api/study/*/subject"
 			},
 			{
-				"rel": "users",
+				"rel": "user",
 				"prompt": "Users",
 				"name": "name",
 				"href": "/api/study/*/user"
@@ -143,10 +143,10 @@
 				"href": "/api/study/*/form"
 			},
 			{
-				"rel": "encounter",
-				"prompt": "Encounters",
+				"rel": "survey",
+				"prompt": "Surveys",
 				"name": "name",
-				"href": "/api/study/*/encounter"
+				"href": "/api/study/*/survey"
 			},
 			{
 				"rel": "collectioncentre",

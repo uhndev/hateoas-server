@@ -10,10 +10,10 @@
     .controller('StudyOverviewController', StudyOverviewController);
   
   StudyOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'API', 'FORM_NAME'
+    '$scope', '$resource', '$location', 'API', 'FORM_NAME', 'AuthService'
   ];
   
-  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME) {
+  function StudyOverviewController($scope, $resource, $location, API, FORM_NAME, AuthService) {
     var vm = this;
 
     // bindable variables
@@ -69,7 +69,7 @@
           var submenu = {
             href: data.items.slug,
             name: data.items.name,
-            links: data.items.links
+            links: AuthService.getRoleLinks(data.items.links)
           };
           angular.copy(submenu, $scope.dados.submenu);
         }

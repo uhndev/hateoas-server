@@ -53,7 +53,7 @@ module.exports = {
     	return CollectionCentre.findOne(ccId);
     })
     .then(function (centre) {
-    	if (this.role === 'admin') {
+    	if (this.role === 'admin' && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
     		if (isAdding) {
     			_.each(coordinators, function(user) {
     				centre.coordinators.add(user);

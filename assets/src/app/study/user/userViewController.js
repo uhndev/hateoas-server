@@ -3,18 +3,20 @@
 	angular
 		.module('dados.study.user', [
 			'dados.user.service',
+			'dados.study.user.addUser.controller',
 			'dados.collectioncentre.service',
 			'dados.common.directives.selectLoader'
 		])
 		.controller('StudyUserController', StudyUserController);
 	
 	StudyUserController.$inject = [
-		'$scope', '$q', '$resource', '$location', 'ngTableParams', 'sailsNgTable', 
-		'CollectionCentreService', 'UserService', 'toastr', 'API'
+		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams', 
+		'sailsNgTable', 'CollectionCentreService', 'UserService', 'toastr', 'API'
 	];
 	
-	function StudyUserController($scope, $q, $resource, $location, TableParams, SailsNgTable, 
-																CollectionCentre, User, toastr, API) {
+	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams, 
+																SailsNgTable, CollectionCentre, User, toastr, API) {
+		
 		var vm = this;
 		var savedAccess = {};
 
@@ -27,12 +29,11 @@
 		vm.filters = {};    
 		vm.template = {};
 		vm.resource = {};
-		vm.newUser = {};
 		vm.url = API.url() + $location.path();
 
 		// bindable methods
 		vm.select = select;
-		vm.addUser = addUser;
+		vm.openAddUser = openAddUser;
 		vm.saveChanges = saveChanges;
 
 		init();
@@ -58,6 +59,7 @@
 						vm.selected = null;
 						vm.allow = headers('allow');
 						vm.centreHref = "study/" + currStudy + "/collectioncentre";
+
 						if (_.contains(vm.allow, 'read,')) {
 							vm.allow = vm.allow.substring(5);
 						}
@@ -102,7 +104,7 @@
 								return link;
 							});
 							var submenu = {
-								links: data.links
+								links: AuthService.getRoleLinks(data.links)
 							};
 							angular.copy(submenu, $scope.dados.submenu);
 						}            
@@ -113,37 +115,26 @@
 
 		function select(item) {
 			vm.selected = (vm.selected === item ? null : item);
-		}
+		}	
 
-		function addUser() {			
-			var access = {};
-			// set access level for each selected collection centre
-			_.each(vm.newUser.collectioncentre, function (centre) {
-				access[centre] = vm.newUser.role;
-			});
+		function openAddUser() {
+	    var modalInstance = $modal.open({
+	      animation: true,
+	      templateUrl: 'study/user/addUserModal.tpl.html',
+	      controller: 'AddUserController',
+	      controllerAs: 'addUser',
+	      bindToController: true,
+	      size: 'lg',
+	      resolve: {
+	        centreHref: function () {
+	          return vm.centreHref;
+	        }
+	      }
+	    });
 
-			var UserRes = $resource(API.url() + '/user/' + vm.newUser.user);
-
-			UserRes.get(function (data) {
-				// merge existing centreAccess with new attributes
-				_.extend(access, data.items.centreAccess);
-
-				var user = new User({
-					'centreAccess': access,
-					'isAdding': true,
-					'collectionCentres': vm.newUser.collectioncentre
-				});
-				user.$update({ id: vm.newUser.user })
-				.then(function() {
-					toastr.success('Added user to collection centre!', 'Collection Centre');
-					$scope.tableParams.reload();
-				}).catch(function (err) {
-					toastr.error('An error occurred, please check your input and try again later.', 'Collection Centre');
-				}).finally(function () {
-					vm.toggleNew = !vm.toggleNew;
-					vm.newUser = {};
-				});			
-			});			
+	    modalInstance.result.then(function () {
+	      $scope.tableParams.reload();
+	    });
 		}
 
 		function saveChanges() {		

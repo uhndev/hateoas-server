@@ -4,9 +4,11 @@
 		.module('dados.header.controller', [])
 		.controller('HeaderController', HeaderController);
 
-	HeaderController.$inject = ['$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW'];
+	HeaderController.$inject = [
+		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW', 'SUBVIEW'
+	];
 
-	function HeaderController($location, $state, $rootScope, AuthService, API, TABVIEW) {
+	function HeaderController($scope, $location, $state, $rootScope, AuthService, API, TABVIEW, SUBVIEW) {
 		
 		var vm = this;
 

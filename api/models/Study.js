@@ -31,58 +31,58 @@ module.exports = {
       collection: 'user',
       via: 'studies'
     },
-    getResponseLinks: function(id) {
-      var overview = {
-        'rel': 'overview',
-        'prompt': this.name,
-        'name': 'name',
-        'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
-        ].join('/')
-      };
-      var subject = { 
-        'rel': 'subject', 
-        'prompt': 'Subjects', 
-        'name': 'name',
-        'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
-        ].join('/')
-      };
-      var users = { 
-        'rel': 'users', 
-        'prompt': 'Users', 
-        'name': 'name',
-        'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
-        ].join('/')
-      };
-      var form = { 
-        'rel': 'form', 
-        'prompt': 'Forms', 
-        'name': 'name',
-        'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
-        ].join('/')
-      };
-      var encounter = { 
-        'rel': 'encounter', 
-        'prompt': 'Encounters', 
-        'name': 'name',
-        'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'encounter'
-        ].join('/')
-      };
-      var collectioncentres = { 
-        'rel': 'collectioncentre', 
-        'prompt': 'Collection Centres', 
-        'name': 'name',
-        'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
-        ].join('/')
-      };
 
-      var defaultLinks = [overview, subject, users, form, encounter, collectioncentres];
-      return defaultLinks;
+    getResponseLinks: function(id) {
+      return [
+        {
+          'rel': 'overview',
+          'prompt': this.name,
+          'name': 'name',
+          'href': [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+          ].join('/')
+        },
+        { 
+          'rel': 'subject', 
+          'prompt': 'Subjects', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
+          ].join('/')
+        },
+        { 
+          'rel': 'user', 
+          'prompt': 'Users', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
+          ].join('/')
+        },
+        { 
+          'rel': 'form', 
+          'prompt': 'Forms', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
+          ].join('/')
+        },
+        { 
+          'rel': 'survey', 
+          'prompt': 'Surveys', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'
+          ].join('/')
+        },
+        { 
+          'rel': 'collectioncentre', 
+          'prompt': 'Collection Centres', 
+          'name': 'name',
+          'href' : [
+            sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
+          ].join('/')
+        }
+      ]
     },    
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }

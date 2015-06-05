@@ -6,16 +6,17 @@
       'ngCookies',
       'ipCookie',
       'ngResource',
-      'dados.auth.constants'
+      'dados.auth.constants',
+      'dados.header.constants'
     ])
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', '$rootScope', '$location',
+    'AUTH_API', '$rootScope', '$location', 'SUBVIEW',
     '$resource', '$cookieStore', 'ipCookie'
   ]; 
 
-  function AuthService(Auth, $rootScope, $location,
+  function AuthService(Auth, $rootScope, $location, SUBVIEW,
                       $resource, $cookieStore, ipCookie) {
     
     var LoginAuth = $resource(Auth.LOGIN_API);
@@ -42,6 +43,13 @@
       this.currentUser = ipCookie('user');
       this.currentRole = ipCookie('user').role;
       $rootScope.$broadcast("events.authorized");
+    };
+
+    this.getRoleLinks = function(links) {
+      var view = this.currentRole.toString().toUpperCase();
+      return _.filter(links, function(link) {
+        return _.contains(SUBVIEW[view], link.rel);
+      });
     };
 
     this.login = function(data, onSuccess, onError) {

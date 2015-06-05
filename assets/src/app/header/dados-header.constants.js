@@ -22,5 +22,13 @@
       { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
       { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
     ]
+  })
+
+  .constant("SUBVIEW", {
+    "SUBJECT": [ 'overview' ],
+    "COORDINATOR": [ 'overview', 'subject', 'user' ],
+    "INTERVIEWER": [ 'overview', 'subject' ],
+    "ADMIN": [ 'overview', 'subject', 'user', 'form', 'survey', 'collectioncentre' ]
   });
+  
 })();
