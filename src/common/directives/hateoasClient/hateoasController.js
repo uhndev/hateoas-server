@@ -8,11 +8,12 @@
   .controller('HateoasController', HateoasController);
 
   HateoasController.$inject = [
-    '$scope', '$resource', '$location', 
+    '$scope', '$resource', '$location', 'AuthService',
     'API', 'ngTableParams', 'sailsNgTable', 'HateoasUtils'
   ];
       
-  function HateoasController($scope, $resource, $location, API, TableParams, SailsNgTable, Utils) {
+  function HateoasController($scope, $resource, $location, AuthService, 
+                              API, TableParams, SailsNgTable, Utils) {
 
     var vm = this;
 
@@ -70,7 +71,7 @@
                 return link;
               });
               var submenu = {
-                links: data.links
+                links: AuthService.getRoleLinks(data.links)
               };
               angular.copy(submenu, $scope.dados.submenu);
             }
@@ -94,7 +95,7 @@
         var submenu = {
           href: vm.selected.slug,
           name: vm.selected.name,
-          links: vm.selected.links
+          links: AuthService.getRoleLinks(vm.selected.links)
         };
         angular.copy(submenu, $scope.dados.submenu);
       } 
