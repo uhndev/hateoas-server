@@ -16,6 +16,12 @@
   <div id="Controls" class="pull-right">
     <div class="btn-group">
       <button type="button" class="btn btn-default"
+        ng-click="studyUser.openUser()"
+        ng-disabled="!!!studyUser.selected">
+        <i class="fa fa-folder-o"></i>
+        View User
+      </button> 
+      <button type="button" class="btn btn-default"
         ng-click="studyUser.openAddUser()">
         <i class="fa fa-file-o"></i>
         Add User

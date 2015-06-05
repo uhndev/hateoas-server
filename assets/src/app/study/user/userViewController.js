@@ -33,6 +33,7 @@
 
 		// bindable methods
 		vm.select = select;
+		vm.openUser = openUser;
 		vm.openAddUser = openAddUser;
 		vm.saveChanges = saveChanges;
 
@@ -116,6 +117,12 @@
 		function select(item) {
 			vm.selected = (vm.selected === item ? null : item);
 		}	
+
+		function openUser() {
+      if (vm.selected.rel) {
+        $location.path(_.convertRestUrl(vm.selected.href, API.prefix));
+      }
+		}
 
 		function openAddUser() {
 	    var modalInstance = $modal.open({

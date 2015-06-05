@@ -148,9 +148,10 @@ _.merge(exports, {
         } else {
           return Person.update(this.user.person, personFields);
         }  
-      }      
+      }
+      return this.user;      
     })
-    .then(function (person) {
+    .then(function (user) {
       if (this.role === 'admin') {
         if (collectionCentres && !_.isEqual(this.user.centreAccess, centreAccess)) {
           _.each(collectionCentres, function (centre) {
@@ -176,6 +177,7 @@ _.merge(exports, {
       if (this.role === 'admin' && !_.isUndefined(centreAccess)) {
         return User.update(userId, { centreAccess: centreAccess });
       }
+      return this.user;
     })
     .then(function (user) {
       res.ok(user);
