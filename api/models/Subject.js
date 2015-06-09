@@ -30,26 +30,70 @@ module.exports = {
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
 
-  findByStudyName: function(studyName, options, cb) {
-    Study.findOneByName(studyName, {}, function found(err, study) {
-      if (err) return cb(err);
+  findByStudyName: function(studyName, roleName, userId, options, cb) {
+    Study.findOneByName(studyName)
+      .populate('collectionCentres')    
+      .then(function (study) {
+        if (!study) {
+          err = new Error();
+          err.message = require('util')
+            .format('Study with name %s does not exist.', studyName);
+          err.status = 404;
+          return cb(err);
+        }
 
-      if (!study) {
-        err = new Error();
-        err.message = require('util')
-          .format('Study with name %s does not exist.', studyName);
-        err.status = 404;
-        return cb(err);
-      }
+        this.study = study;        
+        return study.collectionCentres;
+      })
+      .then(function (centres) {
+        if (roleName !== 'admin') {
+          return Subject.findOne(userId)
+            .populate('user')
+            .populate('collectionCentres')
+            .then(function (subject) {
+              return _.filter(subject.collectionCentres, function (centre) {
+                return _.includes(_.pluck(centres, 'id'), centre.id );
+              });
+            });
+        }
+        return centres;
+      })
+      .then(function (centres) {
+        // return all subjects from each study's collection centres
+        return Promise.all(
+          _.map(centres, function (centre) {
+            return CollectionCentre.findOne(centre.id).populate('subjects');
+          })
+        );
+      })
+      .then(function (centres) {
+        var centreIds = _.pluck(centres, 'id');
+        var subjects = _.uniq(_.flattenDeep(_.pluck(centres, 'subjects')), 'id');
 
-      var query = _.cloneDeep(options);
-      query.where = query.where || {};
-      query.where.study = study.id;
-      delete query.where.name;
+        return Utils.User.populateAndFormat(subjects);
+        // return subjects;
+      })
+      // .then(function (subjects) {
+      //   // TODO: FIX THIS - unable to query on populated values
+      //   var query = _.cloneDeep(options);
+      //   query.where = query.where || {};
+      //   delete query.where.name;
 
-      Subject.find(query)
-        .exec(cb);
-    });
+      //   this.subjects = _.pluck(subjects, 'id');
+      //   return User.find(query).populate('person');
+      // })
+      // .then(function (subjects) {
+      //   return Utils.User.populateAndFormat(subjects);
+      // })
+      // .then(function (subjects) {
+      //   return _.filter(subjects, function (user) {
+      //     return _.includes(this.subjects, user.id);
+      //   });
+      // })
+      .then(function (users) {
+        cb(false, users);
+      })
+      .catch(cb);
   },
   
   beforeValidate: function(subject, cb) {

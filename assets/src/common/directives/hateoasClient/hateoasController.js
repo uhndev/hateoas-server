@@ -33,6 +33,13 @@
     init();
 
     ///////////////////////////////////////////////////////////////////////////
+    
+    // vm.gridOptions = {};
+    // vm.gridOptions.enableColumnResizing = true;
+    // vm.gridOptions.enableFiltering = true;
+    // vm.gridOptions.onRegisterApi = function(gridApi) {
+    //   vm.gridApi = gridApi;
+    // };
 
     function init() {
       var currStudy = _.getStudyFromUrl($location.path());
@@ -56,6 +63,11 @@
             vm.resource = angular.copy(data);
             params.total(data.total);
             $defer.resolve(data.items);
+
+            // vm.gridOptions.data = data.items;
+            // vm.gridOptions.columnDefs = _.map(vm.template.data, function (template) {
+            //   return { field: template.name };
+            // });
 
             // initialize submenu
             if (currStudy && _.has(data, 'links') && data.links.length > 0) {
