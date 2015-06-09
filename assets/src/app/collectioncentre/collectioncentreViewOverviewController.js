@@ -47,6 +47,16 @@
             'contact': { title: 'Contact', type: 'user' }
           }
         };
+
+        vm.centreUsers = {
+          tableData: data.items.coordinators || [],
+          columns: ['Username', 'Email', 'Person', 'Role']
+        };
+
+        vm.centreSubjects = {
+          tableData: data.items.subjects || [],
+          columns: []
+        };
       });
     }
 

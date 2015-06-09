@@ -7,6 +7,24 @@
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
 module.exports = {
+
+  findOne: function (req, res, next) {
+    CollectionCentre.findOne(req.param('id'))
+      .populate('coordinators')
+      .populate('subjects')
+		.then(function (centre) {
+			if (_.isUndefined(centre)) {
+				res.notFound();
+			} else {
+				this.centre = centre;
+				return Utils.User.populateAndFormat(centre.coordinators);
+			}
+		})
+		.then(function (users) {
+			this.centre.coordinators = users;
+			res.ok(this.centre);
+		}).catch(next);
+  },
 	
 	create: function(req, res, next) {
 		var ccName = req.param('name'),
