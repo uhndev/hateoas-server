@@ -108,7 +108,7 @@ describe('The User Controller', function () {
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items[0].username.should.equal('admin');
-						collection.items[1].username.should.equal('subject');
+						collection.items[1].username.should.equal('subject');												
 						collection.items[2].username.should.equal('interviewer');
 						collection.items[3].username.should.equal('coordinator');
 						done(err);

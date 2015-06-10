@@ -59,6 +59,4 @@ module.exports.routes = {
   /***************************************************************************
   * Collection Centre Routes                                                 *
   ****************************************************************************/
-  'get /api/collectioncentre/:id/subject'     : 'CollectionCentreController.findSubjects',
-  'get /api/collectioncentre/:id/coordinator' : 'CollectionCentreController.findCoordinators'
 };

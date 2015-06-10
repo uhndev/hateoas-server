@@ -27,7 +27,8 @@ describe('The Study Controller', function () {
 				Study.create({
 					name: 'STUDY-LEAP-ADMIN',
 					reb: 100,
-					users: [globals.users.coordinatorUserId]
+					administrator: globals.users.coordinatorUserId,
+					pi: globals.users.coordinatorUserId
 				})
 				.then(function (res) {
 					study1 = res.id;
@@ -140,7 +141,8 @@ describe('The Study Controller', function () {
 				req.send({
 						name: 'STUDY-LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [globals.users.adminUserId, globals.users.coordinatorUserId]
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(201)
 					.end(function(err, res) {
@@ -158,7 +160,8 @@ describe('The Study Controller', function () {
 				req.send({
 						name: 'STUDY-LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [globals.users.adminUserId]
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(500)
 					.end(function(err) {
@@ -186,7 +189,7 @@ describe('The Study Controller', function () {
 				var req = request.put('/api/study/' + study2);
 				agent.attachCookies(req);
 
-				req.send({ users: [] })
+				req.send({ administrator: null, pi: null })
 					.expect(200)
 					.end(function (err, res) {
 						done(err);
@@ -196,13 +199,13 @@ describe('The Study Controller', function () {
 			it('should be able to update users of study', function(done) {
 				var req = request.put('/api/study/' + study2);
 				agent.attachCookies(req);
-				req.send({ users: [globals.users.adminUserId, globals.users.interviewerUserId] })
+				req.send({ administrator: globals.users.adminUserId, pi: globals.users.interviewerUserId })
 					.expect(200)
 					.end(function (err, res) {
-						Study.findOne(study2).populate('users')
+						Study.findOne(study2).populate('administrator').populate('pi')
 							.then(function (data) {
-								data.users[0].username.should.equal('admin');
-								data.users[1].username.should.equal('interviewer');
+								data.administrator.username.should.equal('admin');
+								data.pi.username.should.equal('interviewer');
 								done(err);
 							});
 					});
@@ -243,7 +246,8 @@ describe('The Study Controller', function () {
 				Study.create({
 					name: 'STUDY-LEAP-COORD',
 					reb: 100,
-					users: [globals.users.coordinatorUserId]
+					administrator: globals.users.coordinatorUserId,
+					pi: globals.users.coordinatorUserId
 				})
 				.then(function (study) {
 					study3 = study.id;
@@ -289,28 +293,6 @@ describe('The Study Controller', function () {
 
 		after(function(done) {
 			auth.logout(done);
-			// User.update({id: globals.users.coordinatorUserId}, {
-			// 	centreAccess: {},
-			// 	isAdding: false,
-			// 	collectionCentres: [cc1Id]
-			// })
-			// .then(function (user) {
-			// 	return User.update({id: globals.users.interviewerUserId}, {
-			// 		centreAccess: {},
-			// 		isAdding: false,
-			// 		collectionCentres: [cc2Id]
-			// 	})
-			// })
-			// .then(function (user) {
-			// 	return CollectionCentre.destroy(cc1Id);
-			// })
-			// .then(function (cc) {
-			// 	return Study.destroy(study3);
-			// })
-			// .then(function (study) {
-			// 	auth.logout(done);
-			// })
-			// .catch(done);
 		});
 
 		describe('find()', function () {
@@ -384,15 +366,36 @@ describe('The Study Controller', function () {
 
 		describe('create()', function () {
 			it('should not be able to create studies', function(done) {
-				// TODO				
-				done();
+				var req = request.post('/api/study');
+				agent.attachCookies(req);
+				req.send({
+						name: 'TEST',
+						reb: 100,
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
+					})
+					.expect(400)
+					.end(function(err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('User coordinator@example.com is not permitted to POST ');
+						done(err);
+					});
 			});
 		});
 
 		describe('update()', function() {
 			it('should not be able to update studies', function(done) {
-				// TODO				
-				done();
+				var req = request.put('/api/study/STUDY-LEAP-COORD');
+				agent.attachCookies(req);
+				req.send({
+						name: 'TEST'
+					})
+					.expect(400)
+					.end(function(err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('User coordinator@example.com is not permitted to PUT ');
+						done(err);
+					});
 			})
 		});
 
@@ -436,24 +439,10 @@ describe('The Study Controller', function () {
 		});
 
 		describe('find()', function() {
-			it('should be able to see studies where he/she is associated with a CC', function (done) {
-				// TODO
-				done();
-			});
+
 		});
 
 		describe('findOne()', function() {
-			it('should be allowed access to study he/she is associated with via enrollment in CC', function (done) {
-				// var req = request.get('/api/study/LEAP2');
-				// agent.attachCookies(req);
-				// req.expect(200)
-				// 	.end(function (err, res) {
-				// 		var collection = JSON.parse(res.text);
-				// 		collection.items.name.should.equal('LEAP2');
-				// 		done(err);
-				// 	});
-				done();
-			});
 
 			it('should not be allowed access to restricted study', function (done) {
 				var req = request.get('/api/study/STUDY-LEAP-COORD');
@@ -475,7 +464,8 @@ describe('The Study Controller', function () {
 					.send({
 						name: 'LEAPSUBJECT',
 						reb: 100,
-						users: [globals.users.coordinatorUserId]
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -511,19 +501,7 @@ describe('The Study Controller', function () {
 						headers.should.equal('read');
 						done(err);
 					});
-			});
-
-			it('should only allow read access for /api/study/:name', function (done) {
-				// var req = request.get('/api/study/LEAP');
-				// agent.attachCookies(req);
-				// req.expect(200)
-				// 	.end(function (err, res) {
-				// 		var headers = res.headers['allow'];
-				// 		headers.should.equal('read');
-				// 		done(err);
-				// 	});		
-				done();		
-			});			
+			});	
 		});
 	});
 

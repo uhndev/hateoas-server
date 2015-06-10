@@ -103,11 +103,14 @@ module.exports = {
 		var id = req.param('id'),
 				name = req.param('name'),
 				reb = req.param('reb'),
-				users = req.param('users');
+				administrator = req.param('administrator'),
+				pi = req.param('pi');
+
 		var fields = {};
     if (name) fields.name = name;
     if (reb) fields.reb = reb;
-    if (users) fields.users = users;
+    if (administrator) fields.administrator = administrator;
+    if (pi) fields.pi = pi;
 
 		Study.update({id: id}, fields).exec(function (err, study) {
 			if (err) return next(err);

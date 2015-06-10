@@ -20,7 +20,8 @@ describe('The CollectionCentre Controller', function () {
 				Study.create({
 					name: 'CC-LEAP-ADMIN',
 					reb: 100,
-					users: [globals.users.coordinatorUserId]
+					administrator: globals.users.coordinatorUserId,
+					pi: globals.users.coordinatorUserId
 				})
 				.then(function (res) {
 					study1 = res.id;
@@ -130,6 +131,7 @@ describe('The CollectionCentre Controller', function () {
 
 				req.send({
 						name: 'CC-LEAP-ADMIN-TGH',
+						contact: globals.users.coordinatorUserId,
 						study: study1
 					})
 					.expect(201)

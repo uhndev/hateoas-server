@@ -60,7 +60,8 @@
         cb(false, centres);
       })
       .catch(cb);
-    },
+    }
+    
   };
 
 }());

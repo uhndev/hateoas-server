@@ -25,7 +25,7 @@ describe('The User Model', function() {
 			tmp = userData;
 			tmp.username = '';
 			User.create(tmp, function(err, newUser) {
-				should.exist(err);
+				should.not.exist(newUser);
 				done();
 			});
 		});
@@ -34,7 +34,7 @@ describe('The User Model', function() {
 			tmp = userData;
 			tmp.email = '';
 			User.create(tmp, function(err, newUser) {
-				should.exist(err);
+				should.not.exist(newUser);
 				done();
 			});
 		});
@@ -43,7 +43,7 @@ describe('The User Model', function() {
 			tmp = userData;
 			tmp.role = '';
 			User.create(tmp, function(err, newUser) {
-				should.exist(err);
+				should.not.exist(newUser);
 				done();
 			});
 		});

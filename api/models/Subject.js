@@ -32,7 +32,7 @@ module.exports = {
 
   findByStudyName: function(studyName, roleName, userId, options, cb) {
     Study.findOneByName(studyName)
-      .populate('collectionCentres')    
+      .populate('collectionCentres')
       .then(function (study) {
         if (!study) {
           err = new Error();
@@ -51,9 +51,11 @@ module.exports = {
             .populate('user')
             .populate('collectionCentres')
             .then(function (subject) {
-              return _.filter(subject.collectionCentres, function (centre) {
-                return _.includes(_.pluck(centres, 'id'), centre.id );
-              });
+              if (_.has(subject, 'collectionCentres')) {
+                return _.filter(subject.collectionCentres, function (centre) {
+                  return _.includes(_.pluck(centres, 'id'), centre.id );
+                });  
+              }              
             });
         }
         return centres;

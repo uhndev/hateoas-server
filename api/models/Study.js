@@ -15,6 +15,7 @@ module.exports = {
     name: {
       type: 'string',
       required: true,
+      notEmpty: true,
       unique: true
     },
     reb: {
