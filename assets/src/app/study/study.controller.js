@@ -40,14 +40,15 @@
         vm.allow = headers('allow');
         vm.template = data.template;
         vm.resource = angular.copy(data);
-        var robj = _.pick(data.items, 'name', 'reb', 'users');
+        var robj = _.pick(data.items, 'name', 'reb', 'administrator', 'pi');
         
         vm.studyInfo = {
           columns: [ 'Name', 'Value' ],
           rows: {
             'name': { title: 'Name', type: 'text' },
             'reb': { title: 'REB', type: 'text' },
-            'users': { title: 'Users', type: 'users' }
+            'administrator': { title: 'Administrator', type: 'user' },
+            'pi': { title: 'PI', type: 'user' }
           },
           tableData: _.objToPair(robj)
         };

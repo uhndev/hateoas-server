@@ -9,8 +9,8 @@ _.merge(exports, {
 
   findOne: function (req, res, next) {
     User.findOne(req.param('id'))
-      .populate('studies')
       .populate('person')
+      .populate('collectionCentres')
       .populate('roles')
     .exec(function (err, matchingRecord) {
       if (err) res.serverError(err);

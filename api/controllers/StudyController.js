@@ -13,7 +13,6 @@ module.exports = {
 		var name = req.param('name');
 
 		Study.findOne({name: name})
-			.populate('users')
 			.populate('collectionCentres')
 			.then(function (study) {
 				this.study = study;
@@ -24,7 +23,7 @@ module.exports = {
 	      if (role === 'admin') {
 	        return null;
 	      }
-	      else if (role === 'coordinator' || role === 'interviewer') {
+	      else if (role !== 'admin' && role !== 'subject') {
 	        return User.findOne(req.user.id);
 	      }
 	      else {
@@ -50,7 +49,7 @@ module.exports = {
 							})
 						);	
 		    	} 
-		    	else if (this.role === 'coordinator' || this.role === 'interviewer') {
+		    	else if (role !== 'admin' && role !== 'subject') {
 			    	if (_.some(this.study.collectionCentres, function(centre) {
 		          return !_.isUndefined(user.centreAccess[centre.id]);
 		        })) {

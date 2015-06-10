@@ -3,6 +3,9 @@
 
   angular.module('dados', [
     'ui.router',
+    // 'ui.grid',
+    // 'ui.grid.autoResize',
+    // 'ui.grid.resizeColumns',
     'toastr',
     'ngAnimate',
     'ngResource',
