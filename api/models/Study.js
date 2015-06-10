@@ -27,9 +27,11 @@ module.exports = {
       via: 'study'
     },
     // oversees all collection centres as admin/PI
-    users: {
-      collection: 'user',
-      via: 'studies'
+    administrator: {
+      model: 'user'
+    },
+    pi: {
+      model: 'user'
     },
 
     getResponseLinks: function(id) {

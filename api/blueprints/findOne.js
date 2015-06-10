@@ -26,7 +26,6 @@ module.exports = function findOneRecord (req, res) {
 
   var query = Model.findOne(pk);
   if (req.model.identity === 'study') {
-    query.populate('users');
     query.populate('collectionCentres');
   }
 
@@ -48,7 +47,7 @@ module.exports = function findOneRecord (req, res) {
       if (role === 'admin') {
         return null;
       }
-      else if (role === 'coordinator' || role === 'interviewer') {
+      else if (role !== 'admin' && role !== 'subject') {
         return User.findOne(req.user.id);
       }
       else {

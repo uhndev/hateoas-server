@@ -44,7 +44,6 @@ module.exports = function findRecords (req, res) {
 
   // If this model has a users collection, populate it
   if (req.model.identity === 'study') {
-    query.populate('users');
     query.populate('collectionCentres');
   }
   else if (req.model.identity === 'user') {
@@ -82,7 +81,7 @@ module.exports = function findRecords (req, res) {
         if (role === 'admin') { // allow all
           return null;
         }
-        else if (role === 'coordinator' || role === 'interviewer') {
+        else if (role !== 'admin' && role !== 'subject') {
           return User.findOne(req.user.id); // find specific user's access
         }
         else {

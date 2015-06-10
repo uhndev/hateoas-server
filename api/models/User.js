@@ -13,11 +13,6 @@ _.merge(exports, {
     person: {
       model: 'person'
     },
-    // administrators/PIs of a study
-    studies: { 
-      collection: 'study',
-      via: 'users'
-    },
     // coordinator/interviewer CCs I am overseeing
     collectionCentres: {
       collection: 'collectioncentre',
@@ -42,7 +37,6 @@ _.merge(exports, {
 
   findByStudyName: function(studyName, roleName, userId, options, cb) {
     Study.findOneByName(studyName)
-      .populate('users')
       .populate('collectionCentres')    
       .then(function (study) {
         if (!study) {
