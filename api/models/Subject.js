@@ -69,9 +69,14 @@ module.exports = {
       .then(function (centres) {
         var centreIds = _.pluck(centres, 'id');
         var subjects = _.uniq(_.flattenDeep(_.pluck(centres, 'subjects')), 'id');
-
-        return Utils.User.populateAndFormat(subjects);
-        // return subjects;
+        return Promise.all(
+          _.map(subjects, function (subject) {
+            return Subject.findOne(subject.id).populate('user').populate('collectionCentres');
+          })
+        );
+      })
+      .then(function (subjects) {
+        return Utils.User.populateSubjects(subjects);
       })
       // .then(function (subjects) {
       //   // TODO: FIX THIS - unable to query on populated values
@@ -83,15 +88,15 @@ module.exports = {
       //   return User.find(query).populate('person');
       // })
       // .then(function (subjects) {
-      //   return Utils.User.populateAndFormat(subjects);
+      //   return Utils.User.populateUsers(subjects);
       // })
       // .then(function (subjects) {
       //   return _.filter(subjects, function (user) {
       //     return _.includes(this.subjects, user.id);
       //   });
       // })
-      .then(function (users) {
-        cb(false, users);
+      .then(function (subjects) {
+        cb(false, subjects);
       })
       .catch(cb);
   },

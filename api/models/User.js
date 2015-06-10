@@ -91,7 +91,7 @@ _.merge(exports, {
           });
         });       
 
-        return Utils.User.populateAndFormat(users);
+        return Utils.User.populateUsers(users);
         // return users;
       })
       // .then(function (users) {
@@ -104,7 +104,7 @@ _.merge(exports, {
       //   return User.find(query).populate('person');
       // })
       // .then(function (users) {
-      //   return Utils.User.populateAndFormat(users);
+      //   return Utils.User.populateUsers(users);
       // })
       // .then(function (users) {
       //   return _.filter(users, function (user) {

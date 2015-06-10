@@ -1,6 +1,7 @@
 /**
  * Module dependencies
  */
+var Q = require('q');
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
 /**
@@ -46,10 +47,13 @@ module.exports = function findRecords (req, res) {
     query.populate('users');
     query.populate('collectionCentres');
   }
-
-  if (req.model.identity === 'user') {
+  else if (req.model.identity === 'user') {
     query.populate('person');
     query.populate('roles');
+  }
+  else if (req.model.identity === 'subject') {
+    query.populate('user');
+    query.populate('collectionCentres');
   }
 
   // TODO: .populateEach(req.options);
@@ -72,24 +76,28 @@ module.exports = function findRecords (req, res) {
      * Currently used for: [STUDY]
      */
     // if the model has a users collection, return filtered results depending on role
-    if (_.every(matchingRecords, function(record) { return _.has(record, 'users') })) {
+    if (req.model.identity === 'study') {
       PermissionService.getCurrentRole(req).then(function (role) {
         this.role = role;
-        if (role === 'admin') {
+        if (role === 'admin') { // allow all
           return null;
         }
         else if (role === 'coordinator' || role === 'interviewer') {
-          return User.findOne(req.user.id);
+          return User.findOne(req.user.id); // find specific user's access
         }
         else {
-          return Subject.findOne({user: req.user.id});
+          return Subject.findOne({user: req.user.id}).populate('collectionCentres');
         }
       })
       .then(function (user) {
         if (user) {
           var filteredRecords = _.filter(matchingRecords, function (record) {
             return _.some(record.collectionCentres, function(centre) {
-              return !_.isUndefined(user.centreAccess[centre.id]);
+              if (this.role === 'subject') {
+                return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
+              } else {
+                return _.has(user.centreAccess, centre.id);
+              }
             });
           });
           res.ok(filteredRecords);  
@@ -116,6 +124,15 @@ module.exports = function findRecords (req, res) {
         }
       });
       res.ok(matchingRecords);
+    }
+    /**
+     * Currently used for: [SUBJECT]
+     */
+    else if (req.model.identity === 'subject') {
+      Utils.User.populateSubjects(matchingRecords)
+      .then(function (subjects) {
+        res.ok(subjects);
+      });
     }
     else {
       res.ok(matchingRecords);

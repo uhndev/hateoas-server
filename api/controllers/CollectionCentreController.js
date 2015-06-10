@@ -17,7 +17,7 @@ module.exports = {
 				res.notFound();
 			} else {
 				this.centre = centre;
-				return Utils.User.populateAndFormat(centre.coordinators);
+				return Utils.User.populateUsers(centre.coordinators);
 			}
 		})
 		.then(function (users) {
@@ -119,7 +119,7 @@ module.exports = {
 					if (_.isUndefined(centre)) {
 						res.notFound();
 					} else {
-						return Utils.User.populateAndFormat(centre.subjects);
+						return Utils.User.populateUsers(centre.subjects);
 					}
 				})
 				.then(function (subjects) {
@@ -135,7 +135,7 @@ module.exports = {
 				if (_.isUndefined(centre)) {
 					res.notFound();
 				} else {
-					return Utils.User.populateAndFormat(centre.coordinators);
+					return Utils.User.populateUsers(centre.coordinators);
 				}
 			})
 			.then(function (coordinators) {
