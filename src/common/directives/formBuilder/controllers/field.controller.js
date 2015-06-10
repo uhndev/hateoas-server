@@ -13,6 +13,7 @@
   function FieldController($scope, $http, $timeout, SelectService) {
 
     // bindable variables
+    $scope.opened = false;
     $scope.multiInput = [];
     $scope.multiOutput = [];
     $scope.loadError = false;
@@ -21,6 +22,7 @@
     $scope.clearExpr = clearExpr;
     $scope.validateText = validateText;
     $scope.validateNumber = validateNumber;
+    $scope.openDate = openDate;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -68,6 +70,11 @@
       $scope.showValidateError = !res;
       return res;
     }
+  }
+
+  function openDate($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
   }
 
 })();
