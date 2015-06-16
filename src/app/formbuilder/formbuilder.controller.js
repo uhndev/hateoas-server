@@ -27,14 +27,8 @@
         Resource.get(_.pick(query, 'id')).$promise.then(function (form) {
           angular.copy(form.items, vm.form);
           toastr.info('Loaded form '+vm.form.form_name+' successfully!', 'Form');
-        }, function (err) {
-          toastr.error('Unable to load form! ' + err, 'Form');
         });
       }
-    }
-
-    function pushError(err) {
-      toastr.error(err, 'Error');
     }
 
     function saveForm() {
@@ -43,13 +37,13 @@
       if (_.has(vm.form, 'href')) {
         resource.$update( {id:vm.form.id} ).then(function (data) {
           toastr.success('Updated form '+vm.form.form_name+' successfully!', 'Form');
-        }).catch(pushError);        
+        });        
       } 
       // otherwise, we create a new form
       else {
         resource.$save().then(function (data) {
           toastr.success('Saved form '+vm.form.form_name+' successfully!', 'Form');
-        }).catch(pushError);
+        });
       }    
     }
   }

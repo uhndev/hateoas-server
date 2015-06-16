@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('dados.common.services.csrf', [])
+    .module('dados.common.interceptors.csrf', [])
     .factory('csrfRequestInterceptor', CsrfRequestInterceptor)
     .config(function ($httpProvider) {
       $httpProvider.interceptors.push('csrfRequestInterceptor');

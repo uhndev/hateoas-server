@@ -195,8 +195,6 @@
 			}))
 			.then(function() {
 				toastr.success('Updated collection centre permissions successfully!', 'Collection Centre');
-			}).catch(function (err) {
-				toastr.error(err, 'Collection Centre');
 			});
 		}    
 
