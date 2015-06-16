@@ -3,16 +3,12 @@
 
   angular.module('dados', [
     'ui.router',
-    // 'ui.grid',
-    // 'ui.grid.autoResize',
-    // 'ui.grid.resizeColumns',
     'toastr',
     'ngAnimate',
     'ngResource',
 
     'templates-app',
     'templates-common',
-    'config.interceptors',
 
     'dados.constants',
   	'dados.auth',
@@ -26,18 +22,16 @@
     'dados.filters.formatter',
     'dados.filters.type',
 
-    'dados.common.directives.dadosError',
-    'dados.common.directives.hateoas',
-    'dados.common.directives.queryBuilder',
-    'dados.common.services.csrf'
+    'dados.common.services',
+    'dados.common.interceptors',
+    'dados.common.directives'
   ])
   .config(dadosConfig)
   .controller('DadosController', DadosController);
 
-  dadosConfig.$inject = ['$httpProvider', '$stateProvider', 'toastrConfig'];
+  dadosConfig.$inject = ['$stateProvider', 'toastrConfig'];
 
-  function dadosConfig($httpProvider, $stateProvider, toastrConfig) { 
-    $httpProvider.interceptors.push('httpRequestInterceptor');
+  function dadosConfig($stateProvider, toastrConfig) { 
     $stateProvider.state('hateoas', {
       template: '<div class="container" hateoas-client></div>'
     });
@@ -61,9 +55,9 @@
 
     if (_.isEmpty($location.path())) {
       $location.path('/study');
-    } else {
-      $state.go('hateoas');  
-    }    
+    }
+    
+    $state.go('hateoas');
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
       var prevBaseUrl = _.parseUrl($location, prev)[0];

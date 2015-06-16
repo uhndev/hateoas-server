@@ -43,8 +43,6 @@
 				user.$update({ id: vm.newUser.user })
 				.then(function() {
 					toastr.success('Added user to collection centre!', 'Collection Centre');
-				}).catch(function (err) {
-					toastr.error('An error occurred, please check your input and try again later.', 'Collection Centre');
 				}).finally(function () {
 					vm.newUser = {};
 					$modalInstance.close();

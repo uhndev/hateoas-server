@@ -18,14 +18,10 @@
       if (_.has(state, 'id')) {
         state.$update().then(function(data) {
           toastr.success('Successfully updated workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
       } else {
         state.$save().then(function(data) {
           toastr.success('Successfully created workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
       }
       return state;
@@ -36,8 +32,6 @@
         var state = new Workflow(data);
         state.$delete().then(function(data) {
           toastr.success('Successfully archived workflow!', 'Workflow');
-        }).catch(function(err) {
-          toastr.error(err, 'Workflow');
         });
         return state;
       }

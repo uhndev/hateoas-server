@@ -14,7 +14,13 @@ _.merge(exports, {
       .populate('roles')
     .exec(function (err, matchingRecord) {
       if (err) res.serverError(err);
-      if(!matchingRecord) return res.notFound('No record found with the specified `id`.');
+      if(!matchingRecord) {
+        return res.notFound({
+          title: 'Not Found',
+          code: 404,
+          message: 'No record found with the specified id.'
+        });
+      }
 
       if (matchingRecord.person) {
         _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
@@ -30,50 +36,64 @@ _.merge(exports, {
 
   // Overrides sails-auth's UserController.create to include role
   create: function (req, res, next) {
-    var username = req.param('username'),
-        email = req.param('email'),
-        password = req.param('password'),
-        role = req.param('role');
-        prefix = req.param('prefix'),
-        firstname = req.param('firstname'),
-        lastname = req.param('lastname');
+    var password = req.param('password');
 
-    Role.findOne(role).exec(function (err, role) {
+    Role.findOne(req.param('role')).exec(function (err, role) {
       if (err || _.isUndefined(role)) {
-        return res.badRequest(err); // role not found
+        return res.badRequest({
+          title: 'Role Error',
+          code: 400,
+          message: 'Invalid role given'
+        }); // role not found
       }
 
       Person.create({
-        prefix: prefix,
-        firstname: firstname,
-        lastname: lastname
+        prefix: req.param('prefix'),
+        firstname: req.param('firstname'),
+        lastname: req.param('lastname')
       }).exec(function (perr, person) {
         if (perr) res.serverError(perr);
         User.create({
-          username: username,
-          email: email,
+          username: req.param('username'),
+          email: req.param('email'),
           roles: [role],
           person: person.id
         }).exec(function (uerr, user) {
           if (uerr || !user) {
             person.destroy(function (destroyErr) {
-              return res.badRequest(uerr);  
+              return res.badRequest({
+                title: 'User Error',
+                code: 400,
+                message: 'Error creating user'
+              });  
             });
           } else {
-            Passport.create({
-              protocol : 'local'
-            , password : password
-            , user     : user.id
-            }, function (err, passport) {
-              if (err) {
-                user.destroy(function (destroyErr) {
-                  person.destroy(function (destroyErr) {
-                    next(destroyErr || err);  
-                  });                
-                });
-              }
-              res.ok(user);
-            });            
+            if (_.isEmpty(password)) {
+              user.destroy(function (destroyErr) {
+                person.destroy(function (destroyErr) {
+                  return res.badRequest({
+                    title: 'User Error',
+                    code: 400,
+                    message: 'Password cannot be empty'
+                  });
+                });                
+              });
+            } else {
+              Passport.create({
+                protocol : 'local'
+              , password : password
+              , user     : user.id
+              }, function (err, passport) {
+                if (err) {
+                  user.destroy(function (destroyErr) {
+                    person.destroy(function (destroyErr) {
+                      next(destroyErr || err);  
+                    });                
+                  });
+                }
+                res.ok(user);
+              });
+            }            
           }          
         });
       });

@@ -56,9 +56,6 @@
         //TODO: Handle errors!
         Service.commit(api, newItem).then(function(data) {
           toastr.success('Item successfully updated!', 'Success');
-        }, function (err) {
-          toastr.error(err.data.raw.err, 'Error');
-        }).then(function() {
           $scope.$emit('hateoas.client.refresh');
           modalScope.$destroy();
         });

@@ -494,6 +494,20 @@
       },
       {
         "field_id": 3,
+        "field_name": "attributes",
+        "field_title": "Attributes",
+        "field_type": "json",
+        "field_value": {},
+        "field_placeholder": "Enter a json value",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_required": true
+      },
+      {
+        "field_id": 4,
         "field_name": "administrator",
         "field_title": "Administrator",
         "field_type": "singleselect",
@@ -510,7 +524,7 @@
         "field_labels": "prefix firstname lastname"
       },
       {
-        "field_id": 4,
+        "field_id": 5,
         "field_name": "pi",
         "field_title": "PI",
         "field_type": "singleselect",
@@ -525,7 +539,7 @@
         "field_required": false,
         "field_userURL": "user",
         "field_labels": "prefix firstname lastname"
-      }      
+      }
     ]
 	},
   {

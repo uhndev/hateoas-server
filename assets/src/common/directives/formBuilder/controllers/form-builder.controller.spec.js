@@ -61,7 +61,7 @@ describe('Controller: CreateController Tests', function(){
 				ctrl.addField.new = type;
 				ctrl.addNewField();
 			});
-			expect(ctrl.form.form_questions.length).toEqual(13);
+			expect(ctrl.form.form_questions.length).toEqual(14);
 
 			_.each(ctrl.form.form_questions, function(question) {
 				ctrl.deleteField(1);
@@ -97,18 +97,5 @@ describe('Controller: CreateController Tests', function(){
 			expect(ctrl.form.form_questions.length).toBe(0);
 		});
 
-		it('should bind the preview form when required', function() {
-			// previewing an empty form should fail
-			ctrl.previewOn();
-			expect(ctrl.previewForm).toEqual({});
-
-			_.each(ctrl.addField.types, function(type) {
-				ctrl.addField.new = type;
-				ctrl.addNewField();
-			});
-			// previewing a full form should succeed
-			ctrl.previewOn();
-			expect(ctrl.previewForm).toEqual(ctrl.form);
-		});
 	});
 });

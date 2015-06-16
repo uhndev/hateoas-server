@@ -13,14 +13,11 @@ module.exports = {
     subjectId: {
       type: 'integer',
       autoIncrement: true,
-      required: true
+      defaultsTo: 0
     },
     user: {
       model: 'user',
       required: true
-    },
-    doe: {
-      type: 'date'
     },
     // CCs I am enrolled in as a subject
     collectionCentres: {

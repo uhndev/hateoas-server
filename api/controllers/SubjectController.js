@@ -52,9 +52,7 @@ module.exports = {
       console.log('Creating subject');
       console.log(passport);
       return Subject.create({
-        subjectId: req.param('subjectId'),
         user: this.user.id,
-        doe: req.param('doe'),
         collectionCentres: req.param('collectionCentres')
       });
     })

@@ -103,12 +103,14 @@ module.exports = {
 		var id = req.param('id'),
 				name = req.param('name'),
 				reb = req.param('reb'),
+				attributes = req.param('attributes'),
 				administrator = req.param('administrator'),
 				pi = req.param('pi');
 
 		var fields = {};
     if (name) fields.name = name;
     if (reb) fields.reb = reb;
+    if (attributes) fields.attributes = attributes;
     if (administrator) fields.administrator = administrator;
     if (pi) fields.pi = pi;
 
