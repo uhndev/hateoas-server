@@ -64,6 +64,12 @@
             params.total(data.total);
             $defer.resolve(data.items);
 
+            // if on study subpage, include study name in template 
+            // to be able to prepend to appropriate rest calls
+            if (currStudy) {
+              vm.template.study = currStudy;
+            }
+
             // vm.gridOptions.data = data.items;
             // vm.gridOptions.columnDefs = _.map(vm.template.data, function (template) {
             //   return { field: template.name };

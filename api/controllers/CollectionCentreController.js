@@ -35,12 +35,12 @@ module.exports = {
 		Study.findOne(studyId).populate('collectionCentres')
 			.then(function (study) {
 				if (_.isUndefined(study)) {
-					err = new Error('Study with does not exist.');
+					err = new Error('Study '+studyId+' does not exist.');
 					err.status = 400;
 					throw err;
 				} else {
 					if (_.some(study.collectionCentres, {name: ccName})) {
-						err = new Error('Study with does not exist.');
+						err = new Error('Collection centre with name '+ccName+' already exists under this study.');
 						err.status = 400;
 						throw err;
 					} else {
@@ -56,7 +56,11 @@ module.exports = {
 				res.status(201).jsonx(centre);
 			})
 			.catch(function (err) {
-				res.badRequest(err);
+				res.badRequest({
+					title: 'Error',
+					code: err.status,
+					message: err.message
+				});
 			});
 	},
 

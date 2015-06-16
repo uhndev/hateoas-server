@@ -18,6 +18,13 @@ module.exports = {
       notEmpty: true,
       unique: true
     },
+    attributes: {
+      type: 'json',
+      defaultsTo: {
+        procedure: [],
+        area: ['BOTH', 'LEFT', 'RIGHT']
+      }
+    },
     reb: {
       type: 'string',
       required: true
@@ -89,6 +96,7 @@ module.exports = {
     },    
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }
+  
 };
 
 }());
