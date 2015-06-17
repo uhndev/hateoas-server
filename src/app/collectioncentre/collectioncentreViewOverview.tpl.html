@@ -57,16 +57,7 @@
 								<td>{{::row.username}}</td>
 								<td>{{::row.email}}</td>
 								<td>{{::row.prefix}} {{::row.firstname}} {{::row.lastname}}</td>
-								<td>
-									<select-loader
-										url="role"
-										is-atomic="true"
-										is-disabled="true"
-										values="row.centreAccess[cc.resource.items.id]"
-										labels="name"
-										output-properties="id">
-									</select-loader>
-								</td>
+								<td>{{::row.centreAccess[cc.resource.items.id]}}</td>
 							</tr>
 						</tbody>
 					</table>

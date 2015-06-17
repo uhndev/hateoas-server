@@ -74,7 +74,7 @@
 							},            	
 							{
 								"name": "accessRole",
-								"type": "singleselect",
+								"type": "dropdown",
 								"prompt": "Role",
 								"value": "role"
 							}
