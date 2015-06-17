@@ -25,6 +25,7 @@ module.exports = function findOneRecord (req, res) {
   var pk = actionUtil.requirePk(req);
 
   var query = Model.findOne(pk);
+
   if (req.model.identity === 'study') {
     query.populate('collectionCentres');
   }
@@ -42,36 +43,42 @@ module.exports = function findOneRecord (req, res) {
     /**
      * Currently used for: [STUDY]
      */
-    PermissionService.getCurrentRole(req).then(function (role) {
-      this.role = role;
-      if (role === 'admin') {
-        return null;
-      }
-      else if (role !== 'admin' && role !== 'subject') {
-        return User.findOne(req.user.id);
-      }
-      else {
-        return Subject.findOne({user: req.user.id});
-      }
-    })
-    .then(function (user) {
-      if (user) {
-        if (_.some(matchingRecord.collectionCentres, function(centre) {
-          return !_.isUndefined(user.centreAccess[centre.id]);
-        })) {
-          res.ok(matchingRecord);
-        } else {
-          res.status(403).json({
-            "error": "User "+req.user.email+" is not permitted to GET "
-          });
-        } 
-      } else {
-        res.ok(matchingRecord);
-      }   
-    })
-    .catch(function (err) {
-      res.serverError(err);
-    });    
+    if (req.user.role === 'admin') {
+      return res.ok(matchingRecord);
+    }
+    else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
+      return User.findOne(req.user.id)
+        .then(function (user) {
+          if (_.some(matchingRecord.collectionCentres, function(centre) {
+            return !_.isUndefined(user.centreAccess[centre.id]);
+          })) {
+            res.ok(matchingRecord);
+          } else {
+            res.status(403).json({
+              "error": "User "+req.user.email+" is not permitted to GET "
+            });
+          }
+        }).catch(function (err) {
+          res.serverError(err);
+        }); 
+    }
+    else {
+      return Subject.findOne({user: req.user.id}).populate('collectionCentres')
+        .then(function (subject) {
+          if (_.some(matchingRecord.collectionCentres, function(centre) {
+            return _.contains(_.pluck(subject.collectionCentre, 'id'), centre.id);
+          })) {
+            res.ok(matchingRecord);
+          } else {
+            res.status(403).json({
+              "error": "User "+req.user.email+" is not permitted to GET "
+            });
+          }
+        }).catch(function (err) {
+          res.serverError(err);
+        });
+    }
+       
   });
 
 };

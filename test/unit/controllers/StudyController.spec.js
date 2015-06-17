@@ -268,7 +268,7 @@ describe('The Study Controller', function () {
 				.then(function (centre) {
 					cc2Id = centre.id;
 					var access = {};
-					access[cc1Id] = globals.roles.coordinatorRoleId;
+					access[cc1Id] = 'coordinator';
 					return User.update({id: globals.users.coordinatorUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -277,7 +277,7 @@ describe('The Study Controller', function () {
 				})
 				.then(function (centre) {
 					var access = {};
-					access[cc2Id] = globals.roles.interviewerRoleId;
+					access[cc2Id] = 'interviewer';
 					return User.update({id: globals.users.interviewerUserId}, {
 						centreAccess: access,
 						isAdding: true,

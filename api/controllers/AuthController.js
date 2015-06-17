@@ -72,8 +72,7 @@ _.merge(exports, {
 
         User.findOne(user.id).populate('roles').populate('person')
         .then(function(data) {
-          var resp = _.pick(user, 'id', 'username');
-          resp.role = _.pluck(data.roles, 'name');
+          var resp = _.pick(user, 'id', 'username', 'role');
           if (data.person) {
             _.merge(resp, Utils.User.extractPersonFields(data.person));
           }

@@ -16,23 +16,19 @@ module.exports = {
 			.populate('collectionCentres')
 			.then(function (study) {
 				this.study = study;
-				return PermissionService.getCurrentRole(req);
-			})
-	    .then(function (role) {
-	      this.role = role;
-	      if (role === 'admin') {
+	      if (req.user.role === 'admin') {
 	        return null;
 	      }
-	      else if (role !== 'admin' && role !== 'subject') {
+	      else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
 	        return User.findOne(req.user.id);
 	      }
 	      else {
 	        return Subject.findOne({user: req.user.id});
 	      }
-	    })
+			})
 	    .then(function (user) {
 	    	if (this.study) {
-		    	if (this.role === 'admin') {
+		    	if (req.user.role === 'admin') {
 		    		return Promise.all(
 							_.map(this.study.collectionCentres, function (centre) {
 								return CollectionCentre.findOne(centre.id)
@@ -49,7 +45,7 @@ module.exports = {
 							})
 						);	
 		    	} 
-		    	else if (role !== 'admin' && role !== 'subject') {
+		    	else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
 			    	if (_.some(this.study.collectionCentres, function(centre) {
 		          return !_.isUndefined(user.centreAccess[centre.id]);
 		        })) {
@@ -100,21 +96,15 @@ module.exports = {
 
 	update: function (req, res, next) {
 		// can only update study collection centres via CollectionCentre model
-		var id = req.param('id'),
-				name = req.param('name'),
-				reb = req.param('reb'),
-				attributes = req.param('attributes'),
-				administrator = req.param('administrator'),
-				pi = req.param('pi');
+		var id = req.param('id');
 
-		var fields = {};
-    if (name) fields.name = name;
-    if (reb) fields.reb = reb;
-    if (attributes) fields.attributes = attributes;
-    if (administrator) fields.administrator = administrator;
-    if (pi) fields.pi = pi;
-
-		Study.update({id: id}, fields).exec(function (err, study) {
+		Study.update({id: id}, {
+			name: req.param('name'),
+			reb: req.param('reb'),
+			attributes: req.param('attributes'),
+			administrator: req.param('administrator'),
+			pi: req.param('pi')
+		}).exec(function (err, study) {
 			if (err) return next(err);
 			res.ok(_.first(study));
 		});

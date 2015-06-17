@@ -11,20 +11,12 @@ module.exports = {
 
   create: function(req, res, next) {
     // create user/person first and save userId
-    Role.findOneByName('subject')
-    .then(function (subjectRole) {
-      console.log(subjectRole);
-      this.subjectRole = subjectRole.id;
-    })
-    .then(function () {
-      console.log('Creating person');
-      return Person.create({
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname'),
-        gender: req.param('gender'),
-        dob: req.param('dob')
-      });
+    Person.create({
+      prefix: req.param('prefix'),
+      firstname: req.param('firstname'),
+      lastname: req.param('lastname'),
+      gender: req.param('gender'),
+      dob: req.param('dob')
     })
     .then(function (person) {
       this.person = person;
@@ -33,7 +25,7 @@ module.exports = {
       return User.create({
         username: req.param('username'),
         email: req.param('email'),
-        roles: [this.subjectRole],
+        role: 'subject',
         person: person.id
       });
     })
@@ -80,17 +72,15 @@ module.exports = {
 
   findByStudyName: function(req, res) {
     var studyName = req.param('name');
-    PermissionService.getCurrentRole(req).then(function (roleName) {
-      Subject.findByStudyName(studyName, roleName, req.user.id,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) }, 
-        function(err, subjects) {
-          if (err) res.serverError(err);
-          res.ok(subjects);
-        });    
-    });    
+    Subject.findByStudyName(studyName, req.user,
+      { where: actionUtil.parseCriteria(req),
+        limit: actionUtil.parseLimit(req),
+        skip: actionUtil.parseSkip(req),
+        sort: actionUtil.parseSort(req) }, 
+      function(err, subjects) {
+        if (err) res.serverError(err);
+        res.ok(subjects);
+      });    
   }
 
 };

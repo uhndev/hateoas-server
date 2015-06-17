@@ -8,29 +8,97 @@ function PermissionService () { }
 PermissionService.prototype = Object.create(_super);
 _.extend(PermissionService.prototype, {
 
-  // Extend with custom logic here by adding additional fields and methods,
-  // and/or overriding methods in the superclass.
-  
-  getCurrentRole: function (req) {
-    return Role.findOne(req.permissions[0].role)
-      .then(function (role) {
-        return role.name;
+  /**
+   * Removes all roles from the given user.
+   * @param  {Object} user 
+   * @return {Object} user
+   */
+  revokeRoles: function(user) {
+    return User.findOne(user.id).populate('roles')
+      .then(function (user) {
+        _.each(user.roles, function (role) {
+          user.remove(role.id);
+          user.save();
+        });
       }).catch(function (err) {
-        return null;
+        return err;
       });
   },
 
-  checkPermissions: function (req, adminCb, coordinatorCb, interviewerCb, subjectCb, next) {
-    Role.findOne(req.permissions[0].role)
-      .then(function (role) {
-        switch(role.name) {
-          case 'admin': adminCb(); break;
-          case 'coordinator': coordinatorCb(); break;
-          case 'interviewer': interviewerCb(); break;
-          default: subjectCb(); break;
-        }
-      }).catch(next);    
+  /**
+   * Revokes a user's roles, then grants the given roles to a user.
+   * @param  {Object} user  
+   * @param  {Array}  roles 
+   * @return {null}       
+   */
+  grantPermissions: function(user, roles) {
+    return this.revokeRoles(user)
+    .then(function (blankUser) {
+      this.user = blankUser;
+      return Role.find({ name: roles });
+    })
+    .then(function (userRoles) {
+      _.each(userRoles, function (role) {
+        role.users.add(user.id);
+        role.save();
+      });
+    })
+    .catch(function (err) {
+      return err;
+    });
+  },
+
+  grantAdminPermissions: function (user) {
+    return this.grantPermissions(user, ['admin']);
+  },
+
+  grantCoordinatorPermissions: function(user) {
+    var coordinatorRoles = [
+      'readStudy',
+      'readSubject',
+      'readUser',
+      'updateUserOwner',
+      'createUser',
+      'readForm',
+      'createAnswerSet'
+    ];
+    return this.grantPermissions(user, coordinatorRoles);
+  },
+
+  grantPhysicianPermissions: function(user) {
+    var physicianRoles = [
+      'readStudy',
+      'readSubject',
+      'readUser',
+      'updateUserOwner',
+      'readForm',
+      'createAnswerSet'
+    ];
+    return this.grantPermissions(user, physicianRoles);
+  },
+
+  grantInterviewerPermissions: function(user) {
+    var interviewerRoles = [
+      'readStudy',
+      'readSubject',
+      'readUserOwner',
+      'updateUserOwner',
+      'readForm',
+      'createAnswerSet'
+    ];
+    return this.grantPermissions(user, interviewerRoles);
+  },
+
+  grantSubjectPermissions: function(user) {
+    var subjectRoles = [
+      'readStudy',
+      'readUserOwner',
+      'readForm',
+      'createAnswerSet'
+    ];
+    return this.grantPermissions(user, subjectRoles);
   }
+  
 });
 
 module.exports = new PermissionService();

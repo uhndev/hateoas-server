@@ -62,7 +62,7 @@ describe('The User Controller', function () {
 				.then(function (centre) {
 					cc3Id = centre.id;
 					var access = {};
-					access[cc1Id] = globals.roles.coordinatorRoleId;
+					access[cc1Id] = 'coordinator';
 					return User.update({id: globals.users.coordinatorUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -71,7 +71,7 @@ describe('The User Controller', function () {
 				})
 				.then(function (centre) {
 					var access = {};
-					access[cc2Id] = globals.roles.interviewerRoleId;
+					access[cc2Id] = 'interviewer';
 					return User.update({id: globals.users.interviewerUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -80,7 +80,7 @@ describe('The User Controller', function () {
 				})
 				.then(function (centre) {
 					var access = {};
-					access[cc3Id] = globals.roles.interviewerRoleId;
+					access[cc3Id] = 'interviewer';
 					return User.update({id: globals.users.interviewerUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -142,7 +142,7 @@ describe('The User Controller', function () {
 						username: 'coordinator2',
 						email: 'coordinator2@example.com',
 						password: 'coordinator21234',
-						role: globals.roles.coordinatorRoleId,
+						role: 'coordinator',
 						prefix: 'Ms.',
 						firstname: 'Coord',
 						lastname: 'Inator'
@@ -207,7 +207,7 @@ describe('The User Controller', function () {
  				var req = request.put('/api/user/' + globals.users.interviewerUserId);
  				agent.attachCookies(req);
  				var obj = {};
- 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				obj[cc2Id] = 'interviewer';
  				req.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
@@ -217,7 +217,7 @@ describe('The User Controller', function () {
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
  						collection.items[0].username.should.equal('interviewer');
- 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc2Id].should.equal('interviewer');
  						done(err);
  					});
  			});
@@ -226,7 +226,7 @@ describe('The User Controller', function () {
  				var req = request.put('/api/user/' + globals.users.interviewerUserId);
  				agent.attachCookies(req);
  				var obj = {};
- 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				obj[cc2Id] = 'interviewer';
  				req.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
@@ -245,7 +245,7 @@ describe('The User Controller', function () {
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = globals.roles.coordinatorRoleId;
+ 				newCentreAccess[cc3Id] = 'coordinator';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -262,8 +262,8 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.coordinatorRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('coordinator');
  						done(err);
  					});
 				});
@@ -274,7 +274,7 @@ describe('The User Controller', function () {
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = globals.roles.interviewerRoleId;
+ 				newCentreAccess[cc3Id] = 'interviewer';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -289,8 +289,8 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
  						done(err);
  					});
 				});
@@ -301,7 +301,7 @@ describe('The User Controller', function () {
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc2Id] = globals.roles.coordinatorRoleId;
+ 				newCentreAccess[cc2Id] = 'coordinator';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -319,9 +319,9 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId)
- 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator')
+ 						collection.items[0].centreAccess[cc2Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
  						done(err);
  					});
 				});

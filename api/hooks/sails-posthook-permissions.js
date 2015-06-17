@@ -1,30 +1,5 @@
 // Until @tjwebb makes this process easier, I'm modifying the hook from node_modules/sails-permissions
 
-var modelRestrictions = {
-  coordinator: [
-    'Permission',
-    'Model',
-    'WorkflowState'
-  ],
-  physician: [
-    'Permission',
-    'Model',
-    'WorkflowState'
-  ],  
-  interviewer: [
-    'Role',
-    'Permission',
-    'Model',
-    'WorkflowState'    
-  ],
-  subject: [
-    'Role',
-    'Permission',
-    'Model',
-    'WorkflowState'
-  ]
-};
-
 module.exports = function (sails) {
   return {
     initialize: function (next) {
@@ -33,10 +8,8 @@ module.exports = function (sails) {
           .then(function (count) {
             if (count == sails.models.length) return next();
             initializeRoles()
-              .then(initializeCoordinators)
-              .then(initializePhysicians)
-              .then(initializeInterviewers)
-              .then(initializeSubjects)
+              .then(checkAdminUser)
+              .then(initializePermissions)
               .then(next);
           })
           .catch(function (error) {
@@ -52,89 +25,32 @@ module.exports = function (sails) {
  * Install the application. Sets up additional Roles and Permissions
  */
 function initializeRoles () {
-  sails.log('finding or creating roles for coordinators, interviewers and subjects');
+  sails.log('finding or creating roles');
   return require('../../config/fixtures/role').create();
 }
 
-function initializeCoordinators () {
-  return Model.find({ name: { '!': modelRestrictions.coordinator } })
-    .then(function (models) {
-      this.models = models;
-      return Role.find();
-    })    
-    .then(function (roles) {
-      this.roles = roles;
-      return User.findOne({ email: sails.config.permissions.adminEmail });
-    })
-    .then(function (admin) {
-      sails.log('setting additional permissions for coordinators');
-      return require('../../config/fixtures/coordinator').create(this.roles, this.models, admin);
-    })
-    .then(function (permissions) {
-      return null;
-    })
-    .catch(function (error) {
-      sails.log.error(error);
+function checkAdminUser() {
+  return User.findOne({ email: sails.config.permissions.adminEmail })
+    .then(function (user) {
+      return User.update({ id: user.id }, {
+        role: 'admin'
+      });
     });
 }
 
-function initializePhysicians () {
-  return Model.find({ name: { '!': modelRestrictions.physician } })
+function initializePermissions () {
+  return Model.find()
     .then(function (models) {
       this.models = models;
       return Role.find();
-    })    
+    })
     .then(function (roles) {
       this.roles = roles;
       return User.findOne({ email: sails.config.permissions.adminEmail });
     })
     .then(function (admin) {
-      sails.log('setting additional permissions for physicians');
-      return require('../../config/fixtures/physician').create(this.roles, this.models, admin);
-    })
-    .then(function (permissions) {
-      return null;
-    })
-    .catch(function (error) {
-      sails.log.error(error);
-    });
-}
-
-function initializeInterviewers () {
-  return Model.find({ name: { '!': modelRestrictions.interviewer } })
-    .then(function (models) {
-      this.models = models;
-      return Role.find();
-    })    
-    .then(function (roles) {
-      this.roles = roles;
-      return User.findOne({ email: sails.config.permissions.adminEmail });
-    })
-    .then(function (admin) {
-      sails.log('setting additional permissions for interviewers');
-      return require('../../config/fixtures/interviewer').create(this.roles, this.models, admin);
-    })
-    .then(function (permissions) {
-      return null;
-    })
-    .catch(function (error) {
-      sails.log.error(error);
-    });
-}
-
-function initializeSubjects () {
-  return Model.find({ name: { '!': modelRestrictions.subject } })
-    .then(function (models) {
-      this.models = models;
-      return Role.find();
-    })    
-    .then(function (roles) {
-      this.roles = roles;
-      return User.findOne({ email: sails.config.permissions.adminEmail });
-    })
-    .then(function (admin) {
-      sails.log('setting additional permissions for subjects');
-      return require('../../config/fixtures/subject').create(this.roles, this.models, admin);
+      sails.log('setting additional permissions');
+      return require('../../config/fixtures/permissions').create(this.roles, this.models, admin);
     })
     .then(function (permissions) {
       return null;

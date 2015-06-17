@@ -4,12 +4,24 @@
  * @public
  */
 exports.create = function () {
-  return Promise.all([
-  	Role.destroy({name: 'registered'}),
-  	Role.destroy({name: 'public'}),
-    Role.findOrCreate({ name: 'coordinator' }, { name: 'coordinator' }),
-    Role.findOrCreate({ name: 'physician' }, { name: 'physician' }),
-    Role.findOrCreate({ name: 'interviewer' }, { name: 'interviewer' }),
-    Role.findOrCreate({ name: 'subject' }, { name: 'subject' })
-  ]);
+
+	var promises = [];
+	var crud = ['create', 'read', 'update', 'delete'];
+	var dadosModels = [
+		// access models
+		'Role', 'Permission', 'User', 'UserOwner',
+		// study administration models
+		'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person'
+	];
+
+	// setup granular model-specific roles
+	_.each(dadosModels, function(model) {
+		_.each(crud, function(operation) {
+			promises.push(
+				Role.findOrCreate({ name: operation + model }, { name: operation + model })
+			);
+		})
+	});	
+
+	return Promise.all(promises);	
 };

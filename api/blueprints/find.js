@@ -48,7 +48,6 @@ module.exports = function findRecords (req, res) {
   }
   else if (req.model.identity === 'user') {
     query.populate('person');
-    query.populate('roles');
   }
   else if (req.model.identity === 'subject') {
     query.populate('user');
@@ -76,37 +75,35 @@ module.exports = function findRecords (req, res) {
      */
     // if the model has a users collection, return filtered results depending on role
     if (req.model.identity === 'study') {
-      PermissionService.getCurrentRole(req).then(function (role) {
-        this.role = role;
-        if (role === 'admin') { // allow all
-          return null;
-        }
-        else if (role !== 'admin' && role !== 'subject') {
-          return User.findOne(req.user.id); // find specific user's access
-        }
-        else {
-          return Subject.findOne({user: req.user.id}).populate('collectionCentres');
-        }
-      })
-      .then(function (user) {
-        if (user) {
-          var filteredRecords = _.filter(matchingRecords, function (record) {
-            return _.some(record.collectionCentres, function(centre) {
-              if (this.role === 'subject') {
-                return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
-              } else {
+      if (req.user.role === 'admin') { // allow all
+        res.ok(matchingRecords);
+      }
+      else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
+        return User.findOne(req.user.id) // find specific user's access
+          .then(function(user) {
+            var filteredRecords = _.filter(matchingRecords, function (record) {
+              return _.some(record.collectionCentres, function(centre) {
                 return _.has(user.centreAccess, centre.id);
-              }
+              });
             });
+            res.ok(filteredRecords);  
+          }).catch(function (err) {
+            res.serverError(err);
           });
-          res.ok(filteredRecords);  
-        } else {
-          res.ok(matchingRecords);
-        }        
-      })
-      .catch(function (err) {
-        res.serverError(err);
-      });
+      }
+      else {
+        return Subject.findOne({user: req.user.id}).populate('collectionCentres')
+          .then(function(user) {
+            var filteredRecords = _.filter(matchingRecords, function (record) {
+              return _.some(record.collectionCentres, function(centre) {
+                return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
+              });
+            });
+            res.ok(filteredRecords);  
+          }).catch(function (err) {
+            res.serverError(err);
+          });
+      }      
     } 
     /**
      * Currently used for: [USER]
@@ -116,10 +113,6 @@ module.exports = function findRecords (req, res) {
         if (user.person) {
           _.merge(user, Utils.User.extractPersonFields(user.person));
           delete user.person;
-        }
-        if (user.roles) {
-          user.role = _.first(user.roles).id;
-          delete user.roles;
         }
       });
       res.ok(matchingRecords);

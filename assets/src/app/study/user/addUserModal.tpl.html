@@ -29,15 +29,10 @@
     </div>
     <div class="form-group">
       <label for="roleInput">Role&nbsp;</label>
-      <select-loader
-        id="roleInput"
-        url="role"
-        is-atomic="true"
-        is-disabled="false"
-        values="addUser.newUser.role"
-        labels="name"
-        output-properties="id">
-      </select-loader>
+      <select id="roleInput" class="form-control" ng-model="addUser.newUser.role" required="required">
+        <option value="coordinator">Coordinator</option>
+        <option value="interviewer">Interviewer</option>
+      </select>
     </div>
     <button type="submit" id="addUserBtn" class="btn btn-primary" ng-click="addUser.addUser()"
       ng-disabled="!addUser.newUser.user || !addUser.newUser.collectioncentre || !addUser.newUser.role">

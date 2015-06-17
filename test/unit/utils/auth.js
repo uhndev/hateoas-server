@@ -83,17 +83,13 @@ var Auth = {
 
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
-      Role.findOne({name: credentials.role}).exec(function (err, role) {
-        if (err) done(err);
-        var req = request.post('/api/user');
-        agent.attachCookies(req);
-        credentials.role = role.id;
-        req.send(credentials)
-        .expect(201)
-        .end(function(err, res) {
-          done(JSON.parse(res.text).items.id);
-        });  
-      });      
+      var req = request.post('/api/user');
+      agent.attachCookies(req);
+      req.send(credentials)
+      .expect(201)
+      .end(function(err, res) {
+        done(JSON.parse(res.text).items.id);
+      });
     });    
   },
 

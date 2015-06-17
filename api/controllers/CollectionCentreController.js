@@ -76,13 +76,9 @@ module.exports = {
 		if (ccName) ccFields.name = ccName;
 		if (ccContact) ccFields.contact = ccContact;
 
-		PermissionService.getCurrentRole(req)
-		.then(function (role) {
-			this.role = role;
-			return CollectionCentre.findOne(ccId);
-		})
+		CollectionCentre.findOne(ccId)
 		.then(function (centre) {
-			if (this.role === 'admin' && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
+			if (req.user.role === 'admin' && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
 				if (isAdding) {
 					_.each(coordinators, function(user) {
 						centre.coordinators.add(user);
@@ -97,7 +93,7 @@ module.exports = {
 			return centre;
 		})
 		.then(function (centre) {
-			if (role === 'admin') {
+			if (req.user.role === 'admin') {
 				return CollectionCentre.update({id: ccId}, ccFields);
 			}
 			return centre;

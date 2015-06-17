@@ -7,14 +7,5 @@ _.merge(exports, _super);
 _.merge(exports, {
 
   // Extend with custom logic here by adding additional fields, methods, etc.
-  findRoleUsers: function (req, res, next) {
-    var roleName = req.param('name');
-    Role.findOne({name: roleName})
-      .populate('users')
-      .exec(function (err, role) {
-        if (err) return next(err);
-        res.ok(role.users);
-      });
-  }
   
 });
