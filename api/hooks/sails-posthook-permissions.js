@@ -23,12 +23,17 @@ module.exports = function (sails) {
 
 /**
  * Install the application. Sets up additional Roles and Permissions
+ * @return {Array} roles
  */
 function initializeRoles () {
   sails.log('finding or creating roles');
   return require('../../config/fixtures/role').create();
 }
 
+/**
+ * Grants admin role and creates default admin person if not set
+ * @return {Object} user
+ */
 function checkAdminUser() {
   return User.findOne({ email: sails.config.permissions.adminEmail })
     .then(function (user) {
@@ -55,6 +60,10 @@ function checkAdminUser() {
     });
 }
 
+/**
+ * Creates associated permission for each created role in previous step
+ * @return {Array} permissions
+ */
 function initializePermissions () {
   return Model.find()
     .then(function (models) {

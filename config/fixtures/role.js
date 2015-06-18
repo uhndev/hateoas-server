@@ -7,23 +7,21 @@ exports.create = function () {
 
 	var promises = [];
 	var crud = ['create', 'read', 'update', 'delete'];
-	var dadosModels = [
-		// access models
-		'Role', 'Permission', 'User', 'UserOwner',
-		// study administration models
-		'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person',
-		// form models
-		'Form', 'AnswerSet'
-	];
 
-	// setup granular model-specific roles
-	_.each(dadosModels, function(model) {
-		_.each(crud, function(operation) {
-			promises.push(
-				Role.findOrCreate({ name: operation + model }, { name: operation + model })
-			);
-		})
-	});	
+	return Model.find()
+		.then(function (models) {
+		  var dadosModels = _.pluck(models, 'name');
+  		dadosModels.push('UserOwner');
 
-	return Promise.all(promises);	
+			// setup granular model-specific roles
+			_.each(dadosModels, function(model) {
+				_.each(crud, function(operation) {
+					promises.push(
+						Role.findOrCreate({ name: operation + model }, { name: operation + model })
+					);
+				})
+			});	
+
+			return Promise.all(promises);	
+		});
 };

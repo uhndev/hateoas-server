@@ -47,6 +47,7 @@ module.exports = function findRecords (req, res) {
     query.populate('collectionCentres');
   }
   else if (req.model.identity === 'user') {
+    query.populate('roles');
     query.populate('person');
   }
   else if (req.model.identity === 'subject') {

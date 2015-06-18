@@ -11,6 +11,7 @@
     'templates-common',
 
     'dados.constants',
+    'dados.access',
   	'dados.auth',
     'dados.study',
     'dados.user',
@@ -46,9 +47,9 @@
     });
   }
  
-  DadosController.$inject = ['$scope', '$state', '$location'];
+  DadosController.$inject = ['$scope', '$state', '$location', 'AuthService'];
 
-  function DadosController($scope, $state, $location) {
+  function DadosController($scope, $state, $location, Auth) {
 
     var vm = this;
     vm.submenu = {};
@@ -58,6 +59,13 @@
     }
     
     $state.go('hateoas');
+
+    $scope.$on('$locationChangeStart', function(e, current, prev) {
+      var page = $location.path();
+      if (Auth.currentRole !== 'admin' && (page == '/formbuilder' || page == '/access')) {
+        $location.path('/400');
+      }
+    });
 
     $scope.$on('$locationChangeSuccess', function(e, current, prev) {
       var prevBaseUrl = _.parseUrl($location, prev)[0];

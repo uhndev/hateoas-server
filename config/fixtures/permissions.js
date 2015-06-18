@@ -9,15 +9,9 @@ exports.create = function (roles, models, admin) {
 
   var permissions = [];
   var crud = ['create', 'read', 'update', 'delete'];
-  var dadosModels = [
-    // access models
-    'Role', 'Permission', 'User', 'UserOwner',
-    // study administration models
-    'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person',
-    // form models
-    'Form', 'AnswerSet'
-  ];
-
+  var dadosModels = _.pluck(models, 'name');
+  dadosModels.push('UserOwner');
+  
   _.each(dadosModels, function(model) {
     _.each(crud, function(operation) {
       var permission = {
