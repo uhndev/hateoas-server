@@ -32,9 +32,26 @@ function initializeRoles () {
 function checkAdminUser() {
   return User.findOne({ email: sails.config.permissions.adminEmail })
     .then(function (user) {
-      return User.update({ id: user.id }, {
-        role: 'admin'
-      });
+      if (_.isUndefined(user.role)) {
+        return User.update({ id: user.id }, {
+          role: 'admin'
+        });
+      } else {
+        return user;
+      }      
+    })
+    .then(function (user) {
+      if (!_.has(user, 'person')) {
+        return Person.create({
+          prefix: 'Mr.',
+          firstname: 'Admin',
+          lastname: 'Admin'
+        }).then(function (person) {
+          return User.update(user.id, { person: person.id });
+        });
+      } else {
+        return user;
+      }      
     });
 }
 

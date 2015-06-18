@@ -108,9 +108,9 @@ describe('The User Controller', function () {
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items[0].username.should.equal('admin');
-						collection.items[1].username.should.equal('subject');												
-						collection.items[2].username.should.equal('interviewer');
-						collection.items[3].username.should.equal('coordinator');
+						collection.items[1].username.should.equal('subject');																		
+						collection.items[2].username.should.equal('coordinator');
+						collection.items[3].username.should.equal('interviewer');
 						done(err);
 					});
 			});
@@ -163,7 +163,10 @@ describe('The User Controller', function () {
 				req.send({
 						username: 'subject',
 						email: 'subject@example.com',
-						password: 'subject1234'
+						password: 'subject1234',
+						prefix: 'Mr.',
+						firstname: 'Test',
+						lastname: 'Subject'						
 					})
 					.expect(400)
 					.end(function(err, res) {
@@ -489,12 +492,12 @@ describe('The User Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + globals.users.coordinatorUserId);
+				var req = request.get('/api/user/' + globals.users.interviewerUserId);
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.id = globals.users.coordinatorUserId;
+						collection.items.id.should.equal(globals.users.interviewerUserId);
 						done(err);
 					});
 			});

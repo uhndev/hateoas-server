@@ -96,15 +96,21 @@ module.exports = {
 
 	update: function (req, res, next) {
 		// can only update study collection centres via CollectionCentre model
-		var id = req.param('id');
+		var id = req.param('id'),
+				name = req.param('name'),
+				reb = req.param('reb'),
+				attributes = req.param('attributes'),
+				administrator = req.param('administrator'),
+				pi = req.param('pi');
 
-		Study.update({id: id}, {
-			name: req.param('name'),
-			reb: req.param('reb'),
-			attributes: req.param('attributes'),
-			administrator: req.param('administrator'),
-			pi: req.param('pi')
-		}).exec(function (err, study) {
+		var fields = {};
+    if (name) fields.name = name;
+    if (reb) fields.reb = reb;
+    if (attributes) fields.attributes = attributes;
+    if (administrator) fields.administrator = administrator;
+    if (pi) fields.pi = pi;
+
+		Study.update({id: id}, fields).exec(function (err, study) {
 			if (err) return next(err);
 			res.ok(_.first(study));
 		});

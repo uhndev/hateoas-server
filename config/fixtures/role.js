@@ -11,7 +11,9 @@ exports.create = function () {
 		// access models
 		'Role', 'Permission', 'User', 'UserOwner',
 		// study administration models
-		'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person'
+		'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person',
+		// form models
+		'Form', 'AnswerSet'
 	];
 
 	// setup granular model-specific roles

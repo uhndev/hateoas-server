@@ -13,7 +13,9 @@ exports.create = function (roles, models, admin) {
     // access models
     'Role', 'Permission', 'User', 'UserOwner',
     // study administration models
-    'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person'
+    'Study', 'CollectionCentre', 'Subject', 'WorkflowState', 'Person',
+    // form models
+    'Form', 'AnswerSet'
   ];
 
   _.each(dadosModels, function(model) {
@@ -33,12 +35,12 @@ exports.create = function (roles, models, admin) {
         permission.role = _.find(roles, { name: operation + model}).id;
       }
       
-      // prevent user create self tautology
-      if (model !== 'UserOwner' && operation !== 'create') {
-        permissions.push(permission);
-      }
+      permissions.push(permission);
     })
   });
+
+  // prevent user create self tautology
+  permissions = _.reject(permissions, {relation: 'owner', action: 'create'});
 
   return Promise.all(
     _.map(permissions, function (permission) {

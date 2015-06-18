@@ -32,32 +32,43 @@ _.merge(exports, {
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
 
-  afterCreate: function(user, cb) {
-    var promise;
-    switch (user.role) {
-      case 'admin': 
-        promise = PermissionService.grantAdminPermissions(user); break;
-      case 'coordinator': 
-        promise = PermissionService.grantCoordinatorPermissions(user); break;
-      case 'physician': 
-        promise = PermissionService.grantPhysicianPermissions(user); break;
-      case 'interviewer': 
-        promise = PermissionService.grantInterviewerPermissions(user); break;
-      case 'subject': 
-        promise = PermissionService.grantSubjectPermissions(user); break;
-      default: break;
-    }
+  afterCreate: [
+    function setOwner (user, next) {
+      sails.log('User.afterCreate.setOwner', user);
+      User
+        .update({ id: user.id }, { owner: user.id })
+        .then(function (user) {
+          next();
+        })
+        .catch(next);
+    },
+    function grantRoles(user, cb) {
+      var promise;
+      switch (user.role) {
+        case 'admin': 
+          promise = PermissionService.grantAdminPermissions(user); break;
+        case 'coordinator': 
+          promise = PermissionService.grantCoordinatorPermissions(user); break;
+        case 'physician': 
+          promise = PermissionService.grantPhysicianPermissions(user); break;
+        case 'interviewer': 
+          promise = PermissionService.grantInterviewerPermissions(user); break;
+        case 'subject': 
+          promise = PermissionService.grantSubjectPermissions(user); break;
+        default: break;
+      }
 
-    if (_.has(user, 'role')) {
-      promise.then(function (user) {
+      if (_.has(user, 'role')) {
+        promise.then(function (user) {
+          cb();
+        }).catch(function (err) {
+          cb(err);
+        });  
+      } else {
         cb();
-      }).catch(function (err) {
-        cb(err);
-      });  
-    } else {
-      cb();
+      }
     }
-  },
+  ],
 
   findByStudyName: function(studyName, currUser, options, cb) {
     Study.findOneByName(studyName)
