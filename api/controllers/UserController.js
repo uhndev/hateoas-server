@@ -90,16 +90,21 @@ _.merge(exports, {
     var userId = req.param('id');
 
     // access control params
-    var centreAccess = req.param('centreAccess'),
-        swapWith = req.param('swapWith'),
-        isAdding = req.param('isAdding'),
-        collectionCentres = req.param('collectionCentres');
+    var roles = req.param('roles'),
+        updateRole = req.param('updateRole');
+
+    var accessFields = {
+      centreAccess: req.param('centreAccess'),
+      swapWith: req.param('swapWith'),
+      isAdding: req.param('isAdding'),
+      collectionCentres: req.param('collectionCentres')
+    };
 
     var userFields = {
       username: req.param('username'),
       email: req.param('email'),
       role: req.param('role'),
-      centreAccess: centreAccess
+      centreAccess: req.param('centreAccess')
     };
 
     if (req.user.role !== 'admin') {
@@ -137,7 +142,35 @@ _.merge(exports, {
         }
         return this.user;      
       });
-    } 
+    }
+    /**
+     * Update user role from access management
+     */
+    else if (!_.isUndefined(updateRole)) {
+      promise = User.findOne(userId)
+      .then(function (user) {
+        user.role = updateRole;
+        return user.save();
+      }); 
+    }
+    /**
+     * Update user access matrix
+     */
+    else if (!_.isUndefined(roles)) {
+      promise = User.findOne(userId).populate('roles')
+      .then(function (user) {
+        _.each(user.roles, function (role) {
+          user.roles.remove(role.id);
+        });
+        return user.save();
+      })
+      .then(function (user) {
+        _.each(roles, function (role) {
+          user.roles.add(role);
+        });
+        return user.save();
+      })
+    }
     /**
      * Update user collection centre access
      */
@@ -146,9 +179,9 @@ _.merge(exports, {
       .then(function (user) { // update user's collection centre access
         this.user = user;
         if (req.user.role === 'admin') {
-          if (collectionCentres && !_.isEqual(this.user.centreAccess, centreAccess)) {
-            _.each(collectionCentres, function (centre) {
-              if (isAdding) {
+          if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
+            _.each(accessFields.collectionCentres, function (centre) {
+              if (accessFields.isAdding) {
                 this.user.collectionCentres.add(centre);  
               } else {
                 this.user.collectionCentres.remove(centre);
@@ -156,8 +189,8 @@ _.merge(exports, {
             });
 
             // if swapping centres, isAdding flag will be false so after removing, add in new centres
-            if (swapWith && swapWith.length > 0) {
-              _.each(swapWith, function (centre) {
+            if (accessFields.swapWith && accessFields.swapWith.length > 0) {
+              _.each(accessFields.swapWith, function (centre) {
                 this.user.collectionCentres.add(centre);       
               });
             }
@@ -167,8 +200,8 @@ _.merge(exports, {
         return this.user;
       })
       .then(function (user) {        
-        if (req.user.role === 'admin' && !_.isUndefined(centreAccess)) {
-          return User.update(userId, { centreAccess: centreAccess });
+        if (req.user.role === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
+          return User.update(userId, { centreAccess: accessFields.centreAccess });
         }
         return this.user;
       });      
@@ -178,6 +211,7 @@ _.merge(exports, {
       res.ok(user);
     })
     .catch(function (err) {
+      console.log(err);
       return res.serverError(err);
     });
   },

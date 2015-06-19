@@ -17,12 +17,34 @@ _.extend(PermissionService.prototype, {
     return User.findOne(user.id).populate('roles')
       .then(function (user) {
         _.each(user.roles, function (role) {
-          user.remove(role.id);
-          user.save();
+          user.remove(role.id);          
         });
+        return user.save();
       }).catch(function (err) {
         return err;
       });
+  },
+
+  /**
+   * On create/updates of user role, set appropriate permissions
+   * @param {Object}   user
+   */
+  setUserRoles: function(user) {
+    switch (user.role) {
+      case 'admin': 
+        return this.grantAdminPermissions(user); break;
+      case 'coordinator': 
+        return this.grantCoordinatorPermissions(user); break;
+      case 'physician': 
+        return this.grantPhysicianPermissions(user); break;
+      case 'interviewer': 
+        return this.grantInterviewerPermissions(user); break;
+      case 'subject': 
+        return this.grantSubjectPermissions(user); break;
+      default: break;
+    }
+
+    return null;
   },
 
   /**
