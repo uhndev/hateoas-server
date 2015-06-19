@@ -147,11 +147,12 @@ _.merge(exports, {
      * Update user role from access management
      */
     else if (!_.isUndefined(updateRole)) {
-      promise = User.findOne(userId)
+      promise = User.findOne(userId).populate('roles')
       .then(function (user) {
         user.role = updateRole;
         return user.save();
-      }); 
+      });
+      // TODO: on update role, handle role changes in PermissionService
     }
     /**
      * Update user access matrix
@@ -169,7 +170,7 @@ _.merge(exports, {
           user.roles.add(role);
         });
         return user.save();
-      })
+      });
     }
     /**
      * Update user collection centre access

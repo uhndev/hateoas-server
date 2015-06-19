@@ -30,21 +30,20 @@ _.extend(PermissionService.prototype, {
    * @param {Object}   user
    */
   setUserRoles: function(user) {
+    var promise;
     switch (user.role) {
       case 'admin': 
-        return this.grantAdminPermissions(user); break;
+        promise = this.grantAdminPermissions(user); break;
       case 'coordinator': 
-        return this.grantCoordinatorPermissions(user); break;
+        promise = this.grantCoordinatorPermissions(user); break;
       case 'physician': 
-        return this.grantPhysicianPermissions(user); break;
+        promise = this.grantPhysicianPermissions(user); break;
       case 'interviewer': 
-        return this.grantInterviewerPermissions(user); break;
+        promise = this.grantInterviewerPermissions(user); break;
       case 'subject': 
-        return this.grantSubjectPermissions(user); break;
-      default: break;
+        promise = this.grantSubjectPermissions(user); break;
     }
-
-    return null;
+    return promise;
   },
 
   /**
@@ -64,9 +63,7 @@ _.extend(PermissionService.prototype, {
         role.users.add(user.id);
         role.save();
       });
-    })
-    .catch(function (err) {
-      return err;
+      return this.user;
     });
   },
 

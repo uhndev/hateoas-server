@@ -56,6 +56,7 @@
     <tbody>
       <tr ng-repeat="item in studyUser.resource.items"
         ng-click="studyUser.select(item)"
+        class="selectable"
         ng-class="{'active': item === studyUser.selected}">
         <td ng-repeat="column in studyUser.template.data"
           ng-if="!column.data"

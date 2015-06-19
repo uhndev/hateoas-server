@@ -16,6 +16,7 @@
   <tbody>
     <tr ng-repeat="item in $data"
       ng-click="hateoas.select(item)"
+      class="selectable"
       ng-class="{'active': item === hateoas.selected}">
       <td ng-repeat="column in hateoas.template.data"
         ng-if="!column.data"
