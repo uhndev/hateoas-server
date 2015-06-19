@@ -33,12 +33,15 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="row in access.resource.items" 
+						class="selectable"
+						ng-click="access.select(row)"
 						ng-class="{'active': row === access.selected}">
-						<td ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
+						<td>{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
 						<td>
-							<select class="form-control" ng-model="row.role" ng-change="access.updateRole()">
+							{{row.role}}
+<!-- 							<select class="form-control" ng-model="row.role" ng-change="access.updateRole()">
 								<option value="{{role}}" ng-repeat="role in access.roles" ng-selected="row.role === role">{{role}}</option>
-							</select>
+							</select> -->
 						</td>
 					</tr>
 				</tbody>
@@ -46,7 +49,8 @@
 		</div>
 		<div class="col-md-9">
 			<h4 ng-if="!access.selected">Select a row to set access permissions.</h4>
-			<table class="table table-hover table-bordered table-condensed" ng-if="access.selected">
+			<table class="table table-hover table-bordered table-condensed"
+				ng-if="access.selected">
 				<thead>
 					<tr>
 						<th ng-repeat="action in ::access.actions">{{::action}}</th>

@@ -52,7 +52,13 @@
       });      
     }
 
-    function clear() {
+    function loadUser(item) {
+      vm.adminSelected = _.first(item.roles).name === 'admin';
+      vm.userRoles = item.roles;
+      vm.access = _.zipObject(_.pluck(item.roles, 'name'), _.pluck(item.roles, 'id'));
+    }
+
+    function clearUser() {
       vm.userRoles = [];
       vm.roleNames = [];
       vm.access = [];
@@ -62,11 +68,9 @@
     function select(item) {
       vm.selected = (vm.selected === item ? null : item);
       if (vm.selected) {
-        vm.adminSelected = _.first(vm.selected.roles).name === 'admin';
-        vm.userRoles = vm.selected.roles;
-        vm.access = _.zipObject(_.pluck(vm.selected.roles, 'name'), _.pluck(vm.selected.roles, 'id'));
+        loadUser(vm.selected);
       } else {
-        clear();
+        clearUser();
       }      
     }
 
@@ -109,7 +113,8 @@
         'roles': _.values(vm.access)
       });
       user.$update({ id: vm.selected.id })
-      .then(function() {
+      .then(function(user) {
+        init();
         toastr.success('Updated user access!', 'Access');
       });
     }
