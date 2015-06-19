@@ -23,7 +23,7 @@
 	
 	<hr/>
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -34,20 +34,32 @@
 				<tbody>
 					<tr ng-repeat="row in access.resource.items" 
 						class="selectable"
-						ng-click="access.select(row)"
 						ng-class="{'active': row === access.selected}">
-						<td>{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
+						<td ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
 						<td>
-							{{row.role}}
-<!-- 							<select class="form-control" ng-model="row.role" ng-change="access.updateRole()">
+							<select class="form-control" 
+								ng-disabled="access.selected.id !== row.id"
+								ng-model="row.role" ng-change="access.updateRole()">
 								<option value="{{role}}" ng-repeat="role in access.roles" ng-selected="row.role === role">{{role}}</option>
-							</select> -->
+							</select>
 						</td>
 					</tr>
 				</tbody>
 			</table>
+			<div class="panel panel-default" collapse="!access.selected">
+			  <div class="panel-heading" ng-if="access.selected">{{access.selected.prefix}} {{access.selected.lastname}}'s Permissions:</div>
+			  <div class="panel-body">
+			  	<ul class="list-unstyled">
+			  		<li ng-repeat="permission in access.access">
+							<button class="btn btn-info btn-xs permission-btn" type="button" ng-click="access.removeAccess(permission)">
+							  {{permission}} <span class="glyphicon glyphicon-remove"></span>
+							</button>
+						</li>
+					</ul>
+			  </div>
+			</div>
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-8">
 			<h4 ng-if="!access.selected">Select a row to set access permissions.</h4>
 			<table class="table table-hover table-bordered table-condensed"
 				ng-if="access.selected">
