@@ -116,7 +116,11 @@ _.merge(exports, {
      * Update user and person model
      */
     if (userFields.username || userFields.email || userFields.role) {
-      promise = User.update({id: userId}, userFields)
+      promise = User.findOne(userId).populate('roles')
+      .then(function (user) {
+        this.previousRole = user.role;
+        return User.update({id: user.id}, userFields);
+      })
       .then(function (user) { // find and update user's associated passport
         this.user = user;
         if (!_.isEmpty(req.param('password'))) {
@@ -141,6 +145,12 @@ _.merge(exports, {
           }  
         }
         return this.user;      
+      })
+      .then(function (user) { // updating role, apply new permissions
+        if (this.previousRole !== userFields.role && req.user.role === 'admin') {
+          return PermissionService.setUserRoles(_.first(user));
+        }
+        return user;
       });
     }
     /**
@@ -151,25 +161,18 @@ _.merge(exports, {
       .then(function (user) {
         user.role = updateRole;
         return user.save();
+      })
+      .then(function (user) {
+        return PermissionService.setUserRoles(user);
       });
-      // TODO: on update role, handle role changes in PermissionService
     }
     /**
      * Update user access matrix
      */
     else if (!_.isUndefined(roles)) {
-      promise = User.findOne(userId).populate('roles')
+      promise = User.findOne(userId)
       .then(function (user) {
-        _.each(user.roles, function (role) {
-          user.roles.remove(role.id);
-        });
-        return user.save();
-      })
-      .then(function (user) {
-        _.each(roles, function (role) {
-          user.roles.add(role);
-        });
-        return user.save();
+        return PermissionService.grantPermissions(user, roles);
       });
     }
     /**

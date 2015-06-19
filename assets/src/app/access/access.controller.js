@@ -19,14 +19,14 @@
     vm.actions = ['create', 'read', 'update', 'delete'];
     vm.roles = ['admin', 'coordinator', 'physician', 'interviewer'];
     vm.models = [];
-    vm.userRoles = [];
     vm.masterRoles = [];
-    vm.access = {};
+    vm.access = [];
     
     // bindable methods
     vm.select = select;
     vm.isRoleSet = isRoleSet;
     vm.addToAccess = addToAccess;
+    vm.removeAccess = removeAccess;
     vm.updateRole = updateRole;
     vm.saveChanges = saveChanges;
 
@@ -34,6 +34,9 @@
     
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Private Methods
+     */
     function init() {
       $resource(API.url() + '/model').get(function (data) {
         vm.models = _.pluck(data.items, 'name');
@@ -54,17 +57,17 @@
 
     function loadUser(item) {
       vm.adminSelected = _.first(item.roles).name === 'admin';
-      vm.userRoles = item.roles;
-      vm.access = _.zipObject(_.pluck(item.roles, 'name'), _.pluck(item.roles, 'id'));
+      vm.access = _.pluck(item.roles, 'name');
     }
 
     function clearUser() {
-      vm.userRoles = [];
-      vm.roleNames = [];
       vm.access = [];
       vm.selected = null;
     }
 
+    /**
+     * Public Bindable Methods
+     */
     function select(item) {
       vm.selected = (vm.selected === item ? null : item);
       if (vm.selected) {
@@ -79,23 +82,21 @@
         return true;
       } else {
         var role = action.toString() + model.toString();
-        return _.has(vm.access, role);
+        return _.contains(vm.access, role);
       }
     }
 
     function addToAccess(action, model) {
       var findRole = action.toString() + model.toString();
-      var RoleName = $resource(API.url() + '/role?name=' + findRole);
-      RoleName.get(function (role) {
-        var foundRole = _.first(role.items);
-        if (foundRole) {
-          if (_.has(vm.access, findRole)) {
-            delete vm.access[findRole];
-          } else {
-            vm.access[findRole] = foundRole.id;
-          }        
-        }      
-      });
+      if (_.contains(vm.access, findRole)) {
+        vm.access = _.without(vm.access, findRole);
+      } else {
+        vm.access.push(findRole);
+      }
+    }
+
+    function removeAccess(permission) {
+      vm.access = _.without(vm.access, permission);
     }
 
     function updateRole() {
@@ -103,14 +104,16 @@
         'updateRole': vm.selected.role
       });
       user.$update({ id: vm.selected.id })
-      .then(function() {
+      .then(function(user) {
+        init();
+        clearUser();
         toastr.success('Updated user role!', 'Access');
       });      
     }
 
     function saveChanges() {
       var user = new User({
-        'roles': _.values(vm.access)
+        'roles': vm.access
       });
       user.$update({ id: vm.selected.id })
       .then(function(user) {

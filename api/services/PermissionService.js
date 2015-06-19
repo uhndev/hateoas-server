@@ -9,25 +9,10 @@ PermissionService.prototype = Object.create(_super);
 _.extend(PermissionService.prototype, {
 
   /**
-   * Removes all roles from the given user.
-   * @param  {Object} user 
-   * @return {Object} user
-   */
-  revokeRoles: function(user) {
-    return User.findOne(user.id).populate('roles')
-      .then(function (user) {
-        _.each(user.roles, function (role) {
-          user.remove(role.id);          
-        });
-        return user.save();
-      }).catch(function (err) {
-        return err;
-      });
-  },
-
-  /**
+   * [setUserRoles]
    * On create/updates of user role, set appropriate permissions
-   * @param {Object}   user
+   * @param  {Object}         user
+   * @return {Object|Promise} user with updated roles, or promise
    */
   setUserRoles: function(user) {
     var promise;
@@ -42,28 +27,39 @@ _.extend(PermissionService.prototype, {
         promise = this.grantInterviewerPermissions(user); break;
       case 'subject': 
         promise = this.grantSubjectPermissions(user); break;
+      default: break;
     }
     return promise;
   },
 
   /**
+   * [grantPermissions] 
    * Revokes a user's roles, then grants the given roles to a user.
    * @param  {Object} user  
    * @param  {Array}  roles 
-   * @return {null}       
+   * @return {Object} user
    */
   grantPermissions: function(user, roles) {
-    return this.revokeRoles(user)
+    return User.findOne(user.id).populate('roles')
+    .then(function (user) {
+      _.each(user.roles, function (role) {
+        user.roles.remove(role.id);          
+      });
+      return user.save();
+    })
     .then(function (blankUser) {
       this.user = blankUser;
       return Role.find({ name: roles });
     })
     .then(function (userRoles) {
       _.each(userRoles, function (role) {
-        role.users.add(user.id);
-        role.save();
+        this.user.roles.add(role.id);
       });
-      return this.user;
+      return this.user.save();
+    })
+    .catch(function(err){
+      console.log('grantPermissions');
+      console.log(err);
     });
   },
 

@@ -43,16 +43,20 @@ module.exports = function findRecords (req, res) {
   .sort( actionUtil.parseSort(req) );
 
   // If this model has a users collection, populate it
-  if (req.model.identity === 'study') {
-    query.populate('collectionCentres');
-  }
-  else if (req.model.identity === 'user') {
-    query.populate('roles');
-    query.populate('person');
-  }
-  else if (req.model.identity === 'subject') {
-    query.populate('user');
-    query.populate('collectionCentres');
+  switch(req.model.identity) {
+    case 'study':
+      query.populate('collectionCentres');
+      break;
+    case 'user':
+      query.populate('roles');
+      query.populate('person');  
+      break;
+    case 'subject': 
+      query.populate('user');
+      query.populate('collectionCentres');  
+      break;
+    default:
+      break;
   }
 
   // TODO: .populateEach(req.options);
@@ -74,7 +78,6 @@ module.exports = function findRecords (req, res) {
     /**
      * Currently used for: [STUDY]
      */
-    // if the model has a users collection, return filtered results depending on role
     if (req.model.identity === 'study') {
       if (req.user.role === 'admin') { // allow all
         res.ok(matchingRecords);

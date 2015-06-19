@@ -132,7 +132,7 @@ describe('The User Controller', function () {
 		});
 
 		describe('create()', function () {
-			it('should be able to create a new user', function (done) {
+			it('should be able to create a new user and set appropriate permissions', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -150,9 +150,12 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('coordinator2');
 						globals.users.coordinator2 = collection.items.id;
-						done(err);
+						collection.items.username.should.equal('coordinator2');
+						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
+							user.roles.length.should.equal(7);
+							done(err);
+						});
 					});
 			});
 
@@ -185,7 +188,7 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should set role to subject if given role DNE', function (done) {
+			it('should return bad request if given role DNE', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -355,6 +358,32 @@ describe('The User Controller', function () {
  						done(err);
  					});
 				});
+ 			});
+
+ 			it('should update a user\'s roles from access management', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				agent.attachCookies(req);
+
+ 				Role.findOne({ name: 'createStudy' }).then(function (role) {
+ 					this.role = role;
+ 					return User.findOne(globals.users.coordinatorUserId).populate('roles');
+ 				}) 				
+ 				.then(function (user) {
+ 					var newRoles = _.pluck(user.roles, 'id');
+ 					newRoles.push(this.role.id);
+ 					console.log(newRoles);
+ 					console.log(user);
+ 					req.send({
+ 						roles: newRoles
+ 					})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						console.log(err);
+ 						var collection = JSON.parse(res.text);
+ 						// console.log(collection);
+ 						done(err);
+ 					})
+ 				});
  			});
  		});
 
