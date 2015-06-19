@@ -3,20 +3,20 @@
 		<div class="col-md-12">
 			<div class="pull-left">
 				<h1 id="Title">
-				  Access Management
-				  <small>
-				    Total: {{access.resource.count}}
-				  </small>
+					Access Management
+					<small>
+						Total: {{access.resource.count}}
+					</small>
 				</h1>
 			</div>
 			<div class="pull-right">
 				<br/>
-			  <button type="button" 
-			    class="btn btn-success pull-right" 
-			    ng-disabled="!access.selected" 
-			    ng-click="access.saveChanges()">
-			    Save Changes
-			  </button>
+				<button type="button" 
+					class="btn btn-primary" 
+					ng-disabled="!access.selected" 
+					ng-click="access.saveChanges()">
+					Save Changes
+				</button>
 			</div>
 		</div>
 	</div>	
@@ -24,7 +24,7 @@
 	<hr/>
 	<div class="row">
 		<div class="col-md-3">
-		  <table class="table table-hover">
+			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th>User</th>
@@ -33,17 +33,18 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="row in access.resource.items" 
-						ng-class="{'active': row === access.selected}"
-						ng-click="access.select(row)">
-						<td>{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
-						<td>{{row.role}}</td>
+						ng-class="{'active': row === access.selected}">
+						<td ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
+						<td>
+							<select class="form-control" ng-model="row.role" ng-change="access.updateRole()">
+								<option value="{{role}}" ng-repeat="role in access.roles" ng-selected="row.role === role">{{role}}</option>
+							</select>
+						</td>
 					</tr>
 				</tbody>
 			</table>
-			<pre>{{access.userRoles | json}}</pre>
 		</div>
 		<div class="col-md-9">
-			<pre>{{access.access | json}}</pre>
 			<h4 ng-if="!access.selected">Select a row to set access permissions.</h4>
 			<table class="table table-hover table-bordered table-condensed" ng-if="access.selected">
 				<thead>
@@ -55,12 +56,12 @@
 					<tr ng-repeat="model in ::access.models">
 						<td ng-repeat="action in ::access.actions">
 							<div class="checkbox">
-						    <label>
-						      <input type="checkbox" 
-						      	ng-checked="access.isRoleSet(action, model)"
-						      	ng-click="access.addToAccess(action, model)">{{::action}} {{::model}}
-						    </label>
-						  </div>
+								<label>
+									<input type="checkbox" 
+										ng-checked="access.isRoleSet(action, model)"
+										ng-click="access.addToAccess(action, model)">{{::action}} {{::model}}
+								</label>
+							</div>
 						</td>
 					</tr>
 				</tbody>
