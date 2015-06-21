@@ -153,7 +153,7 @@ describe('The User Controller', function () {
 						globals.users.coordinator2 = collection.items.id;
 						collection.items.username.should.equal('coordinator2');
 						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
-							user.roles.length.should.equal(7);
+							user.roles.length.should.equal(8);
 							done(err);
 						});
 					});
@@ -364,23 +364,18 @@ describe('The User Controller', function () {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
  				agent.attachCookies(req);
 
- 				Role.findOne({ name: 'createStudy' }).then(function (role) {
- 					this.role = role;
- 					return User.findOne(globals.users.coordinatorUserId).populate('roles');
- 				}) 				
+ 				User.findOne(globals.users.coordinatorUserId)
+ 				.populate('roles')
  				.then(function (user) {
- 					var newRoles = _.pluck(user.roles, 'id');
- 					newRoles.push(this.role.id);
- 					console.log(newRoles);
- 					console.log(user);
+ 					var newRoles = _.pluck(user.roles, 'name');
+ 					newRoles.push('createStudy');
  					req.send({
  						roles: newRoles
  					})
  					.expect(200)
  					.end(function (err, res) {
- 						console.log(err);
  						var collection = JSON.parse(res.text);
- 						// console.log(collection);
+ 						_.find(collection.items.roles, {name: 'createStudy'}).should.be.ok;
  						done(err);
  					})
  				});
@@ -438,8 +433,6 @@ describe('The User Controller', function () {
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.id = globals.users.coordinatorUserId;
 						done(err);
 					});
 			});

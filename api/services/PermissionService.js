@@ -58,8 +58,7 @@ _.extend(PermissionService.prototype, {
       return this.user.save();
     })
     .catch(function(err){
-      console.log('grantPermissions');
-      console.log(err);
+      return err;
     });
   },
 
@@ -72,6 +71,7 @@ _.extend(PermissionService.prototype, {
       'readStudy',
       'readSubject',
       'readUser',
+      'readUserOwner',
       'updateUserOwner',
       'createUser',
       'readForm',
@@ -85,6 +85,7 @@ _.extend(PermissionService.prototype, {
       'readStudy',
       'readSubject',
       'readUser',
+      'readUserOwner',
       'updateUserOwner',
       'readForm',
       'createAnswerSet'

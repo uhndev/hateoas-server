@@ -215,7 +215,6 @@ _.merge(exports, {
       res.ok(user);
     })
     .catch(function (err) {
-      console.log(err);
       return res.serverError(err);
     });
   },
