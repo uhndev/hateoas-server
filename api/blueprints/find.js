@@ -49,7 +49,7 @@ module.exports = function findRecords (req, res) {
       break;
     case 'user':
       query.populate('roles');
-      query.populate('person');  
+      query.populate('person');
       break;
     case 'subject': 
       query.populate('user');
@@ -75,64 +75,66 @@ module.exports = function findRecords (req, res) {
       });
     }
 
-    /**
-     * Currently used for: [STUDY]
-     */
-    if (req.model.identity === 'study') {
-      if (req.user.role === 'admin') { // allow all
+    Group.findOne(req.user.group).then(function (group) {
+      /**
+       * Currently used for: [STUDY]
+       */
+      if (req.model.identity === 'study') {
+        if (group.name === 'admin') { // allow all
+          res.ok(matchingRecords);
+        }
+        else if (group.name !== 'admin' && group.name !== 'subject') {
+          return User.findOne(req.user.id) // find specific user's access
+            .then(function(user) {
+              var filteredRecords = _.filter(matchingRecords, function (record) {
+                return _.some(record.collectionCentres, function(centre) {
+                  return _.has(user.centreAccess, centre.id);
+                });
+              });
+              res.ok(filteredRecords);  
+            }).catch(function (err) {
+              res.serverError(err);
+            });
+        }
+        else {
+          return Subject.findOne({user: req.user.id}).populate('collectionCentres')
+            .then(function(user) {
+              var filteredRecords = _.filter(matchingRecords, function (record) {
+                return _.some(record.collectionCentres, function(centre) {
+                  return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
+                });
+              });
+              res.ok(filteredRecords);  
+            }).catch(function (err) {
+              res.serverError(err);
+            });
+        }      
+      } 
+      /**
+       * Currently used for: [USER]
+       */
+      else if (req.model.identity === 'user') {
+        _.map(matchingRecords, function (user) {
+          if (user.person) {
+            _.merge(user, Utils.User.extractPersonFields(user.person));
+            delete user.person;
+          }
+        });
         res.ok(matchingRecords);
       }
-      else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
-        return User.findOne(req.user.id) // find specific user's access
-          .then(function(user) {
-            var filteredRecords = _.filter(matchingRecords, function (record) {
-              return _.some(record.collectionCentres, function(centre) {
-                return _.has(user.centreAccess, centre.id);
-              });
-            });
-            res.ok(filteredRecords);  
-          }).catch(function (err) {
-            res.serverError(err);
-          });
+      /**
+       * Currently used for: [SUBJECT]
+       */
+      else if (req.model.identity === 'subject') {
+        Utils.User.populateSubjects(matchingRecords)
+        .then(function (subjects) {
+          res.ok(subjects);
+        });
       }
       else {
-        return Subject.findOne({user: req.user.id}).populate('collectionCentres')
-          .then(function(user) {
-            var filteredRecords = _.filter(matchingRecords, function (record) {
-              return _.some(record.collectionCentres, function(centre) {
-                return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
-              });
-            });
-            res.ok(filteredRecords);  
-          }).catch(function (err) {
-            res.serverError(err);
-          });
-      }      
-    } 
-    /**
-     * Currently used for: [USER]
-     */
-    else if (req.model.identity === 'user') {
-      _.map(matchingRecords, function (user) {
-        if (user.person) {
-          _.merge(user, Utils.User.extractPersonFields(user.person));
-          delete user.person;
-        }
-      });
-      res.ok(matchingRecords);
-    }
-    /**
-     * Currently used for: [SUBJECT]
-     */
-    else if (req.model.identity === 'subject') {
-      Utils.User.populateSubjects(matchingRecords)
-      .then(function (subjects) {
-        res.ok(subjects);
-      });
-    }
-    else {
-      res.ok(matchingRecords);
-    }
+        res.ok(matchingRecords);
+      }
+    });
   });
 };
 

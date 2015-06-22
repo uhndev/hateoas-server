@@ -26,8 +26,10 @@ module.exports = function findOneRecord (req, res) {
 
   var query = Model.findOne(pk);
 
-  if (req.model.identity === 'study') {
-    query.populate('collectionCentres');
+  switch (req.model.identity) {
+    case 'study': query.populate('collectionCentres'); break;
+    case 'group': query.populate('roles'); break;
+    default: break;
   }
 
   query = actionUtil.populateEach(query, req);
@@ -40,44 +42,52 @@ module.exports = function findOneRecord (req, res) {
       actionUtil.subscribeDeep(req, matchingRecord);
     }
     
-    /**
-     * Currently used for: [STUDY]
-     */
-    if (req.user.role === 'admin') {
-      return res.ok(matchingRecord);
-    }
-    else if (req.user.role !== 'admin' && req.user.role !== 'subject') {
-      return User.findOne(req.user.id)
-        .then(function (user) {
-          if (_.some(matchingRecord.collectionCentres, function(centre) {
-            return !_.isUndefined(user.centreAccess[centre.id]);
-          })) {
-            res.ok(matchingRecord);
-          } else {
-            res.status(403).json({
-              "error": "User "+req.user.email+" is not permitted to GET "
+    Group.findOne(req.user.group).exec(function (err, group) {
+      if (err) res.serverError(err);
+      if (req.model.identity === 'study') {
+        /**
+         * Currently used for: [STUDY]
+         */
+        if (group.name === 'admin') {
+          return res.ok(matchingRecord);
+        }
+        else if (group.name !== 'admin' && group.name !== 'subject') {
+          return User.findOne(req.user.id)
+            .then(function (user) {
+              if (_.some(matchingRecord.collectionCentres, function(centre) {
+                return !_.isUndefined(user.centreAccess[centre.id]);
+              })) {
+                res.ok(matchingRecord);
+              } else {
+                res.status(403).json({
+                  "error": "User "+req.user.email+" is not permitted to GET "
+                });
+              }
+            }).catch(function (err) {
+              res.serverError(err);
+            }); 
+        }
+        else {
+          return Subject.findOne({user: req.user.id}).populate('collectionCentres')
+            .then(function (subject) {
+              if (_.some(matchingRecord.collectionCentres, function(centre) {
+                return _.contains(_.pluck(subject.collectionCentre, 'id'), centre.id);
+              })) {
+                res.ok(matchingRecord);
+              } else {
+                res.status(403).json({
+                  "error": "User "+req.user.email+" is not permitted to GET "
+                });
+              }
+            }).catch(function (err) {
+              res.serverError(err);
             });
-          }
-        }).catch(function (err) {
-          res.serverError(err);
-        }); 
-    }
-    else {
-      return Subject.findOne({user: req.user.id}).populate('collectionCentres')
-        .then(function (subject) {
-          if (_.some(matchingRecord.collectionCentres, function(centre) {
-            return _.contains(_.pluck(subject.collectionCentre, 'id'), centre.id);
-          })) {
-            res.ok(matchingRecord);
-          } else {
-            res.status(403).json({
-              "error": "User "+req.user.email+" is not permitted to GET "
-            });
-          }
-        }).catch(function (err) {
-          res.serverError(err);
-        });
-    }
+        }
+      } else {
+        res.ok(matchingRecord);
+      }
+      
+    });
        
   });
 

@@ -39,8 +39,8 @@
 						<td>
 							<select class="form-control" 
 								ng-disabled="access.selected.id !== row.id"
-								ng-model="row.role" ng-change="access.updateRole()">
-								<option value="{{role}}" ng-repeat="role in access.roles" ng-selected="row.role === role">{{role}}</option>
+								ng-model="row.group" ng-change="access.updateRole()">
+								<option value="{{group.id}}" ng-repeat="group in access.groups" ng-selected="row.group === group.id">{{group.name}}</option>
 							</select>
 						</td>
 					</tr>

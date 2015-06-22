@@ -70,9 +70,17 @@ _.merge(exports, {
         // will available.
         req.session.authenticated = true;
 
-        User.findOne(user.id).populate('roles').populate('person')
+        User.findOne(user.id).populate('roles').populate('person').populate('group')
         .then(function(data) {
-          var resp = _.pick(user, 'id', 'username', 'role');
+          console.log(data);
+          var resp = {
+            id: user.id,
+            username: user.username,
+            group: data.group.name,
+            tabview: data.group.tabview,
+            subview: data.group.subview
+          };
+
           if (data.person) {
             _.merge(resp, Utils.User.extractPersonFields(data.person));
           }

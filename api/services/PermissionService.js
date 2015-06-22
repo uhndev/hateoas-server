@@ -15,21 +15,12 @@ _.extend(PermissionService.prototype, {
    * @return {Object|Promise} user with updated roles, or promise
    */
   setUserRoles: function(user) {
-    var promise;
-    switch (user.role) {
-      case 'admin': 
-        promise = this.grantAdminPermissions(user); break;
-      case 'coordinator': 
-        promise = this.grantCoordinatorPermissions(user); break;
-      case 'physician': 
-        promise = this.grantPhysicianPermissions(user); break;
-      case 'interviewer': 
-        promise = this.grantInterviewerPermissions(user); break;
-      case 'subject': 
-        promise = this.grantSubjectPermissions(user); break;
-      default: break;
-    }
-    return promise;
+    var self = this;
+    var uID = user.group.id || user.group;
+    return Group.findOne(uID).populate('roles')
+      .then(function (group) {
+        return self.grantPermissions(user, group.roles);
+      });    
   },
 
   /**
@@ -47,72 +38,31 @@ _.extend(PermissionService.prototype, {
       });
       return user.save();
     })
-    .then(function (blankUser) {
-      this.user = blankUser;
-      return Role.find({ name: roles });
+    .then(function (user) {
+      /**
+       * Depending on how we're creating or updating this user's roles,
+       * either full roles with ids will be passed through, or simply
+       * an array of role names (i.e. from access matrix page)
+       */
+      if (_.all(roles, function (role) { return _.has(role, 'id'); })) {
+        _.each(roles, function (role) {
+          user.roles.add(role.id);
+        });  
+        return user.save();
+      } 
+      // otherwise, updating from access matrix, will pass role names from frontend
+      else {
+        return Role.find({name: roles}).then(function (foundRoles) {
+          _.each(foundRoles, function (role) {
+            user.roles.add(role.id);
+          });  
+          return user.save();
+        })
+      }
     })
-    .then(function (userRoles) {
-      _.each(userRoles, function (role) {
-        this.user.roles.add(role.id);
-      });
-      return this.user.save();
-    })
-    .catch(function(err){
+    .catch(function(err) {
       return err;
     });
-  },
-
-  grantAdminPermissions: function (user) {
-    return this.grantPermissions(user, ['admin']);
-  },
-
-  grantCoordinatorPermissions: function(user) {
-    var coordinatorRoles = [
-      'readStudy',
-      'readSubject',
-      'readUser',
-      'readUserOwner',
-      'updateUserOwner',
-      'createUser',
-      'readForm',
-      'createAnswerSet'
-    ];
-    return this.grantPermissions(user, coordinatorRoles);
-  },
-
-  grantPhysicianPermissions: function(user) {
-    var physicianRoles = [
-      'readStudy',
-      'readSubject',
-      'readUser',
-      'readUserOwner',
-      'updateUserOwner',
-      'readForm',
-      'createAnswerSet'
-    ];
-    return this.grantPermissions(user, physicianRoles);
-  },
-
-  grantInterviewerPermissions: function(user) {
-    var interviewerRoles = [
-      'readStudy',
-      'readSubject',
-      'readUserOwner',
-      'updateUserOwner',
-      'readForm',
-      'createAnswerSet'
-    ];
-    return this.grantPermissions(user, interviewerRoles);
-  },
-
-  grantSubjectPermissions: function(user) {
-    var subjectRoles = [
-      'readStudy',
-      'readUserOwner',
-      'readForm',
-      'createAnswerSet'
-    ];
-    return this.grantPermissions(user, subjectRoles);
   }
   
 });

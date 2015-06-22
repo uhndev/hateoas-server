@@ -118,40 +118,21 @@
       },
       {
         "field_id": 7,
-        "field_name": "role",
-        "field_title": "Role",
-        "field_type": "dropdown",
+        "field_name": "group",
+        "field_title": "Group",
+        "field_type": "singleselect",
         "field_value": "",
-        "field_placeholder": "Select a role",
+        "field_placeholder": "Select a group",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
         "field_helpertext": "missing input or invalid",
-        "field_hasOptions": true,
+        "field_hasItem": true,
         "field_required": true,
-        "field_options": [
-          {
-            "option_id": 1,
-            "option_title": "Admin",
-            "option_value": "admin"
-          },
-          {
-            "option_id": 2,
-            "option_title": "Coordinator",
-            "option_value": "coordinator"
-          },
-          {
-            "option_id": 3,
-            "option_title": "Physician",
-            "option_value": "physician"
-          },          
-          {
-            "option_id": 4,
-            "option_title": "Interviewer",
-            "option_value": "interviewer"
-          }
-        ]
+        "field_prependURL": false,
+        "field_userURL": "group",
+        "field_labels": "name"
       }
 		]
 	},

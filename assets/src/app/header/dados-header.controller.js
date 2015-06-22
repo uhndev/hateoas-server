@@ -5,10 +5,10 @@
 		.controller('HeaderController', HeaderController);
 
 	HeaderController.$inject = [
-		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW', 'SUBVIEW'
+		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API'
 	];
 
-	function HeaderController($scope, $location, $state, $rootScope, AuthService, API, TABVIEW, SUBVIEW) {
+	function HeaderController($scope, $location, $state, $rootScope, AuthService, API) {
 		
 		var vm = this;
 
@@ -42,9 +42,8 @@
 
 		function updateHeader() {
 			if (AuthService.currentRole) {
-				var view = AuthService.currentRole.toString().toUpperCase();
-				if (TABVIEW[view] !== vm.navigation) {
-					vm.navigation = TABVIEW[view];
+				if (AuthService.tabview !== vm.navigation) {
+					vm.navigation = AuthService.tabview;
 				}        
 			}
 

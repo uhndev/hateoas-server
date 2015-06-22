@@ -24,7 +24,7 @@ var Auth = {
         username: 'subject',
         email: 'subject@example.com',
         password: 'subject1234',
-        role: 'subject',
+        group: 'subject',
         prefix: 'Mr.',
         firstname: 'Sub',
         lastname: 'Ject'
@@ -39,7 +39,7 @@ var Auth = {
         username: 'interviewer',
         email: 'interviewer@example.com',
         password: 'interviewer1234',
-        role: 'interviewer',
+        group: 'interviewer',
         prefix: 'Mr.',
         firstname: 'Inter',
         lastname: 'Viewer'
@@ -54,7 +54,7 @@ var Auth = {
         username: 'coordinator',
         email: 'coordinator@example.com',
         password: 'coordinator1234',
-        role: 'coordinator',
+        group: 'coordinator',
         prefix: 'Dr.',
         firstname: 'Coord',
         lastname: 'Inator'
@@ -69,7 +69,7 @@ var Auth = {
         username: 'admin',
         email: 'admin@example.com',
         password: 'admin1234',
-        role: 'admin',
+        group: 'admin',
         prefix: 'Dr.',
         firstname: 'John',
         lastname: 'Admin'
@@ -83,13 +83,17 @@ var Auth = {
 
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
-      var req = request.post('/api/user');
-      agent.attachCookies(req);
-      req.send(credentials)
-      .expect(201)
-      .end(function(err, res) {
-        done(JSON.parse(res.text).items.id);
-      });
+      Group.findOneByName(credentials.group).then(function (group) {
+        delete credentials.group;
+        credentials.group = group.id;
+        var req = request.post('/api/user');
+        agent.attachCookies(req);
+        req.send(credentials)
+        .expect(201)
+        .end(function(err, res) {
+          done(JSON.parse(res.text).items.id);
+        });
+      });      
     });    
   },
 

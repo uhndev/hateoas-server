@@ -1,12 +1,12 @@
 (function() {
   'use strict';
   angular
-    .module('dados.access', ['dados.role.service', 'dados.user.service'])
+    .module('dados.access', ['dados.group.service', 'dados.user.service'])
     .controller('AccessController', AccessController);
   
-  AccessController.$inject = ['$resource', 'toastr', 'RoleService', 'UserService', 'API'];
+  AccessController.$inject = ['$resource', 'toastr', 'GroupService', 'UserService', 'API'];
 
-  function AccessController($resource, toastr, Role, User, API) {
+  function AccessController($resource, toastr, Group, User, API) {
     var vm = this;
 
     // bindable variables
@@ -17,7 +17,7 @@
     vm.adminSelected = false;
 
     vm.actions = ['create', 'read', 'update', 'delete'];
-    vm.roles = ['admin', 'coordinator', 'physician', 'interviewer'];
+    vm.groups = [];
     vm.models = [];
     vm.masterRoles = [];
     vm.access = [];
@@ -38,20 +38,26 @@
      * Private Methods
      */
     function init() {
-      $resource(API.url() + '/model').get(function (data) {
-        vm.models = _.pluck(data.items, 'name');
-        vm.models.push('UserOwner');
-        _.each(vm.actions, function (action) {
-          _.each(vm.models, function (model) {
-            vm.masterRoles.push(action + model);
-          });          
-        });
+      // load groups
+      $resource(API.url() + '/group').get(function (data) {
+        vm.groups = data.items;
+        // load models
+        $resource(API.url() + '/model').get(function (data) {
+          vm.models = _.pluck(data.items, 'name');
+          vm.models.push('UserOwner');
+          _.each(vm.actions, function (action) {
+            _.each(vm.models, function (model) {
+              vm.masterRoles.push(action + model);
+            });          
+          });
 
-        User.get(function(data, headers) {
-          vm.allow = headers('allow');
-          vm.template = data.template;
-          vm.resource = angular.copy(data);
-        });
+          // load users
+          User.get(function(data, headers) {
+            vm.allow = headers('allow');
+            vm.template = data.template;
+            vm.resource = angular.copy(data);
+          });
+        });        
       });      
     }
 
@@ -99,16 +105,16 @@
       vm.access = _.without(vm.access, permission);
     }
 
-    function updateRole() {
+    function updateRole(item) {
       var user = new User({
-        'updateRole': vm.selected.role
+        'updateGroup': vm.selected.group
       });
       user.$update({ id: vm.selected.id })
       .then(function(user) {
         init();
         clearUser();
-        toastr.success('Updated user role!', 'Access');
-      });      
+        toastr.success('Updated user group!', 'Access');
+      });
     }
 
     function saveChanges() {

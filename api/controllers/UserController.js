@@ -25,6 +25,7 @@ _.merge(exports, {
         _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
         delete matchingRecord.person;
       }
+
       res.ok(matchingRecord);
     });    
   },
@@ -42,7 +43,7 @@ _.merge(exports, {
       User.create({
         username: req.param('username'),
         email: req.param('email'),
-        role: req.param('role'),
+        group: req.param('group'),
         person: person.id
       }).exec(function (uerr, user) {
         if (uerr || !user) {
@@ -91,34 +92,37 @@ _.merge(exports, {
 
     // access control params
     var roles = req.param('roles'),
-        updateRole = req.param('updateRole');
-
-    var accessFields = {
-      centreAccess: req.param('centreAccess'),
-      swapWith: req.param('swapWith'),
-      isAdding: req.param('isAdding'),
-      collectionCentres: req.param('collectionCentres')
-    };
+        updateGroup = req.param('updateGroup'),
+        accessFields = {
+          centreAccess: req.param('centreAccess'),
+          swapWith: req.param('swapWith'),
+          isAdding: req.param('isAdding'),
+          collectionCentres: req.param('collectionCentres')
+        };
 
     var userFields = {
       username: req.param('username'),
       email: req.param('email'),
-      role: req.param('role'),
+      group: req.param('group'),
       centreAccess: req.param('centreAccess')
     };
 
-    if (req.user.role !== 'admin') {
-      delete userFields.role;
-    }
+    var promise = Group.findOne(req.user.group).then(function (group) {
+      this.group = group;
+      if (group.name !== 'admin') {
+        delete userFields.group;
+      }
+    });
 
-    var promise;
     /**
      * Update user and person model
      */
-    if (userFields.username || userFields.email || userFields.role) {
-      promise = User.findOne(userId).populate('roles')
+    if (userFields.username || userFields.email || userFields.group) {
+      promise.then(function () {
+        return User.findOne(userId).populate('roles');
+      })
       .then(function (user) {
-        this.previousRole = user.role;
+        this.previousGroup = user.group;
         return User.update({id: user.id}, userFields);
       })
       .then(function (user) { // find and update user's associated passport
@@ -146,43 +150,59 @@ _.merge(exports, {
         }
         return this.user;      
       })
-      .then(function (user) { // updating role, apply new permissions
-        if (this.previousRole !== userFields.role && req.user.role === 'admin') {
+      .then(function (user) { // updating group, apply new permissions
+        if (this.previousGroup !== userFields.group && this.group.name === 'admin') {
           return PermissionService.setUserRoles(_.first(user));
-        }
-        return user;
-      });
+        } else {
+          return user;  
+        }        
+      })
+      .then(function (user) {
+        res.ok(user);
+      });      
     }
     /**
      * Update user role from access management
      */
-    else if (!_.isUndefined(updateRole)) {
-      promise = User.findOne(userId).populate('roles')
+    else if (!_.isUndefined(updateGroup)) {
+      promise.then(function () {
+        return User.findOne(userId).populate('roles');
+      })
       .then(function (user) {
-        user.role = updateRole;
+        user.group = updateGroup;
         return user.save();
       })
       .then(function (user) {
         return PermissionService.setUserRoles(user);
-      });
+      })
+      .then(function (user) {
+        res.ok(user);
+      });      
     }
     /**
      * Update user access matrix
      */
     else if (!_.isUndefined(roles)) {
-      promise = User.findOne(userId)
+      promise.then(function () {
+        return User.findOne(userId);
+      })
       .then(function (user) {
         return PermissionService.grantPermissions(user, roles);
-      });
+      })
+      .then(function (user) {
+        res.ok(user);
+      });      
     }
     /**
      * Update user collection centre access
      */
     else {
-      promise = User.findOne(userId).populate('collectionCentres')
+      promise.then(function () {
+        return User.findOne(userId).populate('collectionCentres');
+      })
       .then(function (user) { // update user's collection centre access
         this.user = user;
-        if (req.user.role === 'admin') {
+        if (this.group.name === 'admin') {
           if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
             _.each(accessFields.collectionCentres, function (centre) {
               if (accessFields.isAdding) {
@@ -204,17 +224,17 @@ _.merge(exports, {
         return this.user;
       })
       .then(function (user) {        
-        if (req.user.role === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
+        if (this.group.name === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
           return User.update(userId, { centreAccess: accessFields.centreAccess });
         }
         return this.user;
-      });      
+      })
+      .then(function (user) {
+        res.ok(user);
+      });
     }    
     
-    promise.then(function (user) {
-      res.ok(user);
-    })
-    .catch(function (err) {
+    promise.catch(function (err) {
       return res.serverError(err);
     });
   },

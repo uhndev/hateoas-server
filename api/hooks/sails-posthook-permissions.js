@@ -8,8 +8,9 @@ module.exports = function (sails) {
           .then(function (count) {
             if (count == sails.models.length) return next();
             initializeRoles()
+              .then(initializeGroups)
               .then(checkAdminUser)
-              .then(initializePermissions)
+              .then(initializePermissions)              
               .then(next);
           })
           .catch(function (error) {
@@ -38,9 +39,12 @@ function checkAdminUser() {
   return User.findOne({ email: sails.config.permissions.adminEmail })
     .then(function (user) {
       if (_.isUndefined(user.role)) {
-        return User.update({ id: user.id }, {
-          role: 'admin'
-        });
+        return Group.findOneByName('admin')
+          .then(function (group) {
+            return User.update({ id: user.id }, {
+              group: group.id
+            });
+          });        
       } else {
         return user;
       }      
@@ -85,3 +89,30 @@ function initializePermissions () {
       sails.log.error(error);
     });
 }
+
+/**
+ * Creates default groups with their own specific roles
+ * @return {Array} groups
+ */
+function initializeGroups () {
+  return Model.find()
+    .then(function (models) {
+      this.models = models;
+      return Role.find();
+    })
+    .then(function (roles) {
+      this.roles = roles;
+      return User.findOne({ email: sails.config.permissions.adminEmail });
+    })
+    .then(function (admin) {
+      sails.log('setting additional groups');
+      return require('../../config/fixtures/groups').create(this.roles, this.models, admin);
+    })
+    .then(function (groups) {
+      return null;
+    })
+    .catch(function (error) {
+      sails.log.error(error);
+    });
+}
+

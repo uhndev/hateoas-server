@@ -107,10 +107,7 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].username.should.equal('admin');
-						collection.items[1].username.should.equal('subject');																		
-						collection.items[2].username.should.equal('coordinator');
-						collection.items[3].username.should.equal('interviewer');
+						collection.items.length.should.equal(4);
 						done(err);
 					});
 			});
@@ -142,7 +139,7 @@ describe('The User Controller', function () {
 						username: 'coordinator2',
 						email: 'coordinator2@example.com',
 						password: 'coordinator21234',
-						role: 'coordinator',
+						group: globals.groups.coordinator,
 						prefix: 'Ms.',
 						firstname: 'Coord',
 						lastname: 'Inator'
@@ -159,7 +156,7 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should return bad request if missing role', function (done) {
+			it('should return bad request if missing group', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -188,7 +185,7 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should return bad request if given role DNE', function (done) {
+			it('should return bad request if given group DNE', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -196,7 +193,7 @@ describe('The User Controller', function () {
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
-						role: 'qwerty',
+						group: 12345,
 						prefix: 'Mrs.',
 						firstname: 'Qwer',
 						lastname: 'Ty'
@@ -540,7 +537,7 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						role: 'interviewer'
+						group: globals.groups.interviewer
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -643,11 +640,10 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						role: 'subject'
+						group: globals.groups.subject
 					})
 					.expect(400)
 					.end(function (err, res) {
-						// var user = res.body;
 						var collection = JSON.parse(res.text);
 						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
