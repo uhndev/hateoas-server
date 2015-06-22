@@ -20,6 +20,7 @@
                       $resource, $cookieStore, ipCookie) {
     
     var LoginAuth = $resource(Auth.LOGIN_API);
+    var self = this;
 
     this.isAuthenticated = function() {
       var auth = Boolean(ipCookie('user'));
@@ -35,20 +36,23 @@
       ipCookie.remove('user');
       delete this.currentUser;
       delete this.currentRole;      
+      delete this.tabview;
+      delete this.subview;
       $rootScope.$broadcast("events.unauthorized");
       $location.url('/login');
     };
 
     this.setAuthenticated = function() {
       this.currentUser = ipCookie('user');
-      this.currentRole = ipCookie('user').role;
+      this.currentRole = ipCookie('user').group;
+      this.tabview = ipCookie('user').tabview;
+      this.subview = ipCookie('user').subview;
       $rootScope.$broadcast("events.authorized");
     };
 
     this.getRoleLinks = function(links) {
-      var view = this.currentRole.toString().toUpperCase();
       return _.filter(links, function(link) {
-        return _.contains(SUBVIEW[view], link.rel);
+        return _.contains(self.subview, link.rel);
       });
     };
 

@@ -65,16 +65,7 @@
 									</select-loader>
 								</td>
 								<td>{{row.name}}</td>
-								<td>
-									<select-loader
-										url="role"
-										is-atomic="true"
-										is-disabled="true"
-										values="user.centreAccess[row.id]"
-										labels="name"
-										output-properties="id">
-									</select-loader>									
-								</td>
+								<td>{{user.centreAccess[row.id]}}</td>
 							</tr>
 						</tbody>
 					</table>
