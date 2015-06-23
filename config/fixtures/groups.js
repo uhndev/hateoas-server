@@ -54,10 +54,12 @@ exports.create = function (roles, models, admin) {
       roles: _.pluck(roles, 'id'),
       tabview: [
         { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
-        { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
-        { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
-        { prompt: 'Access Management', href: '/access', icon: 'fa-cog'}
+        { prompt: 'User Manager', href: '/user', icon: 'fa-user' },        
+        { prompt: 'Tools', icon: 'fa-cog', dropdown: [
+          { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
+          { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
+          { prompt: 'Access Management', href: '/access', icon: 'fa-cog'}
+        ]}
       ],
       subview: [ 'overview', 'subject', 'user', 'form', 'survey', 'collectioncentre' ]
     },

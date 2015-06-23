@@ -1,7 +1,7 @@
 (function() {
 	'use strict';	
 	angular
-		.module('dados.header.controller', [])
+		.module('dados.header.controller', ['ui.bootstrap'])
 		.controller('HeaderController', HeaderController);
 
 	HeaderController.$inject = [
@@ -63,8 +63,13 @@
 			_.each(vm.navigation, function(link) {
 				var pathArr = _.pathnameToArray(href);
 				var comparator = (pathArr.length >= 2) ? '/' + _.first(pathArr) : href;
-				link.isActive = 
-					(comparator.toLowerCase() === link.href.toLowerCase());
+				if (link.dropdown) {
+					_.each(link.dropdown, function(droplink) {
+						droplink.isActive = (comparator.toLowerCase() === droplink.href.toLowerCase());
+					});
+				} else {
+					link.isActive = (comparator.toLowerCase() === link.href.toLowerCase());
+				}				
 			});
 
 			_.each(vm.submenu.links, function(link) {
