@@ -1,7 +1,10 @@
 (function() {
   'use strict';
   angular
-    .module('dados.access', ['dados.group.service', 'dados.user.service'])
+    .module('dados.access', [
+      'dados.group.service', 
+      'dados.user.service'
+    ])
     .controller('AccessController', AccessController);
   
   AccessController.$inject = ['$resource', 'toastr', 'GroupService', 'UserService', 'API'];
@@ -14,7 +17,6 @@
     vm.template = {};
     vm.resource = {};
     vm.selected = null;
-    vm.adminSelected = false;
 
     vm.actions = ['create', 'read', 'update', 'delete'];
     vm.groups = [];
@@ -63,8 +65,11 @@
     }
 
     function loadUser(item) {
-      vm.adminSelected = _.first(item.roles).name === 'admin';
-      vm.access = _.pluck(item.roles, 'name');
+      if (!_.isUndefined(_.find(item.roles, { name: 'admin' }))) {
+        vm.access = vm.masterRoles;
+      } else {
+        vm.access = _.pluck(item.roles, 'name');  
+      }      
     }
 
     function clearUser() {
@@ -85,12 +90,8 @@
     }
 
     function isRoleSet(action, model) {
-      if (vm.adminSelected) {
-        return true;
-      } else {
-        var role = action.toString() + model.toString();
-        return _.contains(vm.access, role);
-      }
+      var role = action.toString() + model.toString();
+      return _.contains(vm.access, role);
     }
 
     function addToAccess(action, model) {
