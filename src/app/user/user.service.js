@@ -8,10 +8,25 @@
 	UserService.$inject = ['$resource', 'USER_API'];
 
 	function UserService($resource, USER_API) {
-		return $resource(USER_API.url, {}, {
-			'update': {
-				method: 'PUT'
-			}
-		});
+
+		return {
+			base: function() {
+				return $resource(USER_API.url, {}, {
+					'update': { method: 'PUT' }
+				});
+			},
+
+			access: function() {
+				return $resource(USER_API.url + '/access', {}, {
+					'update': { method: 'PUT' }
+				});				
+			},
+
+			roles: function() {
+				return $resource(USER_API.url + '/roles', {}, {
+					'update': { method: 'PUT' }
+				});				
+			}			
+		};
 	}
 })();

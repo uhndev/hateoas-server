@@ -35,7 +35,8 @@
 				// merge existing centreAccess with new attributes
 				_.extend(access, data.items.centreAccess);
 
-				var user = new User({
+				var UserResource = User.access();
+				var user = new UserResource({
 					'centreAccess': access,
 					'isAdding': true,
 					'collectionCentres': vm.newUser.collectioncentre
