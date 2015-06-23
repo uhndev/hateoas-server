@@ -2,14 +2,15 @@
   'use strict';
   angular
     .module('dados.access', [
-      'dados.group.service', 
+      'toastr',
+      'dados.access.service', 
       'dados.user.service'
     ])
     .controller('AccessController', AccessController);
   
-  AccessController.$inject = ['$resource', 'toastr', 'GroupService', 'UserService', 'API'];
+  AccessController.$inject = ['toastr', 'GroupService', 'ModelService', 'UserService', 'UserRoles'];
 
-  function AccessController($resource, toastr, Group, User, API) {
+  function AccessController(toastr, Group, Model, User, UserRoles) {
     var vm = this;
 
     // bindable variables
@@ -41,10 +42,12 @@
      */
     function init() {
       // load groups
-      $resource(API.url() + '/group').get(function (data) {
+      Group.get(function (data) {
+        console.log('load data:');
+        console.log(data);
         vm.groups = data.items;
         // load models
-        $resource(API.url() + '/model').get(function (data) {
+        Model.get(function (data) {
           vm.models = _.pluck(data.items, 'name');
           vm.models.push('UserOwner');
           _.each(vm.actions, function (action) {
@@ -54,8 +57,7 @@
           });
 
           // load users
-          var UserResource = User.base();
-          UserResource.get(function(data, headers) {
+          User.get(function(data, headers) {
             vm.allow = headers('allow');
             vm.template = data.template;
             vm.resource = angular.copy(data);
@@ -108,8 +110,7 @@
     }
 
     function updateRole(item) {
-      var UserResource = User.roles();
-      var user = new UserResource({
+      var user = new UserRoles({
         'updateGroup': vm.selected.group
       });
       user.$update({ id: vm.selected.id })
@@ -121,8 +122,7 @@
     }
 
     function saveChanges() {
-      var UserResource = User.roles();
-      var user = new UserResource({
+      var user = new UserRoles({
         'roles': vm.access
       });
       user.$update({ id: vm.selected.id })

@@ -11,11 +11,11 @@
 	
 	StudyUserController.$inject = [
 		'$scope', '$q', '$resource', '$location', '$modal', 'AuthService', 'ngTableParams', 
-		'sailsNgTable', 'CollectionCentreService', 'UserService', 'toastr', 'API'
+		'sailsNgTable', 'CollectionCentreService', 'UserAccess', 'toastr', 'API'
 	];
 	
 	function StudyUserController($scope, $q, $resource, $location, $modal, AuthService, TableParams, 
-																SailsNgTable, CollectionCentre, User, toastr, API) {
+																SailsNgTable, CollectionCentre, UserAccess, toastr, API) {
 		
 		var vm = this;
 		var savedAccess = {};
@@ -187,8 +187,7 @@
 						req.collectionCentres = diff;
 					}
 					
-					var UserResource = User.access();
-					var user = new UserResource(req);
+					var user = new UserAccess(req);
 					return user.$update({ id: item.id });
 				}
 				
