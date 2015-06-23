@@ -186,8 +186,9 @@
 						req.isAdding = isAdding;
 						req.collectionCentres = diff;
 					}
-						
-					var user = new User(req);
+					
+					var UserResource = User.access();
+					var user = new UserResource(req);
 					return user.$update({ id: item.id });
 				}
 				

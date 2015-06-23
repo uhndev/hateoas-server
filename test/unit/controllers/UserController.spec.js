@@ -207,7 +207,7 @@ describe('The User Controller', function () {
 
  		describe('update()', function () {
  			it('should be able to add a user to a collection centre with a role', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
  				var obj = {};
  				obj[cc2Id] = 'interviewer';
@@ -226,7 +226,7 @@ describe('The User Controller', function () {
  			});
 
  			it('should be able to add a user in a collection centre in another study', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
  				var obj = {};
  				obj[cc2Id] = 'interviewer';
@@ -244,7 +244,7 @@ describe('The User Controller', function () {
  			});
 
  			it('should retain its existing centreAccess after updating new access', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
@@ -273,7 +273,7 @@ describe('The User Controller', function () {
  			});
  			
  			it('should be able to update a user\'s role in a collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
@@ -300,7 +300,7 @@ describe('The User Controller', function () {
  			});
 
  			it('should be able to switch a user\'s collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
@@ -331,7 +331,7 @@ describe('The User Controller', function () {
  			});
 
  			it('should remove the user\'s access if selected none collection centres', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
@@ -358,7 +358,7 @@ describe('The User Controller', function () {
  			});
 
  			it('should update a user\'s roles from access management', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/roles');
  				agent.attachCookies(req);
 
  				User.findOne(globals.users.coordinatorUserId)

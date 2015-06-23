@@ -13,6 +13,10 @@ module.exports = {
   		required: true,
   		unique: true
   	},
+  	users: {
+  		collection: 'user',
+  		via: 'group'
+  	},
   	roles: {
   		collection: 'role',
   		via: 'groups'

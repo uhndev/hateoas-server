@@ -38,7 +38,7 @@ function initializeRoles () {
 function checkAdminUser() {
   return User.findOne({ email: sails.config.permissions.adminEmail })
     .then(function (user) {
-      if (_.isUndefined(user.role)) {
+      if (_.isUndefined(user.group)) {
         return Group.findOneByName('admin')
           .then(function (group) {
             return User.update({ id: user.id }, {

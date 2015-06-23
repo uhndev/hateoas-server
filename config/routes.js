@@ -52,7 +52,10 @@ module.exports.routes = {
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
-
+  'put /api/user/:id'              : 'UserController.update',
+  'put /api/user/:id/access'       : 'UserController.updateAccess',
+  'put /api/user/:id/roles'        : 'UserController.updateRoles'
+  
   /***************************************************************************
   * Collection Centre Routes                                                 *
   ****************************************************************************/

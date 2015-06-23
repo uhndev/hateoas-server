@@ -52,7 +52,8 @@
           });
 
           // load users
-          User.get(function(data, headers) {
+          var UserResource = User.base();
+          UserResource.get(function(data, headers) {
             vm.allow = headers('allow');
             vm.template = data.template;
             vm.resource = angular.copy(data);
@@ -106,7 +107,8 @@
     }
 
     function updateRole(item) {
-      var user = new User({
+      var UserResource = User.roles();
+      var user = new UserResource({
         'updateGroup': vm.selected.group
       });
       user.$update({ id: vm.selected.id })
@@ -118,7 +120,8 @@
     }
 
     function saveChanges() {
-      var user = new User({
+      var UserResource = User.roles();
+      var user = new UserResource({
         'roles': vm.access
       });
       user.$update({ id: vm.selected.id })

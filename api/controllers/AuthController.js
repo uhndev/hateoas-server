@@ -72,7 +72,6 @@ _.merge(exports, {
 
         User.findOne(user.id).populate('roles').populate('person').populate('group')
         .then(function(data) {
-          console.log(data);
           var resp = {
             id: user.id,
             username: user.username,

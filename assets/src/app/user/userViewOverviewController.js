@@ -9,10 +9,10 @@
     .controller('UserOverviewController', UserOverviewController);
   
   UserOverviewController.$inject = [
-    '$scope', '$resource', '$location', 'UserService', 'toastr', 'API'
+    '$scope', '$resource', '$location', 'toastr', 'API'
   ];
   
-  function UserOverviewController($scope, $resource, $location, UserAccess, toastr, API) {
+  function UserOverviewController($scope, $resource, $location, toastr, API) {
     var vm = this;
 
     // bindable variables

@@ -106,7 +106,7 @@ var self = {
     populateUsers: function populateUsers(users) {
       return Q.all(
         _.map(users, function (user) {
-          return User.findOne(user.id).populate('person').populate('roles')
+          return User.findOne(user.id).populate('person')
             .then(function (popUser) {
               return _.merge(user, popUser);
             })
@@ -116,10 +116,6 @@ var self = {
           if (user.person) {
             _.merge(user, self.User.extractPersonFields(user.person));
             delete user.person;
-          }
-          if (user.roles) {
-            user.role = _.first(user.roles).id;
-            delete user.roles;
           }
         });
         return users;  

@@ -86,19 +86,13 @@ _.merge(exports, {
     });
   },
 
+  /**
+   * [update]
+   * Route for handling update of user/person attributes     
+   */
   update: function (req, res) {
     // user params
     var userId = req.param('id');
-
-    // access control params
-    var roles = req.param('roles'),
-        updateGroup = req.param('updateGroup'),
-        accessFields = {
-          centreAccess: req.param('centreAccess'),
-          swapWith: req.param('swapWith'),
-          isAdding: req.param('isAdding'),
-          collectionCentres: req.param('collectionCentres')
-        };
 
     var userFields = {
       username: req.param('username'),
@@ -107,67 +101,130 @@ _.merge(exports, {
       centreAccess: req.param('centreAccess')
     };
 
-    var promise = Group.findOne(req.user.group).then(function (group) {
+    Group.findOne(req.user.group).then(function (group) {
       this.group = group;
       if (group.name !== 'admin') {
         delete userFields.group;
       }
+      return User.findOne(userId).populate('roles');
+    })
+    .then(function (user) {
+      this.previousGroup = user.group;
+      return User.update({id: user.id}, userFields);
+    })
+    .then(function (user) { // find and update user's associated passport
+      this.user = user;
+      if (!_.isEmpty(req.param('password'))) {
+        return Passport.findOne({ user : userId }).then(function (passport) {
+          return Passport.update(passport.id, { password : req.param('password') });
+        });
+      }
+    })
+    .then(function (passport) { // update user's associated person
+      var personFields = {
+        prefix: req.param('prefix'),
+        firstname: req.param('firstname'),
+        lastname: req.param('lastname')
+      };
+      if (personFields.prefix || personFields.firstname || personFields.lastname) {
+        if (!_.has(this.user, 'person')) {
+          return Person.create(personFields).then(function (person) {
+            return User.update(userId, { person: person.id });
+          });
+        } else {
+          return Person.update(this.user.person, personFields);
+        }  
+      }
+      return this.user;      
+    })
+    .then(function (user) { // updating group, apply new permissions
+      if (this.previousGroup !== userFields.group && this.group.name === 'admin') {
+        return PermissionService.setUserRoles(_.first(user));
+      } else {
+        return user;  
+      }        
+    })
+    .then(function (user) {
+      res.ok(user);
+    })
+    .catch(function (err) {
+      res.serverError(err);
     });
+  },
+
+  /**
+   * [updateAccess]
+   * Route for handling collection centre access from study users page
+   */
+  updateAccess: function (req, res, next) {
+    // user params
+    var userId = req.param('id');
+
+    // access control params
+    var accessFields = {
+      centreAccess: req.param('centreAccess'),
+      swapWith: req.param('swapWith'),
+      isAdding: req.param('isAdding'),
+      collectionCentres: req.param('collectionCentres')
+    };
+
+    Group.findOne(req.user.group).then(function (group) {
+      this.group = group;
+      return User.findOne(userId).populate('collectionCentres');
+    })
+    .then(function (user) { // update user's collection centre access
+      this.user = user;
+      if (this.group.name === 'admin') {
+        if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
+          _.each(accessFields.collectionCentres, function (centre) {
+            if (accessFields.isAdding) {
+              this.user.collectionCentres.add(centre);  
+            } else {
+              this.user.collectionCentres.remove(centre);
+            }          
+          });
+
+          // if swapping centres, isAdding flag will be false so after removing, add in new centres
+          if (accessFields.swapWith && accessFields.swapWith.length > 0) {
+            _.each(accessFields.swapWith, function (centre) {
+              this.user.collectionCentres.add(centre);       
+            });
+          }
+          return this.user.save();
+        }
+      }      
+      return this.user;
+    })
+    .then(function (user) {        
+      if (this.group.name === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
+        return User.update(userId, { centreAccess: accessFields.centreAccess });
+      }
+      return this.user;
+    })
+    .then(function (user) {
+      res.ok(user);
+    })
+    .catch(function (err) {
+      res.serverError(err);
+    });
+  },
+
+  /**
+   * [updateRoles]
+   * Route for handling role updates from access management page       
+   */
+  updateRoles: function (req, res, next) {
+    // user params
+    var userId = req.param('id');
+    // access control params
+    var roles = req.param('roles'),
+        updateGroup = req.param('updateGroup');
 
     /**
-     * Update user and person model
-     */
-    if (userFields.username || userFields.email || userFields.group) {
-      promise.then(function () {
-        return User.findOne(userId).populate('roles');
-      })
-      .then(function (user) {
-        this.previousGroup = user.group;
-        return User.update({id: user.id}, userFields);
-      })
-      .then(function (user) { // find and update user's associated passport
-        this.user = user;
-        if (!_.isEmpty(req.param('password'))) {
-          return Passport.findOne({ user : userId }).then(function (passport) {
-            return Passport.update(passport.id, { password : req.param('password') });
-          });
-        }
-      })
-      .then(function (passport) { // update user's associated person
-        var personFields = {
-          prefix: req.param('prefix'),
-          firstname: req.param('firstname'),
-          lastname: req.param('lastname')
-        };
-        if (personFields.prefix || personFields.firstname || personFields.lastname) {
-          if (!_.has(this.user, 'person')) {
-            return Person.create(personFields).then(function (person) {
-              return User.update(userId, { person: person.id });
-            });
-          } else {
-            return Person.update(this.user.person, personFields);
-          }  
-        }
-        return this.user;      
-      })
-      .then(function (user) { // updating group, apply new permissions
-        if (this.previousGroup !== userFields.group && this.group.name === 'admin') {
-          return PermissionService.setUserRoles(_.first(user));
-        } else {
-          return user;  
-        }        
-      })
-      .then(function (user) {
-        res.ok(user);
-      });      
-    }
-    /**
-     * Update user role from access management
-     */
-    else if (!_.isUndefined(updateGroup)) {
-      promise.then(function () {
-        return User.findOne(userId).populate('roles');
-      })
+    * Update user role from access management
+    */    
+    if (!_.isUndefined(updateGroup)) {
+      return User.findOne(userId).populate('roles')
       .then(function (user) {
         user.group = updateGroup;
         return user.save();
@@ -177,66 +234,26 @@ _.merge(exports, {
       })
       .then(function (user) {
         res.ok(user);
-      });      
+      })
+      .catch(function (err) {
+        res.serverError(err);
+      });
     }
     /**
      * Update user access matrix
      */
     else if (!_.isUndefined(roles)) {
-      promise.then(function () {
-        return User.findOne(userId);
-      })
+      return User.findOne(userId)
       .then(function (user) {
         return PermissionService.grantPermissions(user, roles);
       })
       .then(function (user) {
         res.ok(user);
-      });      
-    }
-    /**
-     * Update user collection centre access
-     */
-    else {
-      promise.then(function () {
-        return User.findOne(userId).populate('collectionCentres');
       })
-      .then(function (user) { // update user's collection centre access
-        this.user = user;
-        if (this.group.name === 'admin') {
-          if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
-            _.each(accessFields.collectionCentres, function (centre) {
-              if (accessFields.isAdding) {
-                this.user.collectionCentres.add(centre);  
-              } else {
-                this.user.collectionCentres.remove(centre);
-              }          
-            });
-
-            // if swapping centres, isAdding flag will be false so after removing, add in new centres
-            if (accessFields.swapWith && accessFields.swapWith.length > 0) {
-              _.each(accessFields.swapWith, function (centre) {
-                this.user.collectionCentres.add(centre);       
-              });
-            }
-            return this.user.save();
-          }
-        }      
-        return this.user;
-      })
-      .then(function (user) {        
-        if (this.group.name === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
-          return User.update(userId, { centreAccess: accessFields.centreAccess });
-        }
-        return this.user;
-      })
-      .then(function (user) {
-        res.ok(user);
+      .catch(function (err) {
+        res.serverError(err);
       });
-    }    
-    
-    promise.catch(function (err) {
-      return res.serverError(err);
-    });
+    }
   },
 
   findByStudyName: function(req, res) {

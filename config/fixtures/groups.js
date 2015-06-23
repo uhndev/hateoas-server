@@ -101,7 +101,7 @@ exports.create = function (roles, models, admin) {
 
   return Promise.all(
     _.map(groups, function (group) {
-      return Group.findOrCreate(group, group);
+      return Group.findOrCreate({ name: group.name }, group);
     })
   ); 
 };
