@@ -4,7 +4,6 @@
   angular
     .module('dados.auth.service', [
       'ngCookies',
-      'ipCookie',
       'ngResource',
       'dados.auth.constants',
       'dados.header.constants'
@@ -12,18 +11,16 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', '$rootScope', '$location', 'SUBVIEW',
-    '$resource', '$cookieStore', 'ipCookie'
+    'AUTH_API', '$rootScope', '$location', '$resource', '$cookieStore', 'TABVIEW', 'SUBVIEW'
   ]; 
 
-  function AuthService(Auth, $rootScope, $location, SUBVIEW,
-                      $resource, $cookieStore, ipCookie) {
+  function AuthService(Auth, $rootScope, $location, $resource, $cookieStore, TABVIEW, SUBVIEW) {
     
     var LoginAuth = $resource(Auth.LOGIN_API);
     var self = this;
 
     this.isAuthenticated = function() {
-      var auth = Boolean(ipCookie('user'));
+      var auth = Boolean($cookieStore.get('user'));
       if (!auth) {
         this.setUnauthenticated();
       } else {
@@ -33,7 +30,7 @@
     };
 
     this.setUnauthenticated = function() {
-      ipCookie.remove('user');
+      $cookieStore.remove('user');
       delete this.currentUser;
       delete this.currentRole;      
       delete this.tabview;
@@ -43,10 +40,11 @@
     };
 
     this.setAuthenticated = function() {
-      this.currentUser = ipCookie('user');
-      this.currentRole = ipCookie('user').group;
-      this.tabview = ipCookie('user').tabview;
-      this.subview = ipCookie('user').subview;
+      this.currentUser = $cookieStore.get('user');
+      this.currentRole = $cookieStore.get('user').group;
+      var view = this.currentRole.toString().toUpperCase();
+      this.tabview = $cookieStore.get('user').tabview || TABVIEW[view];
+      this.subview = $cookieStore.get('user').subview || SUBVIEW[view];
       $rootScope.$broadcast("events.authorized");
     };
 
@@ -63,7 +61,7 @@
 
     this.logout = function(data, onSuccess, onError) {      
       this.setUnauthenticated();
-      // $cookieStore.remove('user');
+      $cookieStore.remove('user');
       return $resource(Auth.LOGOUT_API).query();
     };
   }  

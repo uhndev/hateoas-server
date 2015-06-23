@@ -22,8 +22,10 @@
 	</div>	
 	
 	<hr/>
+
 	<div class="row">
 		<div class="col-md-4">
+			<input ng-model="access.searchUser" class="form-control" placeholder="Search Users">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -32,7 +34,7 @@
 					</tr>			
 				</thead>
 				<tbody>
-					<tr ng-repeat="row in access.resource.items" 
+					<tr ng-repeat="row in access.resource.items | filter:access.searchUser"  
 						class="selectable"
 						ng-class="{'active': row === access.selected}">
 						<td ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
