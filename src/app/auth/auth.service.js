@@ -32,7 +32,8 @@
     this.setUnauthenticated = function() {
       $cookieStore.remove('user');
       delete this.currentUser;
-      delete this.currentRole;      
+      delete this.currentGroup;      
+      delete this.currentLevel;      
       delete this.tabview;
       delete this.subview;
       $rootScope.$broadcast("events.unauthorized");
@@ -41,8 +42,9 @@
 
     this.setAuthenticated = function() {
       this.currentUser = $cookieStore.get('user');
-      this.currentRole = $cookieStore.get('user').group;
-      var view = this.currentRole.toString().toUpperCase();
+      this.currentGroup = $cookieStore.get('user').group;
+      this.currentLevel = $cookieStore.get('user').level;
+      var view = this.currentGroup.toString().toUpperCase();
       this.tabview = $cookieStore.get('user').tabview || TABVIEW[view];
       this.subview = $cookieStore.get('user').subview || SUBVIEW[view];
       $rootScope.$broadcast("events.authorized");
