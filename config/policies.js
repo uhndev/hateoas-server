@@ -29,7 +29,8 @@ module.exports.policies = {
  '*': [
     'basicAuth',
     'passport',
-    'sessionAuth',
+    'tokenAuth',
+    // 'sessionAuth',
     'ModelPolicy',
     'AuditPolicy',
     'OwnerPolicy',
