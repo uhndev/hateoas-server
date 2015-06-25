@@ -57,6 +57,19 @@ module.exports = {
 
 	findOne: function (req, res, next) {
 		var name = req.param('name');
+		var getCollectionCentreSummary = function(centre) {
+			return CollectionCentre.findOne(centre.id)
+				.populate('contact')
+				.populate('coordinators')
+				.populate('subjects')
+				.then(function (cc) {
+					var ret = _.pick(cc, 'id', 'name');
+					ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
+					ret.coordinators_count = cc.coordinators.length || 0;
+					ret.subjects_count = cc.subjects.length || 0;
+					return ret;
+				});
+		}
 
 		Group.findOne(req.user.group).then(function (group) {
 			this.group = group;
@@ -76,43 +89,19 @@ module.exports = {
     		switch (this.group.level) {
     			case 1: // admin users
     				return Promise.all(
-						_.map(this.study.collectionCentres, function (centre) {
-							return CollectionCentre.findOne(centre.id)
-								.populate('contact')
-								.populate('coordinators')
-								.populate('subjects')
-								.then(function (cc) {
-									var ret = _.pick(cc, 'id', 'name');
-									ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-									ret.coordinators_count = cc.coordinators.length || 0;
-									ret.subjects_count = cc.subjects.length || 0;
-									return ret;
-								})
-							})
+						_.map(this.study.collectionCentres, getCollectionCentreSummary)
 						);
-    			case 1: // coordinator/physician/interviewers
+    			case 2: // coordinator/physician/interviewers
 			    	if (_.some(this.study.collectionCentres, function(centre) {
 		          return !_.isUndefined(user.centreAccess[centre.id]);
 		        })) {
 		        	return Promise.all(
-								_.map(this.study.collectionCentres, function (centre) {
-									return CollectionCentre.findOne(centre.id)
-										.populate('contact')
-										.populate('coordinators')
-										.populate('subjects')
-										.then(function (cc) {
-											var ret = _.pick(cc, 'id', 'name');
-											ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-											ret.coordinators_count = cc.coordinators.length || 0;
-											ret.subjects_count = cc.subjects.length || 0;
-											return ret;
-										})
-								})
+								_.map(this.study.collectionCentres, getCollectionCentreSummary)
 							);
 		    		} else {
 	    			 	return null;
 		    		}    			
-    			case 2: // subjects
+    			case 3: // subjects
     				return null;
     			default: return res.notFound(); break;		
     		}

@@ -22,7 +22,7 @@ describe('The WorkflowState Model', function() {
 
 		it('should begin with user, person, subject, study, and collection centre WorkflowStates',  function (done) {
 			WorkflowState.count(function(err, states) {
-				states.should.be.exactly(5);
+				states.should.be.exactly(6);
 				done(err);
 			});
 		});

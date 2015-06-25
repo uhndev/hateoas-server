@@ -12,7 +12,7 @@
 			<div class="pull-right">
 				<br/>
 				<button type="button" 
-					class="btn btn-primary" 
+					class="btn btn-success" 
 					ng-disabled="!access.selected" 
 					ng-click="access.saveChanges()">
 					Save Changes
@@ -96,12 +96,12 @@
 			</div>
 		</div>
 		<div class="col-md-8">
-			<div class="btn-group pull-right" ng-if="access.selected">
-				<button class="btn btn-primary" ng-click="access.access = access.masterRoles">Select All</button>
-				<button class="btn btn-warning" ng-click="access.access = []">Deselect All</button>
-			</div>
-			<br/>
 			<h4 ng-if="!access.selected">Select a row to set access permissions.</h4>
+			<div class="btn-group pull-right" ng-if="access.selected">
+				<button class="btn btn-primary btn-sm" ng-click="access.access = access.masterRoles">Select All</button>
+				<button class="btn btn-warning btn-sm" ng-click="access.access = []">Deselect All</button>
+			</div>
+			<br/><br/>
 			<table class="table table-hover table-bordered table-condensed"
 				ng-if="access.selected">
 				<thead>
