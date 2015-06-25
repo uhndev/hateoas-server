@@ -59,14 +59,33 @@
         </div>
         <div class="collapse navbar-collapse" collapse="header.menuCollapsed">
           <ul class="nav navbar-nav">
-            <li ng-repeat="link in ::header.navigation"
+            <li ng-repeat="link in ::header.navigation" dropdown
               ng-class="{ 
                 'active': link.isActive,
+                'dropdown': link.dropdown
               }">
-              <a href="#{{ ::link.href }}">
+              <!-- Single Link -->
+              <a href="#{{ ::link.href }}" ng-if="!link.dropdown">
                 <i class="fa {{ ::link.icon }}"></i>
                 {{ ::link.prompt }}
               </a>
+              <!-- Dropdown Link -->
+              <a href class="dropdown-toggle" ng-if="link.dropdown"
+                dropdown-toggle role="button" aria-expanded="false">
+                <i class="fa {{ ::link.icon }}"></i>
+                {{ ::link.prompt }} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" ng-if="link.dropdown" role="menu">
+                <li ng-repeat="droplink in link.dropdown"
+                  ng-class="{ 
+                  'active': droplink.isActive
+                }">
+                  <a href="#{{ ::droplink.href }}">
+                    <i class="fa {{ ::droplink.icon }}"></i>
+                    {{ ::droplink.prompt }}
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

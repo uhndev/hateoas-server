@@ -52,10 +52,10 @@ module.exports.routes = {
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
-  'get /api/user/:id'              : 'UserController.findOne',
-  'get /api/role/:name/users'      : 'RoleController.findRoleUsers',
-  'get /api/user/:id/access'       : 'CentreAccessController.findUserAccess',
-
+  'put /api/user/:id'              : 'UserController.update',
+  'put /api/user/:id/access'       : 'UserController.updateAccess',
+  'put /api/user/:id/roles'        : 'UserController.updateRoles'
+  
   /***************************************************************************
   * Collection Centre Routes                                                 *
   ****************************************************************************/

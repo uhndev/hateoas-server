@@ -4,7 +4,6 @@
   angular
     .module('dados.auth.service', [
       'ngCookies',
-      'ipCookie',
       'ngResource',
       'dados.auth.constants',
       'dados.header.constants'
@@ -12,17 +11,16 @@
     .service('AuthService', AuthService);
 
   AuthService.$inject = [
-    'AUTH_API', '$rootScope', '$location', 'SUBVIEW',
-    '$resource', '$cookieStore', 'ipCookie'
+    'AUTH_API', '$rootScope', '$location', '$resource', '$cookieStore', 'TABVIEW', 'SUBVIEW'
   ]; 
 
-  function AuthService(Auth, $rootScope, $location, SUBVIEW,
-                      $resource, $cookieStore, ipCookie) {
+  function AuthService(Auth, $rootScope, $location, $resource, $cookieStore, TABVIEW, SUBVIEW) {
     
     var LoginAuth = $resource(Auth.LOGIN_API);
+    var self = this;
 
     this.isAuthenticated = function() {
-      var auth = Boolean(ipCookie('user'));
+      var auth = Boolean($cookieStore.get('user'));
       if (!auth) {
         this.setUnauthenticated();
       } else {
@@ -32,23 +30,29 @@
     };
 
     this.setUnauthenticated = function() {
-      ipCookie.remove('user');
+      $cookieStore.remove('user');
       delete this.currentUser;
-      delete this.currentRole;      
+      delete this.currentGroup;      
+      delete this.currentLevel;      
+      delete this.tabview;
+      delete this.subview;
       $rootScope.$broadcast("events.unauthorized");
       $location.url('/login');
     };
 
     this.setAuthenticated = function() {
-      this.currentUser = ipCookie('user');
-      this.currentRole = ipCookie('user').role;
+      this.currentUser = $cookieStore.get('user');
+      this.currentGroup = $cookieStore.get('user').group;
+      this.currentLevel = $cookieStore.get('user').level;
+      var view = this.currentGroup.toString().toUpperCase();
+      this.tabview = $cookieStore.get('user').tabview || TABVIEW[view];
+      this.subview = $cookieStore.get('user').subview || SUBVIEW[view];
       $rootScope.$broadcast("events.authorized");
     };
 
     this.getRoleLinks = function(links) {
-      var view = this.currentRole.toString().toUpperCase();
       return _.filter(links, function(link) {
-        return _.contains(SUBVIEW[view], link.rel);
+        return _.contains(self.subview, link.rel);
       });
     };
 
@@ -59,7 +63,7 @@
 
     this.logout = function(data, onSuccess, onError) {      
       this.setUnauthenticated();
-      // $cookieStore.remove('user');
+      $cookieStore.remove('user');
       return $resource(Auth.LOGOUT_API).query();
     };
   }  

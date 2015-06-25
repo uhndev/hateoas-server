@@ -76,13 +76,12 @@ module.exports = {
 		if (ccName) ccFields.name = ccName;
 		if (ccContact) ccFields.contact = ccContact;
 
-		PermissionService.getCurrentRole(req)
-		.then(function (role) {
-			this.role = role;
+		Group.findOne(req.user.group).then(function (group) {
+			this.group = group;
 			return CollectionCentre.findOne(ccId);
 		})
 		.then(function (centre) {
-			if (this.role === 'admin' && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
+			if (this.group.level === 1 && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
 				if (isAdding) {
 					_.each(coordinators, function(user) {
 						centre.coordinators.add(user);
@@ -97,7 +96,7 @@ module.exports = {
 			return centre;
 		})
 		.then(function (centre) {
-			if (role === 'admin') {
+			if (this.group.level === 1) {
 				return CollectionCentre.update({id: ccId}, ccFields);
 			}
 			return centre;

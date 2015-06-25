@@ -27,7 +27,7 @@ module.exports = {
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   },
 
-  findByStudyName: function(studyName, roleName, userId, options, cb) {
+  findByStudyName: function(studyName, user, options, cb) {
     Study.findOneByName(studyName)
       .populate('collectionCentres')
       .then(function (study) {
@@ -43,8 +43,8 @@ module.exports = {
         return study.collectionCentres;
       })
       .then(function (centres) {
-        if (roleName !== 'admin') {
-          return Subject.findOne(userId)
+        if (user.role !== 'admin') {
+          return Subject.findOne(user.id)
             .populate('user')
             .populate('collectionCentres')
             .then(function (subject) {

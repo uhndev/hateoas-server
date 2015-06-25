@@ -43,7 +43,7 @@ describe('The Auth Controller', function() {
 
 		it('should return the username and roles after logging in', function(done) {
 			auth.authenticate('admin', function(agent, resp) {
-				resp.res.body.should.have.properties('username', 'role')
+				resp.res.body.should.have.properties('username', 'group')
 				done();
 			});
 		})

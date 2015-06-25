@@ -56,6 +56,7 @@
     <tbody>
       <tr ng-repeat="item in studyUser.resource.items"
         ng-click="studyUser.select(item)"
+        class="selectable"
         ng-class="{'active': item === studyUser.selected}">
         <td ng-repeat="column in studyUser.template.data"
           ng-if="!column.data"
@@ -80,7 +81,13 @@
                 labels="name"
                 output-properties="id">
               </select-loader>
-            </div>            
+            </div>  
+            <div ng-switch-when="dropdown">
+              <select ng-model="item[column.name]" class="form-control">
+                <option value="coordinator">Coordinator</option>
+                <option value="interviewer">Interviewer</option>
+              </select> 
+            </div>          
             <div ng-switch-default>
               {{ item[column.name] | formatter:column }}
             </div>

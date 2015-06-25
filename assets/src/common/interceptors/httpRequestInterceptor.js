@@ -35,10 +35,12 @@
       responseError: function responseErrorCallback(response) {
         var message = '', title = 'Error';
 
-        if (response.status === 404) {
+        if (response.status === 400 || response.status === 404) {
           $location.path('/400');
         } else if (response.status === 403) {
           $location.path('/login');
+        } else if (response.status === 500) {
+          $location.path('/500');
         }
 
         if (response.data && response.data.error) {

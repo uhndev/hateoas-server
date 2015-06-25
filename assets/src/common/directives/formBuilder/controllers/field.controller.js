@@ -70,11 +70,11 @@
       $scope.showValidateError = !res;
       return res;
     }
-  }
-
-  function openDate($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+    
+    function openDate($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }    
   }
 
 })();

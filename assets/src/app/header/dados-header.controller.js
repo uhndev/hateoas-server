@@ -1,14 +1,14 @@
 (function() {
 	'use strict';	
 	angular
-		.module('dados.header.controller', [])
+		.module('dados.header.controller', ['ui.bootstrap'])
 		.controller('HeaderController', HeaderController);
 
 	HeaderController.$inject = [
-		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API', 'TABVIEW', 'SUBVIEW'
+		'$scope', '$location', '$state', '$rootScope', 'AuthService', 'API'
 	];
 
-	function HeaderController($scope, $location, $state, $rootScope, AuthService, API, TABVIEW, SUBVIEW) {
+	function HeaderController($scope, $location, $state, $rootScope, AuthService, API) {
 		
 		var vm = this;
 
@@ -41,10 +41,9 @@
     }
 
 		function updateHeader() {
-			if (AuthService.currentRole) {
-				var view = AuthService.currentRole.toString().toUpperCase();
-				if (TABVIEW[view] !== vm.navigation) {
-					vm.navigation = TABVIEW[view];
+			if (AuthService.currentUser.group) {
+				if (AuthService.tabview !== vm.navigation) {
+					vm.navigation = AuthService.tabview;
 				}        
 			}
 
@@ -64,8 +63,13 @@
 			_.each(vm.navigation, function(link) {
 				var pathArr = _.pathnameToArray(href);
 				var comparator = (pathArr.length >= 2) ? '/' + _.first(pathArr) : href;
-				link.isActive = 
-					(comparator.toLowerCase() === link.href.toLowerCase());
+				if (link.dropdown) {
+					_.each(link.dropdown, function(droplink) {
+						droplink.isActive = (comparator.toLowerCase() === droplink.href.toLowerCase());
+					});
+				} else {
+					link.isActive = (comparator.toLowerCase() === link.href.toLowerCase());
+				}				
 			});
 
 			_.each(vm.submenu.links, function(link) {

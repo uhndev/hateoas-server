@@ -8,10 +8,10 @@
 		.controller('AddUserController', AddUserController);
 
 	AddUserController.$inject = [
-		'$scope', '$modalInstance', '$resource', 'API', 'UserService', 'toastr', 'centreHref'
+		'$scope', '$modalInstance', '$resource', 'API', 'UserAccess', 'toastr', 'centreHref'
 	];
 
-	function AddUserController($scope, $modalInstance, $resource, API, User, toastr, centreHref) {
+	function AddUserController($scope, $modalInstance, $resource, API, UserAccess, toastr, centreHref) {
 		var vm = this;
 		// bindable variables
 		vm.newUser = {};
@@ -35,7 +35,7 @@
 				// merge existing centreAccess with new attributes
 				_.extend(access, data.items.centreAccess);
 
-				var user = new User({
+				var user = new UserAccess({
 					'centreAccess': access,
 					'isAdding': true,
 					'collectionCentres': vm.newUser.collectioncentre

@@ -62,7 +62,7 @@ describe('The User Controller', function () {
 				.then(function (centre) {
 					cc3Id = centre.id;
 					var access = {};
-					access[cc1Id] = globals.roles.coordinatorRoleId;
+					access[cc1Id] = 'coordinator';
 					return User.update({id: globals.users.coordinatorUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -71,7 +71,7 @@ describe('The User Controller', function () {
 				})
 				.then(function (centre) {
 					var access = {};
-					access[cc2Id] = globals.roles.interviewerRoleId;
+					access[cc2Id] = 'interviewer';
 					return User.update({id: globals.users.interviewerUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -80,7 +80,7 @@ describe('The User Controller', function () {
 				})
 				.then(function (centre) {
 					var access = {};
-					access[cc3Id] = globals.roles.interviewerRoleId;
+					access[cc3Id] = 'interviewer';
 					return User.update({id: globals.users.interviewerUserId}, {
 						centreAccess: access,
 						isAdding: true,
@@ -107,10 +107,7 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].username.should.equal('admin');
-						collection.items[1].username.should.equal('subject');												
-						collection.items[2].username.should.equal('interviewer');
-						collection.items[3].username.should.equal('coordinator');
+						collection.items.length.should.equal(4);
 						done(err);
 					});
 			});
@@ -132,7 +129,7 @@ describe('The User Controller', function () {
 		});
 
 		describe('create()', function () {
-			it('should be able to create a new user', function (done) {
+			it('should be able to create a new user and set appropriate permissions', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -142,7 +139,7 @@ describe('The User Controller', function () {
 						username: 'coordinator2',
 						email: 'coordinator2@example.com',
 						password: 'coordinator21234',
-						role: globals.roles.coordinatorRoleId,
+						group: globals.groups.coordinator,
 						prefix: 'Ms.',
 						firstname: 'Coord',
 						lastname: 'Inator'
@@ -150,20 +147,26 @@ describe('The User Controller', function () {
 					.expect(200)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.username.should.equal('coordinator2');
 						globals.users.coordinator2 = collection.items.id;
-						done(err);
+						collection.items.username.should.equal('coordinator2');
+						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
+							user.roles.length.should.equal(8);
+							done(err);
+						});
 					});
 			});
 
-			it('should return bad request if missing role', function (done) {
+			it('should return bad request if missing group', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
 				req.send({
 						username: 'subject',
 						email: 'subject@example.com',
-						password: 'subject1234'
+						password: 'subject1234',
+						prefix: 'Mr.',
+						firstname: 'Test',
+						lastname: 'Subject'						
 					})
 					.expect(400)
 					.end(function(err, res) {
@@ -182,7 +185,7 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should set role to subject if given role DNE', function (done) {
+			it('should return bad request if given group DNE', function (done) {
 				var req = request.post('/api/user');
 				agent.attachCookies(req);
 
@@ -190,7 +193,7 @@ describe('The User Controller', function () {
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
-						role: 'qwerty',
+						group: 12345,
 						prefix: 'Mrs.',
 						firstname: 'Qwer',
 						lastname: 'Ty'
@@ -204,10 +207,10 @@ describe('The User Controller', function () {
 
  		describe('update()', function () {
  			it('should be able to add a user to a collection centre with a role', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
  				var obj = {};
- 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				obj[cc2Id] = 'interviewer';
  				req.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
@@ -217,16 +220,16 @@ describe('The User Controller', function () {
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
  						collection.items[0].username.should.equal('interviewer');
- 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc2Id].should.equal('interviewer');
  						done(err);
  					});
  			});
 
  			it('should be able to add a user in a collection centre in another study', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
  				var obj = {};
- 				obj[cc2Id] = globals.roles.interviewerRoleId;
+ 				obj[cc2Id] = 'interviewer';
  				req.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
@@ -241,11 +244,11 @@ describe('The User Controller', function () {
  			});
 
  			it('should retain its existing centreAccess after updating new access', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = globals.roles.coordinatorRoleId;
+ 				newCentreAccess[cc3Id] = 'coordinator';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -262,19 +265,19 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.coordinatorRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('coordinator');
  						done(err);
  					});
 				});
  			});
  			
  			it('should be able to update a user\'s role in a collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = globals.roles.interviewerRoleId;
+ 				newCentreAccess[cc3Id] = 'interviewer';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -289,19 +292,19 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
  						done(err);
  					});
 				});
  			});
 
  			it('should be able to switch a user\'s collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId);
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
- 				newCentreAccess[cc2Id] = globals.roles.coordinatorRoleId;
+ 				newCentreAccess[cc2Id] = 'coordinator';
 
  				User.findOne(globals.users.coordinatorUserId)
 					.then(function (user) {
@@ -319,16 +322,16 @@ describe('The User Controller', function () {
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal(globals.roles.coordinatorRoleId)
- 						collection.items[0].centreAccess[cc2Id].should.equal(globals.roles.coordinatorRoleId);
- 						collection.items[0].centreAccess[cc3Id].should.equal(globals.roles.interviewerRoleId);
+ 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator')
+ 						collection.items[0].centreAccess[cc2Id].should.equal('coordinator');
+ 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
  						done(err);
  					});
 				});
  			});
 
  			it('should remove the user\'s access if selected none collection centres', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId);
+ 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
  				agent.attachCookies(req);
 
  				var newCentreAccess = {};
@@ -352,6 +355,27 @@ describe('The User Controller', function () {
  						done(err);
  					});
 				});
+ 			});
+
+ 			it('should update a user\'s roles from access management', function (done) {
+ 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/roles');
+ 				agent.attachCookies(req);
+
+ 				User.findOne(globals.users.coordinatorUserId)
+ 				.populate('roles')
+ 				.then(function (user) {
+ 					var newRoles = _.pluck(user.roles, 'name');
+ 					newRoles.push('createStudy');
+ 					req.send({
+ 						roles: newRoles
+ 					})
+ 					.expect(200)
+ 					.end(function (err, res) {
+ 						var collection = JSON.parse(res.text);
+ 						_.find(collection.items.roles, {name: 'createStudy'}).should.be.ok;
+ 						done(err);
+ 					})
+ 				});
  			});
  		});
 
@@ -406,8 +430,6 @@ describe('The User Controller', function () {
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.id = globals.users.coordinatorUserId;
 						done(err);
 					});
 			});
@@ -489,12 +511,12 @@ describe('The User Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + globals.users.coordinatorUserId);
+				var req = request.get('/api/user/' + globals.users.interviewerUserId);
 				agent.attachCookies(req);
 				req.expect(200)	
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.id = globals.users.coordinatorUserId;
+						collection.items.id.should.equal(globals.users.interviewerUserId);
 						done(err);
 					});
 			});
@@ -515,7 +537,7 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						role: 'interviewer'
+						group: globals.groups.interviewer
 					})
 					.expect(400)
 					.end(function (err, res) {
@@ -618,11 +640,10 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						role: 'subject'
+						group: globals.groups.subject
 					})
 					.expect(400)
 					.end(function (err, res) {
-						// var user = res.body;
 						var collection = JSON.parse(res.text);
 						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
