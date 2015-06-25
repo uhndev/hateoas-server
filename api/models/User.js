@@ -72,7 +72,7 @@ _.merge(exports, {
       return study.collectionCentres;
     })
     .then(function (centres) {
-      if (this.group.name !== 'admin') {
+      if (this.group.level > 1) {
         return User.findOne(currUser.id).populate('collectionCentres')
           .then(function (user) {
             return _.filter(user.collectionCentres, function (centre) {

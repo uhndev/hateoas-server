@@ -603,6 +603,59 @@
   },  
   {
     "form_type": "system",
+    "form_name": "group",
+    "form_title": "Create Group",
+    "form_submitText": "Submit",
+    "form_cancelText": "Cancel",
+    "form_questions": [
+      {
+        "field_id": 1,
+        "field_name": "name",
+        "field_title": "Name",
+        "field_type": "textfield",
+        "field_value": "",
+        "field_placeholder": "Enter a group name",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_required": true
+      },
+      {
+        "field_id": 2,
+        "field_name": "level",
+        "field_title": "Level",
+        "field_type": "number",
+        "field_placeholder": "Enter a level between 1 and 3",
+        "field_validation": {
+          "rule": "between",
+          "expression": {
+            "min": 1,
+            "max": 3
+          }
+        },
+        "field_helpertext": "Level must be between [1, 3]",
+        "field_required": true
+      },
+      {
+        "field_id": 3,
+        "field_name": "menu",
+        "field_title": "Main and Sub Menu Definitions",
+        "field_type": "json",
+        "field_value": {},
+        "field_placeholder": "Enter a json value",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_required": true
+      }
+    ]
+  },
+  {
+    "form_type": "system",
     "form_name": "survey_tracking",
     "form_title": "Survey Tracking",
     "form_submitText": "Submit",

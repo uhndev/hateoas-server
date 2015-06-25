@@ -52,52 +52,56 @@ exports.create = function (roles, models, admin) {
     {
       name: 'admin',
       roles: _.pluck(roles, 'id'),
-      tabview: [
-        { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'User Manager', href: '/user', icon: 'fa-user' },        
-        { prompt: 'Tools', icon: 'fa-cog', dropdown: [
-          { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
-          { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
-          { prompt: 'Access Management', href: '/access', icon: 'fa-cog'}
-        ]}
-      ],
-      subview: [ 'overview', 'subject', 'user', 'form', 'survey', 'collectioncentre' ]
+      level: 1,
+      menu: {
+        tabview: [
+          { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+          { prompt: 'User Manager', href: '/user', icon: 'fa-user' },        
+          { prompt: 'Tools', icon: 'fa-cog', dropdown: [
+            { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
+            { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
+            { prompt: 'Groups', href: '/group', icon: 'fa-users'},
+            { prompt: 'Access Management', href: '/access', icon: 'fa-lock'}
+          ]}
+        ],
+        subview: [ 'overview', 'subject', 'user', 'form', 'survey', 'collectioncentre' ]
+      }
     },
     {
       name: 'coordinator',
       roles: coordinatorRoles,
-      tabview: [
-        { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'User Manager', href: '/user', icon: 'fa-user' }      
-      ],
-      subview: [ 'overview', 'subject', 'user' ]
-    },
-    {
-      name: 'physician',
-      roles: physicianRoles,
-      tabview: [
-        { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
-      ],
-      subview: [ 'overview', 'subject', 'user' ]
+      level: 2,
+      menu: {
+        tabview: [
+          { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+          { prompt: 'User Manager', href: '/user', icon: 'fa-user' }      
+        ],
+        subview: [ 'overview', 'subject', 'user' ]
+      }
     },
     {
       name: 'interviewer',
       roles: interviewerRoles,
-      tabview: [
-        { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
-      ],
-      subview: [ 'overview', 'subject' ]
+      level: 2,
+      menu: {
+        tabview: [
+          { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
+        ],
+        subview: [ 'overview', 'subject' ]
+      }
     },
     {
       name: 'subject',
       roles: subjectRoles,
-      tabview: [
-        { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
-        { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
-      ],
-      subview: [ 'overview' ]
+      level: 3,   
+      menu: {
+        tabview: [
+          { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
+          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
+        ],
+        subview: [ 'overview' ]  
+      }      
     },                
   ];
 

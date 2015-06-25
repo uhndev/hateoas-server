@@ -76,8 +76,9 @@ _.merge(exports, {
             id: user.id,
             username: user.username,
             group: data.group.name,
-            tabview: data.group.tabview,
-            subview: data.group.subview
+            level: data.group.level,
+            tabview: data.group.menu.tabview,
+            subview: data.group.menu.subview
           };
 
           if (data.person) {

@@ -7,6 +7,28 @@ var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUt
 _.merge(exports, _super);
 _.merge(exports, {
 
+  find: function (req, res, next) {
+    var query = User.find()
+      .where( actionUtil.parseCriteria(req) )
+      .limit( actionUtil.parseLimit(req) )
+      .skip( actionUtil.parseSkip(req) )
+      .sort( actionUtil.parseSort(req) );
+
+    query.populate('roles');
+    query.populate('person'); 
+    query.exec(function found(err, users) {
+      if (err) return res.serverError(err);
+
+      _.map(users, function (user) {
+        if (user.person) {
+          _.merge(user, Utils.User.extractPersonFields(user.person));
+          delete user.person;
+        }
+      });
+      res.ok(users);
+    });        
+  },
+
   findOne: function (req, res, next) {
     User.findOne(req.param('id'))
       .populate('person')
@@ -103,7 +125,7 @@ _.merge(exports, {
 
     Group.findOne(req.user.group).then(function (group) {
       this.group = group;
-      if (group.name !== 'admin') {
+      if (group.level > 1) { // prevent all non-admin users
         delete userFields.group;
       }
       return User.findOne(userId).populate('roles');
@@ -138,7 +160,7 @@ _.merge(exports, {
       return this.user;      
     })
     .then(function (user) { // updating group, apply new permissions
-      if (this.previousGroup !== userFields.group && this.group.name === 'admin') {
+      if (this.previousGroup !== userFields.group && this.group.level === 0) {
         return PermissionService.setUserRoles(_.first(user));
       } else {
         return user;  
@@ -174,7 +196,7 @@ _.merge(exports, {
     })
     .then(function (user) { // update user's collection centre access
       this.user = user;
-      if (this.group.name === 'admin') {
+      if (this.group.level === 1) {
         if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
           _.each(accessFields.collectionCentres, function (centre) {
             if (accessFields.isAdding) {
@@ -196,7 +218,7 @@ _.merge(exports, {
       return this.user;
     })
     .then(function (user) {        
-      if (this.group.name === 'admin' && !_.isUndefined(accessFields.centreAccess)) {
+      if (this.group.level === 1 && !_.isUndefined(accessFields.centreAccess)) {
         return User.update(userId, { centreAccess: accessFields.centreAccess });
       }
       return this.user;

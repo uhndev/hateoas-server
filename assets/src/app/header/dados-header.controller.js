@@ -41,7 +41,7 @@
     }
 
 		function updateHeader() {
-			if (AuthService.currentRole) {
+			if (AuthService.currentUser.group) {
 				if (AuthService.tabview !== vm.navigation) {
 					vm.navigation = AuthService.tabview;
 				}        

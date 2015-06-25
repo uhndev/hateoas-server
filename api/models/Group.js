@@ -14,6 +14,10 @@ module.exports = {
   		required: true,
   		unique: true
   	},
+    level: {
+      type: 'integer',
+      enum: [1, 2, 3]
+    },
   	users: {
   		collection: 'user',
   		via: 'group'
@@ -22,11 +26,8 @@ module.exports = {
   		collection: 'role',
   		via: 'groups'
   	},
-  	tabview: {
-  		type: 'array'
-  	},
-  	subview: {
-  		type: 'array'
+  	menu: {
+  		type: 'json'
   	},
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }

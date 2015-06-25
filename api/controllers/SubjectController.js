@@ -9,6 +9,25 @@ var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUt
 
 module.exports = {
 
+  find: function (req, res, next) {
+    var query = Subject.find()
+      .where( actionUtil.parseCriteria(req) )
+      .limit( actionUtil.parseLimit(req) )
+      .skip( actionUtil.parseSkip(req) )
+      .sort( actionUtil.parseSort(req) );
+
+    query.populate('user');
+    query.populate('collectionCentres');  
+    query.exec(function found(err, subjects) {
+      if (err) return res.serverError(err);
+
+      Utils.User.populateSubjects(matchingRecords)
+      .then(function (subjects) {
+        res.ok(subjects);
+      });
+    });        
+  },
+
   create: function(req, res, next) {
     // create user/person first and save userId
     Person.create({
@@ -65,9 +84,6 @@ module.exports = {
         });
       });
     });
-
-    // create subject as relation to collectionCentre
-    // 
   },
 
   findByStudyName: function(req, res) {

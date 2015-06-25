@@ -160,5 +160,13 @@
 		"template": {
 			"href": "http://localhost:1337/api/form/5"
 		}
+	},
+	{
+		"path": "/api/group",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/6"
+		}
 	}
 ]

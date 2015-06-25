@@ -25,35 +25,69 @@
 
 	<div class="row">
 		<div class="col-md-4">
-			<input ng-model="access.searchUser" class="form-control" placeholder="Search Users">
+			<form class="form-inline">
+				<div class="form-group">
+					<select class="form-control" ng-model="access.currentView" ng-change="access.toggleAccessType()">
+						<option value="user">By User</option>
+						<option value="group">By Group</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<input ng-model="access.searchView" class="form-control" placeholder="Search {{access.currentView}}s">
+				</div>
+			</form>
+
+			<!-- Table of Views -->
 			<table class="table table-hover">
 				<thead>
-					<tr>
+					<tr ng-if="access.currentView === 'user'">
 						<th>User</th>
 						<th>Role</th>
-					</tr>			
+					</tr>	
+					<tr ng-if="access.currentView != 'user'">
+						<th>Group</th>
+						<th>Level</th>
+					</tr>					
 				</thead>
 				<tbody>
-					<tr ng-repeat="row in access.resource.items | filter:access.searchUser"  
+					<tr ng-repeat="row in access.resource.items | filter:access.searchView"  
 						class="selectable"
 						ng-class="{'active': row === access.selected}">
-						<td ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
-						<td>
-							<select class="form-control" 
-								ng-disabled="access.selected.id !== row.id"
-								ng-model="row.group" ng-change="access.updateRole()">
-								<option value="{{group.id}}" ng-repeat="group in access.groups" ng-selected="row.group === group.id">{{group.name}}</option>
-							</select>
-						</td>
+							<td ng-if="access.currentView === 'user'"
+									ng-click="access.select(row)">{{row.prefix}} {{row.firstname}} {{row.lastname}}</td>
+							<td ng-if="access.currentView === 'user'">
+								<select class="form-control" 
+									ng-disabled="access.selected.id !== row.id"
+									ng-model="row.group" ng-change="access.updateRole()">
+									<option value="{{group.id}}" 
+										ng-repeat="group in access.groups" 
+										ng-selected="row.group === group.id">
+										{{group.name}}
+									</option>
+								</select>
+							</td>
+							<td ng-if="access.currentView === 'group'"
+									ng-click="access.select(row)">
+								{{row.name}}
+							</td>
+							<td ng-if="access.currentView === 'group'"
+									ng-click="access.select(row)">
+								{{row.level}}
+							</td>
 					</tr>
 				</tbody>
 			</table>
+
+			<!-- View Panel Permissions -->
 			<div class="panel panel-default" collapse="!access.selected">
-			  <div class="panel-heading" ng-if="access.selected">{{access.selected.prefix}} {{access.selected.lastname}}'s Permissions:</div>
+			  <div class="panel-heading" ng-if="access.selected">
+			  	{{access.viewName}}'s Permissions:
+			  </div>
 			  <div class="panel-body">
 			  	<ul class="list-unstyled">
 			  		<li ng-repeat="permission in access.access">
-							<button class="btn btn-info btn-xs permission-btn" type="button" ng-click="access.removeAccess(permission)">
+							<button class="btn btn-info btn-xs permission-btn" type="button" 
+								ng-click="access.removeAccess(permission)">
 							  {{permission}} <span class="glyphicon glyphicon-remove"></span>
 							</button>
 						</li>
@@ -62,6 +96,11 @@
 			</div>
 		</div>
 		<div class="col-md-8">
+			<div class="btn-group pull-right" ng-if="access.selected">
+				<button class="btn btn-primary" ng-click="access.access = access.masterRoles">Select All</button>
+				<button class="btn btn-warning" ng-click="access.access = []">Deselect All</button>
+			</div>
+			<br/>
 			<h4 ng-if="!access.selected">Select a row to set access permissions.</h4>
 			<table class="table table-hover table-bordered table-condensed"
 				ng-if="access.selected">

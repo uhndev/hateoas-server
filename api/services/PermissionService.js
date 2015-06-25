@@ -24,6 +24,22 @@ _.extend(PermissionService.prototype, {
   },
 
   /**
+   * [revokeGroupPermissions]
+   * Removes all roles' permissions from a given group
+   * @param  {Object} group 
+   * @return {group}       
+   */
+  revokeGroupPermissions: function(group) {
+    return Group.findOne(group.id).populate('roles')
+    .then(function (group) {
+      _.each(group.roles, function (role) {
+        group.roles.remove(role.id);
+      });
+      return group.save();
+    });
+  },
+
+  /**
    * [grantPermissions] 
    * Revokes a user's roles, then grants the given roles to a user.
    * @param  {Object} user  
