@@ -7,7 +7,7 @@ module.exports = {
       obj.rel = model.exports.identity;
       obj.href = HateoasService.getSelfLink(model.exports.identity, this.id);
 
-      if (_.includes(Utils.Model.SLUG_ROUTES, obj.rel) && this.name) {
+      if (_.contains(Utils.Model.SLUG_ROUTES, obj.rel) && this.name) {
         obj.slug = HateoasService.getSelfLink(model.exports.identity, this.name);
       }
 

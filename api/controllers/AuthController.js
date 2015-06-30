@@ -2,11 +2,10 @@
 
 var _ = require('lodash');
 var _super = require('sails-permissions/api/controllers/AuthController');
+var jwt = require('jsonwebtoken');
 
 _.merge(exports, _super);
 _.merge(exports, {
-
-  // Extend with custom logic here by adding additional fields, methods, etc.
 
   /**
    * Create a authentication callback endpoint (Overrides sails-auth)
@@ -27,10 +26,11 @@ _.merge(exports, {
           return res.forbidden(err);
         }
 
-        // Upon successful login, send the user to the homepage where req.user
-        // will available.
-        req.session.authenticated = true;
-        req.user = user;
+        var token = jwt.sign(
+          user, 
+          sails.config.session.secret, 
+          { expiresInMinutes: sails.config.session.jwtExpiry }
+        );
 
         User.findOne(user.id).populate('roles').populate('person').populate('group')
         .then(function(data) {
@@ -41,7 +41,8 @@ _.merge(exports, {
             level: data.group.level,
             tabview: data.group.menu.tabview,
             subview: data.group.menu.subview,
-            token: SessionService.issueToken(req, {sid: user.id})
+            token: token,
+            expires: sails.config.session.jwtExpiry
           };
 
           if (data.person) {
