@@ -26,15 +26,17 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
- '*': [
+  '*': [
     'basicAuth',
     'passport',
+    'tokenAuth',
     'sessionAuth',
     'ModelPolicy',
     'AuditPolicy',
     'OwnerPolicy',
     'PermissionPolicy',
-    'RolePolicy'
+    'RolePolicy',
+    'CriteriaPolicy'
   ],
 
   AuthController: {

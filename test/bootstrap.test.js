@@ -13,7 +13,8 @@ globals = {
   users: {},
   groups: {},
   studies: {},
-  collectioncentres: {}
+  collectioncentres: {},
+  token: ''
 };
 
 before(function(done) {
@@ -25,21 +26,24 @@ before(function(done) {
       level: 'error',
       noShip: true
     },
+
     models: { 
       connection: 'dados_test',
       migrate: 'drop'
     },
-    environment: 'test'
+
+    environment: 'test',
+
+    hooks: {
+      "grunt": false,
+      "csrf": false
+    }
   }, function(err, server) {
     sails = server;
     if (err) return done(err);
     
     // Shared request variable
     request = request(sails.hooks.http.app);
-
-    // temporarily disable csrf for testing
-    sails.config.csrf.grantTokenViaAjax = false;
-    sails.config.csrf.protectionEnabled = false;
 
     // Load fixtures
     var barrels = new Barrels();
