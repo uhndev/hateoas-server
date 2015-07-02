@@ -37,22 +37,7 @@ before(function(done) {
     hooks: {
       "grunt": false,
       "csrf": false
-    },
-
-    // disable JWT while testing
-    policies: {
-      '*': [
-        'basicAuth',
-        'passport',
-        'sessionAuth',
-        'ModelPolicy',
-        'AuditPolicy',
-        'OwnerPolicy',
-        'PermissionPolicy',
-        'RolePolicy'      
-      ]
     }
-
   }, function(err, server) {
     sails = server;
     if (err) return done(err);

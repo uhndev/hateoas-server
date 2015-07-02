@@ -7,13 +7,12 @@ var CollectionCentreController = require('../../../api/controllers/CollectionCen
 
 describe('The CollectionCentre Controller', function () {
 
-	var agent, study1, cc1Id, cc2Id;
+	var study1, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
 		
 		before(function(done) {
-			auth.authenticate('admin', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				globals.users.adminUserId = JSON.parse(resp.text).id;
 
@@ -50,10 +49,8 @@ describe('The CollectionCentre Controller', function () {
 
 		describe('find()', function () {
 			it('should be able to read all collection centres', function (done) {
-				var req = request.get('/api/collectioncentre');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
-					.expect('Content-Type', 'application/collection+json; charset=utf-8')
+				request.get('/api/collectioncentre')
+					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -64,9 +61,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should retrieve a saved collection centre form href from the workflowstate', function (done) {
-				var req = request.get('/api/collectioncentre');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/collectioncentre')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
@@ -75,9 +72,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should return collection centre summary totals', function (done) {
-				var req = request.get('/api/study/CC-LEAP-ADMIN');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study/CC-LEAP-ADMIN')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.centreSummary[0].id.should.equal(cc1Id);
@@ -88,9 +85,9 @@ describe('The CollectionCentre Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to retrieve a specific collection centre', function (done) {
-				var req = request.get('/api/collectioncentre/' + cc1Id);
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/collectioncentre/' + cc1Id)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.name.should.equal('CC-LEAP-ADMIN-TWH');
@@ -99,12 +96,12 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should return a 404 if study does not exist', function (done) {
-				var req = request.get('/api/collectioncentre/12345');
-				agent.attachCookies(req);
-				req.expect(404)
+				request.get('/api/collectioncentre/12345')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(404)
 					.end(function (err, res) {
 						done(err);
-					});				
+					});
 			});
 		});
 
@@ -126,10 +123,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should be able to create a new collection centre', function (done) {
-				var req = request.post('/api/collectioncentre');
-				agent.attachCookies(req);
-
-				req.send({
+				request.post('/api/collectioncentre')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
 						name: 'CC-LEAP-ADMIN-TGH',
 						contact: globals.users.coordinatorUserId,
 						study: study1
@@ -144,10 +140,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should return an error if collection name exists in study already', function (done) {
-				var req = request.post('/api/collectioncentre');
-				agent.attachCookies(req);
-
-				req.send({
+				request.post('/api/collectioncentre')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
 						name: 'CC-LEAP-ADMIN-TWH',
 						study: study1
 					})
@@ -158,10 +153,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should return an error if a collection centre maps to an invalid study', function (done) {
-				var req = request.post('/api/collectioncentre');
-				agent.attachCookies(req);
-
-				req.send({
+				request.post('/api/collectioncentre')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
 						name: 'CC-LEAP-ADMIN-TGH',
 						study: 1234
 					})
@@ -174,10 +168,9 @@ describe('The CollectionCentre Controller', function () {
 
 		describe('update()', function() {
 			it('should be able to update name of collection centre', function (done) {
-				var req = request.put('/api/collectioncentre/' + cc2Id);
-				agent.attachCookies(req);
-
-				req.send({ name: 'CC-LEAP-ADMIN-TGH-2' })
+				request.put('/api/collectioncentre/' + cc2Id)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ name: 'CC-LEAP-ADMIN-TGH-2' })
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -187,10 +180,9 @@ describe('The CollectionCentre Controller', function () {
 			});
 
 			it('should not be able to switch study of collection centre', function (done) {
-				 var req = request.put('/api/collectioncentre/' + cc2Id);
- 				agent.attachCookies(req);
-
- 				req.send({ study: 1234 })
+				request.put('/api/collectioncentre/' + cc2Id)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ study: 1234 })
  					.expect(200)
  					.end(function (err, res) {
  						var collection = JSON.parse(res.text);
@@ -201,10 +193,9 @@ describe('The CollectionCentre Controller', function () {
 
 			it('should be able to add users to this collection centre', function (done) {
 				// maybe dont allow this?
-				var req = request.put('/api/collectioncentre/' + cc2Id);
- 				agent.attachCookies(req);
-
- 				req.send({ isAdding: true, coordinators: [globals.users.adminUserId, globals.users.coordinatorUserId] })
+				request.put('/api/collectioncentre/' + cc2Id)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ isAdding: true, coordinators: [globals.users.adminUserId, globals.users.coordinatorUserId] })
  					.expect(200)
  					.end(function (err, res) {
  						CollectionCentre.findOne(cc2Id).populate('coordinators')

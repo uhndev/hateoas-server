@@ -12,13 +12,12 @@ var UserController = require('../../../api/controllers/UserController');
 
 describe('The User Controller', function () {
 
-	var agent, study1, cc1Id, cc2Id;
+	var study1, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
 
 		before(function(done) {
-			auth.authenticate('admin', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				globals.users.adminUserId = JSON.parse(resp.text).id;
 				
@@ -100,9 +99,9 @@ describe('The User Controller', function () {
 
 		describe('find()', function () {
 			it('should be able to read all users', function (done) {
-				var req = request.get('/api/user');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
+				request.get('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.expect(200)
 					.end(function (err, res) {
@@ -113,9 +112,9 @@ describe('The User Controller', function () {
 			});
 			
 			it('should modify response to include extracted person fields', function (done) {
-				var req = request.get('/api/user');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
+				request.get('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.expect(200)
 					.end(function (err, res) {
@@ -130,10 +129,9 @@ describe('The User Controller', function () {
 
 		describe('create()', function () {
 			it('should be able to create a new user and set appropriate permissions', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-
-				req.set('Accept', 'application/collection+json')
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.send({
 						username: 'coordinator2',
@@ -157,10 +155,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should return bad request if missing group', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-
-				req.send({
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
 						username: 'subject',
 						email: 'subject@example.com',
 						password: 'subject1234',
@@ -175,10 +172,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should return an error if a user already exists', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-
-				req.send(auth.credentials.subject.create)
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send(auth.credentials.subject.create)
 					.expect(400)
 					.end(function(err, res) {
 						done(err);
@@ -186,10 +182,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should return bad request if given group DNE', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-
-				req.send({
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
@@ -207,11 +202,11 @@ describe('The User Controller', function () {
 
  		describe('update()', function () {
  			it('should be able to add a user to a collection centre with a role', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
- 				agent.attachCookies(req);
  				var obj = {};
  				obj[cc2Id] = 'interviewer';
- 				req.send({
+ 				request.put('/api/user/' + globals.users.interviewerUserId + '/access')
+ 					.set('Authorization', 'Bearer ' + globals.token)
+ 					.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
 	 					collectionCentres: [cc2Id]
@@ -226,11 +221,11 @@ describe('The User Controller', function () {
  			});
 
  			it('should be able to add a user in a collection centre in another study', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
- 				agent.attachCookies(req);
  				var obj = {};
  				obj[cc2Id] = 'interviewer';
- 				req.send({
+ 				request.put('/api/user/' + globals.users.interviewerUserId + '/access')
+ 					.set('Authorization', 'Bearer ' + globals.token)
+ 					.send({
 	 					centreAccess: obj,
 	 					isAdding: true,
 	 					collectionCentres: [cc2Id]
@@ -245,7 +240,7 @@ describe('The User Controller', function () {
 
  			it('should retain its existing centreAccess after updating new access', function (done) {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				agent.attachCookies(req);
+ 				req.set('Authorization', 'Bearer ' + globals.token);
 
  				var newCentreAccess = {};
  				newCentreAccess[cc3Id] = 'coordinator';
@@ -274,7 +269,7 @@ describe('The User Controller', function () {
  			
  			it('should be able to update a user\'s role in a collection centre', function (done) {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				agent.attachCookies(req);
+ 				req.set('Authorization', 'Bearer ' + globals.token);
 
  				var newCentreAccess = {};
  				newCentreAccess[cc3Id] = 'interviewer';
@@ -301,7 +296,7 @@ describe('The User Controller', function () {
 
  			it('should be able to switch a user\'s collection centre', function (done) {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				agent.attachCookies(req);
+ 				req.set('Authorization', 'Bearer ' + globals.token);
 
  				var newCentreAccess = {};
  				newCentreAccess[cc2Id] = 'coordinator';
@@ -332,7 +327,7 @@ describe('The User Controller', function () {
 
  			it('should remove the user\'s access if selected none collection centres', function (done) {
  				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
- 				agent.attachCookies(req);
+ 				req.set('Authorization', 'Bearer ' + globals.token);
 
  				var newCentreAccess = {};
 
@@ -359,7 +354,7 @@ describe('The User Controller', function () {
 
  			it('should update a user\'s roles from access management', function (done) {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/roles');
- 				agent.attachCookies(req);
+ 				req.set('Authorization', 'Bearer ' + globals.token);
 
  				User.findOne(globals.users.coordinatorUserId)
  				.populate('roles')
@@ -381,9 +376,9 @@ describe('The User Controller', function () {
 
 		describe('allow correct headers', function() {
 			it('should return full CRUD access for /api/user', function (done) {
-				var req = request.get('/api/user');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
@@ -392,9 +387,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should return full CRUD access for /api/user/:id', function (done) {
-				var req = request.get('/api/user/' + globals.users.adminUserId);
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/user/' + globals.users.adminUserId)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
@@ -406,8 +401,7 @@ describe('The User Controller', function () {
 
  	describe('User with Coordinator Role', function() {
 		before(function(done) {
-			auth.authenticate('coordinator', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('coordinator', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
@@ -426,9 +420,9 @@ describe('The User Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + globals.users.coordinatorUserId);
-				agent.attachCookies(req);
-				req.expect(200)	
+				request.get('/api/user/' + globals.users.coordinatorUserId)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)	
 					.end(function (err, res) {
 						done(err);
 					});
@@ -481,9 +475,9 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-				req.send().expect(400).end(function (err) {
+				request.del('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send().expect(400).end(function (err) {
 					done(err);
 				})
 			});
@@ -492,8 +486,7 @@ describe('The User Controller', function () {
 
  	describe('User with Interviewer Role', function() {
 		before(function(done) {
-			auth.authenticate('interviewer', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('interviewer', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
@@ -511,9 +504,9 @@ describe('The User Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to read self user', function (done) {
-				var req = request.get('/api/user/' + globals.users.interviewerUserId);
-				agent.attachCookies(req);
-				req.expect(200)	
+				request.get('/api/user/' + globals.users.interviewerUserId)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)	
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.id.should.equal(globals.users.interviewerUserId);
@@ -528,10 +521,9 @@ describe('The User Controller', function () {
 
 		describe('create()', function () {
 			it('should not be able to create a new user', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-				
-				req.set('Accept', 'application/json')
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/json')
 					.expect('Content-Type', 'application/json; charset=utf-8')
 					.send({
 						username: 'newuser1',
@@ -550,10 +542,9 @@ describe('The User Controller', function () {
 
 		describe('update()', function() {
 			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-
-				req.send({ email: 'subjectupdated@example.com' })
+				request.put('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ email: 'subjectupdated@example.com' })
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -563,10 +554,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + globals.users.adminUserId);
-				agent.attachCookies(req);
-
-				req.send({ email: 'crapadminemail@example.com' })
+				request.put('/api/user/' + globals.users.adminUserId)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ email: 'crapadminemail@example.com' })
 					.expect(400)
 					.end(function (err, res) {
 						done(err);
@@ -586,11 +576,11 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-				req.send().expect(400).end(function (err) {
-					done(err);
-				})
+				request.del('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send().expect(400).end(function (err) {
+						done(err);
+					});
 			});
 		});
  	});
@@ -598,29 +588,27 @@ describe('The User Controller', function () {
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			auth.authenticate('subject', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('subject', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
 		});
 
 		after(function(done) {	  	
-			auth.authenticate('admin', function(loginAgent, resp) {
-				agent = loginAgent;
-				var req = request.del('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-				req.send().expect(200).end(function (err, res) {
-					auth.logout(done);
-				})
+			auth.authenticate('admin', function(resp) {
+				request.del('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send().expect(200).end(function (err, res) {
+						auth.logout(done);
+					});
 			});
 		});
 
 		describe('find()', function() {
 			it('should only be able to read self user', function (done) {
-				var req = request.get('/api/user');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.length.should.equal(1);
@@ -631,10 +619,9 @@ describe('The User Controller', function () {
 
 		describe('create()', function () {
 			it('should not be able to create a new user', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-				
-				req.set('Accept', 'application/json')
+				request.post('/api/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/json')
 					.expect('Content-Type', 'application/json; charset=utf-8')
 					.send({
 						username: 'newuser1',
@@ -653,10 +640,9 @@ describe('The User Controller', function () {
 
 		describe('update()', function () {
 			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-
-				req.send({ email: 'subjectupdated@example.com' })
+				request.put('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ email: 'subjectupdated@example.com' })
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -666,10 +652,9 @@ describe('The User Controller', function () {
 			});
 
 			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + globals.users.adminUserId);
-				agent.attachCookies(req);
-
-				req.send({ email: 'crapadminemail@example.com' })
+				request.put('/api/user/' + globals.users.adminUserId)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ email: 'crapadminemail@example.com' })
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -691,9 +676,9 @@ describe('The User Controller', function () {
 
 		describe('delete()', function() {
 			it('should not be able to delete users', function (done) {
-				var req = request.del('/api/user/' + globals.users.coordinator2);
-				agent.attachCookies(req);
-				req.send().expect(400).end(function (err) {
+				request.del('/api/user/' + globals.users.coordinator2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send().expect(400).end(function (err) {
 					done(err);
 				})
 			});

@@ -19,14 +19,14 @@ describe('The Auth Controller', function() {
 		});
 
 		it('should return 403 when logging in with bad credentials', function(done) {
-			auth.authenticate('badlogin', function(agent, resp) {
+			auth.authenticate('badlogin', function(resp) {
 				resp.statusCode.should.be.exactly(403);
 				done();
 			});
 		});
 
 		it('should return 200 when logging in with good credentials', function(done) {
-			auth.authenticate('admin', function(agent, resp) {
+			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
@@ -41,9 +41,9 @@ describe('The Auth Controller', function() {
 				});
 		});
 
-		it('should return the username and roles after logging in', function(done) {
-			auth.authenticate('admin', function(agent, resp) {
-				resp.res.body.should.have.properties('username', 'group')
+		it('should return the user data and JWT after logging in', function(done) {
+			auth.authenticate('admin', function(resp) {
+				resp.res.body.should.have.properties('username', 'group', 'token')
 				done();
 			});
 		})

@@ -6,6 +6,7 @@
 */
 (function() {
 var HateoasService = require('../services/HateoasService.js');
+var _ = require('lodash');
 
 module.exports = {
   schema: true,
