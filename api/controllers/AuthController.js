@@ -32,22 +32,22 @@ _.merge(exports, {
           { expiresInMinutes: sails.config.session.jwtExpiry }
         );
 
-        User.findOne(user.id).populate('roles').populate('person').populate('group')
+        User.findOne(user.id).populate('group')
         .then(function(data) {
+          var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname');
           var resp = {
-            id: user.id,
-            username: user.username,
-            group: data.group.name,
-            level: data.group.level,
-            tabview: data.group.menu.tabview,
-            subview: data.group.menu.subview,
-            token: token,
-            expires: sails.config.session.jwtExpiry
+            user: userObj,
+            group: {
+              name: data.group.name,
+              level: data.group.level,
+              tabview: data.group.menu.tabview,
+              subview: data.group.menu.subview
+            },
+            token: {
+              payload: token,
+              expires: sails.config.session.jwtExpiry
+            }
           };
-
-          if (data.person) {
-            _.merge(resp, Utils.User.extractPersonFields(data.person));
-          }
           
           sails.log.info('user', resp, 'authenticated successfully');
 

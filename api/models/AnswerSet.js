@@ -19,11 +19,6 @@ module.exports = {
       type: 'string', 
       required: true
 		},
-		person: {
-			// model: 'person',
-      type: 'string', 
-			required: true
-		},
 		answers: {
 			type: 'json',
       required: true

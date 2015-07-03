@@ -20,32 +20,28 @@ module.exports = {
     query.populate('collectionCentres');  
     query.exec(function found(err, subjects) {
       if (err) return res.serverError(err);
-
-      Utils.User.populateSubjects(matchingRecords)
-      .then(function (subjects) {
-        res.ok(subjects);
+      _.map(subjects, function (subject) {
+        _.merge(subject, Utils.User.extractUserFields(subject.user));
+        delete subject.user;
       });
+
+      res.ok(subjects);
     });        
   },
 
   create: function(req, res, next) {
-    // create user/person first and save userId
-    Person.create({
-      prefix: req.param('prefix'),
-      firstname: req.param('firstname'),
-      lastname: req.param('lastname'),
-      gender: req.param('gender'),
-      dob: req.param('dob')
-    })
-    .then(function (person) {
-      this.person = person;
-      console.log('Creating user');
-      console.log(person);
+    // create user first and save userId
+    Group.findOne({ name: 'subject' })
+    .then(function (subjectGroup) {
       return User.create({
         username: req.param('username'),
         email: req.param('email'),
-        role: 'subject',
-        person: person.id
+        prefix: req.param('prefix'),
+        firstname: req.param('firstname'),
+        lastname: req.param('lastname'),
+        gender: req.param('gender'),
+        dob: req.param('dob'),        
+        group: subjectGroup.id
       });
     })
     .then(function (user) {
@@ -77,10 +73,8 @@ module.exports = {
       this.subject.destroy(function (destroyErr) {
         this.passport.destroy(function (destroyErr) {
           this.user.destroy(function (destroyErr) {
-            this.person.destroy(function (destroyErr) {
-              next(destroyErr || err);
-            })
-          });
+            next(destroyErr || err);
+          })
         });
       });
     });

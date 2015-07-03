@@ -42,22 +42,12 @@ function checkAdminUser() {
         return Group.findOneByName('admin')
           .then(function (group) {
             return User.update({ id: user.id }, {
+              prefix: 'Mr.',
+              firstname: 'Admin',
+              lastname: 'Admin',
               group: group.id
             });
           });        
-      } else {
-        return user;
-      }      
-    })
-    .then(function (user) {
-      if (!_.has(user, 'person')) {
-        return Person.create({
-          prefix: 'Mr.',
-          firstname: 'Admin',
-          lastname: 'Admin'
-        }).then(function (person) {
-          return User.update(user.id, { person: person.id });
-        });
       } else {
         return user;
       }      

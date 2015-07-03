@@ -49,16 +49,10 @@
 				{"name":"email","type":"string","prompt":"Email","value":""},
 				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
 				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
-				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
+				{"name":"lastname","type":"string","prompt":"Lastname","value":""},
+				{"name":"gender","type":"string","prompt":"Gender","value":""},
+				{"name":"dob","type":"date","prompt":"Date of Birth","value":""}
 			]			
-		}
-	},	
-	{
-		"path": "/api/person",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/2"
 		}
 	},	
 	{
