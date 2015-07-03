@@ -78,7 +78,7 @@ var Auth = {
       }
     }
   },
-
+  
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
       Group.findOneByName(credentials.group).then(function (group) {
@@ -100,7 +100,7 @@ var Auth = {
       .send(this.credentials[user].login)
       .end(function (err, result) {
         if (err) throw err;
-        globals.token = result.body.token;
+        if (_.has(result.body, 'token')) globals.token = result.body.token.payload;
         done(result);
       });
   },

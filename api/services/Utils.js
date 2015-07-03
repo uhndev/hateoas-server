@@ -65,64 +65,12 @@ var self = {
       return {
         username: data.username,
         email: data.email,
-        person: data.person 
-      };
-    },
-
-    extractPersonFields: function extractPersonFields(data) {
-      return {
         prefix: data.prefix,
         firstname: data.firstname,
         lastname: data.lastname,
         gender: data.gender,
         dob: data.dob
       };
-    },
-
-    populateSubjects: function populateSubjects(subjects) {
-      var subjectObj = _.map(subjects, function (subject) {
-        _.merge(subject, Utils.User.extractUserFields(subject.user));
-        delete subject.user;
-        return subject;
-      });
-
-      return Q.all(
-        _.map(subjectObj, function (subject) {
-          return Person.findOne(subject.person);
-        })
-      )
-      .then(function (subjectPersons) {
-        var zipped = _.zip(subjectObj, subjectPersons);
-        _.reduce(zipped, function (res, zipObj) {
-          delete zipObj[0].person;
-          res.push(_.merge(zipObj[0], self.User.extractPersonFields(zipObj[1])));
-          return res;
-        }, []);
-
-        return (_.map(zipped, _.first));
-      });
-    },
-    
-    populateUsers: function populateUsers(users) {
-      return Q.all(
-        _.map(users, function (user) {
-          return User.findOne(user.id).populate('person')
-            .then(function (popUser) {
-              return _.merge(user, popUser);
-            })
-        })
-      ).then(function(users) {
-        _.map(users, function (user) {
-          if (user.person) {
-            _.merge(user, self.User.extractPersonFields(user.person));
-            delete user.person;
-          }
-        });
-        return users;  
-      })
-      .catch(function (err) {
-        return err;
-      });
     }
   }
   /** End of "User" Utils **/

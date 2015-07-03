@@ -76,7 +76,11 @@ module.exports = {
         );
       })
       .then(function (subjects) {
-        return Utils.User.populateSubjects(subjects);
+        _.map(subjects, function (subject) {
+          _.merge(subject, Utils.User.extractUserFields(subject.user));
+          delete subject.user;
+        });
+        return subjects;
       })
       // .then(function (subjects) {
       //   // TODO: FIX THIS - unable to query on populated values

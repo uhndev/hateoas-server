@@ -118,6 +118,48 @@
       },
       {
         "field_id": 7,
+        "field_name": "gender",
+        "field_title": "Gender",
+        "field_type": "radio",
+        "field_value": "",
+        "field_placeholder": "Select a gender",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_hasOptions": true,
+        "field_required": false,
+        "field_options": [
+          {
+            "option_id": 1,
+            "option_title": "Male",
+            "option_value": "Male"
+          },
+          {
+            "option_id": 2,
+            "option_title": "Female",
+            "option_value": "Female"
+          }
+        ]
+      },
+      {
+        "field_id": 8,
+        "field_name": "dob",
+        "field_title": "Date of Birth",
+        "field_type": "date",
+        "field_value": "",
+        "field_placeholder": "Enter a date value",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_hasOptions": false,
+        "field_required": false
+      },      
+      {
+        "field_id": 9,
         "field_name": "group",
         "field_title": "Group",
         "field_type": "singleselect",
@@ -135,125 +177,7 @@
         "field_labels": "name"
       }
 		]
-	},
-  {
-    "form_type": "system",
-    "form_name": "person",
-    "form_title": "Person Registration",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
-    "form_questions": [
-      {
-        "field_id": 1,
-        "field_name": "prefix",
-        "field_title": "Prefix",
-        "field_type": "dropdown",
-        "field_value": "",
-        "field_placeholder": "Select a prefix",
-        "field_validation": {
-          "rule": "none",
-          "expression": ""
-        },
-        "field_helpertext": "missing input or invalid",
-        "field_hasOptions": true,
-        "field_required": true,
-        "field_options": [
-          {
-            "option_id": 1,
-            "option_title": "Mr.",
-            "option_value": "Mr."
-          },
-          {
-            "option_id": 2,
-            "option_title": "Mrs.",
-            "option_value": "Mrs."
-          },
-          {
-            "option_id": 3,
-            "option_title": "Ms.",
-            "option_value": "Ms."
-          },
-          {
-            "option_id": 4,
-            "option_title": "Dr.",
-            "option_value": "Dr."
-          }
-        ]
-      },
-      {
-        "field_id": 2,
-        "field_name": "firstname",
-        "field_title": "Firstname",
-        "field_type": "textfield",
-        "field_value": "",
-        "field_placeholder": "John",
-        "field_validation": {
-          "rule": "none",
-          "expression": ""
-        },
-        "field_helpertext": "You must enter a first name",
-        "field_hasOptions": false,
-        "field_required": true
-      },
-      {
-        "field_id": 3,
-        "field_name": "lastname",
-        "field_title": "Lastname",
-        "field_type": "textfield",
-        "field_value": "",
-        "field_placeholder": "Doe",
-        "field_validation": {
-          "rule": "none",
-          "expression": ""
-        },
-        "field_helpertext": "You must enter a last name",
-        "field_hasOptions": false,
-        "field_required": true
-      },
-      {
-        "field_id": 4,
-        "field_name": "gender",
-        "field_title": "Gender",
-        "field_type": "radio",
-        "field_value": "",
-        "field_placeholder": "Select a gender",
-        "field_validation": {
-          "rule": "none",
-          "expression": ""
-        },
-        "field_helpertext": "missing input or invalid",
-        "field_hasOptions": true,
-        "field_required": true,
-        "field_options": [
-          {
-            "option_id": 1,
-            "option_title": "Male",
-            "option_value": "Male"
-          },
-          {
-            "option_id": 2,
-            "option_title": "Female",
-            "option_value": "Female"
-          }
-        ]
-      },
-      {
-        "field_id": 5,
-        "field_name": "dob",
-        "field_title": "Date of Birth",
-        "field_type": "date",
-        "field_value": "",
-        "field_placeholder": "Enter a date value",
-        "field_validation": {
-          "rule": "none",
-          "expression": ""
-        },
-        "field_helpertext": "missing input or invalid",
-        "field_hasOptions": false,
-        "field_required": true
-      }
-    ]
-  },  
+	}, 
   {
     "form_type": "system",
     "form_name": "subject",

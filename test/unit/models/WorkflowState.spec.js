@@ -20,9 +20,9 @@ describe('The WorkflowState Model', function() {
 
 	describe('when accessing the WorkflowState model', function() {
 
-		it('should begin with user, person, subject, study, and collection centre WorkflowStates',  function (done) {
+		it('should begin with user, subject, study, and collection centre WorkflowStates',  function (done) {
 			WorkflowState.count(function(err, states) {
-				states.should.be.exactly(6);
+				states.should.be.exactly(5);
 				done(err);
 			});
 		});
@@ -39,14 +39,6 @@ describe('The WorkflowState Model', function() {
 			WorkflowState.findOne({ path: '/api/subject' })
 				.exec(function (err, state) {
 					state.template.href.should.equal(formHrefs.subject);
-					done(err);
-				});
-		});
-		
-		it('should return the correct person form in template href', function (done) {
-			WorkflowState.findOne({ path: '/api/person' })
-				.exec(function (err, state) {
-					state.template.href.should.equal(formHrefs.person);
 					done(err);
 				});
 		});

@@ -14,126 +14,118 @@ _.merge(exports, {
       .skip( actionUtil.parseSkip(req) )
       .sort( actionUtil.parseSort(req) );
 
-    query.populate('roles');
-    query.populate('person'); 
+    query.populate('roles'); 
     query.exec(function found(err, users) {
-      if (err) return res.serverError(err);
-
-      _.map(users, function (user) {
-        if (user.person) {
-          _.merge(user, Utils.User.extractPersonFields(user.person));
-          delete user.person;
-        }
-      });
+      if (err) {
+        return res.serverError(err);
+      }
       res.ok(users);
     });        
   },
 
   findOne: function (req, res, next) {
     User.findOne(req.param('id'))
-      .populate('person')
       .populate('collectionCentres')
-    .exec(function (err, matchingRecord) {
-      if (err) res.serverError(err);
-      if(!matchingRecord) {
-        return res.notFound({
-          title: 'Not Found',
-          code: 404,
-          message: 'No record found with the specified id.'
-        });
-      }
+      .exec(function (err, matchingRecord) {
+        if (err) {
+          res.serverError(err);
+        }
+        if(!matchingRecord) {
+          return res.notFound({
+            title: 'Not Found',
+            code: 404,
+            message: 'No record found with the specified id.'
+          });
+        }
 
-      if (matchingRecord.person) {
-        _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
-        delete matchingRecord.person;
-      }
-
-      res.ok(matchingRecord);
-    });    
+        res.ok(matchingRecord);
+      });    
   },
 
   // Overrides sails-auth's UserController.create to include role
   create: function (req, res, next) {
     var password = req.param('password');
 
-    Person.create({
+    User.create({
+      username: req.param('username'),
+      email: req.param('email'),
       prefix: req.param('prefix'),
       firstname: req.param('firstname'),
-      lastname: req.param('lastname')
-    }).exec(function (perr, person) {
-      if (perr) res.serverError(perr);
-      User.create({
-        username: req.param('username'),
-        email: req.param('email'),
-        group: req.param('group'),
-        person: person.id
-      }).exec(function (uerr, user) {
-        if (uerr || !user) {
-          person.destroy(function (destroyErr) {
+      lastname: req.param('lastname'),
+      gender: req.param('gender'),
+      dob: req.param('dob'),
+      group: req.param('group')
+    }).exec(function (uerr, user) {
+      if (uerr || !user) {
+        return res.badRequest({
+          title: 'User Error',
+          code: 400,
+          message: 'Error creating user'
+        });
+      } else {
+        if (_.isEmpty(password)) {
+          user.destroy(function (destroyErr) {
             return res.badRequest({
               title: 'User Error',
               code: 400,
-              message: 'Error creating user'
-            });  
+              message: 'Password cannot be empty'
+            });             
           });
         } else {
-          if (_.isEmpty(password)) {
-            user.destroy(function (destroyErr) {
-              person.destroy(function (destroyErr) {
-                return res.badRequest({
-                  title: 'User Error',
-                  code: 400,
-                  message: 'Password cannot be empty'
-                });
-              });                
-            });
-          } else {
-            Passport.create({
-              protocol : 'local'
-            , password : password
-            , user     : user.id
-            }, function (err, passport) {
-              if (err) {
-                user.destroy(function (destroyErr) {
-                  person.destroy(function (destroyErr) {
-                    next(destroyErr || err);  
-                  });                
-                });
-              }
-              res.ok(user);
-            });
-          }            
-        }          
-      });
+          Passport.create({
+            protocol : 'local',
+            password : password,
+            user     : user.id
+          }, function (err, passport) {
+            if (err) {
+              user.destroy(function (destroyErr) {
+                next(destroyErr || err);  
+              });
+            }
+            res.ok(user);
+          });
+        }            
+      }          
     });
   },
 
   /**
    * [update]
-   * Route for handling update of user/person attributes     
+   * Route for handling update of user attributes     
    */
   update: function (req, res) {
-    // user params
     var userId = req.param('id');
 
     var userFields = {
       username: req.param('username'),
       email: req.param('email'),
+      prefix: req.param('prefix'),
+      firstname: req.param('firstname'),
+      lastname: req.param('lastname'),
+      gender: req.param('gender'),
+      dob: req.param('dob'),
       group: req.param('group'),
       centreAccess: req.param('centreAccess')
     };
 
     Group.findOne(req.user.group).then(function (group) {
       this.group = group;
-      if (group.level > 1) { // prevent all non-admin users
+      if (group.level > 1) { // prevent all non-admin users from updating group
         delete userFields.group;
       }
-      return User.findOne(userId).populate('roles');
+      return User.findOne(userId);
     })
-    .then(function (user) {
+    .then(function (user) { // update user fields
       this.previousGroup = user.group;
       return User.update({id: user.id}, userFields);
     })
+    .then(function (user) { // updating group, apply new permissions
+      if (this.previousGroup !== userFields.group && this.group.level === 0) {
+        return PermissionService.setUserRoles(_.first(user));
+      } else {
+        return user;  
+      }
+    })    
     .then(function (user) { // find and update user's associated passport
       this.user = user;
       if (!_.isEmpty(req.param('password'))) {
@@ -141,33 +133,10 @@ _.merge(exports, {
           return Passport.update(passport.id, { password : req.param('password') });
         });
       }
-    })
-    .then(function (passport) { // update user's associated person
-      var personFields = {
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname')
-      };
-      if (personFields.prefix || personFields.firstname || personFields.lastname) {
-        if (!_.has(this.user, 'person')) {
-          return Person.create(personFields).then(function (person) {
-            return User.update(userId, { person: person.id });
-          });
-        } else {
-          return Person.update(this.user.person, personFields);
-        }  
-      }
-      return this.user;      
-    })
-    .then(function (user) { // updating group, apply new permissions
-      if (this.previousGroup !== userFields.group && this.group.level === 0) {
-        return PermissionService.setUserRoles(_.first(user));
-      } else {
-        return user;  
-      }        
+      return this.user;
     })
     .then(function (user) {
-      res.ok(user);
+      res.ok(this.user);
     })
     .catch(function (err) {
       res.serverError(err);
@@ -286,7 +255,9 @@ _.merge(exports, {
         skip: actionUtil.parseSkip(req),
         sort: actionUtil.parseSort(req) }, 
       function(err, users) {
-        if (err) res.serverError(err);
+        if (err) {
+          res.serverError(err);
+        }
         res.ok(users);
       });
   }

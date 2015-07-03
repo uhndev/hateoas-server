@@ -17,12 +17,7 @@ module.exports = {
 			if (_.isUndefined(centre)) {
 				res.notFound();
 			} else {
-				this.centre = centre;
-				Utils.User.populateUsers(centre.coordinators)
-					.then(function (users) {
-						this.centre.coordinators = users;
-						res.ok(this.centre);
-					});
+				res.ok(centre);
 			}
 		});
 	},

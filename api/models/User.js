@@ -10,10 +10,23 @@ _.merge(exports, {
   
   schema: true,
   attributes: {
-    // one-way association to a person
-    person: {
-      model: 'person'
+    firstname: {
+      type: 'string'
     },
+    lastname: {
+      type: 'string'
+    },
+    prefix: {
+      type: 'string',
+      enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+    },
+    gender: {
+      type: 'string',
+      enum: ['Male', 'Female']
+    },
+    dob: {
+      type: 'date'
+    },    
     // group of roles this user has
     group: {
       model: 'group'
@@ -106,29 +119,7 @@ _.merge(exports, {
           }
         });
       });       
-
-      return Utils.User.populateUsers(users);
-      // return users;
-    })
-    // .then(function (users) {
-    //   // TODO: FIX THIS - unable to query on populated values
-    //   var query = _.cloneDeep(options);
-    //   query.where = query.where || {};
-    //   delete query.where.name;
-
-    //   this.coordinators = _.pluck(users, 'id');
-    //   return User.find(query).populate('person');
-    // })
-    // .then(function (users) {
-    //   return Utils.User.populateUsers(users);
-    // })
-    // .then(function (users) {
-    //   return _.filter(users, function (user) {
-    //     return _.includes(this.coordinators, user.id);
-    //   });
-    // })
-    .then(function (users) {
-      cb(false, users);
+      return cb(false, users);
     })
     .catch(cb);
   }

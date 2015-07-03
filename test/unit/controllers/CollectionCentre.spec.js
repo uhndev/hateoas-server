@@ -14,7 +14,7 @@ describe('The CollectionCentre Controller', function () {
 		before(function(done) {
 			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
-				globals.users.adminUserId = JSON.parse(resp.text).id;
+				globals.users.adminUserId = JSON.parse(resp.text).user.id;
 
 				Study.create({
 					name: 'CC-LEAP-ADMIN',
