@@ -9,6 +9,8 @@ _.merge(exports, {
 
   /**
    * Create a authentication callback endpoint (Overrides sails-auth)
+   * Needed to modify response to include populated group info like
+   * main/submenu settings for user as well as JWT token information.
    *
    * @param {Object} req
    * @param {Object} res
@@ -48,6 +50,12 @@ _.merge(exports, {
               expires: sails.config.session.jwtExpiry
             }
           };
+
+          // Upon successful login, optionally redirect the user if there is a
+          // `next` query param
+          if (req.query.next) {
+            res.status(302).set('Location', req.query.next);
+          }
           
           sails.log.info('user', resp, 'authenticated successfully');
 

@@ -16,7 +16,9 @@ _.merge(exports, {
 
     query.populate('roles'); 
     query.exec(function found(err, users) {
-      if (err) return res.serverError(err);
+      if (err) {
+        return res.serverError(err);
+      }
       res.ok(users);
     });        
   },
@@ -25,7 +27,9 @@ _.merge(exports, {
     User.findOne(req.param('id'))
       .populate('collectionCentres')
       .exec(function (err, matchingRecord) {
-        if (err) res.serverError(err);
+        if (err) {
+          res.serverError(err);
+        }
         if(!matchingRecord) {
           return res.notFound({
             title: 'Not Found',
@@ -69,9 +73,9 @@ _.merge(exports, {
           });
         } else {
           Passport.create({
-            protocol : 'local'
-          , password : password
-          , user     : user.id
+            protocol : 'local',
+            password : password,
+            user     : user.id
           }, function (err, passport) {
             if (err) {
               user.destroy(function (destroyErr) {
@@ -251,7 +255,9 @@ _.merge(exports, {
         skip: actionUtil.parseSkip(req),
         sort: actionUtil.parseSort(req) }, 
       function(err, users) {
-        if (err) res.serverError(err);
+        if (err) {
+          res.serverError(err);
+        }
         res.ok(users);
       });
   }
