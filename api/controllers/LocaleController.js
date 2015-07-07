@@ -1,3 +1,4 @@
+/** @ignore */
 module.exports = {
 
 	getLocale: function(req, res, next) {

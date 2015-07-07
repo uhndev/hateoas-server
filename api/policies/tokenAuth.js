@@ -1,12 +1,11 @@
 /**
  * tokenAuth
  *
- * Policy that verifies a given JWT token.
- * If successful, associated user object is stored in req.user for future use.
- *
- * @module      :: Policy
- * @description :: Policy for verifying user json web tokens
- * @docs        :: http://sailsjs.org/#!documentation/policies
+ * @module      Policies
+ * @description Policy that verifies a given JWT token.
+ *              If successful, associated user object is stored in req.user for future use.
+ * @docs        http://sailsjs.org/#!documentation/policies
+ * @see         http://github.com/auth0/express-jwt
  *
  */
 var jwt = require('express-jwt');

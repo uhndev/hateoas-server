@@ -1,5 +1,7 @@
 // Until @tjwebb makes this process easier, I'm modifying the hook from node_modules/sails-permissions
 
+(function() {
+
 module.exports = function (sails) {
   return {
     initialize: function (next) {
@@ -10,7 +12,7 @@ module.exports = function (sails) {
             initializeRoles()
               .then(initializeGroups)
               .then(checkAdminUser)
-              .then(initializePermissions)              
+              .then(initializePermissions)
               .then(next);
           })
           .catch(function (error) {
@@ -47,10 +49,10 @@ function checkAdminUser() {
               lastname: 'Admin',
               group: group.id
             });
-          });        
+          });
       } else {
         return user;
-      }      
+      }
     });
 }
 
@@ -105,4 +107,6 @@ function initializeGroups () {
       sails.log.error(error);
     });
 }
+
+})();
 

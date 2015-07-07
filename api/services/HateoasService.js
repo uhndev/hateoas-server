@@ -27,7 +27,7 @@ module.exports = {
     if (id) {
       components.push(id);
     }
-   
+
     return components.join('/');
   },
   create: function(req, res, data) {
@@ -57,7 +57,7 @@ module.exports = {
            && _.has(models[modelName], 'definition')) {
         var schema = Utils.Model.removeSystemFields(
                        models[modelName].definition);
-        
+
         attributes = _.map(schema, function(definition, field) {
           var template = {
             'name': field,
@@ -67,7 +67,7 @@ module.exports = {
           }
 
           if (definition.model) {
-            template = _.merge(template, 
+            template = _.merge(template,
               makeTemplate(definition.model));
           }
 
@@ -115,15 +115,15 @@ module.exports = {
       if (state) {
         _.each(state.links, addBaseUrl);
         _.each(state.queries, addBaseUrl);
-        response = _.merge(response, 
+        response = _.merge(response,
                      Utils.Model.removeSystemFields(state));
       }
 
       if (!_.has(response.template, 'data')) {
         response.template = _.merge(response.template,
                             makeTemplate(modelName))
-      } 
-      
+      }
+
       // if template.data is explicitly set in workflow, use it exactly.
       // else {
       //   var required = makeTemplate(modelName);
@@ -137,7 +137,7 @@ module.exports = {
       return response;
     }
 
-    return WorkflowState.findOne({ 
+    return WorkflowState.findOne({
       path: decodeURIComponent(address.pathname)
     })
     .then(checkBaseModel)

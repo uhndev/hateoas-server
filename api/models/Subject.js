@@ -1,9 +1,11 @@
 /**
-* Subject.js
+* Subject
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
+* @class Subject
+* @description Model representation of a subject
+* @docs        http://sailsjs.org/#!documentation/models
 */
+
 (function() {
 var HateoasService = require('../services/HateoasService.js');
 var _ = require('lodash');
@@ -40,7 +42,7 @@ module.exports = {
           return cb(err);
         }
 
-        this.study = study;        
+        this.study = study;
         return study.collectionCentres;
       })
       .then(function (centres) {
@@ -52,8 +54,8 @@ module.exports = {
               if (_.has(subject, 'collectionCentres')) {
                 return _.filter(subject.collectionCentres, function (centre) {
                   return _.includes(_.pluck(centres, 'id'), centre.id );
-                });  
-              }              
+                });
+              }
             });
         }
         return centres;
@@ -104,14 +106,14 @@ module.exports = {
       })
       .catch(cb);
   },
-  
+
   beforeValidate: function(subject, cb) {
     //Auto increment workaround
-    Subject.findOne({ where: {"study": subject.study}, 
+    Subject.findOne({ where: {"study": subject.study},
       sort:'studyId DESC' } )
         .exec(function(err, lastSubject){
           if (err) return err;
-          subject.studyId = (lastSubject && lastSubject.studyId ? 
+          subject.studyId = (lastSubject && lastSubject.studyId ?
             lastSubject.studyId + 1 : 1);
           cb();
         });

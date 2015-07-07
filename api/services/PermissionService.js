@@ -3,14 +3,16 @@
 var _ = require('lodash');
 var _super = require('sails-permissions/api/services/PermissionService');
 
+/** @namespace */
 function PermissionService () { }
 
 PermissionService.prototype = Object.create(_super);
 _.extend(PermissionService.prototype, {
 
   /**
-   * [setUserRoles]
-   * On create/updates of user role, set appropriate permissions
+   * setUserRoles
+   * @description On create/updates of user role, set appropriate permissions
+   * @memberOf PermissionService
    * @param  {Object}         user
    * @return {Object|Promise} user with updated roles, or promise
    */
@@ -20,14 +22,15 @@ _.extend(PermissionService.prototype, {
     return Group.findOne(uID).populate('roles')
       .then(function (group) {
         return self.grantPermissions(user, group.roles);
-      });    
+      });
   },
 
   /**
-   * [revokeGroupPermissions]
-   * Removes all roles' permissions from a given group
-   * @param  {Object} group 
-   * @return {group}       
+   * revokeGroupPermissions
+   * @description Removes all roles' permissions from a given group
+   * @memberOf PermissionService
+   * @param  {Object} group
+   * @return {group}
    */
   revokeGroupPermissions: function(group) {
     return Group.findOne(group.id).populate('roles')
@@ -40,17 +43,18 @@ _.extend(PermissionService.prototype, {
   },
 
   /**
-   * [grantPermissions] 
-   * Revokes a user's roles, then grants the given roles to a user.
-   * @param  {Object} user  
-   * @param  {Array}  roles 
+   * grantPermissions
+   * @description Revokes a user's roles, then grants the given roles to a user.
+   * @memberOf PermissionService
+   * @param  {Object} user
+   * @param  {Array}  roles
    * @return {Object} user
    */
   grantPermissions: function(user, roles) {
     return User.findOne(user.id).populate('roles')
     .then(function (user) {
       _.each(user.roles, function (role) {
-        user.roles.remove(role.id);          
+        user.roles.remove(role.id);
       });
       return user.save();
     })
@@ -63,15 +67,15 @@ _.extend(PermissionService.prototype, {
       if (_.all(roles, function (role) { return _.has(role, 'id'); })) {
         _.each(roles, function (role) {
           user.roles.add(role.id);
-        });  
+        });
         return user.save();
-      } 
+      }
       // otherwise, updating from access matrix, will pass role names from frontend
       else {
         return Role.find({name: roles}).then(function (foundRoles) {
           _.each(foundRoles, function (role) {
             user.roles.add(role.id);
-          });  
+          });
           return user.save();
         })
       }
@@ -80,7 +84,7 @@ _.extend(PermissionService.prototype, {
       return err;
     });
   }
-  
+
 });
 
 module.exports = new PermissionService();

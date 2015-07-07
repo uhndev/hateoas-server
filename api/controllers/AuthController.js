@@ -1,19 +1,25 @@
-// api/controllers/AuthController.js
+/**
+ * AuthController
+ *
+ * @module controllers/Auth
+ * @description Controller used for handling authentication with server.
+ *              Overrides sails-auth's AuthController to modify response
+ *              to include populated group info like main/submenu settings
+ *              for user as well as JWT token information.
+ * @see https://github.com/tjwebb/sails-auth
+ */
 
+/** @ignore */
 var _ = require('lodash');
-var _super = require('sails-permissions/api/controllers/AuthController');
-var jwt = require('jsonwebtoken');
 
-_.merge(exports, _super);
-_.merge(exports, {
+_.merge(module.exports, require('sails-permissions/api/controllers/AuthController'));
+_.merge(module.exports, {
 
   /**
    * Create a authentication callback endpoint (Overrides sails-auth)
-   * Needed to modify response to include populated group info like
-   * main/submenu settings for user as well as JWT token information.
    *
-   * @param {Object} req
-   * @param {Object} res
+   * @param {Object} req request object
+   * @param {Object} res response object
    */
   callback: function (req, res) {
     sails.services.passport.callback(req, res, function (err, user) {
@@ -28,9 +34,9 @@ _.merge(exports, {
           return res.forbidden(err);
         }
 
-        var token = jwt.sign(
-          user, 
-          sails.config.session.secret, 
+        var token = require('jsonwebtoken').sign(
+          user,
+          sails.config.session.secret,
           { expiresInMinutes: sails.config.session.jwtExpiry }
         );
 
@@ -56,12 +62,12 @@ _.merge(exports, {
           if (req.query.next) {
             res.status(302).set('Location', req.query.next);
           }
-          
+
           sails.log.info('user', resp, 'authenticated successfully');
 
           return res.json(resp);
-        });        
+        });
       });
     });
-  }   
+  }
 });

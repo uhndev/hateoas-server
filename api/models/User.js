@@ -1,13 +1,18 @@
-// api/models/User.js
+/**
+ * User
+ *
+ * @class User
+ * @description Model representation of a user
+ * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/User.js
+ * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/User.js
+ */
 
 var _ = require('lodash');
-var Q = require('q');
-var _super = require('sails-permissions/api/models/User');
 var HateoasService = require('../services/HateoasService.js');
 
-_.merge(exports, _super);
+_.merge(exports, require('sails-permissions/api/models/User'));
 _.merge(exports, {
-  
+
   schema: true,
   attributes: {
     firstname: {
@@ -26,7 +31,7 @@ _.merge(exports, {
     },
     dob: {
       type: 'date'
-    },    
+    },
     // group of roles this user has
     group: {
       model: 'group'
@@ -60,7 +65,7 @@ _.merge(exports, {
           cb();
         }).catch(function (err) {
           cb(err);
-        });  
+        });
       } else {
         cb();
       }
@@ -71,7 +76,7 @@ _.merge(exports, {
     Group.findOne(currUser.group).then(function (group) {
       this.group = group;
       return Study.findOneByName(studyName).populate('collectionCentres');
-    })      
+    })
     .then(function (study) {
       if (!study) {
         err = new Error();
@@ -81,7 +86,7 @@ _.merge(exports, {
         return cb(err);
       }
 
-      this.study = study;        
+      this.study = study;
       return study.collectionCentres;
     })
     .then(function (centres) {
@@ -92,7 +97,7 @@ _.merge(exports, {
               return _.includes(_.pluck(centres, 'id'), centre.id );
             });
           });
-      } 
+      }
       return centres;
     })
     .then(function (centres) {
@@ -118,7 +123,7 @@ _.merge(exports, {
             user.accessCollectionCentre.push(centreId);
           }
         });
-      });       
+      });
       return cb(false, users);
     })
     .catch(cb);

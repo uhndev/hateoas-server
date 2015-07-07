@@ -1,10 +1,12 @@
 /**
  * SubjectController
  *
+ * @module  controllers/Subject
  * @description :: Server-side logic for managing Subjects
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+/** @ignore */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
 module.exports = {
@@ -17,7 +19,7 @@ module.exports = {
       .sort( actionUtil.parseSort(req) );
 
     query.populate('user');
-    query.populate('collectionCentres');  
+    query.populate('collectionCentres');
     query.exec(function found(err, subjects) {
       if (err) return res.serverError(err);
       _.map(subjects, function (subject) {
@@ -26,7 +28,7 @@ module.exports = {
       });
 
       res.ok(subjects);
-    });        
+    });
   },
 
   create: function(req, res, next) {
@@ -40,7 +42,7 @@ module.exports = {
         firstname: req.param('firstname'),
         lastname: req.param('lastname'),
         gender: req.param('gender'),
-        dob: req.param('dob'),        
+        dob: req.param('dob'),
         group: subjectGroup.id
       });
     })
@@ -86,11 +88,11 @@ module.exports = {
       { where: actionUtil.parseCriteria(req),
         limit: actionUtil.parseLimit(req),
         skip: actionUtil.parseSkip(req),
-        sort: actionUtil.parseSort(req) }, 
+        sort: actionUtil.parseSort(req) },
       function(err, subjects) {
         if (err) res.serverError(err);
         res.ok(subjects);
-      });    
+      });
   }
 
 };

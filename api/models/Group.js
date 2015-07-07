@@ -1,9 +1,11 @@
 /**
-* Group.js
+* Group
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
+* @class Group
+* @description Model representation of a group.
+* @docs        http://sailsjs.org/#!documentation/models
 */
+
 var HateoasService = require('../services/HateoasService.js');
 
 module.exports = {

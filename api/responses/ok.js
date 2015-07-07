@@ -36,18 +36,18 @@ module.exports = function sendOK (data, options) {
       var model = models[modelName];
       if (query.where) {
         return model.count(JSON.parse(query.where));
-      } 
+      }
       return model.count(query);
     }
     return Q.when(0);
   }
 
   /**
-   * Private method for fetching which CRUD operations are permitted 
+   * Private method for fetching which CRUD operations are permitted
    * for the given model and user.
-   * @param  {[model]}
-   * @param  {[user]}
-   * @return {[promise]}
+   * @param  {model}
+   * @param  {user}
+   * @return {promise}
    */
   function fetchPermissions(model, user) {
     var promises = [];
@@ -56,8 +56,8 @@ module.exports = function sendOK (data, options) {
       var options = {
         method: method,
         model: model,
-        user: user 
-      } 
+        user: user
+      }
       promises.push(PermissionService.findModelPermissions(options)
         .then(function (permissions) {
           return permissions;
@@ -88,7 +88,7 @@ module.exports = function sendOK (data, options) {
       '&': '&amp;'
     };
 
-    var sanitized = JSON.stringify(data).replace(/[&<>]/g, 
+    var sanitized = JSON.stringify(data).replace(/[&<>]/g,
       function(key) {
         return entityMap[key];
       });
@@ -112,7 +112,7 @@ module.exports = function sendOK (data, options) {
       hateoasResponse.count = resultCount;
       hateoasResponse.total = modelCount;
 
-      // hateoasControls will read the allow header 
+      // hateoasControls will read the allow header
       // to determine which buttons/actions to render
       res.set({
         'Access-Control-Expose-Headers': 'allow,Content-Type',

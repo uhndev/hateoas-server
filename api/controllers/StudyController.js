@@ -1,15 +1,29 @@
 /**
  * StudyController
  *
- * @description :: Server-side logic for managing studies
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @module controllers/Study
+ * @description Server-side logic for managing studies
+ * @help        See http://links.sailsjs.org/docs/controllers
  */
 
-var PermissionService = require('../services/PermissionService');
+/** @ignore */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
 module.exports = {
 
+  /**
+   * find
+   * @description Finds and returns a list of studies with 3 modes of filtering
+   *              based on the current user's group.  Admins are simply returned
+   *              all studies, coordinators are filtered based on their enrollments
+   *              at their respective collection centres and similarily so for
+   *              subjects and their enrollments.
+   *
+   * @param  {Object}   req  request object
+   * @param  {Object}   res  response object
+   * @param  {Function} next callback function
+   * @return {null}
+   */
 	find: function (req, res, next) {
 	  var query = Study.find()
 			.where( actionUtil.parseCriteria(req) )
@@ -33,7 +47,7 @@ module.exports = {
                   return _.has(user.centreAccess, centre.id);
                 });
               });
-              res.ok(filteredRecords);  
+              res.ok(filteredRecords);
             }).catch(function (err) {
               return res.serverError(err);
             });
@@ -45,7 +59,7 @@ module.exports = {
                   return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
                 });
               });
-              res.ok(filteredRecords);  
+              res.ok(filteredRecords);
             }).catch(function (err) {
               return res.serverError(err);
             });
@@ -55,6 +69,19 @@ module.exports = {
 		});
 	},
 
+  /**
+   * findOne
+   * @description Finds and returns one study with enrollment summaries including
+   *              number of overseeing coordinators and enrolled subjects.  Users
+   *              with coordinator or subject group permissions will only see the
+   *              requested study if they are enrolled in a collection centre
+   *              registered in that study.
+   *
+   * @param  {Object}   req  request object
+   * @param  {Object}   res  response object
+   * @param  {Function} next callback function
+   * @return {null}
+   */
 	findOne: function (req, res, next) {
 		var name = req.param('name');
 		var getCollectionCentreSummary = function(centre) {
@@ -100,20 +127,20 @@ module.exports = {
 							);
 		    		} else {
 	    			 	return null;
-		    		}    			
+		    		}
     			case 3: // subjects
     				return null;
-    			default: return res.notFound(); break;		
+    			default: return res.notFound(); break;
     		}
     	} else {
     		// study not found
     		return null;
-    	}	    	
+    	}
     })
 		.then(function (centres) {
 			if (_.isUndefined(this.study)) {
 				return res.notFound();
-			} 
+			}
 			else if (_.isNull(centres)) {
 				return res.forbidden({
 					title: 'Error',
@@ -123,7 +150,7 @@ module.exports = {
       }
       else {
 				this.study.centreSummary = centres;
-				res.ok(this.study);	
+				res.ok(this.study);
 			}
 		})
     .catch(function (err) {
@@ -135,6 +162,21 @@ module.exports = {
     });
 	},
 
+  /**
+   * update See - {@link controllers/CollectionCentreController}
+   * @description Updates the study attributes given id, name, reb, attributes,
+   *              administrator or pi.  We prevent users from being able to
+   *              update a study's collection centre directly, and only allow
+   *              this from the CollectionCentre model.
+   *
+   * @see controllers/CollectionCentreController
+   * @{@link controllers/CollectionCentreController}
+   * @link controllers/CollectionCentreController
+   * @param  {Object}   req  request object
+   * @param  {Object}   res  response object
+   * @param  {Function} next callback function
+   * @return {null}
+   */
 	update: function (req, res, next) {
 		// can only update study collection centres via CollectionCentre model
 		var id = req.param('id'),
@@ -162,6 +204,6 @@ module.exports = {
 			res.ok(_.first(study));
 		});
 	}
-	
+
 };
 

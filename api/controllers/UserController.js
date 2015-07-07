@@ -1,10 +1,16 @@
-// api/controllers/UserController.js
+/**
+ * UserController
+ *
+ * @module controllers/User
+ * @description User controller
+ */
 
+/** @ignore */
 var _ = require('lodash');
-var _super = require('sails-permissions/api/controllers/UserController');
+/** @ignore */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-_.merge(exports, _super);
+_.merge(exports, require('sails-permissions/api/controllers/UserController'));
 _.merge(exports, {
 
   find: function (req, res, next) {
@@ -14,13 +20,13 @@ _.merge(exports, {
       .skip( actionUtil.parseSkip(req) )
       .sort( actionUtil.parseSort(req) );
 
-    query.populate('roles'); 
+    query.populate('roles');
     query.exec(function found(err, users) {
       if (err) {
         return res.serverError(err);
       }
       res.ok(users);
-    });        
+    });
   },
 
   findOne: function (req, res, next) {
@@ -39,7 +45,7 @@ _.merge(exports, {
         }
 
         res.ok(matchingRecord);
-      });    
+      });
   },
 
   // Overrides sails-auth's UserController.create to include role
@@ -69,7 +75,7 @@ _.merge(exports, {
               title: 'User Error',
               code: 400,
               message: 'Password cannot be empty'
-            });             
+            });
           });
         } else {
           Passport.create({
@@ -79,19 +85,19 @@ _.merge(exports, {
           }, function (err, passport) {
             if (err) {
               user.destroy(function (destroyErr) {
-                next(destroyErr || err);  
+                next(destroyErr || err);
               });
             }
             res.ok(user);
           });
-        }            
-      }          
+        }
+      }
     });
   },
 
   /**
    * [update]
-   * Route for handling update of user attributes     
+   * Route for handling update of user attributes
    */
   update: function (req, res) {
     var userId = req.param('id');
@@ -123,9 +129,9 @@ _.merge(exports, {
       if (this.previousGroup !== userFields.group && this.group.level === 0) {
         return PermissionService.setUserRoles(_.first(user));
       } else {
-        return user;  
+        return user;
       }
-    })    
+    })
     .then(function (user) { // find and update user's associated passport
       this.user = user;
       if (!_.isEmpty(req.param('password'))) {
@@ -169,24 +175,24 @@ _.merge(exports, {
         if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
           _.each(accessFields.collectionCentres, function (centre) {
             if (accessFields.isAdding) {
-              this.user.collectionCentres.add(centre);  
+              this.user.collectionCentres.add(centre);
             } else {
               this.user.collectionCentres.remove(centre);
-            }          
+            }
           });
 
           // if swapping centres, isAdding flag will be false so after removing, add in new centres
           if (accessFields.swapWith && accessFields.swapWith.length > 0) {
             _.each(accessFields.swapWith, function (centre) {
-              this.user.collectionCentres.add(centre);       
+              this.user.collectionCentres.add(centre);
             });
           }
           return this.user.save();
         }
-      }      
+      }
       return this.user;
     })
-    .then(function (user) {        
+    .then(function (user) {
       if (this.group.level === 1 && !_.isUndefined(accessFields.centreAccess)) {
         return User.update(userId, { centreAccess: accessFields.centreAccess });
       }
@@ -202,7 +208,7 @@ _.merge(exports, {
 
   /**
    * [updateRoles]
-   * Route for handling role updates from access management page       
+   * Route for handling role updates from access management page
    */
   updateRoles: function (req, res, next) {
     // user params
@@ -213,7 +219,7 @@ _.merge(exports, {
 
     /**
     * Update user role from access management
-    */    
+    */
     if (!_.isUndefined(updateGroup)) {
       return User.findOne(userId).populate('roles')
       .then(function (user) {
@@ -253,7 +259,7 @@ _.merge(exports, {
       { where: actionUtil.parseCriteria(req),
         limit: actionUtil.parseLimit(req),
         skip: actionUtil.parseSkip(req),
-        sort: actionUtil.parseSort(req) }, 
+        sort: actionUtil.parseSort(req) },
       function(err, users) {
         if (err) {
           res.serverError(err);

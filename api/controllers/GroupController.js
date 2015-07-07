@@ -1,14 +1,28 @@
 /**
  * GroupController
  *
- * @description :: Server-side logic for managing groups
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @module controllers/GroupController
+ * @description Server-side logic for managing groups
+ * @help        See http://links.sailsjs.org/docs/controllers
  */
+
+/** @ignore */
 var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+/** @ignore */
 var Promise = require('q');
 
 module.exports = {
-	
+
+  /**
+   * find
+   * @description Finds and returns groups with populated roles.  Is called from the
+   *              access management page in the frontend.
+   *
+   * @param  {Object}   req  request object
+   * @param  {Object}   res  response object
+   * @param  {Function} next callback function
+   * @return {null}
+   */
 	find: function(req, res, next) {
 	  var query = Group.find()
 			.where( actionUtil.parseCriteria(req) )
@@ -30,6 +44,18 @@ module.exports = {
     });
 	},
 
+  /**
+   * update
+   * @description Updates a group's associated roles (only as admin).  Expects an
+   *              array of role name strings which will then be found and applied
+   *              as new roles to the requested group's permissions.  After applying
+   *              new roles, the user is granted the new group's roles.
+   *
+   * @param  {Object}   req  request object
+   * @param  {Object}   res  response object
+   * @param  {Function} next callback function
+   * @return {null}
+   */
 	update: function (req, res, next) {
 		var groupId = req.param('id'),
 				roles = req.param('roles');
