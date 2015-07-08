@@ -121,10 +121,3 @@ assets/build/
 assets/bin/
 assets/node_modules/
 assets/vendor/*
-
-###############################################
-#
-# Docs
-#
-###############################################
-docs
