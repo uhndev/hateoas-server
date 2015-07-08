@@ -24,11 +24,6 @@
       contact: {
         model: 'user'
       },
-      // for subjects enrolled in a particular CC
-      subjects: {
-      	collection: 'subject',
-      	via: 'collectionCentres'
-      },
       // for coordinators/interviewer roles at a CC
       coordinators: {
       	collection: 'user',
