@@ -7,6 +7,7 @@
  */
 
 (function() {
+
 	var HateoasService = require('../services/HateoasService.js');
 
 	module.exports = {

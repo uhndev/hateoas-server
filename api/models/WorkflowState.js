@@ -18,21 +18,24 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
-module.exports = {
-  schema: true,
-  attributes: {
-    path: {
-      type: 'string',
-      required: true
-    },
-    queries: {
-      type: 'array'
-    },
-    links: {
-      type: 'array'
-    },
-    template: {
-      type: 'json'
+(function() {
+
+  module.exports = {
+    schema: true,
+    attributes: {
+      path: {
+        type: 'string',
+        required: true
+      },
+      queries: {
+        type: 'array'
+      },
+      links: {
+        type: 'array'
+      },
+      template: {
+        type: 'json'
+      }
     }
-  }
-};
+  };
+})();

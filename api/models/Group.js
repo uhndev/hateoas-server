@@ -6,32 +6,34 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
-var HateoasService = require('../services/HateoasService.js');
+(function() {
 
-module.exports = {
+  var HateoasService = require('../services/HateoasService.js');
 
-  attributes: {
-  	name: {
-  		type: 'string',
-  		required: true,
-  		unique: true
-  	},
-    level: {
-      type: 'integer',
-      enum: [1, 2, 3]
-    },
-  	users: {
-  		collection: 'user',
-  		via: 'group'
-  	},
-  	roles: {
-  		collection: 'role',
-  		via: 'groups'
-  	},
-  	menu: {
-  		type: 'json'
-  	},
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  }
-};
+  module.exports = {
 
+    attributes: {
+      name: {
+        type: 'string',
+        required: true,
+        unique: true
+      },
+      level: {
+        type: 'integer',
+        enum: [1, 2, 3]
+      },
+      users: {
+        collection: 'user',
+        via: 'group'
+      },
+      roles: {
+        collection: 'role',
+        via: 'groups'
+      },
+      menu: {
+        type: 'json'
+      },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
+  };
+})();

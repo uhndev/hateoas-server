@@ -1,11 +1,15 @@
 // api/controllers/RoleController.js
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/controllers/RoleController');
+(function() {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/controllers/RoleController');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
-  
-});
+  _.merge(exports, _super);
+  _.merge(exports, {
+
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+  });
+})();
+

@@ -56,6 +56,7 @@
     "grunt-contrib-uglify": "~0.8.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-conventional-changelog": "^1.2.1",
+    "grunt-doxx": "^0.1.2",
     "grunt-html2js": "~0.3.1",
     "grunt-hub": "^0.7.0",
     "grunt-jsdoc": "^0.6.7",

@@ -7,62 +7,63 @@
  */
 
 (function() {
-var HateoasService = require('../services/HateoasService.js');
 
-module.exports = {
-  schema: true,
-  attributes: {
-    name: {
-    	type: 'string',
-    	required: true
-    },
-    study: {
-    	model: 'study',
-    	required: true
-    },
-    contact: {
-      model: 'user'
-    },
-    // for subjects enrolled in a particular CC
-    subjects: {
-    	collection: 'subject',
-    	via: 'collectionCentres'
-    },
-    // for coordinators/interviewer roles at a CC
-    coordinators: {
-    	collection: 'user',
-    	via: 'collectionCentres'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  },
+  var HateoasService = require('../services/HateoasService.js');
 
-  findByStudyName: function(studyName, options, cb) {
-    Study.findOneByName(studyName)
-    .populate('collectionCentres')
-    .then(function (study) {
-      if (!study) {
-        err = new Error();
-        err.message = require('util')
-          .format('Study with name %s does not exist.', studyName);
-        err.status = 404;
-        return cb(err);
-      }
+  module.exports = {
+    schema: true,
+    attributes: {
+      name: {
+      	type: 'string',
+      	required: true
+      },
+      study: {
+      	model: 'study',
+      	required: true
+      },
+      contact: {
+        model: 'user'
+      },
+      // for subjects enrolled in a particular CC
+      subjects: {
+      	collection: 'subject',
+      	via: 'collectionCentres'
+      },
+      // for coordinators/interviewer roles at a CC
+      coordinators: {
+      	collection: 'user',
+      	via: 'collectionCentres'
+      },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
 
-      var query = _.cloneDeep(options);
-      query.where = query.where || {};
-      query.where.study = study.id;
-      delete query.where.name;
+    findByStudyName: function(studyName, options, cb) {
+      Study.findOneByName(studyName)
+      .populate('collectionCentres')
+      .then(function (study) {
+        if (!study) {
+          err = new Error();
+          err.message = require('util')
+            .format('Study with name %s does not exist.', studyName);
+          err.status = 404;
+          return cb(err);
+        }
 
-      return CollectionCentre.find(query)
-        .populate('coordinators')
-        .populate('subjects');
-    })
-    .then(function (centres) {
-      cb(false, centres);
-    })
-    .catch(cb);
-  }
+        var query = _.cloneDeep(options);
+        query.where = query.where || {};
+        query.where.study = study.id;
+        delete query.where.name;
 
-};
+        return CollectionCentre.find(query)
+          .populate('coordinators')
+          .populate('subjects');
+      })
+      .then(function (centres) {
+        cb(false, centres);
+      })
+      .catch(cb);
+    }
+
+  };
 
 }());

@@ -1,20 +1,14 @@
 // api/models/SecurityLog.js
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/SecurityLog');
+(function() {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/SecurityLog');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo(bar);
-   * }
-   */
-});
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+  });
+})();

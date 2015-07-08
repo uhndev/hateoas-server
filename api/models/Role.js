@@ -8,18 +8,22 @@
  */
 
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/Role');
+(function() {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/Role');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-  attributes: {
-    groups: {
-      collection: 'group',
-      via: 'roles'
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+    attributes: {
+      groups: {
+        collection: 'group',
+        via: 'roles'
+      }
     }
-  }
-});
+  });
+})();
+

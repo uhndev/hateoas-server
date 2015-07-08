@@ -1,8 +1,12 @@
 // api/controllers/ModelController.js
 
-_.merge(exports, require('sails-permissions/api/controllers/ModelController'));
-_.merge(exports, {
+(function() {
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(exports, require('sails-permissions/api/controllers/ModelController'));
+  _.merge(exports, {
 
-});
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+  });
+})();
+
