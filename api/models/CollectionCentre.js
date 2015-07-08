@@ -1,11 +1,13 @@
 /**
-* CollectionCentre.js
-*
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
+ * CollectionCentre
+ *
+ * @class CollectionCentre
+ * @description Model representation of a Collection Centre
+ * @docs        http://sailsjs.org/#!documentation/models
+ */
 
 (function() {
+
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {
@@ -28,7 +30,7 @@
       	via: 'collectionCentres'
       },
       // for coordinators/interviewer roles at a CC
-      coordinators: { 
+      coordinators: {
       	collection: 'user',
       	via: 'collectionCentres'
       },
@@ -46,7 +48,7 @@
           err.status = 404;
           return cb(err);
         }
-        
+
         var query = _.cloneDeep(options);
         query.where = query.where || {};
         query.where.study = study.id;
@@ -61,7 +63,7 @@
       })
       .catch(cb);
     }
-    
+
   };
 
 }());

@@ -38,16 +38,16 @@ module.exports.bootstrap = function(cb) {
 					_.each(forms, function(form) {
 						var idx = _.findIndex(fixtures.form, { 'form_name': form.form_name });
 						if (fixtures.workflowstate[idx]) {
-							fixtures.workflowstate[idx].template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'form', form.id].join('/');	
-						}						
+							fixtures.workflowstate[idx].template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'form', form.id].join('/');
+						}
 					});
 				})
 				.then(function (data) {
 					barrels.populate(['workflowstate'], function (err) {
 						cb(err);
-					});	  		
-				});  	
-			});  		
+					});
+				});
+			});
 		}
 	});
 };

@@ -1,17 +1,29 @@
-// api/models/Role.js
+/**
+ * Role
+ *
+ * @class Role
+ * @description Roles endow Users with Permissions. Exposes Postgres-like API for
+ *              resolving granted Permissions for a User.
+ * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/Role.js
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/Role');
 
-_.merge(exports, _super);
-_.merge(exports, {
+(function() {
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/Role');
 
-  attributes: {
-    groups: {
-      collection: 'group',
-      via: 'roles'
+  _.merge(exports, _super);
+  _.merge(exports, {
+
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+    attributes: {
+      groups: {
+        collection: 'group',
+        via: 'roles'
+      }
     }
-  }
-});
+  });
+})();
+

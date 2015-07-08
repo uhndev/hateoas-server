@@ -1,10 +1,13 @@
 /**
-* Form.js
-*
-* @description :: Form Model
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
+ * Form
+ *
+ * @class Form
+ * @description Model representation of a form
+ * @docs        http://sailsjs.org/#!documentation/models
+ */
+
 (function() {
+
 	var HateoasService = require('../services/HateoasService.js');
 
 	module.exports = {
