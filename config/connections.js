@@ -63,6 +63,13 @@ module.exports.connections = {
     database  : 'dados-dev'
   },
 
+  dados_audit: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'dados-audit'
+  },
+
   dados_test: {
     adapter   : 'sails-mongo',
     host      : 'localhost',

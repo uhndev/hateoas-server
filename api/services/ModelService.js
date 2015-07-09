@@ -10,8 +10,21 @@
   ModelService.prototype = Object.create(_super);
   _.extend(ModelService.prototype, {
 
-    // Extend with custom logic here by adding additional fields and methods,
-    // and/or overriding methods in the superclass.
+    /**
+     * filterExpiredRecords
+     * @description Performs find operation with filter for non-expired records.
+     *              Will only perform filter if model definition includes an
+     *              `expiredAt` attribute.
+     * @param  {String} model Model name
+     * @return {Promise}      Chainable model find promise
+     */
+    filterExpiredRecords: function(model) {
+      if (_.has(sails.models[model].definition, 'expiredAt')) {
+        return sails.models[model].find({ expiredAt: null });
+      } else {
+        return sails.models[model].find();
+      }
+    }
 
   });
 

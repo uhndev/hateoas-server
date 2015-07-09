@@ -80,13 +80,13 @@
       var getCollectionCentreSummary = function(centre) {
         return CollectionCentre.findOne(centre.id)
           .populate('contact')
-          .populate('coordinators')
-          .populate('subjects')
+          .populate('userEnrollments')
+          .populate('subjectEnrollments')
           .then(function (cc) {
             var ret = _.pick(cc, 'id', 'name');
             ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-            ret.coordinators_count = cc.coordinators.length || 0;
-            ret.subjects_count = cc.subjects.length || 0;
+            ret.coordinators_count = cc.userEnrollments.length || 0;
+            ret.subjects_count = cc.subjectEnrollments.length || 0;
             return ret;
           });
       };

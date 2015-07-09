@@ -14,19 +14,13 @@
   module.exports = {
     schema: true,
     attributes: {
-      subjectId: {
-        type: 'integer',
-        autoIncrement: true,
-        defaultsTo: 0
-      },
       user: {
         model: 'user',
         required: true
       },
-      // CCs I am enrolled in as a subject
-      collectionCentres: {
-        collection: 'collectioncentre',
-        via: 'subjects'
+      enrollments: {
+        collection: 'subjectenrollment',
+        via: 'subject'
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
@@ -106,19 +100,8 @@
           cb(false, subjects);
         })
         .catch(cb);
-    },
-
-    beforeValidate: function(subject, cb) {
-      //Auto increment workaround
-      Subject.findOne({ where: {"study": subject.study},
-        sort:'studyId DESC' } )
-          .exec(function(err, lastSubject){
-            if (err) return err;
-            subject.studyId = (lastSubject && lastSubject.studyId ?
-              lastSubject.studyId + 1 : 1);
-            cb();
-          });
     }
+
   };
 
 }());

@@ -39,12 +39,9 @@
      */
     findOne: function (req, res, next) {
       User.findOne(req.param('id'))
-        .populate('collectionCentres')
-        .exec(function (err, matchingRecord) {
-          if (err) {
-            res.serverError(err);
-          }
-          if(!matchingRecord) {
+        .populate('enrollments')
+        .then(function (user) {
+          if(!user) {
             return res.notFound({
               title: 'Not Found',
               code: 404,
@@ -52,7 +49,23 @@
             });
           }
 
-          res.ok(matchingRecord);
+          this.user = user;
+          return Promise.all(
+            _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
+              return CollectionCentre.findOne(enrollment.collectionCentre)
+                .then(function (centre) {
+                  enrollment.study = centre.study;
+                  return enrollment;
+                });
+            })
+          );
+        })
+        .then(function (enrollments) {
+          this.user.enrollments = enrollments;
+          res.ok(this.user);
+        })
+        .catch(function (err) {
+          res.serverError(err);
         });
     },
 
@@ -167,54 +180,55 @@
     updateAccess: function (req, res, next) {
       // user params
       var userId = req.param('id');
+      // user access enrollment params
+      var fields = {},
+          collectionCentre = req.param('collectionCentre'),
+          user = req.param('user'),
+          centreAccess = req.param('centreAccess');
 
-      // access control params
-      var accessFields = {
-        centreAccess: req.param('centreAccess'),
-        swapWith: req.param('swapWith'),
-        isAdding: req.param('isAdding'),
-        collectionCentres: req.param('collectionCentres')
-      };
+      if (collectionCentre) fields.collectionCentre = collectionCentre;
+      if (user) fields.user = user;
+      if (centreAccess) fields.centreAccess = centreAccess;
 
-      Group.findOne(req.user.group).then(function (group) {
-        this.group = group;
-        return User.findOne(userId).populate('collectionCentres');
-      })
-      .then(function (user) { // update user's collection centre access
-        this.user = user;
-        if (this.group.level === 1) {
-          if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
-            _.each(accessFields.collectionCentres, function (centre) {
-              if (accessFields.isAdding) {
-                this.user.collectionCentres.add(centre);
-              } else {
-                this.user.collectionCentres.remove(centre);
-              }
-            });
-
-            // if swapping centres, isAdding flag will be false so after removing, add in new centres
-            if (accessFields.swapWith && accessFields.swapWith.length > 0) {
-              _.each(accessFields.swapWith, function (centre) {
-                this.user.collectionCentres.add(centre);
+      // find and create or update user enrollment data
+      UserEnrollment
+        .findOne({
+          user: fields.user,
+          collectionCentre: fields.collectionCentre,
+          expiredAt: null
+        })
+        .then(function (enrollment) {
+          if (!enrollment) {
+            return UserEnrollment.create(fields)
+              .then(function (enrollment) {
+                this.enrollment = enrollment;
+                return User.findOne(userId).populate('enrollments');
+              })
+              .then(function (user) {
+                // if we were modifying an enrollment, nothing needs to be done
+                if (!_.includes(_.pluck(user.enrollments, 'id'), this.enrollment.id)) {
+                  return user;
+                } else {
+                  // otherwise, we are adding a new enrollment
+                  user.enrollments.add(this.enrollment.id);
+                  return user.save();
+                }
+              })
+              .then(function (user) {
+                res.ok(user);
               });
-            }
-            return this.user.save();
+          } else {
+            // otherwise we're trying to update an enrollment to something that already exists
+            res.badRequest({
+              title: 'Enrollment Error',
+              status: 400,
+              message: 'Unable to enroll user, user may already be registered at another collection centre.'
+            });
           }
-        }
-        return this.user;
-      })
-      .then(function (user) {
-        if (this.group.level === 1 && !_.isUndefined(accessFields.centreAccess)) {
-          return User.update(userId, { centreAccess: accessFields.centreAccess });
-        }
-        return this.user;
-      })
-      .then(function (user) {
-        res.ok(user);
-      })
-      .catch(function (err) {
-        res.serverError(err);
-      });
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
     },
 
     /**
@@ -280,5 +294,6 @@
           res.ok(users);
         });
     }
+
   });
 })();

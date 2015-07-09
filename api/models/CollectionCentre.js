@@ -24,35 +24,19 @@
       contact: {
         model: 'user'
       },
-      // for coordinators/interviewer roles at a CC
-      coordinators: {
-      	collection: 'user',
-      	via: 'collectionCentres'
+      subjectEnrollments: {
+        collection: 'subjectenrollment',
+        via: 'collectionCentre'
+      },
+      userEnrollments: {
+        collection: 'userenrollment',
+        via: 'collectionCentre'
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByStudyName: function(studyName, options, cb) {
-      Study.findOneByName(studyName)
-      .populate('collectionCentres')
-      .then(function (study) {
-        if (!study) {
-          err = new Error();
-          err.message = require('util')
-            .format('Study with name %s does not exist.', studyName);
-          err.status = 404;
-          return cb(err);
-        }
-
-        var query = _.cloneDeep(options);
-        query.where = query.where || {};
-        query.where.study = study.id;
-        delete query.where.name;
-
-        return CollectionCentre.find(query)
-          .populate('coordinators')
-          .populate('subjects');
-      })
+    findByStudyName: function(studyName, currUser, options, cb) {
+      EnrollmentService.findStudyCollectionCentres(studyName, currUser)
       .then(function (centres) {
         cb(false, centres);
       })

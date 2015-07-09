@@ -9,7 +9,7 @@
 (function() {
 
   module.exports = {
-
+    schema: true,
     attributes: {
       /**
        * subjectNumber

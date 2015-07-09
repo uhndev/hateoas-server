@@ -7,6 +7,7 @@
  */
 
 (function() {
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
 
@@ -17,16 +18,18 @@
      */
     findOne: function (req, res, next) {
       CollectionCentre.findOne(req.param('id'))
-        .populate('coordinators')
-        .populate('subjects')
-      .exec(function (err, centre) {
-        if (err) return res.serverError(err);
-        if (_.isUndefined(centre)) {
-          res.notFound();
-        } else {
-          res.ok(centre);
-        }
-      });
+        .exec(function (err, centre) {
+          if (err) return res.serverError(err);
+          if (_.isUndefined(centre)) {
+            res.notFound();
+          } else {
+            EnrollmentService.findCollectionCentreUsers(centre.id, req.user)
+              .then(function (users) {
+                centre.coordinators = users;
+                res.ok(centre);
+              });
+          }
+        });
     },
 
     /**
@@ -130,7 +133,7 @@
     findByStudyName: function(req, res) {
       var studyName = req.param('name');
 
-      CollectionCentre.findByStudyName(studyName,
+      CollectionCentre.findByStudyName(studyName, req.user,
         { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),

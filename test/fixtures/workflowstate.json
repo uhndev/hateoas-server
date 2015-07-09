@@ -52,9 +52,9 @@
 				{"name":"lastname","type":"string","prompt":"Lastname","value":""},
 				{"name":"gender","type":"string","prompt":"Gender","value":""},
 				{"name":"dob","type":"date","prompt":"Date of Birth","value":""}
-			]			
+			]
 		}
-	},	
+	},
 	{
 		"path": "/api/subject",
 		"links": [
