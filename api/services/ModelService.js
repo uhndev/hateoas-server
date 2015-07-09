@@ -1,4 +1,7 @@
-// api/services/ModelService.js
+/**
+ * @namespace ModelService
+ * @description Helper service for returning filtered data based on enrollments
+ */
 
 (function() {
 
@@ -16,7 +19,7 @@
      *              Will only perform filter if model definition includes an
      *              `expiredAt` attribute.
      * @param  {String} model Model name
-     * @return {Promise}      Chainable model find promise
+     * @return {Promise}      Chainable model promise after find operation
      */
     filterExpiredRecords: function(model) {
       if (_.has(sails.models[model].definition, 'expiredAt')) {

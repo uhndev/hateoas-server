@@ -78,16 +78,19 @@
     findOne: function (req, res, next) {
       var name = req.param('name');
       var getCollectionCentreSummary = function(centre) {
+        var summary = {};
         return CollectionCentre.findOne(centre.id)
-          .populate('contact')
-          .populate('userEnrollments')
-          .populate('subjectEnrollments')
           .then(function (cc) {
-            var ret = _.pick(cc, 'id', 'name');
-            ret.contact = (_.isUndefined(cc.contact)) ? '' : cc.contact.id;
-            ret.coordinators_count = cc.userEnrollments.length || 0;
-            ret.subjects_count = cc.subjectEnrollments.length || 0;
-            return ret;
+            summary = _.pick(cc, 'id', 'name', 'contact');
+            return Promise.all([
+              UserEnrollment.count().where({ collectionCentre: centre.id, expiredAt: null }),
+              SubjectEnrollment.count().where({ collectionCentre: centre.id, expiredAt: null })
+            ]);
+          })
+          .spread(function (coordinatorCount, subjectCount) {
+            summary.coordinators_count = coordinatorCount || 0;
+            summary.subjects_count = subjectCount || 0;
+            return summary;
           });
       };
 

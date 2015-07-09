@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         '!controllers/PermissionController.js', '!controllers/RoleController.js',
         '!controllers/WorkflowStateController.js',
         '!responses/badRequest.js', '!responses/forbidden.js', '!responses/notFound.js', '!responses/serverError.js',
-        '!services/ModelService.js', '!services/passport.js', '!services/protocols/*.js'
+        '!services/passport.js', '!services/protocols/*.js'
       ],
       jsdoc: './node_modules/.bin/jsdoc',
       options: {
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
           'controllers/PermissionController', 'controllers/RoleController',
           'controllers/WorkflowStateController',
           'responses/badRequest', 'responses/forbidden', 'responses/notFound', 'responses/serverError',
-          'services/ModelService', 'services/passport', 'services/protocols'
+          'services/passport', 'services/protocols'
         ]
       }
     }
