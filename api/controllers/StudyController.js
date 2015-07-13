@@ -7,7 +7,7 @@
  */
 
 (function() {
-
+  var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
@@ -38,11 +38,11 @@
             case 1: // allow all as admin
               return res.ok(studies);
             case 2: // find specific user's access
-              return User.findOne(req.user.id)
+              return User.findOne(req.user.id).populate('enrollments')
               .then(function(user) {
                 var filteredRecords = _.filter(studies, function (record) {
                   return _.some(record.collectionCentres, function(centre) {
-                    return _.has(user.centreAccess, centre.id);
+                    return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
                   });
                 });
                 res.ok(filteredRecords);
@@ -50,11 +50,11 @@
                 return res.serverError(err);
               });
             case 3: // find subject's collection centre access
-              return Subject.findOne({user: req.user.id}).populate('collectionCentres')
+              return Subject.findOne({user: req.user.id}).populate('enrollments')
               .then(function(user) {
                 var filteredRecords = _.filter(studies, function (record) {
                   return _.some(record.collectionCentres, function(centre) {
-                    return _.contains(_.pluck(user.collectionCentres, 'id'), centre.id);
+                    return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
                   });
                 });
                 res.ok(filteredRecords);
@@ -77,14 +77,14 @@
      */
     findOne: function (req, res, next) {
       var name = req.param('name');
-      var getCollectionCentreSummary = function(centre) {
+      var getCollectionCentreSummary = function(centreId) {
         var summary = {};
-        return CollectionCentre.findOne(centre.id)
+        return CollectionCentre.findOne(centreId)
           .then(function (cc) {
             summary = _.pick(cc, 'id', 'name', 'contact');
             return Promise.all([
-              UserEnrollment.count().where({ collectionCentre: centre.id, expiredAt: null }),
-              SubjectEnrollment.count().where({ collectionCentre: centre.id, expiredAt: null })
+              UserEnrollment.count().where({ collectionCentre: centreId, expiredAt: null }),
+              SubjectEnrollment.count().where({ collectionCentre: centreId, expiredAt: null })
             ]);
           })
           .spread(function (coordinatorCount, subjectCount) {
@@ -102,32 +102,21 @@
         this.study = study;
         switch (this.group.level) {
           case 1: return null;
-          case 2: return User.findOne(req.user.id);
-          case 3: return Subject.findOne({user: req.user.id});
+          case 2: return User.findOne(req.user.id).populate('enrollments');
+          case 3: return Subject.findOne({user: req.user.id}).populate('enrollments');
           default: return res.notFound();
         }
       })
       .then(function (user) {
         if (this.study) {
-          switch (this.group.level) {
-            case 1: // admin users
-              return Promise.all(
-              _.map(this.study.collectionCentres, getCollectionCentreSummary)
-              );
-            case 2: // coordinator/physician/interviewers
-              if (_.some(this.study.collectionCentres, function(centre) {
-                return !_.isUndefined(user.centreAccess[centre.id]);
-              })) {
-                return Promise.all(
-                  _.map(this.study.collectionCentres, getCollectionCentreSummary)
-                );
-              } else {
-                return null;
-              }
-              break;
-            case 3: // subjects
-              return null;
-            default: return res.notFound();
+          if (this.group.level > 1 && user) { // for non-admins, only return summaries for valid enrollments
+            return Promise.all(
+              _.map(_.pluck(user.enrollments, 'collectionCentre'), getCollectionCentreSummary)
+            );
+          } else { // otherwise, return summaries for all collection centres
+            return Promise.all(
+              _.map(_.pluck(this.study.collectionCentres, 'id'), getCollectionCentreSummary)
+            );
           }
         } else {
           // study not found

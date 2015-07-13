@@ -27,6 +27,27 @@
       } else {
         return sails.models[model].find();
       }
+    },
+
+    // TODO
+    queryOnPopulated: function(model, options, populatedModel) {
+      var Model = sails.models[model];
+
+      sails.models[populatedModel].find(query)
+        .then(function (records) {
+          // if query applies to populated model, return primary model search
+          // with association ids as an or clause to original model
+          if (records) {
+            var popIds = _.pluck(records, 'id');
+            var popQuery = {};
+            popQuery[populatedModel] = popIds
+            return sails.models[model].find(popQuery);
+          }
+          // otherwise, we try on the base model with query
+          else {
+            return sails.models[model].find(query);
+          }
+        });
     }
 
   });

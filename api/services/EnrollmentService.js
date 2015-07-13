@@ -34,17 +34,11 @@
           return cb(err);
         }
 
-        this.study = study;
         if (this.group.level > 1) {
-          return UserEnrollment.find({
-              user: currUser.id,
-              collectionCentre: study.collectionCentres
-            })
+          return UserEnrollment.find({ user: currUser.id })
             .then(function (enrollments) {
               return _.filter(study.collectionCentres, function (centre) {
-                return _.some(enrollments, function (enrollment) {
-                  return enrollment.collectionCentre === centre.id;
-                });
+                return _.some(enrollments, { collectionCentre: centre.id });
               });
             });
         }
@@ -59,15 +53,16 @@
      *              users from collection centres that current user has in common.
      *
      * @param  {String}         studyName name of study to search on
+     * @param  {Object}         options query options to filter on
      * @param  {Object}         currUser  current user object
      * @return {Array|Promise}  list of users in study
      */
-    findStudyUsers: function(studyName, currUser) {
+    findStudyUsers: function(studyName, options, currUser) {
       return Group.findOne(currUser.group).then(function (group) {
         this.group = group;
         return Study.findOneByName(studyName).populate('collectionCentres');
       })
-      .then(function (study) { // return list of collection centres with enrollments in study
+      .then(function (study) { // return list of enrollments in study
         if (!study) {
           err = new Error();
           err.message = require('util')
@@ -76,33 +71,37 @@
           return cb(err);
         }
 
-        this.study = study;
-        return CollectionCentre.find(_.pluck(study.collectionCentres, 'id'))
-                               .populate('userEnrollments');
-      })
-      .then(function (centres) {
         if (this.group.level > 1) { // if user is non-admin, return only their enrollments
           return ModelService.filterExpiredRecords('userenrollment').where({
             user: currUser.id,
-            collectionCentre: _.pluck(centres, 'id')
+            collectionCentre: _.pluck(study.collectionCentres, 'id')
           });
         }
-        // from list of collection centres, return corresponding enrollments
+        // otherwise, return all enrollments in study
         return ModelService.filterExpiredRecords('userenrollment').where({
-          collectionCentre: _.pluck(centres, 'id')
+          collectionCentre: _.pluck(study.collectionCentres, 'id')
         });
       })
       .then(function (enrollments) { // from enrollments, return users with enrollment data
+        var query = _.cloneDeep(options);
+        query.where = query.where || {};
+        delete query.where.name;
+
         return Promise.all(
           _.map(enrollments, function (enrollment) {
-            return User.findOne(enrollment.user).then(function (user) {
-              user.enrollmentId = enrollment.id;
-              user.collectionCentre = enrollment.collectionCentre;
-              user.centreAccess = enrollment.centreAccess;
-              return user;
+            return User.findOne(query).where({ id: enrollment.user }).then(function (user) {
+              if (user) {
+                user.enrollmentId = enrollment.id;
+                user.collectionCentre = enrollment.collectionCentre;
+                user.centreAccess = enrollment.centreAccess;
+                return user;
+              }
             });
           })
         );
+      })
+      .then(function (users) {
+        return _.compact(users);
       })
       .catch(function (err) {
         return err;
@@ -156,8 +155,11 @@
       })
       .then(function (users) {
         return users;
+      })
+      .catch(function (err) {
+        return err;
       });
-    },
+    }
 
   };
 

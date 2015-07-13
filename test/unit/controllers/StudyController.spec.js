@@ -17,7 +17,7 @@ describe('The Study Controller', function () {
 	var study1, study2, study3, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
-		
+
 		before(function(done) {
 			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
@@ -40,8 +40,8 @@ describe('The Study Controller', function () {
 			Study.destroy(study1).exec(function (err, study) {
 				Study.destroy(study2).exec(function (err, study) {
 					if (err) return done(err);
-					auth.logout(done);		
-				});				
+					auth.logout(done);
+				});
 			});
 		});
 
@@ -81,7 +81,7 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.items.name.should.equal('STUDY-LEAP-ADMIN');
 						done(err);
-					});				
+					});
 			});
 
 			it('should return a 404 if study does not exist', function (done) {
@@ -90,7 +90,7 @@ describe('The Study Controller', function () {
 					.expect(404)
 					.end(function (err, res) {
 						done(err);
-					});				
+					});
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
@@ -101,7 +101,7 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
+					});
 			});
 
 			it('should retrieve a saved user form href from the workflowstate', function (done) {
@@ -112,12 +112,12 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
-			});			
+					});
+			});
 		});
 
 		describe('create()', function () {
-			
+
 			before(function (done) {
 				Study.findOne({name: 'STUDY-LEAP-HIP-ADMIN'})
 					.exec(function (err, study) {
@@ -189,7 +189,7 @@ describe('The Study Controller', function () {
 					.end(function (err, res) {
 						done(err);
 					});
-			});			
+			});
 
 			it('should be able to update users of study', function(done) {
 				request.put('/api/study/' + study2)
@@ -204,7 +204,7 @@ describe('The Study Controller', function () {
 								done(err);
 							});
 					});
-			});					
+			});
 		});
 
 		describe('allow correct headers', function() {
@@ -227,9 +227,9 @@ describe('The Study Controller', function () {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
 						done(err);
-					});				
+					});
 			});
-		}); 
+		});
 	});
 
 	describe('User with Coordinator/Interviewer Role', function () {
@@ -261,25 +261,35 @@ describe('The Study Controller', function () {
 				})
 				.then(function (centre) {
 					cc2Id = centre.id;
-					var access = {};
-					access[cc1Id] = 'coordinator';
-					return User.update({id: globals.users.coordinatorUserId}, {
-						centreAccess: access,
-						isAdding: true,
-						collectionCentres: [cc1Id]
-					});
-				})
-				.then(function (centre) {
-					var access = {};
-					access[cc2Id] = 'interviewer';
-					return User.update({id: globals.users.interviewerUserId}, {
-						centreAccess: access,
-						isAdding: true,
-						collectionCentres: [cc2Id]
-					});
+          return UserEnrollment.create({
+            user: globals.users.coordinatorUserId,
+            collectionCentre: cc1Id,
+            centreAccess: 'coordinator'
+          })
+          // .then(function (enrollment) {
+          //   return User.findOne(globals.users.coordinatorUserId).populate('enrollments')
+          //     .then(function (user) {
+          //       user.enrollments.add(enrollment.id);
+          //       return user.save();
+          //     });
+          // });
 				})
 				.then(function (user) {
-					done();	
+					return UserEnrollment.create({
+            user: globals.users.interviewerUserId,
+            collectionCentre: cc2Id,
+            centreAccess: 'interviewer'
+					})
+          // .then(function (enrollment) {
+          //   return User.findOne(globals.users.interviewerUserId).populate('enrollments')
+          //     .then(function (user) {
+          //       user.enrollments.add(enrollment.id);
+          //       return user.save();
+          //     });
+          // });
+				})
+				.then(function (user) {
+					done();
 				})
 				.catch(done);
 			});
@@ -299,7 +309,7 @@ describe('The Study Controller', function () {
 						collection.items[0].name.should.equal('STUDY-LEAP-COORD');
 						collection.items.length.should.equal(1);
 						done(err);
-					});		
+					});
 			});
 		});
 
@@ -312,7 +322,7 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.items.name.should.equal('STUDY-LEAP-COORD');
 						done(err);
-					});				
+					});
 			});
 
 			it('should not be able to retrieve a specific study by name if not associated to a CC', function (done) {
@@ -323,8 +333,8 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.items.name.should.equal('STUDY-LEAP-COORD');
 						done(err);
-					});				
-			});			
+					});
+			});
 
 			it('should return a 404 if study does not exist', function (done) {
 				request.get('/api/study/DNE')
@@ -332,7 +342,7 @@ describe('The Study Controller', function () {
 					.expect(404)
 					.end(function (err, res) {
 						done(err);
-					});				
+					});
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
@@ -343,7 +353,7 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
+					});
 			});
 
 			it('should retrieve a saved user form href from the workflowstate', function (done) {
@@ -354,8 +364,8 @@ describe('The Study Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
-			});	
+					});
+			});
 		});
 
 		describe('create()', function () {
@@ -413,7 +423,7 @@ describe('The Study Controller', function () {
 						var headers = res.headers['allow'];
 						headers.should.equal('read');
 						done(err);
-					});				
+					});
 			});
 		});
 	});
@@ -493,7 +503,7 @@ describe('The Study Controller', function () {
 		// 				headers.should.equal('read');
 		// 				done(err);
 		// 			});
-		// 	});	
+		// 	});
 		// });
 	});
 

@@ -24,16 +24,6 @@
       },
 
       /**
-       * study
-       * @description The selected study that this enrollment is linked to.
-       * @type {Association} linked study in enrollment
-       */
-      study: {
-        model: 'study',
-        required: true
-      },
-
-      /**
        * collectionCentre
        * @description The collection centre for which this subject is enrolled in.
        * @type {Association} linked collection centre in enrollment
@@ -56,7 +46,7 @@
       /**
        * doe
        * @description Date of event in enrollment; is typically the date of surgery performed
-       *              or other important events
+       *              or other important events related to the timeline of a patient's care.
        * @type {Date}
        */
       doe: {

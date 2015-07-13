@@ -71,7 +71,7 @@
 
     findByStudyName: function(studyName, currUser, options, cb) {
       EnrollmentService
-        .findStudyUsers(studyName, currUser)
+        .findStudyUsers(studyName, options, currUser)
         .then(function (users) { // send data through to callback function
           return cb(false, users);
         })
