@@ -43,6 +43,11 @@
         collection: 'userenrollment',
         via: 'user'
       },
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

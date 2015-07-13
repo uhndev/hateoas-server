@@ -34,6 +34,9 @@
           return cb(err);
         }
 
+        // filter out expired collection centres
+        study.collectionCentres = _.filter(study.collectionCentres, { expiredAt: null });
+
         if (this.group.level > 1) {
           return UserEnrollment.find({ user: currUser.id })
             .then(function (enrollments) {

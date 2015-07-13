@@ -17,7 +17,7 @@
      * @description Finds and returns collection centres by enrollment
      */
     find: function (req, res, next) {
-      var query = CollectionCentre.find()
+      var query = ModelService.filterExpiredRecords('collectioncentre')
         .where( actionUtil.parseCriteria(req) )
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )

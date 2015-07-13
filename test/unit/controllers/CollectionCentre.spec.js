@@ -213,10 +213,55 @@ describe('The CollectionCentre Controller', function () {
 		});
 
 		describe('delete()', function() {
+      var ueID;
+
+      beforeEach(function (done) {
+        UserEnrollment.create({
+          user: globals.users.coordinatorUserId,
+          collectionCentre: cc1Id,
+          centreAccess: 'coordinator'
+        }).exec(function (err, enrollment) {
+          ueID = enrollment.id;
+          done(err);
+        });
+      });
+
+      afterEach(function (done) {
+        UserEnrollment.destroy(ueID).exec(function (err, destroyed) {
+          done(err);
+        });
+      });
+
 			it('should set expiredAt flag to now, but persist in system', function (done) {
-				// TODO
-				done();
+        request.del('/api/collectioncentre/' + cc1Id)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send()
+          .expect(200)
+          .end(function (err, res) {
+            var collection = JSON.parse(res.text);
+            collection.items[0].expiredAt.should.be.truthy;
+            done(err);
+          });
 			});
+
+      it('should have marked all associated user enrollments as expired', function (done) {
+        request.del('/api/collectioncentre/' + cc1Id)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send()
+          .expect(200)
+          .end(function (err, res) {
+            var collection = JSON.parse(res.text);
+            UserEnrollment.findOne(ueID).exec(function (err, enroll) {
+              enroll.expiredAt.should.be.truthy;
+              done(err);
+            });
+          });
+      });
+
+      it('should have marked all associated subject enrollments as expired', function (done) {
+        // TODO
+        done();
+      });
 		});
 	});
 });

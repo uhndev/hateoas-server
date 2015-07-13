@@ -42,6 +42,11 @@
       pi: {
         model: 'user'
       },
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
 
       getResponseLinks: function(id) {
         return [

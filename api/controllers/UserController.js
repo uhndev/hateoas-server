@@ -18,7 +18,7 @@
      * @description finds and returns all users with populated roles associations
      */
     find: function (req, res, next) {
-      var query = User.find()
+      var query = ModelService.filterExpiredRecords('user')
         .where( actionUtil.parseCriteria(req) )
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )
@@ -150,7 +150,7 @@
         return User.update({id: user.id}, userFields);
       })
       .then(function (user) { // updating group, apply new permissions
-        if (this.previousGroup !== userFields.group && this.group.level === 0) {
+        if (this.previousGroup !== userFields.group && this.group.level === 1) {
           return PermissionService.setUserRoles(_.first(user));
         } else {
           return user;

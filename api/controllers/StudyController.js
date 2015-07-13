@@ -21,7 +21,7 @@
      *              subjects and their enrollments.
      */
     find: function (req, res, next) {
-      var query = Study.find()
+      var query = ModelService.filterExpiredRecords('study')
         .where( actionUtil.parseCriteria(req) )
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )

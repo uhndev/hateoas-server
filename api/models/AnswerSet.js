@@ -26,9 +26,10 @@
         type: 'json',
         required: true
       },
-      expired: {
-        type: 'boolean',
-        defaultsTo: false
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
@@ -42,7 +43,7 @@
       }, sort: 'updatedAt DESC'}).exec(function (err, answer) {
         if (err) return cb(err);
         if (answer) {
-          answer.expired = true;
+          answer.expiredAt = new Date();
           answer.save();
         }
         cb();

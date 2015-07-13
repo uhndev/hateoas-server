@@ -45,13 +45,13 @@ var self = {
     /**
      * List of system fields that SailsJS will add to all objects
      */
-    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'owner'],
+    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'expiredAt', 'owner'],
     removeSystemFields: function removeSystemFields(data) {
       if (_.isArray(data)) {
         return data.map(function(item) {
           return self.Model.removeSystemFields(item);
         });
-      } 
+      }
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
     }
