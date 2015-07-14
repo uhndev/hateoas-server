@@ -146,7 +146,12 @@
       if (!_.isNull(updated.expiredAt)) {
         UserEnrollment.update({ user: updated.id }, { expiredAt: new Date() })
         .then(function (userEnrollments) {
-          return SubjectEnrollment.update({ user: updated.id }, { expiredAt: new Date() });
+          // find if deleted user was a subject
+          return Subject.find({ user: updated.id });
+        })
+        .then(function (subjects) {
+          // update any possible subject enrollments
+          return SubjectEnrollment.update({ subject: _.pluck(subjects, 'id') }, { expiredAt: new Date() });
         })
         .then(function (subjectEnrollments) {
           cb();
@@ -157,6 +162,18 @@
       }
     },
 
+    /**
+     * findByStudyName
+     * @description End function for handling /api/study/:name/user.  Should return a list
+     *              of users in a given study and depending on the current users' group
+     *              permissions, this list will be further filtered down based on whether
+     *              or not those users and I share common collection centres.
+     *
+     * @param  {String}   studyName Name of study to search.  Passed in from UserController.
+     * @param  {Object}   currUser  Current user used in determining filtering options based on access
+     * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
+     * @param  {Function} cb        Callback function upon completion
+     */
     findByStudyName: function(studyName, currUser, options, cb) {
       EnrollmentService
         .findStudyUsers(studyName, options, currUser)

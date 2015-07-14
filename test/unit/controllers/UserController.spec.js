@@ -218,6 +218,63 @@ describe('The User Controller', function () {
  			});
  		});
 
+    describe('delete()', function() {
+      var uID, ueID;
+
+      beforeEach(function (done) {
+        request.post('/api/user')
+          .set('Authorization', 'Bearer ' + globals.token)
+          .set('Accept', 'application/collection+json')
+          .expect('Content-Type', 'application/collection+json; charset=utf-8')
+          .send({
+            username: 'tempuser',
+            email: 'tempuser@example.com',
+            password: 'tempuser1234',
+            group: globals.groups.coordinator,
+            prefix: 'Mr.',
+            firstname: 'Temp',
+            lastname: 'User'
+          })
+          .expect(200)
+          .end(function(err, res) {
+            var collection = JSON.parse(res.text);
+            uID = collection.items.id;
+            UserEnrollment.create({
+              user: uID,
+              collectionCentre: cc1Id,
+              centreAccess: 'coordinator'
+            }).then(function (enrollment) {
+              ueID = enrollment.id;
+              done(err);
+            });
+          });
+      });
+
+      afterEach(function (done) {
+        UserEnrollment.destroy(ueID).exec(function (err, destroyed) {
+          User.destroy(uID).exec(function (err, destroyed) {
+            done(err);
+          });
+        });
+      });
+
+      it('should set expiredAt flag to now and propagate expiry to any enrollments', function (done) {
+        request.del('/api/user/' + uID)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send()
+          .expect(200)
+          .end(function (err, res) {
+            var collection = JSON.parse(res.text);
+            collection.items[0].expiredAt.should.be.truthy;
+            UserEnrollment.findOne(ueID).exec(function (err, enrollment) {
+              enrollment.expiredAt.should.be.truthy;
+              done(err);
+            });
+          });
+      });
+
+    });
+
 		describe('allow correct headers', function() {
 			it('should return full CRUD access for /api/user', function (done) {
 				request.get('/api/user')
