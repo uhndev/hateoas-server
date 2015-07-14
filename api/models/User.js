@@ -136,18 +136,17 @@
     /**
      * afterUpdate
      * @description Lifecycle callback meant to handle deletions in our system; if at
-     *              any point we set this collection centre's expiredAt attribute, this
-     *              function will check and invalidate any users/subjects still enrolled
-     *              in this collection centre.
+     *              any point we set this user's expiredAt attribute, this function
+     *              will check and invalidate any active user/subject enrollments.
      *
-     * @param  {Object}   updated updated collection centre object
+     * @param  {Object}   updated updated user object
      * @param  {Function} cb      callback function on completion
      */
     afterUpdate: function(updated, cb) {
       if (!_.isNull(updated.expiredAt)) {
-        UserEnrollment.update({ collectionCentre: updated.id }, { expiredAt: new Date() })
+        UserEnrollment.update({ user: updated.id }, { expiredAt: new Date() })
         .then(function (userEnrollments) {
-          return SubjectEnrollment.update({ collectionCentre: updated.id }, { expiredAt: new Date() });
+          return SubjectEnrollment.update({ user: updated.id }, { expiredAt: new Date() });
         })
         .then(function (subjectEnrollments) {
           cb();
@@ -156,7 +155,7 @@
       } else {
         cb();
       }
-    }
+    },
 
     findByStudyName: function(studyName, currUser, options, cb) {
       EnrollmentService

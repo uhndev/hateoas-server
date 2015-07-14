@@ -168,9 +168,9 @@
     /**
      * afterUpdate
      * @description Lifecycle callback meant to handle deletions in our system; if at
-     *              any point we set this collection centre's expiredAt attribute, this
-     *              function will check and invalidate any users/subjects still enrolled
-     *              in this collection centre.
+     *              any point we set this study's expiredAt attribute, this function
+     *              will check and invalidate any collection centres and by extension,
+     *              any users/subjects still enrolled in those collection centres.
      *
      * @param  {Object}   updated updated study object
      * @param  {Function} cb      callback function on completion
