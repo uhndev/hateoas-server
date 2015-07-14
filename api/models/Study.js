@@ -51,6 +51,12 @@
           area: ['BOTH', 'LEFT', 'RIGHT']
         }
       },
+
+      /**
+       * reb
+       * @description Research ethics board number.
+       * @type {String}
+       */
       reb: {
         type: 'string',
         required: true
@@ -157,6 +163,33 @@
         ]
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * afterUpdate
+     * @description Lifecycle callback meant to handle deletions in our system; if at
+     *              any point we set this collection centre's expiredAt attribute, this
+     *              function will check and invalidate any users/subjects still enrolled
+     *              in this collection centre.
+     *
+     * @param  {Object}   updated updated study object
+     * @param  {Function} cb      callback function on completion
+     */
+    afterUpdate: function(updated, cb) {
+      if (!_.isNull(updated.expiredAt)) {
+        Study.findOne(updated.id).populate('collectionCentres')
+          .then(function (study) {
+            return CollectionCentre.update({ id: _.pluck(study.collectionCentres, 'id') }, {
+              expiredAt: new Date()
+            });
+          })
+          .then(function (collectionCentres) {
+            cb();
+          })
+          .catch(cb);
+      } else {
+        cb();
+      }
     }
 
   };
