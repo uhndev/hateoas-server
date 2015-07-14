@@ -38,15 +38,10 @@
       group: {
         model: 'group'
       },
-      // coordinator/interviewer CCs I am overseeing
-      collectionCentres: {
-        collection: 'collectioncentre',
-        via: 'coordinators'
-      },
-      // key value pair of ccID: user.role to denote a user's access
-      centreAccess: {
-        type: 'json',
-        defaultsTo: {}
+      // coordinator/interviewer enrollments at CCs I am overseeing
+      enrollments: {
+        collection: 'userenrollment',
+        via: 'user'
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
@@ -75,61 +70,14 @@
     ],
 
     findByStudyName: function(studyName, currUser, options, cb) {
-      Group.findOne(currUser.group).then(function (group) {
-        this.group = group;
-        return Study.findOneByName(studyName).populate('collectionCentres');
-      })
-      .then(function (study) {
-        if (!study) {
-          err = new Error();
-          err.message = require('util')
-             .format('Study with name %s does not exist.', studyName);
-          err.status = 404;
-          return cb(err);
-        }
-
-        this.study = study;
-        return study.collectionCentres;
-      })
-      .then(function (centres) {
-        if (this.group.level > 1) {
-          return User.findOne(currUser.id).populate('collectionCentres')
-            .then(function (user) {
-              return _.filter(user.collectionCentres, function (centre) {
-                return _.includes(_.pluck(centres, 'id'), centre.id );
-              });
-            });
-        }
-        return centres;
-      })
-      .then(function (centres) {
-        // return all coordinators from each study's collection centres
-        return Promise.all(
-          _.map(centres, function (centre) {
-            return CollectionCentre.findOne(centre.id).populate('coordinators');
-          })
-        );
-      })
-      .then(function (centres) {
-        // return list of users that have access to collection centres
-        var centreIds = _.pluck(centres, 'id');
-        var users = _.uniq(_.flattenDeep(_.pluck(centres, 'coordinators')), 'id');
-
-        _.each(centreIds, function (centreId) {
-          _.each(users, function (user) {
-            if (!user.accessCollectionCentre) {
-              user.accessCollectionCentre = [];
-            }
-            if (user.centreAccess[centreId]) {
-              user.accessRole = user.centreAccess[centreId];
-              user.accessCollectionCentre.push(centreId);
-            }
-          });
-        });
-        return cb(false, users);
-      })
-      .catch(cb);
+      EnrollmentService
+        .findStudyUsers(studyName, options, currUser)
+        .then(function (users) { // send data through to callback function
+          return cb(false, users);
+        })
+        .catch(cb);
     }
+
   });
 })();
 

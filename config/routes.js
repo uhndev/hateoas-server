@@ -24,7 +24,7 @@ module.exports.routes = {
 
   /***************************************************************************
   * Locale Routes                                                            *
-  ***************************************************************************/  
+  ***************************************************************************/
   'get /api/locale'                : 'LocaleController.getLocale',
 
   /***************************************************************************
@@ -48,14 +48,14 @@ module.exports.routes = {
   // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
   // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
   'get /api/study/:name/collectioncentre': 'CollectionCentreController.findByStudyName',
-  
+
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
   'put /api/user/:id'              : 'UserController.update',
   'put /api/user/:id/access'       : 'UserController.updateAccess',
   'put /api/user/:id/roles'        : 'UserController.updateRoles'
-  
+
   /***************************************************************************
   * Collection Centre Routes                                                 *
   ****************************************************************************/

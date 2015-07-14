@@ -7,8 +7,56 @@
  */
 
 (function() {
+  var _ = require('lodash');
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
+
+    /**
+     * find
+     * @description Finds and returns collection centres by enrollment
+     */
+    find: function (req, res, next) {
+      var query = CollectionCentre.find()
+        .where( actionUtil.parseCriteria(req) )
+        .limit( actionUtil.parseLimit(req) )
+        .skip( actionUtil.parseSkip(req) )
+        .sort( actionUtil.parseSort(req) );
+
+      query.exec(function found(err, centres) {
+        if (err) {
+          return res.serverError(err);
+        }
+
+        Group.findOne(req.user.group).then(function (group) {
+          switch(group.level) {
+            case 1: // allow all as admin
+              return res.ok(centres);
+            case 2: // find specific user's access
+              return User.findOne(req.user.id).populate('enrollments')
+              .then(function(user) {
+                var filteredRecords = _.filter(centres, function (centre) {
+                  return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+                });
+                res.ok(filteredRecords);
+              }).catch(function (err) {
+                return res.serverError(err);
+              });
+            case 3: // find subject's collection centre access
+              return Subject.findOne({user: req.user.id}).populate('enrollments')
+              .then(function(subject) {
+                var filteredRecords = _.filter(centres, function (record) {
+                  return _.includes(_.pluck(subject.enrollments, 'collectionCentre'), centre.id);
+                });
+                res.ok(filteredRecords);
+              }).catch(function (err) {
+                return res.serverError(err);
+              });
+            default: return res.notFound();
+          }
+        });
+      });
+    },
 
     /**
      * findOne
@@ -17,16 +65,46 @@
      */
     findOne: function (req, res, next) {
       CollectionCentre.findOne(req.param('id'))
-        .populate('coordinators')
-        .populate('subjects')
-      .exec(function (err, centre) {
-        if (err) return res.serverError(err);
-        if (_.isUndefined(centre)) {
-          res.notFound();
-        } else {
-          res.ok(centre);
-        }
-      });
+        .exec(function (err, centre) {
+          if (err) {
+            return res.serverError(err);
+          }
+
+          if (_.isUndefined(centre)) {
+            res.notFound();
+          } else {
+            Group.findOne(req.user.group).then(function (group) {
+              switch (group.level) {
+                case 1: return null;
+                case 2: return User.findOne(req.user.id).populate('enrollments');
+                case 3: return Subject.findOne({ user: req.user.id }).populate('enrollments');
+                default: return res.notFound();
+              }
+            })
+            .then(function (user) {
+              if (!user) { // pass through if admin
+                return true;
+              } else { // otherwise, check if user has access to this collection centre
+                return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+              }
+            })
+            .then(function (isEnrolled) {
+              if (isEnrolled) { // if user is enrolled in CC or is admin, populate and return data
+                EnrollmentService.findCollectionCentreUsers(centre.id, req.user)
+                  .then(function (users) {
+                    centre.coordinators = users;
+                    res.ok(centre);
+                  });
+              } else { // otherwise user is not enrolled and we forbid them access
+                res.forbidden({
+                  title: 'Error',
+                  code: 403,
+                  message: "User "+req.user.email+" is not permitted to GET "
+                });
+              }
+            });
+          }
+        });
     },
 
     /**
@@ -75,51 +153,28 @@
 
     /**
      * update
-     * @description Updates a collection centre given name, contact, boolean
-     *              isAdding flag to determine if we are adding users/subjects
-     *              to the coordinators/subjects collection.
+     * @description Updates a collection centre given only name or contact
      */
     update: function(req, res, next) {
       var ccId = req.param('id'),
           ccName = req.param('name'),
-          ccContact = req.param('contact'),
-          isAdding = req.param('isAdding'),
-          coordinators = req.param('coordinators'),
-          subjects = req.param('subjects');
+          ccContact = req.param('contact');
 
-      var ccFields = {}, coordFields = {};
+      var ccFields = {};
       if (ccName) ccFields.name = ccName;
       if (ccContact) ccFields.contact = ccContact;
 
-      Group.findOne(req.user.group).then(function (group) {
-        this.group = group;
-        return CollectionCentre.findOne(ccId);
-      })
-      .then(function (centre) {
-        if (this.group.level === 1 && !_.isUndefined(isAdding) && !_.isUndefined(coordinators)) {
-          if (isAdding) {
-            _.each(coordinators, function(user) {
-              centre.coordinators.add(user);
-            });
-          } else {
-            _.each(coordinators, function(user) {
-              centre.coordinators.remove(user);
-            });
-          }
-          return centre.save();
-        }
-        return centre;
-      })
-      .then(function (centre) {
-        if (this.group.level === 1) {
-          return CollectionCentre.update({id: ccId}, ccFields);
-        }
-        return centre;
-      })
-      .then(function (centre) {
-        res.ok(centre);
-      })
-      .catch(next);
+      CollectionCentre.update({id: ccId}, ccFields)
+        .then(function (centre) {
+          res.ok(centre);
+        })
+        .catch(function (err) {
+          res.badRequest({
+            title: 'Error',
+            code: err.status,
+            message: err.message
+          });
+        });
     },
 
     /**
@@ -130,7 +185,7 @@
     findByStudyName: function(req, res) {
       var studyName = req.param('name');
 
-      CollectionCentre.findByStudyName(studyName,
+      CollectionCentre.findByStudyName(studyName, req.user,
         { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),

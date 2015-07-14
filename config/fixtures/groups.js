@@ -6,6 +6,7 @@ exports.create = function (roles, models, admin) {
   var coordinatorRoles = _.pluck(_.filter(roles, function (role) {
     return _.contains([
       'readStudy',
+      'readCollectionCentre',
       'readSubject',
       'readUser',
       'readUserOwner',
@@ -16,28 +17,17 @@ exports.create = function (roles, models, admin) {
     ], role.name);
   }), 'id');
 
-  var physicianRoles = _.pluck(_.filter(roles, function (role) {
+  var interviewerRoles = _.pluck(_.filter(roles, function (role) {
     return _.contains([
       'readStudy',
+      'readCollectionCentre',
       'readSubject',
-      'readUser',
       'readUserOwner',
       'updateUserOwner',
       'readForm',
       'createAnswerSet'
     ], role.name);
   }), 'id');
-
-  var interviewerRoles = _.pluck(_.filter(roles, function (role) {
-    return _.contains([
-      'readStudy',
-      'readSubject',
-      'readUserOwner',
-      'updateUserOwner',
-      'readForm',
-      'createAnswerSet'
-    ], role.name);
-  }), 'id');      
 
   var subjectRoles = _.pluck(_.filter(roles, function (role) {
     return _.contains([
@@ -46,7 +36,7 @@ exports.create = function (roles, models, admin) {
       'readForm',
       'createAnswerSet'
     ], role.name);
-  }), 'id');      
+  }), 'id');
 
   var groups = [
     {
@@ -56,7 +46,7 @@ exports.create = function (roles, models, admin) {
       menu: {
         tabview: [
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-          { prompt: 'User Manager', href: '/user', icon: 'fa-user' },        
+          { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
           { prompt: 'Tools', icon: 'fa-cog', dropdown: [
             { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
             { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
@@ -74,7 +64,7 @@ exports.create = function (roles, models, admin) {
       menu: {
         tabview: [
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-          { prompt: 'User Manager', href: '/user', icon: 'fa-user' }      
+          { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
         ],
         subview: [ 'overview', 'subject', 'user' ]
       }
@@ -86,7 +76,7 @@ exports.create = function (roles, models, admin) {
       menu: {
         tabview: [
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
+          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
         ],
         subview: [ 'overview', 'subject' ]
       }
@@ -94,20 +84,20 @@ exports.create = function (roles, models, admin) {
     {
       name: 'subject',
       roles: subjectRoles,
-      level: 3,   
+      level: 3,
       menu: {
         tabview: [
           { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
-          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }      
+          { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
         ],
-        subview: [ 'overview' ]  
-      }      
-    },                
+        subview: [ 'overview' ]
+      }
+    },
   ];
 
   return Promise.all(
     _.map(groups, function (group) {
       return Group.findOrCreate({ name: group.name }, group);
     })
-  ); 
+  );
 };

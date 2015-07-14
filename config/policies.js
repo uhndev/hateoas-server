@@ -41,6 +41,12 @@ module.exports.policies = {
 
   AuthController: {
     '*': [ 'passport' ]
+  },
+
+  UserEnrollmentController: {
+    'find': false,
+    'findOne': false,
+    'create': false
   }
 
   /***************************************************************************

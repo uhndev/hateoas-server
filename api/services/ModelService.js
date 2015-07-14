@@ -1,4 +1,7 @@
-// api/services/ModelService.js
+/**
+ * @namespace ModelService
+ * @description Helper service for returning filtered data based on enrollments
+ */
 
 (function() {
 
@@ -10,8 +13,42 @@
   ModelService.prototype = Object.create(_super);
   _.extend(ModelService.prototype, {
 
-    // Extend with custom logic here by adding additional fields and methods,
-    // and/or overriding methods in the superclass.
+    /**
+     * filterExpiredRecords
+     * @description Performs find operation with filter for non-expired records.
+     *              Will only perform filter if model definition includes an
+     *              `expiredAt` attribute.
+     * @param  {String} model Model name
+     * @return {Promise}      Chainable model promise after find operation
+     */
+    filterExpiredRecords: function(model) {
+      if (_.has(sails.models[model].definition, 'expiredAt')) {
+        return sails.models[model].find({ expiredAt: null });
+      } else {
+        return sails.models[model].find();
+      }
+    },
+
+    // TODO
+    queryOnPopulated: function(model, options, populatedModel) {
+      var Model = sails.models[model];
+
+      sails.models[populatedModel].find(query)
+        .then(function (records) {
+          // if query applies to populated model, return primary model search
+          // with association ids as an or clause to original model
+          if (records) {
+            var popIds = _.pluck(records, 'id');
+            var popQuery = {};
+            popQuery[populatedModel] = popIds
+            return sails.models[model].find(popQuery);
+          }
+          // otherwise, we try on the base model with query
+          else {
+            return sails.models[model].find(query);
+          }
+        });
+    }
 
   });
 

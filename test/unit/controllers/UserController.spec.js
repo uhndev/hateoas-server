@@ -12,7 +12,7 @@ var UserController = require('../../../api/controllers/UserController');
 
 describe('The User Controller', function () {
 
-	var study1, cc1Id, cc2Id;
+	var study1, cc1Id, cc2Id, enrollment1, enrollment2, enrollment3;
 
 	describe('User with Admin Role', function () {
 
@@ -20,35 +20,34 @@ describe('The User Controller', function () {
 			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				globals.users.adminUserId = JSON.parse(resp.text).user.id;
-				
+
 				Study.create({
 					name: 'USER-LEAP-ADMIN',
-					reb: 100,
-					users: [globals.users.coordinatorUserId]
+					reb: 100
 				})
 				.then(function (study) {
 					study1 = study.id;
-					return CollectionCentre.create({
-						name: 'USER-LEAP-ADMIN-TWH',
-						reb: 200,
-						study: study1
-					});
+					return Promise.all([
+            CollectionCentre.create({
+  						name: 'USER-LEAP-ADMIN-TWH',
+  						reb: 200,
+  						study: study1
+  					}),
+            CollectionCentre.create({
+              name: 'USER-LEAP-ADMIN-TGH',
+              reb: 300,
+              study: study1
+            })
+          ]);
 				})
-				.then(function (centre) {
-					cc1Id = centre.id;
-					return CollectionCentre.create({
-						name: 'USER-LEAP-ADMIN-TGH',
-						reb: 300,
-						study: study1
-					});
-				})			
-				.then(function (centre) {
-					cc2Id = centre.id;
+				.spread(function (centre1, centre2) {
+					cc1Id = centre1.id;
+					cc2Id = centre2.id;
 					return Study.create({
 						name: 'USER-LEAP2-ADMIN',
 						reb: 200,
 						users: [globals.users.coordinatorUserId]
-					})
+					});
 				})
 				.then(function (study) {
 					study2 = study.id;
@@ -57,37 +56,32 @@ describe('The User Controller', function () {
 						reb: 200,
 						study: study2
 					});
-				})				
+				})
 				.then(function (centre) {
 					cc3Id = centre.id;
-					var access = {};
-					access[cc1Id] = 'coordinator';
-					return User.update({id: globals.users.coordinatorUserId}, {
-						centreAccess: access,
-						isAdding: true,
-						collectionCentres: [cc1Id]
-					});
+          return Promise.all([
+            UserEnrollment.create({
+              user: globals.users.coordinatorUserId,
+              collectionCentre: cc1Id,
+              centreAccess: 'coordinator'
+            }),
+            UserEnrollment.create({
+              user: globals.users.interviewerUserId,
+              collectionCentre: cc2Id,
+              centreAccess: 'interviewer'
+            }),
+            UserEnrollment.create({
+              user: globals.users.interviewerUserId,
+              collectionCentre: cc3Id,
+              centreAccess: 'interviewer'
+            })
+          ]);
 				})
-				.then(function (centre) {
-					var access = {};
-					access[cc2Id] = 'interviewer';
-					return User.update({id: globals.users.interviewerUserId}, {
-						centreAccess: access,
-						isAdding: true,
-						collectionCentres: [cc2Id]
-					});
-				})
-				.then(function (centre) {
-					var access = {};
-					access[cc3Id] = 'interviewer';
-					return User.update({id: globals.users.interviewerUserId}, {
-						centreAccess: access,
-						isAdding: true,
-						collectionCentres: [cc3Id]
-					});
-				})				
-				.then(function (user) {
-					done();	
+				.spread(function (e1, e2, e3) {
+          enrollment1 = e1;
+          enrollment2 = e2;
+          enrollment3 = e3;
+					done();
 				})
 				.catch(done);
 			});
@@ -110,7 +104,7 @@ describe('The User Controller', function () {
 						done(err);
 					});
 			});
-			
+
 			it('should modify response to include extracted person fields', function (done) {
 				request.get('/api/user')
 					.set('Authorization', 'Bearer ' + globals.token)
@@ -148,7 +142,7 @@ describe('The User Controller', function () {
 						globals.users.coordinator2 = collection.items.id;
 						collection.items.username.should.equal('coordinator2');
 						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
-							user.roles.length.should.equal(8);
+							user.roles.length.should.equal(9);
 							done(err);
 						});
 					});
@@ -163,7 +157,7 @@ describe('The User Controller', function () {
 						password: 'subject1234',
 						prefix: 'Mr.',
 						firstname: 'Test',
-						lastname: 'Subject'						
+						lastname: 'Subject'
 					})
 					.expect(400)
 					.end(function(err, res) {
@@ -197,160 +191,10 @@ describe('The User Controller', function () {
 					.end(function(err, res) {
 						done(err);
 					});
-			});			
+			});
 		});
 
  		describe('update()', function () {
- 			it('should be able to add a user to a collection centre with a role', function (done) {
- 				var obj = {};
- 				obj[cc2Id] = 'interviewer';
- 				request.put('/api/user/' + globals.users.interviewerUserId + '/access')
- 					.set('Authorization', 'Bearer ' + globals.token)
- 					.send({
-	 					centreAccess: obj,
-	 					isAdding: true,
-	 					collectionCentres: [cc2Id]
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						collection.items[0].username.should.equal('interviewer');
- 						collection.items[0].centreAccess[cc2Id].should.equal('interviewer');
- 						done(err);
- 					});
- 			});
-
- 			it('should be able to add a user in a collection centre in another study', function (done) {
- 				var obj = {};
- 				obj[cc2Id] = 'interviewer';
- 				request.put('/api/user/' + globals.users.interviewerUserId + '/access')
- 					.set('Authorization', 'Bearer ' + globals.token)
- 					.send({
-	 					centreAccess: obj,
-	 					isAdding: true,
-	 					collectionCentres: [cc2Id]
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						collection.items[0].username.should.equal('interviewer');
- 						done(err);
- 					});
- 			});
-
- 			it('should retain its existing centreAccess after updating new access', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				req.set('Authorization', 'Bearer ' + globals.token);
-
- 				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = 'coordinator';
-
- 				User.findOne(globals.users.coordinatorUserId)
-					.then(function (user) {
-					// merge existing centreAccess with new attributes					
-					var accessCopy = _.clone(user.centreAccess);
-					_.extend(accessCopy, newCentreAccess);
-					newCentreAccess = _.clone(accessCopy);
-
-					req.send({
-						centreAccess: newCentreAccess,
-						isAdding: true,
-						collectionCentres: [cc3Id] 					
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
- 						collection.items[0].centreAccess[cc3Id].should.equal('coordinator');
- 						done(err);
- 					});
-				});
- 			});
- 			
- 			it('should be able to update a user\'s role in a collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				req.set('Authorization', 'Bearer ' + globals.token);
-
- 				var newCentreAccess = {};
- 				newCentreAccess[cc3Id] = 'interviewer';
-
- 				User.findOne(globals.users.coordinatorUserId)
-					.then(function (user) {
-					// merge existing centreAccess with new attributes					
-					var accessCopy = _.clone(user.centreAccess);
-					_.extend(accessCopy, newCentreAccess);
-					newCentreAccess = _.clone(accessCopy);
-
-					req.send({
-						centreAccess: newCentreAccess				
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator');
- 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
- 						done(err);
- 					});
-				});
- 			});
-
- 			it('should be able to switch a user\'s collection centre', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/access');
- 				req.set('Authorization', 'Bearer ' + globals.token);
-
- 				var newCentreAccess = {};
- 				newCentreAccess[cc2Id] = 'coordinator';
-
- 				User.findOne(globals.users.coordinatorUserId)
-					.then(function (user) {
-					// merge existing centreAccess with new attributes					
-					var accessCopy = _.clone(user.centreAccess);
-					_.extend(accessCopy, newCentreAccess);
-					newCentreAccess = _.clone(accessCopy);
-
-					req.send({
-						centreAccess: newCentreAccess,
-						swapWith: [cc2Id],
-						isAdding: false,
-						collectionCentres: [cc1Id]
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						collection.items[0].centreAccess[cc1Id].should.equal('coordinator')
- 						collection.items[0].centreAccess[cc2Id].should.equal('coordinator');
- 						collection.items[0].centreAccess[cc3Id].should.equal('interviewer');
- 						done(err);
- 					});
-				});
- 			});
-
- 			it('should remove the user\'s access if selected none collection centres', function (done) {
- 				var req = request.put('/api/user/' + globals.users.interviewerUserId + '/access');
- 				req.set('Authorization', 'Bearer ' + globals.token);
-
- 				var newCentreAccess = {};
-
- 				User.findOne(globals.users.interviewerUserId)
-					.then(function (user) {
-					// merge existing centreAccess with new attributes					
-					var accessCopy = _.clone(user.centreAccess);
-					_.extend(accessCopy, newCentreAccess);
-					newCentreAccess = _.clone(accessCopy);
-
-					req.send({
-						centreAccess: {},
-						isAdding: false,
-						collectionCentres: [cc2Id]
-	 				})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						_.isEmpty(collection.items[0].centreAccess).should.be.ok;
- 						done(err);
- 					});
-				});
- 			});
 
  			it('should update a user\'s roles from access management', function (done) {
  				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/roles');
@@ -394,9 +238,9 @@ describe('The User Controller', function () {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
 						done(err);
-					});				
+					});
 			})
-		}); 
+		});
 	});
 
  	describe('User with Coordinator Role', function() {
@@ -422,7 +266,7 @@ describe('The User Controller', function () {
 			it('should be able to read self user', function (done) {
 				request.get('/api/user/' + globals.users.coordinatorUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)	
+					.expect(200)
 					.end(function (err, res) {
 						done(err);
 					});
@@ -447,13 +291,13 @@ describe('The User Controller', function () {
 
 			it('should return bad request if trying to creating user with admin role', function (done) {
 				// TODO
-				done();				
+				done();
 			});
 
 			it('should only be able to create new user with coordinator or interviewer role', function (done) {
 				// TODO
 				done();
-			});		
+			});
 		});
 
 		describe('update()', function() {
@@ -466,11 +310,6 @@ describe('The User Controller', function () {
 				// TODO
 				done();
 			});
-
-			it('should not be able to update centreAccess', function (done) {
-				// TODO
-				done();				
-			});			
 		});
 
 		describe('delete()', function() {
@@ -481,7 +320,7 @@ describe('The User Controller', function () {
 					done(err);
 				})
 			});
-		});		
+		});
  	});
 
  	describe('User with Interviewer Role', function() {
@@ -497,7 +336,7 @@ describe('The User Controller', function () {
 		});
 
 		describe('find()', function () {
-			it('should not be able to see other coordinators my collection centres', function (done) {
+			it('should not be able to see other coordinators not in my collection centres', function (done) {
 				done();
 			});
 		});
@@ -506,7 +345,7 @@ describe('The User Controller', function () {
 			it('should be able to read self user', function (done) {
 				request.get('/api/user/' + globals.users.interviewerUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)	
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.items.id.should.equal(globals.users.interviewerUserId);
@@ -537,7 +376,7 @@ describe('The User Controller', function () {
 						collection.error.should.equal('User interviewer@example.com is not permitted to POST ');
 						done(err);
 					});
-			});		
+			});
 		});
 
 		describe('update()', function() {
@@ -570,8 +409,8 @@ describe('The User Controller', function () {
 
 			it('should not be able to update centreAccess', function (done) {
 				// TODO
-				done();				
-			});		
+				done();
+			});
 		});
 
 		describe('delete()', function() {
@@ -594,7 +433,7 @@ describe('The User Controller', function () {
 			});
 		});
 
-		after(function(done) {	  	
+		after(function(done) {
 			auth.authenticate('admin', function(resp) {
 				request.del('/api/user/' + globals.users.coordinator2)
 					.set('Authorization', 'Bearer ' + globals.token)
@@ -613,7 +452,7 @@ describe('The User Controller', function () {
 						var collection = JSON.parse(res.text);
 						collection.items.length.should.equal(1);
 						done(err);
-					});				
+					});
 			});
 		});
 
@@ -670,8 +509,8 @@ describe('The User Controller', function () {
 
 			it('should not be able to update centreAccess', function (done) {
 				// TODO
-				done();				
-			});		
+				done();
+			});
 		});
 
 		describe('delete()', function() {
