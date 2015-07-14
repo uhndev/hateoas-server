@@ -1,7 +1,45 @@
 [
 	{
 		"path": "/api/user",
-		"links": [],
+		"links": [
+			{
+				"rel": "overview",
+				"prompt": "*",
+				"name": "name",
+				"href": "/api/study/*"
+			},
+			{
+				"rel": "subject",
+				"prompt": "Subjects",
+				"name": "name",
+				"href": "/api/study/*/subject"
+			},
+			{
+				"rel": "user",
+				"prompt": "Users",
+				"name": "name",
+				"href": "/api/study/*/user",
+				"isActive": true
+			},
+			{
+				"rel": "form",
+				"prompt": "Forms",
+				"name": "name",
+				"href": "/api/study/*/form"
+			},
+			{
+				"rel": "survey",
+				"prompt": "Surveys",
+				"name": "name",
+				"href": "/api/study/*/survey"
+			},
+			{
+				"rel": "collectioncentre",
+				"prompt": "Collection Centres",
+				"name": "name",
+				"href": "/api/study/*/collectioncentre"
+			}
+		],
 		"queries": [],
 		"template": {
 			"rel": "user",
@@ -11,32 +49,118 @@
 				{"name":"email","type":"string","prompt":"Email","value":""},
 				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
 				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
-				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
-			]			
-		}
-	},	
-	{
-		"path": "/api/subject",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/2"
+				{"name":"lastname","type":"string","prompt":"Lastname","value":""},
+				{"name":"gender","type":"string","prompt":"Gender","value":""},
+				{"name":"dob","type":"date","prompt":"Date of Birth","value":""}
+			]
 		}
 	},
 	{
-		"path": "/api/person",
-		"links": [],
+		"path": "/api/subject",
+		"links": [
+			{
+				"rel": "overview",
+				"prompt": "*",
+				"name": "name",
+				"href": "/api/study/*"
+			},
+			{
+				"rel": "subject",
+				"prompt": "Subjects",
+				"name": "name",
+				"href": "/api/study/*/subject",
+				"isActive": true
+			},
+			{
+				"rel": "user",
+				"prompt": "Users",
+				"name": "name",
+				"href": "/api/study/*/user"
+			},
+			{
+				"rel": "form",
+				"prompt": "Forms",
+				"name": "name",
+				"href": "/api/study/*/form"
+			},
+			{
+				"rel": "survey",
+				"prompt": "Surveys",
+				"name": "name",
+				"href": "/api/study/*/survey"
+			},
+			{
+				"rel": "collectioncentre",
+				"prompt": "Collection Centres",
+				"name": "name",
+				"href": "/api/study/*/collectioncentre"
+			}
+		],
 		"queries": [],
 		"template": {
 			"href": "http://localhost:1337/api/form/3"
 		}
-	},	
+	},
 	{
 		"path": "/api/study",
 		"links": [],
 		"queries": [],
 		"template": {
 			"href": "http://localhost:1337/api/form/4"
+		}
+	},
+	{
+		"path": "/api/collectioncentre",
+		"links": [
+			{
+				"rel": "overview",
+				"prompt": "*",
+				"name": "name",
+				"href": "/api/study/*"
+			},
+			{
+				"rel": "subject",
+				"prompt": "Subjects",
+				"name": "name",
+				"href": "/api/study/*/subject"
+			},
+			{
+				"rel": "user",
+				"prompt": "Users",
+				"name": "name",
+				"href": "/api/study/*/user"
+			},
+			{
+				"rel": "form",
+				"prompt": "Forms",
+				"name": "name",
+				"href": "/api/study/*/form"
+			},
+			{
+				"rel": "survey",
+				"prompt": "Surveys",
+				"name": "name",
+				"href": "/api/study/*/survey"
+			},
+			{
+				"rel": "collectioncentre",
+				"prompt": "Collection Centres",
+				"name": "name",
+				"href": "/api/study/*/collectioncentre",
+				"isActive": true
+			}
+		],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/5"
+		}
+	},
+	{
+		"path": "/api/group",
+		"links": [],
+		"queries": [],
+		"template": {
+			"href": "http://localhost:1337/api/form/6"
 		}
 	}
 ]

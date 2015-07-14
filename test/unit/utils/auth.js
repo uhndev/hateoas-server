@@ -1,6 +1,4 @@
 'use strict';
-var superagent = require('superagent'),
-		agent = superagent.agent();
 
 /**
  * Generic helper function to authenticate specified user with current sails testing instance. Function
@@ -24,7 +22,7 @@ var Auth = {
         username: 'subject',
         email: 'subject@example.com',
         password: 'subject1234',
-        role: 'subject',
+        group: 'subject',
         prefix: 'Mr.',
         firstname: 'Sub',
         lastname: 'Ject'
@@ -34,12 +32,27 @@ var Auth = {
         password: 'subject1234'
       }
     },
+    interviewer: {
+      create: {
+        username: 'interviewer',
+        email: 'interviewer@example.com',
+        password: 'interviewer1234',
+        group: 'interviewer',
+        prefix: 'Mr.',
+        firstname: 'Inter',
+        lastname: 'Viewer'
+      },
+      login: {
+        identifier: 'interviewer',
+        password: 'interviewer1234'
+      }
+    },    
     coordinator: {
       create: {
         username: 'coordinator',
         email: 'coordinator@example.com',
         password: 'coordinator1234',
-        role: 'coordinator',
+        group: 'coordinator',
         prefix: 'Dr.',
         firstname: 'Coord',
         lastname: 'Inator'
@@ -54,7 +67,7 @@ var Auth = {
         username: 'admin',
         email: 'admin@example.com',
         password: 'admin1234',
-        role: 'admin',
+        group: 'admin',
         prefix: 'Dr.',
         firstname: 'John',
         lastname: 'Admin'
@@ -65,31 +78,30 @@ var Auth = {
       }
     }
   },
-
+  
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
-      Role.findOne({name: credentials.role}).exec(function (err, role) {
-        if (err) done(err);
-        var req = request.post('/api/user');
-        agent.attachCookies(req);
-        credentials.role = role.id;
-        req.send(credentials)
-        .expect(201)
-        .end(function(err, res) {
-          done(JSON.parse(res.text).items.id);
-        });  
+      Group.findOneByName(credentials.group).then(function (group) {
+        delete credentials.group;
+        credentials.group = group.id;
+        request.post('/api/user')
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send(credentials)
+          .expect(201)
+          .end(function(err, res) {
+            done(JSON.parse(res.text).items.id);
+          });
       });      
     });    
   },
 
   authenticate: function(user, done) {
     request.post('/auth/local')
-      .set('Content-Type', 'application/json')
       .send(this.credentials[user].login)
       .end(function (err, result) {
         if (err) throw err;
-        agent.saveCookies(result);
-        done(agent, result);
+        if (_.has(result.body, 'token')) globals.token = result.body.token.payload;
+        done(result);
       });
   },
 

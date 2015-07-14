@@ -26,39 +26,59 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
- '*': [
+  '*': [
     'basicAuth',
     'passport',
+    'tokenAuth',
     'sessionAuth',
     'ModelPolicy',
     'AuditPolicy',
     'OwnerPolicy',
     'PermissionPolicy',
-    'RolePolicy'
+    'RolePolicy',
+    'CriteriaPolicy'
   ],
 
   AuthController: {
     '*': [ 'passport' ]
+  },
+
+  UserEnrollmentController: {
+    'find': false,
+    'findOne': false,
+    'create': false
+  },
+
+  SubjectEnrollmentController: {
+    'find': false,
+    'findOne': false,
+    'create': false
+  },
+
+  GroupController: {
+    'destroy': false
+  },
+
+  CriteriaController: {
+    '*': false
+  },
+
+  ModelController: {
+    'create': false,
+    'update': false,
+    'destroy': false
+  },
+
+  RoleController: {
+    'create': false,
+    'update': false,
+    'destroy': false
+  },
+
+  PermissionController: {
+    'create': false,
+    'update': false,
+    'destroy': false
   }
 
-  /***************************************************************************
-  *                                                                          *
-  * Here's an example of mapping some policies to run before a controller    *
-  * and its actions                                                          *
-  *                                                                          *
-  ***************************************************************************/
-	// RabbitController: {
-
-		// Apply the `false` policy as the default for all of RabbitController's actions
-		// (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
-		// '*': false,
-
-		// For the action `nurture`, apply the 'isRabbitMother' policy
-		// (this overrides `false` above)
-		// nurture	: 'isRabbitMother',
-
-		// Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
-		// before letting any users feed our rabbits
-		// feed : ['isNiceToAnimals', 'hasRabbitFood']
-	// }
 };

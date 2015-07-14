@@ -20,9 +20,9 @@ describe('The WorkflowState Model', function() {
 
 	describe('when accessing the WorkflowState model', function() {
 
-		it('should begin with user, person, subject, and study WorkflowStates',  function (done) {
+		it('should begin with user, subject, study, and collection centre WorkflowStates',  function (done) {
 			WorkflowState.count(function(err, states) {
-				states.should.be.exactly(4);
+				states.should.be.exactly(5);
 				done(err);
 			});
 		});
@@ -43,14 +43,6 @@ describe('The WorkflowState Model', function() {
 				});
 		});
 		
-		it('should return the correct person form in template href', function (done) {
-			WorkflowState.findOne({ path: '/api/person' })
-				.exec(function (err, state) {
-					state.template.href.should.equal(formHrefs.person);
-					done(err);
-				});
-		});
-		
 		it('should return the correct study form in template href', function (done) {
 			WorkflowState.findOne({ path: '/api/study' })
 				.exec(function (err, state) {
@@ -58,5 +50,13 @@ describe('The WorkflowState Model', function() {
 					done(err);
 				});
 		});
+
+		it('should return the correct collection centre form in template href', function (done) {
+			WorkflowState.findOne({ path: '/api/collectioncentre' })
+				.exec(function (err, state) {
+					state.template.href.should.equal(formHrefs.collection_centre);
+					done(err);
+				});
+		});		
 	});
 });

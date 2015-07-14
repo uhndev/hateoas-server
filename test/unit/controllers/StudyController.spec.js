@@ -14,49 +14,56 @@ var StudyController = require('../../../api/controllers/StudyController');
 
 describe('The Study Controller', function () {
 
-	var agent, adminUserId, studyId;
+	var study1, study2, study3, cc1Id, cc2Id;
 
 	describe('User with Admin Role', function () {
-		
+
 		before(function(done) {
-			auth.authenticate('admin', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('admin', function(resp) {
 				resp.statusCode.should.be.exactly(200);
-				adminUserId = JSON.parse(resp.text).id;
+				globals.users.adminUserId = JSON.parse(resp.text).user.id;
 
 				Study.create({
-					name: 'LEAP',
+					name: 'STUDY-LEAP-ADMIN',
 					reb: 100,
-					users: [coordinatorUserId]
-				}).then(function (res) {
+					administrator: globals.users.coordinatorUserId,
+					pi: globals.users.coordinatorUserId
+				})
+				.then(function (res) {
+					study1 = res.id;
 					done();
 				});
 			});
 		});
 
 		after(function(done) {
-			auth.logout(done);
+			Study.destroy(study1).exec(function (err, study) {
+				Study.destroy(study2).exec(function (err, study) {
+					if (err) return done(err);
+					auth.logout(done);
+				});
+			});
 		});
 
 		describe('find()', function () {
 			it('should be able to read all studies', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
+				request.get('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/collection+json')
 					.expect('Content-Type', 'application/collection+json; charset=utf-8')
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('LEAP');
+						collection.items[0].name.should.equal('STUDY-LEAP-ADMIN');
 						collection.count.should.equal(1);
 						done(err);
 					});
 			});
 
 			it('should retrieve a saved study form href from the workflowstate', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
@@ -67,53 +74,52 @@ describe('The Study Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to retrieve a specific study by name', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study/STUDY-LEAP-ADMIN')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP');
+						collection.items.name.should.equal('STUDY-LEAP-ADMIN');
 						done(err);
-					});				
+					});
 			});
 
 			it('should return a 404 if study does not exist', function (done) {
-				var req = request.get('/api/study/DNE');
-				agent.attachCookies(req);
-				req.expect(404)
+				request.get('/api/study/DNE')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(404)
 					.end(function (err, res) {
-						res.text.should.equal('Study DNE could not be found');
 						done(err);
-					});				
+					});
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/subject');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study/STUDY-LEAP-ADMIN/subject')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
+					});
 			});
 
 			it('should retrieve a saved user form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/user');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study/STUDY-LEAP-ADMIN/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
 						collection.template.should.have.property('href');
 						done(err);
-					});					
-			});			
+					});
+			});
 		});
 
 		describe('create()', function () {
-			
+
 			before(function (done) {
-				Study.findOne({name: 'LEAP-HIP'})
+				Study.findOne({name: 'STUDY-LEAP-HIP-ADMIN'})
 					.exec(function (err, study) {
 						_.isUndefined(study).should.be.true;
 						done();
@@ -128,31 +134,31 @@ describe('The Study Controller', function () {
 			});
 
 			it('should be able to create a new study', function (done) {
-				var req = request.post('/api/study');
-				agent.attachCookies(req);
-
-				req.send({
-						name: 'LEAP-HIP',
+				request.post('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
+						name: 'STUDY-LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [adminUserId, subjectUserId]
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(201)
 					.end(function(err, res) {
 						var collection = JSON.parse(res.text);
-						studyId = collection.id;
-						collection.name.should.equal('LEAP-HIP');
+						study2 = collection.id;
+						collection.name.should.equal('STUDY-LEAP-HIP-ADMIN');
 						done(err);
 					});
 			});
 
 			it('should return an error if a study already exists', function (done) {
-				var req = request.post('/api/study');
-				agent.attachCookies(req);
-
-				req.send({
-						name: 'LEAP-HIP',
+				request.post('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
+						name: 'STUDY-LEAP-HIP-ADMIN',
 						reb: 100,
-						users: [adminUserId]
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(500)
 					.end(function(err) {
@@ -163,51 +169,49 @@ describe('The Study Controller', function () {
 
 		describe('update()', function() {
 			it('should be able to update study name', function(done) {
-				var req = request.put('/api/study/' + studyId);
-				agent.attachCookies(req);
-
-				req.send({ name: 'LEAP2', reb: 201 })
+				request.put('/api/study/' + study2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ name: 'STUDY-LEAP-HIP2-ADMIN', reb: 201 })
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP2');
+						collection.items.name.should.equal('STUDY-LEAP-HIP2-ADMIN');
 						collection.items.reb.should.equal('201');
 						done(err);
 					});
 			});
 
 			it('should be able to set no users to a study', function(done) {
-				var req = request.put('/api/study/' + studyId);
-				agent.attachCookies(req);
-
-				req.send({ users: [] })
+				request.put('/api/study/' + study2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ administrator: null, pi: null })
 					.expect(200)
 					.end(function (err, res) {
 						done(err);
 					});
-			});			
+			});
 
 			it('should be able to update users of study', function(done) {
-				var req = request.put('/api/study/' + studyId);
-				agent.attachCookies(req);
-				req.send({ users: [adminUserId, subjectUserId] })
+				request.put('/api/study/' + study2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ administrator: globals.users.adminUserId, pi: globals.users.interviewerUserId })
 					.expect(200)
 					.end(function (err, res) {
-						Study.findOne(studyId).populate('users')
+						Study.findOne(study2).populate('administrator').populate('pi')
 							.then(function (data) {
-								data.users[0].username.should.equal('admin');
-								data.users[1].username.should.equal('subject');
+								data.administrator.username.should.equal('admin');
+								data.pi.username.should.equal('interviewer');
 								done(err);
 							});
 					});
-			});					
+			});
 		});
 
 		describe('allow correct headers', function() {
 			it('should return full CRUD access for /api/study', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
@@ -216,32 +220,78 @@ describe('The Study Controller', function () {
 			});
 
 			it('should return full CRUD access for /api/study/:name', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(200)
+				request.get('/api/study/STUDY-LEAP-ADMIN')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var headers = res.headers['allow'];
 						headers.should.equal('read,create,update,delete');
 						done(err);
-					});				
+					});
 			});
-		}); 
+		});
 	});
 
-	describe('User with Coordinator Role', function () {
+	describe('User with Coordinator/Interviewer Role', function () {
 		before(function(done) {
-			auth.authenticate('coordinator', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('coordinator', function(resp) {
 				resp.statusCode.should.be.exactly(200);
-				adminUserId = JSON.parse(resp.text).id;
 
 				Study.create({
-					name: 'TEST',
+					name: 'STUDY-LEAP-COORD',
 					reb: 100,
-					users: [coordinatorUserId]
-				}).then(function (res) {
+					administrator: globals.users.coordinatorUserId,
+					pi: globals.users.coordinatorUserId
+				})
+				.then(function (study) {
+					study3 = study.id;
+					return CollectionCentre.create({
+						name: 'STUDY-LEAP-COORD-TWH',
+						reb: 200,
+						study: study.id
+					});
+				})
+				.then(function (centre) {
+					cc1Id = centre.id;
+					return CollectionCentre.create({
+						name: 'STUDY-LEAP-COORD-TGH',
+						reb: 300,
+						study: study.id
+					});
+				})
+				.then(function (centre) {
+					cc2Id = centre.id;
+          return UserEnrollment.create({
+            user: globals.users.coordinatorUserId,
+            collectionCentre: cc1Id,
+            centreAccess: 'coordinator'
+          })
+          // .then(function (enrollment) {
+          //   return User.findOne(globals.users.coordinatorUserId).populate('enrollments')
+          //     .then(function (user) {
+          //       user.enrollments.add(enrollment.id);
+          //       return user.save();
+          //     });
+          // });
+				})
+				.then(function (user) {
+					return UserEnrollment.create({
+            user: globals.users.interviewerUserId,
+            collectionCentre: cc2Id,
+            centreAccess: 'interviewer'
+					})
+          // .then(function (enrollment) {
+          //   return User.findOne(globals.users.interviewerUserId).populate('enrollments')
+          //     .then(function (user) {
+          //       user.enrollments.add(enrollment.id);
+          //       return user.save();
+          //     });
+          // });
+				})
+				.then(function (user) {
 					done();
-				});
+				})
+				.catch(done);
 			});
 		});
 
@@ -250,102 +300,138 @@ describe('The Study Controller', function () {
 		});
 
 		describe('find()', function () {
-			it('should be able to see all studies', function (done) {
-				done();
-			});
-
-			it('should be able to see studies he/she is associated with', function (done) {
-				done();
+			it('should be able to see studies where he/she is associated with a CC', function (done) {
+				request.get('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.items[0].name.should.equal('STUDY-LEAP-COORD');
+						collection.items.length.should.equal(1);
+						done(err);
+					});
 			});
 		});
 
 		describe('findOne()', function () {
-			it('should be able to retrieve a specific study by name', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(200)
+			it('should be able to retrieve a specific study by name if associated to a CC', function (done) {
+				request.get('/api/study/STUDY-LEAP-COORD')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP');
-						done(err);
-					});				
-			});
-
-			it('should return a 404 if study does not exist', function (done) {
-				var req = request.get('/api/study/DNE');
-				agent.attachCookies(req);
-				req.expect(404)
-					.end(function (err, res) {
-						res.text.should.equal('Study DNE could not be found');
-						done(err);
-					});				
-			});
-
-			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/subject');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
-						done(err);
-					});					
-			});
-
-			it('should retrieve a saved user form href from the workflowstate', function (done) {
-				var req = request.get('/api/study/LEAP/user');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
-						done(err);
-					});					
-			});	
-		});
-
-		describe('create()', function () {
-
-		});
-
-		describe('update()', function() {
-
-		});
-
-		describe('allow correct headers', function() {
-			it('should return full CRUD access for /api/study', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var headers = res.headers['allow'];
-						headers.should.equal('read,create,update,delete');
+						collection.items.name.should.equal('STUDY-LEAP-COORD');
 						done(err);
 					});
 			});
 
-			it('should return full CRUD access for /api/study/:name', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(200)
+			it('should not be able to retrieve a specific study by name if not associated to a CC', function (done) {
+				request.get('/api/study/STUDY-LEAP-COORD')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
 					.end(function (err, res) {
-						var headers = res.headers['allow'];
-						headers.should.equal('read,create,update,delete');
+						var collection = JSON.parse(res.text);
+						collection.items.name.should.equal('STUDY-LEAP-COORD');
 						done(err);
-					});				
+					});
+			});
+
+			it('should return a 404 if study does not exist', function (done) {
+				request.get('/api/study/DNE')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(404)
+					.end(function (err, res) {
+						done(err);
+					});
+			});
+
+			it('should retrieve a saved subject form href from the workflowstate', function (done) {
+				request.get('/api/study/STUDY-LEAP-COORD/subject')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.template.should.have.property('href');
+						done(err);
+					});
+			});
+
+			it('should retrieve a saved user form href from the workflowstate', function (done) {
+				request.get('/api/study/STUDY-LEAP-COORD/user')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
+					.end(function (err, res) {
+						var collection = JSON.parse(res.text);
+						collection.template.should.have.property('href');
+						done(err);
+					});
 			});
 		});
-	});
 
-	describe('User with Interviewer Role', function () {
+		describe('create()', function () {
+			it('should not be able to create studies', function(done) {
+				request.post('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
+						name: 'TEST',
+						reb: 100,
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
+					})
+					.expect(400)
+					.end(function(err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('User coordinator@example.com is not permitted to POST ');
+						done(err);
+					});
+			});
+		});
 
+		describe('update()', function() {
+			it('should not be able to update studies', function(done) {
+				request.put('/api/study/STUDY-LEAP-COORD')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({
+						name: 'TEST'
+					})
+					.expect(400)
+					.end(function(err, res) {
+						var collection = JSON.parse(res.text);
+						collection.error.should.equal('User coordinator@example.com is not permitted to PUT ');
+						done(err);
+					});
+			})
+		});
+
+		describe('allow correct headers', function() {
+			it('should only allow read access for /api/study', function (done) {
+				request.get('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read');
+						done(err);
+					});
+			});
+
+			it('should only allow read access for /api/study/:name', function (done) {
+				request.get('/api/study/STUDY-LEAP-COORD')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(200)
+					.end(function (err, res) {
+						var headers = res.headers['allow'];
+						headers.should.equal('read');
+						done(err);
+					});
+			});
+		});
 	});
 
 	describe('User with Subject Role', function () {
 
 		before(function(done) {
-			auth.authenticate('subject', function(loginAgent, resp) {
-				agent = loginAgent;
+			auth.authenticate('subject', function(resp) {
 				resp.statusCode.should.be.exactly(200);
 				done();
 			});
@@ -356,37 +442,15 @@ describe('The Study Controller', function () {
 		});
 
 		describe('find()', function() {
-			it('should only be able to see studies he/she is associated with', function (done) {
-				var req = request.get('/api/study');
-				agent.attachCookies(req);
-				req.set('Accept', 'application/collection+json')
-					.expect('Content-Type', 'application/collection+json; charset=utf-8')
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items[0].name.should.equal('LEAP2');
-						collection.count.should.equal(1);
-						done(err);
-					});
-			});
+
 		});
 
 		describe('findOne()', function() {
-			it('should be allowed access to study he/she is associated with', function (done) {
-				var req = request.get('/api/study/LEAP2');
-				agent.attachCookies(req);
-				req.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('LEAP2');
-						done(err);
-					});
-			});
 
 			it('should not be allowed access to restricted study', function (done) {
-				var req = request.get('/api/study/LEAP');
-				agent.attachCookies(req);
-				req.expect(403)
+				request.get('/api/study/STUDY-LEAP-COORD')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.expect(403)
 					.end(function (err, res) {
 						done(err);
 					});
@@ -394,21 +458,19 @@ describe('The Study Controller', function () {
 		});
 
 		describe('create()', function () {
-			it('should not be able to create a new user', function (done) {
-				var req = request.post('/api/user');
-				agent.attachCookies(req);
-				
-				req.set('Accept', 'application/json')
+			it('should not be able to create a new study', function (done) {
+				request.post('/api/study')
+					.set('Authorization', 'Bearer ' + globals.token)
+					.set('Accept', 'application/json')
 					.expect('Content-Type', 'application/json; charset=utf-8')
 					.send({
-						username: 'newuser1',
-						email: 'newuser1@example.com',
-						password: 'lalalal1234',
-						role: 'admin'
+						name: 'LEAPSUBJECT',
+						reb: 100,
+						administrator: globals.users.coordinatorUserId,
+						pi: globals.users.coordinatorUserId
 					})
 					.expect(400)
 					.end(function (err, res) {
-						// var user = res.body;
 						var collection = JSON.parse(res.text);
 						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
@@ -417,24 +479,10 @@ describe('The Study Controller', function () {
 		});
 
 		describe('update()', function () {
-			it('should not be able to update themselves', function (done) {
-				var req = request.put('/api/user/' + subjectUserId);
-				agent.attachCookies(req);
-
-				req.send({ email: 'newuserupdated@example.com' })
-					.expect(400)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
-						done(err);
-					});
-			});
-
-			it('should not be able to update another user', function (done) {
-				var req = request.put('/api/user/' + adminUserId);
-				agent.attachCookies(req);
-
-				req.send({ email: 'crapadminemail@example.com' })
+			it('should not be able to update study', function (done) {
+				request.put('/api/study/' + study2)
+					.set('Authorization', 'Bearer ' + globals.token)
+					.send({ reb: 2000 })
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
@@ -443,6 +491,20 @@ describe('The Study Controller', function () {
 					});
 			});
 		});
+
+		// TODO: until subjects can be created
+		// describe('allow correct headers', function() {
+		// 	it('should only allow read access for /api/study', function (done) {
+		// 		request.get('/api/study');
+		// 		agent.attachCookies(req);
+		// 		req.expect(200)
+		// 			.end(function (err, res) {
+		// 				var headers = res.headers['allow'];
+		// 				headers.should.equal('read');
+		// 				done(err);
+		// 			});
+		// 	});
+		// });
 	});
 
 });

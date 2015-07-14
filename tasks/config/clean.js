@@ -13,6 +13,7 @@ module.exports = function(grunt) {
 
 	grunt.config.set('clean', {
 		dev: ['.tmp/public/**'],
+    docs: ['./docs'],
 		build: ['www']
 	});
 

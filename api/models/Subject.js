@@ -1,67 +1,48 @@
 /**
-* Subject.js
+* Subject
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
+* @class Subject
+* @description Model representation of a subject
+* @docs        http://sailsjs.org/#!documentation/models
 */
+
 (function() {
-var HateoasService = require('../services/HateoasService.js');
 
-module.exports = {
-  schema: true,
-  attributes: {
-    studyId: {
-      type: 'integer',
-      autoIncrement: true,
-      required: true
-    },
-    study: {
-      model: 'study',
-      required: true
-    },
-    person: {
-      model: 'person',
-      required: true
-    },
-    doe: {
-      type: 'date'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  },
-  findByStudyName: function(studyName, options, cb) {
-    Study.findOneByName(studyName, {}, function found(err, study) {
-      if (err) return cb(err);
+  var HateoasService = require('../services/HateoasService.js');
+  var _ = require('lodash');
 
-      if (!study) {
-        err = new Error();
-        err.message = require('util')
-          .format('Study with name %s does not exist.', studyName);
-        err.status = 404;
-        return cb(err);
-      }
+  module.exports = {
+    schema: true,
+    attributes: {
+      user: {
+        model: 'user',
+        required: true
+      },
+      enrollments: {
+        collection: 'subjectenrollment',
+        via: 'subject'
+      },
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
 
-      var query = _.cloneDeep(options);
-      query.where = query.where || {};
-      query.where.study = study.id;
-      delete query.where.name;
+    findByStudyName: function(studyName, currUser, options, cb) {
+      // TODO
+      Subject.find().exec(function (err, subjects) {
+        cb(false, subjects);
+      });
+      // EnrollmentService
+      //   .findStudySubjects(studyName, currUser)
+      //   .then(function (users) { // send data through to callback function
+      //     return cb(false, users);
+      //   })
+      //   .catch(cb);
+    }
 
-      Subject.find(query)
-        .populate('person')
-        .populate('study')
-        .exec(cb);
-    });
-  },
-  beforeValidate: function(subject, cb) {
-    //Auto increment workaround
-    Subject.findOne({ where: {"study": subject.study}, 
-      sort:'studyId DESC' } )
-        .exec(function(err, lastSubject){
-          if (err) return err;
-          subject.studyId = (lastSubject && lastSubject.studyId ? 
-            lastSubject.studyId + 1 : 1);
-          cb();
-        });
-  }
-};
+  };
 
 }());

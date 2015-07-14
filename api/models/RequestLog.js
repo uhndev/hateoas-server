@@ -1,20 +1,22 @@
-// api/models/RequestLog.js
+/**
+ * RequestLog
+ *
+ * @class RequestLog
+ * @description Model responsible for capturing all CRUD access operations
+ *              user info, url, and responses during usage of the application.
+ * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/RequestLog.js
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/RequestLog');
+(function() {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/RequestLog');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo(bar);
-   * }
-   */
-});
+    connection: 'dados_audit'
+
+  });
+})();
+

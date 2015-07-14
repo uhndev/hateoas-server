@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         },
         prod: {
             src: ['assets/Gruntfile.js'],
-            tasks: ['default']
+            tasks: ['prod']
         }
     });
 

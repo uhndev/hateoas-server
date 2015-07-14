@@ -1,20 +1,22 @@
-// api/models/Permission.js
+/**
+ * Permission
+ *
+ * @class Permission
+ * @description Representation of the actions a Role is granted on a particular Model and its attributes
+ * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/Permission.js
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/Permission');
+(function() {
+  'use strict';
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/Permission');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo(bar);
-   * }
-   */
-});
+    // Extend with custom logic here by adding additional fields, methods, etc.
+
+  });
+})();
+

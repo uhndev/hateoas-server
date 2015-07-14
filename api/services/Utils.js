@@ -45,13 +45,13 @@ var self = {
     /**
      * List of system fields that SailsJS will add to all objects
      */
-    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'owner'],
+    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'expiredAt', 'owner'],
     removeSystemFields: function removeSystemFields(data) {
       if (_.isArray(data)) {
         return data.map(function(item) {
           return self.Model.removeSystemFields(item);
         });
-      } 
+      }
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
     }
@@ -60,40 +60,17 @@ var self = {
 
   /** Start of "User" Utils **/
   "User": {
-    extractPersonFields: function extractPersonFields(data) {
+
+    extractUserFields: function extractUserFields(data) {
       return {
+        username: data.username,
+        email: data.email,
         prefix: data.prefix,
         firstname: data.firstname,
-        lastname: data.lastname
+        lastname: data.lastname,
+        gender: data.gender,
+        dob: data.dob
       };
-    },
-    
-    populateAndFormat: function populateAndFormat(users) {
-      var promises = [];
-      _.each(users, function (user) {
-        promises.push(User.findOne(user.id)
-          .populate('person')
-          .populate('roles')
-          .then(function (user) {
-            return user;
-          })
-        );
-      });
-      
-      return Q.allSettled(promises).then(function (users) {
-        var userVals = _.pluck(users, 'value');
-        _.map(userVals, function (user) {
-          if (user.person) {
-            _.merge(user, self.User.extractPersonFields(user.person));
-            delete user.person;
-          }
-          if (user.roles) {
-            user.role = _.first(user.roles).id;
-            delete user.roles;
-          }
-        });
-        return userVals;
-      });
     }
   }
   /** End of "User" Utils **/
