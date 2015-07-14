@@ -13,7 +13,7 @@
   module.exports = {
 
     find: function (req, res, next) {
-      var query = Subject.find()
+      var query = ModelService.filterExpiredRecords('subject')
         .where( actionUtil.parseCriteria(req) )
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )

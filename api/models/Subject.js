@@ -22,6 +22,11 @@
         collection: 'subjectenrollment',
         via: 'subject'
       },
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

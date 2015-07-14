@@ -34,10 +34,18 @@ module.exports = function sendOK (data, options) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
+
+      var promise;
       if (query.where) {
-        return model.count(JSON.parse(query.where));
+        promise = model.count(JSON.parse(query.where));
       }
-      return model.count(query);
+      promise = model.count(query);
+
+      if (_.has(model.attributes, 'expiredAt')) {
+        promise.where({ expiredAt: null });
+      }
+
+      return promise;
     }
     return Q.when(0);
   }
