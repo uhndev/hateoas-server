@@ -39,7 +39,6 @@ module.exports = function sendOK (data, options) {
       if (query.where) {
         promise = model.count(JSON.parse(query.where));
       }
-      promise = model.count(query);
 
       if (_.has(model.attributes, 'expiredAt')) {
         promise.where({ expiredAt: null });
