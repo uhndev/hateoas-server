@@ -172,7 +172,7 @@
           res.badRequest({
             title: 'Error',
             code: 400,
-            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(ccFields);
+            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(ccFields)
           });
         });
     },

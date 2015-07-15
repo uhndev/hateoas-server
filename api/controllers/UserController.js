@@ -168,7 +168,11 @@
         res.ok(this.user);
       })
       .catch(function (err) {
-        res.serverError(err);
+        res.serverError({
+          title: 'User Update Error',
+          code: 500,
+          message: 'An error occurred when updating user: ' + userFields.username
+        });
       });
     },
 
@@ -226,7 +230,11 @@
           }
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Collection Centre Access Error',
+            code: 500,
+            message: 'Error when updating user centre access for user: ' + user
+          });
         });
     },
 
@@ -255,7 +263,11 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Role Update Error',
+            code: 500,
+            message: 'Error when updating roles for user: ' + user.username
+          });
         });
       }
       // Update user access matrix
@@ -268,7 +280,11 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Role Update Error',
+            code: 500,
+            message: 'Error when updating access roles for user: ' + userId
+          });
         });
       }
     },
