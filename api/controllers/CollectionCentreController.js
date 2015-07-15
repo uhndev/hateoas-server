@@ -171,8 +171,8 @@
         .catch(function (err) {
           res.badRequest({
             title: 'Error',
-            code: err.status,
-            message: err.message
+            code: 400,
+            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(ccFields);
           });
         });
     },
