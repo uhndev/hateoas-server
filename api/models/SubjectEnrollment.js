@@ -106,15 +106,10 @@
           if (valid) {
             cb();
           } else {
-            var err = new Error();
-            err.status = 400;
-            err.message = 'Study mapping is not valid!';
-            cb(err);
+            cb('Study mapping is not valid!');
           }
         })
-        .catch(function (err) {
-          cb(err);
-        });
+        .catch(cb);
     }
 
   };

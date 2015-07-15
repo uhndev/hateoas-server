@@ -155,7 +155,8 @@
      * @description Creates a study given name, reb, attributes, administrator and
      *              pi.  We prevent users from being able to add collection centres
      *              when creating studies; they should only be able to do so on the
-     *              study/:name/collectioncentre page.  We also verify that
+     *              study/:name/collectioncentre page.  We also verify that the name
+     *              is unique and provide the user an error if it isnt.
      */
     create: function (req, res, next) {
       var name = req.param('name');
@@ -172,8 +173,8 @@
         } else {
           // validating passed in study attribute object structure
           if (_.isObject(attributes) &&
-              _.all(_.keys(attributes, _.isString)) &&
-              _.all(_.values(attributes, _.isArray))) {
+              _.all(_.keys(attributes), _.isString) &&
+              _.all(_.values(attributes), _.isArray)) {
 
             Study.create({
               name: name,

@@ -190,35 +190,7 @@
       } else {
         cb();
       }
-    },
-
-    /**
-     * beforeCreate
-     * @description Lifecycle callback firing before creating any study; since study
-     *              names are supposed to be unique, we pre-emptively check for uniqueness
-     *              in addition to verifying that the study.attributes object is well formed.
-     *
-     * @param  {Object}   values  proposed study object
-     * @param  {Function} cb      callback function on completion
-     */
-    // beforeCreate: function(values, cb) {
-    //   Study.findOneByName(values.name).exec(function (err, study) {
-    //     if (study) {
-    //       cb('Unable to create study ' + values.name + ', a study by that name already exists.');
-    //     } else {
-    //       // validating passed in study attribute object structure
-    //       if (_.isObject(values.attributes) && !_.isEmpty(values.attributes) &&
-    //           _.all(_.keys(values.attributes, _.isString)) &&
-    //           _.all(_.values(values.attributes, _.isArray))) {
-    //         cb();
-    //       }
-    //       // otherwise structure is invalid and we fail
-    //       else {
-    //         cb('Invalid study attributes structure, keys must be strings and values must be arrays');
-    //       }
-    //     }
-    //   });
-    // }
+    }
 
   };
 
