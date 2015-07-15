@@ -244,41 +244,41 @@ describe('The Study Controller', function () {
 		});
 
     describe('delete()', function() {
-      var sID, cID;
+      var studyID, centreID;
 
       beforeEach(function (done) {
         Study.create({
           name: 'DEL-TEST-STUDY',
           reb: 100
         }).exec(function (err, study) {
-          sID = study.id;
+          studyID = study.id;
           CollectionCentre.create({
             name: 'TWG',
             study: study.id
           }).exec(function (err, centre) {
-            cID = centre.id;
+            centreID = centre.id;
             done(err);
           });
         });
       });
 
       afterEach(function (done) {
-        CollectionCentre.destroy(cID).exec(function (err, destroyed) {
-          Study.destroy(sID).exec(function (err, destroyed) {
+        CollectionCentre.destroy(centreID).exec(function (err, destroyed) {
+          Study.destroy(studyID).exec(function (err, destroyed) {
             done(err);
           });
         });
       });
 
       it('should set expiredAt flag to now and propagate expiry to collection centres', function (done) {
-        request.del('/api/study/' + sID)
+        request.del('/api/study/' + studyID)
           .set('Authorization', 'Bearer ' + globals.token)
           .send()
           .expect(200)
           .end(function (err, res) {
             var collection = JSON.parse(res.text);
             collection.items[0].expiredAt.should.be.truthy;
-            CollectionCentre.findOne(cID).exec(function (err, centre) {
+            CollectionCentre.findOne(centreID).exec(function (err, centre) {
               centre.expiredAt.should.be.truthy;
               done(err);
             });
