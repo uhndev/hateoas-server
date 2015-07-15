@@ -110,12 +110,14 @@
       .then(function (user) {
         if (this.study) {
           if (this.group.level > 1 && user) { // for non-admins, only return summaries for valid enrollments
+            var enrollments = _.filter(user.enrollments, { expiredAt: null });
             return Promise.all(
-              _.map(_.pluck(user.enrollments, 'collectionCentre'), getCollectionCentreSummary)
+              _.map(_.pluck(enrollments, 'collectionCentre'), getCollectionCentreSummary)
             );
           } else { // otherwise, return summaries for all collection centres
+            var centres = _.filter(this.study.collectionCentres, { expiredAt: null });
             return Promise.all(
-              _.map(_.pluck(this.study.collectionCentres, 'id'), getCollectionCentreSummary)
+              _.map(_.pluck(centres, 'id'), getCollectionCentreSummary)
             );
           }
         } else {
