@@ -197,6 +197,26 @@ describe('The Study Controller', function () {
 					});
 			});
 
+      it('should not be able to update study name to another that already exists', function(done) {
+        request.put('/api/study/' + study2)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send({ name: 'STUDY-LEAP-ADMIN' })
+          .expect(500)
+          .end(function (err, res) {
+            done(err);
+          });
+      });
+
+      it('should return bad request if given study attributes have invalid structure', function (done) {
+        request.post('/api/study/' + study2)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send({ attributes: { 'test': 'bar', 'foo': 2 } })
+          .expect(400)
+          .end(function(err) {
+            done(err);
+          });
+      });
+
 			it('should be able to set no users to a study', function(done) {
 				request.put('/api/study/' + study2)
 					.set('Authorization', 'Bearer ' + globals.token)

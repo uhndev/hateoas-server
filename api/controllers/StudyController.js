@@ -228,9 +228,22 @@
       var fields = {};
       if (name) fields.name = name;
       if (reb) fields.reb = reb;
-      if (attributes) fields.attributes = attributes;
       if (administrator) fields.administrator = administrator;
       if (pi) fields.pi = pi;
+      if (attributes) {
+        // validating passed in study attribute object structure
+        if (_.isObject(attributes) &&
+            _.all(_.keys(attributes), _.isString) &&
+            _.all(_.values(attributes), _.isArray)) {
+          fields.attributes = attributes;
+        } else {
+          return res.badRequest({
+            title: 'Study Attributes Error',
+            code: 400,
+            message: 'Invalid study attributes structure, keys must be strings and values must be arrays'
+          });
+        }
+      }
 
       Study.update({id: id}, fields).exec(function (err, study) {
         if (err) {
