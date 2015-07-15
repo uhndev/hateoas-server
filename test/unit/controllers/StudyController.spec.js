@@ -151,7 +151,7 @@ describe('The Study Controller', function () {
 					});
 			});
 
-			it('should return an error if a study already exists', function (done) {
+			it('should return bad request if a study already exists', function (done) {
 				request.post('/api/study')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({
@@ -160,11 +160,27 @@ describe('The Study Controller', function () {
 						administrator: globals.users.coordinatorUserId,
 						pi: globals.users.coordinatorUserId
 					})
-					.expect(500)
+					.expect(400)
 					.end(function(err) {
 						done(err);
 					});
 			});
+
+      it('should return bad request if given study attributes have invalid structure', function (done) {
+        request.post('/api/study')
+          .set('Authorization', 'Bearer ' + globals.token)
+          .send({
+            name: 'BAD-ATTRIBUTES-STUDY',
+            reb: 100,
+            attributes: { 'test': 'bar', 'foo': 2 },
+            administrator: globals.users.coordinatorUserId,
+            pi: globals.users.coordinatorUserId
+          })
+          .expect(400)
+          .end(function(err) {
+            done(err);
+          });
+      });
 		});
 
 		describe('update()', function() {

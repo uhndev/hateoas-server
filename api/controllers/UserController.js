@@ -89,8 +89,8 @@
         if (uerr || !user) {
           return res.badRequest({
             title: 'User Error',
-            code: 400,
-            message: 'Error creating user'
+            code: uerr.status || 400,
+            message: uerr.message || 'Error creating user'
           });
         } else {
           if (_.isEmpty(password)) {
@@ -134,8 +134,7 @@
         lastname: req.param('lastname'),
         gender: req.param('gender'),
         dob: req.param('dob'),
-        group: req.param('group'),
-        centreAccess: req.param('centreAccess')
+        group: req.param('group')
       };
 
       Group.findOne(req.user.group).then(function (group) {

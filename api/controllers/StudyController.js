@@ -151,6 +151,62 @@
     },
 
     /**
+     * create
+     * @description Creates a study given name, reb, attributes, administrator and
+     *              pi.  We prevent users from being able to add collection centres
+     *              when creating studies; they should only be able to do so on the
+     *              study/:name/collectioncentre page.  We also verify that
+     */
+    create: function (req, res, next) {
+      var name = req.param('name');
+      var attributes = req.param('attributes') || Study.attributes.attributes.defaultsTo;
+
+      Study.findOneByName(name).exec(function (err, study) {
+        if (err) res.serverError(err);
+        if (study) {
+          return res.badRequest({
+            title: 'Study Error',
+            code: 400,
+            message: 'Unable to create study ' + name + ', a study by that name already exists.'
+          });
+        } else {
+          // validating passed in study attribute object structure
+          if (_.isObject(attributes) &&
+              _.all(_.keys(attributes, _.isString)) &&
+              _.all(_.values(attributes, _.isArray))) {
+
+            Study.create({
+              name: name,
+              reb: req.param('reb'),
+              attributes: attributes,
+              administrator: req.param('administrator'),
+              pi: req.param('pi')
+            }).exec(function (err, study) {
+              if (err || !study) {
+                return res.badRequest({
+                  title: 'Study Error',
+                  code: err.status || 400,
+                  message: err.message || 'Error creating study'
+                });
+              } else {
+                res.status(201);
+                return res.json(study);
+              }
+            });
+          }
+          // otherwise structure is invalid and we fail
+          else {
+            return res.badRequest({
+              title: 'Study Attributes Error',
+              code: 400,
+              message: 'Invalid study attributes structure, keys must be strings and values must be arrays'
+            });
+          }
+        }
+      });
+    },
+
+    /**
      * update
      * @description Updates the study attributes given id, name, reb, attributes,
      *              administrator or pi.  We prevent users from being able to
