@@ -1,51 +1,35 @@
 /**
- * Form
- *
- * @class Form
- * @description Model representation of a form
- * @docs        http://sailsjs.org/#!documentation/models
- */
-
+* Form
+*
+* @class  Form
+* @description Model representation of a form
+* @docs        http://sailsjs.org/#!documentation/models
+*/
 (function() {
+var HateoasService = require('../services/HateoasService.js');
 
-	var HateoasService = require('../services/HateoasService.js');
-
-	module.exports = {
-		schema: true,
-		attributes: {
-			// system, user generated form
-			form_type: {
-				type: 'string',
-				required: true
-			},
-			// unique id or name attribute of form
-			form_name: {
-				type: 'string',
-				required: true,
-				unique: true
-			},
-			// title of the form to display
-			form_title: {
-				type: 'string',
-				required: true
-			},
-			// list of questions in this form
-			form_questions: {
-				type: 'array',
-				required: true
-			},
-			// text to appear on submit button
-			form_submitText: {
-				type: 'text',
-				defaultsTo: 'Submit'
-			},
-			// text to appear on cancel button
-			form_cancelText: {
-				type: 'text',
-				defaultsTo: 'Cancel'
-			},
-			toJSON: HateoasService.makeToHATEOAS.call(this, module)
-		}
-	};
+module.exports = {
+  schema: true,
+  attributes: {
+    // system, user generated form
+    name: {
+      type: 'string',
+      required: true
+    },
+    // unique id or name attribute of form
+    metaData: {
+      type: 'json',
+    },
+    // title of the form to display
+    questions: {
+      type: 'json',
+    },
+    // list of questions in this form
+    isDirty: {
+      type: 'array'
+    },
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+  }
+};
 
 }());

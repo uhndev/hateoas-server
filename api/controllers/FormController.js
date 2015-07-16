@@ -1,16 +1,12 @@
 /**
  * FormController
  *
- * @module controllers/Form
  * @description Server-side logic for managing forms
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 
-(function() {
 
-  module.exports = {
+module.exports = {
 
-  };
-})();
-
+};
 

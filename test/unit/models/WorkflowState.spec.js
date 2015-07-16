@@ -10,9 +10,9 @@ describe('The WorkflowState Model', function() {
 	var formHrefs = {};
 
 	before(function (done) {
-		Form.find().exec(function (err, forms) {
+		SystemForm.find().exec(function (err, forms) {
 			_.each(forms, function(form) {
-				formHrefs[form.form_name] = 'http://localhost:1337/api/form/' + form.id;
+				formHrefs[form.form_name] = 'http://localhost:1337/api/systemform/' + form.id;
 			});
 			done(err);
 		});
@@ -42,7 +42,7 @@ describe('The WorkflowState Model', function() {
 					done(err);
 				});
 		});
-		
+
 		it('should return the correct study form in template href', function (done) {
 			WorkflowState.findOne({ path: '/api/study' })
 				.exec(function (err, state) {
@@ -57,6 +57,6 @@ describe('The WorkflowState Model', function() {
 					state.template.href.should.equal(formHrefs.collection_centre);
 					done(err);
 				});
-		});		
+		});
 	});
 });
