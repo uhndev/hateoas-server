@@ -12,6 +12,7 @@ exports.create = function (roles, models, admin) {
       'readUserOwner',
       'updateUserOwner',
       'createUser',
+      'readSystemForm',
       'readForm',
       'createAnswerSet'
     ], role.name);
@@ -24,6 +25,7 @@ exports.create = function (roles, models, admin) {
       'readSubject',
       'readUserOwner',
       'updateUserOwner',
+      'readSystemForm',
       'readForm',
       'createAnswerSet'
     ], role.name);
@@ -33,6 +35,7 @@ exports.create = function (roles, models, admin) {
     return _.contains([
       'readStudy',
       'readUserOwner',
+      'readSystemForm',
       'readForm',
       'createAnswerSet'
     ], role.name);
@@ -48,7 +51,8 @@ exports.create = function (roles, models, admin) {
           { prompt: 'Studies', href: '/study', icon: 'fa-group' },
           { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
           { prompt: 'Tools', icon: 'fa-cog', dropdown: [
-            { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },
+            { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-wrench' },
+            { prompt: 'Plugin Editor', href: '/plugineditor', icon: 'fa-pencil-square-o' },
             { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
             { prompt: 'Groups', href: '/group', icon: 'fa-users'},
             { prompt: 'Access Management', href: '/access', icon: 'fa-lock'}

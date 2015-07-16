@@ -25,20 +25,20 @@ module.exports.bootstrap = function(cb) {
 	// Populate the DB
 	console.log("Loading sails fixtures...");
 
-	var formNames = _.pluck(fixtures.form, 'form_name');
-	Form.find({form_name: formNames}).then(function (forms) {
+	var systemFormNames = _.pluck(fixtures.systemform, 'form_name');
+	SystemForm.find({form_name: systemFormNames}).then(function (systemforms) {
 		// if forms already loaded in DB, carry on
-		if (forms.length === fixtures.form.length) {
+		if (systemforms.length === fixtures.systemform.length) {
 			cb();
 		} else {
 			// otherwise, load fixtures for forms
-			barrels.populate(['form'], function(err) {
+			barrels.populate(['systemform'], function(err) {
 				// after loading form fixtures, create workflows for each
-				Form.find().then(function (forms) {
-					_.each(forms, function(form) {
-						var idx = _.findIndex(fixtures.form, { 'form_name': form.form_name });
+				SystemForm.find().then(function (systemforms) {
+					_.each(systemforms, function(systemform) {
+						var idx = _.findIndex(fixtures.systemform, { 'form_name': systemform.form_name });
 						if (fixtures.workflowstate[idx]) {
-							fixtures.workflowstate[idx].template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'form', form.id].join('/');
+							fixtures.workflowstate[idx].template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'systemform', systemform.id].join('/');
 						}
 					});
 				})
