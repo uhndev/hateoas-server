@@ -89,8 +89,8 @@
         if (uerr || !user) {
           return res.badRequest({
             title: 'User Error',
-            code: 400,
-            message: 'Error creating user'
+            code: uerr.status || 400,
+            message: uerr.message || 'Error creating user'
           });
         } else {
           if (_.isEmpty(password)) {
@@ -134,8 +134,7 @@
         lastname: req.param('lastname'),
         gender: req.param('gender'),
         dob: req.param('dob'),
-        group: req.param('group'),
-        centreAccess: req.param('centreAccess')
+        group: req.param('group')
       };
 
       Group.findOne(req.user.group).then(function (group) {
@@ -169,7 +168,11 @@
         res.ok(this.user);
       })
       .catch(function (err) {
-        res.serverError(err);
+        res.serverError({
+          title: 'User Update Error',
+          code: 500,
+          message: 'An error occurred when updating user: ' + userFields.username
+        });
       });
     },
 
@@ -227,7 +230,11 @@
           }
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Collection Centre Access Error',
+            code: 500,
+            message: 'Error when updating user centre access for user: ' + user
+          });
         });
     },
 
@@ -256,7 +263,11 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Role Update Error',
+            code: 500,
+            message: 'Error when updating roles for user: ' + user.username
+          });
         });
       }
       // Update user access matrix
@@ -269,7 +280,11 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'Role Update Error',
+            code: 500,
+            message: 'Error when updating access roles for user: ' + userId
+          });
         });
       }
     },
