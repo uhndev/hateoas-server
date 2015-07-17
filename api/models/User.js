@@ -74,6 +74,10 @@
         model: 'group'
       },
 
+      owner: {
+        model: 'user'
+      },
+
       /**
        * enrollments
        * @description Linked associations of UserEnrollments denoting which collection

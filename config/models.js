@@ -17,7 +17,7 @@ module.exports.models = {
   * connections (see `config/connections.js`)                                *
   *                                                                          *
   ***************************************************************************/
-
+  autoCreatedBy: true,
   migrate: 'alter',
   connection: 'dados_development'
 };

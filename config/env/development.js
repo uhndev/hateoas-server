@@ -18,6 +18,8 @@ module.exports = {
    ***************************************************************************/
 
   models: {
+    migrate: 'alter',
+    // connection: 'dados_mysql'
     connection: 'dados_development'
   }
 

@@ -20,8 +20,8 @@ exports.create = function () {
 						Role.findOrCreate({ name: operation + model }, { name: operation + model })
 					);
 				})
-			});	
+			});
 
-			return Promise.all(promises);	
+			return Promise.all(promises);
 		});
 };
