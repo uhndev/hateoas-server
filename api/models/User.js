@@ -75,6 +75,17 @@
       },
 
       /**
+       * owner
+       * @description Reference to who the 'owner' of this is - is used in the owner
+       *              relation in roles like readUserOwner/updateUserOwner which are
+       *              roles specifically for handling read/updates of themselves.
+       * @type {Association}
+       */
+      owner: {
+        model: 'user'
+      },
+
+      /**
        * enrollments
        * @description Linked associations of UserEnrollments denoting which collection
        *              centres/studies this user is overseeing as a coordinator/interviewer.

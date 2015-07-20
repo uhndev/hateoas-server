@@ -11,7 +11,7 @@ exports.create = function (roles, models, admin) {
   var crud = ['create', 'read', 'update', 'delete'];
   var dadosModels = _.pluck(models, 'name');
   dadosModels.push('UserOwner');
-  
+
   _.each(dadosModels, function(model) {
     _.each(crud, function(operation) {
       var permission = {
@@ -28,7 +28,7 @@ exports.create = function (roles, models, admin) {
         permission.model = _.find(models, { name: model }).id;
         permission.role = _.find(roles, { name: operation + model}).id;
       }
-      
+
       permissions.push(permission);
     })
   });
@@ -40,5 +40,5 @@ exports.create = function (roles, models, admin) {
     _.map(permissions, function (permission) {
       return Permission.findOrCreate(permission, permission);
     })
-  ); 
+  );
 };
