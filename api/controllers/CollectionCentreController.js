@@ -8,6 +8,7 @@
 
 (function() {
   var _ = require('lodash');
+  var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
@@ -90,11 +91,15 @@
             })
             .then(function (isEnrolled) {
               if (isEnrolled) { // if user is enrolled in CC or is admin, populate and return data
-                EnrollmentService.findCollectionCentreUsers(centre.id, req.user)
-                  .then(function (users) {
-                    centre.coordinators = users;
-                    res.ok(centre);
-                  });
+                Promise.all([
+                  EnrollmentService.findCollectionCentreUsers(centre.id, req.user, 'user'),
+                  EnrollmentService.findCollectionCentreUsers(centre.id, req.user, 'subject'),
+                ])
+                .spread(function (users, subjects) {
+                  centre.coordinators = users;
+                  centre.subjects = subjects;
+                  res.ok(centre);
+                });
               } else { // otherwise user is not enrolled and we forbid them access
                 res.forbidden({
                   title: 'Error',

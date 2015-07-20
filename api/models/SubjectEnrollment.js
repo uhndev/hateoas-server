@@ -7,6 +7,7 @@
 */
 
 (function() {
+  var _ = require('lodash');
 
   module.exports = {
     schema: true,
@@ -19,8 +20,7 @@
        */
       subjectNumber: {
         type: 'integer',
-        required: true,
-        autoIncrement: true
+        required: true
       },
 
       /**
@@ -83,33 +83,37 @@
     },
 
     /**
-     * beforeCreate
-     * @description Before creating an enrollment entity, should validate that study mapping is
-     *              valid and maps to the correct attributes of the requested study attributes.
-     * @param  {Object}   values Model values submitted to create entity
-     * @param  {Function} cb     Callback function to run on completion
+     * findByStudyName
+     * @description End function for handling /api/study/:name/subject.  Should return a list
+     *              of subjects in a given study and depending on the current users' group
+     *              permissions, this list will be further filtered down based on whether
+     *              or not those subjects and I share common collection centres.
+     *
+     * @param  {String}   studyName Name of study to search.  Passed in from SubjectEnrollmentController.
+     * @param  {Object}   currUser  Current user used in determining filtering options based on access
+     * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
+     * @param  {Function} cb        Callback function upon completion
      */
-    beforeCreate: function (values, cb) {
-      Study.findOne(value.study)
-        .then(function (study) {
-          // verify keys of study attributes mirror keys of studyMapping
-          var valid = _.equals(_.keys(study.attributes), _.keys(values.studyMapping));
-
-          // verify value of studyMapping corresponds directly to one of the values in study attributes
-          _.forIn(study.attributes, function (value, key) {
-            valid = valid & _.includes(value, values.studyMapping[key]);
-          });
-
-          return valid;
-        })
-        .then(function (valid) {
-          if (valid) {
-            cb();
-          } else {
-            cb('Study mapping is not valid!');
-          }
+    findByStudyName: function(studyName, currUser, options, cb) {
+      EnrollmentService
+        .findStudyUsers(studyName, options, currUser, 'subject')
+        .then(function (subjects) { // send data through to callback function
+          return cb(false, subjects);
         })
         .catch(cb);
+    },
+
+    beforeValidate: function(values, cb) {
+      //Auto increment workaround
+      SubjectEnrollment.findOne({
+        where: { "collectionCentre": values.collectionCentre },
+        sort:'subjectNumber DESC'
+      }).exec(function (err, lastSubject) {
+        if (err) cb(err);
+        values.subjectNumber = (lastSubject && lastSubject.subjectNumber ?
+          lastSubject.subjectNumber + 1 : 1);
+        cb();
+      });
     }
 
   };

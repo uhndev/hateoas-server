@@ -51,16 +51,17 @@
 
     /**
      * findStudyUsers
-     * @description Finds and returns all users enrolled in any of the collection
+     * @description Finds and returns all users or subjects enrolled in any of the collection
      *              centres.  If current user is non-admin, should only return
-     *              users from collection centres that current user has in common.
+     *              users or from collection centres that current user has in common.
      *
      * @param  {String}         studyName name of study to search on
      * @param  {Object}         options query options to filter on
      * @param  {Object}         currUser  current user object
+     * @param  {String}         userType  can only be one of: [user, subject]
      * @return {Array|Promise}  list of users in study
      */
-    findStudyUsers: function(studyName, options, currUser) {
+    findStudyUsers: function(studyName, options, currUser, userType) {
       return Group.findOne(currUser.group).then(function (group) {
         this.group = group;
         return Study.findOneByName(studyName).populate('collectionCentres');
@@ -75,13 +76,19 @@
         }
 
         if (this.group.level > 1) { // if user is non-admin, return only their enrollments
-          return ModelService.filterExpiredRecords('userenrollment').where({
+          var query = ModelService.filterExpiredRecords('userenrollment').where({
             user: currUser.id,
             collectionCentre: _.pluck(study.collectionCentres, 'id')
           });
+          if (userType === 'subject') {
+            query.then(function (userenrollments) {
+              return SubjectEnrollment.find({ collectionCentre: _.pluck(userenrollments, 'collectionCentre') });
+            });
+          }
+          return query;
         }
         // otherwise, return all enrollments in study
-        return ModelService.filterExpiredRecords('userenrollment').where({
+        return ModelService.filterExpiredRecords(userType + 'enrollment').where({
           collectionCentre: _.pluck(study.collectionCentres, 'id')
         });
       })
@@ -90,18 +97,22 @@
         query.where = query.where || {};
         delete query.where.name;
 
-        return Promise.all(
-          _.map(enrollments, function (enrollment) {
-            return User.findOne(query).where({ id: enrollment.user }).then(function (user) {
-              if (user) {
-                user.enrollmentId = enrollment.id;
-                user.collectionCentre = enrollment.collectionCentre;
-                user.centreAccess = enrollment.centreAccess;
-                return user;
-              }
-            });
-          })
-        );
+        if (userType === 'user') {
+          return Promise.all(
+            _.map(enrollments, function (enrollment) {
+              return User.findOne(query).where({ id: enrollment.user }).then(function (user) {
+                if (user) {
+                  user.enrollmentId = enrollment.id;
+                  user.collectionCentre = enrollment.collectionCentre;
+                  user.centreAccess = enrollment.centreAccess;
+                  return user;
+                }
+              });
+            })
+          );
+        } else {
+          return SubjectEnrollment.find(query);
+        }
       })
       .then(function (users) {
         return _.compact(users);
@@ -113,32 +124,40 @@
 
     /**
      * findCollectionCentreUsers
-     * @description Finds and returns users enrolled in a given collection centre.
+     * @description Finds and returns users or subjects enrolled in a given collection centre.
      *              If current user is non-admin and is not enrolled in the given
      *              collection centre, we returned null.
      *
      * @param  {ID}             centreId collection centre ID
      * @param  {Object}         currUser current user object
+     * @param  {String}         userType  can only be one of: [user, subject]
      * @return {Array|Promise}  list of users enrolled in collection centre
      */
-    findCollectionCentreUsers: function(centreId, currUser) {
+    findCollectionCentreUsers: function(centreId, currUser, userType) {
       return Group.findOne(currUser.group).then(function (group) {
         if (group.level > 1) { // if non-admin, only return enrollments of current user
-          return ModelService.filterExpiredRecords('userenrollment').where({
-            user: currUser.id, collectionCentre: centreId
+          var query = ModelService.filterExpiredRecords('userenrollment').where({
+            user: currUser.id,
+            collectionCentre: _.pluck(study.collectionCentres, 'id')
           });
+          if (userType === 'subject') {
+            query.then(function (userenrollments) {
+              return SubjectEnrollment.find({ collectionCentre: _.pluck(userenrollments, 'collectionCentre') });
+            });
+          }
+          return query;
         } // otherwise if admin, just find corresponding enrollment
-        return ModelService.filterExpiredRecords('userenrollment').where({
+        return ModelService.filterExpiredRecords(userType + 'enrollment').where({
           collectionCentre: centreId
         });
       })
-      .then(function (userEnrollment) {
-        if (!userEnrollment) {
+      .then(function (enrollment) {
+        if (!enrollment) {
           return null;
         }
         // if enrollment found or is admin, return all collection centre's enrollments
         return CollectionCentre.findOne(centreId)
-                               .populate('userEnrollments');
+                               .populate(userType + 'Enrollments');
       })
       .then(function (collectionCentre) { // populate and return users in collection centre
         if (!collectionCentre) {
@@ -146,11 +165,19 @@
         }
 
         return Promise.all(
-          _.map(collectionCentre.userEnrollments, function (enrollment) {
-            return User.findOne(enrollment.user).then(function (user) {
-              user.enrollmentId = enrollment.id;
-              user.collectionCentre = enrollment.collectionCentre;
-              user.centreAccess = enrollment.centreAccess;
+          _.map(collectionCentre[userType + 'Enrollments'], function (enrollment) {
+            return sails.models[userType].findOne(enrollment[userType]).then(function (user) {
+              if (userType === 'user') {
+                user.enrollmentId = enrollment.id;
+                user.collectionCentre = enrollment.collectionCentre;
+                user.centreAccess = enrollment.centreAccess;
+              } else {
+                user.enrollmentId = enrollment.id;
+                user.subjectNumber = enrollment.subjectNumber;
+                user.collectionCentre = enrollment.collectionCentre;
+                user.doe = enrollment.doe;
+                user.studyMapping = enrollment.studyMapping;
+              }
               return user;
             });
           })

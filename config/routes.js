@@ -43,7 +43,7 @@ module.exports.routes = {
   * Study Routes                                                             *
   ***************************************************************************/
   'get /api/study/:name'           : 'StudyController.findOne',
-  'get /api/study/:name/subject'   : 'SubjectController.findByStudyName',
+  'get /api/study/:name/subject'   : 'SubjectEnrollmentController.findByStudyName',
   'get /api/study/:name/user'      : 'UserController.findByStudyName',
   // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
   // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'

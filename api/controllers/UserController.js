@@ -24,7 +24,6 @@
         .skip( actionUtil.parseSkip(req) )
         .sort( actionUtil.parseSort(req) );
 
-      query.populate('roles');
       query.exec(function found(err, users) {
         if (err) {
           return res.serverError(err);
