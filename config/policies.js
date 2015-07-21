@@ -49,11 +49,6 @@ module.exports.policies = {
     'create': false
   },
 
-  SubjectEnrollmentController: {
-    'find': false,
-    'findOne': false
-  },
-
   GroupController: {
     'destroy': false
   },

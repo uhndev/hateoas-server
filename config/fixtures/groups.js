@@ -7,7 +7,7 @@ exports.create = function (roles, models, admin) {
     return _.contains([
       'readStudy',
       'readCollectionCentre',
-      'readSubject',
+      'readSubjectEnrollment',
       'readUser',
       'readUserOwner',
       'updateUserOwner',
@@ -22,7 +22,7 @@ exports.create = function (roles, models, admin) {
     return _.contains([
       'readStudy',
       'readCollectionCentre',
-      'readSubject',
+      'readSubjectEnrollment',
       'readUserOwner',
       'updateUserOwner',
       'readSystemForm',

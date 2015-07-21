@@ -111,7 +111,6 @@
       });
     },
 
-
     findByStudyName: function(req, res) {
       var studyName = req.param('name');
       SubjectEnrollment.findByStudyName(studyName, req.user,

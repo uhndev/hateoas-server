@@ -15,8 +15,8 @@ exports.create = function (roles, models, admin) {
   _.each(dadosModels, function(model) {
     _.each(crud, function(operation) {
       var permission = {
-        action: operation,
-        createdBy: admin.id
+        action: operation
+        // createdBy: admin.id
       };
 
       // special case for user modifying self permissions

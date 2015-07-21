@@ -36,7 +36,7 @@ describe('The WorkflowState Model', function() {
 		});
 
 		it('should return the correct subject form in template href', function (done) {
-			WorkflowState.findOne({ path: '/api/subject' })
+			WorkflowState.findOne({ path: '/api/subjectenrollment' })
 				.exec(function (err, state) {
 					state.template.href.should.equal(formHrefs.subject);
 					done(err);

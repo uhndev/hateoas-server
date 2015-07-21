@@ -86,7 +86,9 @@ describe('The UserEnrollment Controller', function () {
     });
 
     after(function(done) {
-      auth.logout(done);
+      Study.destroy({id: study1.id}).exec(function (err) {
+        auth.logout(done);
+      });
     });
 
     describe('find()', function () {
