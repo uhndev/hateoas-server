@@ -130,17 +130,6 @@
             cb();
           })
           .catch(cb);
-      },
-      function grantRoles(user, cb) {
-        if (_.has(user, 'group')) {
-          PermissionService.setUserRoles(user).then(function (user) {
-            cb();
-          }).catch(function (err) {
-            cb(err);
-          });
-        } else {
-          cb();
-        }
       }
     ],
 

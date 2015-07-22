@@ -112,7 +112,15 @@
                   next(destroyErr || err);
                 });
               }
-              res.ok(user);
+              PermissionService.setUserRoles(user)
+                .then(function (user) {
+                  res.ok(user);
+                })
+                .catch(function (err) {
+                  user.destroy(function (destroyErr) {
+                    next(destroyErr || err);
+                  });
+                });
             });
           }
         }
