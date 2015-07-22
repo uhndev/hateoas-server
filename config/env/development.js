@@ -18,10 +18,10 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    migrate: 'drop',
+    migrate: 'alter',
     //connection: 'dados_mysql'
-    //connection: 'dados_development'
-    connection: 'dados_postgresql'
+    //connection: 'dados_postgresql'
+    connection: 'dados_development'
   }
 
 };
