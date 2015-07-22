@@ -16,7 +16,6 @@ exports.create = function (roles, models, admin) {
     _.each(crud, function(operation) {
       var permission = {
         action: operation
-        // createdBy: admin.id
       };
 
       // special case for user modifying self permissions

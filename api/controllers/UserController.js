@@ -23,7 +23,7 @@
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )
         .sort( actionUtil.parseSort(req) );
-
+      query.populate('roles');
       query.exec(function found(err, users) {
         if (err) {
           return res.serverError(err);
@@ -111,7 +111,17 @@
                   next(destroyErr || err);
                 });
               }
-              res.ok(user);
+              PermissionService.setUserRoles(user)
+                .then(function(user) {
+                  res.ok(user);
+                })
+                .catch(function(err) {
+                  if (err) {
+                    user.destroy(function (destroyErr) {
+                      next(destroyErr || err);
+                    });
+                  }
+                });
             });
           }
         }

@@ -17,7 +17,7 @@ module.exports.models = {
   * connections (see `config/connections.js`)                                *
   *                                                                          *
   ***************************************************************************/
-  migrate: 'alter',
+  //migrate: 'drop',
   //connection: 'dados_mysql',
-  connection: 'dados_development'
+  //connection: 'dados_development'
 };
