@@ -74,55 +74,66 @@
      * @description Overrides sails-auth's UserController.create to include role
      */
     create: function (req, res, next) {
-      var password = req.param('password');
+      var password = req.param('password'),
+          groupID = req.param('group');
 
-      User.create({
-        username: req.param('username'),
-        email: req.param('email'),
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname'),
-        gender: req.param('gender'),
-        dob: req.param('dob'),
-        group: req.param('group')
-      }).exec(function (uerr, user) {
-        if (uerr || !user) {
-          return res.badRequest({
+      Group.findOne(groupID).exec(function (err, group) {
+        if (err || !group) {
+          res.badRequest({
             title: 'User Error',
-            code: uerr.status || 400,
-            message: uerr.message || 'Error creating user'
+            code: 400,
+            message: 'Group ' + groupID + ' is not a valid group'
           });
         } else {
-          if (_.isEmpty(password)) {
-            user.destroy(function (destroyErr) {
+          User.create({
+            username: req.param('username'),
+            email: req.param('email'),
+            prefix: req.param('prefix'),
+            firstname: req.param('firstname'),
+            lastname: req.param('lastname'),
+            gender: req.param('gender'),
+            dob: req.param('dob'),
+            group: groupID
+          }).exec(function (uerr, user) {
+            if (uerr || !user) {
               return res.badRequest({
                 title: 'User Error',
-                code: 400,
-                message: 'Password cannot be empty'
+                code: uerr.status || 400,
+                message: uerr.message || 'Error creating user'
               });
-            });
-          } else {
-            Passport.create({
-              protocol : 'local',
-              password : password,
-              user     : user.id
-            }, function (err, passport) {
-              if (err) {
+            } else {
+              if (_.isEmpty(password)) {
                 user.destroy(function (destroyErr) {
-                  next(destroyErr || err);
-                });
-              }
-              PermissionService.setUserRoles(user)
-                .then(function (user) {
-                  res.ok(user);
-                })
-                .catch(function (err) {
-                  user.destroy(function (destroyErr) {
-                    next(destroyErr || err);
+                  return res.badRequest({
+                    title: 'User Error',
+                    code: 400,
+                    message: 'Password cannot be empty'
                   });
                 });
-            });
-          }
+              } else {
+                Passport.create({
+                  protocol : 'local',
+                  password : password,
+                  user     : user.id
+                }, function (err, passport) {
+                  if (err) {
+                    user.destroy(function (destroyErr) {
+                      next(destroyErr || err);
+                    });
+                  }
+                  PermissionService.setUserRoles(user)
+                    .then(function (user) {
+                      res.ok(user);
+                    })
+                    .catch(function (err) {
+                      user.destroy(function (destroyErr) {
+                        next(destroyErr || err);
+                      });
+                    });
+                });
+              }
+            }
+          });
         }
       });
     },

@@ -27,7 +27,7 @@ before(function(done) {
       noShip: true
     },
 
-    models: { 
+    models: {
       connection: 'dados_test',
       migrate: 'drop'
     },
@@ -41,7 +41,7 @@ before(function(done) {
   }, function(err, server) {
     sails = server;
     if (err) return done(err);
-    
+
     // Shared request variable
     request = request(sails.hooks.http.app);
 
@@ -56,21 +56,21 @@ before(function(done) {
 
     var createSubject = function() {
       auth.createUser(auth.credentials['subject'].create, function(subId) {
-        globals.users.subjectUserId = subId; 
+        globals.users.subjectUserId = subId;
       });
-    }
+    };
 
     var createInterviewer = function() {
       auth.createUser(auth.credentials['interviewer'].create, function(intId) {
         globals.users.interviewerUserId = intId;
       });
-    }
+    };
 
     var createCoordinator = function() {
       auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
         globals.users.coordinatorUserId = cooId;
       });
-    }
+    };
 
     Group.find().then(function (groups) {
       _.each(groups, function (group) {
