@@ -1,9 +1,10 @@
 (function() {
   var HateoasService = require('../services/HateoasService.js');
   var UserModel = require('./User.js');
+  var _super = require('./baseView.js');
 
-  module.exports = {
-    migrate: 'safe',
+  _.merge(exports, _super);
+  _.merge(exports, {
 
     attributes: {
       id: {
@@ -53,6 +54,8 @@
       },
       toJSON: UserModel.attributes.toJSON
     }
-  }
+
+  });
+
 })();
 

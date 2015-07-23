@@ -18,7 +18,7 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     //connection: 'dados_mysql'
     connection: 'dados_postgresql'
     //connection: 'dados_development'

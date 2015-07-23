@@ -1,10 +1,10 @@
 (function() {
   var HateoasService = require('../services/HateoasService.js');
   var SubjectModel = require('./Subject.js');
+  var _super = require('./baseView.js');
 
-  module.exports = {
-    migrate: 'safe',
-
+  _.merge(exports, _super);
+  _.merge(exports, {
     attributes: {
       id: {
         type: 'integer'
@@ -35,5 +35,6 @@
       },
       toJSON: SubjectModel.attributes.toJSON
     }
-  }
+  });
+
 })();

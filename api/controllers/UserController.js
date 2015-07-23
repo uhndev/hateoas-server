@@ -51,9 +51,10 @@
           this.user = user;
           return Promise.all(
             _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
-              return CollectionCentre.findOne(enrollment.collectionCentre)
+              return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
                 .then(function (centre) {
-                  enrollment.study = centre.study;
+                  enrollment.collectionCentre = centre.name;
+                  enrollment.study = centre.study.name;
                   return enrollment;
                 });
             })
