@@ -83,30 +83,21 @@
               }
             })
             .then(function (user) {
-              if (!user) { // pass through if admin
-                return true;
-              } else { // otherwise, check if user has access to this collection centre
-                return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+              var filteredUsers, filteredSubjects = { collectionCentreId: centre.id };
+              if (user) { // return users with matching enrollments
+                filteredUsers.userenrollmentId = _.pluck(user.enrollments, 'id');
+                filteredSubjects.subjectenrollmentId = _.pluck(user.enrollments, 'id');
               }
+
+              return Promise.all([
+                collectioncentreuser.find(filteredUsers),
+                collectioncentresubject.find(filteredSubjects)
+              ]);
             })
-            .then(function (isEnrolled) {
-              if (isEnrolled) { // if user is enrolled in CC or is admin, populate and return data
-                Promise.all([
-                  EnrollmentService.findCollectionCentreUsers(centre.id, req.user, 'user'),
-                  EnrollmentService.findCollectionCentreUsers(centre.id, req.user, 'subject'),
-                ])
-                .spread(function (users, subjects) {
-                  centre.coordinators = users;
-                  centre.subjects = subjects;
-                  res.ok(centre);
-                });
-              } else { // otherwise user is not enrolled and we forbid them access
-                res.forbidden({
-                  title: 'Error',
-                  code: 403,
-                  message: "User "+req.user.email+" is not permitted to GET "
-                });
-              }
+            .spread(function (users, subjects) {
+              centre.coordinators = users;
+              centre.subjects = subjects;
+              res.ok(centre);
             });
           }
         });

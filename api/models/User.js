@@ -176,12 +176,18 @@
      * @param  {Function} cb        Callback function upon completion
      */
     findByStudyName: function(studyName, currUser, options, cb) {
-      EnrollmentService
-        .findStudyUsers(studyName, options, currUser, 'user')
-        .then(function (users) { // send data through to callback function
-          return cb(false, users);
-        })
-        .catch(cb);
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+      studyuser.find(query).where({ studyName: studyName }).then(function (studyUsers) {
+        cb(false, studyUsers)
+      }).catch(cb);
+      // EnrollmentService
+      //   .findStudyUsers(studyName, options, currUser, 'user')
+      //   .then(function (users) { // send data through to callback function
+      //     return cb(false, users);
+      //   })
+      //   .catch(cb);
     }
 
   });
