@@ -20,14 +20,14 @@
 
     return {
       initialize: function (next) {
-        sails.after('hook:sails-auth:loaded', function () {
+        sails.after('hook:blueprints:loaded', function () {
           pg.connect(connectionStr, function (err, client, done) {
             if (err) {
               console.log('Error fetching client from pool', err);
               return next(err);
             }
             var dropQuery = _.map(views, function (view) {
-              return 'DROP VIEW ' + view + ';';
+              return 'DROP VIEW IF EXISTS ' + view + ';';
             }).join(' ');
             client.query(dropQuery, function (err, result) {
               if (err) {
