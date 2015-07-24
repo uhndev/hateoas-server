@@ -6,7 +6,8 @@
   var Promise = require('q');
 
   module.exports = function (sails) {
-    var connection = sails.config.connections.dados_postgresql;
+    var env = sails.config.environment;
+    var connection = sails.config.connections['dados_' + env];
 
     var connectionStr = [
       'postgres://', connection.user, ':', connection.password,
@@ -33,7 +34,7 @@
                 console.log('Error running query: ' + err);
               }
               done();
-              sails.log('Query executed successfully: ' + result);
+              sails.log('Drop View Query executed successfully');
               next();
             })
           })

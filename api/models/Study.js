@@ -46,10 +46,7 @@
        */
       attributes: {
         type: 'json',
-        defaultsTo: {
-          procedure: [],
-          area: ['BOTH', 'LEFT', 'RIGHT']
-        }
+        defaultsTo: {}
       },
 
       /**

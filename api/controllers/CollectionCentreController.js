@@ -114,6 +114,7 @@
       var ccName = req.param('name'),
           ccContact = req.param('contact'),
           studyId = req.param('study');
+      var options = _.omit(_.pick(req.body, 'name', 'contact', 'study'), _.isEmpty && !_.isNumber);
 
       Study.findOne(studyId).populate('collectionCentres')
         .then(function (study) {
@@ -127,11 +128,7 @@
               err.status = 400;
               throw err;
             } else {
-              return CollectionCentre.create({
-                name: ccName,
-                contact: ccContact,
-                study: studyId
-              });
+              return CollectionCentre.create(options);
             }
           }
         })
@@ -155,12 +152,9 @@
       var ccId = req.param('id'),
           ccName = req.param('name'),
           ccContact = req.param('contact');
+      var options = _.omit(_.pick(req.body, 'name', 'contact'), _.isEmpty);
 
-      var ccFields = {};
-      if (ccName) ccFields.name = ccName;
-      if (ccContact) ccFields.contact = ccContact;
-
-      CollectionCentre.update({id: ccId}, ccFields)
+      CollectionCentre.update({id: ccId}, options)
         .then(function (centre) {
           res.ok(centre);
         })
@@ -168,7 +162,7 @@
           res.badRequest({
             title: 'Error',
             code: 400,
-            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(ccFields)
+            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(options)
           });
         });
     },

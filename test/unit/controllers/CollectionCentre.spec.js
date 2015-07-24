@@ -77,6 +77,7 @@ describe('The CollectionCentre Controller', function () {
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
+            console.log(collection);
 						collection.items.centreSummary[0].id.should.equal(cc1Id);
 						done(err);
 					});

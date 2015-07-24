@@ -182,12 +182,6 @@
       studyuser.find(query).where({ studyName: studyName }).then(function (studyUsers) {
         cb(false, studyUsers)
       }).catch(cb);
-      // EnrollmentService
-      //   .findStudyUsers(studyName, options, currUser, 'user')
-      //   .then(function (users) { // send data through to callback function
-      //     return cb(false, users);
-      //   })
-      //   .catch(cb);
     }
 
   });

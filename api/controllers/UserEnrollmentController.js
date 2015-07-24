@@ -21,27 +21,20 @@
       // enrollment params
       var id = req.param('id');
       // user access enrollment params
-      var fields = {},
-          collectionCentre = req.param('collectionCentre'),
-          user = req.param('user'),
-          centreAccess = req.param('centreAccess'),
-          expiredAt = req.param('expiredAt')
-
-      if (collectionCentre) fields.collectionCentre = collectionCentre;
-      if (user) fields.user = user;
-      if (centreAccess) fields.centreAccess = centreAccess;
-      if (expiredAt) fields.expiredAt = expiredAt;
+      var options = _.omit(_.pick(req.body,
+        'collectionCentre', 'user', 'centreAccess', 'expiredAt'
+      ), _.isEmpty);
 
       // check if we're trying to update an enrollment to something that already exists
       UserEnrollment.findOne({
-        collectionCentre: collectionCentre,
-        user: user,
+        collectionCentre: req.param('collectionCentre'),
+        user: req.param('user'),
         expiredAt: null,
         id: { '!': id }
       })
       .then(function (enrollment) {
         if (!enrollment) { // if no existing enrollment found, update can be performed safely
-          return UserEnrollment.update({ id: id }, fields).then(function (enrollment) {
+          return UserEnrollment.update({ id: id }, options).then(function (enrollment) {
             res.ok(enrollment);
           });
         } else { // otherwise, we are trying to register an invalid enrollment

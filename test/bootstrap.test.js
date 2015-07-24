@@ -21,25 +21,7 @@ globals = {
 before(function(done) {
   console.log('Lifting sails...');
   this.timeout(30000);
-  Sails.lift({
-    // configuration for testing purposes
-    log: {
-      level: 'error',
-      noShip: true
-    },
-
-    models: {
-      connection: 'dados_test',
-      migrate: 'drop'
-    },
-
-    environment: 'test',
-
-    hooks: {
-      "grunt": false,
-      "csrf": false
-    }
-  }, function(err, server) {
+  Sails.lift({ environment: 'test' }, function(err, server) {
     sails = server;
     if (err) return done(err);
 

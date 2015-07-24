@@ -76,6 +76,9 @@
     create: function (req, res, next) {
       var password = req.param('password'),
           groupID = req.param('group');
+      var options = _.omit(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.isEmpty && !_.isNumber);
 
       Group.findOne(groupID).exec(function (err, group) {
         if (err || !group) {
@@ -85,16 +88,7 @@
             message: 'Group ' + groupID + ' is not a valid group'
           });
         } else {
-          User.create({
-            username: req.param('username'),
-            email: req.param('email'),
-            prefix: req.param('prefix'),
-            firstname: req.param('firstname'),
-            lastname: req.param('lastname'),
-            gender: req.param('gender'),
-            dob: req.param('dob'),
-            group: groupID
-          }).exec(function (uerr, user) {
+          User.create(options).exec(function (uerr, user) {
             if (uerr || !user) {
               return res.badRequest({
                 title: 'User Error',
@@ -144,17 +138,9 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
-
-      var userFields = {
-        username: req.param('username'),
-        email: req.param('email'),
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname'),
-        gender: req.param('gender'),
-        dob: req.param('dob'),
-        group: req.param('group')
-      };
+      var options = _.omit(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.isEmpty && !_.isNumber);
 
       Group.findOne(req.user.group).then(function (group) {
         this.group = group;
@@ -165,7 +151,7 @@
       })
       .then(function (user) { // update user fields
         this.previousGroup = user.group;
-        return User.update({id: user.id}, userFields);
+        return User.update({id: user.id}, options);
       })
       .then(function (user) { // updating group, apply new permissions
         if (this.previousGroup !== userFields.group && this.group.level === 1) {
@@ -203,14 +189,7 @@
       // user params
       var userId = req.param('id');
       // user access enrollment params
-      var fields = {},
-          collectionCentre = req.param('collectionCentre'),
-          user = req.param('user'),
-          centreAccess = req.param('centreAccess');
-
-      if (collectionCentre) fields.collectionCentre = collectionCentre;
-      if (user) fields.user = user;
-      if (centreAccess) fields.centreAccess = centreAccess;
+      var options = _.omit(_.pick(req.body, 'collectionCentre', 'user', 'centreAccess'), _.isEmpty && !_.isNumber);
 
       // find and create or update user enrollment data
       UserEnrollment
@@ -221,7 +200,7 @@
         })
         .then(function (enrollment) {
           if (!enrollment) {
-            return UserEnrollment.create(fields)
+            return UserEnrollment.create(options)
               .then(function (enrollment) {
                 this.enrollment = enrollment;
                 return User.findOne(userId).populate('enrollments');
