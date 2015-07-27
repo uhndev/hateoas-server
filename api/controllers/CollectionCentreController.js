@@ -83,7 +83,8 @@
               }
             })
             .then(function (user) {
-              var filteredUsers, filteredSubjects = { collectionCentreId: centre.id };
+              var filteredUsers = { collectionCentreId: centre.id},
+                  filteredSubjects = { collectionCentreId: centre.id};
               if (user) { // return users with matching enrollments
                 filteredUsers.userenrollmentId = _.pluck(user.enrollments, 'id');
                 filteredSubjects.subjectenrollmentId = _.pluck(user.enrollments, 'id');

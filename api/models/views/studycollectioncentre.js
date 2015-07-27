@@ -1,5 +1,5 @@
 (function() {
-  var UserModel = require('./../User.js');
+  var CollectionCentreModel = require('./../CollectionCentre.js');
   var _super = require('./baseView.js');
 
   _.merge(exports, _super);
@@ -9,34 +9,19 @@
       id: {
         type: 'integer'
       },
-      collectionCentreId: {
-        type: 'integer'
-      },
-      username: {
-        type: 'string'
-      },
-      email: {
-        type: 'string'
-      },
-      prefix: {
-        type: 'string'
-      },
-      firstname: {
-        type: 'string'
-      },
-      lastname: {
-        type: 'string'
-      },
-      gender: {
-        type: 'string'
-      },
-      dob: {
-        type: 'date'
-      },
       userenrollmentId: {
         type: 'integer'
       },
-      centreAccess: {
+      study: {
+        type: 'string'
+      },
+      name: {
+        type: 'string'
+      },
+      contact: {
+        type: 'integer'
+      },
+      contactName: {
         type: 'string'
       },
       createdAt: {
@@ -45,7 +30,7 @@
       updatedAt: {
         type: 'date'
       },
-      toJSON: UserModel.attributes.toJSON
+      toJSON: CollectionCentreModel.attributes.toJSON
     }
 
   });

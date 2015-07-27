@@ -16,8 +16,7 @@ CREATE OR REPLACE VIEW studyuser AS
     userenrollment."collectionCentre",
     userenrollment."centreAccess",
     userenrollment."createdAt",
-    userenrollment."updatedAt",
-    userenrollment."expiredAt"
+    userenrollment."updatedAt"
    FROM userenrollment
      LEFT JOIN "user" ON "user".id = userenrollment."user"
      LEFT JOIN collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id

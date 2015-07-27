@@ -48,9 +48,6 @@
       updatedAt: {
         type: 'date'
       },
-      expiredAt: {
-        type: 'date'
-      },
       toJSON: UserModel.attributes.toJSON
     }
 

@@ -9,8 +9,8 @@
       id: {
         type: 'integer'
       },
-      userEnrollments: {
-        type: 'array'
+      username: {
+        type: 'string'
       },
       coordinators_count: {
         type: 'integer'

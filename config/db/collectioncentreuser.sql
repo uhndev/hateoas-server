@@ -12,8 +12,7 @@ CREATE OR REPLACE VIEW collectioncentreuser AS
     "user".lastname,
     "user".gender,
     "user".dob,
-    "user"."expiredAt",
-    userenrollment.id AS "userenrollmendId",
+    userenrollment.id AS "userenrollmentId",
     userenrollment."centreAccess",
     userenrollment."createdAt",
     userenrollment."updatedAt"

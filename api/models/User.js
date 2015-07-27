@@ -179,9 +179,20 @@
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      studyuser.find(query).where({ studyName: studyName }).then(function (studyUsers) {
-        cb(false, studyUsers)
-      }).catch(cb);
+      User.findOne(currUser.id)
+        .populate('enrollments')
+        .populate('group')
+        .then(function (user) {
+          var whereOp = { studyName: studyName };
+          if (user.group.level > 1) {
+            whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
+          }
+          return studyuser.find(query).where(whereOp);
+        })
+        .then(function (studyUsers) {
+          cb(false, studyUsers)
+        })
+        .catch(cb);
     }
 
   });

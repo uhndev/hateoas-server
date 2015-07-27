@@ -85,15 +85,13 @@
       .then(function (study) {
         this.study = study;
         switch (this.group.level) {
-          case 1: return null;
-          case 2: return User.findOne(req.user.id);
-          case 3: return Subject.findOne({user: req.user.id});
+          case 1: return collectioncentreoverview.find({ study: name }).then(function (centres) {
+            return _.unique(centres, 'name');
+          });
+          case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
+          case 3: return null; //TODO
           default: return res.notFound();
         }
-      })
-      .then(function (user) {
-        this.user = user;
-        return (this.study) ? collectioncentreoverview.findByStudy(name) : null;
       })
       .then(function (centres) {
         if (_.isUndefined(this.study)) {
@@ -107,14 +105,6 @@
           });
         }
         else {
-          if (this.group.level > 1) { // for non-admins, only return summaries for valid enrollments
-            centres = _.filter(centres, function (centre) {
-              return !_.isEmpty(_.xor(
-                _.pluck(centre.userEnrollments, 'id'),
-                _.pluck(this.user.enrollments, 'id')
-              ));
-            });
-          }
           this.study.centreSummary = centres;
           res.ok(this.study);
         }

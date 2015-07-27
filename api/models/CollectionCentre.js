@@ -85,11 +85,23 @@
     },
 
     findByStudyName: function(studyName, currUser, options, cb) {
-      EnrollmentService.findStudyCollectionCentres(studyName, currUser)
-      .then(function (centres) {
-        cb(false, centres);
-      })
-      .catch(cb);
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+      User.findOne(currUser.id)
+        .populate('enrollments')
+        .populate('group')
+        .then(function (user) {
+          var whereOp = { study: studyName };
+          if (user.group.level > 1) {
+            whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
+          }
+          return studycollectioncentre.find(query).where(whereOp);
+        })
+        .then(function (centres) {
+          cb(false, _.unique(centres, 'id'));
+        })
+        .catch(cb);
     },
 
     /**
