@@ -76,9 +76,9 @@
     create: function (req, res, next) {
       var password = req.param('password'),
           groupID = req.param('group');
-      var options = _.omit(_.pick(req.body,
+      var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
-      ), _.isEmpty && !_.isNumber);
+      ), _.identity);
 
       Group.findOne(groupID).exec(function (err, group) {
         if (err || !group) {
@@ -138,14 +138,14 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
-      var options = _.omit(_.pick(req.body,
+      var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
-      ), _.isEmpty && !_.isNumber);
+      ), _.identity);
 
       Group.findOne(req.user.group).then(function (group) {
         this.group = group;
         if (group.level > 1) { // prevent all non-admin users from updating group
-          delete userFields.group;
+          delete options.group;
         }
         return User.findOne(userId);
       })
@@ -154,7 +154,7 @@
         return User.update({id: user.id}, options);
       })
       .then(function (user) { // updating group, apply new permissions
-        if (this.previousGroup !== userFields.group && this.group.level === 1) {
+        if (this.previousGroup !== options.group && this.group.level === 1) {
           return PermissionService.setUserRoles(_.first(user));
         } else {
           return user;
@@ -176,7 +176,7 @@
         res.serverError({
           title: 'User Update Error',
           code: 500,
-          message: 'An error occurred when updating user: ' + userFields.username
+          message: 'An error occurred when updating user: ' + options.username
         });
       });
     },
@@ -189,13 +189,13 @@
       // user params
       var userId = req.param('id');
       // user access enrollment params
-      var options = _.omit(_.pick(req.body, 'collectionCentre', 'user', 'centreAccess'), _.isEmpty && !_.isNumber);
+      var options = _.pick(_.pick(req.body, 'collectionCentre', 'user', 'centreAccess'), _.identity);
 
       // find and create or update user enrollment data
       UserEnrollment
         .findOne({
-          user: fields.user,
-          collectionCentre: fields.collectionCentre,
+          user: options.user,
+          collectionCentre: options.collectionCentre,
           expiredAt: null
         })
         .then(function (enrollment) {

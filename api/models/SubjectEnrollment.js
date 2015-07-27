@@ -7,6 +7,7 @@
 */
 
 (function() {
+  var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
   module.exports = {
@@ -79,7 +80,9 @@
         type: 'datetime',
         defaultsTo: null,
         datetime: true
-      }
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
     /**

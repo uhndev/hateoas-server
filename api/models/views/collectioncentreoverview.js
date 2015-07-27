@@ -1,6 +1,5 @@
 (function() {
-  var HateoasService = require('../services/HateoasService.js');
-  var CollectionCentreModel = require('./CollectionCentre.js');
+  var CollectionCentreModel = require('./../CollectionCentre.js');
   var _super = require('./baseView.js');
 
   _.merge(exports, _super);

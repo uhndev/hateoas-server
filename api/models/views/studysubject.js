@@ -1,25 +1,28 @@
 (function() {
-  var HateoasService = require('../services/HateoasService.js');
-  var SubjectModel = require('./Subject.js');
+  var SubjectEnrollmentModel = require('./../SubjectEnrollment.js');
   var _super = require('./baseView.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     attributes: {
       id: {
         type: 'integer'
       },
-      userId: {
+      subjectId: {
         type: 'integer'
       },
-      collectionCentreId: {
+      collectionCentre: {
         type: 'integer'
       },
       subjectNumber: {
         type: 'integer'
       },
-      subjectenrollmentId: {
-        type: 'integer'
+      studyName: {
+        type: 'string'
+      },
+      collectionCentreName: {
+        type: 'string'
       },
       studyMapping: {
         type: 'json'
@@ -33,8 +36,10 @@
       updatedAt: {
         type: 'date'
       },
-      toJSON: SubjectModel.attributes.toJSON
+      toJSON: SubjectEnrollmentModel.attributes.toJSON
     }
+
   });
 
 })();
+

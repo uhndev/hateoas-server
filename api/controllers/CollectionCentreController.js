@@ -114,7 +114,7 @@
       var ccName = req.param('name'),
           ccContact = req.param('contact'),
           studyId = req.param('study');
-      var options = _.omit(_.pick(req.body, 'name', 'contact', 'study'), _.isEmpty && !_.isNumber);
+      var options = _.pick(_.pick(req.body, 'name', 'contact', 'study'), _.identity);
 
       Study.findOne(studyId).populate('collectionCentres')
         .then(function (study) {

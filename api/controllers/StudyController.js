@@ -139,7 +139,9 @@
     create: function (req, res, next) {
       var name = req.param('name');
       var attributes = req.param('attributes') || Study.attributes.attributes.defaultsTo;
-      var options = _.omit(_.pick(req.body, 'name', 'reb', 'attributes', 'administrator', 'pi'), _.isEmpty && !_.isNumber);
+      var options = _.pick(_.pick(req.body, 'name', 'reb', 'attributes', 'administrator', 'pi'), _.identity);
+
+      console.log(options);
 
       Study.findOneByName(name).exec(function (err, study) {
         if (err) res.serverError(err);
@@ -192,23 +194,15 @@
     update: function (req, res, next) {
       // can only update study collection centres via CollectionCentre model
       var id = req.param('id'),
-          name = req.param('name'),
-          reb = req.param('reb'),
-          attributes = req.param('attributes'),
-          administrator = req.param('administrator'),
-          pi = req.param('pi');
+          attributes = req.param('attributes');
+      var options = _.pick(_.pick(req.body, 'name', 'reb', 'administrator', 'pi'), _.identity);
 
-      var fields = {};
-      if (name) fields.name = name;
-      if (reb) fields.reb = reb;
-      if (administrator) fields.administrator = administrator;
-      if (pi) fields.pi = pi;
       if (attributes) {
         // validating passed in study attribute object structure
         if (_.isObject(attributes) &&
             _.all(_.keys(attributes), _.isString) &&
             _.all(_.values(attributes), _.isArray)) {
-          fields.attributes = attributes;
+          options.attributes = attributes;
         } else {
           return res.badRequest({
             title: 'Study Attributes Error',
@@ -218,7 +212,7 @@
         }
       }
 
-      Study.update({id: id}, fields).exec(function (err, study) {
+      Study.update({id: id}, options).exec(function (err, study) {
         if (err) {
           return res.serverError({
             title: 'Server Error',

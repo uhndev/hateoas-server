@@ -14,18 +14,14 @@
   module.exports = {
 
     create: function(req, res, next) {
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
+      ), _.identity);
+
       Group.findOne({ name: 'subject' })
       .then(function (subjectGroup) { // create user with subject group
-        return User.create({
-          username: req.param('username'),
-          email: req.param('email'),
-          prefix: req.param('prefix'),
-          firstname: req.param('firstname'),
-          lastname: req.param('lastname'),
-          gender: req.param('gender'),
-          dob: req.param('dob'),
-          group: subjectGroup.id
-        });
+        options.group = subjectGroup.id;
+        return User.create(options);
       })
       .then(function (user) { // create passport
         this.user = user;

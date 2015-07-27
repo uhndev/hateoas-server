@@ -83,6 +83,10 @@
        })
        .then(function () {
          auth.logout(done);
+       })
+       .catch(function (err) {
+         console.log(err);
+         done(err);
        });
    });
 

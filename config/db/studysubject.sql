@@ -1,0 +1,23 @@
+-- View: studysubject
+
+-- DROP VIEW studysubject;
+
+CREATE OR REPLACE VIEW studysubject AS
+ SELECT subjectenrollment.id,
+    subject.id AS "subjectId",
+    subjectenrollment."collectionCentre",
+    subjectenrollment."subjectNumber",
+    study.name AS "studyName",
+    collectioncentre.name AS "collectionCentreName",
+    subjectenrollment."studyMapping",
+    subjectenrollment.doe,
+    subjectenrollment."createdAt",
+    subjectenrollment."updatedAt"
+   FROM subjectenrollment
+     LEFT JOIN subject ON subject.id = subjectenrollment.subject
+     LEFT JOIN collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN study ON collectioncentre.study = study.id
+  WHERE subjectenrollment."expiredAt" IS NULL;
+
+ALTER TABLE studysubject
+  OWNER TO postgres;

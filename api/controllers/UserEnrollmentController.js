@@ -21,9 +21,9 @@
       // enrollment params
       var id = req.param('id');
       // user access enrollment params
-      var options = _.omit(_.pick(req.body,
+      var options = _.pick(_.pick(req.body,
         'collectionCentre', 'user', 'centreAccess', 'expiredAt'
-      ), _.isEmpty);
+      ), _.identity);
 
       // check if we're trying to update an enrollment to something that already exists
       UserEnrollment.findOne({

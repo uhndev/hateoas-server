@@ -1,6 +1,5 @@
 (function() {
-  var HateoasService = require('../services/HateoasService.js');
-  var UserModel = require('./User.js');
+  var UserModel = require('./../User.js');
   var _super = require('./baseView.js');
 
   _.merge(exports, _super);
@@ -10,7 +9,7 @@
       id: {
         type: 'integer'
       },
-      enrollmentId: {
+      collectionCentreId: {
         type: 'integer'
       },
       username: {
@@ -34,11 +33,8 @@
       dob: {
         type: 'date'
       },
-      studyName: {
-        type: 'string'
-      },
-      collectionCentre: {
-        type: 'integer'
+      expiredAt: {
+        type: 'date'
       },
       centreAccess: {
         type: 'string'
@@ -47,9 +43,6 @@
         type: 'date'
       },
       updatedAt: {
-        type: 'date'
-      },
-      expiredAt: {
         type: 'date'
       },
       toJSON: UserModel.attributes.toJSON
