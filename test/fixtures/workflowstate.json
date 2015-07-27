@@ -107,7 +107,7 @@
           "value": ""
         },
         {
-          "name": "collectionCentre",
+          "name": "collectionCentreName",
           "type": "string",
           "prompt": "Collection Centre",
           "value": ""
@@ -178,7 +178,21 @@
 		],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/systemform/4"
+			"href": "http://localhost:1337/api/systemform/4",
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "Name",
+          "value": ""
+        },
+        {
+          "name": "contactName",
+          "type": "string",
+          "prompt": "Contact",
+          "value": ""
+        }
+      ]
 		}
 	},
 	{

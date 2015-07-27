@@ -131,8 +131,6 @@
       var attributes = req.param('attributes') || Study.attributes.attributes.defaultsTo;
       var options = _.pick(_.pick(req.body, 'name', 'reb', 'attributes', 'administrator', 'pi'), _.identity);
 
-      console.log(options);
-
       Study.findOneByName(name).exec(function (err, study) {
         if (err) res.serverError(err);
         if (study) {

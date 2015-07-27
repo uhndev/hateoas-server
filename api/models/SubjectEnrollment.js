@@ -98,10 +98,21 @@
      * @param  {Function} cb        Callback function upon completion
      */
     findByStudyName: function(studyName, currUser, options, cb) {
-      EnrollmentService
-        .findStudyUsers(studyName, options, currUser, 'subject')
-        .then(function (subjects) { // send data through to callback function
-          return cb(false, subjects);
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+      User.findOne(currUser.id)
+        .populate('enrollments')
+        .populate('group')
+        .then(function (user) {
+          var whereOp = { studyName: studyName };
+          if (user.group.level > 1) {
+            whereOp.collectionCentre = _.pluck(user.enrollments, 'collectionCentre');
+          }
+          return studysubject.find(query).where(whereOp);
+        })
+        .then(function (studySubjects) {
+          cb(false, studySubjects)
         })
         .catch(cb);
     },
