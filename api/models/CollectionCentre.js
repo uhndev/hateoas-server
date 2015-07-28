@@ -92,7 +92,7 @@
         .populate('enrollments')
         .populate('group')
         .then(function (user) {
-          var whereOp = { study: studyName };
+          var whereOp = { studyName: studyName };
           if (user.group.level > 1) {
             whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
           }

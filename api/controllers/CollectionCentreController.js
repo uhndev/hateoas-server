@@ -153,7 +153,7 @@
       var ccId = req.param('id'),
           ccName = req.param('name'),
           ccContact = req.param('contact');
-      var options = _.omit(_.pick(req.body, 'name', 'contact'), _.isEmpty);
+      var options = _.pick(_.pick(req.body, 'name', 'contact'), _.identity);
 
       CollectionCentre.update({id: ccId}, options)
         .then(function (centre) {

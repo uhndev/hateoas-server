@@ -24,11 +24,18 @@
         .skip( actionUtil.parseSkip(req) )
         .sort( actionUtil.parseSort(req) );
       query.populate('roles');
+      query.populate('group');
       query.exec(function found(err, users) {
         if (err) {
           return res.serverError(err);
         }
-        res.ok(users);
+        res.ok(_.filter(users, function (user) {
+          var groupID = user.group.id;
+          var level = user.group.level;
+          delete user.group;
+          user.group = groupID;
+          return (level < 3);
+        }));
       });
     },
 

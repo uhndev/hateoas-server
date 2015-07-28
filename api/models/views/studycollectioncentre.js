@@ -13,6 +13,9 @@
         type: 'integer'
       },
       study: {
+        type: 'integer'
+      },
+      studyName: {
         type: 'string'
       },
       name: {
