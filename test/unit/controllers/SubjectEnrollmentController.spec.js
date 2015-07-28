@@ -74,18 +74,11 @@
    });
 
    after(function(done) {
-     SubjectEnrollment.destroy({ id: [enrollment1, enrollment2]})
-       .then(function () {
-         return CollectionCentre.destroy({ id: [cc1Id, cc2Id] });
-       })
-       .then(function() {
-         return Study.destroy({ id: study1 });
-       })
+     Study.destroy({ id: study1 })
        .then(function () {
          auth.logout(done);
        })
        .catch(function (err) {
-         console.log(err);
          done(err);
        });
    });
@@ -104,14 +97,10 @@
        SubjectEnrollment.destroy(enrollment3).exec(function (err) {
          Subject.destroy(newSubject).exec(function (err) {
            User.destroy(newUser).exec(function (err) {
-             done(err);
+             auth.logout(done);
            });
          });
        });
-     });
-
-     after(function(done) {
-       auth.logout(done);
      });
 
      describe('create()', function () {
@@ -139,11 +128,11 @@
            .end(function (err, res) {
              var collection = JSON.parse(res.text);
              Subject.findOne(collection.items.subject)
-               .exec(function (err, subject) {
+               .exec(function (subjectErr, subject) {
                  newUser = subject.user;
                  newSubject = subject.id;
                  enrollment3 = collection.items.id;
-                 done(err);
+                 done(subjectErr || err);
                });
            });
        });
@@ -156,11 +145,11 @@
            .expect(200)
            .end(function (err, res) {
              var collection = JSON.parse(res.text);
-             _.pluck(collection.items, 'subject').should.containEql(newSubject);
+             _.pluck(collection.items, 'subjectId').should.containEql(newSubject);
              done(err);
            });
        });
-     })
+     });
 
    });
 

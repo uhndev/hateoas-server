@@ -71,16 +71,6 @@ describe('The CollectionCentre Controller', function () {
 					});
 			});
 
-			it('should return collection centre summary totals', function (done) {
-				request.get('/api/study/CC-LEAP-ADMIN')
-					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.centreSummary[0].id.should.equal(cc1Id);
-						done(err);
-					});
-			});
 		});
 
 		describe('findOne()', function () {

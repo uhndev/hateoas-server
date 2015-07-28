@@ -6,7 +6,7 @@
  */
 
 (function() {
-
+  var Promise = require('q');
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
@@ -29,13 +29,7 @@
         if (err) {
           return res.serverError(err);
         }
-        res.ok(_.filter(users, function (user) {
-          var groupID = user.group.id;
-          var level = user.group.level;
-          delete user.group;
-          user.group = groupID;
-          return (level < 3);
-        }));
+        res.ok(users);
       });
     },
 
