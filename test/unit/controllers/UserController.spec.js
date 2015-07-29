@@ -1,4 +1,4 @@
- /**
+                                                                                                      /**
  * Test File: Testing UserController
  * File Location: test/controllers/UserController.spec.js
  *

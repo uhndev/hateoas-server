@@ -1,27 +1,31 @@
-/**
- * Creates default Roles
- *
- * @public
- */
-exports.create = function () {
+(function () {
+  var Promise = require('q');
+  /**
+   * Creates default Roles
+   *
+   * @public
+   */
+  exports.create = function () {
 
-	var promises = [];
-	var crud = ['create', 'read', 'update', 'delete'];
+    var promises = [];
+    var crud = ['create', 'read', 'update', 'delete'];
 
-	return Model.find()
-		.then(function (models) {
-		  var dadosModels = _.pluck(models, 'name');
-  		dadosModels.push('UserOwner');
+    return Model.find()
+      .then(function (models) {
+        var dadosModels = _.pluck(models, 'name');
+        dadosModels.push('UserOwner');
 
-			// setup granular model-specific roles
-			_.each(dadosModels, function(model) {
-				_.each(crud, function(operation) {
-					promises.push(
-						Role.findOrCreate({ name: operation + model }, { name: operation + model })
-					);
-				})
-			});
+        // setup granular model-specific roles
+        _.each(dadosModels, function(model) {
+          _.each(crud, function(operation) {
+            promises.push(
+              Role.findOrCreate({ name: operation + model }, { name: operation + model })
+            );
+          })
+        });
 
-			return Promise.all(promises);
-		});
-};
+        return Promise.all(promises);
+      });
+  };
+
+})();

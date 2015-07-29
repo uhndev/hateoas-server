@@ -61,6 +61,10 @@ var self = {
   /** Start of "User" Utils **/
   "User": {
 
+    getFullName: function getFullName(user) {
+      return [user.prefix, user.firstname, user.lastname].join(' ');
+    },
+
     extractUserFields: function extractUserFields(data) {
       return {
         username: data.username,
