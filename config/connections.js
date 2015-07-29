@@ -103,6 +103,15 @@ module.exports.connections = {
     database: 'dados_dev'
   },
 
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'dados_prod'
+  },
+
   dados_test: {
     adapter: 'sails-postgresql',
     host: 'localhost',
