@@ -77,17 +77,23 @@
             Group.findOne(req.user.group).then(function (group) {
               switch (group.level) {
                 case 1: return null;
-                case 2: return User.findOne(req.user.id).populate('enrollments');
-                case 3: return Subject.findOne({ user: req.user.id }).populate('enrollments');
+                case 2: return UserEnrollment.find({
+                          user: req.user.id,
+                          collectionCentre: centre.id
+                        });
+                case 3: return SubjectEnrollment.find({
+                          subject: req.user.id,
+                          collectionCentre: centre.id
+                        });
                 default: return res.notFound();
               }
             })
-            .then(function (user) {
+            .then(function (enrollments) {
               var filteredUsers = { collectionCentreId: centre.id},
                   filteredSubjects = { collectionCentreId: centre.id};
-              if (user) { // return users with matching enrollments
-                filteredUsers.userenrollmentId = _.pluck(user.enrollments, 'id');
-                filteredSubjects.subjectenrollmentId = _.pluck(user.enrollments, 'id');
+              if (enrollments) { // return users with matching enrollments
+                filteredUsers.userenrollmentId = _.pluck(enrollments, 'id');
+                filteredSubjects.subjectenrollmentId = _.pluck(enrollments, 'id');
               }
 
               return Promise.all([

@@ -25,6 +25,16 @@
       },
 
       /**
+       * study
+       * @description The study for which this subject is enrolled in.
+       * @type {Association} linked study in enrollment
+       */
+      study: {
+        model: 'study',
+        required: true
+      },
+
+      /**
        * collectionCentre
        * @description The collection centre for which this subject is enrolled in.
        * @type {Association} linked collection centre in enrollment
@@ -117,16 +127,25 @@
         .catch(cb);
     },
 
+    /**
+     * beforeValidate
+     * @description Before validation/creation, auto-increments the subjectNumber by latest study
+     *              and also inserts the collection centre study as a parameter
+     * @param  {Object}   values  given subject enrollment object for creation
+     * @param  {Function} cb      callback function on completion
+     */
     beforeValidate: function(values, cb) {
-      //Auto increment workaround
-      SubjectEnrollment.findOne({
-        where: { "collectionCentre": values.collectionCentre },
-        sort:'subjectNumber DESC'
-      }).exec(function (err, lastSubject) {
-        if (err) cb(err);
-        values.subjectNumber = (lastSubject && lastSubject.subjectNumber ?
+      CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
+        SubjectEnrollment.findOne({
+          where: { "study": centre.study },
+          sort:'subjectNumber DESC'
+        }).exec(function (err, lastSubject) {
+          if (err) cb(err);
+          values.subjectNumber = (lastSubject && lastSubject.subjectNumber ?
           lastSubject.subjectNumber + 1 : 1);
-        cb();
+          values.study = centre.study;
+          cb();
+        });
       });
     }
 
