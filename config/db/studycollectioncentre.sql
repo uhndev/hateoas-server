@@ -1,4 +1,5 @@
 -- View: studycollectioncentre
+-- returns a study's list of collection centres; used in CollectionCentre.findByStudyName
 
 -- DROP VIEW studycollectioncentre;
 

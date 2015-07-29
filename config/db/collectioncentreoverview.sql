@@ -1,9 +1,12 @@
 -- View: collectioncentreoverview
+-- returns collection centre enrollment summaries for users and subjects
+-- grouped by username; used in StudyController.findOne.
 
 -- DROP VIEW collectioncentreoverview;
 
 CREATE OR REPLACE VIEW collectioncentreoverview AS
- SELECT userenrollment."collectionCentre" AS id,
+ SELECT DISTINCT ON (name)
+    userenrollment."collectionCentre" AS id,
     "user".username,
     COALESCE(aggregatecoords.coordinators_count, 0) AS coordinators_count,
     COALESCE(aggregatesubs.subjects_count, 0) AS subjects_count,

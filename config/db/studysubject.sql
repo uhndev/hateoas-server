@@ -1,4 +1,5 @@
 -- View: studysubject
+-- returns a study's list of enrolled subjects; used in SubjectEnrollment.findByStudyName
 
 -- DROP VIEW studysubject;
 

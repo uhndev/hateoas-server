@@ -1,4 +1,5 @@
 -- View: studyuser
+-- returns a study's list of enrolled users; used in User.findByStudyName
 
 -- DROP VIEW studyuser;
 

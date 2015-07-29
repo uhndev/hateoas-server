@@ -1,4 +1,5 @@
 -- View: collectioncentreuser
+-- returns a collection centre's list of enrolled users; used in CollectionCentreController.findOne
 
 -- DROP VIEW collectioncentreuser;
 
