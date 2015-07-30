@@ -17,7 +17,7 @@ CREATE OR REPLACE VIEW studycollectioncentre AS
 	LEFT JOIN userenrollment ON userenrollment."collectionCentre" = collectioncentre.id
 	LEFT JOIN "user" ON "user".id = collectioncentre.contact
 	LEFT JOIN study ON collectioncentre.study = study.id
-  WHERE userenrollment."expiredAt" IS NULL AND collectioncentre."expiredAt" IS NULL;
+  WHERE collectioncentre."expiredAt" IS NULL;
 
 ALTER TABLE studycollectioncentre
   OWNER TO postgres;
