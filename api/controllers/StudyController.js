@@ -77,52 +77,18 @@
      */
     findOne: function (req, res, next) {
       var name = req.param('name');
-      var getCollectionCentreSummary = function(centreId) {
-        var summary = {};
-        return CollectionCentre.findOne(centreId)
-          .then(function (cc) {
-            summary = _.pick(cc, 'id', 'name', 'contact');
-            return Promise.all([
-              UserEnrollment.count().where({ collectionCentre: centreId, expiredAt: null }),
-              SubjectEnrollment.count().where({ collectionCentre: centreId, expiredAt: null })
-            ]);
-          })
-          .spread(function (coordinatorCount, subjectCount) {
-            summary.coordinators_count = coordinatorCount || 0;
-            summary.subjects_count = subjectCount || 0;
-            return summary;
-          });
-      };
 
       Group.findOne(req.user.group).then(function (group) {
         this.group = group;
-        return Study.findOne({name: name}).populate('collectionCentres');
+        return Study.findOne({name: name});
       })
       .then(function (study) {
         this.study = study;
         switch (this.group.level) {
-          case 1: return null;
-          case 2: return User.findOne(req.user.id).populate('enrollments');
-          case 3: return Subject.findOne({user: req.user.id}).populate('enrollments');
+          case 1: return collectioncentreoverview.find({ study: name });
+          case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
+          case 3: return null; //TODO
           default: return res.notFound();
-        }
-      })
-      .then(function (user) {
-        if (this.study) {
-          if (this.group.level > 1 && user) { // for non-admins, only return summaries for valid enrollments
-            var enrollments = _.filter(user.enrollments, { expiredAt: null });
-            return Promise.all(
-              _.map(_.pluck(enrollments, 'collectionCentre'), getCollectionCentreSummary)
-            );
-          } else { // otherwise, return summaries for all collection centres
-            var centres = _.filter(this.study.collectionCentres, { expiredAt: null });
-            return Promise.all(
-              _.map(_.pluck(centres, 'id'), getCollectionCentreSummary)
-            );
-          }
-        } else {
-          // study not found
-          return null;
         }
       })
       .then(function (centres) {
@@ -161,6 +127,7 @@
     create: function (req, res, next) {
       var name = req.param('name');
       var attributes = req.param('attributes') || Study.attributes.attributes.defaultsTo;
+      var options = _.pick(_.pick(req.body, 'name', 'reb', 'attributes', 'administrator', 'pi'), _.identity);
 
       Study.findOneByName(name).exec(function (err, study) {
         if (err) res.serverError(err);
@@ -176,13 +143,7 @@
               _.all(_.keys(attributes), _.isString) &&
               _.all(_.values(attributes), _.isArray)) {
 
-            Study.create({
-              name: name,
-              reb: req.param('reb'),
-              attributes: attributes,
-              administrator: req.param('administrator'),
-              pi: req.param('pi')
-            }).exec(function (err, study) {
+            Study.create(options).exec(function (err, study) {
               if (err || !study) {
                 return res.badRequest({
                   title: 'Study Error',
@@ -219,23 +180,15 @@
     update: function (req, res, next) {
       // can only update study collection centres via CollectionCentre model
       var id = req.param('id'),
-          name = req.param('name'),
-          reb = req.param('reb'),
-          attributes = req.param('attributes'),
-          administrator = req.param('administrator'),
-          pi = req.param('pi');
+          attributes = req.param('attributes');
+      var options = _.pick(_.pick(req.body, 'name', 'reb', 'administrator', 'pi'), _.identity);
 
-      var fields = {};
-      if (name) fields.name = name;
-      if (reb) fields.reb = reb;
-      if (administrator) fields.administrator = administrator;
-      if (pi) fields.pi = pi;
       if (attributes) {
         // validating passed in study attribute object structure
         if (_.isObject(attributes) &&
             _.all(_.keys(attributes), _.isString) &&
             _.all(_.values(attributes), _.isArray)) {
-          fields.attributes = attributes;
+          options.attributes = attributes;
         } else {
           return res.badRequest({
             title: 'Study Attributes Error',
@@ -245,7 +198,7 @@
         }
       }
 
-      Study.update({id: id}, fields).exec(function (err, study) {
+      Study.update({id: id}, options).exec(function (err, study) {
         if (err) {
           return res.serverError({
             title: 'Server Error',

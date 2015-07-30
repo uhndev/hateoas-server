@@ -10,9 +10,10 @@
 (function() {
 
   var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/User');
   var HateoasService = require('../services/HateoasService.js');
 
-  _.merge(exports, require('sails-permissions/api/models/User'));
+  _.merge(exports, _super);
   _.merge(exports, {
 
     schema: true,
@@ -175,10 +176,21 @@
      * @param  {Function} cb        Callback function upon completion
      */
     findByStudyName: function(studyName, currUser, options, cb) {
-      EnrollmentService
-        .findStudyUsers(studyName, options, currUser)
-        .then(function (users) { // send data through to callback function
-          return cb(false, users);
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+      User.findOne(currUser.id)
+        .populate('enrollments')
+        .populate('group')
+        .then(function (user) {
+          var whereOp = { studyName: studyName };
+          if (user.group.level > 1) {
+            whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
+          }
+          return studyuser.find(query).where(whereOp);
+        })
+        .then(function (studyUsers) {
+          cb(false, studyUsers)
         })
         .catch(cb);
     }

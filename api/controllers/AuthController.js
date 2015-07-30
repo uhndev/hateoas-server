@@ -64,7 +64,7 @@
               res.status(302).set('Location', req.query.next);
             }
 
-            sails.log.info('user', resp, 'authenticated successfully');
+            sails.log.info('user', resp.user, 'authenticated successfully');
 
             return res.json(resp);
           });

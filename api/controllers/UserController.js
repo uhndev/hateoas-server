@@ -6,7 +6,7 @@
  */
 
 (function() {
-
+  var Promise = require('q');
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
@@ -23,7 +23,6 @@
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )
         .sort( actionUtil.parseSort(req) );
-
       query.populate('roles');
       query.exec(function found(err, users) {
         if (err) {
@@ -52,9 +51,10 @@
           this.user = user;
           return Promise.all(
             _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
-              return CollectionCentre.findOne(enrollment.collectionCentre)
+              return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
                 .then(function (centre) {
-                  enrollment.study = centre.study;
+                  enrollment.collectionCentre = centre.name;
+                  enrollment.study = centre.study.name;
                   return enrollment;
                 });
             })
@@ -76,6 +76,9 @@
     create: function (req, res, next) {
       var password = req.param('password'),
           groupID = req.param('group');
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.identity);
 
       Group.findOne(groupID).exec(function (err, group) {
         if (err || !group) {
@@ -85,16 +88,7 @@
             message: 'Group ' + groupID + ' is not a valid group'
           });
         } else {
-          User.create({
-            username: req.param('username'),
-            email: req.param('email'),
-            prefix: req.param('prefix'),
-            firstname: req.param('firstname'),
-            lastname: req.param('lastname'),
-            gender: req.param('gender'),
-            dob: req.param('dob'),
-            group: groupID
-          }).exec(function (uerr, user) {
+          User.create(options).exec(function (uerr, user) {
             if (uerr || !user) {
               return res.badRequest({
                 title: 'User Error',
@@ -144,31 +138,23 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
-
-      var userFields = {
-        username: req.param('username'),
-        email: req.param('email'),
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname'),
-        gender: req.param('gender'),
-        dob: req.param('dob'),
-        group: req.param('group')
-      };
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.identity);
 
       Group.findOne(req.user.group).then(function (group) {
         this.group = group;
         if (group.level > 1) { // prevent all non-admin users from updating group
-          delete userFields.group;
+          delete options.group;
         }
         return User.findOne(userId);
       })
       .then(function (user) { // update user fields
         this.previousGroup = user.group;
-        return User.update({id: user.id}, userFields);
+        return User.update({id: user.id}, options);
       })
       .then(function (user) { // updating group, apply new permissions
-        if (this.previousGroup !== userFields.group && this.group.level === 1) {
+        if (this.previousGroup !== options.group && this.group.level === 1) {
           return PermissionService.setUserRoles(_.first(user));
         } else {
           return user;
@@ -190,7 +176,7 @@
         res.serverError({
           title: 'User Update Error',
           code: 500,
-          message: 'An error occurred when updating user: ' + userFields.username
+          message: 'An error occurred when updating user: ' + options.username
         });
       });
     },
@@ -203,25 +189,18 @@
       // user params
       var userId = req.param('id');
       // user access enrollment params
-      var fields = {},
-          collectionCentre = req.param('collectionCentre'),
-          user = req.param('user'),
-          centreAccess = req.param('centreAccess');
-
-      if (collectionCentre) fields.collectionCentre = collectionCentre;
-      if (user) fields.user = user;
-      if (centreAccess) fields.centreAccess = centreAccess;
+      var options = _.pick(_.pick(req.body, 'collectionCentre', 'user', 'centreAccess'), _.identity);
 
       // find and create or update user enrollment data
       UserEnrollment
         .findOne({
-          user: fields.user,
-          collectionCentre: fields.collectionCentre,
+          user: options.user,
+          collectionCentre: options.collectionCentre,
           expiredAt: null
         })
         .then(function (enrollment) {
           if (!enrollment) {
-            return UserEnrollment.create(fields)
+            return UserEnrollment.create(options)
               .then(function (enrollment) {
                 this.enrollment = enrollment;
                 return User.findOne(userId).populate('enrollments');

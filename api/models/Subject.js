@@ -77,31 +77,6 @@
       } else {
         cb();
       }
-    },
-
-    /**
-     * findByStudyName
-     * @description End function for handling /api/study/:name/subject.  Should return a list
-     *              of subjects in a given study and depending on the current users' group
-     *              permissions, this list will be further filtered down based on whether
-     *              or not those subjects and I share common collection centres.
-     *
-     * @param  {String}   studyName Name of study to search.  Passed in from SubjectController.
-     * @param  {Object}   currUser  Current user used in determining filtering options based on access
-     * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
-     * @param  {Function} cb        Callback function upon completion
-     */
-    findByStudyName: function(studyName, currUser, options, cb) {
-      Subject.find().exec(function (err, subjects) {
-        cb(false, subjects);
-      });
-      // TODO
-      // EnrollmentService
-      //   .findStudySubjects(studyName, currUser)
-      //   .then(function (users) { // send data through to callback function
-      //     return cb(false, users);
-      //   })
-      //   .catch(cb);
     }
 
   };

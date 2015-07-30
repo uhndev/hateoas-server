@@ -8,6 +8,7 @@
 
 (function() {
   var _ = require('lodash');
+  var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
@@ -82,26 +83,22 @@
               }
             })
             .then(function (user) {
-              if (!user) { // pass through if admin
-                return true;
-              } else { // otherwise, check if user has access to this collection centre
-                return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+              var filteredUsers = { collectionCentreId: centre.id},
+                  filteredSubjects = { collectionCentreId: centre.id};
+              if (user) { // return users with matching enrollments
+                filteredUsers.userenrollmentId = _.pluck(user.enrollments, 'id');
+                filteredSubjects.subjectenrollmentId = _.pluck(user.enrollments, 'id');
               }
+
+              return Promise.all([
+                collectioncentreuser.find(filteredUsers),
+                collectioncentresubject.find(filteredSubjects)
+              ]);
             })
-            .then(function (isEnrolled) {
-              if (isEnrolled) { // if user is enrolled in CC or is admin, populate and return data
-                EnrollmentService.findCollectionCentreUsers(centre.id, req.user)
-                  .then(function (users) {
-                    centre.coordinators = users;
-                    res.ok(centre);
-                  });
-              } else { // otherwise user is not enrolled and we forbid them access
-                res.forbidden({
-                  title: 'Error',
-                  code: 403,
-                  message: "User "+req.user.email+" is not permitted to GET "
-                });
-              }
+            .spread(function (users, subjects) {
+              centre.coordinators = users;
+              centre.subjects = subjects;
+              res.ok(centre);
             });
           }
         });
@@ -118,6 +115,7 @@
       var ccName = req.param('name'),
           ccContact = req.param('contact'),
           studyId = req.param('study');
+      var options = _.pick(_.pick(req.body, 'name', 'contact', 'study'), _.identity);
 
       Study.findOne(studyId).populate('collectionCentres')
         .then(function (study) {
@@ -131,11 +129,7 @@
               err.status = 400;
               throw err;
             } else {
-              return CollectionCentre.create({
-                name: ccName,
-                contact: ccContact,
-                study: studyId
-              });
+              return CollectionCentre.create(options);
             }
           }
         })
@@ -159,12 +153,9 @@
       var ccId = req.param('id'),
           ccName = req.param('name'),
           ccContact = req.param('contact');
+      var options = _.pick(_.pick(req.body, 'name', 'contact'), _.identity);
 
-      var ccFields = {};
-      if (ccName) ccFields.name = ccName;
-      if (ccContact) ccFields.contact = ccContact;
-
-      CollectionCentre.update({id: ccId}, ccFields)
+      CollectionCentre.update({id: ccId}, options)
         .then(function (centre) {
           res.ok(centre);
         })
@@ -172,7 +163,7 @@
           res.badRequest({
             title: 'Error',
             code: 400,
-            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(ccFields)
+            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(options)
           });
         });
     },

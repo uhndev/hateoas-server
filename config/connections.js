@@ -57,12 +57,12 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  dados_development: {
-    adapter   : 'sails-mongo',
-    host      : 'localhost',
-    port      : 27017,
-    database  : 'dados-dev'
-  },
+  //dados_development: {
+  //  adapter   : 'sails-mongo',
+  //  host      : 'localhost',
+  //  port      : 27017,
+  //  database  : 'dados-dev'
+  //},
 
   dados_audit: {
     adapter   : 'sails-mongo',
@@ -71,19 +71,19 @@ module.exports.connections = {
     database  : 'dados-audit'
   },
 
-  dados_test: {
-    adapter   : 'sails-mongo',
-    host      : 'localhost',
-    port      : 27017,
-    database  : 'dados-test'
-  },
-
-  dados_production: {
-    adapter   : 'sails-mongo',
-    host      : 'localhost',
-    port      : 27017,
-    database  : 'dados-prod'
-  },
+  //dados_test: {
+  //  adapter   : 'sails-mongo',
+  //  host      : 'localhost',
+  //  port      : 27017,
+  //  database  : 'dados-test'
+  //},
+  //
+  //dados_production: {
+  //  adapter   : 'sails-mongo',
+  //  host      : 'localhost',
+  //  port      : 27017,
+  //  database  : 'dados-prod'
+  //},
 
   /***************************************************************************
   *                                                                          *
@@ -94,15 +94,32 @@ module.exports.connections = {
   *                                                                          *
   *                                                                          *
   ***************************************************************************/
-  dados_postgresql: {
+  dados_development: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
     database: 'dados_dev'
-  }
+  },
 
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'dados_prod'
+  },
+
+  dados_test: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'dados_test'
+  }
 
   /***************************************************************************
   *                                                                          *

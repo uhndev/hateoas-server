@@ -18,6 +18,7 @@ module.exports = {
    ***************************************************************************/
   hookTimeout: 60000, // 60 seconds to allow for uglification
   models: {
+    migrate: 'safe',
     autoCreatedBy: true,
     connection: 'dados_production'
   },
