@@ -1,4 +1,5 @@
 -- View: collectioncentresubject
+-- returns a collection centre's list of enrolled subjects; used in CollectionCentreController.findOne
 
 -- DROP VIEW collectioncentresubject;
 
