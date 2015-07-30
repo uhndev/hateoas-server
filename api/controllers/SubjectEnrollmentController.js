@@ -21,7 +21,9 @@
       Group.findOne({ name: 'subject' })
       .then(function (subjectGroup) { // create user with subject group
         options.group = subjectGroup.id;
-        return User.create(options);
+        return User.create(options).then(function (user) {
+          return PermissionService.setUserRoles(user);
+        });
       })
       .then(function (user) { // create passport
         this.user = user;
