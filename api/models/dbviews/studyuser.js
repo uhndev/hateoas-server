@@ -12,6 +12,9 @@
       enrollmentId: {
         type: 'integer'
       },
+      userEnrollments: {
+        type: 'array'
+      },
       username: {
         type: 'string'
       },

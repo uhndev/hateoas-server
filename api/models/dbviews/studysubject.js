@@ -12,6 +12,9 @@
       subjectId: {
         type: 'integer'
       },
+      userId: {
+        type: 'integer'
+      },
       collectionCentre: {
         type: 'integer'
       },

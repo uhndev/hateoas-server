@@ -86,7 +86,10 @@
         this.study = study;
         switch (this.group.level) {
           case 1: return collectioncentreoverview.find({ study: name });
-          case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
+          case 2: return collectioncentreoverview.find({ username: req.user.username, study: name })
+                        .then(function (centre) {
+                          return _.unique(centre, 'name');
+                        });
           case 3: return null; //TODO
           default: return res.notFound();
         }

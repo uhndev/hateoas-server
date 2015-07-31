@@ -183,14 +183,17 @@
         .populate('enrollments')
         .populate('group')
         .then(function (user) {
-          var whereOp = { studyName: studyName };
-          if (user.group.level > 1) {
-            whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
-          }
-          return studyuser.find(query).where(whereOp);
+          this.user = user;
+          return studyuser.find({ studyName: studyName });
         })
         .then(function (studyUsers) {
-          cb(false, studyUsers)
+          if (this.user.group.level > 1) {
+            cb(false, _.filter(studyUsers, function (user) {
+              return !_.isEmpty(_.xor(user.userEnrollments, _.pluck(this.user.enrollments, 'id')));        
+            }));
+          } else {
+            cb(false, studyUsers);  
+          }          
         })
         .catch(cb);
     }
