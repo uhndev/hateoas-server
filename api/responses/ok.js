@@ -34,19 +34,25 @@ module.exports = function sendOK (data, options) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
+      return Group.findOne({ name: 'subject' }).then(function (group) {
+        var promise;
+        if (query.where) {
+          promise = model.count(JSON.parse(query.where));
+        } else {
+          promise = model.count();
+        }
 
-      var promise;
-      if (query.where) {
-        promise = model.count(JSON.parse(query.where));
-      } else {
-        promise = model.count();
-      }
+        if (_.has(model.attributes, 'expiredAt')) {
+          promise.where({ expiredAt: null });
+        }
 
-      if (_.has(model.attributes, 'expiredAt')) {
-        promise.where({ expiredAt: null });
-      }
+        // we do not want to include subjects' users in our total count
+        if (model.identity === 'user') {
+          promise.where({ group: { '<=': group.level }});
+        }
 
-      return promise;
+        return promise;
+      });
     }
     return Q.when(0);
   }

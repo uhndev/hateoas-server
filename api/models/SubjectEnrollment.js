@@ -20,8 +20,7 @@
        * @type {Integer}
        */
       subjectNumber: {
-        type: 'integer',
-        required: true
+        type: 'integer'
       },
 
       /**
@@ -30,8 +29,7 @@
        * @type {Association} linked study in enrollment
        */
       study: {
-        model: 'study',
-        required: true
+        model: 'study'
       },
 
       /**
@@ -128,13 +126,13 @@
     },
 
     /**
-     * beforeValidate
+     * beforeCreate
      * @description Before validation/creation, auto-increments the subjectNumber by latest study
      *              and also inserts the collection centre study as a parameter
      * @param  {Object}   values  given subject enrollment object for creation
      * @param  {Function} cb      callback function on completion
      */
-    beforeValidate: function(values, cb) {
+    beforeCreate: function(values, cb) {
       CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
         SubjectEnrollment.findOne({
           where: { "study": centre.study },

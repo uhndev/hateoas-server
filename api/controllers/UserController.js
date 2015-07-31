@@ -18,17 +18,20 @@
      * @description finds and returns all users with populated roles associations
      */
     find: function (req, res, next) {
-      var query = ModelService.filterExpiredRecords('user')
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-      query.populate('roles');
-      query.exec(function found(err, users) {
-        if (err) {
-          return res.serverError(err);
-        }
-        res.ok(users);
+      Group.findOne({ name: 'subject' }).then(function (group) {
+        var query = ModelService.filterExpiredRecords('user')
+          .where( actionUtil.parseCriteria(req) )
+          .where({ group: { '<=': group.level } })
+          .limit( actionUtil.parseLimit(req) )
+          .skip( actionUtil.parseSkip(req) )
+          .sort( actionUtil.parseSort(req) );
+        query.populate('roles');
+        query.exec(function found(err, users) {
+          if (err) {
+            return res.serverError(err);
+          }
+          res.ok(users);
+        });
       });
     },
 
