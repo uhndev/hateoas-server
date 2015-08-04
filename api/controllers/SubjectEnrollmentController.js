@@ -13,6 +13,12 @@
 
   module.exports = {
 
+    findOne: function(req, res, next) {
+      studysubject.findOne({ id: req.param('id') }).exec(function (err, enrollment) {
+        res.ok(enrollment);
+      });
+    },
+
     create: function(req, res, next) {
       var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'

@@ -27,6 +27,9 @@
       collectionCentreName: {
         type: 'string'
       },
+      studyAttributes: {
+        type: 'json'
+      },
       studyMapping: {
         type: 'json'
       },

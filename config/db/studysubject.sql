@@ -11,6 +11,7 @@ CREATE OR REPLACE VIEW studysubject AS
     subjectenrollment."subjectNumber",
     study.name AS "studyName",
     collectioncentre.name AS "collectionCentreName",
+    study.attributes AS "studyAttributes",
     subjectenrollment."studyMapping",
     subjectenrollment.doe,
     subjectenrollment."createdAt",
