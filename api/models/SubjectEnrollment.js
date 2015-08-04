@@ -75,7 +75,8 @@
       studyMapping: {
         type: 'json',
         required: true,
-        json: true
+        json: true,
+        defaultsTo: {}
       },
 
       /**
