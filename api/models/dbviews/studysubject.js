@@ -33,6 +33,9 @@
       studyMapping: {
         type: 'json'
       },
+      status: {
+        type: 'string'
+      },
       doe: {
         type: 'date'
       },

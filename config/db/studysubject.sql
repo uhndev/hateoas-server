@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW studysubject AS
     collectioncentre.name AS "collectionCentreName",
     study.attributes AS "studyAttributes",
     subjectenrollment."studyMapping",
+    subjectenrollment.status,
     subjectenrollment.doe,
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"

@@ -24,6 +24,10 @@
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
       ), _.identity);
 
+      var enrollmentOptions = _.pick(_.pick(req.body,
+        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+      ), _.identity);
+
       Group.findOne({ name: 'subject' })
       .then(function (subjectGroup) { // create user with subject group
         options.group = subjectGroup.id;
@@ -57,21 +61,21 @@
       })
       .then(function (subject) { // find collection centre's study
         this.subject = subject;
-        return CollectionCentre.findOne(req.param('collectionCentre')).populate('study')
-          .then(function (centre) {
-            return centre.study;
-          });
+        return Study.findOne(enrollmentOptions.study).then(function (study) {
+          return study.attributes;
+        });
       })
-      .then(function (study) { // verify studyMapping is valid
-        var studyMapping = req.param('studyMapping');
-        // only if both empty we allow
-        if (_.isEmpty(study.attributes) && _.isEmpty(studyMapping)) {
+      .then(function (attributes) { // verify studyMapping is valid
+        var studyMapping = enrollmentOptions.studyMapping;
+        // only if both empty we allow or if status is set to REGISTERED
+        if (_.isEmpty(attributes) && _.isEmpty(studyMapping) ||
+            _.isEmpty(studyMapping) && enrollmentOptions.status == 'REGISTERED') {
           return true;
         } else {
           // verify keys of study attributes mirror keys of studyMapping
-          var valid = _.isEmpty(_.xor(_.keys(study.attributes), _.keys(studyMapping)));
+          var valid = _.isEmpty(_.xor(_.keys(attributes), _.keys(studyMapping)));
           // verify value of studyMapping corresponds directly to one of the values in study attributes
-          _.forIn(study.attributes, function (value, key) {
+          _.forIn(attributes, function (value, key) {
             valid = valid && _.includes(value, studyMapping[key]);
           });
           return valid;
@@ -79,12 +83,8 @@
       })
       .then(function (validMapping) { // if valid, create subject enrollment
         if (validMapping) {
-          return SubjectEnrollment.create({
-            collectionCentre: req.param('collectionCentre'),
-            doe: req.param('doe'),
-            subject: this.subject.id,
-            studyMapping: req.param('studyMapping')
-          });
+          enrollmentOptions.subject = this.subject.id;
+          return SubjectEnrollment.create(enrollmentOptions);
         } else {
           return null;
         }

@@ -10,6 +10,7 @@ CREATE OR REPLACE VIEW collectioncentresubject AS
     subjectenrollment."subjectNumber",
     subjectenrollment.id AS "subjectenrollmentId",
     subjectenrollment."studyMapping",
+    subjectenrollment.status,
     subjectenrollment.doe,
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"
