@@ -1,3 +1,7 @@
+/**
+ * A virtual model representing a database view.
+ * See config/db/studysubject.sql for view definition.
+ */
 (function() {
   var SubjectEnrollmentModel = require('./../SubjectEnrollment.js');
   var _super = require('./baseView.js');

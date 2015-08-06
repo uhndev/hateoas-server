@@ -114,7 +114,7 @@
         return res.serverError({
           title: 'Server Error',
           code: err.status,
-          message: err.message
+          message: err.details
         });
       });
     },
@@ -151,7 +151,7 @@
                 return res.badRequest({
                   title: 'Study Error',
                   code: err.status || 400,
-                  message: err.message || 'Error creating study'
+                  message: err.details || 'Error creating study'
                 });
               } else {
                 res.status(201);
@@ -206,7 +206,7 @@
           return res.serverError({
             title: 'Server Error',
             code: err.status,
-            message: err.message
+            message: err.details
           });
         }
         res.ok(_.first(study));
@@ -214,6 +214,7 @@
     }
 
   };
+
 })();
 
 

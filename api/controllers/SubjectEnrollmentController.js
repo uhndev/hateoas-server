@@ -110,7 +110,7 @@
         res.serverError({
           title: 'Subject Enrollment Error',
           code: err.status || 500,
-          message: err.message || 'Error creating subject'
+          message: err.details || 'Error creating subject'
         });
       });
     },

@@ -184,16 +184,16 @@
         .populate('group')
         .then(function (user) {
           this.user = user;
-          return studyuser.find({ studyName: studyName });
+          return studyuser.find({ studyName: studyName }).where(query);
         })
         .then(function (studyUsers) {
           if (this.user.group.level > 1) {
             cb(false, _.filter(studyUsers, function (user) {
-              return !_.isEmpty(_.xor(user.userEnrollments, _.pluck(this.user.enrollments, 'id')));        
+              return !_.isEmpty(_.xor(user.userEnrollments, _.pluck(this.user.enrollments, 'id')));
             }));
           } else {
-            cb(false, studyUsers);  
-          }          
+            cb(false, studyUsers);
+          }
         })
         .catch(cb);
     }

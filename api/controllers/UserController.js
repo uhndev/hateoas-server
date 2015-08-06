@@ -96,7 +96,7 @@
               return res.badRequest({
                 title: 'User Error',
                 code: uerr.status || 400,
-                message: uerr.message || 'Error creating user'
+                message: uerr.details || 'Error creating user'
               });
             } else {
               if (_.isEmpty(password)) {

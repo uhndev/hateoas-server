@@ -1,3 +1,7 @@
+/**
+ * A virtual model representing a database view.
+ * See config/db/studycollectioncentre.sql for view definition.
+ */
 (function() {
   var CollectionCentreModel = require('./../CollectionCentre.js');
   var _super = require('./baseView.js');
