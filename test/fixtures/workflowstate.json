@@ -102,7 +102,7 @@
       "data": [
         {
           "name": "subjectNumber",
-          "type": "integer",
+          "type": "mrn",
           "prompt": "Subject ID",
           "value": ""
         },
@@ -122,6 +122,12 @@
           "name": "studyMapping",
           "type": "string",
           "prompt": "Study Mapping",
+          "value": ""
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "prompt": "Status",
           "value": ""
         }
       ]

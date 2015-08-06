@@ -5,7 +5,7 @@
 -- DROP VIEW collectioncentreoverview;
 
 CREATE OR REPLACE VIEW collectioncentreoverview AS
-  SELECT DISTINCT ON (collectioncentre.name)
+  SELECT
     userenrollment."collectionCentre" AS id,
     "user".username,
     COALESCE(aggregatecoords.coordinators_count, 0::bigint) AS coordinators_count,

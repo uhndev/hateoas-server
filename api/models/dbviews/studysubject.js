@@ -1,3 +1,7 @@
+/**
+ * A virtual model representing a database view.
+ * See config/db/studysubject.sql for view definition.
+ */
 (function() {
   var SubjectEnrollmentModel = require('./../SubjectEnrollment.js');
   var _super = require('./baseView.js');
@@ -12,6 +16,9 @@
       subjectId: {
         type: 'integer'
       },
+      userId: {
+        type: 'integer'
+      },
       collectionCentre: {
         type: 'integer'
       },
@@ -24,8 +31,14 @@
       collectionCentreName: {
         type: 'string'
       },
+      studyAttributes: {
+        type: 'json'
+      },
       studyMapping: {
         type: 'json'
+      },
+      status: {
+        type: 'string'
       },
       doe: {
         type: 'date'

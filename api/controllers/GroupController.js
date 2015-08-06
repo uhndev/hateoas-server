@@ -31,7 +31,7 @@
           return res.serverErr({
             title: 'Error',
             code: err.status,
-            message: err.message
+            message: err.details
           });
         }
 

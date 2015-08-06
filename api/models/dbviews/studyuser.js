@@ -1,3 +1,7 @@
+/**
+ * A virtual model representing a database view.
+ * See config/db/studyuser.sql for view definition.
+ */
 (function() {
   var UserModel = require('./../User.js');
   var _super = require('./baseView.js');
@@ -11,6 +15,9 @@
       },
       enrollmentId: {
         type: 'integer'
+      },
+      userEnrollments: {
+        type: 'array'
       },
       username: {
         type: 'string'

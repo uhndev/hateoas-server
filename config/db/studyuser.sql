@@ -4,8 +4,12 @@
 -- DROP VIEW studyuser;
 
 CREATE OR REPLACE VIEW studyuser AS
- SELECT "user".id,
+  SELECT "user".id,
     userenrollment.id AS "enrollmentId",
+    (SELECT ARRAY(SELECT userenrollment.id
+     FROM userenrollment
+     WHERE userenrollment."collectionCentre" = collectioncentre.id
+     AND userenrollment."expiredAt" IS NULL)) AS "userEnrollments",
     "user".username,
     "user".email,
     "user".prefix,

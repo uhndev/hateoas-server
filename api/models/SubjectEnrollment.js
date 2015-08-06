@@ -20,8 +20,16 @@
        * @type {Integer}
        */
       subjectNumber: {
-        type: 'integer',
-        required: true
+        type: 'integer'
+      },
+
+      /**
+       * study
+       * @description The study for which this subject is enrolled in.
+       * @type {Association} linked study in enrollment
+       */
+      study: {
+        model: 'study'
       },
 
       /**
@@ -30,8 +38,7 @@
        * @type {Association} linked collection centre in enrollment
        */
       collectionCentre: {
-        model: 'collectioncentre',
-        required: true
+        model: 'collectioncentre'
       },
 
       /**
@@ -52,7 +59,6 @@
        */
       doe: {
         type: 'date',
-        required: true,
         date: true
       },
 
@@ -66,8 +72,30 @@
        */
       studyMapping: {
         type: 'json',
-        required: true,
-        json: true
+        json: true,
+        defaultsTo: {}
+      },
+
+      /**
+       * status
+       * @description Represents the subject's current status in this enrollment.  Subjects
+       *              can be enrolled as REGISTERED which signifies that they haven't been
+       *              enrolled in any particular collection centre yet.  After selecting a
+       *              collection centre, status should be set to ONGOING.
+       * @type {String}
+       */
+      status: {
+        type: 'string',
+        enum: [
+          'REGISTERED',
+          'ONGOING',
+          'LOST TO FOLLOWUP',
+          'WITHDRAWN',
+          'INELIGIBLE',
+          'DECEASED',
+          'TERMINATED',
+          'COMPLETED'
+        ]
       },
 
       /**
@@ -117,17 +145,47 @@
         .catch(cb);
     },
 
-    beforeValidate: function(values, cb) {
-      //Auto increment workaround
+    /**
+     * beforeCreate
+     * @description Before validation/creation, auto-increments the subjectNumber by latest study
+     *              and also inserts the collection centre study as a parameter
+     * @param  {Object}   values  given subject enrollment object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeCreate: function(values, cb) {
       SubjectEnrollment.findOne({
-        where: { "collectionCentre": values.collectionCentre },
+        where: { "study": values.study },
         sort:'subjectNumber DESC'
       }).exec(function (err, lastSubject) {
         if (err) cb(err);
         values.subjectNumber = (lastSubject && lastSubject.subjectNumber ?
-          lastSubject.subjectNumber + 1 : 1);
+        lastSubject.subjectNumber + 1 : 1);
+        // make sure if we're creating an enrollment with no studyMapping set yet, the status should be set to REGISTERED
+        if (!_.isEmpty(values.studyMapping)) {
+          values.status = 'REGISTERED';
+        }
         cb();
       });
+    },
+
+    /**
+     * beforeUpdate
+     * @description We need to perform some validation on the state of a subject's statuses as
+     *              enrollments are created.
+     * @param  {Object}   values  given subject enrollment object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeUpdate: function(values, cb) {
+      // when updating, if studyMapping is set, status cannot be set back to REGISTERED
+      if (!_.isEmpty(values.studyMapping)) {
+        values.status = (values.status === 'REGISTERED') ? 'ONGOING' : values.status;
+      }
+      // otherwise if studyMapping still not set, make sure user isn't trying to set status to
+      // something other than REGISTERED if they haven't set a mapping yet.
+      else {
+        values.status = 'REGISTERED';
+      }
+      cb();
     }
 
   };

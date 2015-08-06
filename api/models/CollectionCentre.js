@@ -94,7 +94,7 @@
         .then(function (user) {
           var whereOp = { studyName: studyName };
           if (user.group.level > 1) {
-            whereOp.enrollmentId = _.pluck(user.enrollments, 'id');
+            whereOp.userenrollmentId = _.pluck(user.enrollments, 'id');
           }
           return studycollectioncentre.find(query).where(whereOp);
         })

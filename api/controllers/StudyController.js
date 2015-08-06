@@ -85,7 +85,10 @@
       .then(function (study) {
         this.study = study;
         switch (this.group.level) {
-          case 1: return collectioncentreoverview.find({ study: name });
+          case 1: return collectioncentreoverview.find({ study: name })
+                        .then(function (centre) {
+                          return _.unique(centre, 'name');
+                        });
           case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
           case 3: return null; //TODO
           default: return res.notFound();
@@ -111,7 +114,7 @@
         return res.serverError({
           title: 'Server Error',
           code: err.status,
-          message: err.message
+          message: err.details
         });
       });
     },
@@ -148,7 +151,7 @@
                 return res.badRequest({
                   title: 'Study Error',
                   code: err.status || 400,
-                  message: err.message || 'Error creating study'
+                  message: err.details || 'Error creating study'
                 });
               } else {
                 res.status(201);
@@ -203,7 +206,7 @@
           return res.serverError({
             title: 'Server Error',
             code: err.status,
-            message: err.message
+            message: err.details
           });
         }
         res.ok(_.first(study));
@@ -211,6 +214,7 @@
     }
 
   };
+
 })();
 
 

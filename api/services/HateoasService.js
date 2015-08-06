@@ -65,7 +65,7 @@
               'type': definition.model || definition.type,
               'prompt': Utils.String.camelCaseToText(field),
               'value': ''
-            }
+            };
 
             if (definition.model) {
               template = _.merge(template,
