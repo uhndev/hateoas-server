@@ -138,7 +138,27 @@
 		"links": [],
 		"queries": [],
 		"template": {
-			"href": "http://localhost:1337/api/systemform/3"
+			"href": "http://localhost:1337/api/systemform/3",
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "Study Name",
+          "value": ""
+        },
+        {
+          "name": "attributes",
+          "type": "json",
+          "prompt": "Attributes",
+          "value": ""
+        },
+        {
+          "name": "reb",
+          "type": "integer",
+          "prompt": "REB",
+          "value": ""
+        }
+      ]
 		}
 	},
 	{
