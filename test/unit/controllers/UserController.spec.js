@@ -9,6 +9,7 @@
  */
 
 var UserController = require('../../../api/controllers/UserController');
+var Promise = require('q');
 
 describe('The User Controller', function () {
 
