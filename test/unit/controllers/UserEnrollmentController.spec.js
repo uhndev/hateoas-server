@@ -8,6 +8,7 @@
  */
 
 var UserEnrollmentController = require('../../../api/controllers/UserEnrollmentController');
+var Promise = require('q');
 
 describe('The UserEnrollment Controller', function () {
 
