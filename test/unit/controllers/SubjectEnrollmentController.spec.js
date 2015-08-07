@@ -45,6 +45,8 @@
          cc2Id = centre2.id;
          return Promise.all([
            SubjectEnrollment.create({
+             study: study1,
+             status: 'ONGOING',
              subject: globals.subjects.subjectId,
              collectionCentre: cc1Id,
              doe: new Date,
@@ -54,6 +56,8 @@
              }
            }),
            SubjectEnrollment.create({
+             study: study1,
+             status: 'ONGOING',
              subject: globals.subjects.subjectId,
              collectionCentre: cc2Id,
              doe: new Date,
@@ -117,6 +121,8 @@
              lastname: 'Subject',
              gender: 'Male',
              dob: new Date(),
+             study: study1,
+             status: 'ONGOING',
              collectionCentre: cc1Id,
              studyMapping: {
                procedure: 'B',

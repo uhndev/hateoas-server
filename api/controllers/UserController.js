@@ -56,6 +56,7 @@
             _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
               return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
                 .then(function (centre) {
+                  console.log(centre.study);
                   enrollment.collectionCentre = centre.name;
                   enrollment.study = centre.study.name;
                   return enrollment;
