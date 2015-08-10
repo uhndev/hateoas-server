@@ -16,12 +16,14 @@ module.exports = {
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
+
   hookTimeout: 60000, // 60 seconds to allow for uglification
+  proxyHost: 'ws69.uhnresearch.ca',
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
     connection: 'dados_production'
-  },
+  }
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *

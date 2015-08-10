@@ -120,7 +120,7 @@
         },
         {
           "name": "studyMapping",
-          "type": "string",
+          "type": "json",
           "prompt": "Study Mapping",
           "value": ""
         },
