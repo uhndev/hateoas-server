@@ -16,6 +16,7 @@ module.exports = {
   },
 
   environment: 'test',
+  port: '1338',
 
   hooks: {
     "grunt": false,

@@ -18,7 +18,6 @@ globals = {
 };
 
 before(function(done) {
-  console.log('Lifting sails...');
   this.timeout(30000);
   Sails.lift({ environment: 'test' }, function(err, server) {
     sails = server;

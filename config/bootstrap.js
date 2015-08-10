@@ -23,8 +23,6 @@ module.exports.bootstrap = function(cb) {
 	fixtures = barrels.data;
 
 	// Populate the DB
-	console.log("Loading sails fixtures...");
-
 	var systemFormNames = _.pluck(fixtures.systemform, 'form_name');
 	SystemForm.find({form_name: systemFormNames}).then(function (systemforms) {
 		// if forms already loaded in DB, carry on
