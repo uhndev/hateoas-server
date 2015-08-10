@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 
     bamboo_test: {
       options: {
-        reporter: 'json',
+        reporter: 'mocha-bamboo-reporter',
         captureFile: 'mocha.json',
         quiet: false, // Optionally suppress output to standard out (defaults to false)
         clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
