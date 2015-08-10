@@ -19,10 +19,12 @@ There are 2 parts of the NODEJS Windows installer.
 $ sudo apt-get install nodejs
 $ sudo apt-get install npm
 $ sudo apt-get install mongodb
+$ sudo apt-get install postgresql postgresql-contrib
 
 $ sudo npm install -g sails
 $ sudo npm install -g bower
 $ sudo npm install -g grunt-cli
+$ sudo npm install -g phantomjs
 ```
 
 ## Install Dependencies
