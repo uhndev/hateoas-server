@@ -45,8 +45,8 @@ module.exports.policies = {
 
   UserEnrollmentController: {
     'find': false,
-    'findOne': false,
-    'create': false
+    'findOne': false
+    //'create': false
   },
 
   GroupController: {
