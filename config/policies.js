@@ -43,12 +43,6 @@ module.exports.policies = {
     '*': [ 'passport' ]
   },
 
-  UserEnrollmentController: {
-    'find': false,
-    'findOne': false,
-    'create': false
-  },
-
   GroupController: {
     'destroy': false
   },
