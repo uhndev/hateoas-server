@@ -156,6 +156,17 @@ describe('The SubjectEnrollment Controller', function () {
             done(err);
           });
       });
+
+      it('should show correct count based on study', function (done) {
+        request.get('/api/study/ENROLLMENT-LEAP-ADMIN/subject')
+          .set('Authorization', 'Bearer ' + globals.token)
+          .expect(200)
+          .end(function (err, res) {
+            var collection = JSON.parse(res.text);
+            collection.total.should.equal(3);
+            done(err);
+          });
+      });
     });
 
   });

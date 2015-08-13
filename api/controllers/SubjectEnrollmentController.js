@@ -121,11 +121,13 @@
         { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) },
-        function(err, subjects) {
-          if (err) res.serverError(err);
-          res.ok(subjects);
-        });
+          sort: actionUtil.parseSort(req) }
+      ).then(function(subjects) {
+        var err = subjects[0];
+        var subjectItems = subjects[1];
+        if (err) res.serverError(err);
+        res.ok(subjectItems);
+      });
     }
 
   };

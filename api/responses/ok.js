@@ -30,25 +30,34 @@ module.exports = function sendOK (data, options) {
   /**
    * Private method that fetches the result count for the current query.
    */
-  function fetchResultCount(query, modelName) {
+  function fetchResultCount(req, query, modelName) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
       return Group.findOne({ name: 'subject' }).then(function (group) {
         var promise;
-        if (query.where) {
-          promise = model.count(JSON.parse(query.where));
-        } else {
-          promise = model.count();
+        // for models with the method findByStudyName, hateoas total should be filtered by study
+        if (req.options.action === 'findbystudyname') {
+          var studyName = req.param('name');
+          promise = model.findByStudyName(studyName, req.user, {}).then(function (studyItems) {
+            return studyItems[1].length;
+          });
         }
+        // otherwise, we can just return the model count total
+        else {
+          if (query.where) {
+            promise = model.count(JSON.parse(query.where));
+          } else {
+            promise = model.count();
+          }
+          if (_.has(model.attributes, 'expiredAt')) {
+            promise.where({ expiredAt: null });
+          }
 
-        if (_.has(model.attributes, 'expiredAt')) {
-          promise.where({ expiredAt: null });
-        }
-
-        // we do not want to include subjects' users in our total count
-        if (model.identity === 'user') {
-          promise.where({ group: { '<=': group.level }});
+          // we do not want to include subjects' users in our total count
+          if (model.identity === 'user') {
+            promise.where({ group: { '<=': group.level }});
+          }
         }
 
         return promise;
@@ -112,16 +121,13 @@ module.exports = function sendOK (data, options) {
 
   HateoasService.create(req, res, data)
     .then(function(hateoasResponse) {
-      var address = url.parse(Utils.Path.getFullUrl(req));
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);
       var modelPromise = Model.findOne({name: modelName})
         .then(function (model) {
           return fetchPermissions(model, req.user);
         });
-
-      return [hateoasResponse, data.length, fetchResultCount(query, modelName), modelPromise];
-      // return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
+      return [hateoasResponse, data.length, fetchResultCount(req, query, modelName), modelPromise];
     })
     .spread(function(hateoasResponse, resultCount, modelCount, permissions) {
       hateoasResponse.count = resultCount;

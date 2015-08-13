@@ -302,13 +302,13 @@
         { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) },
-        function(err, users) {
-          if (err) {
-            res.serverError(err);
-          }
-          res.ok(users);
-        });
+          sort: actionUtil.parseSort(req) }
+      ).then(function(users) {
+        var err = users[0];
+        var userItems = users[1];
+        if (err) res.serverError(err);
+        res.ok(userItems);
+      });
     }
 
   });

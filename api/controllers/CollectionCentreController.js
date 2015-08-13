@@ -186,11 +186,13 @@
         { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) },
-        function(err, centres) {
-          if (err) res.serverError(err);
-          res.ok(centres);
-        });
+          sort: actionUtil.parseSort(req) }
+      ).then(function(centres) {
+        var err = centres[0];
+        var centreItems = centres[1];
+        if (err) res.serverError(err);
+        res.ok(centreItems);
+      });
     }
   };
 })();
