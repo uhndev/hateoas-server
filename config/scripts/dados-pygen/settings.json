@@ -1,0 +1,7 @@
+{
+	"url": "http://localhost:1337",
+	"user_limit": 10,
+	"study_limit": 5,
+	"user_enrollment_limit": 20,
+	"subject_enrollment_limit": 100
+}
