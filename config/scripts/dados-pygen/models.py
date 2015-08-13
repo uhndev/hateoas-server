@@ -14,7 +14,7 @@ class User:
     self.password = self.firstname + self.lastname + "123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])
-    self.group = random.choice([2, 3])
+    self.group = 2
 
 class Study:
   def __init__(self, id):
