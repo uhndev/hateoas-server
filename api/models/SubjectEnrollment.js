@@ -129,7 +129,7 @@
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      User.findOne(currUser.id)
+      return User.findOne(currUser.id)
         .populate('enrollments')
         .populate('group')
         .then(function (user) {
@@ -140,9 +140,11 @@
           return studysubject.find(query).where(whereOp);
         })
         .then(function (studySubjects) {
-          cb(false, studySubjects)
+          return [false, studySubjects];
         })
-        .catch(cb);
+        .catch(function (err) {
+          return [err, null];
+        });
     },
 
     /**

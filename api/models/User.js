@@ -179,7 +179,7 @@
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      User.findOne(currUser.id)
+      return User.findOne(currUser.id)
         .populate('enrollments')
         .populate('group')
         .then(function (user) {
@@ -188,14 +188,16 @@
         })
         .then(function (studyUsers) {
           if (this.user.group.level > 1) {
-            cb(false, _.filter(studyUsers, function (user) {
+            return [false, _.filter(studyUsers, function (user) {
               return !_.isEmpty(_.xor(user.userEnrollments, _.pluck(this.user.enrollments, 'id')));
-            }));
+            })];
           } else {
-            cb(false, studyUsers);
+            return [false, studyUsers];
           }
         })
-        .catch(cb);
+        .catch(function (err) {
+          return [err, null];
+        });
     }
 
   });
