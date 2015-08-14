@@ -85,10 +85,7 @@
       .then(function (study) {
         this.study = study;
         switch (this.group.level) {
-          case 1: return collectioncentreoverview.find({ study: name })
-                        .then(function (centre) {
-                          return _.unique(centre, 'name');
-                        });
+          case 1: return collectioncentreoverview.find({ study: name });
           case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
           case 3: return null; //TODO
           default: return res.notFound();
@@ -106,7 +103,7 @@
           });
         }
         else {
-          this.study.centreSummary = centres;
+          this.study.centreSummary = _.unique(centres, 'name');
           res.ok(this.study);
         }
       })
