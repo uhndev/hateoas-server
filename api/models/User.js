@@ -189,7 +189,10 @@
         .then(function (studyUsers) {
           if (this.user.group.level > 1) {
             return [false, _.filter(studyUsers, function (user) {
-              return !_.isEmpty(_.xor(user.userEnrollments, _.pluck(this.user.enrollments, 'id')));
+              // return users whose enrollments has at least one with proposed user
+              return (_.some(_.pluck(this.user.enrollments, 'id'), function (currEnrollment) {
+                return _.includes(user.userEnrollments, currEnrollment);
+              }));
             })];
           } else {
             return [false, studyUsers];

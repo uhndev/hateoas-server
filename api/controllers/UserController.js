@@ -18,10 +18,10 @@
      * @description finds and returns all users with populated roles associations
      */
     find: function (req, res, next) {
-      Group.findOne({ name: 'subject' }).then(function (group) {
+      Group.findOneByName('subject').then(function (subjectGroup) {
         var query = ModelService.filterExpiredRecords('user')
           .where( actionUtil.parseCriteria(req) )
-          .where({ group: { '<': group.level } })
+          .where({ group: { '!': subjectGroup.id } })
           .limit( actionUtil.parseLimit(req) )
           .skip( actionUtil.parseSkip(req) )
           .sort( actionUtil.parseSort(req) );

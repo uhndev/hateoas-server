@@ -34,7 +34,7 @@ module.exports = function sendOK (data, options) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
-      return Group.findOne({ name: 'subject' }).then(function (group) {
+      return Group.findOneByName('subject').then(function (subjectGroup) {
         var promise;
         // for models with the method findByStudyName, hateoas total should be filtered by study
         if (req.options.action === 'findbystudyname') {
@@ -56,7 +56,7 @@ module.exports = function sendOK (data, options) {
 
           // we do not want to include subjects' users in our total count
           if (model.identity === 'user') {
-            promise.where({ group: { '<': group.level }});
+            promise.where({ group: { '!': subjectGroup.id }});
           }
         }
 
