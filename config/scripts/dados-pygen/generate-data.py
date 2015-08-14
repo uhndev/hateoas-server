@@ -56,13 +56,14 @@ def makeRequests():
         r = requests.post(config.url + '/api/'+model[0], data=json.dumps(instance.__dict__), headers=config.headers)
         if r.status_code != 200 and r.status_code != 201:
           print '\n--------------------------ERROR--------------------------'
+          print 'Error Code: ' + `r.status_code`
           print json.dumps(instance.__dict__)
           raise ValueError(r.text)
         sys.stdout.write(".")
         sys.stdout.flush()
       print "\nCreated " + `len(model[1])` + " " + model[0] + "s"
   except ValueError as error:
-    print error
+    print error.encode('utf-8')
 
 def main():
   createObjects()

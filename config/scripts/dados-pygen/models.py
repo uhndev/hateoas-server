@@ -23,7 +23,7 @@ class Study:
     self.attributes = {}
     self.attributes['procedure'] = fake.words()
     self.attributes['area'] = ['BOTH', 'LEFT', 'RIGHT']
-    self.reb = random.randint(0, 100)
+    self.reb = fake.country_code() + '-' + `random.randint(100, 999)`
     self.administrator = random.randint(config.minCoord, config.maxCoord)
     self.pi = random.randint(config.minCoord, config.maxCoord)
 

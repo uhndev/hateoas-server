@@ -21,7 +21,7 @@
       Group.findOne({ name: 'subject' }).then(function (group) {
         var query = ModelService.filterExpiredRecords('user')
           .where( actionUtil.parseCriteria(req) )
-          .where({ group: { '<=': group.level } })
+          .where({ group: { '<': group.level } })
           .limit( actionUtil.parseLimit(req) )
           .skip( actionUtil.parseSkip(req) )
           .sort( actionUtil.parseSort(req) );
