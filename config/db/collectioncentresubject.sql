@@ -12,6 +12,8 @@ CREATE OR REPLACE VIEW collectioncentresubject AS
     subjectenrollment."studyMapping",
     subjectenrollment.status,
     subjectenrollment.doe,
+    subjectenrollment."owner",
+    subjectenrollment."createdBy",
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"
    FROM subjectenrollment

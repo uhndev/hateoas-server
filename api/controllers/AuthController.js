@@ -41,8 +41,7 @@
             { expiresInMinutes: sails.config.session.jwtExpiry }
           );
 
-          User.findOne(user.id).populate('group')
-          .then(function(data) {
+          User.findOne(user.id).populate('group').exec(function (err, data) {
             var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname');
             var resp = {
               user: userObj,

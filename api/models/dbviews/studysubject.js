@@ -10,9 +10,6 @@
   _.merge(exports, {
 
     attributes: {
-      id: {
-        type: 'integer'
-      },
       subjectId: {
         type: 'integer'
       },
@@ -41,12 +38,6 @@
         type: 'string'
       },
       doe: {
-        type: 'date'
-      },
-      createdAt: {
-        type: 'date'
-      },
-      updatedAt: {
         type: 'date'
       },
       toJSON: SubjectEnrollmentModel.attributes.toJSON

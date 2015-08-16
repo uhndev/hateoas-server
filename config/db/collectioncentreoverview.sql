@@ -13,6 +13,8 @@ CREATE OR REPLACE VIEW collectioncentreoverview AS
     study.name AS study,
     collectioncentre.name,
     concat_ws(' '::text, "user".prefix, "user".firstname, "user".lastname) AS contact,
+    collectioncentre."owner",
+    collectioncentre."createdBy",
     collectioncentre."createdAt",
     collectioncentre."updatedAt"
   FROM "user"

@@ -15,6 +15,8 @@ CREATE OR REPLACE VIEW collectioncentreuser AS
     "user".dob,
     userenrollment.id AS "userenrollmentId",
     userenrollment."centreAccess",
+    userenrollment."owner",
+    userenrollment."createdBy",
     userenrollment."createdAt",
     userenrollment."updatedAt"
    FROM userenrollment

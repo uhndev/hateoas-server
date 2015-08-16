@@ -20,6 +20,8 @@ CREATE OR REPLACE VIEW studyuser AS
     study.name AS "studyName",
     userenrollment."collectionCentre",
     userenrollment."centreAccess",
+    userenrollment."owner",
+    userenrollment."createdBy",
     userenrollment."createdAt",
     userenrollment."updatedAt"
    FROM userenrollment

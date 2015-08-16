@@ -9,9 +9,6 @@
   _.merge(exports, _super);
   _.merge(exports, {
     attributes: {
-      id: {
-        type: 'integer'
-      },
       userId: {
         type: 'integer'
       },
@@ -31,12 +28,6 @@
         type: 'string'
       },
       doe: {
-        type: 'date'
-      },
-      createdAt: {
-        type: 'date'
-      },
-      updatedAt: {
         type: 'date'
       },
       toJSON: SubjectModel.attributes.toJSON

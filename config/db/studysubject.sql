@@ -15,6 +15,8 @@ CREATE OR REPLACE VIEW studysubject AS
     subjectenrollment."studyMapping",
     subjectenrollment.status,
     subjectenrollment.doe,
+    subjectenrollment."owner",
+    subjectenrollment."createdBy",
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"
   FROM subjectenrollment

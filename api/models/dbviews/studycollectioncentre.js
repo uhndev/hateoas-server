@@ -10,9 +10,6 @@
   _.merge(exports, {
 
     attributes: {
-      id: {
-        type: 'integer'
-      },
       userenrollmentId: {
         type: 'integer'
       },
@@ -30,12 +27,6 @@
       },
       contactName: {
         type: 'string'
-      },
-      createdAt: {
-        type: 'date'
-      },
-      updatedAt: {
-        type: 'date'
       },
       toJSON: CollectionCentreModel.attributes.toJSON
     }
