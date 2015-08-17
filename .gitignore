@@ -40,6 +40,7 @@
 ################################################
 
 config/local.js
+config/scripts/**/*.pyc
 mocha.json
 assets/karma/results/**
 
@@ -122,3 +123,4 @@ assets/build/
 assets/bin/
 assets/node_modules/
 assets/vendor/*
+assets/src/common/config/app.config.js
