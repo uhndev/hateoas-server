@@ -3,5 +3,10 @@
     "modules": {
       "permissions-api": "sails-permissions"
     }
+  },
+  "hooks": {
+    "session": false,
+    "csrf": false,
+    "views": false
   }
 }
