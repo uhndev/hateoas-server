@@ -33,19 +33,10 @@ module.exports = {
 
     /**
      * questions
-     * @description Contains key-value pair representations of questions
-     * @type {Object}
-     */
-    questions: {
-      type: 'json'
-    },
-
-    /**
-     * isDirty
-     * @description Contains array of questions that are ngDirty
+     * @description Contains array of json-object questions
      * @type {Array}
      */
-    isDirty: {
+    questions: {
       type: 'array'
     },
 
@@ -86,11 +77,13 @@ module.exports = {
    * @param  {Function} cb      callback function on completion
    */
   beforeValidate: function(values, cb) {
-    console.log(values);
-    Study.findOneByName(values.studyName).exec(function (err, study) {
-      values.study = study.id;
-      cb(err);
-    });
+    if (!values.study) {
+      Study.findOneByName(values.studyName).exec(function (err, study) {
+        values.study = study.id;
+        cb(err);
+      });
+    }
+    cb();
   }
 
 };
