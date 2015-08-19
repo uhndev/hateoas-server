@@ -20,9 +20,9 @@ describe('The WorkflowState Model', function() {
 
 	describe('when accessing the WorkflowState model', function() {
 
-		it('should begin with user, subject, study, and collection centre WorkflowStates',  function (done) {
+		it('should begin with the correct WorkflowStates',  function (done) {
 			WorkflowState.count(function(err, states) {
-				states.should.be.exactly(5);
+				states.should.be.exactly(6);
 				done(err);
 			});
 		});
@@ -58,5 +58,6 @@ describe('The WorkflowState Model', function() {
 					done(err);
 				});
 		});
+
 	});
 });

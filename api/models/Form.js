@@ -82,8 +82,9 @@ module.exports = {
         values.study = study.id;
         cb(err);
       });
+    } else {
+      cb();
     }
-    cb();
   }
 
 };

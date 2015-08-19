@@ -184,7 +184,7 @@
         .populate('group')
         .then(function (user) {
           this.user = user;
-          return studyuser.find({ studyName: studyName }).where(query);
+          return studyuser.find(query).where({ studyName: studyName });
         })
         .then(function (studyUsers) {
           if (this.user.group.level > 1) {
