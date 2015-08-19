@@ -3,5 +3,9 @@
     "modules": {
       "permissions-api": "sails-permissions"
     }
+  },
+  "hooks": {
+    "csrf": false,
+    "views": false
   }
 }

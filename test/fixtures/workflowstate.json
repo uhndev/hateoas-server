@@ -228,5 +228,50 @@
 		"template": {
 			"href": "http://localhost:1337/api/systemform/5"
 		}
-	}
+	},
+  {
+    "path": "/api/form",
+    "queries": [],
+    "links": [
+      {
+        "rel": "overview",
+        "prompt": "*",
+        "name": "name",
+        "href": "/api/study/*"
+      },
+      {
+        "rel": "subject",
+        "prompt": "Subjects",
+        "name": "name",
+        "href": "/api/study/*/subject"
+      },
+      {
+        "rel": "user",
+        "prompt": "Users",
+        "name": "name",
+        "href": "/api/study/*/user"
+      },
+      {
+        "rel": "form",
+        "prompt": "Forms",
+        "name": "name",
+        "href": "/api/study/*/form",
+        "isActive": true
+      },
+      {
+        "rel": "survey",
+        "prompt": "Surveys",
+        "name": "name",
+        "href": "/api/study/*/survey"
+      },
+      {
+        "rel": "collectioncentre",
+        "prompt": "Collection Centres",
+        "name": "name",
+        "href": "/api/study/*/collectioncentre"
+      }
+    ],
+    "template": {
+    }
+  }
 ]

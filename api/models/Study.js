@@ -64,7 +64,7 @@
        * @description Associated list of collection centres that are registered to
        *              collect data for this study.
        *
-       * @type {Association}
+       * @type {Array}
        */
       collectionCentres: {
         collection: 'collectioncentre',
@@ -72,8 +72,19 @@
       },
 
       /**
+       * forms
+       * @description Associated list of user-created forms that are set up as part of
+       *              the surveys for this study.
+       * @type {Array}
+       */
+      forms: {
+        collection: 'form',
+        via: 'study'
+      },
+
+      /**
        * administrator
-       * @type {Association}
+       * @type {Integer}
        */
       administrator: {
         model: 'user'
@@ -81,7 +92,7 @@
 
       /**
        * pi
-       * @type {Association}
+       * @type {Integer}
        */
       pi: {
         model: 'user'

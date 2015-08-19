@@ -21,5 +21,4 @@ module.exports = {
     migrate: 'alter',
     connection: 'dados_development'
   }
-
 };
