@@ -271,7 +271,57 @@
         "href": "/api/study/*/collectioncentre"
       }
     ],
+    "template": {}
+  },
+  {
+    "path": "/api/userenrollment",
+    "queries": [],
+    "links": [],
     "template": {
+      "data": [
+        {
+          "name": "username",
+          "type": "string",
+          "prompt": "Username",
+          "value": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "prompt": "Email",
+          "value": ""
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "prompt": "Prefix",
+          "value": ""
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "prompt": "Firstname",
+          "value": ""
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "prompt": "Lastname",
+          "value": ""
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "prompt": "Gender",
+          "value": ""
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "prompt": "Date of Birth",
+          "value": ""
+        }
+      ]
     }
   }
 ]

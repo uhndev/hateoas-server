@@ -7,6 +7,8 @@
 */
 
 (function() {
+  var _ = require('lodash');
+  var UserModel = require('./User.js');
 
   module.exports = {
     schema: true,
@@ -57,7 +59,47 @@
         datetime: true
       },
 
-      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+      toJSON: UserModel.attributes.toJSON
+    },
+
+    /**
+     * findByStudyName
+     * @description End function for handling /api/study/:name/user.  Should return a list
+     *              of users in a given study and depending on the current users' group
+     *              permissions, this list will be further filtered down based on whether
+     *              or not those users and I share common collection centres.
+     *
+     * @param  {String}   studyName Name of study to search.  Passed in from UserController.
+     * @param  {Object}   currUser  Current user used in determining filtering options based on access
+     * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
+     * @param  {Function} cb        Callback function upon completion
+     */
+    findByStudyName: function(studyName, currUser, options, cb) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+      return User.findOne(currUser.id)
+        .populate('enrollments')
+        .populate('group')
+        .then(function (user) {
+          this.user = user;
+          return studyuser.find(query).where({ studyName: studyName });
+        })
+        .then(function (studyUsers) {
+          if (this.user.group.level > 1) {
+            return [false, _.filter(studyUsers, function (user) {
+              // return users whose enrollments has at least one with proposed user
+              return (_.some(_.pluck(this.user.enrollments, 'id'), function (currEnrollment) {
+                return _.includes(user.userEnrollments, currEnrollment);
+              }));
+            })];
+          } else {
+            return [false, studyUsers];
+          }
+        })
+        .catch(function (err) {
+          return [err, null];
+        });
     }
 
   };

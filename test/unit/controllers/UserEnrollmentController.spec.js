@@ -101,7 +101,7 @@ describe('The UserEnrollment Controller', function () {
     describe('update()', function () {
 
       it('should prevent user from changing role of an enrollment at a CC when user already has a role there', function (done) {
-        request.put('/api/user/' + globals.users.interviewerUserId + '/access')
+        request.post('/api/userenrollment')
           .set('Authorization', 'Bearer ' + globals.token)
           .send({
             centreAccess: 'interviewer',
@@ -115,7 +115,7 @@ describe('The UserEnrollment Controller', function () {
       });
 
       it('should prevent user from changing another enrollment to a CC when user already has an enrollment there', function (done) {
-        request.put('/api/user/' + globals.users.interviewerUserId + '/access')
+        request.post('/api/userenrollment')
           .set('Authorization', 'Bearer ' + globals.token)
           .send({
             centreAccess: 'coordinator',
@@ -146,7 +146,7 @@ describe('The UserEnrollment Controller', function () {
       });
 
       it('should be able to add a user to a collection centre with a role', function (done) {
-        request.put('/api/user/' + globals.users.coordinatorUserId + '/access')
+        request.post('/api/userenrollment')
           .set('Authorization', 'Bearer ' + globals.token)
           .send({
             centreAccess: 'coordinator',
@@ -160,7 +160,7 @@ describe('The UserEnrollment Controller', function () {
       });
 
       it('should be able to add a user in a collection centre in another study', function (done) {
-        request.put('/api/user/' + globals.users.interviewerUserId + '/access')
+        request.post('/api/userenrollment')
           .set('Authorization', 'Bearer ' + globals.token)
           .send({
             centreAccess: 'interviewer',

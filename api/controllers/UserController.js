@@ -185,61 +185,6 @@
     },
 
     /**
-     * updateAccess
-     * @description Route for handling collection centre access from study users page
-     */
-    updateAccess: function (req, res, next) {
-      // user params
-      var userId = req.param('id');
-      // user access enrollment params
-      var options = _.pick(_.pick(req.body, 'collectionCentre', 'user', 'centreAccess'), _.identity);
-
-      // find and create or update user enrollment data
-      UserEnrollment
-        .findOne({
-          user: options.user,
-          collectionCentre: options.collectionCentre,
-          expiredAt: null
-        })
-        .then(function (enrollment) {
-          if (!enrollment) {
-            return UserEnrollment.create(options)
-              .then(function (enrollment) {
-                this.enrollment = enrollment;
-                return User.findOne(userId).populate('enrollments');
-              })
-              .then(function (user) {
-                // if we were modifying an enrollment, nothing needs to be done
-                if (!_.includes(_.pluck(user.enrollments, 'id'), this.enrollment.id)) {
-                  return user;
-                } else {
-                  // otherwise, we are adding a new enrollment
-                  user.enrollments.add(this.enrollment.id);
-                  return user.save();
-                }
-              })
-              .then(function (user) {
-                res.ok(user);
-              });
-          } else {
-            // otherwise we're trying to update an enrollment to something that already exists
-            res.badRequest({
-              title: 'Enrollment Error',
-              status: 400,
-              message: 'Unable to enroll user, user may already be registered at another collection centre.'
-            });
-          }
-        })
-        .catch(function (err) {
-          res.serverError({
-            title: 'Collection Centre Access Error',
-            code: 500,
-            message: 'Error when updating user centre access for user: ' + user
-          });
-        });
-    },
-
-    /**
      * updateRoles
      * @description Route for handling role updates from access management page
      */
@@ -288,27 +233,6 @@
           });
         });
       }
-    },
-
-    /**
-     * findByStudyName
-     * @description Calls the User model function findByStudyName to return the list
-     *              of users that are enrolled in a given study.  Further filtering
-     *              of users based on enrollment is also done in the User model function.
-     */
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
-      User.findByStudyName(studyName, req.user,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) }
-      ).then(function(users) {
-        var err = users[0];
-        var userItems = users[1];
-        if (err) res.serverError(err);
-        res.ok(userItems);
-      });
     }
 
   });
