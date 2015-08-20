@@ -99,7 +99,7 @@ module.exports.connections = {
     host: 'localhost',
     port: 5432,
     user: 'postgres',
-    password: 'postgres',
+    password: 'password',
     database: 'dados_dev'
   },
 
@@ -126,4 +126,5 @@ module.exports.connections = {
   * More adapters: https://github.com/balderdashy/sails                      *
   *                                                                          *
   ***************************************************************************/
+
 };
