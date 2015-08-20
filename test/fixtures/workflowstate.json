@@ -1,45 +1,7 @@
 [
 	{
 		"path": "/api/user",
-		"links": [
-			{
-				"rel": "overview",
-				"prompt": "*",
-				"name": "name",
-				"href": "/api/study/*"
-			},
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject"
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user",
-				"isActive": true
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			},
-			{
-				"rel": "collectioncentre",
-				"prompt": "Collection Centres",
-				"name": "name",
-				"href": "/api/study/*/collectioncentre"
-			}
-		],
+		"links": [],
 		"queries": [],
 		"template": {
 			"rel": "user",
@@ -276,7 +238,45 @@
   {
     "path": "/api/userenrollment",
     "queries": [],
-    "links": [],
+    "links": [
+      {
+        "rel": "overview",
+        "prompt": "*",
+        "name": "name",
+        "href": "/api/study/*"
+      },
+      {
+        "rel": "subject",
+        "prompt": "Subjects",
+        "name": "name",
+        "href": "/api/study/*/subject"
+      },
+      {
+        "rel": "user",
+        "prompt": "Users",
+        "name": "name",
+        "href": "/api/study/*/user",
+        "isActive": true
+      },
+      {
+        "rel": "form",
+        "prompt": "Forms",
+        "name": "name",
+        "href": "/api/study/*/form"
+      },
+      {
+        "rel": "survey",
+        "prompt": "Surveys",
+        "name": "name",
+        "href": "/api/study/*/survey"
+      },
+      {
+        "rel": "collectioncentre",
+        "prompt": "Collection Centres",
+        "name": "name",
+        "href": "/api/study/*/collectioncentre"
+      }
+    ],
     "template": {
       "data": [
         {

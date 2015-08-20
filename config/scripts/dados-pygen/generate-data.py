@@ -30,9 +30,14 @@ def createObjects():
     studies.append(study)
 
   # create user enrollments
+  enrollments = []
   for ueid in range(config.minUserEnrollment, config.maxUserEnrollment):
     randCentre = random.choice(centres)
     enrollment = models.UserEnrollment(ueid, randCentre.id)
+    while (enrollment.user, enrollment.collectionCentre) in enrollments:
+      enrollment = models.UserEnrollment(ueid, randCentre.id)
+
+    enrollments.append((enrollment.user, enrollment.collectionCentre))
     userEnrollments.append(enrollment)
 
   # create subject enrollments
@@ -63,7 +68,7 @@ def makeRequests():
         sys.stdout.flush()
       print "\nCreated " + `len(model[1])` + " " + model[0] + "s"
   except ValueError as error:
-    print error.encode('utf-8')
+    print error
 
 def main():
   createObjects()
