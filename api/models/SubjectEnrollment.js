@@ -163,8 +163,10 @@
         values.subjectNumber = (lastSubject && lastSubject.subjectNumber ?
         lastSubject.subjectNumber + 1 : 1);
         // make sure if we're creating an enrollment with no studyMapping set yet, the status should be set to REGISTERED
-        if (!_.isEmpty(values.studyMapping)) {
+        if (_.isEmpty(values.studyMapping)) {
           values.status = 'REGISTERED';
+        } else {
+          values.status = 'ONGOING';
         }
         cb();
       });
