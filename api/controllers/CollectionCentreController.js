@@ -66,6 +66,8 @@
      */
     findOne: function (req, res, next) {
       CollectionCentre.findOne(req.param('id'))
+        .populate('study')
+        .populate('contact')
         .exec(function (err, centre) {
           if (err) {
             return res.serverError(err);
