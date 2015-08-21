@@ -1,45 +1,7 @@
 [
 	{
 		"path": "/api/user",
-		"links": [
-			{
-				"rel": "overview",
-				"prompt": "*",
-				"name": "name",
-				"href": "/api/study/*"
-			},
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject"
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user",
-				"isActive": true
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			},
-			{
-				"rel": "collectioncentre",
-				"prompt": "Collection Centres",
-				"name": "name",
-				"href": "/api/study/*/collectioncentre"
-			}
-		],
+		"links": [],
 		"queries": [],
 		"template": {
 			"rel": "user",
@@ -271,7 +233,95 @@
         "href": "/api/study/*/collectioncentre"
       }
     ],
+    "template": {}
+  },
+  {
+    "path": "/api/userenrollment",
+    "queries": [],
+    "links": [
+      {
+        "rel": "overview",
+        "prompt": "*",
+        "name": "name",
+        "href": "/api/study/*"
+      },
+      {
+        "rel": "subject",
+        "prompt": "Subjects",
+        "name": "name",
+        "href": "/api/study/*/subject"
+      },
+      {
+        "rel": "user",
+        "prompt": "Users",
+        "name": "name",
+        "href": "/api/study/*/user",
+        "isActive": true
+      },
+      {
+        "rel": "form",
+        "prompt": "Forms",
+        "name": "name",
+        "href": "/api/study/*/form"
+      },
+      {
+        "rel": "survey",
+        "prompt": "Surveys",
+        "name": "name",
+        "href": "/api/study/*/survey"
+      },
+      {
+        "rel": "collectioncentre",
+        "prompt": "Collection Centres",
+        "name": "name",
+        "href": "/api/study/*/collectioncentre"
+      }
+    ],
     "template": {
+      "data": [
+        {
+          "name": "username",
+          "type": "string",
+          "prompt": "Username",
+          "value": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "prompt": "Email",
+          "value": ""
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "prompt": "Prefix",
+          "value": ""
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "prompt": "Firstname",
+          "value": ""
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "prompt": "Lastname",
+          "value": ""
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "prompt": "Gender",
+          "value": ""
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "prompt": "Date of Birth",
+          "value": ""
+        }
+      ]
     }
   }
 ]

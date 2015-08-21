@@ -45,19 +45,21 @@ module.exports = function sendOK (data, options) {
         }
         // otherwise, we can just return the model count total
         else {
+          var filterQuery = { where: {} };
+          // if provided a query, include in where clause
           if (query.where) {
-            promise = model.count(JSON.parse(query.where));
-          } else {
-            promise = model.count();
-          }
-          if (_.has(model.attributes, 'expiredAt')) {
-            promise.where({ expiredAt: null });
+            filterQuery.where = JSON.parse(query.where);
           }
 
+          if (_.has(model.attributes, 'expiredAt')) {
+            filterQuery.where.expiredAt = null;
+          }
           // we do not want to include subjects' users in our total count
           if (model.identity === 'user') {
-            promise.where({ group: { '!': subjectGroup.id }});
+            filterQuery.where.group = {"!": subjectGroup.id};
           }
+
+          promise = model.count(filterQuery);
         }
 
         return promise;
