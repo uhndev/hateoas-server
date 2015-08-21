@@ -80,7 +80,7 @@
 
       Group.findOne(req.user.group).then(function (group) {
         this.group = group;
-        return Study.findOne({name: name});
+        return Study.findOne({name: name}).populate('administrator').populate('pi');
       })
       .then(function (study) {
         this.study = study;
