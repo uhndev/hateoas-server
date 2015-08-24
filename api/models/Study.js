@@ -80,7 +80,7 @@
        */
       forms: {
         collection: 'form',
-        via: 'study'
+        via: 'studies'
       },
 
       /**
