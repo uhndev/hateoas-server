@@ -104,13 +104,13 @@ describe('The Study Controller', function () {
 					});
 			});
 
-			it('should retrieve a saved user form href from the workflowstate', function (done) {
+			it('should have rel userenrollment in workflowstate template', function (done) {
 				request.get('/api/study/STUDY-LEAP-ADMIN/user')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
+						collection.template.rel.should.equal('userenrollment');
 						done(err);
 					});
 			});
@@ -436,13 +436,13 @@ describe('The Study Controller', function () {
 					});
 			});
 
-			it('should retrieve a saved user form href from the workflowstate', function (done) {
+			it('should have rel userenrollment in the workflowstate template', function (done) {
 				request.get('/api/study/STUDY-LEAP-COORD/user')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
+						collection.template.rel.should.equal('userenrollment');
 						done(err);
 					});
 			});

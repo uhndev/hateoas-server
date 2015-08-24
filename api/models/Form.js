@@ -41,14 +41,14 @@ module.exports = {
     },
 
     /**
-     * study
-     * @description Associated study for which this form is attached to.
+     * studies
+     * @description Associated studies for which this form is attached to.
      *              A study can have multiple forms attached to it
-     * @type {Integer} linked study reference
+     * @type {Array} linked study references
      */
-    study: {
-      model: 'study',
-      required: true
+    studies: {
+      collection: 'study',
+      via: 'forms'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -66,26 +66,26 @@ module.exports = {
       .catch(function (err) {
         return [err, null];
       });
-  },
-
-  /**
-   * beforeValidate
-   * @description Lifecycle callback meant to handle take a studyName and replace
-   *              it with the study ID before passing to validation.
-   *
-   * @param  {Object}   values  proposed form values object
-   * @param  {Function} cb      callback function on completion
-   */
-  beforeValidate: function(values, cb) {
-    if (!values.study) {
-      Study.findOneByName(values.studyName).exec(function (err, study) {
-        values.study = study.id;
-        cb(err);
-      });
-    } else {
-      cb();
-    }
   }
+  //
+  ///**
+  // * beforeValidate
+  // * @description Lifecycle callback meant to handle take a studyName and replace
+  // *              it with the study ID before passing to validation.
+  // *
+  // * @param  {Object}   values  proposed form values object
+  // * @param  {Function} cb      callback function on completion
+  // */
+  //beforeValidate: function(values, cb) {
+  //  if (!values.study) {
+  //    Study.findOneByName(values.studyName).exec(function (err, study) {
+  //      values.study = study.id;
+  //      cb(err);
+  //    });
+  //  } else {
+  //    cb();
+  //  }
+  //}
 
 };
 

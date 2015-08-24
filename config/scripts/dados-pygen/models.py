@@ -24,20 +24,20 @@ class Study:
     self.attributes['procedure'] = fake.words()
     self.attributes['area'] = ['BOTH', 'LEFT', 'RIGHT']
     self.reb = fake.country_code() + '-' + `random.randint(100, 999)`
-    self.administrator = random.randint(config.minCoord, config.maxCoord)
-    self.pi = random.randint(config.minCoord, config.maxCoord)
+    self.administrator = random.randint(config.minCoord, config.maxCoord - 1)
+    self.pi = random.randint(config.minCoord, config.maxCoord - 1)
 
 class CollectionCentre:
   def __init__(self, id, study):
     self.id = id
     self.name = 'CC-' + `id` + '-' + study.name
     self.study = study.id
-    self.contact = random.randint(config.minCoord, config.maxCoord)
+    self.contact = random.randint(config.minCoord, config.maxCoord - 1)
 
 class UserEnrollment:
   def __init__(self, id, centreID):
     self.collectionCentre = centreID
-    self.user = random.randint(config.minCoord, config.maxCoord)
+    self.user = random.randint(config.minCoord, config.maxCoord - 1)
     self.centreAccess = random.choice(['coordinator', 'interviewer'])
 
 class SubjectEnrollment:

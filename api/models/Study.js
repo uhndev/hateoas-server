@@ -30,6 +30,7 @@
        */
       name: {
         type: 'string',
+        index: true,
         required: true,
         notEmpty: true,
         unique: true
@@ -79,7 +80,7 @@
        */
       forms: {
         collection: 'form',
-        via: 'study'
+        via: 'studies'
       },
 
       /**

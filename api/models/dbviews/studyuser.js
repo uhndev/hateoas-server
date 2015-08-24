@@ -43,6 +43,9 @@
       collectionCentre: {
         type: 'integer'
       },
+      collectionCentreName: {
+        type: 'string'
+      },
       centreAccess: {
         type: 'string'
       },

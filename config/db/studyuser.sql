@@ -19,6 +19,7 @@ CREATE OR REPLACE VIEW studyuser AS
     "user".dob,
     study.name AS "studyName",
     userenrollment."collectionCentre",
+    collectioncentre.name AS "collectionCentreName",
     userenrollment."centreAccess",
     userenrollment."owner",
     userenrollment."createdBy",

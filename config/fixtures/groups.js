@@ -10,6 +10,7 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readUserEnrollment',
         'readUser',
         'readUserOwner',
         'updateUserOwner',
@@ -98,7 +99,7 @@
           ],
           subview: [ 'overview' ]
         }
-      },
+      }
     ];
 
     return Promise.all(
