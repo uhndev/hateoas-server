@@ -6,87 +6,78 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 (function() {
-var HateoasService = require('../services/HateoasService.js');
+  var HateoasService = require('../services/HateoasService.js');
+  var _ = require('lodash');
 
-module.exports = {
-  schema: true,
-  attributes: {
+  module.exports = {
+    schema: true,
+    attributes: {
 
-    /**
-     * name
-     * @description Name of the form created by pluginEditor
-     */
-    name: {
-      type: 'string',
-      required: true
+      /**
+       * name
+       * @description Name of the form created by pluginEditor
+       */
+      name: {
+        type: 'string',
+        required: true
+      },
+
+      /**
+       * metaData
+       * @description Contains any amount of form-specific metadata the user would like to attach.
+       *              Should be in the form of key-value pairs.
+       * @type {Object}
+       */
+      metaData: {
+        type: 'json'
+      },
+
+      /**
+       * questions
+       * @description Contains array of json-object questions
+       * @type {Array}
+       */
+      questions: {
+        type: 'array'
+      },
+
+      /**
+       * studies
+       * @description Associated studies for which this form is attached to.
+       *              A study can have multiple forms attached to it
+       * @type {Array} linked study references
+       */
+      studies: {
+        collection: 'study',
+        via: 'forms'
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    /**
-     * metaData
-     * @description Contains any amount of form-specific metadata the user would like to attach.
-     *              Should be in the form of key-value pairs.
-     * @type {Object}
-     */
-    metaData: {
-      type: 'json'
-    },
+    findByStudyName: function(studyName, currUser, options, cb) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
 
-    /**
-     * questions
-     * @description Contains array of json-object questions
-     * @type {Array}
-     */
-    questions: {
-      type: 'array'
-    },
+      // get study forms
+      return Study.findOneByName(studyName).populate('forms')
+        .then(function (study) {
+          var studyFormIds = _.pluck(study.forms, 'id');
+          return Form.find(query).then(function (forms) {
+            return _.filter(forms, function (form) {
+              return _.includes(studyFormIds, form.id);
+            });
+          });
+        })
+        .then(function (filteredForms) {
+          return [false, filteredForms];
+        })
+        .catch(function (err) {
+          return [err, null];
+        });
+    }
 
-    /**
-     * studies
-     * @description Associated studies for which this form is attached to.
-     *              A study can have multiple forms attached to it
-     * @type {Array} linked study references
-     */
-    studies: {
-      collection: 'study',
-      via: 'forms'
-    },
-
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  },
-
-  findByStudyName: function(studyName, currUser, options, cb) {
-    var query = _.cloneDeep(options);
-    query.where = query.where || {};
-    delete query.where.name;
-
-    return Study.findOneByName(studyName).populate('forms')
-      .then(function (study) {
-        return [false, study.forms];
-      })
-      .catch(function (err) {
-        return [err, null];
-      });
-  }
-  //
-  ///**
-  // * beforeValidate
-  // * @description Lifecycle callback meant to handle take a studyName and replace
-  // *              it with the study ID before passing to validation.
-  // *
-  // * @param  {Object}   values  proposed form values object
-  // * @param  {Function} cb      callback function on completion
-  // */
-  //beforeValidate: function(values, cb) {
-  //  if (!values.study) {
-  //    Study.findOneByName(values.studyName).exec(function (err, study) {
-  //      values.study = study.id;
-  //      cb(err);
-  //    });
-  //  } else {
-  //    cb();
-  //  }
-  //}
-
-};
+  };
 
 }());

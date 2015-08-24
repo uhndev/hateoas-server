@@ -36,21 +36,21 @@ module.exports = function sendOK (data, options) {
       var model = models[modelName];
       return Group.findOneByName('subject').then(function (subjectGroup) {
         var promise;
+        var filterQuery = { where: {} };
+        // if provided a query, include in where clause
+        if (query.where) {
+          filterQuery.where = JSON.parse(query.where);
+        }
+
         // for models with the method findByStudyName, hateoas total should be filtered by study
         if (req.options.action === 'findbystudyname') {
           var studyName = req.param('name');
-          promise = model.findByStudyName(studyName, req.user, {}).then(function (studyItems) {
+          promise = model.findByStudyName(studyName, req.user, filterQuery).then(function (studyItems) {
             return studyItems[1].length;
           });
         }
         // otherwise, we can just return the model count total
         else {
-          var filterQuery = { where: {} };
-          // if provided a query, include in where clause
-          if (query.where) {
-            filterQuery.where = JSON.parse(query.where);
-          }
-
           if (_.has(model.attributes, 'expiredAt')) {
             filterQuery.where.expiredAt = null;
           }
