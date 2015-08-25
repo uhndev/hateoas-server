@@ -26,6 +26,9 @@
         type: 'string'
       },
       contact: {
+        type: 'integer'
+      },
+      contactName: {
         type: 'text'
       },
       toJSON: CollectionCentreModel.attributes.toJSON
