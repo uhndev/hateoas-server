@@ -55,13 +55,12 @@
             { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
             { prompt: 'Tools', icon: 'fa-cog', dropdown: [
               { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-wrench' },
-              { prompt: 'Plugin Editor', href: '/plugineditor', icon: 'fa-pencil-square-o' },
               { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
               { prompt: 'Groups', href: '/group', icon: 'fa-users'},
               { prompt: 'Access Management', href: '/access', icon: 'fa-lock'}
             ]}
           ],
-          subview: [ 'overview', 'subject', 'user', 'form', 'survey', 'collectioncentre' ]
+          subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
         }
       },
       {
@@ -73,7 +72,7 @@
             { prompt: 'Studies', href: '/study', icon: 'fa-group' },
             { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'overview', 'subject', 'user' ]
+          subview: [ 'name', 'overview', 'subject', 'user' ]
         }
       },
       {
@@ -85,7 +84,7 @@
             { prompt: 'Studies', href: '/study', icon: 'fa-group' },
             { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'overview', 'subject' ]
+          subview: [ 'name', 'overview', 'subject' ]
         }
       },
       {
@@ -97,7 +96,7 @@
             { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
             { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'overview' ]
+          subview: [ 'name', 'overview' ]
         }
       }
     ];
