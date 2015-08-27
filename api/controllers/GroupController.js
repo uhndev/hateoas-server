@@ -48,6 +48,7 @@
      */
     update: function (req, res, next) {
       var groupId = req.param('id'),
+          menu = req.param('menu'),
           roles = req.param('roles');
 
       Group.findOne(req.user.group).exec(function (err, group) {
@@ -57,8 +58,9 @@
           return Group.findOne(groupId).populate('roles').populate('users')
           .then(function (group) {
             this.group = group;
-            // roles is a list of rolename strings, so we
+            // roles is a list of rolename strings or role objects, so we
             // need to find ids to add to the groups' roles collection
+            roles = (_.all(roles, function(role) { return _.has(role, 'name'); })) ? _.pluck(roles, 'name') : roles;
             return Role.find({ name: roles });
           })
           .then(function (roles) {
@@ -66,6 +68,9 @@
             return PermissionService.revokeGroupPermissions(this.group);
           })
           .then(function (group) { // apply roles to group
+            if (menu) {
+              this.group.menu = menu;
+            }
             _.each(this.roles, function (role) {
               this.group.roles.add(role.id);
             });
