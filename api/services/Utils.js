@@ -21,7 +21,7 @@ var self = {
   /** Start of "Path" Utils **/
   "Path" : {
     getFullUrl: function getFullUrl(req) {
-      return req.protocol + '://' + req.get('host') + req.originalUrl;
+      return sails.getBaseUrl() + req.url;
     },
 
     getWhere: function getWhere(query) {

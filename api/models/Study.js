@@ -122,11 +122,27 @@
       getResponseLinks: function(id) {
         return [
           {
-            'rel': 'overview',
+            'rel': 'name',
             'prompt': this.name,
             'name': 'name',
             'href': [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+            ].join('/')
+          },
+          {
+            'rel': 'overview',
+            'prompt': 'Overview',
+            'name': 'name',
+            'href': [
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+            ].join('/')
+          },
+          {
+            'rel': 'collectioncentre',
+            'prompt': 'Collection Centres',
+            'name': 'name',
+            'href' : [
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
             ].join('/')
           },
           {
@@ -159,14 +175,6 @@
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'
-            ].join('/')
-          },
-          {
-            'rel': 'collectioncentre',
-            'prompt': 'Collection Centres',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
             ].join('/')
           }
         ]

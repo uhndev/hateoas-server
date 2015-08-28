@@ -15,7 +15,7 @@
   background: url(img/dottedLine_vert.gif) top left repeat-y;
   margin: 0;
   overflow: hidden;
-  height: 34px;  
+  height: 34px;
 }
 #subBrand_site {
   font-size: 12px;
@@ -107,6 +107,8 @@
   .navbar-default {
     background-color: @headerColour;
     border-color: @headerColour;
+    z-index: 20;
+    position: relative;
   }
 }
 .menuWrapper {
@@ -122,11 +124,11 @@
   margin-bottom: 10px;
   .navbar {
     margin-bottom: 0px;
-  } 
+  }
   .navbar-inverse {
     background-color: @submenuColour;
     border-color: @submenuColour;
-    z-index: 0;
+    z-index: 10;
     position: relative;
   }
   -moz-box-shadow: 0px 4px 7px -2px #666;
