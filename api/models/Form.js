@@ -52,6 +52,18 @@
         via: 'forms'
       },
 
+      /**
+       * versions
+       * @description Collection of versions this particular form has, in git terms, the instance
+       *              of this Form model is the HEAD revision, and the items in this collection
+       *              represent the commit history.
+       * @type {Association} 1-to-many relationship to the FormVersion model
+       */
+      versions: {
+        collection: 'formversion',
+        via: 'form'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

@@ -12,14 +12,30 @@
 
   module.exports = {
     schema: true,
+
     attributes: {
-      form: {
-        model: 'form',
+      study: {
+        model: 'study',
         required: true
       },
-      subject: {
-        // model: 'subject',
-        type: 'string',
+      formVersion: {
+        model: 'formversion',
+        required: true
+      },
+      surveyVersion: {
+        model: 'surveyversion',
+        required: true
+      },
+      subjectSchedule: {
+        model: 'subjectschedule',
+        required: true
+      },
+      subjectEnrollment: {
+        model: 'subjectenrollment',
+        required: true
+      },
+      userEnrollment: {
+        model: 'userenrollment',
         required: true
       },
       answers: {
