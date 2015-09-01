@@ -3,8 +3,8 @@
 *
 * @description Model representation of a session of a Survey.  A session denotes the abstract points in time for which
 *              data is to be collected for a subject.  A session stores this information by defining an integer
-*              timeline for which SubjectSchedules can be stamped out based on this number, namely the validFrom
-*              and validTo dates are determined based on the settings in this model.
+*              timeline for which SubjectSchedules can be stamped out based on this number, namely the availableFrom
+*              and availableTo dates are determined based on the settings in this model.
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
@@ -45,7 +45,7 @@
       /**
        * timepoint
        * @description Integer denoting the days from the subject enrolment DOE this session
-       *              should occur.  The validFrom and validTo fields in SubjectSchedule are
+       *              should occur.  The availableFrom and availableTo fields in SubjectSchedule are
        *              determined based on this number.  There are several configurations between
        *              this and the type attribute that are possible:
        *              1) scheduled with timepoint X      : repeat session every X days
@@ -59,12 +59,26 @@
       },
 
       /**
-       * window
-       * @description Days before and after the timepoint event for which data capture should be allowed.
-       *              i.e. with a timepoint of 90 days and window of 5, SubjectSchedule will be available
-       *              5 days before and 5 days after every 90 day session.
+       * availableFrom
+       * @description Days before the timepoint event for which data capture should be allowed.
+       *              i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+       *              SubjectSchedule will become available 5 days before and 2 days after every 90 day session.
+       * @type {Integer}
        */
-      window: {
+      availableFrom: {
+        type: 'integer',
+        integer: true,
+        defaultsTo: 1
+      },
+
+      /**
+       * availableFrom
+       * @description Days after the timepoint event for which data capture should be allowed.
+       *              i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+       *              SubjectSchedule will become available 5 days before and 2 days after every 90 day session.
+       * @type {Integer}
+       */
+      availableTo: {
         type: 'integer',
         integer: true,
         defaultsTo: 1
@@ -97,7 +111,7 @@
       /**
        * subjectSchedules
        * @description Collection of instantiated SubjectSchedules for each subject in respective
-       *              SubjectEnrollment.  The validFrom and validTo attributes are calculated based on
+       *              SubjectEnrollment.  The availableFrom and availableTo attributes are calculated based on
        *              the timepoint attribute in this model.
        * @type {Association} 1-to-many relationship to the SubjectSchedule model
        */

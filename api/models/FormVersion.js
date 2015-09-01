@@ -26,7 +26,7 @@
       /**
        * form
        * @description Reference to the form for which this FormVersion tracks changes for
-       * @type {Assiciation}
+       * @type {Association}
        */
       form: {
         model: 'form'
@@ -80,6 +80,17 @@
       sessions: {
         collection: 'session',
         via: 'formVersions'
+      },
+
+      /**
+       * activeOn
+       * @description Boolean date value denoting whether or not this FormVersion has had any AnswerSets filled out.
+       *              If activeOn is null, then there's no need to create a new version of a Form.
+       * @type {Date}
+       */
+      activeOn: {
+        type: 'date',
+        defaultsTo: null
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

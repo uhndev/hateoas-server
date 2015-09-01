@@ -69,13 +69,14 @@
       },
 
       /**
-       * publishedOn
+       * lastPublished
        * @description Boolean flag of null || date defining whether or not subjects have already begun
        *              participating in this Survey.  If publishedOn has a date set, this survey can only
        *              be updated by creating a new SurveyVersion and bumping up the latest version reference to match.
+       *              This date should always reflect the latest SurveyVersion's activeOn date attribute.
        * @type {Date} Date denoting the day when subjects began participating in a survey
        */
-      publishedOn: {
+      lastPublished: {
         type: 'date',
         defaultsTo: null
       },

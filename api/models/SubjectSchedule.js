@@ -16,20 +16,20 @@
     attributes: {
 
       /**
-       * validFrom
+       * availableFrom
        * @description Date denoting when this data capture event should begin to be available to the subject
        * @type {Date}
        */
-      validFrom: {
+      availableFrom: {
         type: 'date'
       },
 
       /**
-       * validTo
+       * availableTo
        * @description Date denoting when this data capture event should no longer be available to the subject
        * @type {Date}
        */
-      validTo: {
+      availableTo: {
         type: 'date'
       },
 

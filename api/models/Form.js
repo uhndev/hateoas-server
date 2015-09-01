@@ -64,6 +64,19 @@
         via: 'form'
       },
 
+      /**
+       * lastPublished
+       * @description Boolean flag of null || date defining whether or not subjects have already begun
+       *              participating in this Survey.  If publishedOn has a date set, this form can only
+       *              be updated by creating a new FormVersion and bumping up the latest version reference to match.
+       *              This date should always reflect the latest FormVersion's activeOn date attribute.
+       * @type {Date} Date denoting the day when subjects began participating in a survey
+       */
+      lastPublished: {
+        type: 'date',
+        defaultsTo: null
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

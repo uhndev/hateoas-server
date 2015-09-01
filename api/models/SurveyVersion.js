@@ -67,6 +67,18 @@
       },
 
       /**
+       * activeOn
+       * @description Boolean date value denoting whether or not this SurveyVersion has had any AnswerSets filled out.
+       *              If activeOn is null, then there's no need to create a new version of a Survey.  In that case,
+       *              we simply recreate all SubjectSchedules since no data has been captured yet.
+       * @type {Date}
+       */
+      activeOn: {
+        type: 'date',
+        defaultsTo: null
+      },
+
+      /**
        * expiredAt
        * @description Instead of strictly deleting objects from our system, we set a date such
        *              that if it is not null, we do not include this entity in our response.
