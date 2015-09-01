@@ -29,8 +29,7 @@
        */
       name: {
         type: 'string',
-        required: true,
-        unique: true
+        required: true
       },
 
       /**
@@ -94,7 +93,31 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    findByStudyName: function(studyName, currUser, options, cb) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.name;
+
+      // get study surveys
+      return Study.findOneByName(studyName).populate('surveys')
+        .then(function (study) {
+          var studySurveyIds = _.pluck(study.surveys, 'id');
+          return Survey.find(query).then(function (surveys) {
+            return _.filter(surveys, function (survey) {
+              return _.includes(studySurveyIds, survey.id);
+            });
+          });
+        })
+        .then(function (filteredSurveys) {
+          return [false, filteredSurveys];
+        })
+        .catch(function (err) {
+          return [err, null];
+        });
     }
+
   };
 
 })();

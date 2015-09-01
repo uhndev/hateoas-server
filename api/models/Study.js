@@ -84,6 +84,16 @@
       },
 
       /**
+       * surveys
+       * @description Associated list of user-created surveys
+       * @type {Array}
+       */
+      surveys: {
+        collection: 'survey',
+        via: 'study'
+      },
+
+      /**
        * administrator
        * @type {Integer}
        */
