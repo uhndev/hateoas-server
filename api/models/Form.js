@@ -52,6 +52,31 @@
         via: 'forms'
       },
 
+      /**
+       * versions
+       * @description Collection of versions this particular form has, in git terms, the instance
+       *              of this Form model is the HEAD revision, and the items in this collection
+       *              represent the commit history.
+       * @type {Association} 1-to-many relationship to the FormVersion model
+       */
+      versions: {
+        collection: 'formversion',
+        via: 'form'
+      },
+
+      /**
+       * lastPublished
+       * @description Boolean flag of null || date defining whether or not subjects have already begun
+       *              participating in this Survey.  If publishedOn has a date set, this form can only
+       *              be updated by creating a new FormVersion and bumping up the latest version reference to match.
+       *              This date should always reflect the latest FormVersion's activeOn date attribute.
+       * @type {Date} Date denoting the day when subjects began participating in a survey
+       */
+      lastPublished: {
+        type: 'date',
+        defaultsTo: null
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
