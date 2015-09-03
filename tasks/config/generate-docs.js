@@ -8,6 +8,7 @@ module.exports = function(grunt) {
       src: [
         'api/**/*.js',
         '!api/policies/*.js',
+        '!api/models/dbviews/*.js',
         '!hooks/sails-auth.js', '!hooks/sails-permissions.js',
         '!controllers/LocaleController.js', '!controllers/ModelController.js',
         '!controllers/PermissionController.js', '!controllers/RoleController.js',
@@ -33,7 +34,7 @@ module.exports = function(grunt) {
       options: {
         title: 'DADOS',
         ignore: [
-          'policies',
+          'policies', 'models/dbviews',
           'hooks/sails-auth', 'hooks/sails-permissions',
           'controllers/LocaleController', 'controllers/ModelController',
           'controllers/PermissionController', 'controllers/RoleController',

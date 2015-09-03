@@ -43,8 +43,7 @@ config/local.js
 config/scripts/**/*.pyc
 mocha.json
 assets/karma/results/**
-
-
+.vagrant/**
 
 
 ################################################

@@ -66,8 +66,6 @@
        * studyMapping
        * @description Depending on the associated study, study.attributes should define what
        *              attribute keys goes in this enrollment.studyMapping.
-       *
-       * @example
        * @type {Object}
        */
       studyMapping: {
