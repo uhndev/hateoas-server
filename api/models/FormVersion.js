@@ -83,14 +83,15 @@
       },
 
       /**
-       * activeOn
-       * @description Boolean date value denoting whether or not this FormVersion has had any AnswerSets filled out.
-       *              If activeOn is null, then there's no need to create a new version of a Form.
-       * @type {Date}
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
        */
-      activeOn: {
-        type: 'date',
-        defaultsTo: null
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

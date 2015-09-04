@@ -77,7 +77,85 @@
         defaultsTo: null
       },
 
+      /**
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
+       */
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * afterCreate
+     * @description After creating a brand new form, create initial mirrored FormVersion
+     */
+    afterCreate: function(values, cb) {
+      // stamp out initial form version
+      FormVersion.create({
+        revision: 0,
+        form: values.id,
+        name: values.name,
+        metaData: values.metaData,
+        questions: values.questions,
+        description: 'Initial commit'
+      }).exec(function (err, formVersion) {
+        cb(err);
+      });
+    },
+
+    /**
+     * afterUpdate
+     * @description After updating the head revision, depending on whether or not users have
+     *              filled out any AnswerSets, we create new FormVersions as needed.
+     */
+    afterUpdate: function(values, cb) {
+      // if lastPublished set on Form, then there are AnswerSets referring to this version
+      if (values.lastPublished !== null) {
+        // in that case, stamp out next form version and next survey version
+        FormVersion.findOne({ 
+          where: {
+            form: values.id
+          },
+          sort: 'revision DESC'
+        }).exec(function (err, latestFormVersion) {
+          if (err || !latestFormVersion) {
+            // this shouldn't really happen
+            cb(err);
+          } else {
+            // create new form version with updated revision number
+            FormVersion.findOneByForm(values.id)
+              .sort('revision DESC')
+              .then(function (latestFormVersion) {
+                var newFormVersion = { 
+                  revision: latestFormVersion.revision + 1,
+                  form: values.id
+                };
+                _.merge(newFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
+                return FormVersion.create(newFormVersion);
+              })
+              .then(function (newFormVersion) {
+                cb();
+              })
+              .catch(cb);
+          }
+        })
+      } 
+      // otherwise updates are done in place for the current head
+      else {
+        cb();
+      }
+    },
+
+    afterDestroy: function(values, cb) {
+      // set current head to last form version?
+      // not sure what should happen here yet.
     },
 
     findByStudyName: function(studyName, currUser, options, cb) {
