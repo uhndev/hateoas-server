@@ -130,7 +130,7 @@
             cb(err);
           } else {
             // create new form version with updated revision number
-            FormVersion.findOneByForm(values.id)
+            FormVersion.findOne({ form: values.id })
               .sort('revision DESC')
               .then(function (latestFormVersion) {
                 var newFormVersion = { 
@@ -156,6 +156,7 @@
     afterDestroy: function(values, cb) {
       // set current head to last form version?
       // not sure what should happen here yet.
+      cb();
     },
 
     findByStudyName: function(studyName, currUser, options, cb) {
