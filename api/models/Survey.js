@@ -139,7 +139,7 @@
           .catch(cb);
       } else {
         // if lastPublished set on Survey, then there are AnswerSets referring to this version
-        if (values.lastPublished !== null) {
+        if (values.lastPublished !== null && _.isNull(values.expiredAt)) {
           // in that case, stamp out next survey version
           SurveyVersion.findOne({
             where: {
@@ -151,7 +151,7 @@
               // this shouldn't really happen
               cb(err);
             } else {
-              // create new form version with updated revision number
+              // create new survey version with updated revision number
               SurveyVersion.findOne({ survey: values.id })
                 .sort('revision DESC')
                 .populate('sessions')

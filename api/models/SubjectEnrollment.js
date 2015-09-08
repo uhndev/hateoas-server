@@ -7,6 +7,7 @@
 */
 
 (function() {
+  var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
@@ -168,6 +169,45 @@
         }
         cb();
       });
+
+    },
+
+    /**
+     * afterCreate
+     * @description After enrolling a subject in a study, create their associated SubjectSchedules
+     *              for each Session and for each Survey in enrolled Study.  To achieve this, we
+     *              find a list of study surveys, flatten out all the Sessions for each study in survey
+     *              and create SubjectSchedules based on the Sessions.
+     */
+    afterCreate: function (values, cb) {
+      Study.findOne(values.study).populate('surveys')
+        .then(function (study) {
+          return Survey.find(_.pluck(study.surveys, 'id')).populate('sessions');
+        })
+        .then(function (surveys) {
+          return _.reduce(surveys, function (result, survey) {
+            return result.concat(survey.sessions);
+          }, []);
+        })
+        .then(function (sessions) {
+          return Promise.all(
+            _.map(sessions, function (session) {
+              var availableFrom = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
+              var availableTo = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
+              return SubjectSchedule.findOrCreate({
+                availableFrom: availableFrom.toDate(),
+                availableTo: availableTo.toDate(),
+                status: 'IN PROGRESS',
+                session: session.id,
+                subjectEnrollment: values.id
+              });
+            })
+          );
+        })
+        .then(function (createdSchedules) {
+          cb();
+        })
+        .catch(cb);
     },
 
     /**

@@ -22,6 +22,9 @@
       subjectNumber: {
         type: 'integer'
       },
+      studyId: {
+        type: 'integer'
+      },
       studyName: {
         type: 'string'
       },

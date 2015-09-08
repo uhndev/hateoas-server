@@ -6,6 +6,7 @@
 var should = require('should');
 
 describe('The Survey Model', function() {
+  var studyID;
 
   before(function (done) {
     Study.create({
@@ -53,7 +54,7 @@ describe('The Survey Model', function() {
     });
   });
 
-  describe('after the survey is created', function() {
+  describe('before subjects have been enrolled', function() {
     it('should create initial survey version after create', function (done) {
       SurveyVersion.findOne({survey: 1})
         .exec(function (err, surveyVersion) {
@@ -72,9 +73,7 @@ describe('The Survey Model', function() {
           done(err);
         });
     });
-  });
 
-  describe('after the survey is modified', function() {
     it('should update the head revision in place if no AnswerSets filled yet', function(done) {
       Survey.update({ name: 'SURVEY' }, {
         name: 'SURVEY2'
@@ -86,17 +85,103 @@ describe('The Survey Model', function() {
       });
     });
 
-    it('should update the head revision and create new SurveyVersion if AnswerSet exists', function(done) {
-      Survey.update({ name: 'SURVEY2' }, { lastPublished: new Date() })
-        .then(function (updated) {
-          return Survey.update({ name: 'SURVEY2' }, { name: 'SURVEY3' })
-            .then(function (finalSurvey) {
-              SurveyVersion.count().exec(function (err, versions) {
-                versions.should.equal(3);
-                done(err);
-              });
-            });
+    it('should not create subject schedules if no subjects enrolled yet', function(done) {
+      Survey.findOneByName('SURVEY2')
+        .populate('sessions')
+        .then(function (survey) {
+          return SubjectSchedule.count({ session:_.pluck(survey.sessions, 'id') });
+        })
+        .then(function (schedules) {
+          schedules.should.equal(0);
+          done();
         });
+    });
+
+    it('should have edited survey in place and not have created new version if not published yet', function(done) {
+      Survey.findOneByName('SURVEY2')
+        .populate('versions')
+        .exec(function (err, survey) {
+          survey.versions.length.should.equal(1);
+          done(err);
+        });
+    });
+  });
+
+  describe('after subjects have been enrolled but before being published', function() {
+    var enrollment1, enrollment2;
+    before(function (done) {
+      Study.findOneByName('STUDY')
+        .populate('collectionCentres')
+        .exec(function (err, study) {
+          SubjectEnrollment.create([
+            {
+              study: study.id,
+              status: 'ONGOING',
+              subject: globals.subjects.subjectId,
+              collectionCentre: study.collectionCentres[0],
+              doe: new Date,
+              studyMapping: {}
+            },
+            {
+              study: study.id,
+              status: 'ONGOING',
+              subject: globals.subjects.subjectId,
+              collectionCentre: study.collectionCentres[1],
+              doe: new Date,
+              studyMapping: {}
+            }
+          ]).exec(function (err, enrollments) {
+            enrollment1 = enrollments[0];
+            enrollment2 = enrollments[1];
+            done(err);
+          });
+        });
+    });
+
+    it('should update the head revision in place if no AnswerSets filled yet', function(done) {
+      Survey.update({ name: 'SURVEY2' }, {
+        name: 'SURVEY3'
+      }).exec(function (err, updatedSurvey) {
+        SurveyVersion.find({ survey: 1 }).exec(function (err, surveyVersions) {
+          surveyVersions.length.should.equal(1);
+          done(err);
+        });
+      });
+    });
+
+    it('should have created subject schedules if subjects enrolled', function(done) {
+      SubjectSchedule
+        .count({ subjectEnrollment: [enrollment1.id, enrollment2.id] })
+        .exec(function (err, schedules) {
+          schedules.should.equal(4);
+          done();
+        });
+    });
+
+    it('should update SubjectSchedules in place if not published yet', function(done) {
+      //Session.update
+    });
+  });
+
+  describe('after subjects enrolled and Survey is published', function() {
+    before(function (done) {
+      Survey.update({name: 'SURVEY3'}, {lastPublished: new Date()}).exec(function (err, survey) {
+        done(err);
+      });
+    });
+
+    it('should update the head revision and create new SurveyVersion if published', function(done) {
+      Survey.update({name: 'SURVEY3'}, {name: 'SURVEY4'})
+        .then(function (finalSurvey) {
+          SurveyVersion.count().exec(function (err, versions) {
+            versions.should.equal(3);
+            done(err);
+          });
+        });
+    });
+
+    it('should create new version if Session is edited', function(done) {
+      done();
     });
   });
 

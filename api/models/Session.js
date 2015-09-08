@@ -9,6 +9,8 @@
 */
 
 (function () {
+  var moment = require('moment');
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {
@@ -133,6 +135,104 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * afterUpdate
+     * @description After updating the head revision, depending on whether or not users have
+     *              filled out any AnswerSets, we create new SurveyVersions as needed.
+     */
+    afterUpdate: function(values, cb) {
+      if (!_.isNull(values.expiredAt)) {
+        Session.findOne(values.id)
+          .populate('subjectSchedules')
+          .then(function (session) {
+            return SubjectSchedule.update({ id: _.pluck(session.subjectSchedules, 'id') }, {
+             expiredAt: new Date
+            });
+          })
+          .then(function (schedules) {
+            cb();
+          })
+          .catch(cb);
+      } else {
+        Survey.findOne(values.survey).populate('sessions').exec(function (err, survey) {
+          // if lastPublished set on Survey, then there are AnswerSets referring to this version
+          if (survey.lastPublished !== null && _.isNull(survey.expiredAt)) {
+            // in that case, stamp out next survey version
+            SurveyVersion.findOne({
+              where: {
+                survey: values.survey
+              },
+              sort: 'revision DESC'
+            }).exec(function (err, latestSurveyVersion) {
+              if (err || !latestSurveyVersion) {
+                // this shouldn't really happen
+                cb(err);
+              } else {
+                // create new survey version with updated revision number
+                SurveyVersion.findOne({ survey: values.survey })
+                  .sort('revision DESC')
+                  .populate('sessions')
+                  .then(function (latestSurveyVersion) {
+                    var newSurveyVersion = {
+                      revision: latestSurveyVersion.revision + 1,
+                      survey: values.survey
+                    };
+                    _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy', _.pluck(survey.sessions, 'id')));
+                    return SurveyVersion.create(newSurveyVersion);
+                  })
+                  .then(function (newSurveyVersion) {
+                    cb();
+                  })
+                  .catch(cb);
+              }
+            })
+          }
+          // otherwise updates are done in place for the current head
+          else {
+            SubjectSchedule
+            cb();
+          }
+        });
+      }
+    },
+
+    /**
+     * afterCreate
+     * @description After creating a session, create SubjectSchedules iff there are subjects
+     *              enrolled in the study at the time of creation.
+     */
+    afterCreate: function (values, cb) {
+      Survey.findOne(values.survey)
+        .then(function (survey) {
+          return studysubject.find({ studyId: survey.study });
+        })
+        .then(function (subjectEnrollments) {
+          if (subjectEnrollments) {
+            return Promise.all(
+              _.map(subjectEnrollments, function (enrollment) {
+                var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+                  .subtract(values.availableFrom, 'days');
+                var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+                  .subtract(values.availableFrom, 'days');
+                return SubjectSchedule.findOrCreate({
+                  availableFrom: availableFrom.toDate(),
+                  availableTo: availableTo.toDate(),
+                  status: 'IN PROGRESS',
+                  session: values.id,
+                  subjectEnrollment: enrollment.id
+                });
+              })
+            )
+          } else {
+           return null;
+          }
+        })
+        .then(function (createdSchedules) {
+          cb();
+        })
+        .catch(cb);
     }
   };
 })();
