@@ -87,11 +87,10 @@ describe('The Survey Model', function() {
     });
 
     it('should update the head revision and create new SurveyVersion if AnswerSet exists', function(done) {
-      Survey
-        .update({ name: 'SURVEY2' }, { lastPublished: new Date() })
+      Survey.update({ name: 'SURVEY2' }, { lastPublished: new Date() })
         .then(function (updated) {
           return Survey.update({ name: 'SURVEY2' }, { name: 'SURVEY3' })
-            .then(function (finalForm) {
+            .then(function (finalSurvey) {
               SurveyVersion.count().exec(function (err, versions) {
                 versions.should.equal(3);
                 done(err);
@@ -120,5 +119,20 @@ describe('The Survey Model', function() {
           done();
         });
     });
+  });
+
+  after(function (done) {
+    Study.destroy({ name: 'STUDY' })
+      .then(function (err) {
+        return [
+          CollectionCentre.destroy({ name: ['CC1', 'CC2'] }),
+          Survey.destroy(1),
+          Form.destroy({ name: ['FORM1', 'FORM2'] }),
+          Session.destroy({id: [1, 2] })
+        ];
+      })
+      .spread(function (centres, surveys, forms, sessions) {
+        done();
+      });
   });
 });

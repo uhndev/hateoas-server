@@ -6,7 +6,7 @@
 var should = require('should');
 
 describe('The Form Model', function() {
-  
+
   before(function (done) {
     Form.create({
       name: 'TESTFORM',
@@ -18,7 +18,7 @@ describe('The Form Model', function() {
   });
 
   describe('after the form is created/modified', function() {
-    it('should create initial form version after create', function(done) {      
+    it('should create initial form version after create', function(done) {
       FormVersion.findOne({ form: 1 })
         .exec(function (err, formVersion) {
           formVersion.revision.should.equal(0);
@@ -38,8 +38,7 @@ describe('The Form Model', function() {
     });
 
     it('should update the head revision and create new FormVersion if AnswerSet exists', function(done) {
-      Form
-        .update({ name: 'TESTFORM2' }, { lastPublished: new Date() })
+      Form.update({ name: 'TESTFORM2' }, { lastPublished: new Date() })
         .then(function (updated) {
           return Form.update({ name: 'TESTFORM2' }, { name: 'TESTFORM3' })
         .then(function (finalForm) {
