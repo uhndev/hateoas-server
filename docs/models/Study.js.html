@@ -72,19 +72,29 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="../index.html">Main</a></li>
+            <li><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
             <li><a href="../controllers/AnswerSetController.js.html">controllers/AnswerSetController.js</a></li>
             <li><a href="../controllers/AuthController.js.html">controllers/AuthController.js</a></li>
             <li><a href="../controllers/CollectionCentreController.js.html">controllers/CollectionCentreController.js</a></li>
             <li><a href="../controllers/FormController.js.html">controllers/FormController.js</a></li>
             <li><a href="../controllers/GroupController.js.html">controllers/GroupController.js</a></li>
+            <li><a href="../controllers/SessionController.js.html">controllers/SessionController.js</a></li>
             <li><a href="../controllers/StudyController.js.html">controllers/StudyController.js</a></li>
             <li><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
+            <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
+            <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
+            <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
+            <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
+            <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
+            <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
+            <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
             <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
+            <li><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
             <li><a href="../models/Group.js.html">models/Group.js</a></li>
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
@@ -92,113 +102,323 @@
             <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
+            <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li class="active"><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
+            <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
+            <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
+            <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
+            <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
+            <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
+            <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
+            <li><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
             <li><a href="../services/PermissionService.js.html">services/PermissionService.js</a></li>
             <li><a href="../services/Utils.js.html">services/Utils.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#name"><i class="alert alert-success"></i><span>name</span></a>
+              </li>
+              <li><a href="#attributes"><i class="alert alert-success"></i><span>attributes</span></a>
+              </li>
+              <li><a href="#reb"><i class="alert alert-success"></i><span>reb</span></a>
+              </li>
+              <li><a href="#collectionCentres"><i class="alert alert-success"></i><span>collectionCentres</span></a>
+              </li>
+              <li><a href="#forms"><i class="alert alert-success"></i><span>forms</span></a>
+              </li>
+              <li><a href="#surveys"><i class="alert alert-success"></i><span>surveys</span></a>
+              </li>
+              <li><a href="#administrator"><i class="alert alert-success"></i><span>administrator</span></a>
+              </li>
+              <li><a href="#pi"><i class="alert alert-success"></i><span>pi</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#getResponseLinks"><i class="alert alert-info"></i><span>getResponseLinks</span></a>
+              </li>
+              <li><a href="#afterUpdate"><i class="alert alert-info"></i><span>afterUpdate</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>Study</p> <p>Model representation of a study</p></div>
+          <div class="description"><p>Study</p> <p>Model representation of a study.  The study model acts as the base
+             root model for application logic in DADOS.  That is to say, collection
+             centres must have an associated study and users must be enrolled in
+             collection centres.</p></div>
           <pre><code class="language-javascript">(function() {
 
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {
     schema: true,
-    attributes: {
-      name: {
-        type: 'string',
-        required: true,
-        notEmpty: true,
-        unique: true
-      },
-      attributes: {
-        type: 'json',
-        defaultsTo: {
-          procedure: [],
-          area: ['BOTH', 'LEFT', 'RIGHT']
-        }
-      },
-      reb: {
-        type: 'string',
-        required: true
-      },
-      // encapsulates access restrictions of coordinator/interviewer/subjects
-      collectionCentres: {
-        collection: 'collectioncentre',
-        via: 'study'
-      },
-      // oversees all collection centres as admin/PI
-      administrator: {
-        model: 'user'
-      },
-      pi: {
-        model: 'user'
-      },
 
-      getResponseLinks: function(id) {
-        return [
-          {
-            'rel': 'overview',
-            'prompt': this.name,
-            'name': 'name',
-            'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
-            ].join('/')
-          },
-          {
-            'rel': 'subject',
-            'prompt': 'Subjects',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
-            ].join('/')
-          },
-          {
-            'rel': 'user',
-            'prompt': 'Users',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
-            ].join('/')
-          },
-          {
-            'rel': 'form',
-            'prompt': 'Forms',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
-            ].join('/')
-          },
-          {
-            'rel': 'survey',
-            'prompt': 'Surveys',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'
-            ].join('/')
-          },
-          {
-            'rel': 'collectioncentre',
-            'prompt': 'Collection Centres',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
-            ].join('/')
-          }
-        ]
-      },
-      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    attributes: {</code></pre>
+          <section id="name">
+            <h1>name</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>name</span>
+            </p>
+          </section>
+          <div class="description"><p>name</p> <p>Unique name representing a study.  This is the only
+             exception in our REST routes where we use a named URL
+             slug instead of an ID.  In other words, we can reference
+             any study by /api/study/:name rather than /api/study/:id
+             like our other models.</p></div>
+          <pre><code class="language-javascript">name: {
+  type: 'string',
+  index: true,
+  required: true,
+  notEmpty: true,
+  unique: true
+},</code></pre>
+          <section id="attributes">
+            <h1>attributes</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>attributes</span>
+            </p>
+          </section>
+          <div class="description"><p>attributes</p> <p>JSON object denoting what high level data the study captures.
+             By default we have procedure and area attribute lists but they
+             can be arbitrary.  However, it must always be a flat object
+             of string keys and array values.</p></div>
+          <pre><code class="language-javascript">attributes: {
+  type: 'json',
+  defaultsTo: {}
+},</code></pre>
+          <section id="reb">
+            <h1>reb</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>reb</span>
+            </p>
+          </section>
+          <div class="description"><p>reb</p> <p>Research ethics board number.</p></div>
+          <pre><code class="language-javascript">reb: {
+  type: 'string',
+  required: true
+},</code></pre>
+          <section id="collectionCentres">
+            <h1>collectionCentres</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>collectionCentres</span>
+            </p>
+          </section>
+          <div class="description"><p>collectionCentres</p> <p>Associated list of collection centres that are registered to
+             collect data for this study.</p></div>
+          <pre><code class="language-javascript">collectionCentres: {
+  collection: 'collectioncentre',
+  via: 'study'
+},</code></pre>
+          <section id="forms">
+            <h1>forms</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>forms</span>
+            </p>
+          </section>
+          <div class="description"><p>forms</p> <p>Associated list of user-created forms that are set up as part of
+             the surveys for this study.</p></div>
+          <pre><code class="language-javascript">forms: {
+  collection: 'form',
+  via: 'studies'
+},</code></pre>
+          <section id="surveys">
+            <h1>surveys</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>surveys</span>
+            </p>
+          </section>
+          <div class="description"><p>surveys</p> <p>Associated list of user-created surveys</p></div>
+          <pre><code class="language-javascript">surveys: {
+  collection: 'survey',
+  via: 'study'
+},</code></pre>
+          <section id="administrator">
+            <h1>administrator</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>administrator</span>
+            </p>
+          </section>
+          <div class="description"><p>administrator</p> </div>
+          <pre><code class="language-javascript">administrator: {
+  model: 'user'
+},</code></pre>
+          <section id="pi">
+            <h1>pi</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>pi</span>
+            </p>
+          </section>
+          <div class="description"><p>pi</p> </div>
+          <pre><code class="language-javascript">pi: {
+  model: 'user'
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},</code></pre>
+          <section id="getResponseLinks">
+            <h1>getResponseLinks</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>getResponseLinks()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>ID</td>
+                <td><p>Study ID</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td><p>Array of response links</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>getResponseLinks</p> <p>Provides the response links array in our HATEOAS response; these links
+             should denote transitionable states that are accessible from state /api/study.</p></div>
+          <pre><code class="language-javascript">getResponseLinks: function(id) {
+  return [
+    {
+      'rel': 'name',
+      'prompt': this.name,
+      'name': 'name',
+      'href': [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+      ].join('/')
+    },
+    {
+      'rel': 'overview',
+      'prompt': 'Overview',
+      'name': 'name',
+      'href': [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+      ].join('/')
+    },
+    {
+      'rel': 'collectioncentre',
+      'prompt': 'Collection Centres',
+      'name': 'name',
+      'href' : [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
+      ].join('/')
+    },
+    {
+      'rel': 'subject',
+      'prompt': 'Subjects',
+      'name': 'name',
+      'href' : [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
+      ].join('/')
+    },
+    {
+      'rel': 'user',
+      'prompt': 'Users',
+      'name': 'name',
+      'href' : [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
+      ].join('/')
+    },
+    {
+      'rel': 'form',
+      'prompt': 'Forms',
+      'name': 'name',
+      'href' : [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
+      ].join('/')
+    },
+    {
+      'rel': 'survey',
+      'prompt': 'Surveys',
+      'name': 'name',
+      'href' : [
+        sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'
+      ].join('/')
     }
+  ]
+},
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },</code></pre>
+          <section id="afterUpdate">
+            <h1>afterUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterUpdate()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>updated</td>
+                <td>Object</td>
+                <td><p>updated study object</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>callback function on completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>afterUpdate</p> <p>Lifecycle callback meant to handle deletions in our system; if at
+             any point we set this study's expiredAt attribute, this function
+             will check and invalidate any collection centres and by extension,
+             any users/subjects still enrolled in those collection centres.</p></div>
+          <pre><code class="language-javascript">afterUpdate: function(updated, cb) {
+  if (!_.isNull(updated.expiredAt)) {
+    Study.findOne(updated.id).populate('collectionCentres')
+      .then(function (study) {
+        return CollectionCentre.update({ id: _.pluck(study.collectionCentres, 'id') }, {
+          expiredAt: new Date()
+        });
+      })
+      .then(function (collectionCentres) {
+        cb();
+      })
+      .catch(cb);
+  } else {
+    cb();
+  }
+}
 
   };
 

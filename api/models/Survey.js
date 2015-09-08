@@ -1,11 +1,11 @@
 /**
-* Survey
-* @class Survey
-* @description Model representation of a survey to be performed within a study
-*              A survey has many sessions which dictate the points in time when
+ * Survey
+ * @class Survey
+ * @description Model representation of a survey to be performed within a study
+ *              A survey has many sessions which dictate the points in time when
  *             data is to be collected from a subject.
-* @docs        http://sailsjs.org/#!documentation/models
-*/
+ * @docs        http://sailsjs.org/#!documentation/models
+ */
 (function() {
 
   var HateoasService = require('../services/HateoasService.js');
@@ -96,6 +96,87 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
+    /**
+     * afterCreate
+     * @description After creating a brand new survey, create initial mirrored SurveyVersion
+     */
+    afterCreate: function(values, cb) {
+      // stamp out initial survey version
+      SurveyVersion.create({
+        revision: 0,
+        survey: values.id,
+        name: values.name,
+        completedBy: values.completedBy,
+        sessions: _.pluck(values.sessions, 'id')
+      }).exec(function (err, surveyVersion) {
+        cb(err);
+      });
+    },
+
+    /**
+     * afterUpdate
+     * @description After updating the head revision, depending on whether or not users have
+     *              filled out any AnswerSets, we create new SurveyVersions as needed.
+     */
+    afterUpdate: function(values, cb) {
+      if (!_.isNull(values.expiredAt)) {
+        Survey.findOne(values.id)
+          .populate('versions')
+          .populate('sessions')
+          .then(function (survey) {
+            return [
+              SurveyVersion.update({ id: _.pluck(survey.versions, 'id') }, {
+                expiredAt: new Date()
+              }),
+              Session.update({ id: _.pluck(survey.sessions, 'id') }, {
+                expiredAt: new Date()
+              })
+            ];
+          })
+          .spread(function (versions, sessions) {
+            cb();
+          })
+          .catch(cb);
+      } else {
+        // if lastPublished set on Survey, then there are AnswerSets referring to this version
+        if (values.lastPublished !== null) {
+          // in that case, stamp out next survey version
+          SurveyVersion.findOne({
+            where: {
+              survey: values.id
+            },
+            sort: 'revision DESC'
+          }).exec(function (err, latestSurveyVersion) {
+            if (err || !latestSurveyVersion) {
+              // this shouldn't really happen
+              cb(err);
+            } else {
+              // create new form version with updated revision number
+              SurveyVersion.findOne({ survey: values.id })
+                .sort('revision DESC')
+                .populate('sessions')
+                .then(function (latestSurveyVersion) {
+                  var newSurveyVersion = {
+                    revision: latestSurveyVersion.revision + 1,
+                    survey: values.id
+                  };
+                  _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy', _.pluck(latestSurveyVersion.sessions, 'id')));
+                  return SurveyVersion.create(newSurveyVersion);
+                })
+                .then(function (newSurveyVersion) {
+                  cb();
+                })
+                .catch(cb);
+            }
+          })
+        }
+        // otherwise updates are done in place for the current head
+        else {
+          cb();
+        }
+      }
+    },
+
     findByStudyName: function(studyName, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
@@ -122,4 +203,3 @@
   };
 
 })();
-

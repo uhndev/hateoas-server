@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -111,7 +111,7 @@
             <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
             <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
-            <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
+            <li class="active"><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
@@ -121,23 +121,156 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#collectionCentre"><i class="alert alert-success"></i><span>collectionCentre</span></a>
+              </li>
+              <li><a href="#user"><i class="alert alert-success"></i><span>user</span></a>
+              </li>
+              <li><a href="#centreAccess"><i class="alert alert-success"></i><span>centreAccess</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#findByStudyName"><i class="alert alert-info"></i><span>findByStudyName</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>UserEnrollment</p> <p>Model representation of a user's enrollment/involvement in a collection centre</p></div>
           <pre><code class="language-javascript">(function() {
-
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var UserModel = require('./User.js');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  module.exports = {
+    schema: true,
+    attributes: {</code></pre>
+          <section id="collectionCentre">
+            <h1>collectionCentre</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>collectionCentre</span>
+            </p>
+          </section>
+          <div class="description"><p>collectionCentre</p> <p>The collection centre for which this subject is enrolled in.</p></div>
+          <pre><code class="language-javascript">collectionCentre: {
+  model: 'collectioncentre',
+  required: true
+},</code></pre>
+          <section id="user">
+            <h1>user</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>user</span>
+            </p>
+          </section>
+          <div class="description"><p>user</p> <p>Many to one association between user enrollments and users.</p></div>
+          <pre><code class="language-javascript">user: {
+  model: 'user',
+  required: true
+},</code></pre>
+          <section id="centreAccess">
+            <h1>centreAccess</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>centreAccess</span>
+            </p>
+          </section>
+          <div class="description"><p>centreAccess</p> <p>For a particular user enrollment, a user can have multiple
+             views of the data.  For example, a user can oversee a
+             collection centre as a coordinator, and can oversee another
+             collection centre as an interviewer.</p></div>
+          <pre><code class="language-javascript">centreAccess: {
+  type: 'string',
+  enum: ['coordinator', 'interviewer']
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-    connection: 'dados_audit'
+toJSON: UserModel.attributes.toJSON
+    },</code></pre>
+          <section id="findByStudyName">
+            <h1>findByStudyName</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>findByStudyName()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>studyName</td>
+                <td>String</td>
+                <td><p>Name of study to search. Passed in from UserController.</p></td>
+              </tr>
+              <tr>
+                <td>currUser</td>
+                <td>Object</td>
+                <td><p>Current user used in determining filtering options based on access</p></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td><p>Query options potentially passed from queryBuilder in frontend</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>Callback function upon completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>findByStudyName</p> <p>End function for handling /api/study/:name/user.  Should return a list
+             of users in a given study and depending on the current users' group
+             permissions, this list will be further filtered down based on whether
+             or not those users and I share common collection centres.</p></div>
+          <pre><code class="language-javascript">findByStudyName: function(studyName, currUser, options, cb) {
+  var query = _.cloneDeep(options);
+  query.where = query.where || {};
+  delete query.where.name;
+  return User.findOne(currUser.id)
+    .populate('enrollments')
+    .populate('group')
+    .then(function (user) {
+      this.user = user;
+      return studyuser.find(query).where({ studyName: studyName });
+    })
+    .then(function (studyUsers) {
+      if (this.user.group.level &gt; 1) {
+        return [false, _.filter(studyUsers, function (user) {
+          // return users whose enrollments has at least one with proposed user
+          return (_.some(_.pluck(this.user.enrollments, 'id'), function (currEnrollment) {
+            return _.includes(user.userEnrollments, currEnrollment);
+          }));
+        })];
+      } else {
+        return [false, studyUsers];
+      }
+    })
+    .catch(function (err) {
+      return [err, null];
+    });
+}
 
-  });
+  };
+
 })();</code></pre>
         </div>
       </div>

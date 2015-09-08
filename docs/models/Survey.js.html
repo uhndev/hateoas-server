@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -107,7 +107,7 @@
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
             <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
             <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
-            <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
+            <li class="active"><a href="../models/Survey.js.html">models/Survey.js</a></li>
             <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
             <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
@@ -121,23 +121,247 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#study"><i class="alert alert-success"></i><span>study</span></a>
+              </li>
+              <li><a href="#name"><i class="alert alert-success"></i><span>name</span></a>
+              </li>
+              <li><a href="#completedBy"><i class="alert alert-success"></i><span>completedBy</span></a>
+              </li>
+              <li><a href="#sessions"><i class="alert alert-success"></i><span>sessions</span></a>
+              </li>
+              <li><a href="#versions"><i class="alert alert-success"></i><span>versions</span></a>
+              </li>
+              <li><a href="#lastPublished"><i class="alert alert-success"></i><span>lastPublished</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#afterCreate"><i class="alert alert-info"></i><span>afterCreate</span></a>
+              </li>
+              <li><a href="#afterUpdate"><i class="alert alert-info"></i><span>afterUpdate</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>Survey</p> <p>Model representation of a survey to be performed within a study
+             A survey has many sessions which dictate the points in time when
+            data is to be collected from a subject.</p></div>
           <pre><code class="language-javascript">(function() {
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var HateoasService = require('../services/HateoasService.js');
+  module.exports = {
+    schema: true,
+    attributes: {</code></pre>
+          <section id="study">
+            <h1>study</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>study</span>
+            </p>
+          </section>
+          <div class="description"><p>study</p> <p>The study for which this survey captures data for.</p></div>
+          <pre><code class="language-javascript">study: {
+  model: 'study'
+},</code></pre>
+          <section id="name">
+            <h1>name</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>name</span>
+            </p>
+          </section>
+          <div class="description"><p>name</p> <p>The name of the survey, i.e. LEAP SURVEY</p></div>
+          <pre><code class="language-javascript">name: {
+  type: 'string',
+  required: true
+},</code></pre>
+          <section id="completedBy">
+            <h1>completedBy</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>completedBy</span>
+            </p>
+          </section>
+          <div class="description"><p>completedBy</p> <p>Reference for who should be filling out this survey;
+             the subject or a coordinator on their behalf.</p></div>
+          <pre><code class="language-javascript">completedBy: {
+  type: 'string',
+  enum: ['subject', 'coordinator']
+},</code></pre>
+          <section id="sessions">
+            <h1>sessions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>sessions</span>
+            </p>
+          </section>
+          <div class="description"><p>sessions</p> <p>Collection of set time intervals that define when data should be collected
+             for each subject based on their date of event.  Each session created acts as
+             a template for SubjectSchedules to be stamped out for each subject in
+             SubjectEnrollment</p></div>
+          <pre><code class="language-javascript">sessions: {
+  collection: 'session',
+  via: 'survey'
+},</code></pre>
+          <section id="versions">
+            <h1>versions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>versions</span>
+            </p>
+          </section>
+          <div class="description"><p>versions</p> <p>Collection of versions this particular survey has, in git terms, the instance
+             of this Survey model is the HEAD revision, and the items in this collection
+             represent the commit history.</p></div>
+          <pre><code class="language-javascript">versions: {
+  collection: 'surveyversion',
+  via: 'survey'
+},</code></pre>
+          <section id="lastPublished">
+            <h1>lastPublished</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>lastPublished</span>
+            </p>
+          </section>
+          <div class="description"><p>lastPublished</p> <p>Boolean flag of null || date defining whether or not subjects have already begun
+             participating in this Survey.  If publishedOn has a date set, this survey can only
+             be updated by creating a new SurveyVersion and bumping up the latest version reference to match.
+             This date should always reflect the latest SurveyVersion's activeOn date attribute.</p></div>
+          <pre><code class="language-javascript">lastPublished: {
+  type: 'date',
+  defaultsTo: null
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-  _.merge(exports, _super);
-  _.merge(exports, {
-
-    connection: 'dados_audit'
-
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },</code></pre>
+          <section id="afterCreate">
+            <h1>afterCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterCreate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterCreate</p> <p>After creating a brand new survey, create initial mirrored SurveyVersion</p></div>
+          <pre><code class="language-javascript">afterCreate: function(values, cb) {
+  // stamp out initial survey version
+  SurveyVersion.create({
+    revision: 0,
+    survey: values.id,
+    name: values.name,
+    completedBy: values.completedBy,
+    sessions: _.pluck(values.sessions, 'id')
+  }).exec(function (err, surveyVersion) {
+    cb(err);
   });
+},</code></pre>
+          <section id="afterUpdate">
+            <h1>afterUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterUpdate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterUpdate</p> <p>After updating the head revision, depending on whether or not users have
+             filled out any AnswerSets, we create new SurveyVersions as needed.</p></div>
+          <pre><code class="language-javascript">afterUpdate: function(values, cb) {
+  if (!_.isNull(values.expiredAt)) {
+    Survey.findOne(values.id)
+      .populate('versions')
+      .populate('sessions')
+      .then(function (survey) {
+        return [
+          SurveyVersion.update({ id: _.pluck(survey.versions, 'id') }, {
+            expiredAt: new Date()
+          }),
+          Session.update({ id: _.pluck(survey.sessions, 'id') }, {
+            expiredAt: new Date()
+          })
+        ];
+      })
+      .spread(function (versions, sessions) {
+        cb();
+      })
+      .catch(cb);
+  } else {
+    // if lastPublished set on Survey, then there are AnswerSets referring to this version
+    if (values.lastPublished !== null) {
+      // in that case, stamp out next survey version
+      SurveyVersion.findOne({
+        where: {
+          survey: values.id
+        },
+        sort: 'revision DESC'
+      }).exec(function (err, latestSurveyVersion) {
+        if (err || !latestSurveyVersion) {
+          // this shouldn't really happen
+          cb(err);
+        } else {
+          // create new form version with updated revision number
+          SurveyVersion.findOne({ survey: values.id })
+            .sort('revision DESC')
+            .populate('sessions')
+            .then(function (latestSurveyVersion) {
+              var newSurveyVersion = {
+                revision: latestSurveyVersion.revision + 1,
+                survey: values.id
+              };
+              _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy', _.pluck(latestSurveyVersion.sessions, 'id')));
+              return SurveyVersion.create(newSurveyVersion);
+            })
+            .then(function (newSurveyVersion) {
+              cb();
+            })
+            .catch(cb);
+        }
+      })
+    }
+    // otherwise updates are done in place for the current head
+    else {
+      cb();
+    }
+  }
+},
+
+findByStudyName: function(studyName, currUser, options, cb) {
+  var query = _.cloneDeep(options);
+  query.where = query.where || {};
+  delete query.where.name;
+
+  // get study surveys
+  return Study.findOneByName(studyName).populate('surveys')
+    .then(function (study) {
+      var studySurveyIds = _.pluck(study.surveys, 'id');
+      return Survey.find(query).then(function (surveys) {
+        return _.filter(surveys, function (survey) {
+          return _.includes(studySurveyIds, survey.id);
+        });
+      });
+    })
+    .then(function (filteredSurveys) {
+      return [false, filteredSurveys];
+    })
+    .catch(function (err) {
+      return [err, null];
+    });
+}
+
+  };
+
 })();</code></pre>
         </div>
       </div>

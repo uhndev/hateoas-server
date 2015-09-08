@@ -99,10 +99,10 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
-            <li><a href="../models/Session.js.html">models/Session.js</a></li>
+            <li class="active"><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
             <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
@@ -121,23 +121,181 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#survey"><i class="alert alert-success"></i><span>survey</span></a>
+              </li>
+              <li><a href="#surveyVersion"><i class="alert alert-success"></i><span>surveyVersion</span></a>
+              </li>
+              <li><a href="#name"><i class="alert alert-success"></i><span>name</span></a>
+              </li>
+              <li><a href="#timepoint"><i class="alert alert-success"></i><span>timepoint</span></a>
+              </li>
+              <li><a href="#availableFrom"><i class="alert alert-success"></i><span>availableFrom</span></a>
+              </li>
+              <li><a href="#availableTo"><i class="alert alert-success"></i><span>availableTo</span></a>
+              </li>
+              <li><a href="#type"><i class="alert alert-success"></i><span>type</span></a>
+              </li>
+              <li><a href="#formVersions"><i class="alert alert-success"></i><span>formVersions</span></a>
+              </li>
+              <li><a href="#subjectSchedules"><i class="alert alert-success"></i><span>subjectSchedules</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
-          <pre><code class="language-javascript">(function() {
+          <div class="description"><p>Session</p> <p>Model representation of a session of a Survey.  A session denotes the abstract points in time for which
+             data is to be collected for a subject.  A session stores this information by defining an integer
+             timeline for which SubjectSchedules can be stamped out based on this number, namely the availableFrom
+             and availableTo dates are determined based on the settings in this model.</p></div>
+          <pre><code class="language-javascript">(function () {
+  var HateoasService = require('../services/HateoasService.js');
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  module.exports = {
+    schema: true,
+    attributes: {</code></pre>
+          <section id="survey">
+            <h1>survey</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>survey</span>
+            </p>
+          </section>
+          <div class="description"><p>survey</p> <p>Reference to the head revision of the current survey</p></div>
+          <pre><code class="language-javascript">survey: {
+  model: 'survey'
+},</code></pre>
+          <section id="surveyVersion">
+            <h1>surveyVersion</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>surveyVersion</span>
+            </p>
+          </section>
+          <div class="description"><p>surveyVersion</p> <p>Reference to the version of the survey we are using for this session</p></div>
+          <pre><code class="language-javascript">surveyVersion: {
+  model: 'surveyversion'
+},</code></pre>
+          <section id="name">
+            <h1>name</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>name</span>
+            </p>
+          </section>
+          <div class="description"><p>name</p> <p>Name of the session, i.e. Baseline, 1 Month, 2 Month, etc.</p></div>
+          <pre><code class="language-javascript">name: {
+  type: 'string'
+},</code></pre>
+          <section id="timepoint">
+            <h1>timepoint</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>timepoint</span>
+            </p>
+          </section>
+          <div class="description"><p>timepoint</p> <p>Integer denoting the days from the subject enrolment DOE this session
+             should occur.  The availableFrom and availableTo fields in SubjectSchedule are
+             determined based on this number.  There are several configurations between
+             this and the type attribute that are possible:
+             1) scheduled with timepoint X      : repeat session every X days
+             2) non-scheduled with timepoint X  : enable session after X days</p></div>
+          <pre><code class="language-javascript">timepoint: {
+  type: 'integer',
+  required: true,
+  integer: true
+},</code></pre>
+          <section id="availableFrom">
+            <h1>availableFrom</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>availableFrom</span>
+            </p>
+          </section>
+          <div class="description"><p>availableFrom</p> <p>Days before the timepoint event for which data capture should be allowed.
+             i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+             SubjectSchedule will become available 5 days before and 2 days after every 90 day session.</p></div>
+          <pre><code class="language-javascript">availableFrom: {
+  type: 'integer',
+  integer: true,
+  defaultsTo: 1
+},</code></pre>
+          <section id="availableTo">
+            <h1>availableTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>availableTo</span>
+            </p>
+          </section>
+          <div class="description"><p>availableFrom</p> <p>Days after the timepoint event for which data capture should be allowed.
+             i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+             SubjectSchedule will become available 5 days before and 2 days after every 90 day session.</p></div>
+          <pre><code class="language-javascript">availableTo: {
+  type: 'integer',
+  integer: true,
+  defaultsTo: 1
+},</code></pre>
+          <section id="type">
+            <h1>type</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>type</span>
+            </p>
+          </section>
+          <div class="description"><p>type</p> <p>Type of session where scheduled means an event that should be repeated at regular
+             intervals, or non-scheduled which means a one time data capture event.</p></div>
+          <pre><code class="language-javascript">type: {
+  type: 'string',
+  enum: [
+    'scheduled',
+    'non-scheduled'
+  ]
+},</code></pre>
+          <section id="formVersions">
+            <h1>formVersions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>formVersions</span>
+            </p>
+          </section>
+          <div class="description"><p>formVersions</p> <p>Collection of forms for subject to fill out at the given session/timepoint.</p></div>
+          <pre><code class="language-javascript">formVersions: {
+  collection: 'formversion',
+  via: 'sessions'
+},</code></pre>
+          <section id="subjectSchedules">
+            <h1>subjectSchedules</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>subjectSchedules</span>
+            </p>
+          </section>
+          <div class="description"><p>subjectSchedules</p> <p>Collection of instantiated SubjectSchedules for each subject in respective
+             SubjectEnrollment.  The availableFrom and availableTo attributes are calculated based on
+             the timepoint attribute in this model.</p></div>
+          <pre><code class="language-javascript">subjectSchedules: {
+  collection: 'subjectschedule',
+  via: 'session'
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-  _.merge(exports, _super);
-  _.merge(exports, {
-
-    connection: 'dados_audit'
-
-  });
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
+  };
 })();</code></pre>
         </div>
       </div>

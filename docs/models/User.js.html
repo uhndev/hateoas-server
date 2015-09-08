@@ -72,19 +72,29 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="../index.html">Main</a></li>
+            <li><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
             <li><a href="../controllers/AnswerSetController.js.html">controllers/AnswerSetController.js</a></li>
             <li><a href="../controllers/AuthController.js.html">controllers/AuthController.js</a></li>
             <li><a href="../controllers/CollectionCentreController.js.html">controllers/CollectionCentreController.js</a></li>
             <li><a href="../controllers/FormController.js.html">controllers/FormController.js</a></li>
             <li><a href="../controllers/GroupController.js.html">controllers/GroupController.js</a></li>
+            <li><a href="../controllers/SessionController.js.html">controllers/SessionController.js</a></li>
             <li><a href="../controllers/StudyController.js.html">controllers/StudyController.js</a></li>
             <li><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
+            <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
+            <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
+            <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
+            <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
+            <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
+            <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
+            <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
             <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
+            <li><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
             <li><a href="../models/Group.js.html">models/Group.js</a></li>
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
@@ -92,17 +102,47 @@
             <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
+            <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
+            <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
+            <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
+            <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
+            <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
+            <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li class="active"><a href="../models/User.js.html">models/User.js</a></li>
+            <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
+            <li><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
             <li><a href="../services/PermissionService.js.html">services/PermissionService.js</a></li>
             <li><a href="../services/Utils.js.html">services/Utils.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#firstname"><i class="alert alert-success"></i><span>firstname</span></a>
+              </li>
+              <li><a href="#lastname"><i class="alert alert-success"></i><span>lastname</span></a>
+              </li>
+              <li><a href="#prefix"><i class="alert alert-success"></i><span>prefix</span></a>
+              </li>
+              <li><a href="#gender"><i class="alert alert-success"></i><span>gender</span></a>
+              </li>
+              <li><a href="#dob"><i class="alert alert-success"></i><span>dob</span></a>
+              </li>
+              <li><a href="#group"><i class="alert alert-success"></i><span>group</span></a>
+              </li>
+              <li><a href="#owner"><i class="alert alert-success"></i><span>owner</span></a>
+              </li>
+              <li><a href="#enrollments"><i class="alert alert-success"></i><span>enrollments</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#afterCreate"><i class="alert alert-success"></i><span>afterCreate</span></a>
+              </li>
+              <li><a href="#afterUpdate"><i class="alert alert-info"></i><span>afterUpdate</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -111,126 +151,200 @@
           <pre><code class="language-javascript">(function() {
 
   var _ = require('lodash');
+  var _super = require('sails-permissions/api/models/User');
   var HateoasService = require('../services/HateoasService.js');
 
-  _.merge(exports, require('sails-permissions/api/models/User'));
+  _.merge(exports, _super);
   _.merge(exports, {
 
     schema: true,
-    attributes: {
-      firstname: {
-        type: 'string'
-      },
-      lastname: {
-        type: 'string'
-      },
-      prefix: {
-        type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
-      },
-      gender: {
-        type: 'string',
-        enum: ['Male', 'Female']
-      },
-      dob: {
-        type: 'date'
-      },
-      // group of roles this user has
-      group: {
-        model: 'group'
-      },
-      // coordinator/interviewer CCs I am overseeing
-      collectionCentres: {
-        collection: 'collectioncentre',
-        via: 'coordinators'
-      },
-      // key value pair of ccID: user.role to denote a user's access
-      centreAccess: {
-        type: 'json',
-        defaultsTo: {}
-      },
-      toJSON: HateoasService.makeToHATEOAS.call(this, module)
-    },
+    attributes: {</code></pre>
+          <section id="firstname">
+            <h1>firstname</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>firstname</span>
+            </p>
+          </section>
+          <div class="description"><p>firstname</p> <p>A user's first name.</p></div>
+          <pre><code class="language-javascript">firstname: {
+  type: 'string'
+},</code></pre>
+          <section id="lastname">
+            <h1>lastname</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>lastname</span>
+            </p>
+          </section>
+          <div class="description"><p>lastname</p> <p>A user's last name.</p></div>
+          <pre><code class="language-javascript">lastname: {
+  type: 'string'
+},</code></pre>
+          <section id="prefix">
+            <h1>prefix</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>prefix</span>
+            </p>
+          </section>
+          <div class="description"><p>prefix</p> <p>Enumeration of allowable prefixes for a user.</p></div>
+          <pre><code class="language-javascript">prefix: {
+  type: 'string',
+  enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+},</code></pre>
+          <section id="gender">
+            <h1>gender</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>gender</span>
+            </p>
+          </section>
+          <div class="description"><p>gender</p> <p>Enumeration of allowable genders of a user.</p></div>
+          <pre><code class="language-javascript">gender: {
+  type: 'string',
+  enum: ['Male', 'Female']
+},</code></pre>
+          <section id="dob">
+            <h1>dob</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>dob</span>
+            </p>
+          </section>
+          <div class="description"><p>dob</p> <p>A user's date of birth.</p></div>
+          <pre><code class="language-javascript">dob: {
+  type: 'date'
+},</code></pre>
+          <section id="group">
+            <h1>group</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>group</span>
+            </p>
+          </section>
+          <div class="description"><p>group</p> <p>A user's registered group which in turn dictates what actions
+             this user is permitted to perform.</p></div>
+          <pre><code class="language-javascript">group: {
+  model: 'group'
+},</code></pre>
+          <section id="owner">
+            <h1>owner</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>owner</span>
+            </p>
+          </section>
+          <div class="description"><p>owner</p> <p>Reference to who the 'owner' of this is - is used in the owner
+             relation in roles like readUserOwner/updateUserOwner which are
+             roles specifically for handling read/updates of themselves.</p></div>
+          <pre><code class="language-javascript">owner: {
+  model: 'user'
+},</code></pre>
+          <section id="enrollments">
+            <h1>enrollments</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>enrollments</span>
+            </p>
+          </section>
+          <div class="description"><p>enrollments</p> <p>Linked associations of UserEnrollments denoting which collection
+             centres/studies this user is overseeing as a coordinator/interviewer.</p></div>
+          <pre><code class="language-javascript">enrollments: {
+  collection: 'userenrollment',
+  via: 'user'
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-    afterCreate: [
-      function setOwner (user, next) {
-        sails.log('User.afterCreate.setOwner', user);
-        User
-          .update({ id: user.id }, { owner: user.id })
-          .then(function (user) {
-            next();
-          })
-          .catch(next);
-      },
-      function grantRoles(user, cb) {
-        if (_.has(user, 'group')) {
-          PermissionService.setUserRoles(user).then(function (user) {
-            cb();
-          }).catch(function (err) {
-            cb(err);
-          });
-        } else {
-          cb();
-        }
-      }
-    ],
-
-    findByStudyName: function(studyName, currUser, options, cb) {
-      Group.findOne(currUser.group).then(function (group) {
-        this.group = group;
-        return Study.findOneByName(studyName).populate('collectionCentres');
-      })
-      .then(function (study) {
-        if (!study) {
-          err = new Error();
-          err.message = require('util')
-             .format('Study with name %s does not exist.', studyName);
-          err.status = 404;
-          return cb(err);
-        }
-
-        this.study = study;
-        return study.collectionCentres;
-      })
-      .then(function (centres) {
-        if (this.group.level &gt; 1) {
-          return User.findOne(currUser.id).populate('collectionCentres')
-            .then(function (user) {
-              return _.filter(user.collectionCentres, function (centre) {
-                return _.includes(_.pluck(centres, 'id'), centre.id );
-              });
-            });
-        }
-        return centres;
-      })
-      .then(function (centres) {
-        // return all coordinators from each study's collection centres
-        return Promise.all(
-          _.map(centres, function (centre) {
-            return CollectionCentre.findOne(centre.id).populate('coordinators');
-          })
-        );
-      })
-      .then(function (centres) {
-        // return list of users that have access to collection centres
-        var centreIds = _.pluck(centres, 'id');
-        var users = _.uniq(_.flattenDeep(_.pluck(centres, 'coordinators')), 'id');
-
-        _.each(centreIds, function (centreId) {
-          _.each(users, function (user) {
-            if (!user.accessCollectionCentre) {
-              user.accessCollectionCentre = [];
-            }
-            if (user.centreAccess[centreId]) {
-              user.accessRole = user.centreAccess[centreId];
-              user.accessCollectionCentre.push(centreId);
-            }
-          });
-        });
-        return cb(false, users);
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },</code></pre>
+          <section id="afterCreate">
+            <h1>afterCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>afterCreate</span>
+            </p>
+          </section>
+          <div class="description"><p>afterCreate</p> <p>Lifecycle function that fires after a User is created.  We
+             do two things whenever we create a user:  set the owner attribute
+             to themselves so that we can allow users to read/update themselves
+             only.  Afterwards, we grant them roles based on the group we
+             assigned them during their creation.</p></div>
+          <pre><code class="language-javascript">afterCreate: [
+  function setOwner (user, cb) {
+    sails.log('User.afterCreate.setOwner', user);
+    User
+      .update({ id: user.id }, { owner: user.id })
+      .then(function (user) {
+        cb();
       })
       .catch(cb);
-    }
+  }
+],</code></pre>
+          <section id="afterUpdate">
+            <h1>afterUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterUpdate()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>updated</td>
+                <td>Object</td>
+                <td><p>updated user object</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>callback function on completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>afterUpdate</p> <p>Lifecycle callback meant to handle deletions in our system; if at
+             any point we set this user's expiredAt attribute, this function
+             will check and invalidate any active user/subject enrollments.</p></div>
+          <pre><code class="language-javascript">afterUpdate: function(updated, cb) {
+  if (!_.isNull(updated.expiredAt)) {
+    UserEnrollment.update({ user: updated.id }, { expiredAt: new Date() })
+    .then(function (userEnrollments) {
+      // find if deleted user was a subject
+      return Subject.find({ user: updated.id });
+    })
+    .then(function (subjects) {
+      // update any possible subject enrollments
+      return SubjectEnrollment.update({ subject: _.pluck(subjects, 'id') }, { expiredAt: new Date() });
+    })
+    .then(function (subjectEnrollments) {
+      cb();
+    })
+    .catch(cb);
+  } else {
+    cb();
+  }
+}
+
   });
 })();</code></pre>
         </div>

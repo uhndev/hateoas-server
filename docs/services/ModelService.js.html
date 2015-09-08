@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -115,29 +115,71 @@
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
-            <li><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
+            <li class="active"><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
             <li><a href="../services/PermissionService.js.html">services/PermissionService.js</a></li>
             <li><a href="../services/Utils.js.html">services/Utils.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#filterExpiredRecords"><i class="alert alert-info"></i><span>filterExpiredRecords</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
-          <pre><code class="language-javascript">(function() {
+          <div class="description"><p>Helper service for returning filtered data based on enrollments</p> <p>Helper service for returning filtered data based on enrollments</p></div>
+          <pre><code class="language-javascript">(function () {
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var _super = require('sails-permissions/api/services/ModelService');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  function ModelService() {
+  }
 
-    connection: 'dados_audit'
+  ModelService.prototype = Object.create(_super);
+  _.extend(ModelService.prototype, {</code></pre>
+          <section id="filterExpiredRecords">
+            <h1>filterExpiredRecords</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>filterExpiredRecords()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><p>Model name</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Promise</td>
+                <td><p>Chainable model promise after find operation</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>filterExpiredRecords</p> <p>Performs find operation with filter for non-expired records.
+             Will only perform filter if model definition includes an
+             `expiredAt` attribute.</p></div>
+          <pre><code class="language-javascript">filterExpiredRecords: function (model) {
+  if (_.has(sails.models[model].definition, 'expiredAt')) {
+    return sails.models[model].find({expiredAt: null});
+  } else {
+    return sails.models[model].find();
+  }
+}
 
   });
+
+  module.exports = new ModelService();
 })();</code></pre>
         </div>
       </div>

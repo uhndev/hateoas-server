@@ -99,14 +99,14 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
             <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
-            <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
+            <li class="active"><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
             <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
             <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
             <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
@@ -121,23 +121,124 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#availableFrom"><i class="alert alert-success"></i><span>availableFrom</span></a>
+              </li>
+              <li><a href="#availableTo"><i class="alert alert-success"></i><span>availableTo</span></a>
+              </li>
+              <li><a href="#subjectEnrollment"><i class="alert alert-success"></i><span>subjectEnrollment</span></a>
+              </li>
+              <li><a href="#answerSets"><i class="alert alert-success"></i><span>answerSets</span></a>
+              </li>
+              <li><a href="#status"><i class="alert alert-success"></i><span>status</span></a>
+              </li>
+              <li><a href="#session"><i class="alert alert-success"></i><span>session</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
-          <pre><code class="language-javascript">(function() {
+          <div class="description"><p>SubjectSchedule</p> <p>Model representation of an scheduled data capture event for a subject in an study's survey.
+             SubjectSchedules are instantiated based on Sessions in a Survey and are done so based on
+            individual SubjectEnrollments.  i.e. Every subject will end up having their own unique SubjectSchedules.</p></div>
+          <pre><code class="language-javascript">(function () {
+  var HateoasService = require('../services/HateoasService.js');
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  module.exports = {
+    schema: true,
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+    attributes: {</code></pre>
+          <section id="availableFrom">
+            <h1>availableFrom</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>availableFrom</span>
+            </p>
+          </section>
+          <div class="description"><p>availableFrom</p> <p>Date denoting when this data capture event should begin to be available to the subject</p></div>
+          <pre><code class="language-javascript">availableFrom: {
+  type: 'date'
+},</code></pre>
+          <section id="availableTo">
+            <h1>availableTo</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>availableTo</span>
+            </p>
+          </section>
+          <div class="description"><p>availableTo</p> <p>Date denoting when this data capture event should no longer be available to the subject</p></div>
+          <pre><code class="language-javascript">availableTo: {
+  type: 'date'
+},</code></pre>
+          <section id="subjectEnrollment">
+            <h1>subjectEnrollment</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>subjectEnrollment</span>
+            </p>
+          </section>
+          <div class="description"><p>subjectEnrollment</p> <p>Reference to the subject enrollment data and in effect, the subject for their schedule</p></div>
+          <pre><code class="language-javascript">subjectEnrollment: {
+  model: 'subjectenrollment'
+},</code></pre>
+          <section id="answerSets">
+            <h1>answerSets</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>answerSets</span>
+            </p>
+          </section>
+          <div class="description"><p>answerSets</p> <p>Collection of collected answersets during this SubjectSchedule</p></div>
+          <pre><code class="language-javascript">answerSets: {
+  collection: 'answerset',
+  via: 'subjectSchedule'
+},</code></pre>
+          <section id="status">
+            <h1>status</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>status</span>
+            </p>
+          </section>
+          <div class="description"><p>status</p> <p>Status flag denoting whether or not all data required has been captured for this SubjectSchedule</p></div>
+          <pre><code class="language-javascript">status: {
+  type: 'string',
+  enum: [
+    'IN PROGRESS',
+    'COMPLETE'
+  ]
+},</code></pre>
+          <section id="session">
+            <h1>session</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>session</span>
+            </p>
+          </section>
+          <div class="description"><p>session</p> <p>Reference to session template that instantiated this SubjectSchedule</p></div>
+          <pre><code class="language-javascript">session: {
+  model: 'session'
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-    connection: 'dados_audit'
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
+  };
 
-  });
 })();</code></pre>
         </div>
       </div>

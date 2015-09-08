@@ -81,7 +81,7 @@
             <li><a href="../controllers/SessionController.js.html">controllers/SessionController.js</a></li>
             <li><a href="../controllers/StudyController.js.html">controllers/StudyController.js</a></li>
             <li><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
-            <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
+            <li class="active"><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
             <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
             <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
             <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -125,19 +125,133 @@
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>SubjectEnrollmentController</p> <p>Server-side logic for managing Subject Enrollments</p></div>
           <pre><code class="language-javascript">(function() {
-
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var Promise = require('q');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  module.exports = {
 
-    connection: 'dados_audit'
+    findOne: function(req, res, next) {
+      studysubject.findOne({ id: req.param('id') }).exec(function (err, enrollment) {
+        res.ok(enrollment);
+      });
+    },
 
-  });
+    create: function(req, res, next) {
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
+      ), _.identity);
+
+      var enrollmentOptions = _.pick(_.pick(req.body,
+        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+      ), _.identity);
+
+      Group.findOne({ name: 'subject' })
+      .then(function (subjectGroup) { // create user with subject group
+        options.group = subjectGroup.id;
+        return User.create(options).then(function (user) {
+          return PermissionService.setUserRoles(user);
+        });
+      })
+      .then(function (user) { // create passport
+        this.user = user;
+        return Passport.create({
+          protocol : 'local',
+          password : req.param('password'),
+          user     : user.id
+        }).catch(function (err) {
+          this.user.destroy(function (destroyErr) {
+            throw err;
+          });
+        });
+      })
+      .then(function (passport) { // create subject
+        this.passport = passport;
+        return Subject.create({
+          user: this.user.id
+        }).catch(function (err) {
+          this.passport.destroy(function (destroyErr) {
+            this.user.destroy(function (destroyErr) {
+              throw err;
+            });
+          });
+        });
+      })
+      .then(function (subject) { // find collection centre's study
+        this.subject = subject;
+        return Study.findOne(enrollmentOptions.study).then(function (study) {
+          return study.attributes;
+        });
+      })
+      .then(function (attributes) { // verify studyMapping is valid
+        var studyMapping = enrollmentOptions.studyMapping;
+        // only if both empty we allow or if status is set to REGISTERED
+        if (_.isEmpty(attributes) &amp;&amp; _.isEmpty(studyMapping) ||
+            _.isEmpty(studyMapping) &amp;&amp; enrollmentOptions.status == 'REGISTERED') {
+          return true;
+        } else {
+          // verify keys of study attributes mirror keys of studyMapping
+          var valid = _.isEmpty(_.xor(_.keys(attributes), _.keys(studyMapping)));
+          // verify value of studyMapping corresponds directly to one of the values in study attributes
+          _.forIn(attributes, function (value, key) {
+            valid = valid &amp;&amp; _.includes(value, studyMapping[key]);
+          });
+          return valid;
+        }
+      })
+      .then(function (validMapping) { // if valid, create subject enrollment
+        if (validMapping) {
+          enrollmentOptions.subject = this.subject.id;
+          return SubjectEnrollment.create(enrollmentOptions);
+        } else {
+          return null;
+        }
+      })
+      .then(function (enrollment) {
+        if (enrollment) {
+          res.ok(enrollment);
+        } else {
+          this.subject.destroy(function (destroyErr) {
+            this.passport.destroy(function (destroyErr) {
+              this.user.destroy(function (destroyErr) {
+                res.badRequest({
+                  title: 'Subject Enrollment Error',
+                  code: 400,
+                  message: 'Study mapping is invalid, please ensure options match study attributes.'
+                });
+              });
+            });
+          });
+        }
+      })
+      .catch(function (err) {
+        res.serverError({
+          title: 'Subject Enrollment Error',
+          code: err.status || 500,
+          message: err.details || 'Error creating subject'
+        });
+      });
+    },
+
+    findByStudyName: function(req, res) {
+      var studyName = req.param('name');
+      SubjectEnrollment.findByStudyName(studyName, req.user,
+        { where: actionUtil.parseCriteria(req),
+          limit: actionUtil.parseLimit(req),
+          skip: actionUtil.parseSkip(req),
+          sort: actionUtil.parseSort(req) }
+      ).then(function(subjects) {
+        var err = subjects[0];
+        var subjectItems = subjects[1];
+        if (err) res.serverError(err);
+        res.ok(subjectItems);
+      });
+    }
+
+  };
+
 })();</code></pre>
         </div>
       </div>
