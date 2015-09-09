@@ -143,35 +143,39 @@
      *              filled out any AnswerSets, we create new SurveyVersions as needed.
      */
     afterUpdate: function(values, cb) {
+      // begin promise chain with populated Session
+      var promise = Session.findOne(values.id).populate('subjectSchedules')
+        .then(function (session) {
+          this.session = session;
+          return session;
+        });
+
+      // if expiring a Session, expire all associated SubjectSchedules
       if (!_.isNull(values.expiredAt)) {
-        Session.findOne(values.id)
-          .populate('subjectSchedules')
-          .then(function (session) {
-            return SubjectSchedule.update({ id: _.pluck(session.subjectSchedules, 'id') }, {
-             expiredAt: new Date
-            });
-          })
-          .then(function (schedules) {
-            cb();
-          })
-          .catch(cb);
+        promise.then(function (session) {
+          return SubjectSchedule.update({ id: _.pluck(session.subjectSchedules, 'id') }, {
+           expiredAt: new Date
+          });
+        })
+        .then(function (schedules) {
+          cb();
+        })
+        .catch(cb);
       } else {
         Survey.findOne(values.survey).populate('sessions').exec(function (err, survey) {
           // if lastPublished set on Survey, then there are AnswerSets referring to this version
           if (survey.lastPublished !== null && _.isNull(survey.expiredAt)) {
             // in that case, stamp out next survey version
-            SurveyVersion.findOne({
-              where: {
-                survey: values.survey
-              },
-              sort: 'revision DESC'
-            }).exec(function (err, latestSurveyVersion) {
-              if (err || !latestSurveyVersion) {
-                // this shouldn't really happen
-                cb(err);
-              } else {
+            promise
+              .then(function (session) {
+                return SurveyVersion.findOne({
+                  where: { survey: values.survey },
+                  sort: 'revision DESC'
+                });
+              })
+              .then(function (latestSurveyVersion) {
                 // create new survey version with updated revision number
-                SurveyVersion.findOne({ survey: values.survey })
+                return SurveyVersion.findOne({ survey: values.survey })
                   .sort('revision DESC')
                   .populate('sessions')
                   .then(function (latestSurveyVersion) {
@@ -181,19 +185,61 @@
                     };
                     _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy', _.pluck(survey.sessions, 'id')));
                     return SurveyVersion.create(newSurveyVersion);
+                  });
+              });
+          }
+          /**
+           * otherwise updates are done in place for the current head
+           * since its not published yet, we have two more scenarios:
+           * 1) no subjects enrolled yet = do nothing
+           * 2) subject already enrolled = create if not exist, update if exist
+           */
+          promise
+            .then(function () {
+              return Survey.findOne(values.survey);
+            })
+            .then(function (survey) {
+              return studysubject.find({ studyId: survey.study });
+            })
+            .then(function (subjectEnrollments) {
+              // scenario 1; no subjects enrolled yet so do nothing
+              if (!subjectEnrollments) {
+                cb();
+              }
+              // scenario 2; subjects enrolled, create or update SubjectSchedules
+              else {
+                return Promise.all(
+                  _.map(subjectEnrollments, function (enrollment) {
+                    var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+                      .subtract(values.availableFrom, 'days');
+                    var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+                      .add(values.availableTo, 'days');
+
+                    // create subjectSchedules if not exist
+                    if (!this.session.subjectSchedules) {
+                      return SubjectSchedule.create({
+                        availableFrom: availableFrom.toDate(),
+                        availableTo: availableTo.toDate(),
+                        status: 'IN PROGRESS',
+                        session: values.id,
+                        subjectEnrollment: enrollment.id
+                      });
+                    }
+                    // update existing subjectSchedules
+                    else {
+                      return SubjectSchedule.update({session: values.id, subjectEnrollment: enrollment.id}, {
+                        availableFrom: availableFrom.toDate(),
+                        availableTo: availableTo.toDate()
+                      });
+                    }
                   })
-                  .then(function (newSurveyVersion) {
-                    cb();
-                  })
-                  .catch(cb);
+                );
               }
             })
-          }
-          // otherwise updates are done in place for the current head
-          else {
-            SubjectSchedule
-            cb();
-          }
+            .then(function (schedules) {
+              cb();
+            })
+            .catch(cb);
         });
       }
     },
@@ -215,7 +261,7 @@
                 var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
                   .subtract(values.availableFrom, 'days');
                 var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
-                  .subtract(values.availableFrom, 'days');
+                  .add(values.availableTo, 'days');
                 return SubjectSchedule.findOrCreate({
                   availableFrom: availableFrom.toDate(),
                   availableTo: availableTo.toDate(),

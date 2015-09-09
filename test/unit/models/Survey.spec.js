@@ -4,6 +4,7 @@
  */
 
 var should = require('should');
+var moment = require('moment');
 
 describe('The Survey Model', function() {
   var studyID;
@@ -24,11 +25,9 @@ describe('The Survey Model', function() {
       Survey.create({
         study: study.id,
         name: 'SURVEY',
-        completedBy: 'subject'
-      }).exec(function (err, survey) {
-        Session.create([
+        completedBy: 'subject',
+        sessions: [
           {
-            survey: survey.id,
             surveyVersion: 1,
             name: 'Baseline',
             timepoint: 0,
@@ -38,7 +37,6 @@ describe('The Survey Model', function() {
             formVersions: [1, 2]
           },
           {
-            survey: survey.id,
             surveyVersion: 1,
             name: '90 Day',
             timepoint: 90,
@@ -47,9 +45,9 @@ describe('The Survey Model', function() {
             type: 'scheduled',
             formVersions: [1, 2]
           }
-        ]).exec(function (err, session) {
-          done(err);
-        });
+        ]
+      }).exec(function (err, survey) {
+        done(err);
       });
     });
   });
@@ -151,15 +149,31 @@ describe('The Survey Model', function() {
 
     it('should have created subject schedules if subjects enrolled', function(done) {
       SubjectSchedule
-        .count({ subjectEnrollment: [enrollment1.id, enrollment2.id] })
+        .find({ subjectEnrollment: [enrollment1.id, enrollment2.id] })
         .exec(function (err, schedules) {
-          schedules.should.equal(4);
+          schedules.length.should.equal(4);
           done();
         });
     });
 
-    it('should update SubjectSchedules in place if not published yet', function(done) {
-      //Session.update
+    it('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function(done) {
+      Session.update({ id: 1 }, { availableFrom: 10, availableTo: 10 })
+        .then(function (updatedSession) {
+          _.first(updatedSession).surveyVersion.should.equal(1);
+          return Session.findOne(1).populate('subjectSchedules');
+        })
+        .then(function (session) {
+          this.session = session;
+          return SubjectSchedule.findOne(_.first(session.subjectSchedules).id).populate('subjectEnrollment');
+        })
+        .then(function (schedule) {
+          var correctFrom = moment(schedule.subjectEnrollment.doe).subtract(10, 'days').toDate();
+          var correctTo = moment(schedule.subjectEnrollment.doe).add(10, 'days').toDate();
+          schedule.availableFrom.should.eql(correctFrom);
+          schedule.availableTo.should.eql(correctTo);
+          done();
+        })
+        .catch(done);
     });
   });
 
