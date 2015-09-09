@@ -49,7 +49,7 @@
        *              for each subject based on their date of event.  Each session created acts as
        *              a template for SubjectSchedules to be stamped out for each subject in
        *              SubjectEnrollment
-       * @type: {Association} 1-to-many relationship to the Session model
+       * @type {Association} 1-to-many relationship to the Session model
        */
       sessions: {
         collection: 'session',
@@ -141,34 +141,22 @@
         // if lastPublished set on Survey, then there are AnswerSets referring to this version
         if (values.lastPublished !== null && _.isNull(values.expiredAt)) {
           // in that case, stamp out next survey version
-          SurveyVersion.findOne({
-            where: {
-              survey: values.id
-            },
-            sort: 'revision DESC'
-          }).exec(function (err, latestSurveyVersion) {
-            if (err || !latestSurveyVersion) {
-              // this shouldn't really happen
-              cb(err);
-            } else {
-              // create new survey version with updated revision number
-              SurveyVersion.findOne({ survey: values.id })
-                .sort('revision DESC')
-                .populate('sessions')
-                .then(function (latestSurveyVersion) {
-                  var newSurveyVersion = {
-                    revision: latestSurveyVersion.revision + 1,
-                    survey: values.id
-                  };
-                  _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy', _.pluck(latestSurveyVersion.sessions, 'id')));
-                  return SurveyVersion.create(newSurveyVersion);
-                })
-                .then(function (newSurveyVersion) {
-                  cb();
-                })
-                .catch(cb);
-            }
-          })
+          // create new survey version with updated revision number
+          SurveyVersion.find({ survey: values.id })
+            .sort('revision DESC')
+            .populate('sessions')
+            .then(function (latestSurveyVersions) {
+              var newSurveyVersion = {
+                revision: _.first(latestSurveyVersions).revision + 1,
+                survey: values.id
+              };
+              _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy', _.pluck(_.first(latestSurveyVersions).sessions, 'id')));
+              return SurveyVersion.create(newSurveyVersion);
+            })
+            .then(function (newSurveyVersion) {
+              cb();
+            })
+            .catch(cb);
         }
         // otherwise updates are done in place for the current head
         else {

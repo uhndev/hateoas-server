@@ -10,46 +10,51 @@ describe('The Survey Model', function() {
   var studyID;
 
   before(function (done) {
-    Study.create({
-      name: 'STUDY',
-      attributes: {},
-      reb: '123',
-      collectionCentres: [
-        { name: 'CC1' }, { name: 'CC2' }
-      ],
-      forms: [
-        { name: 'FORM1', metaData: {}, questions: [] },
-        { name: 'FORM2', metaData: {}, questions: [] }
-      ]
-    }).exec(function (err, study) {
-      Survey.create({
-        study: study.id,
-        name: 'SURVEY',
-        completedBy: 'subject',
-        sessions: [
-          {
-            surveyVersion: 1,
-            name: 'Baseline',
-            timepoint: 0,
-            availableFrom: 5,
-            availableTo: 2,
-            type: 'scheduled',
-            formVersions: [1, 2]
-          },
-          {
-            surveyVersion: 1,
-            name: '90 Day',
-            timepoint: 90,
-            availableFrom: 5,
-            availableTo: 2,
-            type: 'scheduled',
-            formVersions: [1, 2]
-          }
+    Study
+      .create({
+        name: 'STUDY',
+        attributes: {},
+        reb: '123',
+        collectionCentres: [
+          { name: 'CC1' }, { name: 'CC2' }
+        ],
+        forms: [
+          { name: 'FORM1', metaData: {}, questions: [] },
+          { name: 'FORM2', metaData: {}, questions: [] }
         ]
-      }).exec(function (err, survey) {
-        done(err);
+      })
+      .then(function (study) {
+        return Study.findOne(study.id).populate('forms');
+      })
+      .then(function (study) {
+        Survey.create({
+          study: study.id,
+          name: 'SURVEY',
+          completedBy: 'subject',
+          sessions: [
+            {
+              surveyVersion: 1,
+              name: 'Baseline',
+              timepoint: 0,
+              availableFrom: 5,
+              availableTo: 2,
+              type: 'scheduled',
+              formVersions: _.pluck(study.forms, 'id')
+            },
+            {
+              surveyVersion: 1,
+              name: '90 Day',
+              timepoint: 90,
+              availableFrom: 5,
+              availableTo: 2,
+              type: 'scheduled',
+              formVersions: _.pluck(study.forms, 'id')
+            }
+          ]
+        }).exec(function (err, survey) {
+          done(err);
+        });
       });
-    });
   });
 
   describe('before subjects have been enrolled', function() {
@@ -194,9 +199,42 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should create new version if Session is edited', function(done) {
+    it('should stay on same version if Session is edited', function(done) {
+      // TODO
+      Session.update({ id: 1 }, { availableFrom: 5, availableTo: 5 })
+        .then(function (updatedSession) {
+          _.first(updatedSession).surveyVersion.should.equal(1);
+          return Session.findOne(1).populate('subjectSchedules');
+        })
+        .then(function (session) {
+          this.session = session;
+          return SubjectSchedule.findOne(_.first(session.subjectSchedules).id).populate('subjectEnrollment');
+        })
+        .then(function (schedule) {
+          var correctFrom = moment(schedule.subjectEnrollment.doe).subtract(5, 'days').toDate();
+          var correctTo = moment(schedule.subjectEnrollment.doe).add(5, 'days').toDate();
+          schedule.availableFrom.should.eql(correctFrom);
+          schedule.availableTo.should.eql(correctTo);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should create a new SurveyVersion if adding a Session to Survey', function(done) {
+      // TODO
       done();
     });
+
+    it('should create a new SurveyVersion if removing a Session from a Survey', function(done) {
+      // TODO
+      done();
+    });
+
+    it('should create a new SurveyVersion if Form was edited', function(done) {
+      // TODO
+      done();
+    });
+
   });
 
   describe('after the survey is expired', function() {
@@ -220,18 +258,4 @@ describe('The Survey Model', function() {
     });
   });
 
-  after(function (done) {
-    Study.destroy({ name: 'STUDY' })
-      .then(function (err) {
-        return [
-          CollectionCentre.destroy({ name: ['CC1', 'CC2'] }),
-          Survey.destroy(1),
-          Form.destroy({ name: ['FORM1', 'FORM2'] }),
-          Session.destroy({id: [1, 2] })
-        ];
-      })
-      .spread(function (centres, surveys, forms, sessions) {
-        done();
-      });
-  });
 });
