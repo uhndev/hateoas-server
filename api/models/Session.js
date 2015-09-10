@@ -162,99 +162,135 @@
         })
         .catch(cb);
       } else {
-        Survey.findOne(values.survey).populate('sessions').exec(function (err, survey) {
-          // if lastPublished set on Survey, then there are AnswerSets referring to this version
-          if (survey.lastPublished !== null && _.isNull(survey.expiredAt)) {
-            // in that case, stamp out next survey version
-            promise
-              .then(function (session) {
-                return SurveyVersion.findOne({
-                  where: { survey: values.survey },
-                  sort: 'revision DESC'
-                });
-              })
-              .then(function (latestSurveyVersion) {
-                // create new survey version with updated revision number
-                return SurveyVersion.findOne({ survey: values.survey })
-                  .sort('revision DESC')
-                  .populate('sessions')
-                  .then(function (latestSurveyVersion) {
-                    var newSurveyVersion = {
-                      revision: latestSurveyVersion.revision + 1,
-                      survey: values.survey
-                    };
-                    _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy', _.pluck(survey.sessions, 'id')));
-                    return SurveyVersion.create(newSurveyVersion);
-                  });
-              });
-          }
-          /**
-           * otherwise updates are done in place for the current head
-           * since its not published yet, we have two more scenarios:
-           * 1) no subjects enrolled yet = do nothing
-           * 2) subject already enrolled = create if not exist, update if exist
-           */
-          promise
-            .then(function () {
-              return Survey.findOne(values.survey);
-            })
-            .then(function (survey) {
-              return studysubject.find({ studyId: survey.study });
-            })
-            .then(function (subjectEnrollments) {
-              // scenario 1; no subjects enrolled yet so do nothing
-              if (!subjectEnrollments) {
-                cb();
-              }
-              // scenario 2; subjects enrolled, create or update SubjectSchedules
-              else {
-                return Promise.all(
-                  _.map(subjectEnrollments, function (enrollment) {
-                    var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
-                      .subtract(values.availableFrom, 'days');
-                    var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
-                      .add(values.availableTo, 'days');
+        promise
+          .then(function (session) {
+            if (_.isNull(values.survey)) {
+              return SurveyVersion.findOne(values.surveyVersion)
+                .populate('survey')
+                .then(function (surveyVersion) {
+                  return surveyVersion.survey;
+                })
+                .then(function (survey) {
+                  return Survey.findOne(survey.id).populate('sessions');
+                })
+                .catch(cb);
+            } else {
+              return Survey.findOne(values.survey).populate('sessions');
+            }
+          })
+          .then(function (survey) {
+            this.currentSurvey = survey;
+            // if lastPublished set on Survey, then there are AnswerSets referring to this version
+            if (survey.lastPublished !== null && _.isNull(survey.expiredAt)) {
+              // in that case, stamp out next survey version
+              // create new survey version with updated revision number
+              return SurveyVersion.find({ survey: survey.id })
+                .sort('revision DESC')
+                .then(function (latestSurveyVersions) {
+                  // create new SurveyVersion iff we've added or removed a session
+                  if (survey.sessions.length !== _.first(latestSurveyVersions).sessions.length) {
+                    console.log(survey.sessions.length + ' vs ' + _.first(latestSurveyVersions).sessions.length);
 
-                    // create subjectSchedules if not exist
-                    if (!this.session.subjectSchedules) {
-                      return SubjectSchedule.create({
-                        availableFrom: availableFrom.toDate(),
-                        availableTo: availableTo.toDate(),
-                        status: 'IN PROGRESS',
-                        session: values.id,
-                        subjectEnrollment: enrollment.id
-                      });
-                    }
-                    // update existing subjectSchedules
-                    else {
-                      return SubjectSchedule.update({session: values.id, subjectEnrollment: enrollment.id}, {
-                        availableFrom: availableFrom.toDate(),
-                        availableTo: availableTo.toDate()
-                      });
-                    }
-                  })
-                );
-              }
-            })
-            .then(function (schedules) {
-              cb();
-            })
-            .catch(cb);
-        });
+                    var newSurveyVersion = {
+                      revision: _.first(latestSurveyVersions).revision + 1,
+                      survey: values.survey,
+                      sessions: _.pluck(survey.sessions, 'id')
+                    };
+                    _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy'));
+                    console.log('creating survey version in Session afterUpdate');
+                    //return null;
+                    return SurveyVersion.create(newSurveyVersion);
+                  }
+                  return null;
+                });
+            }
+          })
+          .then(function () {
+            /**
+             * otherwise updates are done in place for the current head but
+             * since its not published yet, we have two more scenarios:
+             * 1) no subjects enrolled yet = do nothing
+             * 2) subject already enrolled = create if not exist, update if exist
+             */
+            return studysubject.find({studyId: this.currentSurvey.study});
+          })
+          .then(function (subjectEnrollments) {
+            // scenario 1; no subjects enrolled yet so do nothing
+            if (!subjectEnrollments) {
+              return null;
+            }
+            // scenario 2; subjects enrolled, create or update SubjectSchedules
+            else {
+              return Promise.all(
+                _.map(subjectEnrollments, function (enrollment) {
+                  var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+                    .subtract(values.availableFrom, 'days');
+                  var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+                    .add(values.availableTo, 'days');
+
+                  // create subjectSchedules if not exist
+                  if (!this.session.subjectSchedules) {
+                    return SubjectSchedule.create({
+                      availableFrom: availableFrom.toDate(),
+                      availableTo: availableTo.toDate(),
+                      status: 'IN PROGRESS',
+                      session: values.id,
+                      subjectEnrollment: enrollment.id
+                    });
+                  }
+                  // update existing subjectSchedules
+                  else {
+                    return SubjectSchedule.update({session: values.id, subjectEnrollment: enrollment.id}, {
+                      availableFrom: availableFrom.toDate(),
+                      availableTo: availableTo.toDate()
+                    });
+                  }
+                })
+              );
+            }
+          })
+          .then(function (schedules) {
+            cb();
+          })
+          .catch(cb);
       }
     },
 
     /**
      * afterCreate
      * @description After creating a session, create SubjectSchedules iff there are subjects
-     *              enrolled in the study at the time of creation.
+     *              enrolled in the study at the time of creation.  We create a new SurveyVersion
+     *              iff the current Survey is published.
      */
     afterCreate: function (values, cb) {
       Survey.findOne(values.survey)
+        .populate('sessions')
         .then(function (survey) {
-          return studysubject.find({ studyId: survey.study });
+          this.currentSurvey = survey;
+          return SurveyVersion.find({ survey: values.survey })
+            .sort('revision DESC');
+        })
+        .then(function (latestSurveyVersions) {
+          if (this.currentSurvey.lastPublished !== null && _.isNull(this.currentSurvey.expiredAt)) {
+            // create new SurveyVersion since we added a Session to a published Survey
+            var newSurveyVersion = {
+              revision: _.first(latestSurveyVersions).revision + 1,
+              survey: values.survey,
+              sessions: _.pluck(this.currentSurvey.sessions, 'id')
+            };
+            _.merge(newSurveyVersion, _.pick(this.currentSurvey, 'name', 'completedBy'));
+            console.log('creating survey version in Session afterCreate');
+            return SurveyVersion.create(newSurveyVersion);
+          } else {
+            return null;
+          }
+        })
+        .then(function (newSurveyVersion) {
+          // find subject enrollments for study
+          return studysubject.find({studyId: this.currentSurvey.study});
         })
         .then(function (subjectEnrollments) {
+          // if subjects are enrolled already, create SubjectSchedules for them
           if (subjectEnrollments) {
             return Promise.all(
               _.map(subjectEnrollments, function (enrollment) {
@@ -272,7 +308,7 @@
               })
             )
           } else {
-           return null;
+            return null;
           }
         })
         .then(function (createdSchedules) {

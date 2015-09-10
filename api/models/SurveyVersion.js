@@ -59,11 +59,10 @@
        *              for each subject based on their date of event.  Each session created acts as
        *              a template for SubjectSchedules to be stamped out for each subject in
        *              SubjectEnrollment
-       * @type: {Association} 1-to-many relationship to the Session model
+       * @type: {Array} Data dump of sessions in survey at time of version creation.
        */
       sessions: {
-        collection: 'session',
-        via: 'surveyVersion'
+        type: 'array'
       },
 
       /**

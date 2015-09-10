@@ -6,7 +6,7 @@
  *             data is to be collected from a subject.
  * @docs        http://sailsjs.org/#!documentation/models
  */
-(function() {
+(function () {
 
   var HateoasService = require('../services/HateoasService.js');
   module.exports = {
@@ -100,7 +100,7 @@
      * afterCreate
      * @description After creating a brand new survey, create initial mirrored SurveyVersion
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function (values, cb) {
       // stamp out initial survey version
       SurveyVersion.create({
         revision: 0,
@@ -118,54 +118,65 @@
      * @description After updating the head revision, depending on whether or not users have
      *              filled out any AnswerSets, we create new SurveyVersions as needed.
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function (values, cb) {
+      console.log('survey is afterUpdating');
+      var promise = Survey.findOne(values.id)
+        .populate('versions')
+        .populate('sessions');
+
       if (!_.isNull(values.expiredAt)) {
-        Survey.findOne(values.id)
-          .populate('versions')
-          .populate('sessions')
-          .then(function (survey) {
-            return [
-              SurveyVersion.update({ id: _.pluck(survey.versions, 'id') }, {
-                expiredAt: new Date()
-              }),
-              Session.update({ id: _.pluck(survey.sessions, 'id') }, {
-                expiredAt: new Date()
-              })
-            ];
-          })
+        promise.then(function (survey) {
+          return [
+            SurveyVersion.update({id: _.pluck(survey.versions, 'id')}, {
+              expiredAt: new Date()
+            }),
+            Session.update({id: _.pluck(survey.sessions, 'id')}, {
+              expiredAt: new Date()
+            })
+          ];
+        })
           .spread(function (versions, sessions) {
             cb();
           })
           .catch(cb);
       } else {
-        // if lastPublished set on Survey, then there are AnswerSets referring to this version
-        if (values.lastPublished !== null && _.isNull(values.expiredAt)) {
-          // in that case, stamp out next survey version
-          // create new survey version with updated revision number
-          SurveyVersion.find({ survey: values.id })
-            .sort('revision DESC')
-            .populate('sessions')
-            .then(function (latestSurveyVersions) {
-              var newSurveyVersion = {
-                revision: _.first(latestSurveyVersions).revision + 1,
-                survey: values.id
-              };
-              _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy', _.pluck(_.first(latestSurveyVersions).sessions, 'id')));
-              return SurveyVersion.create(newSurveyVersion);
-            })
-            .then(function (newSurveyVersion) {
-              cb();
-            })
-            .catch(cb);
-        }
-        // otherwise updates are done in place for the current head
-        else {
-          cb();
-        }
+        promise.then(function (survey) {
+          // if lastPublished set on Survey, then there are AnswerSets referring to this version
+          if (!_.isNull(survey.lastPublished) && _.isNull(survey.expiredAt)) {
+            // in that case, stamp out next survey version
+            // create new survey version with updated revision number
+            SurveyVersion.find({survey: values.id})
+              .sort('revision DESC')
+              .then(function (latestSurveyVersions) {
+                var latestVersion = _.first(latestSurveyVersions);
+                console.log(latestVersion.sessions);
+                console.log(survey.sessions.length);
+                if (survey.sessions.length !== latestVersion.sessions.length) {
+                  var newSurveyVersion = {
+                    revision: _.first(latestSurveyVersions).revision + 1,
+                    survey: values.id,
+                    sessions: _.pluck(survey.sessions, 'id')
+                  };
+                  _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy'));
+                  console.log('creating survey version in Survey');
+                  return SurveyVersion.create(newSurveyVersion);
+                }
+                return null;
+              })
+              .then(function (newSurveyVersion) {
+                cb();
+              })
+              .catch(cb);
+          }
+          // otherwise updates are done in place for the current head
+          else {
+            cb();
+          }
+        });
       }
     },
 
-    findByStudyName: function(studyName, currUser, options, cb) {
+    findByStudyName: function (studyName, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;

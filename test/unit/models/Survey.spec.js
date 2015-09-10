@@ -81,10 +81,16 @@ describe('The Survey Model', function() {
       Survey.update({ name: 'SURVEY' }, {
         name: 'SURVEY2'
       }).exec(function (err, updatedSurvey) {
-        SurveyVersion.find({ survey: 1 }).exec(function (err, surveyVersions) {
-          surveyVersions.length.should.equal(1);
-          done(err);
-        });
+        Survey.findOne({ name: 'SURVEY2' })
+          .populate('sessions')
+          .exec(function (err, survey) {
+            survey.sessions[0].surveyVersion.should.equal(1);
+            survey.sessions[1].surveyVersion.should.equal(1);
+            SurveyVersion.find({ survey: 1 }).exec(function (err, surveyVersions) {
+              surveyVersions.length.should.equal(1);
+              done(err);
+            });
+          });
       });
     });
 
@@ -165,7 +171,10 @@ describe('The Survey Model', function() {
       Session.update({ id: 1 }, { availableFrom: 10, availableTo: 10 })
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
-          return Session.findOne(1).populate('subjectSchedules');
+          return SurveyVersion.count().then(function (versions) {
+            versions.should.equal(1);
+            return Session.findOne(1).populate('subjectSchedules');
+          });
         })
         .then(function (session) {
           this.session = session;
@@ -193,14 +202,13 @@ describe('The Survey Model', function() {
       Survey.update({name: 'SURVEY3'}, {name: 'SURVEY4'})
         .then(function (finalSurvey) {
           SurveyVersion.count().exec(function (err, versions) {
-            versions.should.equal(3);
+            versions.should.equal(2);
             done(err);
           });
         });
     });
 
-    it('should stay on same version if Session is edited', function(done) {
-      // TODO
+    it('should create a new SurveyVersion if Session is edited', function(done) {
       Session.update({ id: 1 }, { availableFrom: 5, availableTo: 5 })
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
@@ -221,41 +229,82 @@ describe('The Survey Model', function() {
     });
 
     it('should create a new SurveyVersion if adding a Session to Survey', function(done) {
-      // TODO
-      done();
+      Survey.findOne({name: 'SURVEY4'})
+        .populate('sessions')
+        .exec(function (err, survey) {
+          Session.create({
+            survey: survey.id,
+            surveyVersion: 1,
+            name: 'Future',
+            timepoint: 300,
+            availableFrom: 6,
+            availableTo: 6,
+            type: 'non-scheduled'
+          }).exec(function (err, session) {
+            SurveyVersion.count().exec(function (err, versions) {
+              versions.should.equal(3);
+              done(err);
+            });
+          });
+        });
     });
 
     it('should create a new SurveyVersion if removing a Session from a Survey', function(done) {
-      // TODO
-      done();
-    });
-
-    it('should create a new SurveyVersion if Form was edited', function(done) {
-      // TODO
-      done();
-    });
-
-  });
-
-  describe('after the survey is expired', function() {
-    it('should set expiredAt all associated Sessions, SurveyVersions, and SubjectSchedules', function (done) {
-      Survey.update({ id: 1 }, { expiredAt: new Date() })
+      Survey.findOne({name: 'SURVEY4'})
+        .populate('sessions')
         .then(function (survey) {
-          return [
-            SurveyVersion.find(),
-            Session.find(),
-            SubjectSchedule.find()
-          ];
+          var removeSession = _.find(survey.sessions, {name: 'Future'}).id;
+          survey.sessions.remove(removeSession);
+          return survey.save();
         })
-        .spread(function (versions, sessions, schedules) {
-          _.each([versions, sessions, schedules], function (entity) {
-            _.each(entity, function (item) {
-              item.expiredAt.should.not.equal(null);
-            });
+        .then(function (survey) {
+          SurveyVersion.count().exec(function (err, versions) {
+            versions.should.equal(4);
+            done(err);
           });
-          done();
         });
     });
+
+    it('should not create a new SurveyVersion if Form was edited', function(done) {
+      // TODO
+      done();
+    });
+
+    it('should create a new SurveyVersion if a formVersion is added to a Session', function(done) {
+      // TODO
+      done();
+    });
+
+    it('should not allow user to remove formVersion from Session if already published', function(done) {
+      // TODO
+      done();
+    });
+
+    //it('should set expiredAt all associated Sessions, SurveyVersions, and SubjectSchedules', function (done) {
+    //  Survey.update({ id: 1 }, { expiredAt: new Date() })
+    //    .exec(function (err, survey) {
+    //      SurveyVersion.find()
+    //        .then(function (surveys) {
+    //          _.all(surveys, function (survey) {
+    //            return _.isNull(survey.expiredAt);
+    //          }).should.equal(false);
+    //          return Session.find();
+    //        })
+    //        .then(function (sessions) {
+    //          _.all(sessions, function (session) {
+    //            return _.isNull(session.expiredAt);
+    //          }).should.equal(false);
+    //          return SubjectSchedule.find();
+    //        })
+    //        .then(function (schedules) {
+    //          _.all(schedules, function (schedule) {
+    //            return _.isNull(schedule.expiredAt);
+    //          }).should.equal(false);
+    //          done();
+    //        });
+    //    });
+    //});
+
   });
 
 });
