@@ -141,6 +141,10 @@
               </li>
               <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
               </li>
+              <li><a href="#afterUpdate"><i class="alert alert-info"></i><span>afterUpdate</span></a>
+              </li>
+              <li><a href="#afterCreate"><i class="alert alert-info"></i><span>afterCreate</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -150,6 +154,8 @@
              timeline for which SubjectSchedules can be stamped out based on this number, namely the availableFrom
              and availableTo dates are determined based on the settings in this model.</p></div>
           <pre><code class="language-javascript">(function () {
+  var moment = require('moment');
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {
@@ -294,7 +300,186 @@
 },
 
 toJSON: HateoasService.makeToHATEOAS.call(this, module)
-    }
+    },</code></pre>
+          <section id="afterUpdate">
+            <h1>afterUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterUpdate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterUpdate</p> <p>After updating the head revision, depending on whether or not users have
+             filled out any AnswerSets, we create new SurveyVersions as needed.</p></div>
+          <pre><code class="language-javascript">afterUpdate: function(values, cb) {
+  // begin promise chain with populated Session
+  var promise = Session.findOne(values.id).populate('subjectSchedules')
+    .then(function (session) {
+      this.session = session;
+      return session;
+    });
+
+  // if expiring a Session, expire all associated SubjectSchedules
+  if (!_.isNull(values.expiredAt)) {
+    promise.then(function (session) {
+      return SubjectSchedule.update({ id: _.pluck(session.subjectSchedules, 'id') }, {
+       expiredAt: new Date
+      });
+    })
+    .then(function (schedules) {
+      cb();
+    })
+    .catch(cb);
+  } else {
+    promise
+      .then(function (session) {
+        if (_.isNull(values.survey)) {
+          return SurveyVersion.findOne(values.surveyVersion)
+            .populate('survey')
+            .then(function (surveyVersion) {
+              return surveyVersion.survey;
+            })
+            .then(function (survey) {
+              return Survey.findOne(survey.id).populate('sessions');
+            })
+            .catch(cb);
+        } else {
+          return Survey.findOne(values.survey).populate('sessions');
+        }
+      })
+      .then(function (survey) {
+        this.currentSurvey = survey;
+        // if lastPublished set on Survey, then there are AnswerSets referring to this version
+        if (survey.lastPublished !== null &amp;&amp; _.isNull(survey.expiredAt)) {
+          // in that case, stamp out next survey version
+          // create new survey version with updated revision number
+          return SurveyVersion.find({ survey: survey.id })
+            .sort('revision DESC')
+            .then(function (latestSurveyVersions) {
+              // create new SurveyVersion iff we've added or removed a session
+              var currentSessions = _.pluck(survey.sessions, 'id');
+              var previousSessions = _.first(latestSurveyVersions).sessions;
+              if (_.difference(currentSessions, previousSessions).length &gt; 0) {
+                var newSurveyVersion = {
+                  revision: _.first(latestSurveyVersions).revision + 1,
+                  survey: values.survey,
+                  sessions: _.pluck(survey.sessions, 'id')
+                };
+                _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy'));
+                //return null;
+                return SurveyVersion.create(newSurveyVersion);
+              }
+              return null;
+            });
+        }
+      })
+      .then(function () {</code></pre>
+          <div class="description"><p>otherwise updates are done in place for the current head but<br />since its not published yet, we have two more scenarios:<br />1) no subjects enrolled yet = do nothing<br />2) subject already enrolled = create if not exist, update if exist</p> </div>
+          <pre><code class="language-javascript">return studysubject.find({studyId: this.currentSurvey.study});
+          })
+          .then(function (subjectEnrollments) {
+// scenario 1; no subjects enrolled yet so do nothing
+if (!subjectEnrollments) {
+  return null;
+}
+// scenario 2; subjects enrolled, create or update SubjectSchedules
+else {
+  return Promise.all(
+    _.map(subjectEnrollments, function (enrollment) {
+      var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+        .subtract(values.availableFrom, 'days');
+      var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+        .add(values.availableTo, 'days');
+
+      // create subjectSchedules if not exist
+      if (!this.session.subjectSchedules) {
+        return SubjectSchedule.create({
+          availableFrom: availableFrom.toDate(),
+          availableTo: availableTo.toDate(),
+          status: 'IN PROGRESS',
+          session: values.id,
+          subjectEnrollment: enrollment.id
+        });
+      }
+      // update existing subjectSchedules
+      else {
+        return SubjectSchedule.update({session: values.id, subjectEnrollment: enrollment.id}, {
+          availableFrom: availableFrom.toDate(),
+          availableTo: availableTo.toDate()
+        });
+      }
+    })
+  );
+}
+          })
+          .then(function (schedules) {
+cb();
+          })
+          .catch(cb);
+      }
+    },</code></pre>
+          <section id="afterCreate">
+            <h1>afterCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterCreate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterCreate</p> <p>After creating a session, create SubjectSchedules iff there are subjects
+             enrolled in the study at the time of creation.  We create a new SurveyVersion
+             iff the current Survey is published.</p></div>
+          <pre><code class="language-javascript">afterCreate: function (values, cb) {
+  Survey.findOne(values.survey)
+    .populate('sessions')
+    .then(function (survey) {
+      this.currentSurvey = survey;
+      return SurveyVersion.find({ survey: values.survey })
+        .sort('revision DESC');
+    })
+    .then(function (latestSurveyVersions) {
+      if (this.currentSurvey.lastPublished !== null &amp;&amp; _.isNull(this.currentSurvey.expiredAt)) {
+        // create new SurveyVersion since we added a Session to a published Survey
+        var newSurveyVersion = {
+          revision: _.first(latestSurveyVersions).revision + 1,
+          survey: values.survey,
+          sessions: _.pluck(this.currentSurvey.sessions, 'id')
+        };
+        _.merge(newSurveyVersion, _.pick(this.currentSurvey, 'name', 'completedBy'));
+        return SurveyVersion.create(newSurveyVersion);
+      } else {
+        return null;
+      }
+    })
+    .then(function (newSurveyVersion) {
+      // find subject enrollments for study
+      return studysubject.find({studyId: this.currentSurvey.study});
+    })
+    .then(function (subjectEnrollments) {
+      // if subjects are enrolled already, create SubjectSchedules for them
+      if (subjectEnrollments) {
+        return Promise.all(
+          _.map(subjectEnrollments, function (enrollment) {
+            var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+              .subtract(values.availableFrom, 'days');
+            var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+              .add(values.availableTo, 'days');
+            return SubjectSchedule.findOrCreate({
+              availableFrom: availableFrom.toDate(),
+              availableTo: availableTo.toDate(),
+              status: 'IN PROGRESS',
+              session: values.id,
+              subjectEnrollment: enrollment.id
+            });
+          })
+        )
+      } else {
+        return null;
+      }
+    })
+    .then(function (createdSchedules) {
+      cb();
+    })
+    .catch(cb);
+}
   };
 })();</code></pre>
         </div>

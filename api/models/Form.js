@@ -158,12 +158,6 @@
       }
     },
 
-    afterDestroy: function(values, cb) {
-      // set current head to last form version?
-      // not sure what should happen here yet.
-      cb();
-    },
-
     findByStudyName: function(studyName, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};

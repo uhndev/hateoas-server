@@ -135,6 +135,8 @@
               </li>
               <li><a href="#sessions"><i class="alert alert-success"></i><span>sessions</span></a>
               </li>
+              <li><a href="#activeOn"><i class="alert alert-success"></i><span>activeOn</span></a>
+              </li>
               <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
               </li>
             </ul>
@@ -232,6 +234,19 @@
           <pre><code class="language-javascript">sessions: {
   collection: 'session',
   via: 'formVersions'
+},</code></pre>
+          <section id="activeOn">
+            <h1>activeOn</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>activeOn</span>
+            </p>
+          </section>
+          <div class="description"><p>activeOn</p> <p>Boolean date value denoting whether or not this FormVersion has had any AnswerSets filled out.
+             If activeOn is null, then there's no need to create a new version of a Form.</p></div>
+          <pre><code class="language-javascript">activeOn: {
+  type: 'date',
+  defaultsTo: null
 },</code></pre>
           <section id="expiredAt">
             <h1>expiredAt</h1>
