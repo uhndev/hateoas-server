@@ -188,16 +188,15 @@
                 .sort('revision DESC')
                 .then(function (latestSurveyVersions) {
                   // create new SurveyVersion iff we've added or removed a session
-                  if (survey.sessions.length !== _.first(latestSurveyVersions).sessions.length) {
-                    console.log(survey.sessions.length + ' vs ' + _.first(latestSurveyVersions).sessions.length);
-
+                  var currentSessions = _.pluck(survey.sessions, 'id');
+                  var previousSessions = _.first(latestSurveyVersions).sessions;
+                  if (_.difference(currentSessions, previousSessions).length > 0) {
                     var newSurveyVersion = {
                       revision: _.first(latestSurveyVersions).revision + 1,
                       survey: values.survey,
                       sessions: _.pluck(survey.sessions, 'id')
                     };
                     _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy'));
-                    console.log('creating survey version in Session afterUpdate');
                     //return null;
                     return SurveyVersion.create(newSurveyVersion);
                   }
@@ -279,7 +278,6 @@
               sessions: _.pluck(this.currentSurvey.sessions, 'id')
             };
             _.merge(newSurveyVersion, _.pick(this.currentSurvey, 'name', 'completedBy'));
-            console.log('creating survey version in Session afterCreate');
             return SurveyVersion.create(newSurveyVersion);
           } else {
             return null;

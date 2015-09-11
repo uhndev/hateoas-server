@@ -119,7 +119,6 @@
      *              filled out any AnswerSets, we create new SurveyVersions as needed.
      */
     afterUpdate: function (values, cb) {
-      console.log('survey is afterUpdating');
       var promise = Survey.findOne(values.id)
         .populate('versions')
         .populate('sessions');
@@ -148,17 +147,15 @@
             SurveyVersion.find({survey: values.id})
               .sort('revision DESC')
               .then(function (latestSurveyVersions) {
-                var latestVersion = _.first(latestSurveyVersions);
-                console.log(latestVersion.sessions);
-                console.log(survey.sessions.length);
-                if (survey.sessions.length !== latestVersion.sessions.length) {
+                var currentSessions = _.pluck(survey.sessions, 'id');
+                var previousSessions = _.first(latestSurveyVersions).sessions;
+                if (_.difference(currentSessions, previousSessions).length > 0) {
                   var newSurveyVersion = {
                     revision: _.first(latestSurveyVersions).revision + 1,
                     survey: values.id,
                     sessions: _.pluck(survey.sessions, 'id')
                   };
                   _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy'));
-                  console.log('creating survey version in Survey');
                   return SurveyVersion.create(newSurveyVersion);
                 }
                 return null;

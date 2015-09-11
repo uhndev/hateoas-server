@@ -194,7 +194,7 @@
             _.map(sessions, function (session) {
               var availableFrom = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
               var availableTo = moment(values.doe).add(session.timepoint, 'days').add(session.availableTo, 'days');
-              return SubjectSchedule.findOrCreate({
+              return SubjectSchedule.create({
                 availableFrom: availableFrom.toDate(),
                 availableTo: availableTo.toDate(),
                 status: 'IN PROGRESS',
