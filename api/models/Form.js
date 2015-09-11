@@ -106,10 +106,7 @@
         questions: values.questions,
         description: 'Initial commit'
       }).exec(function (err, formVersion) {
-        Form.update({ id: values.id }, { latestVersion: formVersion.id })
-          .exec(function (err, form) {
-            cb(err);
-          });
+        cb(err);
       });
     },
 
