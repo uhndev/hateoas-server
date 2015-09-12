@@ -161,7 +161,9 @@
           cb();
         })
         .catch(cb);
-      } else {
+      }
+      // otherwise, we perform logic for editing of Surveys and Sessions
+      else {
         promise
           .then(function (session) {
             if (_.isNull(values.survey)) {

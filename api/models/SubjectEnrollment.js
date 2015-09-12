@@ -185,6 +185,7 @@
           return Survey.find(_.pluck(study.surveys, 'id')).populate('sessions');
         })
         .then(function (surveys) {
+          // flattens out sessions by foldr-ing over sessions
           return _.reduce(surveys, function (result, survey) {
             return result.concat(survey.sessions);
           }, []);

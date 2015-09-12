@@ -58,8 +58,11 @@
        * @description Collection of set time intervals that define when data should be collected
        *              for each subject based on their date of event.  Each session created acts as
        *              a template for SubjectSchedules to be stamped out for each subject in
-       *              SubjectEnrollment
-       * @type: {Array} Data dump of sessions in survey at time of version creation.
+       *              SubjectEnrollment.  We do a data dump because if it were a two way association
+       *              to the Session model, we would lose the version tracking capabilities in Session
+       *              whenever Session is edited.  Hence, why Session.surveyVersion needs to be
+       *              a one way association.
+       * @type: {Array} Data dump of session ids in survey at time of version creation.
        */
       sessions: {
         type: 'array'

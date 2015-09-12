@@ -209,6 +209,7 @@
           .populate('surveys')
           .populate('forms')
           .then(function (study) {
+            // cascading 'delete' of associated study data by updating expiry
             return [
               CollectionCentre.update({ id: _.pluck(study.collectionCentres, 'id') }, {
                 expiredAt: new Date()
