@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -109,7 +109,7 @@
             <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
             <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
             <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
-            <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
+            <li class="active"><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
             <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
@@ -125,20 +125,50 @@
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>SystemForm</p> <p>Model representation of a system form</p></div>
           <pre><code class="language-javascript">(function() {
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+	var HateoasService = require('../services/HateoasService.js');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+	module.exports = {
+		schema: true,
+		attributes: {
+			// system, user generated form
+			form_type: {
+				type: 'string',
+				required: true
+			},
+			// unique id or name attribute of form
+			form_name: {
+				type: 'string',
+				required: true,
+				unique: true
+			},
+			// title of the form to display
+			form_title: {
+				type: 'string',
+				required: true
+			},
+			// list of questions in this form
+			form_questions: {
+				type: 'array',
+				required: true
+			},
+			// text to appear on submit button
+			form_submitText: {
+				type: 'text',
+				defaultsTo: 'Submit'
+			},
+			// text to appear on cancel button
+			form_cancelText: {
+				type: 'text',
+				defaultsTo: 'Cancel'
+			},
+			toJSON: HateoasService.makeToHATEOAS.call(this, module)
+		}
+	};
 
-    connection: 'dados_audit'
-
-  });
-})();</code></pre>
+}());</code></pre>
         </div>
       </div>
     </div>

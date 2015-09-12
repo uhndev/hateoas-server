@@ -72,7 +72,7 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="../index.html">Main</a></li>
-            <li><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
+            <li class="active"><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
             <li><a href="../controllers/AnswerSetController.js.html">controllers/AnswerSetController.js</a></li>
             <li><a href="../controllers/AuthController.js.html">controllers/AuthController.js</a></li>
             <li><a href="../controllers/CollectionCentreController.js.html">controllers/CollectionCentreController.js</a></li>
@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -121,23 +121,95 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#actionUtil"><i class="alert alert-success"></i><span>actionUtil</span></a>
+              </li>
+              <li><a href="#exports"><i class="alert alert-info"></i><span>exports</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
-          <pre><code class="language-javascript">(function() {
+          <section id="actionUtil">
+            <h1>actionUtil</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">declaration</div><span>actionUtil</span>
+            </p>
+          </section>
+          <div class="description"><p>Module dependencies</p> </div>
+          <pre><code class="language-javascript">var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');</code></pre>
+          <section id="exports">
+            <h1>exports</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>module.exports()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>Integer, String</td>
+                <td><ul>
+<li>the unique id of the particular instance you&#39;d like to delete<br />Optional:</li>
+</ul>
+</td>
+              </tr>
+              <tr>
+                <td>callback</td>
+                <td>String</td>
+                <td><ul>
+<li>default jsonp callback param (i.e. the name of the js function returned)</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Destroy One Record</p><p>delete  /:modelIdentity/:id</p><ul>
+<li>/:modelIdentity/destroy/:id</li>
+</ul>
+<p>Destroys the single model instance with the specified <code>id</code> from<br />the data adapter for the given model if it exists.</p><p>Required:</p> </div>
+          <pre><code class="language-javascript">module.exports = function destroyOneRecord (req, res) {
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var Model = actionUtil.parseModel(req);
+  var pk = actionUtil.requirePk(req);
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  var query = Model.findOne(pk);
+  query = actionUtil.populateEach(query, req);
+  query.exec(function foundRecord (err, record) {
+    if (err) return res.serverError(err);
+    if(!record) return res.notFound('No record found with the specified `id`.');
 
-    connection: 'dados_audit'
+    if (_.has(Model.attributes, 'expiredAt')) {
+      Model.update({ id: pk }, { expiredAt: new Date() })
+        .exec(function updatedRecord(err, record) {
+          if (err) return res.negotiate(err);
+          return res.ok(record);
+        });
+    } else {
+      Model.destroy(pk).exec(function destroyedRecord (err) {
+        if (err) return res.negotiate(err);
 
+        if (sails.hooks.pubsub) {
+          Model.publishDestroy(pk, !sails.config.blueprints.mirror &amp;&amp; req, {previous: record});
+          if (req.isSocket) {
+            Model.unsubscribe(req, record);
+            Model.retire(record);
+          }
+        }
+
+        return res.ok(record);
+      });
+    }
   });
+};
 })();</code></pre>
         </div>
       </div>

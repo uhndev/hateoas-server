@@ -87,7 +87,7 @@
             <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
             <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
-            <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
+            <li class="active"><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
             <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
             <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -125,19 +125,49 @@
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>sails-create-views</p><p>In order to support database views in sails, one needs to drop views before<br />the ORM loads and recreate views after the ORM has loaded otherwise sails<br />won&#39;t know what to do with the models defined in models/views.<br />Here we read the config/db directory an iterate over the sql files there,<br />parse and execute them as sql statements to recreate our views.</p> </div>
           <pre><code class="language-javascript">(function() {
-
+  var fs = require('fs');
+  var pg = require('pg');
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  var Promise = require('q');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  module.exports = function (sails) {
+    var env = sails.config.environment;
+    var connection = sails.config.connections['dados_' + env];
 
-    connection: 'dados_audit'
+    var connectionStr = [
+      'postgres://', connection.user, ':', connection.password,
+      '@', connection.host, ':', connection.port, '/', connection.database
+    ].join('');
 
-  });
+    return {
+      initialize: function (next) {
+        sails.after('hook:orm:loaded', function () {
+          pg.connect(connectionStr, function (err, client, done) {
+            if (err) {
+              console.log('Error fetching client from pool', err);
+              return next(err);
+            }
+
+            var createQuery = _.map(fs.readdirSync('config/db'), function (view) {
+              return fs.readFileSync('config/db/' + view, 'utf-8');
+            }).join(' ');
+
+            client.query(createQuery, function (err, result) {
+              if (err) {
+                console.log('Error running query: ' + err);
+              }
+              done();
+              sails.log('Create View Query executed successfully');
+              next();
+            });
+          });
+        });
+      }
+    };
+  };
+
 })();</code></pre>
         </div>
       </div>

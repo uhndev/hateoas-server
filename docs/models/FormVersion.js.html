@@ -94,12 +94,12 @@
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
-            <li><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
+            <li class="active"><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
             <li><a href="../models/Group.js.html">models/Group.js</a></li>
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -121,24 +121,154 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#revision"><i class="alert alert-success"></i><span>revision</span></a>
+              </li>
+              <li><a href="#form"><i class="alert alert-success"></i><span>form</span></a>
+              </li>
+              <li><a href="#name"><i class="alert alert-success"></i><span>name</span></a>
+              </li>
+              <li><a href="#metaData"><i class="alert alert-success"></i><span>metaData</span></a>
+              </li>
+              <li><a href="#questions"><i class="alert alert-success"></i><span>questions</span></a>
+              </li>
+              <li><a href="#description"><i class="alert alert-success"></i><span>description</span></a>
+              </li>
+              <li><a href="#sessions"><i class="alert alert-success"></i><span>sessions</span></a>
+              </li>
+              <li><a href="#activeOn"><i class="alert alert-success"></i><span>activeOn</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>FormVersion</p> <p>Model representation of a version of a form</p></div>
           <pre><code class="language-javascript">(function() {
-
+  var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  module.exports = {
+    schema: true,
+    attributes: {</code></pre>
+          <section id="revision">
+            <h1>revision</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>revision</span>
+            </p>
+          </section>
+          <div class="description"><p>revision</p> <p>The version number which dictates what the version is for the associated Form</p></div>
+          <pre><code class="language-javascript">revision: {
+  type: 'integer',
+  defaultsTo: 1
+},</code></pre>
+          <section id="form">
+            <h1>form</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>form</span>
+            </p>
+          </section>
+          <div class="description"><p>form</p> <p>Reference to the form for which this FormVersion tracks changes for</p></div>
+          <pre><code class="language-javascript">form: {
+  model: 'form'
+},</code></pre>
+          <section id="name">
+            <h1>name</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>name</span>
+            </p>
+          </section>
+          <div class="description"><p>name</p> <p>Name of the form created by pluginEditor</p></div>
+          <pre><code class="language-javascript">name: {
+  type: 'string',
+  required: true
+},</code></pre>
+          <section id="metaData">
+            <h1>metaData</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>metaData</span>
+            </p>
+          </section>
+          <div class="description"><p>metaData</p> <p>Contains any amount of form-specific metadata the user would like to attach.
+             Should be in the form of key-value pairs.</p></div>
+          <pre><code class="language-javascript">metaData: {
+  type: 'json'
+},</code></pre>
+          <section id="questions">
+            <h1>questions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>questions</span>
+            </p>
+          </section>
+          <div class="description"><p>questions</p> <p>Contains array of json-object questions</p></div>
+          <pre><code class="language-javascript">questions: {
+  type: 'array'
+},</code></pre>
+          <section id="description">
+            <h1>description</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>description</span>
+            </p>
+          </section>
+          <div class="description"><p>description</p> <p>Optional commit message that should describe reasons for changing a form</p></div>
+          <pre><code class="language-javascript">description: {
+  type: 'string'
+},</code></pre>
+          <section id="sessions">
+            <h1>sessions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>sessions</span>
+            </p>
+          </section>
+          <div class="description"><p>sessions</p> <p>Collection of set time intervals that define when data should be collected
+             for each subject based on their date of event.  Each session created acts as
+             a template for SubjectSchedules to be stamped out for each subject in
+             SubjectEnrollment.</p></div>
+          <pre><code class="language-javascript">sessions: {
+  collection: 'session',
+  via: 'formVersions'
+},</code></pre>
+          <section id="activeOn">
+            <h1>activeOn</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>activeOn</span>
+            </p>
+          </section>
+          <div class="description"><p>activeOn</p> <p>Boolean date value denoting whether or not this FormVersion has had any AnswerSets filled out.
+             If activeOn is null, then there's no need to create a new version of a Form.</p></div>
+          <pre><code class="language-javascript">activeOn: {
+  type: 'date',
+  defaultsTo: null
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-    connection: 'dados_audit'
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
 
-  });
-})();</code></pre>
+  };
+
+}());</code></pre>
         </div>
       </div>
     </div>

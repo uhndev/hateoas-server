@@ -99,13 +99,13 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
-            <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
+            <li class="active"><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
             <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
             <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
             <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
@@ -121,23 +121,354 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#subjectNumber"><i class="alert alert-success"></i><span>subjectNumber</span></a>
+              </li>
+              <li><a href="#study"><i class="alert alert-success"></i><span>study</span></a>
+              </li>
+              <li><a href="#collectionCentre"><i class="alert alert-success"></i><span>collectionCentre</span></a>
+              </li>
+              <li><a href="#subject"><i class="alert alert-success"></i><span>subject</span></a>
+              </li>
+              <li><a href="#doe"><i class="alert alert-success"></i><span>doe</span></a>
+              </li>
+              <li><a href="#studyMapping"><i class="alert alert-success"></i><span>studyMapping</span></a>
+              </li>
+              <li><a href="#status"><i class="alert alert-success"></i><span>status</span></a>
+              </li>
+              <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#findByStudyName"><i class="alert alert-info"></i><span>findByStudyName</span></a>
+              </li>
+              <li><a href="#beforeCreate"><i class="alert alert-info"></i><span>beforeCreate</span></a>
+              </li>
+              <li><a href="#afterCreate"><i class="alert alert-info"></i><span>afterCreate</span></a>
+              </li>
+              <li><a href="#beforeUpdate"><i class="alert alert-info"></i><span>beforeUpdate</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>SubjectEnrollment</p> <p>Model representation of a subject's enrollment in a collection centre</p></div>
           <pre><code class="language-javascript">(function() {
-
+  var moment = require('moment');
+  var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+  module.exports = {
+    schema: true,
+    attributes: {</code></pre>
+          <section id="subjectNumber">
+            <h1>subjectNumber</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>subjectNumber</span>
+            </p>
+          </section>
+          <div class="description"><p>subjectNumber</p> <p>Equivalent of DADOS 2.0 subjectId that autoincrements with each
+             instance of a subject's enrollment at a collection centre.</p></div>
+          <pre><code class="language-javascript">subjectNumber: {
+  type: 'integer'
+},</code></pre>
+          <section id="study">
+            <h1>study</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>study</span>
+            </p>
+          </section>
+          <div class="description"><p>study</p> <p>The study for which this subject is enrolled in.</p></div>
+          <pre><code class="language-javascript">study: {
+  model: 'study'
+},</code></pre>
+          <section id="collectionCentre">
+            <h1>collectionCentre</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>collectionCentre</span>
+            </p>
+          </section>
+          <div class="description"><p>collectionCentre</p> <p>The collection centre for which this subject is enrolled in.</p></div>
+          <pre><code class="language-javascript">collectionCentre: {
+  model: 'collectioncentre'
+},</code></pre>
+          <section id="subject">
+            <h1>subject</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>subject</span>
+            </p>
+          </section>
+          <div class="description"><p>subject</p> <p>The subject whose enrollment pertains to.</p></div>
+          <pre><code class="language-javascript">subject: {
+  model: 'subject',
+  required: true
+},</code></pre>
+          <section id="doe">
+            <h1>doe</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>doe</span>
+            </p>
+          </section>
+          <div class="description"><p>doe</p> <p>Date of event in enrollment; is typically the date of surgery performed
+             or other important events related to the timeline of a patient's care.</p></div>
+          <pre><code class="language-javascript">doe: {
+  type: 'date',
+  date: true
+},</code></pre>
+          <section id="studyMapping">
+            <h1>studyMapping</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>studyMapping</span>
+            </p>
+          </section>
+          <div class="description"><p>studyMapping</p> <p>Depending on the associated study, study.attributes should define what
+             attribute keys goes in this enrollment.studyMapping.</p></div>
+          <pre><code class="language-javascript">studyMapping: {
+  type: 'json',
+  json: true,
+  defaultsTo: {}
+},</code></pre>
+          <section id="status">
+            <h1>status</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>status</span>
+            </p>
+          </section>
+          <div class="description"><p>status</p> <p>Represents the subject's current status in this enrollment.  Subjects
+             can be enrolled as REGISTERED which signifies that they haven't been
+             enrolled in any particular collection centre yet.  After selecting a
+             collection centre, status should be set to ONGOING.</p></div>
+          <pre><code class="language-javascript">status: {
+  type: 'string',
+  enum: [
+    'REGISTERED',
+    'ONGOING',
+    'LOST TO FOLLOWUP',
+    'WITHDRAWN',
+    'INELIGIBLE',
+    'DECEASED',
+    'TERMINATED',
+    'COMPLETED'
+  ]
+},</code></pre>
+          <section id="expiredAt">
+            <h1>expiredAt</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>expiredAt</span>
+            </p>
+          </section>
+          <div class="description"><p>expiredAt</p> <p>Instead of strictly deleting objects from our system, we set a date such
+             that if it is not null, we do not include this entity in our response.</p></div>
+          <pre><code class="language-javascript">expiredAt: {
+  type: 'datetime',
+  defaultsTo: null,
+  datetime: true
+},
 
-    connection: 'dados_audit'
-
+toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },</code></pre>
+          <section id="findByStudyName">
+            <h1>findByStudyName</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>findByStudyName()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>studyName</td>
+                <td>String</td>
+                <td><p>Name of study to search. Passed in from SubjectEnrollmentController.</p></td>
+              </tr>
+              <tr>
+                <td>currUser</td>
+                <td>Object</td>
+                <td><p>Current user used in determining filtering options based on access</p></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td><p>Query options potentially passed from queryBuilder in frontend</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>Callback function upon completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>findByStudyName</p> <p>End function for handling /api/study/:name/subject.  Should return a list
+             of subjects in a given study and depending on the current users' group
+             permissions, this list will be further filtered down based on whether
+             or not those subjects and I share common collection centres.</p></div>
+          <pre><code class="language-javascript">findByStudyName: function(studyName, currUser, options, cb) {
+  var query = _.cloneDeep(options);
+  query.where = query.where || {};
+  delete query.where.name;
+  return User.findOne(currUser.id)
+    .populate('enrollments')
+    .populate('group')
+    .then(function (user) {
+      var whereOp = { studyName: studyName };
+      if (user.group.level &gt; 1) {
+        whereOp.collectionCentre = _.pluck(user.enrollments, 'collectionCentre');
+      }
+      return studysubject.find(query).where(whereOp);
+    })
+    .then(function (studySubjects) {
+      return [false, studySubjects];
+    })
+    .catch(function (err) {
+      return [err, null];
+    });
+},</code></pre>
+          <section id="beforeCreate">
+            <h1>beforeCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>beforeCreate()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>values</td>
+                <td>Object</td>
+                <td><p>given subject enrollment object for creation</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>callback function on completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>beforeCreate</p> <p>Before validation/creation, auto-increments the subjectNumber by latest study
+             and also inserts the collection centre study as a parameter</p></div>
+          <pre><code class="language-javascript">beforeCreate: function(values, cb) {
+  SubjectEnrollment.findOne({
+    where: { &quot;study&quot;: values.study },
+    sort:'subjectNumber DESC'
+  }).exec(function (err, lastSubject) {
+    if (err) cb(err);
+    values.subjectNumber = (lastSubject &amp;&amp; lastSubject.subjectNumber ?
+    lastSubject.subjectNumber + 1 : 1);
+    // make sure if we're creating an enrollment with no studyMapping set yet, the status should be set to REGISTERED
+    if (_.isEmpty(values.studyMapping)) {
+      values.status = 'REGISTERED';
+    } else {
+      values.status = 'ONGOING';
+    }
+    cb();
   });
+
+},</code></pre>
+          <section id="afterCreate">
+            <h1>afterCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterCreate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterCreate</p> <p>After enrolling a subject in a study, create their associated SubjectSchedules
+             for each Session and for each Survey in enrolled Study.  To achieve this, we
+             find a list of study surveys, flatten out all the Sessions for each study in survey
+             and create SubjectSchedules based on the Sessions.</p></div>
+          <pre><code class="language-javascript">afterCreate: function (values, cb) {
+  Study.findOne(values.study).populate('surveys')
+    .then(function (study) {
+      return Survey.find(_.pluck(study.surveys, 'id')).populate('sessions');
+    })
+    .then(function (surveys) {
+      return _.reduce(surveys, function (result, survey) {
+        return result.concat(survey.sessions);
+      }, []);
+    })
+    .then(function (sessions) {
+      return Promise.all(
+        _.map(sessions, function (session) {
+          var availableFrom = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
+          var availableTo = moment(values.doe).add(session.timepoint, 'days').add(session.availableTo, 'days');
+          return SubjectSchedule.create({
+            availableFrom: availableFrom.toDate(),
+            availableTo: availableTo.toDate(),
+            status: 'IN PROGRESS',
+            session: session.id,
+            subjectEnrollment: values.id
+          });
+        })
+      );
+    })
+    .then(function (createdSchedules) {
+      cb();
+    })
+    .catch(cb);
+},</code></pre>
+          <section id="beforeUpdate">
+            <h1>beforeUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>beforeUpdate()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>values</td>
+                <td>Object</td>
+                <td><p>given subject enrollment object for creation</p></td>
+              </tr>
+              <tr>
+                <td>cb</td>
+                <td>Function</td>
+                <td><p>callback function on completion</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>beforeUpdate</p> <p>We need to perform some validation on the state of a subject's statuses as
+             enrollments are created.</p></div>
+          <pre><code class="language-javascript">beforeUpdate: function(values, cb) {
+  // when updating, if studyMapping is set, status cannot be set back to REGISTERED
+  if (!_.isEmpty(values.studyMapping)) {
+    values.status = (values.status === 'REGISTERED') ? 'ONGOING' : values.status;
+  }
+  // otherwise if studyMapping still not set, make sure user isn't trying to set status to
+  // something other than REGISTERED if they haven't set a mapping yet.
+  else {
+    values.status = 'REGISTERED';
+  }
+  cb();
+}
+
+  };
+
 })();</code></pre>
         </div>
       </div>

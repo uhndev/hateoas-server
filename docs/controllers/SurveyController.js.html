@@ -83,7 +83,7 @@
             <li><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
             <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
             <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
-            <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
+            <li class="active"><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
             <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
             <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
@@ -99,7 +99,7 @@
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
             <li><a href="../models/Permission.js.html">models/Permission.js</a></li>
-            <li class="active"><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
+            <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
             <li><a href="../models/Session.js.html">models/Session.js</a></li>
@@ -121,23 +121,43 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#findByStudyName"><i class="alert alert-info"></i><span>findByStudyName</span></a>
+              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>RequestLog</p> <p>Model responsible for capturing all CRUD access operations
-             user info, url, and responses during usage of the application.</p></div>
+          <div class="description"><p>SurveyController</p> <p>Server-side logic for managing surveys</p></div>
           <pre><code class="language-javascript">(function() {
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/RequestLog');
+  module.exports = {</code></pre>
+          <section id="findByStudyName">
+            <h1>findByStudyName</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>findByStudyName()</span>
+            </p>
+          </section>
+          <div class="description"><p>findByStudyName</p> <p>Finds studies by their associations to a given study.</p></div>
+          <pre><code class="language-javascript">findByStudyName: function (req, res) {
+  var studyName = req.param('name');
 
-  _.merge(exports, _super);
-  _.merge(exports, {
-
-    connection: 'dados_audit'
-
-  });
+  Survey.findByStudyName(studyName, req.user,
+    {
+      where: actionUtil.parseCriteria(req),
+      limit: actionUtil.parseLimit(req),
+      skip: actionUtil.parseSkip(req),
+      sort: actionUtil.parseSort(req)
+    }
+  ).then(function (surveys) {
+      var err = surveys[0];
+      var surveyItems = surveys[1];
+      if (err) res.serverError(err);
+      res.ok(surveyItems);
+    });
+}
+  };
 })();</code></pre>
         </div>
       </div>

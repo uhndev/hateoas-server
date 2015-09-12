@@ -90,7 +90,7 @@
             <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
             <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
-            <li class="active"><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
+            <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
@@ -102,7 +102,7 @@
             <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
-            <li><a href="../models/Session.js.html">models/Session.js</a></li>
+            <li class="active"><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
             <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
@@ -121,57 +121,56 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#study"><i class="alert alert-success"></i><span>study</span></a>
-              </li>
-              <li><a href="#formVersion"><i class="alert alert-success"></i><span>formVersion</span></a>
+              <li><a href="#survey"><i class="alert alert-success"></i><span>survey</span></a>
               </li>
               <li><a href="#surveyVersion"><i class="alert alert-success"></i><span>surveyVersion</span></a>
               </li>
-              <li><a href="#subjectSchedule"><i class="alert alert-success"></i><span>subjectSchedule</span></a>
+              <li><a href="#name"><i class="alert alert-success"></i><span>name</span></a>
               </li>
-              <li><a href="#subjectEnrollment"><i class="alert alert-success"></i><span>subjectEnrollment</span></a>
+              <li><a href="#timepoint"><i class="alert alert-success"></i><span>timepoint</span></a>
               </li>
-              <li><a href="#userEnrollment"><i class="alert alert-success"></i><span>userEnrollment</span></a>
+              <li><a href="#availableFrom"><i class="alert alert-success"></i><span>availableFrom</span></a>
               </li>
-              <li><a href="#answers"><i class="alert alert-success"></i><span>answers</span></a>
+              <li><a href="#availableTo"><i class="alert alert-success"></i><span>availableTo</span></a>
+              </li>
+              <li><a href="#type"><i class="alert alert-success"></i><span>type</span></a>
+              </li>
+              <li><a href="#formVersions"><i class="alert alert-success"></i><span>formVersions</span></a>
+              </li>
+              <li><a href="#subjectSchedules"><i class="alert alert-success"></i><span>subjectSchedules</span></a>
               </li>
               <li><a href="#expiredAt"><i class="alert alert-success"></i><span>expiredAt</span></a>
+              </li>
+              <li><a href="#afterUpdate"><i class="alert alert-info"></i><span>afterUpdate</span></a>
+              </li>
+              <li><a href="#afterCreate"><i class="alert alert-info"></i><span>afterCreate</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <div class="description"><p>AnswerSet</p> <p>Model representation of an AnswerSet</p></div>
-          <pre><code class="language-javascript">(function() {
+          <div class="description"><p>Session</p> <p>Model representation of a session of a Survey.  A session denotes the abstract points in time for which
+             data is to be collected for a subject.  A session stores this information by defining an integer
+             timeline for which SubjectSchedules can be stamped out based on this number, namely the availableFrom
+             and availableTo dates are determined based on the settings in this model.</p></div>
+          <pre><code class="language-javascript">(function () {
+  var moment = require('moment');
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {
     schema: true,
-
     attributes: {</code></pre>
-          <section id="study">
-            <h1>study</h1>
+          <section id="survey">
+            <h1>survey</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>study</span>
+              <div class="label label-success radius ctx-type">property</div><span>survey</span>
             </p>
           </section>
-          <div class="description"><p>study</p> <p>Associated study pertinent to this AnswerSet</p></div>
-          <pre><code class="language-javascript">study: {
-  model: 'study',
-  required: true
-},</code></pre>
-          <section id="formVersion">
-            <h1>formVersion</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>formVersion</span>
-            </p>
-          </section>
-          <div class="description"><p>formVersion</p> <p>Reference to version of form filled out for this AnswerSet</p></div>
-          <pre><code class="language-javascript">formVersion: {
-  model: 'formversion',
-  required: true
+          <div class="description"><p>survey</p> <p>Reference to the head revision of the current survey</p></div>
+          <pre><code class="language-javascript">survey: {
+  model: 'survey'
 },</code></pre>
           <section id="surveyVersion">
             <h1>surveyVersion</h1>
@@ -180,58 +179,110 @@
               <div class="label label-success radius ctx-type">property</div><span>surveyVersion</span>
             </p>
           </section>
-          <div class="description"><p>surveyVersion</p> <p>Reference to version of survey at time of data capture for AnswerSet</p></div>
+          <div class="description"><p>surveyVersion</p> <p>Reference to the version of the survey we are using for this session</p></div>
           <pre><code class="language-javascript">surveyVersion: {
-  model: 'surveyversion',
-  required: true
+  model: 'surveyversion'
 },</code></pre>
-          <section id="subjectSchedule">
-            <h1>subjectSchedule</h1>
+          <section id="name">
+            <h1>name</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>subjectSchedule</span>
+              <div class="label label-success radius ctx-type">property</div><span>name</span>
             </p>
           </section>
-          <div class="description"><p>subjectSchedule</p> <p>Reference to instance of a subject's scheduled data capture event</p></div>
-          <pre><code class="language-javascript">subjectSchedule: {
-  model: 'subjectschedule',
-  required: true
+          <div class="description"><p>name</p> <p>Name of the session, i.e. Baseline, 1 Month, 2 Month, etc.</p></div>
+          <pre><code class="language-javascript">name: {
+  type: 'string'
 },</code></pre>
-          <section id="subjectEnrollment">
-            <h1>subjectEnrollment</h1>
+          <section id="timepoint">
+            <h1>timepoint</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>subjectEnrollment</span>
+              <div class="label label-success radius ctx-type">property</div><span>timepoint</span>
             </p>
           </section>
-          <div class="description"><p>subjectEnrollment</p> <p>Reference to the subject & enrollment data to capture who this data refers to</p></div>
-          <pre><code class="language-javascript">subjectEnrollment: {
-  model: 'subjectenrollment',
-  required: true
+          <div class="description"><p>timepoint</p> <p>Integer denoting the days from the subject enrolment DOE this session
+             should occur.  The availableFrom and availableTo fields in SubjectSchedule are
+             determined based on this number.  There are several configurations between
+             this and the type attribute that are possible:
+             1) scheduled with timepoint X      : repeat session every X days
+             2) non-scheduled with timepoint X  : enable session after X days</p></div>
+          <pre><code class="language-javascript">timepoint: {
+  type: 'integer',
+  required: true,
+  integer: true
 },</code></pre>
-          <section id="userEnrollment">
-            <h1>userEnrollment</h1>
+          <section id="availableFrom">
+            <h1>availableFrom</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>userEnrollment</span>
+              <div class="label label-success radius ctx-type">property</div><span>availableFrom</span>
             </p>
           </section>
-          <div class="description"><p>userEnrollment</p> <p>Reference to the user/coordinator to capture who may have been capturing data on behalf of subject</p></div>
-          <pre><code class="language-javascript">userEnrollment: {
-  model: 'userenrollment',
-  required: true
+          <div class="description"><p>availableFrom</p> <p>Days before the timepoint event for which data capture should be allowed.
+             i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+             SubjectSchedule will become available 5 days before and 2 days after every 90 day session.</p></div>
+          <pre><code class="language-javascript">availableFrom: {
+  type: 'integer',
+  integer: true,
+  defaultsTo: 1
 },</code></pre>
-          <section id="answers">
-            <h1>answers</h1>
+          <section id="availableTo">
+            <h1>availableTo</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>answers</span>
+              <div class="label label-success radius ctx-type">property</div><span>availableTo</span>
             </p>
           </section>
-          <div class="description"><p>answers</p> <p>Key-value mapping of unique field names in a particular version of a form to answers</p></div>
-          <pre><code class="language-javascript">answers: {
-  type: 'json',
-  required: true
+          <div class="description"><p>availableFrom</p> <p>Days after the timepoint event for which data capture should be allowed.
+             i.e. with a timepoint of 90 days, availableFrom = 5, and availableTo = 2,
+             SubjectSchedule will become available 5 days before and 2 days after every 90 day session.</p></div>
+          <pre><code class="language-javascript">availableTo: {
+  type: 'integer',
+  integer: true,
+  defaultsTo: 1
+},</code></pre>
+          <section id="type">
+            <h1>type</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>type</span>
+            </p>
+          </section>
+          <div class="description"><p>type</p> <p>Type of session where scheduled means an event that should be repeated at regular
+             intervals, or non-scheduled which means a one time data capture event.</p></div>
+          <pre><code class="language-javascript">type: {
+  type: 'string',
+  enum: [
+    'scheduled',
+    'non-scheduled'
+  ]
+},</code></pre>
+          <section id="formVersions">
+            <h1>formVersions</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>formVersions</span>
+            </p>
+          </section>
+          <div class="description"><p>formVersions</p> <p>Collection of forms for subject to fill out at the given session/timepoint.</p></div>
+          <pre><code class="language-javascript">formVersions: {
+  collection: 'formversion',
+  via: 'sessions'
+},</code></pre>
+          <section id="subjectSchedules">
+            <h1>subjectSchedules</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>subjectSchedules</span>
+            </p>
+          </section>
+          <div class="description"><p>subjectSchedules</p> <p>Collection of instantiated SubjectSchedules for each subject in respective
+             SubjectEnrollment.  The availableFrom and availableTo attributes are calculated based on
+             the timepoint attribute in this model.</p></div>
+          <pre><code class="language-javascript">subjectSchedules: {
+  collection: 'subjectschedule',
+  via: 'session'
 },</code></pre>
           <section id="expiredAt">
             <h1>expiredAt</h1>
@@ -249,23 +300,186 @@
 },
 
 toJSON: HateoasService.makeToHATEOAS.call(this, module)
-    },
+    },</code></pre>
+          <section id="afterUpdate">
+            <h1>afterUpdate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterUpdate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterUpdate</p> <p>After updating the head revision, depending on whether or not users have
+             filled out any AnswerSets, we create new SurveyVersions as needed.</p></div>
+          <pre><code class="language-javascript">afterUpdate: function(values, cb) {
+  // begin promise chain with populated Session
+  var promise = Session.findOne(values.id).populate('subjectSchedules')
+    .then(function (session) {
+      this.session = session;
+      return session;
+    });
 
-    // Set most recent previous answerset to be expired
-    beforeCreate: function(values, cb) {
-AnswerSet.findOne({ where: {
-  form: values.form,
-  subject: values.subject,
-  person: values.person
-}, sort: 'updatedAt DESC'}).exec(function (err, answer) {
-  if (err) return cb(err);
-  if (answer) {
-    answer.expiredAt = new Date();
-    answer.save();
-  }
-  cb();
-});
-    }
+  // if expiring a Session, expire all associated SubjectSchedules
+  if (!_.isNull(values.expiredAt)) {
+    promise.then(function (session) {
+      return SubjectSchedule.update({ id: _.pluck(session.subjectSchedules, 'id') }, {
+       expiredAt: new Date
+      });
+    })
+    .then(function (schedules) {
+      cb();
+    })
+    .catch(cb);
+  } else {
+    promise
+      .then(function (session) {
+        if (_.isNull(values.survey)) {
+          return SurveyVersion.findOne(values.surveyVersion)
+            .populate('survey')
+            .then(function (surveyVersion) {
+              return surveyVersion.survey;
+            })
+            .then(function (survey) {
+              return Survey.findOne(survey.id).populate('sessions');
+            })
+            .catch(cb);
+        } else {
+          return Survey.findOne(values.survey).populate('sessions');
+        }
+      })
+      .then(function (survey) {
+        this.currentSurvey = survey;
+        // if lastPublished set on Survey, then there are AnswerSets referring to this version
+        if (survey.lastPublished !== null &amp;&amp; _.isNull(survey.expiredAt)) {
+          // in that case, stamp out next survey version
+          // create new survey version with updated revision number
+          return SurveyVersion.find({ survey: survey.id })
+            .sort('revision DESC')
+            .then(function (latestSurveyVersions) {
+              // create new SurveyVersion iff we've added or removed a session
+              var currentSessions = _.pluck(survey.sessions, 'id');
+              var previousSessions = _.first(latestSurveyVersions).sessions;
+              if (_.difference(currentSessions, previousSessions).length &gt; 0) {
+                var newSurveyVersion = {
+                  revision: _.first(latestSurveyVersions).revision + 1,
+                  survey: values.survey,
+                  sessions: _.pluck(survey.sessions, 'id')
+                };
+                _.merge(newSurveyVersion, _.pick(survey, 'name', 'completedBy'));
+                //return null;
+                return SurveyVersion.create(newSurveyVersion);
+              }
+              return null;
+            });
+        }
+      })
+      .then(function () {</code></pre>
+          <div class="description"><p>otherwise updates are done in place for the current head but<br />since its not published yet, we have two more scenarios:<br />1) no subjects enrolled yet = do nothing<br />2) subject already enrolled = create if not exist, update if exist</p> </div>
+          <pre><code class="language-javascript">return studysubject.find({studyId: this.currentSurvey.study});
+          })
+          .then(function (subjectEnrollments) {
+// scenario 1; no subjects enrolled yet so do nothing
+if (!subjectEnrollments) {
+  return null;
+}
+// scenario 2; subjects enrolled, create or update SubjectSchedules
+else {
+  return Promise.all(
+    _.map(subjectEnrollments, function (enrollment) {
+      var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+        .subtract(values.availableFrom, 'days');
+      var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+        .add(values.availableTo, 'days');
+
+      // create subjectSchedules if not exist
+      if (!this.session.subjectSchedules) {
+        return SubjectSchedule.create({
+          availableFrom: availableFrom.toDate(),
+          availableTo: availableTo.toDate(),
+          status: 'IN PROGRESS',
+          session: values.id,
+          subjectEnrollment: enrollment.id
+        });
+      }
+      // update existing subjectSchedules
+      else {
+        return SubjectSchedule.update({session: values.id, subjectEnrollment: enrollment.id}, {
+          availableFrom: availableFrom.toDate(),
+          availableTo: availableTo.toDate()
+        });
+      }
+    })
+  );
+}
+          })
+          .then(function (schedules) {
+cb();
+          })
+          .catch(cb);
+      }
+    },</code></pre>
+          <section id="afterCreate">
+            <h1>afterCreate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>afterCreate()</span>
+            </p>
+          </section>
+          <div class="description"><p>afterCreate</p> <p>After creating a session, create SubjectSchedules iff there are subjects
+             enrolled in the study at the time of creation.  We create a new SurveyVersion
+             iff the current Survey is published.</p></div>
+          <pre><code class="language-javascript">afterCreate: function (values, cb) {
+  Survey.findOne(values.survey)
+    .populate('sessions')
+    .then(function (survey) {
+      this.currentSurvey = survey;
+      return SurveyVersion.find({ survey: values.survey })
+        .sort('revision DESC');
+    })
+    .then(function (latestSurveyVersions) {
+      if (this.currentSurvey.lastPublished !== null &amp;&amp; _.isNull(this.currentSurvey.expiredAt)) {
+        // create new SurveyVersion since we added a Session to a published Survey
+        var newSurveyVersion = {
+          revision: _.first(latestSurveyVersions).revision + 1,
+          survey: values.survey,
+          sessions: _.pluck(this.currentSurvey.sessions, 'id')
+        };
+        _.merge(newSurveyVersion, _.pick(this.currentSurvey, 'name', 'completedBy'));
+        return SurveyVersion.create(newSurveyVersion);
+      } else {
+        return null;
+      }
+    })
+    .then(function (newSurveyVersion) {
+      // find subject enrollments for study
+      return studysubject.find({studyId: this.currentSurvey.study});
+    })
+    .then(function (subjectEnrollments) {
+      // if subjects are enrolled already, create SubjectSchedules for them
+      if (subjectEnrollments) {
+        return Promise.all(
+          _.map(subjectEnrollments, function (enrollment) {
+            var availableFrom = moment(enrollment.doe).add(values.timepoint, 'days')
+              .subtract(values.availableFrom, 'days');
+            var availableTo = moment(enrollment.doe).add(values.timepoint, 'days')
+              .add(values.availableTo, 'days');
+            return SubjectSchedule.findOrCreate({
+              availableFrom: availableFrom.toDate(),
+              availableTo: availableTo.toDate(),
+              status: 'IN PROGRESS',
+              session: values.id,
+              subjectEnrollment: enrollment.id
+            });
+          })
+        )
+      } else {
+        return null;
+      }
+    })
+    .then(function (createdSchedules) {
+      cb();
+    })
+    .catch(cb);
+}
   };
 })();</code></pre>
         </div>

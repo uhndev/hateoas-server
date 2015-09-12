@@ -1,12 +1,12 @@
 /**
-* Survey
-* @class Survey
-* @description Model representation of a survey to be performed within a study
-*              A survey has many sessions which dictate the points in time when
+ * Survey
+ * @class Survey
+ * @description Model representation of a survey to be performed within a study
+ *              A survey has many sessions which dictate the points in time when
  *             data is to be collected from a subject.
-* @docs        http://sailsjs.org/#!documentation/models
-*/
-(function() {
+ * @docs        http://sailsjs.org/#!documentation/models
+ */
+(function () {
 
   var HateoasService = require('../services/HateoasService.js');
   module.exports = {
@@ -49,7 +49,7 @@
        *              for each subject based on their date of event.  Each session created acts as
        *              a template for SubjectSchedules to be stamped out for each subject in
        *              SubjectEnrollment
-       * @type: {Association} 1-to-many relationship to the Session model
+       * @type {Association} 1-to-many relationship to the Session model
        */
       sessions: {
         collection: 'session',
@@ -96,7 +96,84 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByStudyName: function(studyName, currUser, options, cb) {
+    /**
+     * afterCreate
+     * @description After creating a brand new survey, create initial mirrored SurveyVersion
+     */
+    afterCreate: function (values, cb) {
+      // stamp out initial survey version
+      SurveyVersion.create({
+        revision: 0,
+        survey: values.id,
+        name: values.name,
+        completedBy: values.completedBy,
+        sessions: _.pluck(values.sessions, 'id')
+      }).exec(function (err, surveyVersion) {
+        cb(err);
+      });
+    },
+
+    /**
+     * afterUpdate
+     * @description After updating the head revision, depending on whether or not users have
+     *              filled out any AnswerSets, we create new SurveyVersions as needed.
+     */
+    afterUpdate: function (values, cb) {
+      var promise = Survey.findOne(values.id)
+        .populate('versions')
+        .populate('sessions');
+
+      if (!_.isNull(values.expiredAt)) {
+        promise.then(function (survey) {
+          return [
+            SurveyVersion.update({id: _.pluck(survey.versions, 'id')}, {
+              expiredAt: new Date()
+            }),
+            Session.update({id: _.pluck(survey.sessions, 'id')}, {
+              expiredAt: new Date()
+            })
+          ];
+        })
+          .spread(function (versions, sessions) {
+            cb();
+          })
+          .catch(cb);
+      } else {
+        promise.then(function (survey) {
+          // if lastPublished set on Survey, then there are AnswerSets referring to this version
+          if (!_.isNull(survey.lastPublished) && _.isNull(survey.expiredAt)) {
+            // in that case, stamp out next survey version
+            // create new survey version with updated revision number
+            SurveyVersion.find({survey: values.id})
+              .sort('revision DESC')
+              .then(function (latestSurveyVersions) {
+                var currentSessions = _.pluck(survey.sessions, 'id');
+                var previousSessions = _.first(latestSurveyVersions).sessions;
+                if (_.difference(currentSessions, previousSessions).length > 0) {
+                  var newSurveyVersion = {
+                    revision: _.first(latestSurveyVersions).revision + 1,
+                    survey: values.id,
+                    sessions: _.pluck(survey.sessions, 'id')
+                  };
+                  _.merge(newSurveyVersion, _.pick(values, 'name', 'completedBy'));
+                  return SurveyVersion.create(newSurveyVersion);
+                }
+                return null;
+              })
+              .then(function (newSurveyVersion) {
+                cb();
+              })
+              .catch(cb);
+          }
+          // otherwise updates are done in place for the current head
+          else {
+            cb();
+          }
+        });
+      }
+    },
+
+    findByStudyName: function (studyName, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
@@ -122,4 +199,3 @@
   };
 
 })();
-

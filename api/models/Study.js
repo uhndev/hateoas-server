@@ -204,13 +204,25 @@
      */
     afterUpdate: function(updated, cb) {
       if (!_.isNull(updated.expiredAt)) {
-        Study.findOne(updated.id).populate('collectionCentres')
+        Study.findOne(updated.id)
+          .populate('collectionCentres')
+          .populate('surveys')
+          .populate('forms')
           .then(function (study) {
-            return CollectionCentre.update({ id: _.pluck(study.collectionCentres, 'id') }, {
-              expiredAt: new Date()
-            });
+            // cascading 'delete' of associated study data by updating expiry
+            return [
+              CollectionCentre.update({ id: _.pluck(study.collectionCentres, 'id') }, {
+                expiredAt: new Date()
+              }),
+              Survey.update({ id: _.pluck(study.surveys, 'id') }, {
+                expiredAt: new Date()
+              }),
+              Form.update({ id: _.pluck(study.forms, 'id') }, {
+                expiredAt: new Date()
+              })
+            ];
           })
-          .then(function (collectionCentres) {
+          .spread(function (collectionCentres, surveys, forms) {
             cb();
           })
           .catch(cb);

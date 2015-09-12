@@ -93,6 +93,18 @@
         defaultsTo: null
       },
 
+      /**
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
+       */
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 
