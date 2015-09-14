@@ -9,6 +9,7 @@ CREATE OR REPLACE VIEW studysubject AS
     "user".id AS "userId",
     subjectenrollment."collectionCentre",
     subjectenrollment."subjectNumber",
+    study.id AS "studyId",
     study.name AS "studyName",
     collectioncentre.name AS "collectionCentreName",
     study.attributes AS "studyAttributes",

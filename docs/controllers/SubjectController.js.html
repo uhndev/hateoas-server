@@ -72,19 +72,29 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="../index.html">Main</a></li>
+            <li><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
             <li><a href="../controllers/AnswerSetController.js.html">controllers/AnswerSetController.js</a></li>
             <li><a href="../controllers/AuthController.js.html">controllers/AuthController.js</a></li>
             <li><a href="../controllers/CollectionCentreController.js.html">controllers/CollectionCentreController.js</a></li>
             <li><a href="../controllers/FormController.js.html">controllers/FormController.js</a></li>
             <li><a href="../controllers/GroupController.js.html">controllers/GroupController.js</a></li>
+            <li><a href="../controllers/SessionController.js.html">controllers/SessionController.js</a></li>
             <li><a href="../controllers/StudyController.js.html">controllers/StudyController.js</a></li>
             <li class="active"><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
+            <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
+            <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
+            <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
+            <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
+            <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
+            <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
+            <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
             <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
+            <li><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
             <li><a href="../models/Group.js.html">models/Group.js</a></li>
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
@@ -92,12 +102,20 @@
             <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
+            <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
+            <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
+            <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
+            <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
+            <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
+            <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
+            <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
+            <li><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
             <li><a href="../services/PermissionService.js.html">services/PermissionService.js</a></li>
             <li><a href="../services/Utils.js.html">services/Utils.js</a></li>
           </ul>
@@ -113,90 +131,6 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
-
-    find: function (req, res, next) {
-      var query = Subject.find()
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-
-      query.populate('user');
-      query.populate('collectionCentres');
-      query.exec(function found(err, subjects) {
-        if (err) return res.serverError(err);
-        _.map(subjects, function (subject) {
-          _.merge(subject, Utils.User.extractUserFields(subject.user));
-          delete subject.user;
-        });
-
-        res.ok(subjects);
-      });
-    },
-
-    create: function(req, res, next) {
-      // create user first and save userId
-      Group.findOne({ name: 'subject' })
-      .then(function (subjectGroup) {
-        return User.create({
-          username: req.param('username'),
-          email: req.param('email'),
-          prefix: req.param('prefix'),
-          firstname: req.param('firstname'),
-          lastname: req.param('lastname'),
-          gender: req.param('gender'),
-          dob: req.param('dob'),
-          group: subjectGroup.id
-        });
-      })
-      .then(function (user) {
-        this.user = user;
-        console.log('Creating passport');
-        console.log(user);
-        return Passport.create({
-          protocol : 'local',
-          password : req.param('password'),
-          user     : user.id
-        });
-      })
-      .then(function (passport) {
-        this.passport = passport;
-        console.log('Creating subject');
-        console.log(passport);
-        return Subject.create({
-          user: this.user.id,
-          collectionCentres: req.param('collectionCentres')
-        });
-      })
-      .then(function (subject) {
-        this.subject = subject;
-        console.log(subject);
-        res.ok(subject);
-      })
-      .catch(function (err) {
-        console.log(err);
-        this.subject.destroy(function (destroyErr) {
-          this.passport.destroy(function (destroyErr) {
-            this.user.destroy(function (destroyErr) {
-              next(destroyErr || err);
-            })
-          });
-        });
-      });
-    },
-
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
-      Subject.findByStudyName(studyName, req.user,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) },
-        function(err, subjects) {
-          if (err) res.serverError(err);
-          res.ok(subjects);
-        });
-    }
 
   };
 })();</code></pre>

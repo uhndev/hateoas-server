@@ -72,19 +72,29 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="../index.html">Main</a></li>
+            <li><a href="../blueprints/destroy.js.html">blueprints/destroy.js</a></li>
             <li><a href="../controllers/AnswerSetController.js.html">controllers/AnswerSetController.js</a></li>
             <li><a href="../controllers/AuthController.js.html">controllers/AuthController.js</a></li>
             <li><a href="../controllers/CollectionCentreController.js.html">controllers/CollectionCentreController.js</a></li>
             <li><a href="../controllers/FormController.js.html">controllers/FormController.js</a></li>
             <li><a href="../controllers/GroupController.js.html">controllers/GroupController.js</a></li>
+            <li><a href="../controllers/SessionController.js.html">controllers/SessionController.js</a></li>
             <li><a href="../controllers/StudyController.js.html">controllers/StudyController.js</a></li>
             <li><a href="../controllers/SubjectController.js.html">controllers/SubjectController.js</a></li>
+            <li><a href="../controllers/SubjectEnrollmentController.js.html">controllers/SubjectEnrollmentController.js</a></li>
+            <li><a href="../controllers/SubjectScheduleController.js.html">controllers/SubjectScheduleController.js</a></li>
+            <li><a href="../controllers/SurveyController.js.html">controllers/SurveyController.js</a></li>
+            <li><a href="../controllers/SystemFormController.js.html">controllers/SystemFormController.js</a></li>
             <li class="active"><a href="../controllers/UserController.js.html">controllers/UserController.js</a></li>
+            <li><a href="../controllers/UserEnrollmentController.js.html">controllers/UserEnrollmentController.js</a></li>
+            <li><a href="../hooks/sails-create-views.js.html">hooks/sails-create-views.js</a></li>
+            <li><a href="../hooks/sails-drop-views.js.html">hooks/sails-drop-views.js</a></li>
             <li><a href="../hooks/sails-posthook-permissions.js.html">hooks/sails-posthook-permissions.js</a></li>
             <li><a href="../models/AnswerSet.js.html">models/AnswerSet.js</a></li>
             <li><a href="../models/CollectionCentre.js.html">models/CollectionCentre.js</a></li>
             <li><a href="../models/Criteria.js.html">models/Criteria.js</a></li>
             <li><a href="../models/Form.js.html">models/Form.js</a></li>
+            <li><a href="../models/FormVersion.js.html">models/FormVersion.js</a></li>
             <li><a href="../models/Group.js.html">models/Group.js</a></li>
             <li><a href="../models/Model.js.html">models/Model.js</a></li>
             <li><a href="../models/Passport.js.html">models/Passport.js</a></li>
@@ -92,12 +102,20 @@
             <li><a href="../models/RequestLog.js.html">models/RequestLog.js</a></li>
             <li><a href="../models/Role.js.html">models/Role.js</a></li>
             <li><a href="../models/SecurityLog.js.html">models/SecurityLog.js</a></li>
+            <li><a href="../models/Session.js.html">models/Session.js</a></li>
             <li><a href="../models/Study.js.html">models/Study.js</a></li>
             <li><a href="../models/Subject.js.html">models/Subject.js</a></li>
+            <li><a href="../models/SubjectEnrollment.js.html">models/SubjectEnrollment.js</a></li>
+            <li><a href="../models/SubjectSchedule.js.html">models/SubjectSchedule.js</a></li>
+            <li><a href="../models/Survey.js.html">models/Survey.js</a></li>
+            <li><a href="../models/SurveyVersion.js.html">models/SurveyVersion.js</a></li>
+            <li><a href="../models/SystemForm.js.html">models/SystemForm.js</a></li>
             <li><a href="../models/User.js.html">models/User.js</a></li>
+            <li><a href="../models/UserEnrollment.js.html">models/UserEnrollment.js</a></li>
             <li><a href="../models/WorkflowState.js.html">models/WorkflowState.js</a></li>
             <li><a href="../responses/ok.js.html">responses/ok.js</a></li>
             <li><a href="../services/HateoasService.js.html">services/HateoasService.js</a></li>
+            <li><a href="../services/ModelService.js.html">services/ModelService.js</a></li>
             <li><a href="../services/PermissionService.js.html">services/PermissionService.js</a></li>
             <li><a href="../services/Utils.js.html">services/Utils.js</a></li>
           </ul>
@@ -111,11 +129,7 @@
               </li>
               <li><a href="#update"><i class="alert alert-info"></i><span>update</span></a>
               </li>
-              <li><a href="#updateAccess"><i class="alert alert-info"></i><span>updateAccess</span></a>
-              </li>
               <li><a href="#updateRoles"><i class="alert alert-info"></i><span>updateRoles</span></a>
-              </li>
-              <li><a href="#findByStudyName"><i class="alert alert-info"></i><span>findByStudyName</span></a>
               </li>
             </ul>
           </div>
@@ -123,7 +137,7 @@
         <div class="span9">
           <div class="description"><p>UserController</p> <p>Server-side logic for managing users.</p></div>
           <pre><code class="language-javascript">(function() {
-
+  var Promise = require('q');
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
@@ -138,18 +152,20 @@
           </section>
           <div class="description"><p>find</p> <p>finds and returns all users with populated roles associations</p></div>
           <pre><code class="language-javascript">find: function (req, res, next) {
-  var query = User.find()
-    .where( actionUtil.parseCriteria(req) )
-    .limit( actionUtil.parseLimit(req) )
-    .skip( actionUtil.parseSkip(req) )
-    .sort( actionUtil.parseSort(req) );
-
-  query.populate('roles');
-  query.exec(function found(err, users) {
-    if (err) {
-      return res.serverError(err);
-    }
-    res.ok(users);
+  Group.findOneByName('subject').then(function (subjectGroup) {
+    var query = ModelService.filterExpiredRecords('user')
+      .where( actionUtil.parseCriteria(req) )
+      .where({ group: { '!': subjectGroup.id } })
+      .limit( actionUtil.parseLimit(req) )
+      .skip( actionUtil.parseSkip(req) )
+      .sort( actionUtil.parseSort(req) );
+    query.populate('roles');
+    query.exec(function found(err, users) {
+      if (err) {
+        return res.serverError(err);
+      }
+      res.ok(users);
+    });
   });
 },</code></pre>
           <section id="findOne">
@@ -162,12 +178,9 @@
           <div class="description"><p>findOne</p> <p>finds one user by id and returns single user with populated collection centre association</p></div>
           <pre><code class="language-javascript">findOne: function (req, res, next) {
   User.findOne(req.param('id'))
-    .populate('collectionCentres')
-    .exec(function (err, matchingRecord) {
-      if (err) {
-        res.serverError(err);
-      }
-      if(!matchingRecord) {
+    .populate('enrollments')
+    .then(function (user) {
+      if(!user) {
         return res.notFound({
           title: 'Not Found',
           code: 404,
@@ -175,7 +188,25 @@
         });
       }
 
-      res.ok(matchingRecord);
+      this.user = user;
+      return Promise.all(
+        _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
+          return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
+            .then(function (centre) {
+              enrollment.collectionCentre = centre.id;
+              enrollment.collectionCentreName = centre.name;
+              enrollment.study = centre.study.name;
+              return enrollment;
+            });
+        })
+      );
+    })
+    .then(function (enrollments) {
+      this.user.enrollments = enrollments;
+      res.ok(this.user);
+    })
+    .catch(function (err) {
+      res.serverError(err);
     });
 },</code></pre>
           <section id="create">
@@ -187,47 +218,60 @@
           </section>
           <div class="description"><p>create</p> <p>Overrides sails-auth's UserController.create to include role</p></div>
           <pre><code class="language-javascript">create: function (req, res, next) {
-  var password = req.param('password');
+  var password = req.param('password'),
+      groupID = req.param('group');
+  var options = _.pick(_.pick(req.body,
+    'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+  ), _.identity);
 
-  User.create({
-    username: req.param('username'),
-    email: req.param('email'),
-    prefix: req.param('prefix'),
-    firstname: req.param('firstname'),
-    lastname: req.param('lastname'),
-    gender: req.param('gender'),
-    dob: req.param('dob'),
-    group: req.param('group')
-  }).exec(function (uerr, user) {
-    if (uerr || !user) {
-      return res.badRequest({
+  Group.findOne(groupID).exec(function (err, group) {
+    if (err || !group) {
+      res.badRequest({
         title: 'User Error',
         code: 400,
-        message: 'Error creating user'
+        message: 'Group ' + groupID + ' is not a valid group'
       });
     } else {
-      if (_.isEmpty(password)) {
-        user.destroy(function (destroyErr) {
+      User.create(options).exec(function (uerr, user) {
+        if (uerr || !user) {
           return res.badRequest({
             title: 'User Error',
-            code: 400,
-            message: 'Password cannot be empty'
+            code: uerr.status || 400,
+            message: uerr.details || 'Error creating user'
           });
-        });
-      } else {
-        Passport.create({
-          protocol : 'local',
-          password : password,
-          user     : user.id
-        }, function (err, passport) {
-          if (err) {
+        } else {
+          if (_.isEmpty(password)) {
             user.destroy(function (destroyErr) {
-              next(destroyErr || err);
+              return res.badRequest({
+                title: 'User Error',
+                code: 400,
+                message: 'Password cannot be empty'
+              });
+            });
+          } else {
+            Passport.create({
+              protocol : 'local',
+              password : password,
+              user     : user.id
+            }, function (err, passport) {
+              if (err) {
+                user.destroy(function (destroyErr) {
+                  next(destroyErr || err);
+                });
+              }
+              PermissionService.setUserRoles(user)
+                .then(function (user) {
+                  res.ok(user);
+                })
+                .catch(function (err) {
+                  user.destroy(function (destroyErr) {
+                    next(destroyErr || err);
+                  });
+                });
             });
           }
-          res.ok(user);
-        });
-      }
+        }
+      });
     }
   });
 },</code></pre>
@@ -241,32 +285,23 @@
           <div class="description"><p>update</p> <p>Route for handling update of user attributes</p></div>
           <pre><code class="language-javascript">update: function (req, res) {
   var userId = req.param('id');
-
-  var userFields = {
-    username: req.param('username'),
-    email: req.param('email'),
-    prefix: req.param('prefix'),
-    firstname: req.param('firstname'),
-    lastname: req.param('lastname'),
-    gender: req.param('gender'),
-    dob: req.param('dob'),
-    group: req.param('group'),
-    centreAccess: req.param('centreAccess')
-  };
+  var options = _.pick(_.pick(req.body,
+    'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+  ), _.identity);
 
   Group.findOne(req.user.group).then(function (group) {
     this.group = group;
     if (group.level &gt; 1) { // prevent all non-admin users from updating group
-      delete userFields.group;
+      delete options.group;
     }
     return User.findOne(userId);
   })
   .then(function (user) { // update user fields
     this.previousGroup = user.group;
-    return User.update({id: user.id}, userFields);
+    return User.update({id: user.id}, options);
   })
   .then(function (user) { // updating group, apply new permissions
-    if (this.previousGroup !== userFields.group &amp;&amp; this.group.level === 0) {
+    if (this.previousGroup !== options.group &amp;&amp; this.group.level === 1) {
       return PermissionService.setUserRoles(_.first(user));
     } else {
       return user;
@@ -285,67 +320,11 @@
     res.ok(this.user);
   })
   .catch(function (err) {
-    res.serverError(err);
-  });
-},</code></pre>
-          <section id="updateAccess">
-            <h1>updateAccess</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>updateAccess()</span>
-            </p>
-          </section>
-          <div class="description"><p>updateAccess</p> <p>Route for handling collection centre access from study users page</p></div>
-          <pre><code class="language-javascript">updateAccess: function (req, res, next) {
-  // user params
-  var userId = req.param('id');
-
-  // access control params
-  var accessFields = {
-    centreAccess: req.param('centreAccess'),
-    swapWith: req.param('swapWith'),
-    isAdding: req.param('isAdding'),
-    collectionCentres: req.param('collectionCentres')
-  };
-
-  Group.findOne(req.user.group).then(function (group) {
-    this.group = group;
-    return User.findOne(userId).populate('collectionCentres');
-  })
-  .then(function (user) { // update user's collection centre access
-    this.user = user;
-    if (this.group.level === 1) {
-      if (accessFields.collectionCentres &amp;&amp; !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
-        _.each(accessFields.collectionCentres, function (centre) {
-          if (accessFields.isAdding) {
-            this.user.collectionCentres.add(centre);
-          } else {
-            this.user.collectionCentres.remove(centre);
-          }
-        });
-
-        // if swapping centres, isAdding flag will be false so after removing, add in new centres
-        if (accessFields.swapWith &amp;&amp; accessFields.swapWith.length &gt; 0) {
-          _.each(accessFields.swapWith, function (centre) {
-            this.user.collectionCentres.add(centre);
-          });
-        }
-        return this.user.save();
-      }
-    }
-    return this.user;
-  })
-  .then(function (user) {
-    if (this.group.level === 1 &amp;&amp; !_.isUndefined(accessFields.centreAccess)) {
-      return User.update(userId, { centreAccess: accessFields.centreAccess });
-    }
-    return this.user;
-  })
-  .then(function (user) {
-    res.ok(user);
-  })
-  .catch(function (err) {
-    res.serverError(err);
+    res.serverError({
+      title: 'User Update Error',
+      code: 500,
+      message: 'An error occurred when updating user: ' + options.username
+    });
   });
 },</code></pre>
           <section id="updateRoles">
@@ -377,7 +356,11 @@
       res.ok(user);
     })
     .catch(function (err) {
-      res.serverError(err);
+      res.serverError({
+        title: 'Role Update Error',
+        code: 500,
+        message: 'Error when updating roles for user: ' + user.username
+      });
     });
   }
   // Update user access matrix
@@ -390,34 +373,15 @@
       res.ok(user);
     })
     .catch(function (err) {
-      res.serverError(err);
+      res.serverError({
+        title: 'Role Update Error',
+        code: 500,
+        message: 'Error when updating access roles for user: ' + userId
+      });
     });
   }
-},</code></pre>
-          <section id="findByStudyName">
-            <h1>findByStudyName</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>findByStudyName()</span>
-            </p>
-          </section>
-          <div class="description"><p>findByStudyName</p> <p>Calls the User model function findByStudyName to return the list
-             of users that are enrolled in a given study.  Further filtering
-             of users based on enrollment is also done in the User model function.</p></div>
-          <pre><code class="language-javascript">findByStudyName: function(req, res) {
-  var studyName = req.param('name');
-  User.findByStudyName(studyName, req.user,
-    { where: actionUtil.parseCriteria(req),
-      limit: actionUtil.parseLimit(req),
-      skip: actionUtil.parseSkip(req),
-      sort: actionUtil.parseSort(req) },
-    function(err, users) {
-      if (err) {
-        res.serverError(err);
-      }
-      res.ok(users);
-    });
 }
+
   });
 })();</code></pre>
         </div>
