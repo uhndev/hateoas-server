@@ -184,7 +184,7 @@
           var studySurveyIds = _.pluck(study.surveys, 'id');
           return Survey.find(query).then(function (surveys) {
             return _.filter(surveys, function (survey) {
-              return _.includes(studySurveyIds, survey.id);
+              return _.contains(studySurveyIds, survey.id);
             });
           });
         })
