@@ -301,7 +301,28 @@
         "isActive": true
       }
     ],
-    "template": {}
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "Name",
+          "value": ""
+        },
+        {
+          "name": "completedBy",
+          "type": "string",
+          "prompt": "Completed By",
+          "value": ""
+        },
+        {
+          "name": "sessions",
+          "type": "array",
+          "prompt": "Number of Sessions",
+          "value": ""
+        }
+      ]
+    }
   },
   {
     "path": "/api/userenrollment",
