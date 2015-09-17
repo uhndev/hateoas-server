@@ -314,12 +314,6 @@
           "type": "string",
           "prompt": "Completed By",
           "value": ""
-        },
-        {
-          "name": "sessions",
-          "type": "array",
-          "prompt": "Number of Sessions",
-          "value": ""
         }
       ]
     }
