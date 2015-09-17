@@ -182,7 +182,7 @@
       return Study.findOneByName(studyName).populate('surveys')
         .then(function (study) {
           var studySurveyIds = _.pluck(study.surveys, 'id');
-          return Survey.find(query).then(function (surveys) {
+          return Survey.find(query).populate('versions').then(function (surveys) {
             return _.filter(surveys, function (survey) {
               return _.contains(studySurveyIds, survey.id);
             });
