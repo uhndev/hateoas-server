@@ -77,36 +77,48 @@
             res.notFound();
           } else {
             Group.findOne(req.user.group).then(function (group) {
+              this.group = group;
               switch (group.level) {
                 case 1: return null;
                 case 2: return UserEnrollment.find({
                           user: req.user.id,
                           collectionCentre: centre.id
                         });
-                case 3: return SubjectEnrollment.find({
-                          subject: req.user.id,
-                          collectionCentre: centre.id
+                case 3: return Subject.findOne({ user: req.user.id }).then(function (subject) {
+                          return SubjectEnrollment.find({
+                            subject: subject.id,
+                            collectionCentre: centre.id
+                          });
                         });
                 default: return res.notFound();
               }
             })
             .then(function (enrollments) {
-              var filteredUsers = { collectionCentreId: centre.id},
-                  filteredSubjects = { collectionCentreId: centre.id};
-              if (enrollments) { // return users with matching enrollments
-                filteredUsers.userenrollmentId = _.pluck(enrollments, 'id');
-                filteredSubjects.subjectenrollmentId = _.pluck(enrollments, 'id');
+              // if no enrollments found for coordinator/subject, DENY
+              if (this.group.level > 1 && enrollments.length === 0) {
+                return res.forbidden({
+                  title: 'Error',
+                  code: 403,
+                  message: "User "+req.user.email+" is not permitted to GET "
+                });
+              } else {
+                var filteredUsers = { collectionCentreId: centre.id },
+                  filteredSubjects = { collectionCentreId: centre.id };
+                if (enrollments) { // return users with matching enrollments
+                  filteredUsers.userenrollmentId = _.pluck(enrollments, 'id');
+                  if (this.group.level === 3) { // if user is a subject, only return their enrollments
+                    filteredSubjects.subjectenrollmentId = _.pluck(enrollments, 'id');
+                  }
+                }
+                return Promise.all([
+                  collectioncentreuser.find(filteredUsers),
+                  collectioncentresubject.find(filteredSubjects)
+                ]).spread(function (users, subjects) {
+                  centre.coordinators = users;
+                  centre.subjects = subjects;
+                  res.ok(centre);
+                });
               }
-
-              return Promise.all([
-                collectioncentreuser.find(filteredUsers),
-                collectioncentresubject.find(filteredSubjects)
-              ]);
-            })
-            .spread(function (users, subjects) {
-              centre.coordinators = users;
-              centre.subjects = subjects;
-              res.ok(centre);
             });
           }
         });
