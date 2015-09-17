@@ -9,6 +9,9 @@
   _.merge(exports, _super);
   _.merge(exports, {
     attributes: {
+      type: {
+        type: 'string'
+      },
       name: {
         type: 'string'
       },
@@ -23,6 +26,12 @@
       },
       formVersions: {
         type: 'array'
+      },
+      survey: {
+        type: 'integer'
+      },
+      surveyVersion: {
+        type: 'integer'
       },
       surveyName: {
         type: 'string'

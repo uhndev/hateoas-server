@@ -189,6 +189,16 @@
           });
         })
         .then(function (filteredSurveys) {
+          return Promise.all(
+            _.map(filteredSurveys, function(survey) {
+              return studysession.find({ study: survey.study, survey: survey.id }).then(function (sessions) {
+                survey.sessionForms = sessions;
+                return survey;
+              });
+            })
+          );
+        })
+        .then(function (filteredSurveys) {
           return [false, filteredSurveys];
         })
         .catch(function (err) {

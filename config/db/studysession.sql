@@ -4,14 +4,17 @@
 
 CREATE OR REPLACE VIEW studysession AS
  SELECT session.id,
-    survey.name,
+    session.type,
+    session.name,
     session.timepoint,
     session."availableFrom" AS "availableFrom",
     session."availableTo" AS "availableTo",
+    session.survey,
+    session."surveyVersion",
     ( SELECT ARRAY( SELECT formsessions.formversion_sessions
                    FROM formversion_sessions__session_formversions formsessions
                   WHERE formsessions."session_formVersions" = session.id AND session."expiredAt" IS NULL) AS "array") AS "formVersions",
-    survey.id AS "surveyId",
+    survey.name AS "surveyName",
     survey."completedBy",
     survey.study,
     study.name AS "studyName",
