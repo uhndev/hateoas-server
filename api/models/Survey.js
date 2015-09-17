@@ -182,11 +182,14 @@
       return Study.findOneByName(studyName).populate('surveys')
         .then(function (study) {
           var studySurveyIds = _.pluck(study.surveys, 'id');
-          return ModelService.filterExpiredRecords('survey').populate('versions').then(function (surveys) {
-            return _.filter(surveys, function (survey) {
-              return _.contains(studySurveyIds, survey.id);
+          return ModelService.filterExpiredRecords('survey')
+            .where(query.where)
+            .populate('versions')
+            .then(function (surveys) {
+              return _.filter(surveys, function (survey) {
+                return _.contains(studySurveyIds, survey.id);
+              });
             });
-          });
         })
         .then(function (filteredSurveys) {
           return Promise.all(
