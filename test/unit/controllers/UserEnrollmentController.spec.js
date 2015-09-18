@@ -216,6 +216,23 @@ describe('The UserEnrollment Controller', function () {
     });
 
     describe('findOne()', function () {
+      it ('should not allow coordinator to access a study they are not enrolled at', function (done) {
+        request.get('/api/study/ENROLLMENT-LEAP2-ADMIN')
+          .set('Authorization', 'Bearer ' + globals.token)
+          .expect(403)
+          .end(function (err, res) {
+            done(err);
+          });
+      });
+
+      it ('should not allow coordinator to access a collection centre they are not enrolled at', function (done) {
+        request.get('/api/collectioncentre/' + cc3Id)
+          .set('Authorization', 'Bearer ' + globals.token)
+          .expect(403)
+          .end(function (err, res) {
+            done(err);
+          });
+      });
     });
 
     describe('create()', function () {
