@@ -95,7 +95,7 @@
         if (_.isUndefined(this.study)) {
           return res.notFound();
         }
-        else if (_.isNull(centres)) {
+        else if (this.group.level === 2 && centres.length === 0 || this.group.level === 3) {
           return res.forbidden({
             title: 'Error',
             code: 403,
@@ -108,6 +108,7 @@
         }
       })
       .catch(function (err) {
+          console.log(err);
         return res.serverError({
           title: 'Server Error',
           code: err.status,
