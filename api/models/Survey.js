@@ -182,11 +182,24 @@
       return Study.findOneByName(studyName).populate('surveys')
         .then(function (study) {
           var studySurveyIds = _.pluck(study.surveys, 'id');
-          return Survey.find(query).then(function (surveys) {
-            return _.filter(surveys, function (survey) {
-              return _.includes(studySurveyIds, survey.id);
+          return ModelService.filterExpiredRecords('survey')
+            .where(query.where)
+            .populate('versions')
+            .then(function (surveys) {
+              return _.filter(surveys, function (survey) {
+                return _.contains(studySurveyIds, survey.id);
+              });
             });
-          });
+        })
+        .then(function (filteredSurveys) {
+          return Promise.all(
+            _.map(filteredSurveys, function(survey) {
+              return studysession.find({ study: survey.study, survey: survey.id }).then(function (sessions) {
+                survey.sessionForms = sessions;
+                return survey;
+              });
+            })
+          );
         })
         .then(function (filteredSurveys) {
           return [false, filteredSurveys];
