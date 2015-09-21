@@ -14,15 +14,19 @@
       Survey.findOne(req.param('id'))
         .then(function (survey) {
           this.survey = survey;
-          return studysession.find({survey: survey.id});
+          return studysession.find({ survey: survey.id });
         })
         .then(function (sessions) {
           this.sessions = sessions;
-          this.survey.studySessions = {};
-          return Study.findOne(this.survey.study);
+          this.survey.sessionForms = [];
+          return Study.findOne(this.survey.study).populate('forms');
         })
         .then(function (study) {
-          this.survey.studySessions.study = _.pick(study, 'id', 'name');
+          this.survey.sessionStudy = _.pick(study, 'id', 'name');
+          return Form.find({id: _.pluck(study.forms, 'id')}).populate('versions');
+        })
+        .then(function (studyForms) {
+          this.survey.sessionStudy.forms = studyForms;
           return Promise.all(
             _.map(this.sessions, function (session) {
               return FormVersion.find({ id: session.formVersions }).then(function (formVersions) {
@@ -35,7 +39,7 @@
           );
         })
         .then(function (sessions) {
-          this.survey.studySessions.sessions = sessions;
+          this.survey.sessionForms = sessions;
           res.ok(this.survey);
         });
     },
