@@ -7,8 +7,9 @@
  * @docs        http://sailsjs.org/#!documentation/models
  */
 (function () {
-
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
+
   module.exports = {
     schema: true,
     attributes: {

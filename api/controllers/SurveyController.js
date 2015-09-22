@@ -6,6 +6,9 @@
  */
 
 (function() {
+  var Promise = require('bluebird');
+  var util = require('util');
+  var pg = require('pg');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
@@ -41,6 +44,46 @@
         .then(function (sessions) {
           this.survey.sessionForms = sessions;
           res.ok(this.survey);
+        });
+    },
+
+    create: function (req, res) {
+      var pConfig = sails.config.connections.dados_development;
+      var conString = util.format("postgres://%s:%s@localhost:%s/%s", pConfig.user, pConfig.password, pConfig.port, pConfig.database);
+
+      var client = new pg.Client(conString);
+      Promise.promisifyAll(client);
+      client.connectAsync()
+        .then(function(){
+          return client.queryAsync('BEGIN');
+        })
+        .then(function() {
+          // Create data object (monolithic combination of all parameters)
+          // Omit the blacklisted params (like JSONP callback param, etc.)
+          var data = actionUtil.parseValues(req);
+
+          // Create new instance of model using data from params
+          return Survey.create(data);
+        })
+        .then(function (newSurvey) {
+          this.newSurvey = newSurvey;
+          // If we have the pubsub hook, use the model class's publish method
+          // to notify all subscribers about the created item
+          if (req._sails.hooks.pubsub) {
+            if (req.isSocket) {
+              Survey.subscribe(req, newSurvey);
+              Survey.introduce(newSurvey);
+            }
+            Survey.publishCreate(newSurvey, !req.options.mirror && req);
+          }
+          return client.queryAsync('COMMIT');
+        })
+        .then(function() {
+          res.created(this.newSurvey);
+        })
+        .catch(function(err) {
+          client.queryAsync('ROLLBACK');
+          res.negotiate(err);
         });
     },
 
