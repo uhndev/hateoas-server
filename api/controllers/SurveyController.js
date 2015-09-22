@@ -10,6 +10,40 @@
 
   module.exports = {
 
+    findOne: function (req, res) {
+      Survey.findOne(req.param('id'))
+        .then(function (survey) {
+          this.survey = survey;
+          return studysession.find({ survey: survey.id });
+        })
+        .then(function (sessions) {
+          this.sessions = sessions;
+          this.survey.sessionForms = [];
+          return Study.findOne(this.survey.study).populate('forms');
+        })
+        .then(function (study) {
+          this.survey.sessionStudy = _.pick(study, 'id', 'name');
+          return Form.find({id: _.pluck(study.forms, 'id')}).populate('versions');
+        })
+        .then(function (studyForms) {
+          this.survey.sessionStudy.forms = studyForms;
+          return Promise.all(
+            _.map(this.sessions, function (session) {
+              return FormVersion.find({ id: session.formVersions }).then(function (formVersions) {
+                session.formVersions = _.map(formVersions, function (formVersion) {
+                  return _.pick(formVersion, 'id', 'name', 'revision');
+                });
+                return session;
+              })
+            })
+          );
+        })
+        .then(function (sessions) {
+          this.survey.sessionForms = sessions;
+          res.ok(this.survey);
+        });
+    },
+
     /**
      * findByStudyName
      * @description Finds studies by their associations to a given study.
