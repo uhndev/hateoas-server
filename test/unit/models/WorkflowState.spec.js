@@ -22,7 +22,7 @@ describe('The WorkflowState Model', function() {
 
 		it('should begin with the correct WorkflowStates',  function (done) {
 			WorkflowState.count(function(err, states) {
-				states.should.be.exactly(7);
+				states.should.be.exactly(8);
 				done(err);
 			});
 		});

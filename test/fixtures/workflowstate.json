@@ -254,6 +254,71 @@
     "template": {}
   },
   {
+    "path": "/api/survey",
+    "queries": [],
+    "links": [
+      {
+        "rel": "name",
+        "prompt": "*",
+        "name": "name",
+        "href": "/api/study/*"
+      },
+      {
+        "rel": "overview",
+        "prompt": "Overview",
+        "name": "name",
+        "href": "/api/study/*"
+      },
+      {
+        "rel": "collectioncentre",
+        "prompt": "Collection Centres",
+        "name": "name",
+        "href": "/api/study/*/collectioncentre"
+      },
+      {
+        "rel": "subject",
+        "prompt": "Subjects",
+        "name": "name",
+        "href": "/api/study/*/subject"
+      },
+      {
+        "rel": "user",
+        "prompt": "Users",
+        "name": "name",
+        "href": "/api/study/*/user"
+      },
+      {
+        "rel": "form",
+        "prompt": "Forms",
+        "name": "name",
+        "href": "/api/study/*/form"
+      },
+      {
+        "rel": "survey",
+        "prompt": "Surveys",
+        "name": "name",
+        "href": "/api/study/*/survey",
+        "isActive": true
+      }
+    ],
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "Name",
+          "value": ""
+        },
+        {
+          "name": "completedBy",
+          "type": "string",
+          "prompt": "Completed By",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
     "path": "/api/userenrollment",
     "queries": [],
     "links": [

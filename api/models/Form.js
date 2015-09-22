@@ -164,7 +164,9 @@
       return Study.findOneByName(studyName).populate('forms')
         .then(function (study) {
           var studyFormIds = _.pluck(study.forms, 'id');
-          return Form.find(query).then(function (forms) {
+          return ModelService.filterExpiredRecords('form')
+            .where(query.where)
+            .populate('versions').then(function (forms) {
             return _.filter(forms, function (form) {
               return _.includes(studyFormIds, form.id);
             });
