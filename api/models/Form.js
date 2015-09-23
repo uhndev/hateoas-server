@@ -116,41 +116,43 @@
      *              filled out any AnswerSets, we create new FormVersions as needed.
      */
     afterUpdate: function(values, cb) {
-      if (!_.isNull(values.expiredAt)) {
-        Form.findOne(values.id)
-          .populate('versions')
-          .then(function (form) {
-            return FormVersion.update({ id: _.pluck(form.versions, 'id') }, {
-              expiredAt: new Date()
-            });
-          })
-          .then(function (versions) {
-            cb();
-          })
-          .catch(cb);
-      } else {
-        // if lastPublished set on Form, then there are AnswerSets referring to this version
-        if (values.lastPublished !== null) {
-          // in that case, stamp out next form version and next survey version
-          // create new form version with updated revision number
-          FormVersion.find({ form: values.id })
-            .sort('revision DESC')
-            .then(function (latestFormVersions) {
-              var newFormVersion = {
-                revision: _.first(latestFormVersions).revision + 1,
-                form: values.id
-              };
-              _.merge(newFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
-              return FormVersion.create(newFormVersion);
+      if (values.commit) {
+        if (!_.isNull(values.expiredAt)) {
+          Form.findOne(values.id)
+            .populate('versions')
+            .then(function (form) {
+              return FormVersion.update({ id: _.pluck(form.versions, 'id') }, {
+                expiredAt: new Date()
+              });
             })
-            .then(function (newFormVersion) {
+            .then(function (versions) {
               cb();
             })
             .catch(cb);
-        }
-        // otherwise updates are done in place for the current head
-        else {
-          cb();
+        } else {
+          // if lastPublished set on Form, then there are AnswerSets referring to this version
+          if (values.lastPublished !== null) {
+            // in that case, stamp out next form version and next survey version
+            // create new form version with updated revision number
+            FormVersion.find({ form: values.id })
+              .sort('revision DESC')
+              .then(function (latestFormVersions) {
+                var newFormVersion = {
+                  revision: _.first(latestFormVersions).revision + 1,
+                  form: values.id
+                };
+                _.merge(newFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
+                return FormVersion.create(newFormVersion);
+              })
+              .then(function (newFormVersion) {
+                cb();
+              })
+              .catch(cb);
+          }
+          // otherwise updates are done in place for the current head
+          else {
+            cb();
+          }
         }
       }
     },
