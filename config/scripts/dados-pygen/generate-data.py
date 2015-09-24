@@ -41,9 +41,13 @@ def createObjects():
     userEnrollments.append(enrollment)
 
   # create subject enrollments
+  subjects = {}
   for seid in range(config.minSubjectEnrollment, config.maxSubjectEnrollment):
     randCentre = random.choice(centres)
     enrollment = models.SubjectEnrollment(seid, studies[randCentre.study - config.minStudy], randCentre.id)
+    while enrollment.username in subjects:
+      enrollment = models.SubjectEnrollment(seid, studies[randCentre.study - config.minStudy], randCentre.id)
+    subjects[enrollment.username] = True
     subjectEnrollments.append(enrollment)
 
 def makeRequests():

@@ -110,7 +110,17 @@
         completedBy: values.completedBy,
         sessions: _.pluck(values.sessions, 'id')
       }).exec(function (err, surveyVersion) {
-        cb(err);
+        cb();
+        // jesus take the wheel
+        SurveyService.batchUpdateSessions(values).then(function () {
+          console.log('QUERY COMPLETE');
+        }).catch(function (err) {
+          Session.destroy({ survey: values.id }).exec(function (sessionErr) {
+            Survey.destroy(values.id).exec(function (surveyErr) {
+              console.log(sessionErr || surveyErr);
+            });
+          });
+        });
       });
     },
 
@@ -137,8 +147,7 @@
         })
           .spread(function (versions, sessions) {
             cb();
-          })
-          .catch(cb);
+          });
       } else {
         promise.then(function (survey) {
           // if lastPublished set on Survey, then there are AnswerSets referring to this version
@@ -163,8 +172,7 @@
               })
               .then(function (newSurveyVersion) {
                 cb();
-              })
-              .catch(cb);
+              });
           }
           // otherwise updates are done in place for the current head
           else {
@@ -172,6 +180,8 @@
           }
         });
       }
+
+      promise.catch(cb);
     },
 
     findByStudyName: function (studyName, currUser, options, cb) {
