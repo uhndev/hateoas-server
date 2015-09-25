@@ -137,6 +137,13 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
+    /**
+     * createLifecycle
+     * @description Wraps the default Session.create model method, but allows us manual control of
+     *              when we want to execute Session lifecycle logic.
+     * @param createValues session to create
+     * @returns {Object | Promise}
+     */
     createLifecycle: function(createValues) {
       return Session.create(createValues)
         .then(function (session) {
@@ -148,6 +155,14 @@
         });
     },
 
+    /**
+     * updateLifecycle
+     * @description Wraps the default Session.update model method, but allows us manual control of
+     *              when we want to execute Session lifecycle logic.
+     * @param findBy find criteria to find Session to update
+     * @param updateValues proposed changes to Session object
+     * @returns {Object | Promise}
+     */
     updateLifecycle: function(findBy, updateValues) {
       return Session.update(findBy, updateValues)
         .then(function (session) {
