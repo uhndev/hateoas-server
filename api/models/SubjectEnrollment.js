@@ -9,7 +9,6 @@
 (function() {
   var Promise = require('q');
   var moment = require('moment');
-  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
