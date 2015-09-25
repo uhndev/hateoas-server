@@ -172,7 +172,7 @@ describe('The Survey Model', function() {
     });
 
     it('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function(done) {
-      Session.update({ id: 1 }, { availableFrom: 10, availableTo: 10 })
+      Session.updateLifecycle({ id: 1 }, { availableFrom: 10, availableTo: 10 })
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
           return SurveyVersion.count().then(function (versions) {
@@ -215,7 +215,7 @@ describe('The Survey Model', function() {
     });
 
     it('should not create a new SurveyVersion if Session is edited', function(done) {
-      Session.update({ id: 1 }, { availableFrom: 5, availableTo: 5 })
+      Session.updateLifecycle({ id: 1 }, { availableFrom: 5, availableTo: 5 })
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
           return SurveyVersion.count();
@@ -242,7 +242,7 @@ describe('The Survey Model', function() {
       Survey.findOne({name: 'SURVEY4'})
         .populate('sessions')
         .exec(function (err, survey) {
-          Session.create({
+          Session.createLifecycle({
             survey: survey.id,
             surveyVersion: 1,
             name: 'Future',
@@ -250,12 +250,12 @@ describe('The Survey Model', function() {
             availableFrom: 6,
             availableTo: 6,
             type: 'non-scheduled'
-          }).exec(function (err, session) {
+          }).then(function (session) {
             SurveyVersion.count().exec(function (err, versions) {
               versions.should.equal(3);
-              done(err);
+              done();
             });
-          });
+          }).catch(done);
         });
     });
 
