@@ -67,8 +67,7 @@
             var sessions = this.currentSurvey.sessions;
             var queryTotal = sessions.length * subjectEnrollments.length;
             var now =  pgp.as.date(new Date());
-            var env = sails.config.environment;
-            var connection = sails.config.connections['dados_' + env];
+            var connection = sails.config.connections['dados_' + sails.config.environment];
             var db = pgp(connection);
 
             return db.tx(function (t) {
@@ -90,7 +89,7 @@
               });
 
               return t.sequence(function (idx) {
-                console.log(idx + '/' + queryTotal);
+                sails.log.info(idx + '/' + queryTotal);
                 if (idx < queryTotal) {
                   return t.none("INSERT INTO subjectschedule " +
                     "(\"availableFrom\", \"availableTo\", status, session, \"subjectEnrollment\", \"createdAt\", \"updatedAt\") VALUES " +
