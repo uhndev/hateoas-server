@@ -100,7 +100,7 @@
             .then(function (data) {
               return data;
             }, function (reason) {
-              console.log(reason);
+              sails.log.error(reason);
               return reason;
             });
           } else {

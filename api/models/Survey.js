@@ -3,7 +3,7 @@
  * @class Survey
  * @description Model representation of a survey to be performed within a study
  *              A survey has many sessions which dictate the points in time when
- *             data is to be collected from a subject.
+ *              data is to be collected from a subject.
  * @docs        http://sailsjs.org/#!documentation/models
  */
 (function () {
@@ -113,11 +113,11 @@
         cb();
         // jesus take the wheel
         SurveyService.batchUpdateSessions(values).then(function () {
-          console.log('QUERY COMPLETE');
+          sails.log.info('QUERY COMPLETE: Schedules created.');
         }).catch(function (err) {
           Session.destroy({ survey: values.id }).exec(function (sessionErr) {
             Survey.destroy(values.id).exec(function (surveyErr) {
-              console.log(sessionErr || surveyErr);
+              sails.log.error(sessionErr || surveyErr);
             });
           });
         });
@@ -201,16 +201,6 @@
                 return _.contains(studySurveyIds, survey.id);
               });
             });
-        })
-        .then(function (filteredSurveys) {
-          return Promise.all(
-            _.map(filteredSurveys, function(survey) {
-              return studysession.find({ study: survey.study, survey: survey.id }).then(function (sessions) {
-                survey.sessionForms = sessions;
-                return survey;
-              });
-            })
-          );
         })
         .then(function (filteredSurveys) {
           return [false, filteredSurveys];

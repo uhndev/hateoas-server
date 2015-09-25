@@ -30,7 +30,7 @@
         sails.after('hook:blueprints:loaded', function () {
           pg.connect(connectionStr, function (err, client, done) {
             if (err) {
-              console.log('Error fetching client from pool', err);
+              sails.log.error('Error fetching client from pool', err);
               return next(err);
             }
             var dropQuery = _.map(views, function (view) {
@@ -38,10 +38,10 @@
             }).join(' ');
             client.query(dropQuery, function (err, result) {
               if (err) {
-                console.log('Error running query: ' + err);
+                sails.log.error('Error running query: ' + err);
               }
               done();
-              sails.log('Drop View Query executed successfully');
+              sails.log.info('Drop View Query executed successfully');
               next();
             })
           })
