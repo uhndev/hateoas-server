@@ -75,10 +75,13 @@
               // creating a sequence of transaction queries:
               _.each(sessions, function (session) {
                 _.each(subjectEnrollments, function (enrollment) {
-                  var doe = moment(enrollment.doe);
+                  var availableFrom = moment(enrollment.doe).add(session.timepoint, 'days')
+                    .subtract(session.availableFrom, 'days');
+                  var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
+                    .add(session.availableTo, 'days');
                   queries.push({
-                    from: (session.type == 'scheduled') ? doe.add(session.timepoint - session.availableFrom, 'days').toDate() : null,
-                    to: (session.type == 'scheduled') ? doe.add(session.timepoint + session.availableTo, 'days').toDate() : null,
+                    from: (session.type == 'scheduled') ? availableFrom.toDate() : null,
+                    to: (session.type == 'scheduled') ? availableTo.toDate() : null,
                     status: 'IN PROGRESS',
                     session: session.id,
                     enrollment: enrollment.id,
