@@ -10,8 +10,8 @@
   _.merge(exports, {
 
     attributes: {
-      collectionCentreId: {
-        type: 'integer'
+      collectionCentre: {
+        model: 'collectioncentre'
       },
       username: {
         type: 'string'
@@ -34,8 +34,8 @@
       dob: {
         type: 'date'
       },
-      userenrollmentId: {
-        type: 'integer'
+      userenrollment: {
+        model: 'userenrollment'
       },
       centreAccess: {
         type: 'string'

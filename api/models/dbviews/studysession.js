@@ -28,10 +28,10 @@
         type: 'array'
       },
       survey: {
-        type: 'integer'
+        model: 'survey'
       },
       surveyVersion: {
-        type: 'integer'
+        model: 'surveyversion'
       },
       surveyName: {
         type: 'string'
@@ -40,7 +40,7 @@
         type: 'string'
       },
       study: {
-        type: 'integer'
+        model: 'study'
       },
       studyName: {
         type: 'string'

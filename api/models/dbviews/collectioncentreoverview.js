@@ -26,7 +26,7 @@
         type: 'string'
       },
       contact: {
-        type: 'integer'
+        model: 'user'
       },
       contactName: {
         type: 'text'

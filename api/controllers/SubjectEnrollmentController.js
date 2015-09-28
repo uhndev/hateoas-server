@@ -14,8 +14,24 @@
   module.exports = {
 
     findOne: function(req, res, next) {
-      studysubject.findOne({ id: req.param('id') }).exec(function (err, enrollment) {
-        res.ok(enrollment);
+      studysubject.findOne(req.param('id')).exec(function (err, enrollment) {
+        if (_.isUndefined(enrollment)) {
+          res.notFound();
+        } else {
+          PermissionService.findEnrollments(req.user, enrollment.collectionCentre)
+            .then(function (enrollments) {
+              // if no enrollments found for coordinator/subject, DENY
+              if (this.group.level > 1 && enrollments.length === 0) {
+                return res.forbidden({
+                  title: 'Error',
+                  code: 403,
+                  message: "User "+req.user.email+" is not permitted to GET "
+                });
+              } else {
+                res.ok(enrollment);
+              }
+            });
+        }
       });
     },
 
