@@ -50,13 +50,13 @@
        *              should occur.  The availableFrom and availableTo fields in SubjectSchedule are
        *              determined based on this number.  There are several configurations between
        *              this and the type attribute that are possible:
-       *              1) scheduled with timepoint X      : repeat session every X days
-       *              2) non-scheduled with timepoint X  : enable session after X days
+       *              1) scheduled with timepoint X       : repeat session every X days
+       *              2) non-scheduled with timepoint X   : enable session after X days
+       *              3) non-scheduled with timepoint null: session available always
        * @type {Integer}
        */
       timepoint: {
         type: 'integer',
-        required: true,
         integer: true
       },
 
@@ -69,8 +69,7 @@
        */
       availableFrom: {
         type: 'integer',
-        integer: true,
-        defaultsTo: 1
+        integer: true
       },
 
       /**
@@ -82,14 +81,13 @@
        */
       availableTo: {
         type: 'integer',
-        integer: true,
-        defaultsTo: 1
+        integer: true
       },
 
       /**
        * type
        * @description Type of session where scheduled means an event that should be repeated at regular
-       *              intervals, or non-scheduled which means a one time data capture event.
+       *              intervals, or non-scheduled which means a session that is available whenever.
        * @type {String}
        */
       type: {

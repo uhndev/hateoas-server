@@ -259,6 +259,16 @@ describe('The Survey Model', function() {
         });
     });
 
+    it('should have set availableFrom/To to null if session type was non-scheduled', function(done) {
+      Session.findOneByName('Future').populate('subjectSchedules').exec(function (err, session) {
+        _.each(session.subjectSchedules, function (schedule) {
+          _.isNull(schedule.availableFrom).should.be.ok;
+          _.isNull(schedule.availableTo).should.be.ok;
+        });
+        done(err);
+      })
+    });
+
     it('should create a new SurveyVersion if removing a Session from a Survey', function(done) {
       Survey.findOne({name: 'SURVEY4'})
         .populate('sessions')

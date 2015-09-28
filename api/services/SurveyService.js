@@ -77,8 +77,8 @@
                 _.each(subjectEnrollments, function (enrollment) {
                   var doe = moment(enrollment.doe);
                   queries.push({
-                    from: doe.add(session.timepoint - session.availableFrom, 'days').toDate(),
-                    to: doe.add(session.timepoint + session.availableTo, 'days').toDate(),
+                    from: (session.type == 'scheduled') ? doe.add(session.timepoint - session.availableFrom, 'days').toDate() : null,
+                    to: (session.type == 'scheduled') ? doe.add(session.timepoint + session.availableTo, 'days').toDate() : null,
                     status: 'IN PROGRESS',
                     session: session.id,
                     enrollment: enrollment.id,
@@ -137,8 +137,8 @@
                 var availableTo = moment(enrollment.doe).add(sessionObj.timepoint, 'days')
                   .add(sessionObj.availableTo, 'days');
                 return SubjectSchedule.findOrCreate({
-                  availableFrom: availableFrom.toDate(),
-                  availableTo: availableTo.toDate(),
+                  availableFrom: (sessionObj.type == 'scheduled') ? availableFrom.toDate() : null,
+                  availableTo: (sessionObj.type == 'scheduled') ? availableTo.toDate() : null,
                   status: 'IN PROGRESS',
                   session: sessionObj.id,
                   subjectEnrollment: enrollment.id
@@ -189,8 +189,8 @@
                 // create subjectSchedules if not exist
                 if (!updatedSession.subjectSchedules) {
                   return SubjectSchedule.create({
-                    availableFrom: availableFrom.toDate(),
-                    availableTo: availableTo.toDate(),
+                    availableFrom: (updatedSession.type == 'scheduled') ? availableFrom.toDate() : null,
+                    availableTo: (updatedSession.type == 'scheduled') ? availableTo.toDate() : null,
                     status: 'IN PROGRESS',
                     session: updatedSession.id,
                     subjectEnrollment: enrollment.id
@@ -199,8 +199,8 @@
                 // update existing subjectSchedules
                 else {
                   return SubjectSchedule.update({session: updatedSession.id, subjectEnrollment: enrollment.id}, {
-                    availableFrom: availableFrom.toDate(),
-                    availableTo: availableTo.toDate()
+                    availableFrom: (updatedSession.type == 'scheduled') ? availableFrom.toDate() : null,
+                    availableTo: (updatedSession.type == 'scheduled') ? availableTo.toDate() : null
                   });
                 }
               })
