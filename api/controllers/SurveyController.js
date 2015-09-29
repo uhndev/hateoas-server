@@ -1,73 +1,197 @@
 /**
- * SurveyController
+ * SubjectEnrollmentController
  *
- * @description Server-side logic for managing surveys
- * @help        See http://links.sailsjs.org/docs/controllers
+ * @module controllers/SubjectEnrollment
+ * @description Server-side logic for managing Subject Enrollments
+ * @help        See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 (function() {
-  var Promise = require('q');
-  var util = require('util');
-  var pg = require('pg');
+  var moment = require('moment'); // I need a minute
+  var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var Promise = require('q');
 
   module.exports = {
 
-    findOne: function (req, res) {
-      Survey.findOne(req.param('id'))
-        .then(function (survey) {
-          this.survey = survey;
-          return studysession.find({ survey: survey.id });
-        })
-        .then(function (sessions) {
-          this.sessions = sessions;
-          this.survey.sessionForms = [];
-          return Study.findOne(this.survey.study).populate('forms');
-        })
-        .then(function (study) {
-          this.survey.sessionStudy = _.pick(study, 'id', 'name');
-          return Form.find({id: _.pluck(study.forms, 'id')}).populate('versions');
-        })
-        .then(function (studyForms) {
-          this.survey.sessionStudy.forms = studyForms;
-          return Promise.all(
-            _.map(this.sessions, function (session) {
-              return FormVersion.find({ id: session.formVersions }).then(function (formVersions) {
-                session.formVersions = _.map(formVersions, function (formVersion) {
-                  return _.pick(formVersion, 'id', 'name', 'revision');
+    findOne: function(req, res, next) {
+      studysubject.findOne(req.param('id')).exec(function (err, enrollment) {
+        if (_.isUndefined(enrollment)) {
+          res.notFound();
+        } else {
+          PermissionService.findEnrollments(req.user, enrollment.collectionCentre)
+            .then(function (enrollments) {
+              // if no enrollments found for coordinator/subject, DENY
+              if (this.group.level > 1 && enrollments.length === 0) {
+                return res.forbidden({
+                  title: 'Error',
+                  code: 403,
+                  message: "User "+req.user.email+" is not permitted to GET "
                 });
-                return session;
-              })
-            })
-          );
+              } else {
+                // find subject schedule with session information
+                schedulesessions.find({ subjectEnrollment: enrollment.id })
+                  .then(function (schedules) {
+                    this.schedules = _.sortBy(schedules, 'timepoint');
+                    // get flattened dictionary of possible formVersions in each schedule
+                    return FormVersion.find({ id: _.flatten(_.pluck(schedules, 'formVersions'))})
+                      .then(function (formVersions) {
+                        return _.indexBy(_.map(formVersions, function (form) {
+                          return _.pick(form, 'id', 'name', 'revision', 'form');
+                        }), 'id');
+                      });
+                  })
+                  .then(function (possibleForms) {
+                    enrollment.formSchedules = [];
+                    // create 1D list of scheduled forms
+                    _.each(this.schedules, function (schedule) {
+                      _.each(schedule.formVersions, function (formId) {
+                        var scheduledForm = _.clone(schedule);
+                        scheduledForm.scheduledForm = possibleForms[formId];
+                        enrollment.formSchedules.push(scheduledForm);
+                      });
+                    });
+
+                  })
+                  .then(function () {
+                    return Promise.all(
+                      _.map(enrollment.formSchedules, function (schedule) {
+                        return AnswerSet.count({
+                          formVersion: schedule.scheduledForm.id,
+                          surveyVersion: schedule.surveyVersion,
+                          subjectSchedule: schedule.id,
+                          subjectEnrollment: enrollment.id
+                        }).then(function (answers) {
+                          // TODO: Support [unavailable, late, incomplete, and completed] status types
+                          // TODO: Verify semi-completed answer sets (possibly store state in AnswerSet itself?)
+                          schedule.scheduledForm.status = (answers > 0) ? "Complete" : "Incomplete";
+                        })
+                      })
+                    );
+                  })
+                  .then(function (answers) {
+                    res.ok(enrollment);
+                  })
+                  .catch(function (err) {
+                    res.serverError(err);
+                  });
+              }
+            });
+        }
+      });
+    },
+
+    create: function(req, res, next) {
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
+      ), _.identity);
+
+      var enrollmentOptions = _.pick(_.pick(req.body,
+        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+      ), _.identity);
+
+      Group.findOne({ name: 'subject' })
+        .then(function (subjectGroup) { // create user with subject group
+          options.group = subjectGroup.id;
+          return User.create(options).then(function (user) {
+            return PermissionService.setUserRoles(user);
+          });
         })
-        .then(function (sessions) {
-          this.survey.sessionForms = sessions;
-          res.ok(this.survey);
+        .then(function (user) { // create passport
+          this.user = user;
+          return Passport.create({
+            protocol : 'local',
+            password : req.param('password'),
+            user     : user.id
+          }).catch(function (err) {
+            this.user.destroy(function (destroyErr) {
+              throw err;
+            });
+          });
+        })
+        .then(function (passport) { // create subject
+          this.passport = passport;
+          return Subject.create({
+            user: this.user.id
+          }).catch(function (err) {
+            this.passport.destroy(function (destroyErr) {
+              this.user.destroy(function (destroyErr) {
+                throw err;
+              });
+            });
+          });
+        })
+        .then(function (subject) { // find collection centre's study
+          this.subject = subject;
+          return Study.findOne(enrollmentOptions.study).then(function (study) {
+            return study.attributes;
+          });
+        })
+        .then(function (attributes) { // verify studyMapping is valid
+          var studyMapping = enrollmentOptions.studyMapping;
+          // only if both empty we allow or if status is set to REGISTERED
+          if (_.isEmpty(attributes) && _.isEmpty(studyMapping) ||
+            _.isEmpty(studyMapping) && enrollmentOptions.status == 'REGISTERED') {
+            return true;
+          } else {
+            // verify keys of study attributes mirror keys of studyMapping
+            var valid = _.isEmpty(_.xor(_.keys(attributes), _.keys(studyMapping)));
+            // verify value of studyMapping corresponds directly to one of the values in study attributes
+            _.forIn(attributes, function (value, key) {
+              valid = valid && _.includes(value, studyMapping[key]);
+            });
+            return valid;
+          }
+        })
+        .then(function (validMapping) { // if valid, create subject enrollment
+          if (validMapping) {
+            enrollmentOptions.subject = this.subject.id;
+            return SubjectEnrollment.create(enrollmentOptions);
+          } else {
+            return null;
+          }
+        })
+        .then(function (enrollment) {
+          if (enrollment) {
+            res.ok(enrollment);
+          } else {
+            this.subject.destroy(function (destroyErr) {
+              this.passport.destroy(function (destroyErr) {
+                this.user.destroy(function (destroyErr) {
+                  res.badRequest({
+                    title: 'Subject Enrollment Error',
+                    code: 400,
+                    message: 'Study mapping is invalid, please ensure options match study attributes.'
+                  });
+                });
+              });
+            });
+          }
+        })
+        .catch(function (err) {
+          res.serverError({
+            title: 'Subject Enrollment Error',
+            code: err.status || 500,
+            message: err.details || 'Error creating subject'
+          });
         });
     },
 
-    /**
-     * findByStudyName
-     * @description Finds studies by their associations to a given study.
-     */
-    findByStudyName: function (req, res) {
+    findByStudyName: function(req, res) {
       var studyName = req.param('name');
-
-      Survey.findByStudyName(studyName, req.user,
-        {
-          where: actionUtil.parseCriteria(req),
+      SubjectEnrollment.findByStudyName(studyName, req.user,
+        { where: actionUtil.parseCriteria(req),
           limit: actionUtil.parseLimit(req),
           skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req)
-        }
-      ).then(function (surveys) {
-          var err = surveys[0];
-          var surveyItems = surveys[1];
+          sort: actionUtil.parseSort(req) }
+      ).then(function(subjects) {
+          var err = subjects[0];
+          var subjectItems = subjects[1];
           if (err) res.serverError(err);
-          res.ok(surveyItems);
+          res.ok(subjectItems);
         });
     }
-  };
-})();
 
+  };
+
+})();
