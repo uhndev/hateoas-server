@@ -10,11 +10,11 @@
   _.merge(exports, {
 
     attributes: {
-      userenrollmentId: {
-        type: 'integer'
+      userenrollment: {
+        model: 'userenrollment'
       },
       study: {
-        type: 'integer'
+        model: 'study'
       },
       studyName: {
         type: 'string'
@@ -23,7 +23,7 @@
         type: 'string'
       },
       contact: {
-        type: 'integer'
+        model: 'user'
       },
       contactName: {
         type: 'string'

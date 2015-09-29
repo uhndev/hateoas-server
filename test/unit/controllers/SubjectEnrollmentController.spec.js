@@ -152,7 +152,7 @@ describe('The SubjectEnrollment Controller', function () {
           .expect(200)
           .end(function (err, res) {
             var collection = JSON.parse(res.text);
-            _.pluck(collection.items, 'subjectId').should.containEql(newSubject);
+            _.pluck(collection.items, 'subject').should.containEql(newSubject);
             done(err);
           });
       });

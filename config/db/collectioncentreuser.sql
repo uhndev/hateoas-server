@@ -5,7 +5,7 @@
 
 CREATE OR REPLACE VIEW collectioncentreuser AS
  SELECT "user".id,
-    collectioncentre.id AS "collectionCentreId",
+    collectioncentre.id AS "collectionCentre",
     "user".username,
     "user".email,
     "user".prefix,
@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW collectioncentreuser AS
     "user".lastname,
     "user".gender,
     "user".dob,
-    userenrollment.id AS "userenrollmentId",
+    userenrollment.id AS "userenrollment",
     userenrollment."centreAccess",
     userenrollment."owner",
     userenrollment."createdBy",

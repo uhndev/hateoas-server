@@ -5,7 +5,7 @@
 
 CREATE OR REPLACE VIEW studyuser AS
   SELECT "user".id,
-    userenrollment.id AS "enrollmentId",
+    userenrollment.id AS "userenrollment",
     (SELECT ARRAY(SELECT userenrollment.id
      FROM userenrollment
      WHERE userenrollment."collectionCentre" = collectioncentre.id

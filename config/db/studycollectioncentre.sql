@@ -5,7 +5,7 @@
 
 CREATE OR REPLACE VIEW studycollectioncentre AS
  SELECT collectioncentre.id,
-    userenrollment.id AS "userenrollmentId",
+    userenrollment.id AS "userenrollment",
     collectioncentre.study,
     study.name AS "studyName",
     collectioncentre.name,

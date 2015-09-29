@@ -10,20 +10,20 @@
   _.merge(exports, {
 
     attributes: {
-      subjectId: {
+      subject: {
         type: 'integer'
       },
-      userId: {
-        type: 'integer'
+      user: {
+        model: 'user'
       },
       collectionCentre: {
-        type: 'integer'
+        model: 'collectioncentre'
       },
       subjectNumber: {
         type: 'integer'
       },
-      studyId: {
-        type: 'integer'
+      study: {
+        model: 'study'
       },
       studyName: {
         type: 'string'

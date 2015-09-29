@@ -58,7 +58,7 @@
         .then(function (survey) {
           // find subject enrollments for study
           this.currentSurvey = survey;
-          return studysubject.find({studyId: this.currentSurvey.study});
+          return studysubject.find({study: this.currentSurvey.study});
         })
         .then(function (subjectEnrollments) {
           // if subjects are enrolled already, create SubjectSchedules for them
@@ -75,10 +75,13 @@
               // creating a sequence of transaction queries:
               _.each(sessions, function (session) {
                 _.each(subjectEnrollments, function (enrollment) {
-                  var doe = moment(enrollment.doe);
+                  var availableFrom = moment(enrollment.doe).add(session.timepoint, 'days')
+                    .subtract(session.availableFrom, 'days');
+                  var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
+                    .add(session.availableTo, 'days');
                   queries.push({
-                    from: (session.type == 'scheduled') ? doe.add(session.timepoint - session.availableFrom, 'days').toDate() : null,
-                    to: (session.type == 'scheduled') ? doe.add(session.timepoint + session.availableTo, 'days').toDate() : null,
+                    from: (session.type == 'scheduled') ? availableFrom.toDate() : null,
+                    to: (session.type == 'scheduled') ? availableTo.toDate() : null,
                     status: 'IN PROGRESS',
                     session: session.id,
                     enrollment: enrollment.id,
@@ -125,7 +128,7 @@
         })
         .then(function (newSurveyVersion) {
           // find subject enrollments for study
-          return studysubject.find({studyId: this.currentSurvey.study});
+          return studysubject.find({study: this.currentSurvey.study});
         })
         .then(function (subjectEnrollments) {
           // if subjects are enrolled already, create SubjectSchedules for them
@@ -170,7 +173,7 @@
            * 1) no subjects enrolled yet = do nothing
            * 2) subject already enrolled = create if not exist, update if exist
            */
-          return studysubject.find({studyId: this.currentSurvey.study});
+          return studysubject.find({study: this.currentSurvey.study});
         })
         .then(function (subjectEnrollments) {
           // scenario 1; no subjects enrolled yet so do nothing
