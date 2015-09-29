@@ -1,0 +1,217 @@
+
+<style>
+    .mapDiv {
+        top:30px;
+
+    }
+
+    .angular-google-map-container {height:400px; width:400px;}
+    .selectedRow {
+        background: #ffa;
+    }
+
+    .SiteDistanceTable {
+        margin:0px;padding:0px;
+        width:100%;
+        box-shadow: 10px 10px 5px #888888;
+        border:1px solid #000000;
+
+        -moz-border-radius-bottomleft:0px;
+        -webkit-border-bottom-left-radius:0px;
+        border-bottom-left-radius:0px;
+
+        -moz-border-radius-bottomright:0px;
+        -webkit-border-bottom-right-radius:0px;
+        border-bottom-right-radius:0px;
+
+        -moz-border-radius-topright:0px;
+        -webkit-border-top-right-radius:0px;
+        border-top-right-radius:0px;
+
+        -moz-border-radius-topleft:0px;
+        -webkit-border-top-left-radius:0px;
+        border-top-left-radius:0px;
+    }.SiteDistanceTable table{
+         border-collapse: collapse;
+         border-spacing: 0;
+         width:100%;
+         height:100%;
+         margin:0px;padding:0px;
+     }.SiteDistanceTable tr:last-child td:last-child {
+          -moz-border-radius-bottomright:0px;
+          -webkit-border-bottom-right-radius:0px;
+          border-bottom-right-radius:0px;
+      }
+    .SiteDistanceTable table tr:first-child td:first-child {
+        -moz-border-radius-topleft:0px;
+        -webkit-border-top-left-radius:0px;
+        border-top-left-radius:0px;
+    }
+    .SiteDistanceTable table tr:first-child td:last-child {
+        -moz-border-radius-topright:0px;
+        -webkit-border-top-right-radius:0px;
+        border-top-right-radius:0px;
+    }.SiteDistanceTable tr:last-child td:first-child{
+         -moz-border-radius-bottomleft:0px;
+         -webkit-border-bottom-left-radius:0px;
+         border-bottom-left-radius:0px;
+     }.SiteDistanceTable tr:hover td{
+          background-color:#ffffff;
+
+
+      }
+    .SiteDistanceTable td{
+        vertical-align:middle;
+        background:-o-linear-gradient(bottom, #aad4ff 5%, #ffffff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #aad4ff), color-stop(1, #ffffff) );
+        background:-moz-linear-gradient( center top, #aad4ff 5%, #ffffff 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#aad4ff", endColorstr="#ffffff");	background: -o-linear-gradient(top,#aad4ff,ffffff);
+
+        background-color:#aad4ff;
+
+        border:1px solid #000000;
+        border-width:0px 1px 1px 0px;
+        text-align:left;
+        padding:7px;
+        font-size:10px;
+        font-family:Arial;
+        font-weight:normal;
+        color:#000000;
+    }.SiteDistanceTable tr:last-child td{
+         border-width:0px 1px 0px 0px;
+     }.SiteDistanceTable tr td:last-child{
+          border-width:0px 0px 1px 0px;
+      }.SiteDistanceTable tr:last-child td:last-child{
+           border-width:0px 0px 0px 0px;
+       }
+    .SiteDistanceTable tr:first-child td{
+        background:-o-linear-gradient(bottom, #005fbf 5%, #56ffff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #56ffff) );
+        background:-moz-linear-gradient( center top, #005fbf 5%, #56ffff 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#56ffff");	background: -o-linear-gradient(top,#005fbf,56ffff);
+
+        background-color:#005fbf;
+        border:0px solid #000000;
+        text-align:center;
+        border-width:0px 0px 1px 1px;
+        font-size:14px;
+        font-family:Arial;
+        font-weight:bold;
+        color:#ffffff;
+    }
+    .SiteDistanceTable tr:first-child:hover td{
+        background:-o-linear-gradient(bottom, #005fbf 5%, #56ffff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #56ffff) );
+        background:-moz-linear-gradient( center top, #005fbf 5%, #56ffff 100% );
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#56ffff");	background: -o-linear-gradient(top,#005fbf,56ffff);
+
+        background-color:#005fbf;
+    }
+    .SiteDistanceTable tr:first-child td:first-child{
+        border-width:0px 0px 1px 0px;
+    }
+    .SiteDistanceTable tr:first-child td:last-child{
+        border-width:0px 0px 1px 1px;
+    }
+    tr:hover {
+        background-color: #ffa;
+    }</style>
+
+<div ng-app="dados.arm.assessment.controller" ng-controller="AssessmentController as assessment">
+    <h3 class="col-md-12 text-center">Login</h3>
+
+    <div id="selectionDiv" class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <form data-ng-submit="assessment.findReferral(assessment.searchString)" class="form-horizontal"
+              autocomplete="off">
+            Find Referral
+            <fieldset>
+                <div class="form-group">
+                    <label for="searchString">Search</label>
+                    <input type="text" id="searchString" name="searchString" class="form-control"
+                           data-ng-model="assessment.searchString" placeholder="Search MRN / Cliam / Client">
+                </div>
+                <div class="text-center form-group">
+                    <!--{{assessment.referrals|json}}-->
+                </div>
+                <div class="text-center form-group">
+                    <button type="submit" id="findReferralSubmit" class="btn btn-primary">Search</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <h2 style="clear:both">results&nbsp;<a ng-click="assessment.collapsedSearch= !assessment.collapsedSearch;">{{(assessment.collapsedSearch)
+        ? '+' : '--'}}</a></h2>
+
+    <div id="referralSearchDiv" style="clear:both" class="form-group" collapse="assessment.collapsedSearch">
+        <table id="searchResults" class="table ng-table">
+            <thead>
+            <tr>
+                <td>MRN #</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Claim Num</td>
+                <td>Policy Num</td>
+            </tr>
+            </thead>
+            <tr ng-repeat="referral in assessment.referrals" ng-click="assessment.selectReferral(referral)"
+                class="{{(assessment.selectedReferral===referral) ? 'selectedRow' : ''}}">
+                <td>{{referral.client_mrn}}</td>
+                <td>{{referral.client_firstName}}</td>
+                <td>{{referral.client_lastName}}</td>
+                <td>{{referral.claim_claimNum}}</td>
+                <td>{{referral.claim_policyNum}}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="selectedReferralDiv" style="clear:both" class="form-group" collapse="assessment.collapsedClientDetail">
+        <table id="clientDetail" class="table">
+            <thead>
+            <tr>
+                <td>MRN #</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Claim Num</td>
+                <td>Policy Num</td>
+                <td>City</td>
+                <td>Referral Date</td>
+            </tr>
+            </thead>
+            <tr class="selectedRow">
+                <td>{{assessment.selectedReferral.client_mrn}}</td>
+                <td>{{assessment.selectedReferral.client_firstName}}</td>
+                <td>{{assessment.selectedReferral.client_lastName}}</td>
+                <td>{{assessment.selectedReferral.claim_claimNum}}</td>
+                <td>{{assessment.selectedReferral.claim_policyNum}}</td>
+                <td>{{assessment.selectedReferral.client_city}}</td>
+                <td>{{assessment.selectedReferral.referralDate}}</td>
+            </tr>
+        </table>
+
+        <div id="sitesDiv">
+            <table id="distanceToSites" class="SiteDistanceTable">
+                    <tr>
+                        <td ng-repeat="site in assessment.sites">{{site.name}}</td>
+                    </tr>
+                <tr>
+                    <td ng-repeat="siteDistance in assessment.distanceMatrix.rows[0].elements">{{siteDistance.distance.text}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="mapDiv">
+        <ui-gmap-google-map ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true" zoom="assessment.map.zoom">
+            <ui-gmap-marker ng-if="assessment.selectedReferral != {} "
+                            idKey="9999"
+                            coords="{latitude: assessment.selectedReferral.client_latitude, longitude: assessment.selectedReferral.client_longitude}"
+                            click=""
+                            icon="{url: 'assets/img/patienticon.png'}"
+                    >
+            </ui-gmap-marker>
+            <ui-gmap-marker ng-repeat="site in assessment.sites"
+                            idKey='$index'
+                            coords="{latitude: site.latitude, longitude: site.longitude }"
+                            click='assessment.selectSite(site)'
+                    >
+            </ui-gmap-marker>
+        </ui-gmap-google-map>
+    </div>
+    <div id="DirectionsDiv"></div>
+</div>
