@@ -144,10 +144,9 @@
               expiredAt: new Date()
             })
           ];
-        })
-          .spread(function (versions, sessions) {
-            cb();
-          });
+        }).spread(function (versions, sessions) {
+          cb();
+        });
       } else {
         promise.then(function (survey) {
           // if lastPublished set on Survey, then there are AnswerSets referring to this version
