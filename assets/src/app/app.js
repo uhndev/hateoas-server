@@ -10,6 +10,7 @@
     'templates-app',
     'templates-common',
 
+    // DADOS
     'dados.constants',
     'dados.access',
   	'dados.auth',
@@ -28,7 +29,10 @@
 
     'dados.common.services',
     'dados.common.interceptors',
-    'dados.common.directives'
+    'dados.common.directives',
+
+    // ARM
+    'dados.arm.assessment'
   ])
   .config(dadosConfig)
   .controller('DadosController', DadosController);

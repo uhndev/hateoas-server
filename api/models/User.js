@@ -36,15 +36,18 @@
         type: 'string'
       },
 
+
       /**
        * prefix
        * @description Enumeration of allowable prefixes for a user.
        * @type {Enum}
        */
+
       prefix: {
         type: 'string',
         enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
       },
+
 
       /**
        * gender
@@ -56,6 +59,7 @@
         enum: ['Male', 'Female']
       },
 
+
       /**
        * dob
        * @description A user's date of birth.
@@ -64,6 +68,7 @@
       dob: {
         type: 'date'
       },
+
 
       /**
        * group
@@ -74,6 +79,7 @@
       group: {
         model: 'group'
       },
+
 
       /**
        * owner

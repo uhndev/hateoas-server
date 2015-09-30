@@ -89,6 +89,7 @@ module.exports = {
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
+      'vendor/angular-google-maps/dist/angular-google-maps.js',
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'

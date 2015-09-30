@@ -1,8 +1,4 @@
--- View: test2
-
--- DROP VIEW test2;
-
-CREATE OR REPLACE VIEW "ReferralDetail" AS
+CREATE OR REPLACE VIEW ReferralDetail AS
  SELECT referral.client,
     referral.program,
     referral.physician,
@@ -30,10 +26,13 @@ CREATE OR REPLACE VIEW "ReferralDetail" AS
     contact."familyDoctor" as "client_familyDoctor",
     contact.language as client_language,
     claim."claimNum" as "claim_claimNum",
-    claim."policyNum" as "claim_policyNum"
+    claim."policyNum" as "claim_policyNum",
+    '1' as createdBy
 
    FROM referral
         left join claim on referral.claim=claim.id
         left join client on referral.client=client.id
         left join contact on client.contact=contact.id
-        left join address on contact.address=address.id
+        left join address on contact.address=address.id;
+ALTER TABLE "ReferralDetail"
+OWNER TO postgres;

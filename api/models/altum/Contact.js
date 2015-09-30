@@ -7,13 +7,7 @@
 
 module.exports = {
 
-
-  /**
-   *
-   * @description A contact's
-   * @type {String}
-   */
-
+  schema:true,
   attributes: {
 
     /**
@@ -79,7 +73,7 @@ module.exports = {
     },
 
     /**
-     * dob
+     * dateOfBirth
      * @description A client's date of birth.
      * @type {Date}
      */
@@ -91,7 +85,7 @@ module.exports = {
     /**
      * address
      * @description A client's address
-     * @type {string}
+     * @type {model}
      */
     address: {
       model: 'address'
