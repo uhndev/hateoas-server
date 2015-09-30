@@ -39,6 +39,9 @@
       surveyVersion: {
         type: 'surveyversion'
       },
+      formOrder: {
+        type: 'array'
+      },
       formVersions: {
         type: 'array'
       },

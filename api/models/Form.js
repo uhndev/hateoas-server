@@ -129,29 +129,34 @@
           })
           .catch(cb);
       } else {
-        // if lastPublished set on Form, then there are AnswerSets referring to this version
-        if (values.lastPublished !== null) {
-          // in that case, stamp out next form version and next survey version
-          // create new form version with updated revision number
-          FormVersion.find({ form: values.id })
-            .sort('revision DESC')
-            .then(function (latestFormVersions) {
+        FormVersion.find({ form: values.id })
+          .sort('revision DESC')
+          .then(function (latestFormVersions) {
+            // if lastPublished set on Form, then there are AnswerSets referring to this version
+            if (values.lastPublished !== null) {
+              // in that case, stamp out next form version and next survey version
+              // create new form version with updated revision number
               var newFormVersion = {
                 revision: _.first(latestFormVersions).revision + 1,
                 form: values.id
               };
               _.merge(newFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
               return FormVersion.create(newFormVersion);
-            })
-            .then(function (newFormVersion) {
-              cb();
-            })
-            .catch(cb);
-        }
-        // otherwise updates are done in place for the current head
-        else {
-          cb();
-        }
+            }
+            // otherwise updates are done in place for the current head
+            else {
+              var updatedFormVersion = {
+                revision: _.first(latestFormVersions).revision,
+                form: values.id
+              };
+              _.merge(updatedFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
+              return FormVersion.update({ id: _.first(latestFormVersions).id }, updatedFormVersion);
+            }
+          })
+          .then(function (newFormVersion) {
+            cb();
+          })
+          .catch(cb);
       }
     },
 
