@@ -26,10 +26,16 @@
         })
         .then(function (study) {
           this.survey.sessionStudy = _.pick(study, 'id', 'name');
-          return Form.find({id: _.pluck(study.forms, 'id')}).populate('versions');
+          // get flattened dictionary of possible formVersions in each schedule
+          return FormVersion.find({ id: _.flatten(_.pluck(this.sessions, 'formVersions'))})
+            .then(function (formVersions) {
+              return _.indexBy(_.map(formVersions, function (form) {
+                return _.pick(form, 'id', 'name', 'revision', 'form');
+              }), 'id');
+            });
         })
-        .then(function (studyForms) {
-          this.survey.sessionStudy.forms = studyForms;
+        .then(function (possibleForms) {
+          this.survey.sessionStudy.possibleForms = possibleForms;
           return Promise.all(
             _.map(this.sessions, function (session) {
               return FormVersion.find({ id: session.formVersions }).then(function (formVersions) {

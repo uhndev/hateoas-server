@@ -24,14 +24,17 @@
       availableTo: {
         type: 'integer'
       },
-      formVersions: {
-        type: 'array'
-      },
       survey: {
         model: 'survey'
       },
       surveyVersion: {
         model: 'surveyversion'
+      },
+      formOrder: {
+        type: 'array'
+      },
+      formVersions: {
+        type: 'array'
       },
       surveyName: {
         type: 'string'
