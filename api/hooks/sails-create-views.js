@@ -28,7 +28,7 @@
         sails.after('hook:orm:loaded', function () {
           pg.connect(connectionStr, function (err, client, done) {
             if (err) {
-              console.log('Error fetching client from pool', err);
+              sails.log.error('Error fetching client from pool', err);
               return next(err);
             }
 
@@ -38,10 +38,10 @@
 
             client.query(createQuery, function (err, result) {
               if (err) {
-                console.log('Error running query: ' + err);
+                sails.log.error('Error running query: ' + err);
               }
               done();
-              sails.log('Create View Query executed successfully');
+              sails.log.info('Create View Query executed successfully');
               next();
             });
           });

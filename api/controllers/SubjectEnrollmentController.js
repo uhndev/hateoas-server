@@ -7,6 +7,7 @@
  */
 
 (function() {
+  var moment = require('moment'); // I need a minute
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('q');
@@ -14,8 +15,71 @@
   module.exports = {
 
     findOne: function(req, res, next) {
-      studysubject.findOne({ id: req.param('id') }).exec(function (err, enrollment) {
-        res.ok(enrollment);
+      studysubject.findOne(req.param('id')).exec(function (err, enrollment) {
+        if (_.isUndefined(enrollment)) {
+          res.notFound();
+        } else {
+          PermissionService.findEnrollments(req.user, enrollment.collectionCentre)
+            .then(function (enrollments) {
+              // if no enrollments found for coordinator/subject, DENY
+              if (this.group.level > 1 && enrollments.length === 0) {
+                return res.forbidden({
+                  title: 'Error',
+                  code: 403,
+                  message: "User "+req.user.email+" is not permitted to GET "
+                });
+              } else {
+                // find subject schedule with session information
+                schedulesessions.find({ subjectEnrollment: enrollment.id })
+                  .then(function (schedules) {
+                    this.schedules = _.sortBy(schedules, 'timepoint');
+                    // get flattened dictionary of possible formVersions in each schedule
+                    return FormVersion.find({ id: _.flatten(_.pluck(schedules, 'formVersions'))})
+                      .then(function (formVersions) {
+                        return _.indexBy(_.map(formVersions, function (form) {
+                          return _.pick(form, 'id', 'name', 'revision', 'form');
+                        }), 'id');
+                      });
+                  })
+                  .then(function (possibleForms) {
+                    enrollment.formSchedules = [];
+                    // create 1D list of scheduled forms
+                    _.each(this.schedules, function (schedule) {
+                      _.each(schedule.formOrder, function (formOrderId) {
+                        // if ordered form is active for this session
+                        if (_.includes(schedule.formVersions, formOrderId)) {
+                          var scheduledForm = _.clone(schedule);
+                          scheduledForm.scheduledForm = possibleForms[formOrderId];
+                          enrollment.formSchedules.push(scheduledForm);
+                        }
+                      });
+                    });
+                  })
+                  .then(function () {
+                    return Promise.all(
+                      _.map(enrollment.formSchedules, function (schedule) {
+                        return AnswerSet.count({
+                          formVersion: schedule.scheduledForm.id,
+                          surveyVersion: schedule.surveyVersion,
+                          subjectSchedule: schedule.id,
+                          subjectEnrollment: enrollment.id
+                        }).then(function (answers) {
+                          // TODO: Support [unavailable, late, incomplete, and completed] status types
+                          // TODO: Verify semi-completed answer sets (possibly store state in AnswerSet itself?)
+                          schedule.scheduledForm.status = (answers > 0) ? "Complete" : "Incomplete";
+                        })
+                      })
+                    );
+                  })
+                  .then(function (answers) {
+                    res.ok(enrollment);
+                  })
+                  .catch(function (err) {
+                    res.serverError(err);
+                  });
+              }
+            });
+        }
       });
     },
 

@@ -108,7 +108,7 @@
         }
       })
       .catch(function (err) {
-          console.log(err);
+        sails.log.error(err);
         return res.serverError({
           title: 'Server Error',
           code: err.status,

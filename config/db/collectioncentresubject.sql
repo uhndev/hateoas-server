@@ -5,10 +5,10 @@
 
 CREATE OR REPLACE VIEW collectioncentresubject AS
  SELECT subject.id,
-    subject."user" AS "userId",
-    collectioncentre.id AS "collectionCentreId",
+    subject."user" AS "user",
+    collectioncentre.id AS "collectionCentre",
     subjectenrollment."subjectNumber",
-    subjectenrollment.id AS "subjectenrollmentId",
+    subjectenrollment.id AS "subjectenrollment",
     subjectenrollment."studyMapping",
     subjectenrollment.status,
     subjectenrollment.doe,

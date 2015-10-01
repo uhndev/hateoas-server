@@ -5,11 +5,11 @@
 
 CREATE OR REPLACE VIEW studysubject AS
   SELECT subjectenrollment.id,
-    subject.id AS "subjectId",
-    "user".id AS "userId",
+    subject.id AS "subject",
+    "user".id AS "user",
     subjectenrollment."collectionCentre",
     subjectenrollment."subjectNumber",
-    study.id AS "studyId",
+    study.id AS "study",
     study.name AS "studyName",
     collectioncentre.name AS "collectionCentreName",
     study.attributes AS "studyAttributes",

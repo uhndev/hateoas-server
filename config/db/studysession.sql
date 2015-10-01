@@ -11,6 +11,7 @@ CREATE OR REPLACE VIEW studysession AS
     session."availableTo" AS "availableTo",
     session.survey,
     session."surveyVersion",
+    session."formOrder",
     ( SELECT ARRAY( SELECT formsessions.formversion_sessions
                    FROM formversion_sessions__session_formversions formsessions
                   WHERE formsessions."session_formVersions" = session.id AND session."expiredAt" IS NULL) AS "array") AS "formVersions",

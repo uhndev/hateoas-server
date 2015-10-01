@@ -12,6 +12,34 @@
   _.extend(PermissionService.prototype, {
 
     /**
+     * findEnrollments
+     * @description Given a user with arbitrary group, check for valid enrollments for the given collection centre
+     * @memberOf PermissionService
+     * @param  {Object}         user req.user object
+     * @param  {Object|Integer} centre collection centre object or centre ID
+     * @return {Array|Promise}  list of enrollments, or promise
+     */
+    findEnrollments: function(user, centre) {
+      return Group.findOne(user.group).then(function (group) {
+        this.group = group;
+        switch (group.level) {
+          case 1: return null;
+          case 2: return UserEnrollment.find({
+            user: user.id,
+            collectionCentre: centre.id || centre
+          });
+          case 3: return Subject.findOne({ user: user.id }).then(function (subject) {
+            return SubjectEnrollment.find({
+              subject: subject.id,
+              collectionCentre: centre.id || centre
+            });
+          });
+          default: return res.notFound();
+        }
+      });
+    },
+
+    /**
      * setUserRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService

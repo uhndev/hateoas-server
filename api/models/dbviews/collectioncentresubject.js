@@ -9,17 +9,17 @@
   _.merge(exports, _super);
   _.merge(exports, {
     attributes: {
-      userId: {
-        type: 'integer'
+      user: {
+        model: 'user'
       },
-      collectionCentreId: {
-        type: 'integer'
+      collectionCentre: {
+        model: 'collectioncentre'
       },
       subjectNumber: {
         type: 'integer'
       },
-      subjectenrollmentId: {
-        type: 'integer'
+      subjectenrollment: {
+        model: 'subjectenrollment'
       },
       studyMapping: {
         type: 'json'
