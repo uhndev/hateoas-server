@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW ReferralDetail AS
+CREATE OR REPLACE VIEW referraldetail AS
  SELECT referral.client,
     referral.program,
     referral.physician,
@@ -34,5 +34,5 @@ CREATE OR REPLACE VIEW ReferralDetail AS
         left join client on referral.client=client.id
         left join contact on client.contact=contact.id
         left join address on contact.address=address.id;
-ALTER TABLE "ReferralDetail"
+ALTER TABLE referraldetail
 OWNER TO postgres;

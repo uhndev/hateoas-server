@@ -24,15 +24,15 @@
     'dados.systemformbuilder',
     'dados.collectioncentre',
 
+    // ARM
+    'dados.arm.assessment',
+
     'dados.filters.formatter',
     'dados.filters.type',
 
     'dados.common.services',
     'dados.common.interceptors',
-    'dados.common.directives',
-
-    // ARM
-    'dados.arm.assessment'
+    'dados.common.directives'
   ])
   .config(dadosConfig)
   .controller('DadosController', DadosController);

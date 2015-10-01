@@ -75,6 +75,7 @@ module.exports = {
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',
       'vendor/angular-cookies/angular-cookies.js',
+      'vendor/angular-simple-logger/dist/angular-simple-logger.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
