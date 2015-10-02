@@ -29,12 +29,16 @@ module.exports = {
           }
         })
         .then(function (formVersion) {
-          res.created(formVersion);
+          if (form.lastPublished !== null) {
+            res.created(formVersion);
+          } else {
+            res.ok(formVersion);
+          }
         });
     })
     .catch(function (err) {
       res.badRequest({
-        title: 'Error',
+        title: 'FormVersion Error: formID '+ formID,
         code: err.status,
         message: err.details
       });
