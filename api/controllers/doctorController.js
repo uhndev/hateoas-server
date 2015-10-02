@@ -1,8 +1,8 @@
 /**
- * SiteController
+ * doctorController
  *
- * @module  controllers/Subject
- * @description Server-side logic for managing Sites
+ * @module  controllers/doctors
+ * @description Server-side logic for managing doctors
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 

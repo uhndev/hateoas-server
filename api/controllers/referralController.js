@@ -1,8 +1,8 @@
 /**
- * SiteController
+ * ReferralController
  *
- * @module  controllers/Subject
- * @description Server-side logic for managing Sites
+ * @module  controllers/Referral
+ * @description Server-side logic for managing Referrals
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 

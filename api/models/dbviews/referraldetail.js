@@ -24,7 +24,7 @@
         type: 'integer'
       },
       status: {
-        type: 'string'
+        type: 'integer'
       },
       referralDate: {
         type: 'date'
@@ -42,7 +42,7 @@
         type: 'string'
       },
       client_gender: {
-        type: 'date'
+        type: 'string'
       },
       client_address1: {
         type: 'string'
@@ -75,10 +75,10 @@
         type: 'string'
       },
       client_familyDoctor: {
-        type: 'string'
+        type: 'integer'
       },
       client_language: {
-        type: 'string'
+        type: 'integer'
       },
       claim_claimNum: {
         type: 'string'

@@ -7,6 +7,19 @@
 
 module.exports = {
 
-  attributes: {}
+  attributes: {
+
+    /**
+     * name
+     * @description A status's name
+     * @type {model}
+     */
+
+    name: {
+      type: 'string'
+    },
+
+
+  }
 };
 

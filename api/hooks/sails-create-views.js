@@ -36,6 +36,9 @@
               return fs.readFileSync('config/db/' + view, 'utf-8');
             }).join(' ');
 
+            // uncomment next line to print every create query to the log
+            //sails.log.error(createQuery);
+
             client.query(createQuery, function (err, result) {
               if (err) {
                 sails.log.error('Error running query: ' + err);
