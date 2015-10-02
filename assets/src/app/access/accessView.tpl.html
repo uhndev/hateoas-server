@@ -59,12 +59,9 @@
           <td ng-if="access.currentView === 'user'">
             <select class="form-control"
                     ng-disabled="access.selected.id !== row.id"
-                    ng-model="row.group" ng-change="access.updateRole()">
-              <option value="{{group.id}}"
-                      ng-repeat="group in access.groups"
-                      ng-selected="row.group === group.id">
-                {{group.name}}
-              </option>
+                    ng-model="row.group"
+                    ng-change="access.updateRole()"
+                    ng-options="group.id as group.name for group in access.groups">
             </select>
           </td>
           <td ng-if="access.currentView === 'group'"
