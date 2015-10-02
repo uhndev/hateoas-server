@@ -34,7 +34,7 @@
               return next(err);
             }
             var dropQuery = _.map(views, function (view) {
-              return 'DROP VIEW ' + view + ';';
+              return 'DROP VIEW IF EXISTS ' + view + ';';
             }).join(' ');
             client.query(dropQuery, function (err, result) {
               if (err) {
