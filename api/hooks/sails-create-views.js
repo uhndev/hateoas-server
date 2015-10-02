@@ -39,10 +39,14 @@
             client.query(createQuery, function (err, result) {
               if (err) {
                 sails.log.error('Error running query: ' + err);
+                sails.log.error(createQuery);
+                next(err);
+              } else {
+                done();
+                sails.log.info('Create View Query executed successfully with result: ');
+                sails.log.info(result);
+                next();
               }
-              done();
-              sails.log.info('Create View Query executed successfully');
-              next();
             });
           });
         });

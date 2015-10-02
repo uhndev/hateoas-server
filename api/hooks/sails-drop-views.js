@@ -34,15 +34,19 @@
               return next(err);
             }
             var dropQuery = _.map(views, function (view) {
-              return 'DROP VIEW IF EXISTS ' + view + ';';
+              return 'DROP VIEW ' + view + ';';
             }).join(' ');
             client.query(dropQuery, function (err, result) {
               if (err) {
                 sails.log.error('Error running query: ' + err);
+                sails.log.error(dropQuery);
+                next(err);
+              } else {
+                done();
+                sails.log.info('Drop View Query executed successfully with result: ');
+                sails.log.info(result);
+                next();
               }
-              done();
-              sails.log.info('Drop View Query executed successfully');
-              next();
             })
           })
         });
