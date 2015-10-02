@@ -207,7 +207,7 @@
             </ui-gmap-marker>
             <ui-gmap-marker ng-repeat="site in assessment.sites"
                             idKey='$index'
-                            coords="{latitude: site.latitude, longitude: site.longitude }"
+                            coords="{latitude: site.address.latitude, longitude: site.address.longitude }"
                             click='assessment.selectSite(site)'
                     >
             </ui-gmap-marker>

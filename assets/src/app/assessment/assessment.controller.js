@@ -67,7 +67,7 @@
 
                     vm.sites.forEach(function (site) {
 //                        vm.destinations.push(maps.LatLng(site.latitude, site.longitude));
-                        vm.destinations.push( (site.address1 || '') + ' ' +  (site.address2 || '') + ' ' +   (site.city || '') + ' ' +   (site.province || '') + ' ' +   (site.postalCode || '') + ' ' +   (site.country || '') );
+                        vm.destinations.push( (site.address.address1 || '') + ' ' +  (site.address.address2 || '') + ' ' +   (site.address.city || '') + ' ' +   (site.address.province || '') + ' ' +   (site.address.postalCode || '') + ' ' +   (site.address.country || '') );
                     });
 
 
@@ -132,6 +132,7 @@
 
 
             vm.calculateDistances();
+          //vm.geocodeSites();
         };
 
         this.calculateDistances= function calculateDistances() {
@@ -170,15 +171,15 @@
 
             vm.sites.forEach(function (site) {
                 console.log(site);
-                var addy = (site.address1 || '' ) + ' ' + (site.address2 || '') + ' ' + (site.city || '') + ' ' + (site.province || '') + ', ' + (site.postalCode || '');
+                var addy = (site.address.address1 || '' ) + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ', ' + (site.address.postalCode || '');
                 vm.geocoder.geocode({address: addy}, function (location) {
                     console.log(location);
                     if (location[0]) {
                         console.log(location);
 
                         var newSite = new Site(site);
-                        newSite.latitude = location[0].geometry.location.lat();
-                        newSite.longitude = location[0].geometry.location.lng();
+                        newSite.address.latitude = location[0].geometry.location.lat();
+                        newSite.address.longitude = location[0].geometry.location.lng();
                         newSite.$update({id: site.id})
                             .then(function () {
                                 toastr.success('Site geolocation updated', 'Geolocation');
@@ -197,7 +198,7 @@
         this.selectSite = function selectedSite(site) {
             //alert('you just clicked the ' + site.name + ' site');
             //vm.geocodeSites();
-            alert('Come to ' + site.name + ' at ' + site.longitude + ' ' + site.latitude);
+            alert('Come to ' + site.name + ' at ' + site.address.longitude + ' ' + site.address.latitude);
             alert(vm.selectedReferral.client_longitude);
         };
     }

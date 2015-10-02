@@ -5,9 +5,11 @@
         .service('ASSESSMENT_API', Assessment)
         .service('REFERRAL_API', Referral)
         .service('REFERRALDETAIL_API', ReferralDetail)
+        .service('ADDRESS_API', Address)
         .service('SITE_API', Site);
 
     Assessment.$inject = ['API'];
+    Address.$inject = ['API'];
     Referral.$inject = ['API'];
     Site.$inject = ['API'];
 
@@ -26,4 +28,8 @@
     function Site(API) {
         return {url: API.url() + '/site/:id'};
     }
+
+  function Address(API) {
+    return {url: API.url() + '/address/:id'};
+  }
 })();

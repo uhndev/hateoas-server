@@ -13,11 +13,13 @@
       .service('AssessmentService', AssessmentService)
       .service('ReferralService', ReferralService)
       .service('ReferralDetailService', ReferralDetailService)
+      .service('AddressService', AddressService)
       .service('SiteService', SiteService);
 
   AssessmentService.$inject = ['ResourceFactory','ASSESSMENT_API'];
   ReferralService.$inject = ['ResourceFactory','REFERRAL_API'];
   ReferralDetailService.$inject = ['ResourceFactory','REFERRALDETAIL_API'];
+  AddressService.$inject = ['ResourceFactory','ADDRESS_API'];
   SiteService.$inject = ['ResourceFactory','SITE_API'];
 
   function AssessmentService(ResourceFactory,ASSESSMENT_API) {
@@ -31,5 +33,8 @@
   }
   function SiteService(ResourceFactory,SITE_API) {
     return ResourceFactory.create(SITE_API.url);
+  }
+  function AddressService(ResourceFactory,ADDRESS_API) {
+    return ResourceFactory.create(ADDRESS_API.url);
   }
 })();
