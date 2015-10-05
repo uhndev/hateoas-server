@@ -40,13 +40,13 @@ module.exports.connections = {
   * Run: npm install sails-mysql                                             *
   *                                                                          *
   ***************************************************************************/
-  dados_mysql: {
+  arm_mysql: {
     adapter: 'sails-mysql',
     host: 'localhost',
     port: 3306,
     user: 'root',
     password: 'password',
-    database: 'dados_dev'
+    database: 'arm_dev'
   },
 
   /***************************************************************************
@@ -57,28 +57,28 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  //dados_development: {
+  //arm_development: {
   //  adapter   : 'sails-mongo',
   //  host      : 'localhost',
   //  port      : 27017,
   //  database  : 'dados-dev'
   //},
 
-  dados_audit: {
+  arm_audit: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
     database  : 'dados-audit'
   },
 
-  //dados_test: {
+  //arm_test: {
   //  adapter   : 'sails-mongo',
   //  host      : 'localhost',
   //  port      : 27017,
   //  database  : 'dados-test'
   //},
   //
-  //dados_production: {
+  //arm_production: {
   //  adapter   : 'sails-mongo',
   //  host      : 'localhost',
   //  port      : 27017,
@@ -94,31 +94,31 @@ module.exports.connections = {
   *                                                                          *
   *                                                                          *
   ***************************************************************************/
-  dados_development: {
+  arm_development: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'dados_dev'
+    database: 'arm_dev'
   },
 
-  dados_production: {
+  arm_production: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'dados_prod'
+    database: 'arm_prod'
   },
 
-  dados_test: {
+  arm_test: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'dados_test'
+    database: 'arm_test'
   }
 
   /***************************************************************************

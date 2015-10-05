@@ -1,8 +1,8 @@
 /**
- * SubjectController
+ * ClaimController
  *
- * @module  controllers/Subject
- * @description Server-side logic for managing Subjects
+ * @module  controllers/Claim
+ * @description Server-side logic for managing Claims
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 

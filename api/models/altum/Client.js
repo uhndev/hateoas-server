@@ -1,12 +1,9 @@
 /**
- * client
+ * Client
  *
- * @class client
- * @description Model representation of a client
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/client.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/Client.js
+ * @class Client
+ * @description Model representation of a Client
  */
-
 
 (function () {
 
@@ -21,7 +18,6 @@
        * @description A client's contact
        * @type {String}
        */
-
       contact: {
         model: 'contact'
       },
@@ -31,7 +27,6 @@
        * @description A client's emergencyContacts
        * @type {String}
        */
-
       emergencyContacts: {
         model: 'emergencyContact',
         via: 'client'
@@ -42,7 +37,6 @@
        * @description A client's mrn
        * @type {string}
        */
-
       MRN: {
         type: 'string',
         index: true
@@ -53,7 +47,6 @@
        * @description A client's familyDoctor
        * @type {integer}
        */
-
       familyDoctor: {
         model: 'physician'
       },
@@ -63,7 +56,6 @@
        * @description A client's referrals
        * @type {integer}
        */
-
       referrals: {
         collection: 'referral',
         via: 'client'

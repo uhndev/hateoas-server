@@ -18,6 +18,6 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
   //migrate: 'drop',
-  //connection: 'dados_mysql',
-  //connection: 'dados_development'
+  //connection: 'arm_mysql',
+  //connection: 'arm_development'
 };

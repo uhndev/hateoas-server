@@ -67,7 +67,7 @@
             var sessions = this.currentSurvey.sessions;
             var queryTotal = sessions.length * subjectEnrollments.length;
             var now =  pgp.as.date(new Date());
-            var connection = sails.config.connections['dados_' + sails.config.environment];
+            var connection = sails.config.connections['arm_' + sails.config.environment];
             var db = pgp(connection);
 
             return db.tx(function (t) {

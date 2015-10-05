@@ -6,7 +6,7 @@ module.exports = {
 
   models: {
     migrate: 'drop',
-    connection: 'dados_test'
+    connection: 'arm_test'
   },
 
   // configuration for testing purposes

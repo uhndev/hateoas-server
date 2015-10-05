@@ -21,6 +21,8 @@
     ],
     "ADMIN": [
       { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+      { prompt: 'Assessments', href: '/assessment', icon: 'fa-stethoscope' },
+      { prompt: 'Clients', href: '/client', icon: 'fa-male' },
       { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
       { prompt: 'Tools', icon: 'fa-cog', dropdown: [
         { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-pencil-square-o' },

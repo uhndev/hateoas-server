@@ -1,8 +1,8 @@
 /**
- * doctorController
+ * AssessmentController
  *
- * @module  controllers/doctors
- * @description Server-side logic for managing doctors
+ * @module  controllers/Assessment
+ * @description Server-side logic for managing Assessments
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 

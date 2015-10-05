@@ -16,7 +16,7 @@
 
   module.exports = function (sails) {
     var env = sails.config.environment;
-    var connection = sails.config.connections['dados_' + env];
+    var connection = sails.config.connections['arm_' + env];
 
     var connectionStr = [
       'postgres://', connection.user, ':', connection.password,

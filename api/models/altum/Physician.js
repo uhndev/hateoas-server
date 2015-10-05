@@ -14,11 +14,11 @@ module.exports = {
      * @description a physician's contact
      * @type {String}
      */
-
-    contact: {
-      model: 'Contact'
-    }
-
+    // TODO: Causes infinite loop with Hateoas Templating:
+    // client -> (contact -> address --> physician) -> (contact -> address -> physician)...
+    //contact: {
+    //  model: 'Contact'
+    //}
   }
 };
 
