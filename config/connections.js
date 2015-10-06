@@ -100,7 +100,7 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_dev'
+    database: 'dados_dev'
   },
 
   arm_production: {

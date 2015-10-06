@@ -19,6 +19,11 @@ module.exports = {
     //contact: {
     //  model: 'Contact'
     //}
+
+
+    name: {
+      type: 'string'
+    }
   }
 };
 
