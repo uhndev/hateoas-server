@@ -3,8 +3,6 @@
  *
  * @class address
  * @description Model representation of an address
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/address.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/address.js
  */
 
 (function () {
@@ -13,9 +11,10 @@
   var HateoasService = require('../../services/HateoasService.js');
 
   module.exports = {
+    schema:true,
 
-    schema: true,
     attributes: {
+
       /**
        * name
        * @description an address's name
@@ -28,7 +27,7 @@
       /**
        * address1
        * @description an address's first line
-       * @type {model}
+       * @type {string}
        */
 
       address1: {
@@ -37,7 +36,7 @@
       /**
        * address2
        * @description an address's second line
-       * @type {model}
+       * @type {string}
        */
       address2: {
         type: 'string'

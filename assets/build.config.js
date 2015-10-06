@@ -75,6 +75,7 @@ module.exports = {
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-cookie/angular-cookie.js',
       'vendor/angular-cookies/angular-cookies.js',
+      'vendor/angular-simple-logger/dist/angular-simple-logger.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
@@ -89,6 +90,7 @@ module.exports = {
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
+      'vendor/angular-google-maps/dist/angular-google-maps.js',
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'

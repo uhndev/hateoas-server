@@ -16,7 +16,7 @@
 
   module.exports = function (sails) {
     var env = sails.config.environment;
-    var connection = sails.config.connections['dados_' + env];
+    var connection = sails.config.connections['arm_' + env];
 
     var connectionStr = [
       'postgres://', connection.user, ':', connection.password,
@@ -35,6 +35,9 @@
             var createQuery = _.map(fs.readdirSync('config/db'), function (view) {
               return fs.readFileSync('config/db/' + view, 'utf-8');
             }).join(' ');
+
+            // uncomment next line to print every create query to the log
+            //sails.log.error(createQuery);
 
             client.query(createQuery, function (err, result) {
               if (err) {

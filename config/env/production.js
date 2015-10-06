@@ -22,7 +22,7 @@ module.exports = {
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
-    connection: 'dados_production'
+    connection: 'arm_production'
   }
 
   /***************************************************************************

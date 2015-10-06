@@ -13,8 +13,7 @@
  * specified, as shown below.
  */
 angular.module( 'AHS.home', [
-  'ui.router',
-  'plusOne'
+  'ui.router'
 ])
 
 /**
@@ -35,7 +34,6 @@ angular.module( 'AHS.home', [
  * And of course we define a controller for our route.
  */
 .controller( 'HomeCtrl', function HomeController( $scope ) {
-})
 
-;
+});
 

@@ -24,6 +24,22 @@
       user: {
         model: 'user'
       },
+      /**
+       * title
+       * @description A approver's title
+       * @type {model}
+       */
+      title: {
+        type: 'string'
+      },
+      /**
+       * name
+       * @description A approver's name
+       * @type {model}
+       */
+      name: {
+        type: 'string'
+      },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 

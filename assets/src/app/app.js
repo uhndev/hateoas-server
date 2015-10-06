@@ -10,6 +10,7 @@
     'templates-app',
     'templates-common',
 
+    // DADOS
     'dados.constants',
     'dados.access',
   	'dados.auth',
@@ -22,6 +23,9 @@
     'dados.formbuilder',
     'dados.systemformbuilder',
     'dados.collectioncentre',
+
+    // ARM
+    'dados.arm.assessment',
 
     'dados.filters.formatter',
     'dados.filters.type',

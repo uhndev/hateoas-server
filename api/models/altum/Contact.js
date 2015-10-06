@@ -7,13 +7,7 @@
 
 module.exports = {
 
-
-  /**
-   *
-   * @description A contact's
-   * @type {String}
-   */
-
+  schema:true,
   attributes: {
 
     /**
@@ -21,7 +15,6 @@ module.exports = {
      * @description A contact's salutation
      * @type {String}
      */
-
     salutation: {
       type: 'string'
     },
@@ -31,18 +24,15 @@ module.exports = {
      * @description A client's first name.
      * @type {String}
      */
-
     firstName: {
       type: 'string'
     },
-
 
     /**
      * middleName
      * @description A contact's middle name
      * @type {String}
      */
-
     middleName: {
       type: 'string'
     },
@@ -61,7 +51,6 @@ module.exports = {
      * @description Enumeration of allowable prefixes for a client.
      * @type {Enum}
      */
-
     prefix: {
       type: 'string',
       enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
@@ -72,18 +61,16 @@ module.exports = {
      * @description Enumeration of allowable genders of a client.
      * @type {Enum}
      */
-
     gender: {
       type: 'string',
       enum: ['Male', 'Female']
     },
 
     /**
-     * dob
+     * dateOfBirth
      * @description A client's date of birth.
      * @type {Date}
      */
-
     dateOfBirth: {
       type: 'date'
     },
@@ -91,7 +78,7 @@ module.exports = {
     /**
      * address
      * @description A client's address
-     * @type {string}
+     * @type {model}
      */
     address: {
       model: 'address'
@@ -111,7 +98,6 @@ module.exports = {
      * @description A client's workPhone
      * @type {string}
      */
-
     workPhone: {
       type: 'string'
     },
@@ -122,7 +108,6 @@ module.exports = {
      * @description A client's cellPhone
      * @type {string}
      */
-
     cellPhone: {
       type: 'string'
     },
@@ -132,7 +117,6 @@ module.exports = {
      * @description A client's otherPhone
      * @type {string}
      */
-
     otherPhone: {
       type: 'string'
     },
@@ -143,7 +127,6 @@ module.exports = {
      * @description A contact's company
      * @type {String}
      */
-
     company: {
       type: 'string'
     },
@@ -153,7 +136,6 @@ module.exports = {
      * @description A contact's title
      * @type {String}
      */
-
     title: {
       type: 'string'
     },
@@ -163,7 +145,6 @@ module.exports = {
      * @description A contact's licence
      * @type {String}
      */
-
     license: {
       type: 'string'
     },
@@ -173,16 +154,15 @@ module.exports = {
      * @description A contact's family doctor
      * @type {String}
      */
-
     familyDoctor: {
       model: 'physician'
     },
+
     /**
      * fax
      * @description A contact's fax number
      * @type {String}
      */
-
     fax: {
       type: 'string'
     },
@@ -192,7 +172,6 @@ module.exports = {
      * @description A contact's homeEmail
      * @type {String}
      */
-
     homeEmail: {
       type: 'string'
     },
@@ -202,18 +181,15 @@ module.exports = {
      * @description A contact's work eMail
      * @type {String}
      */
-
     workEmail: {
       type: 'string'
     },
-
 
     /**
      * otherEmail
      * @description A contact's other eMail
      * @type {String}
      */
-
     otherEmail: {
       type: 'string'
     },
@@ -223,7 +199,6 @@ module.exports = {
      * @description A contact's occupation
      * @type {String}
      */
-
     occupation: {
       type: 'string'
     },
@@ -233,7 +208,6 @@ module.exports = {
      * @description A contact's occupation type
      * @type {String}
      */
-
     occupationType: {
       type: 'string'
     },
@@ -243,7 +217,6 @@ module.exports = {
      * @description A contact's occupation sector
      * @type {String}
      */
-
     occupationSector: {
       type: 'string'
     },
@@ -253,7 +226,6 @@ module.exports = {
      * @description A contact's employer
      * @type {String}
      */
-
     employer: {
       model: 'employer'
     },
@@ -263,7 +235,6 @@ module.exports = {
      * @description A contact's comments
      * @type {String}
      */
-
     contactComments: {
       type: 'string'
     },
@@ -274,7 +245,6 @@ module.exports = {
      * @description A contact's language
      * @type {String}
      */
-
     language: {
       model: 'language'
     },
@@ -284,25 +254,21 @@ module.exports = {
      * @description a contacts requires interperter flag
      * @type {String}
      */
-
     requiresInterpreter: {
       type: 'boolean'
     },
 
     /**
-     * TODO: set up referralContacts table
      * referralContacts
      * @description A referral's contacts
      * @type {String}
      */
-
     referralContacts: {
       collection: 'referralContact',
       via: 'contact'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
   }
 };
 
