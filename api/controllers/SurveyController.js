@@ -22,7 +22,7 @@
         .then(function (sessions) {
           this.sessions = sessions;
           this.survey.sessionForms = [];
-          return Study.findOne(this.survey.study).populate('forms');
+          return Study.findOne(this.survey.study);
         })
         .then(function (study) {
           this.survey.sessionStudy = _.pick(study, 'id', 'name');
