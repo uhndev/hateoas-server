@@ -6,6 +6,7 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 (function() {
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
@@ -131,6 +132,24 @@
       } else {
         cb();
       }
+    },
+
+    /**
+     * findLatestFormVersions
+     * @description Given a list of form objects, return a list of latest corresponding FormVersions
+     * @param forms Array of form objects to search upon
+     * @returns {Array | Promise} Array of form versions or promise
+     */
+    findLatestFormVersions: function(forms) {
+      return Promise.all(
+        _.map(forms, function (form) {
+          return FormVersion.find({ form: form.id })
+            .sort('revision DESC')
+            .then(function (latestFormVersions) {
+              return _.first(latestFormVersions);
+            });
+        })
+      );
     },
 
     findByStudyName: function(studyName, currUser, options, cb) {

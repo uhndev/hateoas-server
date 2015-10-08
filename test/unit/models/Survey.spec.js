@@ -81,6 +81,15 @@ describe('The Survey Model', function() {
         });
     });
 
+    it('should have created defaultFormVersions array if not given', function(done) {
+      Survey.findOneByName('SURVEY').exec(function (err, survey) {
+        survey.defaultFormVersions.length.should.equal(2);
+        survey.defaultFormVersions[0].active.should.be.ok;
+        survey.defaultFormVersions[1].active.should.be.ok;
+        done(err);
+      });
+    });
+
     it('should update the head revision in place if no AnswerSets filled yet', function(done) {
       Survey.update({ name: 'SURVEY' }, {
         name: 'SURVEY2'
