@@ -32,7 +32,7 @@ describe('The Form Model', function() {
       }).exec(function (err, updatedForm) {
         FormVersion.findOne({ form: 1 })
           .exec(function (err, formVersion) {
-            formVersion.expiredAt.should.notEqual(null);
+            formVersion.expiredAt.should.not.equal("null");
             done(err);
           });
       });
