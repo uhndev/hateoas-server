@@ -66,9 +66,13 @@
         vm.googleMaps = maps;
 
         //initialize sites/destinations
-        vm.sites.forEach(function (site) {
+        _.each(vm.sites, function(site,index) {
           //vm.destinations.push(maps.LatLng(site.latitude, site.longitude));
           vm.destinations.push((site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ' ' + (site.address.postalCode || '') + ' ' + (site.address.country || ''));
+
+          var val= {idKey: index, latitude: site.address.latitude, longitude: site.address.longitude, title: site.name, icon:{url: 'assets/img/hospital-building.png'}, click: function() {selectSite(site);}};
+          val["id"]= index;
+          vm.markers.push(val);
         });
 
         //initialize geocoder
@@ -119,6 +123,13 @@
       vm.collapsedClientDetail = false;
       vm.mapReady = true;
 
+      var val= {idKey: 'client', latitude: referral.client_latitude, longitude: referral.client_longitude, title: referral.client_name, icon:{url: 'assets/img/firstaid.png'}, click: function() {selectSite(site);}};
+      val["id"]= 'client';
+      vm.markers.pop();
+      vm.markers.push(val);
+
+      vm.map = {control: {}, center: {latitude: referral.client_latitude, longitude: referral.client_longitude}, zoom: 10};
+
       vm.calculateDistances();
       //vm.geocodeSites();
     }
@@ -145,11 +156,17 @@
         travelMode: vm.googleMaps.DirectionsTravelMode.DRIVING
       };
 
-      vm.directionsService(request, function (response) {
-        if (status === vm.googleMaps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
-          directionsDisplay.setMap(vm.map.control.getGMap());
-          directionsDisplay.setPanel(vm.map.control.getGMap());
+      vm.directionsService.route(request, function (response) {
+        if (response.status === vm.googleMaps.DirectionsStatus.OK) {
+
+          //vm.directionsDisplay.setDirections(response);
+          //vm.directionsDisplay.setMap(vm.map.control.getGMap());
+          //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
+//alert('wait');
+          //set routes
+          vm.directionsSteps=response.routes[0].legs[0].steps;
+          console.log(vm.directionsSteps);
+
         }
       });
     }
@@ -184,7 +201,11 @@
     function selectSite(site) {
       //alert('you just clicked the ' + site.name + ' site');
       //vm.geocodeSites();
-      alert('Come to ' + site.name + ' at ' + site.address.longitude + ' ' + site.address.latitude);
+      //console.log(vm.directionsSteps);
+
+      var origin= new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
+      var destination= new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
+      calculateDirections(origin,destination);
     }
   }
 
