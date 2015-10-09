@@ -37,12 +37,16 @@
     vm.mapReady = false;
     vm.geocoder = null;
     vm.geoDirections = null;
+    vm.geoDistance=null;
+    vm.directionsService=null;
     vm.googleMaps = uiGmapGoogleMapApi;
 
     // google distance placeholders for distance call
     vm.origins = [];
     vm.destinations = [];
     vm.distanceMatrix = [];
+    vm.directionsSteps= [];
+    vm.markers=[];
 
     // bindable methods
     vm.findReferral = findReferral;
