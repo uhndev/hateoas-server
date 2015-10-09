@@ -45,6 +45,18 @@
       },
 
       /**
+       * defaultFormVersions
+       * @description Array storing form versions that are applicable to the study, as well
+       *              as the default order for the forms in each session
+       * @type {Array}
+       */
+      defaultFormVersions: {
+        type: 'array',
+        defaultsTo: [],
+        array: true
+      },
+
+      /**
        * sessions
        * @description Collection of set time intervals that define when data should be collected
        *              for each subject based on their date of event.  Each session created acts as
@@ -95,6 +107,32 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * beforeCreate
+     * @description Before creating survey, check if user provided a defaultFormVersion and if not
+     *              retrieve from latest study forms and include all in default order.
+     */
+    beforeCreate: function (values, cb) {
+      Study.findOne(values.study)
+        .populate('forms')
+        .exec(function (err, study) {
+          if (_.has(values, 'defaultFormVersions') && values.defaultFormVersions.length === study.forms.length) {
+            cb();
+          } else {
+            Form.findLatestFormVersions(study.forms)
+              .then(function (latestFormVersions) {
+                // default set all form versions to active
+                values.defaultFormVersions = _.map(latestFormVersions, function (formVersion) {
+                  var returnForm =_.pick(latestFormVersions, 'id', 'name', 'revision', 'form');
+                  returnForm.active = true;
+                  return returnForm;
+                });
+                cb();
+              });
+          }
+        });
     },
 
     /**
