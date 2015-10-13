@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW schedulesessions AS
     session.timepoint,
     session.type,
     session.survey,
+    survey.name AS "surveyName",
     session."surveyVersion",
     session."formOrder",
     ( SELECT ARRAY( SELECT formsessions.formversion_sessions
@@ -24,7 +25,8 @@ CREATE OR REPLACE VIEW schedulesessions AS
     subjectschedule."updatedAt"
    FROM subjectschedule
      LEFT JOIN session ON session.id = subjectschedule.session
-  WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL;
+     LEFT JOIN survey ON session.survey = survey.id
+  WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL AND survey."expiredAt" IS NULL;
 
 ALTER TABLE schedulesessions
   OWNER TO postgres;
