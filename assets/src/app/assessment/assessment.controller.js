@@ -19,9 +19,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService'];
+  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService'];
 
-  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician) {
+  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician, Program) {
     var vm = this;
 
     // bindable variables
@@ -32,13 +32,14 @@
     vm.selectedReferral = {};
     vm.siteMatrix = {};
     vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
-    vm.sites = [];
+    vm.sites = [];            //placeholder for sites
+    vm.programs= [];           //placeholder for programs
     vm.siteLocations = [];
     vm.mapReady = false;
     vm.geocoder = null;
     vm.geoDirections = null;
     vm.geoDistance=null;
-    vm.directionsService=null;
+    vm.directionsService=null; //placeholder for directionsService object
     vm.googleMaps = uiGmapGoogleMapApi;
 
     // google distance placeholders for distance call
@@ -61,6 +62,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
+      Program.query({}).$promise.then(function(resp) {
+        vm.programs=angular.copy(resp);
+      });
+
       Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
         return uiGmapGoogleMapApi;

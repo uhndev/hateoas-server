@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  angular.module('dados.arm.program', [
-    'dados.arm.program.service'
+  angular.module('dados.arm.altum_api', [
+    'dados.arm.altum_api.service'
   ]);
 
 })();
