@@ -98,19 +98,19 @@
     </div>
   </div>
   <div id="mapDiv">
-    <ui-gmap-google-map style="float:left"ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
+    <ui-gmap-google-map ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
                         zoom="assessment.map.zoom">
       <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click">
       </ui-gmap-marker>
         </ui-gmap-markers>
     </ui-gmap-google-map>
-    <div id="directionsDiv" style="overflow-y: hidden; height:500px; right:30px;margin-left:10px;">
-      <p ng-repeat="wayPoint in assessment.directionsSteps" .instructions>
+    <div id="directionsDiv" >
+      <p ng-repeat="wayPoint in assessment.directionsSteps" >
         {{wayPoint.instructions}}
       </p>
     </div>
     </div>
-  <div id="triageDiv" style="clear:both">
+  <div id="triageDiv">
     <h2>Triage</h2>
     <table class="ng-table">
       <tr>
@@ -137,7 +137,7 @@
             <option value="REC">REC</option>
           </select>
         </td>
-        <td>{{assessment.selectedReferral.physician}}</td>
+        <td>{{assessment.selectedReferral.physician_name}}</td>
       </tr>
     </table>
     <div id="assessmentType">
@@ -151,7 +151,7 @@
       <input type="radio" name="Modified Time Duties" value="Modified Time Duties">Modified Time\Duties
       <input type="radio" name="Modified Time" value="Full Time">Full Time\Modified Duties
       <input type="radio" name="" value="WSIBNonSpecialty">Not Working
-</div>
+  </div>
     <div>
       <select class="form-control" id="prognosis" >
         <option value="" selected="">--- Select One ---</option>

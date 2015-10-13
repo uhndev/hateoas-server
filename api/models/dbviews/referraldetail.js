@@ -83,6 +83,9 @@
       claim_claimNum: {
         type: 'string'
       },
+      physician_name: {
+        type: 'string'
+      },
       toJSON: UserModel.attributes.toJSON
 
     }

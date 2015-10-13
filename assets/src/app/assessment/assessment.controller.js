@@ -19,9 +19,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi'];
+  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService'];
 
-  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi) {
+  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician) {
     var vm = this;
 
     // bindable variables
@@ -168,7 +168,7 @@
           //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
 //alert('wait');
           //set routes
-          vm.directionsSteps=response.routes[0].legs[0].steps;
+              vm.directionsSteps = response.routes[0].legs[0].steps;
           console.log(vm.directionsSteps);
 
         }
@@ -209,8 +209,9 @@
 
       var origin= new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
       var destination= new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
-      calculateDirections(origin,destination);
+
+      vm.calculateDirections(origin,destination);
+      vm.calculateDirections(origin,destination);
     }
   }
-
 })();
