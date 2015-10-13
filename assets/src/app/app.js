@@ -26,6 +26,7 @@
 
     // ARM
     'dados.arm.assessment',
+    'dados.arm.altum_api',
 
     'dados.filters.formatter',
     'dados.filters.type',
