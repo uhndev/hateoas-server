@@ -19,9 +19,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService','$scope'];
+  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService'];
 
-  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician, Program, $scope) {
+  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi, Physician, Program) {
     var vm = this;
 
     // bindable variables
@@ -30,24 +30,25 @@
     vm.collapsedSearch = false;
     vm.collapsedClientDetail = true;
     vm.selectedReferral = {};
+    vm.selectedSite= {};
     vm.siteMatrix = {};
     vm.map = {control: {}, center: {latitude: 43.7000, longitude: -79.4000}, zoom: 7};
     vm.sites = [];            //placeholder for sites
-    vm.programs= [];           //placeholder for programs
+    vm.programs = [];           //placeholder for programs
     vm.siteLocations = [];
     vm.mapReady = false;
     vm.geocoder = null;
     vm.geoDirections = null;
-    vm.geoDistance=null;
-    vm.directionsService=null; //placeholder for directionsService object
+    vm.geoDistance = null;
+    vm.directionsService = null; //placeholder for directionsService object
     vm.googleMaps = uiGmapGoogleMapApi;
 
     // google distance placeholders for distance call
     vm.origins = [];
     vm.destinations = [];
     vm.distanceMatrix = [];
-    vm.directionsSteps= [];
-    vm.markers=[];
+    vm.directionsSteps = [];
+    vm.markers = [];
 
     // bindable methods
     vm.findReferral = findReferral;
@@ -62,40 +63,48 @@
     ///////////////////////////////////////////////////////////////////////////
 
     function init() {
-      Program.query({}).$promise.then(function(resp) {
-        vm.programs=angular.copy(resp);
+      Program.query({}).$promise.then(function (resp) {
+        vm.programs = angular.copy(resp);
       });
 
       Site.query({}).$promise.then(function (resp) {
         vm.sites = angular.copy(resp);
         return uiGmapGoogleMapApi;
       })
-      .then(function (maps) {
-        //init googleMaps object
-        vm.googleMaps = maps;
+        .then(function (maps) {
+          //init googleMaps object
+          vm.googleMaps = maps;
 
-        //initialize sites/destinations
-        _.each(vm.sites, function(site,index) {
-          //vm.destinations.push(maps.LatLng(site.latitude, site.longitude));
-          vm.destinations.push((site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ' ' + (site.address.postalCode || '') + ' ' + (site.address.country || ''));
+          //initialize sites/destinations
+          _.each(vm.sites, function (site, index) {
+            //vm.destinations.push((site.address.address1 || '') + ' ' + (site.address.address2 || '') + ' ' + (site.address.city || '') + ' ' + (site.address.province || '') + ' ' + (site.address.postalCode || '') + ' ' + (site.address.country || ''));
+            vm.destinations.push(_.values(_.pick(site.address, 'address1', 'address2', 'city', 'province', 'postalCode')).join(' '));
+            var val = {
+              idKey: index,
+              latitude: site.address.latitude,
+              longitude: site.address.longitude,
+              title: site.name,
+              icon: {url: 'assets/img/hospital-building.png'},
+              click: function () {
+                selectSite(site);
+              }
+            };
+            val["id"] = index;
+            vm.markers.push(val);
+          });
 
-          var val= {idKey: index, latitude: site.address.latitude, longitude: site.address.longitude, title: site.name, icon:{url: 'assets/img/hospital-building.png'}, click: function() {selectSite(site);}};
-          val["id"]= index;
-          vm.markers.push(val);
+          //initialize geocoder
+          vm.geocoder = new vm.googleMaps.Geocoder();
+
+          //initialize distance
+          vm.geoDistance = new vm.googleMaps.DistanceMatrixService();
+
+          //initialize directions service
+          vm.directionsService = new vm.googleMaps.DirectionsService();
+
+          //init directions renderer
+          vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
         });
-
-        //initialize geocoder
-        vm.geocoder = new vm.googleMaps.Geocoder();
-
-        //initialize distance
-        vm.geoDistance = new vm.googleMaps.DistanceMatrixService();
-
-        //initialize directions service
-        vm.directionsService = new vm.googleMaps.DirectionsService();
-
-        //init directions renderer
-        vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
-      });
     }
 
     function findReferral(searchString) {
@@ -111,14 +120,14 @@
           ]
         }
       }).$promise
-      .then(function (resp) {
-        vm.referralList = resp;
-        vm.referrals = resp;
-        vm.collapsedSearch = false;
-      },
-      function error(err) {
-        alert('error');
-      });
+        .then(function (resp) {
+          vm.referralList = resp;
+          vm.referrals = resp;
+          vm.collapsedSearch = false;
+        },
+        function error(err) {
+          alert('error');
+        });
     }
 
     function selectReferral(referral) {
@@ -132,12 +141,25 @@
       vm.collapsedClientDetail = false;
       vm.mapReady = true;
 
-      var val= {idKey: 'client', latitude: referral.client_latitude, longitude: referral.client_longitude, title: referral.client_name, icon:{url: 'assets/img/firstaid.png'}, click: function() {selectSite(site);}};
-      val["id"]= 'client';
+      var val = {
+        idKey: 'client',
+        latitude: referral.client_latitude,
+        longitude: referral.client_longitude,
+        title: referral.client_name,
+        icon: {url: 'assets/img/firstaid.png'},
+        click: function () {
+          selectSite(site);
+        }
+      };
+      val["id"] = 'client';
       vm.markers.pop();
       vm.markers.push(val);
 
-      vm.map = {control: {}, center: {latitude: referral.client_latitude, longitude: referral.client_longitude}, zoom: 10};
+      vm.map = {
+        control: {},
+        center: {latitude: referral.client_latitude, longitude: referral.client_longitude},
+        zoom: 10
+      };
 
       vm.calculateDistances();
       //vm.geocodeSites();
@@ -173,12 +195,11 @@
           //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
 //alert('wait');
           //set routes
-          $scope.$apply(function(){
+          $scope.$apply(function () {
 
             vm.directionsSteps = response.routes[0].legs[0].steps;
           });
           console.log(vm.directionsSteps);
-
         }
       });
     }
@@ -215,11 +236,11 @@
       //vm.geocodeSites();
       //console.log(vm.directionsSteps);
 
-      var origin= new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
-      var destination= new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
+      vm.selectedSite=site;
+      var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
+      var destination = new vm.googleMaps.LatLng(site.address.latitude, site.address.longitude);
 
-      vm.calculateDirections(origin,destination);
-      vm.calculateDirections(origin,destination);
+      vm.calculateDirections(origin, destination);
     }
   }
 })();
