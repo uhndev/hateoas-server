@@ -13,6 +13,21 @@
 
   module.exports = {
 
+    addSessions: function (req, res) {
+      console.log(req.body);
+      res.send(200);
+    },
+
+    updateSessions: function (req, res) {
+      console.log(req.body);
+      res.send(200);
+    },
+
+    removeSessions: function (req, res) {
+      console.log(req.body);
+      res.send(200);
+    },
+
     findOne: function (req, res) {
       Survey.findOne(req.param('id'))
         .then(function (survey) {
