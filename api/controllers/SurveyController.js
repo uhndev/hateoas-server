@@ -14,18 +14,49 @@
   module.exports = {
 
     addSessions: function (req, res) {
-      console.log(req.body);
-      res.send(200);
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToAdd) {
+          sessionToAdd.survey = surveyID;
+          return Session.create(sessionToAdd);
+        }))
+        .then(function (createdSessions) {
+          return res.ok(createdSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
     },
 
     updateSessions: function (req, res) {
-      console.log(req.body);
-      res.send(200);
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToUpdate) {
+          return Session.update({ id: sessionToUpdate.id }, sessionToUpdate);
+        }))
+        .then(function (updatedSessions) {
+          return res.ok(updatedSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
     },
 
     removeSessions: function (req, res) {
-      console.log(req.body);
-      res.send(200);
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToRemove) {
+          return Session.update({ id: sessionToRemove.id }, { expiredAt: new Date() });
+        }))
+        .then(function (removedSessions) {
+          return res.ok(removedSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
     },
 
     findOne: function (req, res) {
