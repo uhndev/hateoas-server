@@ -263,10 +263,10 @@ module.exports = {
      * @description A referral's contacts
      * @type {String}
      */
-    referralContacts: {
+    /*referralContacts: {
       collection: 'referralContact',
       via: 'contact'
-    },
+    },*/
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }

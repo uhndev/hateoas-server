@@ -96,19 +96,23 @@
         </tr>
       </table>
     </div>
-  </div>
-  <div id="mapDiv">
+  <div id="mapDiv" class="form-div">
     <ui-gmap-google-map ng-if="assessment.mapReady==true" center="assessment.map.center" pan="true"
                         zoom="assessment.map.zoom">
       <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click" >
         </ui-gmap-markers>
     </ui-gmap-google-map>
     <div id="directionsDiv" >
+      <h2>{{(assessment.selectedSite.address.address1 + ' ' +
+        assessment.selectedSite.address.address2 + ' ' +
+        assessment.selectedSite.address.city + ' ' +
+        assessment.selectedSite.address.province + ' ') }}</h2>
       <p ng-repeat="wayPoint in assessment.directionsSteps" >
         {{wayPoint.instructions}}
       </p>
     </div>
     </div>
+  </div>
   <div id="triageDiv">
     <h2>Triage</h2>
     <table class="ng-table">
@@ -122,21 +126,13 @@
       <tr>
         <td>
           <select class="form-control" id="selectProgram" >
-            <option value="" selected="">--- Select One ---</option>
-            <option value="BN">BN</option>
-            <option value="FA">FA</option>
-            <option value="FPP">FPP</option>
-            <option value="HK">HK</option>
-            <option value="HW">HW</option>
-            <option value="SX-FA">SX-FA</option>
-            <option value="SX-HK">SX-HK</option>
-            <option value="SX-HW">SX-HW</option>
-            <option value="SURGICAL">SURGICAL</option>
-            <option value="Non Speciality">Non Speciality</option>
-            <option value="REC">REC</option>
+            <option disabled selected>Select Program</option>
+            <option ng-repeat="program in assessment.programs" value="site">{{program.programName}}</option>
           </select>
         </td>
         <td>{{assessment.selectedReferral.physician_name}}</td>
+        <td></td>
+        <td>{{assessment.selectedReferral.recieveDate}}</td>
       </tr>
     </table>
     <div id="assessmentType">

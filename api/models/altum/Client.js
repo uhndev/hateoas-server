@@ -27,10 +27,10 @@
        * @description A client's emergencyContacts
        * @type {String}
        */
-      emergencyContacts: {
+      /*emergencyContacts: {
         model: 'emergencyContact',
         via: 'client'
-      },
+      },*/
 
       /**
        * MRN

@@ -25,9 +25,9 @@ module.exports = {
      * @type {model}
      */
 
-    contact: {
+    /*contact: {
       model: 'contact'
-    }
+    }*/
 
 
   }
