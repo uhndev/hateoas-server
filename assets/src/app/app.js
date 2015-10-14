@@ -28,6 +28,9 @@
     'dados.arm.assessment',
     'dados.arm.altum_api',
 
+    // AHS
+    'AHS.client',
+
     'dados.filters.formatter',
     'dados.filters.type',
 
