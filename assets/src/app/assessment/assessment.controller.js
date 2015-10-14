@@ -19,9 +19,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService'];
+  AssessmentController.$inject = ['AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService','$scope'];
 
-  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician, Program) {
+  function AssessmentController(Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi,Physician, Program, $scope) {
     var vm = this;
 
     // bindable variables
@@ -173,7 +173,10 @@
           //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
 //alert('wait');
           //set routes
-              vm.directionsSteps = response.routes[0].legs[0].steps;
+          $scope.$apply(function(){
+
+            vm.directionsSteps = response.routes[0].legs[0].steps;
+          });
           console.log(vm.directionsSteps);
 
         }
