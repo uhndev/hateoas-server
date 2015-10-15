@@ -13,6 +13,101 @@
 
   module.exports = {
 
+    /**
+     * addSessions
+     * @description Request endpoint for adding multiple sessions to an existing survey
+     * @param req
+     * @param res
+     */
+    addSessions: function (req, res) {
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToAdd) {
+          sessionToAdd.survey = surveyID;
+          return Session.create(sessionToAdd);
+        }))
+        .then(function (createdSessions) {
+          this.createdSessions = createdSessions;
+          return SurveyService.buildScheduleQueries(surveyID, createdSessions);
+        })
+        .then(function (scheduleQueries) {
+          return Promise.all(
+            _.map(scheduleQueries, function (schedule) {
+              return SubjectSchedule.findOrCreate(schedule);
+            })
+          );
+        })
+        .then(function (createdSchedules) {
+          return res.ok(this.createdSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
+    },
+
+    /**
+     * updateSessions
+     * @description Request endpoint for updating multiple sessions from an existing survey
+     * @param req
+     * @param res
+     */
+    updateSessions: function (req, res) {
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToUpdate) {
+          return Session.update({ id: sessionToUpdate.id }, sessionToUpdate);
+        }))
+        .then(function (updatedSessions) {
+          this.updatedSessions = _.flatten(updatedSessions);
+          return SurveyService.buildScheduleQueries(surveyID, _.flatten(updatedSessions));
+        })
+        .then(function (scheduleQueries) {
+          return Promise.all(
+            _.map(scheduleQueries, function (schedule) {
+              return SubjectSchedule.update({session: schedule.session, subjectEnrollment: schedule.subjectEnrollment}, {
+                availableFrom: schedule.availableFrom,
+                availableTo: schedule.availableTo
+              });
+            })
+          );
+        })
+        .then(function (updatedSchedules) {
+          return res.ok(this.updatedSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
+    },
+
+    /**
+     * removeSessions
+     * @description Request endpoint for removing multiple sessions from an existing survey
+     * @param req
+     * @param res
+     */
+    removeSessions: function (req, res) {
+      var surveyID = req.param('id');
+      var sessions = req.param('sessions');
+      Promise.all(
+        _.map(sessions, function (sessionToRemove) {
+          return Session.update({ id: sessionToRemove.id }, { expiredAt: new Date() });
+        }))
+        .then(function (removedSessions) {
+          this.removedSessions = removedSessions;
+          return Survey.findOne(surveyID).then(function (survey) {
+            return SurveyService.checkSurveyVersion(survey);
+          });
+        })
+        .then(function (survey) {
+          return res.ok(this.removedSessions);
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
+        });
+    },
+
     findOne: function (req, res) {
       Survey.findOne(req.param('id'))
         .then(function (survey) {
