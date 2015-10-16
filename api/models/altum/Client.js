@@ -5,13 +5,14 @@
  * @description Model representation of a Client
  */
 
-(function () {
+  (function () {
 
-  var _super = require('./baseModel.js');
-  var _ = require('lodash');
-  var HateoasService = require('../../services/HateoasService.js');
+    var _super = require('./BaseModel.js');
+    var _ = require('lodash');
+    var HateoasService = require('../../services/HateoasService.js');
 
-  module.exports= {
+    _.merge(exports, _super);
+    _.merge(exports, {
     attributes: {
 
       /**
@@ -64,8 +65,8 @@
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-    }
-  }
-})();
 
+    }
+    });
+  })();
 

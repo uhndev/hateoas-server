@@ -7,10 +7,12 @@
 
 (function () {
 
-  var _super = require('./baseModel.js');
-var _super = require('./baseModel.js');
+  var _super = require('./BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
 
-module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
   attributes: {
 
@@ -27,6 +29,6 @@ module.exports = {
 
 
   }
-};
+  });
 })();
 

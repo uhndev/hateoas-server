@@ -20,6 +20,6 @@ module.exports = {
   hookTimeout: 60000, // 60 seconds to allow for uglification
   models: {
     migrate: 'alter',
-    connection: 'dados_development'
+    connection: 'arm_development'
   }
 };

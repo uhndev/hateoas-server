@@ -18,7 +18,6 @@ module.exports = {
       defaultsTo: false
     },
 
-
     /**
      * deletedAt
      * @description deleted date
@@ -40,7 +39,6 @@ module.exports = {
 
     deletedBy: {
       model: 'user'
-
     }
   }
 }
