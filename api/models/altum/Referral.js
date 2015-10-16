@@ -7,6 +7,7 @@
 
 
 (function () {
+
   var _super = require('./BaseModel.js');
 
   _.merge(exports, _super);

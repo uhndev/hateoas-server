@@ -5,6 +5,9 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
+(function () {
+
+  var _super = require('./baseModel.js');
 module.exports = {
 
   schema:true,
@@ -246,7 +249,6 @@ module.exports = {
      * @type {String}
      */
     language: {
-      model: 'language'
     },
 
     /**
@@ -267,8 +269,11 @@ module.exports = {
       collection: 'referralContact',
       via: 'contact'
     },*/
-
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
+
+
   }
 };
+})();
+
 
