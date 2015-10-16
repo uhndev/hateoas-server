@@ -5,6 +5,9 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
+(function () {
+
+  var _super = require('./baseModel.js');
 module.exports = {
 
   attributes: {
@@ -39,8 +42,13 @@ module.exports = {
 
     role: {
       model: 'contactRole'
-    }
+    },
+
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+
 
   }
 };
+})();
+
 

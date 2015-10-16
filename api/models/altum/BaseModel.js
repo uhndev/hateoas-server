@@ -2,6 +2,9 @@
  * Created by calvinsu on 15-09-11.
  */
 module.exports = {
+
+  connection: 'arm_development',
+
   attributes: {
 
     /**
@@ -37,6 +40,7 @@ module.exports = {
 
     deletedBy: {
       model: 'user'
+
     }
   }
 }

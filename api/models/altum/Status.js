@@ -5,6 +5,11 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
+(function () {
+
+  var _super = require('./baseModel.js');
+var _super = require('./baseModel.js');
+
 module.exports = {
 
   attributes: {
@@ -18,8 +23,10 @@ module.exports = {
     name: {
       type: 'string'
     },
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 
   }
 };
+})();
 
