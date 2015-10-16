@@ -4,8 +4,11 @@
  * In order to support database views in sails, one needs to drop views before
  * the ORM loads and recreate views after the ORM has loaded otherwise sails
  * won't know what to do with the models defined in models/views.
- * Here we read the config/db directory an iterate over the sql files there,
+ * Here we read the config/db/<database> directory an iterate over the sql files there,
  * parse and execute them as sql statements to recreate our views.
+ *
+ * NOTE: folder structure of config/db/<database> must match a defined connection
+ * i.e. if database is dados, there must exist a dados_<environment> connection in config/connections.
  */
 
 (function() {
