@@ -3,56 +3,57 @@
  *
  * In order to support database views in sails, one needs to drop views before
  * the ORM loads, otherwise sails won't know what to do with the models defined
- * in models/views.  Here we read the config/db directory an iterate over the
+ * in models/views.  Here we read the config/db/<database> directory an iterate over the
  * filenames to create and execute a drop view query.
+ *
+ * NOTE: folder structure of config/db/<database> must match a defined connection
+ * i.e. if database is dados, there must exist a dados_<environment> connection in config/connections.
  */
 
 (function() {
-  var pg = require('pg');
+  var fs = require('fs');
+  var pgp = require('pg-promise')();
   var _ = require('lodash');
   var Promise = require('q');
 
   module.exports = function (sails) {
     var env = sails.config.environment;
-    var connection = sails.config.connections['dados_' + env];
 
-    var connectionStr = [
-      'postgres://', connection.user, ':', connection.password,
-      '@', connection.host, ':', connection.port, '/', connection.database
-    ].join('');
-
-    var views = _.map(require('fs').readdirSync('config/db'), function(file) {
-      return file.slice(0, -4);
+    var connections = [];
+    _.each(fs.readdirSync('config/db'), function(db) {
+      var connection = sails.config.connections[db + '_' + env];
+      if (connection) {
+        var connectionStr = [
+          'postgres://', connection.user, ':', connection.password,
+          '@', connection.host, ':', connection.port, '/', connection.database
+        ].join('');
+        connections.push({ dbName: db, pgConnection: pgp(connectionStr) });
+      }
     });
 
     return {
       initialize: function (next) {
         sails.after('hook:blueprints:loaded', function () {
-          pg.connect(connectionStr, function (err, client, done) {
-            if (err) {
-              sails.log.error('Error fetching client from pool', err);
-              return next(err);
-            }
-            var dropQuery = _.map(views, function (view) {
-              return 'DROP VIEW IF EXISTS ' + view + ';';
-            }).join(' ');
-            client.query(dropQuery, function (err, result) {
-              if (err) {
-                sails.log.error('Error running query: ' + err);
-                sails.log.error(dropQuery);
-                next(err);
-              } else {
-                done();
-                sails.log.info('Drop View Query executed successfully with result: ');
-                sails.log.info(result);
-                next();
-              }
+          Promise.all(
+            _.map(connections, function (connection) {
+              var dropQuery = _.map(fs.readdirSync('config/db/' + connection.dbName), function(file) {
+                return 'DROP VIEW IF EXISTS ' + file.slice(0, -4).toString() + ';';
+              }).join(' ');
+              return connection.pgConnection.query(dropQuery);
+            }))
+            .then(function (result) {
+              sails.log.info('Drop View Query executed successfully');
+              next();
             })
+            .catch(function (err) {
+              sails.log.error('Error running query: ' + err);
+              sails.log.error(dropQuery);
+              next(err);
+            });
           })
-        });
+        }
       }
     };
-  };
 
 })();
 
