@@ -7,8 +7,12 @@
 
 (function () {
 
-  var _super = require('./baseModel.js');
-module.exports = {
+  var _super = require('./BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
+
+  _.merge(exports, _super);
+  _.merge(exports, {
 
   attributes: {
 
@@ -30,14 +34,14 @@ module.exports = {
 
     referrals: {
       collection: 'referral',
-      via: 'payors'
+      via: 'payors',
+      dominant:true
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 
   }
-};
+  });
 })();
-
 

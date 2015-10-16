@@ -153,7 +153,8 @@
 
       clients: {
         collection: 'client',
-        via: 'referrals'
+        via: 'referrals',
+        dominant: true
       },
 
       /**

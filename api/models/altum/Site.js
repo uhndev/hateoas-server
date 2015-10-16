@@ -7,13 +7,14 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/site.js
  */
 
-(function () {
+  (function () {
 
-  var _super = require('./baseModel.js');
-  var _ = require('lodash');
-  var HateoasService = require('../../services/HateoasService.js');
+    var _super = require('./BaseModel.js');
+    var _ = require('lodash');
+    var HateoasService = require('../../services/HateoasService.js');
 
-  module.exports = {
+    _.merge(exports, _super);
+    _.merge(exports, {
 
     schema:true,
     attributes: {
@@ -61,10 +62,11 @@
       phone: {
         type: 'string'
       },
-
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
+
     }
-  }
-})();
+    });
+  })();
+
 

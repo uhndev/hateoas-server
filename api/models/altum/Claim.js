@@ -7,13 +7,14 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/claim.js
  */
 
-(function () {
+  (function () {
 
-  var _super = require('./baseModel.js');
-  var _ = require('lodash');
-  var HateoasService = require('../../services/HateoasService.js');
+    var _super = require('./BaseModel.js');
+    var _ = require('lodash');
+    var HateoasService = require('../../services/HateoasService.js');
 
-  module.exports = {
+    _.merge(exports, _super);
+    _.merge(exports, {
 
     schema: true,
     attributes: {
@@ -83,7 +84,8 @@
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
+
     }
-  }
-})();
+    });
+  })();
 
