@@ -1,7 +1,7 @@
 /**
- * Payor.js
+ * PayorProgram.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @description :: A model representing all programs belonging to a particular payor
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -17,41 +17,39 @@
   attributes: {
 
     /**
-     * contact
-     * @description a payor's contact
-     * @type {String}
+     * payors
+     * @description a PayorProgram's payor
+     * @type {collection}
      */
 
-    contact: {
-      model: 'contact'
+    payors: {
+      model: 'payor',
+
     },
 
     /**
-     * referrals
-     * @description a payor's referrals
+     * name
+     * @description a PayorProgram's name
      * @type {String}
      */
 
-    referrals: {
-      collection: 'referral',
-      via: 'payors',
-      dominant:true
+    name: {
+      type:'string'
     },
 
     /**
-     * programs
-     * @description a payor's programs
+     * ProgramServices
+     * @description a payor's ProgramServices
      * @type {String}
      */
 
-    payorPrograms : {
-      collection: 'PayorProgram',
-      via: 'payors',
+    programServices: {
+      collection: 'ProgramService',
+      via: 'payorPrograms',
       dominant:true
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
 
   }
   });
