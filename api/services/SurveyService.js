@@ -210,6 +210,53 @@
             );
           }
         });
+    },
+
+    /**
+     * buildScheduleQueries
+     * @description After adding/updating/removing sessions from an existing survey, checks if new SurveyVersion
+     *              needs to be created, then based on the changed session(s), updates SubjectSchedules accordingly.
+     * @param surveyID  ID of survey where sessions were changed
+     * @param sessions  array of changed sessions that should be used to update SubjectSchedules
+     * @returns {Array}
+     */
+    buildScheduleQueries: function (surveyID, sessions) {
+      var self = this;
+      return Survey.findOne(surveyID)
+        .populate('sessions')
+        .then(function (survey) {
+          this.currentSurvey = survey;
+          return self.checkSurveyVersion(survey);
+        })
+        .then(function (newSurveyVersion) {
+          // find subject enrollments for study
+          return studysubject.find({study: this.currentSurvey.study});
+        })
+        .then(function (subjectEnrollments) {
+          // if subjects are enrolled already, create SubjectSchedules for them
+          if (subjectEnrollments) {
+            var queries = [];
+            _.each(sessions, function (session) {
+              _.each(subjectEnrollments, function (enrollment) {
+                var availableFrom = moment(enrollment.doe).add(session.timepoint, 'days')
+                  .subtract(session.availableFrom, 'days');
+                var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
+                  .add(session.availableTo, 'days');
+                queries.push({
+                  availableFrom: (session.type == 'scheduled') ? availableFrom.toDate() : null,
+                  availableTo: (session.type == 'scheduled') ? availableTo.toDate() : null,
+                  status: 'IN PROGRESS',
+                  session: session.id,
+                  subjectEnrollment: enrollment.id
+                });
+              });
+            });
+
+            return queries;
+          } else {
+            return null;
+          }
+        });
     }
   };
 

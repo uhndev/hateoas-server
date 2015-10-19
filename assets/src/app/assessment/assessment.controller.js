@@ -104,6 +104,12 @@
 
           //init directions renderer
           vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
+
+          return uiGmapIsReady.promise(1);
+        })
+        .then ( function(instances) {
+          var instanceMap=instances[0].map;
+          vm.directionsDisplay.setMap(instanceMap);
         });
     }
 

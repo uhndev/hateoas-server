@@ -52,9 +52,12 @@ module.exports.routes = {
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
-  'put /api/user/:id/roles'        : 'UserController.updateRoles'
+  'put /api/user/:id/roles'        : 'UserController.updateRoles',
 
   /***************************************************************************
-  * Collection Centre Routes                                                 *
+  * Survey Session Lifecycle Routes                                          *
   ****************************************************************************/
+  'put /api/survey/:id/addSessions'       : 'SurveyController.addSessions',
+  'put /api/survey/:id/updateSessions'    : 'SurveyController.updateSessions',
+  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions'
 };

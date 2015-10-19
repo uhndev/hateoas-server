@@ -99,6 +99,17 @@
       },
 
       /**
+       * formOrder
+       * @description Array denoting the order in which forms in this session should appear.
+       * @type {Array}
+       */
+      formOrder: {
+        type: 'array',
+        defaultsTo: [],
+        array: true
+      },
+
+      /**
        * formVersions
        * @description Collection of forms for subject to fill out at the given session/timepoint.
        * @type {Association} many-to-many relationship to the FormVersion model

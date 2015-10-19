@@ -23,8 +23,8 @@ module.exports = {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
 
-    coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
-    coffeeunit: [ 'src/**/*.spec.coffee' ],
+    ts: [ 'src/**/*.ts', '!src/**/*.spec.ts', '!src/assets/**/*.ts' ],
+    tsunit: [ 'src/**/*.spec.ts' ],
 
     atpl: [ 'src/app/**/*.tpl.html' ],
     ctpl: [ 'src/common/**/*.tpl.html' ],
@@ -83,14 +83,17 @@ module.exports = {
       'vendor/angularSails/dist/ngsails.io.js',
       'vendor/angular-toastr/dist/angular-toastr.tpls.js',
       'vendor/angular-timeline/dist/angular-timeline.js',
+      'vendor/angular-scroll-animate/dist/angular-scroll-animate.js',
       'vendor/ng-table/dist/ng-table.js',
-      'vendor/angular-ui-utils/ui-utils.js',
+      'vendor/angular-ui-validate/dist/validate.js',
       'vendor/angular-ui-sortable/sortable.js',
       'vendor/ace-builds/src/ace.js',
       'vendor/ace-builds/src/mode-javascript.js',
       'vendor/ace-builds/src/worker-javascript.js',
       'vendor/angular-ui-ace/ui-ace.js',
       'vendor/angular-google-maps/dist/angular-google-maps.js',
+      'vendor/tr-ng-grid/trNgGrid.js',
+      'vendor/angular-local-storage/dist/angular-local-storage.min.js',
 
       // plugins
       'vendor/JSONedit/js/JSONEdit.js'
@@ -105,5 +108,5 @@ module.exports = {
       'vendor/angular-ui-grid/ui-grid.ttf',
       'vendor/angular-ui-grid/ui-grid.woff'
     ]
-  },
+  }
 };

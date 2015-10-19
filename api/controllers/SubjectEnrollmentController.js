@@ -45,13 +45,15 @@
                     enrollment.formSchedules = [];
                     // create 1D list of scheduled forms
                     _.each(this.schedules, function (schedule) {
-                      _.each(schedule.formVersions, function (formId) {
-                        var scheduledForm = _.clone(schedule);
-                        scheduledForm.scheduledForm = possibleForms[formId];
-                        enrollment.formSchedules.push(scheduledForm);
+                      _.each(schedule.formOrder, function (formOrderId) {
+                        // if ordered form is active for this session
+                        if (_.includes(schedule.formVersions, formOrderId)) {
+                          var scheduledForm = _.clone(schedule);
+                          scheduledForm.scheduledForm = possibleForms[formOrderId];
+                          enrollment.formSchedules.push(scheduledForm);
+                        }
                       });
                     });
-
                   })
                   .then(function () {
                     return Promise.all(

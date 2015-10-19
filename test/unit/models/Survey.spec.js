@@ -81,6 +81,15 @@ describe('The Survey Model', function() {
         });
     });
 
+    it('should have created defaultFormVersions array if not given', function(done) {
+      Survey.findOneByName('SURVEY').exec(function (err, survey) {
+        survey.defaultFormVersions.length.should.equal(2);
+        survey.defaultFormVersions[0].active.should.be.ok;
+        survey.defaultFormVersions[1].active.should.be.ok;
+        done(err);
+      });
+    });
+
     it('should update the head revision in place if no AnswerSets filled yet', function(done) {
       Survey.update({ name: 'SURVEY' }, {
         name: 'SURVEY2'
@@ -283,25 +292,6 @@ describe('The Survey Model', function() {
             done(err);
           });
         });
-    });
-
-    it('should not create a new SurveyVersion if Form was edited, but should create new FormVersion', function(done) {
-      Form.update({ name: 'FORM1' }, {
-          name: 'FORM1-alpha'
-        })
-        .then(function (form) {
-          _.first(form).name.should.equal('FORM1-alpha');
-          return FormVersion.count({form: _.first(form).id});
-        })
-        .then(function (formVersions) {
-          formVersions.should.equal(3);
-          return SurveyVersion.count();
-        })
-        .then(function (surveyVersions) {
-          surveyVersions.should.equal(3);
-          done();
-        })
-        .catch(done);
     });
 
     it('should not create a new SurveyVersion if a formVersion is added to a Session', function(done) {
