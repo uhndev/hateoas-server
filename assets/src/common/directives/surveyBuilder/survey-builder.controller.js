@@ -22,16 +22,25 @@
   function SurveyBuilderController($scope, STAGES, TableParams) {
     var vm = this;
 
+    // private variables
+    var stepSize = 2;                          // amount of sessions to add when scrolling down
+    var defaultLoad = 10;                      // default number of sessions to limit to
+    var infiniteThreshold = 20;                // minimum number of sessions required for infinite-scrolling
+
     // bindable variables
+    vm.isFormsToggled = false;                 // boolean denoting whether all forms per session are visible
+    vm.isDefaultsCollapsed = false;            // boolean denoting whether side panel of default forms is visible
+    vm.cascadeDefaults = true;                 // denotes whether or not to cascade changes in form order to each session
     vm.newSession = {};                        // palette for generating/adding sessions to vm.survey.sessions
     vm.survey = vm.survey || { sessions: [] }; // object storing full survey definition to be loaded or built
     vm.study = vm.study || {};                 // object storing study definition
     vm.forms = vm.forms || [];                 // array storing form definitions
-    vm.formVersions = [];                      // array storing latest form versions
+    vm.formVersions = {};                      // dictionary storing latest form versions by id
     vm.latestSurveyVersion = 1;                // id of latest survey version
     vm.STAGES = angular.copy(STAGES);          // constants defining states/stages of survey creation
-    vm.selectedAllSessions = false;            // boolean storing whether or not user clicked select all sessions
-    vm.selectedAllForms = false;               // boolean storing whether or not user clicked select all forms
+    vm.loadLimit = 10;                         // max number of sessions to show in window
+    vm.beginLimit = 0;                         // number of sessions in timeline to limit from the beginning
+
     vm.sessionColumns = [
       { title: 'Type', field: 'type', type: 'dropdown', options: [
         { prompt: 'Scheduled', value: 'scheduled' },
@@ -47,7 +56,10 @@
     // bindable methods
     vm.addRemoveForm = addRemoveForm;
     vm.isFormActive = isFormActive;
+    vm.onToggleCascadeDefaults = onToggleCascadeDefaults;
     vm.generateSessions = generateSessions;
+    vm.loadMore = loadMore;
+    vm.toggleForms = toggleForms;
 
     init();
 
@@ -58,21 +70,71 @@
      */
     function init() {
       angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
+
       // sort and retrieve latest revisions of forms
       if (!_.has(vm.forms, 'versions')) {
-        // store array of latest forms
-        vm.formVersions = _.map(vm.forms, function (form) {
-          return _.last(_.sortBy(form.versions, 'revision'));
+        // stored list of latest form versions
+        vm.forms = _.map(vm.forms, function (form) {
+          var latestForm = _.last(_.sortBy(form.versions, 'revision'));
+          latestForm = _.pick(latestForm, 'id', 'name', 'revision', 'form');
+          latestForm.active = true;
+          return latestForm;
         });
+
+        // store dictionary of latest forms
+        vm.formVersions = _.indexBy(angular.copy(vm.forms), 'id');
       }
+
       // sort and retrieve latest revisions of surveys
       if (_.has(vm.survey, 'versions') && vm.survey.versions.length > 1) {
         // store latest survey version
         vm.latestSurveyVersion = _.last(_.sortBy(vm.survey.versions, 'revision'));
       }
+
+      // check if editing existing survey, if so, disable auto-cascade
+      if (_.has(vm.survey, 'id')) {
+        vm.cascadeDefaults = false;
+        vm.isDefaultsCollapsed = true;
+
+        // check if any new forms have been added and add them if so
+        var formDiffs = _.filter(vm.forms, function (form) {
+          return !_.contains(_.pluck(vm.survey.defaultFormVersions, 'id'), form.id);
+        });
+
+        // add any new forms to survey.defaultFormVersions
+        if (formDiffs.length > 0) {
+          _.each(formDiffs, function (formToAdd) {
+            formToAdd.active = false;
+            vm.survey.defaultFormVersions.push(formToAdd);
+          });
+        }
+
+        // add any new forms to each session.formOrder
+        var formIds = _.pluck(vm.forms, 'id');
+        _.map(vm.survey.sessions, function (session) {
+          var diff = _.difference(formIds, session.formOrder);
+          if (diff.length > 0) {
+            _.each(diff, function (formId) {
+              session.formOrder.push(formId);
+            });
+          }
+        });
+      } else {
+        // if creating new survey, set defaultFormVersions from vm.forms
+        vm.survey.defaultFormVersions = [];
+        _.each(vm.forms, function (form) {
+          vm.survey.defaultFormVersions.push(form);
+        });
+      }
+
+      // depending on length of survey, disable/enable infinite-scroll
       if (!_.has(vm.survey, 'sessions')) {
         vm.survey.sessions = [];
+        vm.loadLimit = 0;
+      } else {
+        vm.loadLimit = (vm.survey.sessions.length > infiniteThreshold) ? defaultLoad : vm.survey.sessions.length;
       }
+
       vm.tableParams = new TableParams({
         page: 1,
         count: 10
@@ -93,10 +155,11 @@
      * @param session session object with list of formVersions
      */
     function addRemoveForm(formVersion, session) {
-      if (_.inArray(session.formVersions, formVersion.id)) {
-        session.formVersions = _.without(session.formVersions, formVersion.id);
+      var formId = parseInt((_.has(formVersion, 'id') ? formVersion.id : formVersion));
+      if (_.inArray(session.formVersions, formId)) {
+        session.formVersions = _.without(session.formVersions, formId);
       } else {
-        session.formVersions.push(formVersion.id);
+        session.formVersions.push(formId);
       }
     }
 
@@ -107,7 +170,22 @@
      * @returns {Boolean} true if formVersion is in session, false otherwise
      */
     function isFormActive(form, session) {
-      return _.inArray(session.formVersions, form.id);
+      var formId = parseInt((_.has(form, 'id') ? form.id : form));
+      return _.inArray(session.formVersions, formId);
+    }
+
+    function onToggleCascadeDefaults() {
+      if (vm.cascadeDefaults) {
+        var formOrder = _.map(_.pluck(vm.survey.defaultFormVersions, 'id'), function (formId) { return parseInt(formId); });
+        var formIds = _.map(_.pluck(_.filter(vm.survey.defaultFormVersions, { active: true }), 'id'), function (formId) { return parseInt(formId); });
+
+        _.map(vm.survey.sessions, function (session) {
+          if (!session.$noCascade) {
+            session.formOrder = angular.copy(formOrder);
+            session.formVersions = angular.copy(formIds);
+          }
+        });
+      }
     }
 
     /**
@@ -118,7 +196,10 @@
      */
     function generateSessions() {
       if (!_.isEmpty(vm.newSession)) {
-        vm.newSession.formVersions = _.pluck(vm.formVersions, 'id');
+        var formIds = _.map(_.pluck(vm.forms, 'id'), function (formId) { return parseInt(formId); });
+        vm.newSession.formOrder = angular.copy(formIds);
+        vm.newSession.formVersions = angular.copy(_.filter(formIds, { active: false }));
+
         // if scheduled, session won't have name but will have repeat attributes
         if (vm.newSession.type === 'scheduled') {
           // repeat as many times as needed to generate timepoints
@@ -131,7 +212,8 @@
               timepoint: future,
               availableFrom: vm.newSession.availableFrom,
               availableTo: vm.newSession.availableTo,
-              formVersions: _.pluck(vm.formVersions, 'id')
+              formOrder: angular.copy(formIds),
+              formVersions: angular.copy(formIds)
             });
           }
         }
@@ -145,14 +227,41 @@
         }
         vm.newSession = {};
         angular.copy(_.sortBy(vm.survey.sessions, 'timepoint'), vm.survey.sessions);
+        vm.loadLimit = (vm.survey.sessions.length > infiniteThreshold) ? defaultLoad : vm.survey.sessions.length;
         vm.tableParams.reload();
         vm.toggleReload = !vm.toggleReload;
       }
     }
 
-    $scope.$watch('surveyBuilder.survey', function(newVal, oldVal) {
+    /**
+     * loadMore
+     * @description Callback for when scrollbar reaches bottom of window; will load more elements
+     *              depending on total number of available sessions.
+     */
+    function loadMore() {
+      if (vm.survey.sessions.length > infiniteThreshold) {
+        if ((vm.loadLimit + stepSize) > vm.survey.sessions.length) {
+          vm.loadLimit = vm.survey.sessions.length;
+        } else {
+          vm.loadLimit += stepSize;
+        }
+      }
+    }
+
+    function toggleForms() {
+      vm.isFormsToggled = !vm.isFormsToggled;
+      _.map(vm.survey.sessions, function (session) {
+        session.$isCollapsed = vm.isFormsToggled;
+      });
+    }
+
+    $scope.$watch('sb.survey', function(newVal, oldVal) {
       vm.isValid = (_.has(vm.surveyForm, '$valid') && _.has(vm.survey, 'sessions')) ?
                    (vm.surveyForm.$valid && vm.survey.sessions.length > 0) : false;
+    }, true);
+
+    $scope.$watch('sb.survey.defaultFormVersions', function(newVal, oldVal) {
+      onToggleCascadeDefaults();
     }, true);
   }
 })();

@@ -4,7 +4,7 @@
   angular
     .module('AHS.client.service', [
       'AHS.client.constants',
-      'AHS.common.services.resource'
+      'dados.common.services.resource'
     ])
     .service('ClientService', ClientService);
 

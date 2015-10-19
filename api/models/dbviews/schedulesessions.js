@@ -36,8 +36,14 @@
       survey: {
         model: 'survey'
       },
+      surveyName: {
+        type: 'string'
+      },
       surveyVersion: {
         type: 'surveyversion'
+      },
+      formOrder: {
+        type: 'array'
       },
       formVersions: {
         type: 'array'

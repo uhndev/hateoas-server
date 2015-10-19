@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   angular
-    .module('AHS.client.constants', ['AHS.constants'])
+    .module('AHS.client.constants', ['dados.constants'])
     .service('CLIENT_API', Client);
   Client.$inject = ['API'];
   function Client(API) {

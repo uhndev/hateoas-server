@@ -6,6 +6,7 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 (function() {
+  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
@@ -129,30 +130,26 @@
           })
           .catch(cb);
       } else {
-        // if lastPublished set on Form, then there are AnswerSets referring to this version
-        if (values.lastPublished !== null) {
-          // in that case, stamp out next form version and next survey version
-          // create new form version with updated revision number
-          FormVersion.find({ form: values.id })
+        cb();
+      }
+    },
+
+    /**
+     * findLatestFormVersions
+     * @description Given a list of form objects, return a list of latest corresponding FormVersions
+     * @param forms Array of form objects to search upon
+     * @returns {Array | Promise} Array of form versions or promise
+     */
+    findLatestFormVersions: function(forms) {
+      return Promise.all(
+        _.map(forms, function (form) {
+          return FormVersion.find({ form: form.id })
             .sort('revision DESC')
             .then(function (latestFormVersions) {
-              var newFormVersion = {
-                revision: _.first(latestFormVersions).revision + 1,
-                form: values.id
-              };
-              _.merge(newFormVersion, _.pick(values, 'name', 'metaData', 'questions'));
-              return FormVersion.create(newFormVersion);
-            })
-            .then(function (newFormVersion) {
-              cb();
-            })
-            .catch(cb);
-        }
-        // otherwise updates are done in place for the current head
-        else {
-          cb();
-        }
-      }
+              return _.first(latestFormVersions);
+            });
+        })
+      );
     },
 
     findByStudyName: function(studyName, currUser, options, cb) {
