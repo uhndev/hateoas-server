@@ -67,6 +67,10 @@
               'value': ''
             };
 
+            if (definition.enum) {
+              template.value = definition.enum;
+            }
+
             if (definition.model) {
               template = _.merge(template,
                 makeTemplate(definition.model));
