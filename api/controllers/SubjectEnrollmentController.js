@@ -47,7 +47,7 @@
                     _.each(this.schedules, function (schedule) {
                       _.each(schedule.formOrder, function (formOrderId) {
                         // if ordered form is active for this session
-                        if (_.includes(schedule.formVersions, formOrderId)) {
+                        if (_.includes(schedule.formVersions, formOrderId) || schedule.formVersions == formOrderId) {
                           var scheduledForm = _.clone(schedule);
                           scheduledForm.scheduledForm = possibleForms[formOrderId];
                           enrollment.formSchedules.push(scheduledForm);
