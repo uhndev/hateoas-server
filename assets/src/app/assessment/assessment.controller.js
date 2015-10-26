@@ -1,4 +1,5 @@
 /**
+ *
  * Controller for handling assessments
  */
 
@@ -19,9 +20,9 @@
     })
     .controller('AssessmentController', AssessmentController);
 
-  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService'];
+  AssessmentController.$inject = ['$scope', 'AssessmentService', 'ReferralService', 'ReferralDetailService', 'SiteService', 'uiGmapGoogleMapApi', 'PhysicianService', 'ProgramService', 'uiGmapIsReady'];
 
-  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi, Physician, Program) {
+  function AssessmentController($scope, Assessment, Referral, ReferralDetail, Site, uiGmapGoogleMapApi, Physician, Program, uiGmapIsReady) {
     var vm = this;
 
     // bindable variables
@@ -105,11 +106,7 @@
           //init directions renderer
           vm.directionsDisplay = new vm.googleMaps.DirectionsRenderer();
 
-          return uiGmapIsReady.promise(1);
-        })
-        .then ( function(instances) {
-          var instanceMap=instances[0].map;
-          vm.directionsDisplay.setMap(instanceMap);
+
         });
     }
 
@@ -168,6 +165,9 @@
       };
 
       vm.calculateDistances();
+      var origin = new vm.googleMaps.LatLng(vm.selectedReferral.client_latitude, vm.selectedReferral.client_longitude);
+      var destination = new vm.googleMaps.LatLng(vm.selectedSite.address.latitude, vm.selectedSite.address.longitude);
+      vm.calculateDirections(origin, destination);
       //vm.geocodeSites();
     }
 
@@ -201,9 +201,18 @@
           //vm.directionsDisplay.setPanel(vm.map.control.getGMap());
 //alert('wait');
           //set routes
+          vm.directionsDisplay.setDirections(response);
           $scope.$apply(function () {
 
+            //vm.directionsDisplay.setMap($scope.map.control.getGMap());
+
             vm.directionsSteps = response.routes[0].legs[0].steps;
+            return uiGmapIsReady.promise(1);
+          })
+          .then(function(instances) {
+              var instanceMap=instances[0].map;
+              vm.directionsDisplay.setMap(instanceMap);
+              vm.directionsDisplay.setDirections(response);
           });
           console.log(vm.directionsSteps);
         }
