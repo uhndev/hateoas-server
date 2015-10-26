@@ -102,15 +102,7 @@
       <ui-gmap-markers models="assessment.markers" coords="'self'" icon="'icon'" click="click" >
         </ui-gmap-markers>
     </ui-gmap-google-map>
-    <div id="directionsDiv" >
-      <h2>{{(assessment.selectedSite.address.address1 + ' ' +
-        assessment.selectedSite.address.address2 + ' ' +
-        assessment.selectedSite.address.city + ' ' +
-        assessment.selectedSite.address.province + ' ') }}</h2>
-      <p ng-repeat="wayPoint in assessment.directionsSteps" >
-        {{wayPoint.instructions}}
-      </p>
-    </div>
+    <div id="directionsDiv" />
     </div>
   </div>
   <div id="triageDiv">

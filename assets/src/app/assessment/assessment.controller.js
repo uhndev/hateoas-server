@@ -213,6 +213,10 @@
               var instanceMap=instances[0].map;
               vm.directionsDisplay.setMap(instanceMap);
               vm.directionsDisplay.setDirections(response);
+
+              //this is not the angular way, at all, and I hate it, but it works. Want to change ti
+
+              vm.directionsDisplay.setPanel(document.getElementById('directionsDiv'));
           });
           console.log(vm.directionsSteps);
         }
