@@ -1,0 +1,20 @@
+{
+    "Home": {
+        "Welcome": "Willkommen bei "
+    },
+    "Header": {        
+        "MENU_ABOUT": "Etwa",
+        "MENU_USERS": "Benutzer",
+        "MENU_FORMS": "Formulare",
+        "MENU_BUILDER": "Formulare Baumeister",
+        "MENU_EDIT_PROFILE": "Profil bearbeiten ",
+        "MENU_CHANGE_PASSWORD": "Kennwort ändern",
+        "MENU_SIGNOUT": "Abmelden",
+        "MENU_LANG": "Sprache",        
+        "BUTTON_LANG_EN": "English",
+        "BUTTON_LANG_FR": "Francais",
+        "BUTTON_LANG_ES": "Español",
+        "BUTTON_LANG_DE": "Deutsch",
+        "BUTTON_LANG_CH": "中国"
+    }
+}

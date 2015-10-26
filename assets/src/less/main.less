@@ -1,0 +1,131 @@
+/**
+ * This is the main application stylesheet. It should include or import all
+ * stylesheets used throughout the application as this is the only stylesheet in
+ * the Grunt configuration that is automatically processed.
+ */
+
+
+/**
+ * First, we include the Twitter Bootstrap LESS files. Only the ones used in the
+ * project should be imported as the rest are just wasting space.
+ */
+
+@import '../../vendor/bootstrap/less/bootstrap.less';
+@import '../../vendor/bootstrap/less/glyphicons.less';
+@import '../../vendor/font-awesome/less/font-awesome.less';
+
+/**
+ * This is our main variables file. We must include it last so we can overwrite any variable
+ * definitions in our imported stylesheets.
+ */
+
+@import 'variables.less';
+
+/**
+ * Typography
+ */
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(fonts/Roboto-Regular.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url("glyphicons-halflings-regular.eot");
+  src: url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), 
+  url('glyphicons-halflings-regular.woff') format('woff'), 
+  url('glyphicons-halflings-regular.ttf') format('truetype'),
+  url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url("fontawesome-webfont.eot");
+  src: url('fontawesome-webfont.eot?#iefix') format('embedded-opentype'), 
+  url('fontawesome-webfont.woff') format('woff'), 
+  url('fontawesome-webfont.ttf') format('truetype'),
+  url('fontawesome-webfont.svg#fontawesomeregular') format('svg');
+}
+
+html, body {
+  margin: 0px;
+}
+
+a {
+  cursor: pointer; 
+  cursor: hand;
+}
+
+.grid {
+  width: 100%;
+  height: auto;
+}
+
+#addUserBtn {
+  margin-top: 40px;
+  padding: 9px 15px 9px 15px;
+}
+
+.selectable {
+  cursor: pointer;
+}
+
+.form-inline > * {
+  margin: 10px 10px;
+}
+/**
+ * Collection
+ */
+#Title {
+  color: @orange;
+}
+
+/**
+ * Footer
+ */
+
+.footer {
+  margin-top: 80px;
+
+  .footer-inner {
+    padding: 40px 0;
+    border-top: 1px solid #DDD;
+  }
+}
+
+.no-top {
+  top: 0 !important;
+}
+
+.align-right {
+  text-align: right !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+/**
+ * Now that all app-wide styles have been applied, we can load the styles for
+ * all the submodules and components we are using. 
+ *
+ * TODO: In a later version of this boilerplate, I'd like to automate this.
+ */
+
+@import '../app/header/dados-header.less';
+@import '../app/access/access.less';
+@import '../app/workflow/workflow.less';
+@import '../app/study/studyViewOverview.less';
+
+@import '../common/directives/formBuilder/form-builder.less';
+
+@import (inline) '../../vendor/angular-toastr/dist/angular-toastr.css';
+@import (inline) '../../vendor/angular-multi-select/isteven-multi-select.css';
+@import (inline) '../../vendor/angular-ui-grid/ui-grid.css';

@@ -1,0 +1,20 @@
+{
+    "Home": {
+        "Welcome": "Bienvenue à "
+    },
+    "Header": {
+        "MENU_ABOUT": "Propos",
+        "MENU_USERS": "Utilisateurs",
+        "MENU_FORMS": "Formes",
+        "MENU_BUILDER": "Formes Constructeur",
+        "MENU_EDIT_PROFILE": "Modifier le profil ",
+        "MENU_CHANGE_PASSWORD": "Changer le mot de passe ",
+        "MENU_SIGNOUT": "Déconnexion ",
+        "MENU_LANG": "Langue",        
+        "BUTTON_LANG_EN": "English",
+        "BUTTON_LANG_FR": "Francais",
+        "BUTTON_LANG_ES": "Español",
+        "BUTTON_LANG_DE": "Deutsch",
+        "BUTTON_LANG_CH": "中国"
+    }
+}
