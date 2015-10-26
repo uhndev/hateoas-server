@@ -17,6 +17,33 @@
   _.merge(module.exports, {
 
     /**
+     * Log out a user and return them to the homepage
+     *
+     * Passport exposes a logout() function on req (also aliased as logOut()) that
+     * can be called from any route handler which needs to terminate a login
+     * session. Invoking logout() will remove the req.user property and clear the
+     * login session (if any).
+     *
+     * For more information on logging out users in Passport.js, check out:
+     * http://passportjs.org/guide/logout/
+     *
+     * @param {Object} req
+     * @param {Object} res
+     */
+    logout: function (req, res) {
+      req.logout();
+      if (!req.isSocket) {
+        // res.redirect(req.query.next || '/');
+      }
+      else {
+        delete req.user;
+        delete req.session.passport;
+        req.session.authenticated = false;
+        res.ok();
+      }
+    },
+
+    /**
      * Create a authentication callback endpoint (Overrides sails-auth)
      *
      * @param {Object} req request object
