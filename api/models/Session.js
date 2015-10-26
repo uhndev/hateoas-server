@@ -50,8 +50,8 @@
        *              should occur.  The availableFrom and availableTo fields in SubjectSchedule are
        *              determined based on this number.  There are several configurations between
        *              this and the type attribute that are possible:
-       *              1) scheduled with timepoint X       : repeat session every X days
-       *              2) non-scheduled with timepoint X   : enable session after X days
+       *              1) recurring with timepoint X       : repeat session every X days
+       *              2) scheduled with timepoint X       : enable session after X days
        *              3) non-scheduled with timepoint null: session available always
        * @type {Integer}
        */
@@ -94,6 +94,7 @@
         type: 'string',
         enum: [
           'scheduled',
+          'recurring',
           'non-scheduled'
         ]
       },
