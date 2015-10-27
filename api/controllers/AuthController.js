@@ -33,6 +33,7 @@
     logout: function (req, res) {
       req.logout();
       if (!req.isSocket) {
+        res.send(200);
         // res.redirect(req.query.next || '/');
       }
       else {
