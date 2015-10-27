@@ -131,7 +131,6 @@
         type: 'datetime'
       },
 
-
       /**
        * dischargeDate
        * @description A referral's dischargeDate
