@@ -16,18 +16,29 @@ There are 2 parts of the NODEJS Windows installer.
 
 ## Installing Prerequisites
 ```
-$ sudo apt-get install nodejs
-$ sudo apt-get install npm
-$ sudo apt-get install mongodb
-$ sudo apt-get install postgresql postgresql-contrib
+$ curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
+$ apt-get install --yes git
+$ apt-get install --yes vim
+$ apt-get install --yes nodejs
+$ apt-get install --yes build-essential
+$ apt-get install --yes mongodb
+$ apt-get install --yes postgresql postgresql-contrib
 
-$ sudo npm install -g sails
-$ sudo npm install -g bower
-$ sudo npm install -g grunt-cli
 $ sudo npm install -g phantomjs
+$ sudo npm install -g http-server
+$ sudo npm install -g grunt-cli
+$ sudo npm install -g karma
+$ sudo npm install -g bower
+$ sudo npm install -g sails
 ```
 
-## Install Dependencies
+### (Optional) Install Python Tools for Auto-Generating Test Data
+```
+$ apt-get install --yes python-setuptools
+$ easy_install requests fake-factory
+```
+
+## Install NPM Dependencies
 ```
 $ npm install
 ```
@@ -36,7 +47,25 @@ $ npm install
 ```
 $ sails lift
 ```
-Your application should run on the 1337 port so in your browser just go to [http://localhost:1337](http://localhost:1337)
+
+## Login Credentials
+By default, an admin user is created with username `admin` and password `admin1234`.
+If you wish to change these defaults, they can be set via:
+
+### Seting environment variables
+
+| variable | description | default |
+|:---|:---|:---|
+| `ADMIN_USERNAME` | admin username | `admin` |
+| `ADMIN_EMAIL` | admin user email address | `admin@example.com` |
+| `ADMIN_PASSWORD` | admin user password | `admin1234` |
+
+### Or setting local config in config/local.js (file is in .gitignore)
+```
+sails.config.permissions.adminUsername = 'admin'
+sails.config.permissions.adminEmail = 'admin@example.com'
+sails.config.permissions.adminPassword = 'admin1234'
+```
 
 ## Testing
 Run ```grunt test``` to test (uses the test environment & database)

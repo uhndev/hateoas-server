@@ -15,7 +15,6 @@ apt-get install --yes nodejs
 apt-get install --yes build-essential
 apt-get install --yes mongodb
 apt-get install --yes postgresql postgresql-contrib
-apt-get install --yes phantomjs
 
 # install python modules for dados-pygen
 echo "-------------------------------------------------------------------------"
@@ -28,24 +27,13 @@ easy_install requests fake-factory
 echo "-------------------------------------------------------------------------"
 echo " Installing Global Node Modules"
 echo "-------------------------------------------------------------------------"
-su - vagrant -c 'sudo npm install -g node-gyp;
+su - $USER -c 'sudo npm install -g phantomjs;
 sudo npm install -g http-server;
 sudo npm install -g forever;
 sudo npm install -g grunt-cli;
 sudo npm install -g karma;
 sudo npm install -g bower;
 sudo npm install -g sails'
-
-# Symlink node_modules to get around windows restrictions
-# See http://perrymitchell.net/article/npm-symlinks-through-vagrant-windows/
-echo "-------------------------------------------------------------------------"
-echo " Creating Symlinks"
-echo "-------------------------------------------------------------------------"
-su - vagrant -c 'mkdir ~/node_modules_dados;
-rm -rf /vagrant/node_modules;
-cd /vagrant;
-ln -s ~/node_modules_dados node_modules;
-sudo chown -R vagrant ~/.npm/_locks'
 
 echo "-------------------------------------------------------------------------"
 echo " Configuring PostgreSQL"
