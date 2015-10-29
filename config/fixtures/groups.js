@@ -70,7 +70,7 @@
         menu: {
           tabview: [
             { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'USER_MANAGER', href: '/user', icon: 'fa-user' }
+            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
           ],
           subview: [ 'name', 'overview', 'subject', 'user' ]
         }
@@ -82,7 +82,7 @@
         menu: {
           tabview: [
             { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
+            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
           subview: [ 'name', 'overview', 'subject' ]
         }
