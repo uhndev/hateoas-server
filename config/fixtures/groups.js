@@ -51,13 +51,13 @@
         level: 1,
         menu: {
           tabview: [
-            { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-            { prompt: 'User Manager', href: '/user', icon: 'fa-user' },
-            { prompt: 'Tools', icon: 'fa-cog', dropdown: [
-              { prompt: 'Form Builder', href: '/formbuilder', icon: 'fa-wrench' },
-              { prompt: 'Workflow Editor', href: '/workflow', icon: 'fa-code' },
-              { prompt: 'Groups', href: '/group', icon: 'fa-users'},
-              { prompt: 'Access Management', href: '/access', icon: 'fa-lock'}
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
+              { prompt: 'HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
+              { prompt: 'HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
+              { prompt: 'HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
+              { prompt: 'HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
             ]}
           ],
           subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
@@ -69,8 +69,8 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'Studies', href: '/study', icon: 'fa-group' },
-            { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'USER_MANAGER', href: '/user', icon: 'fa-user' }
           ],
           subview: [ 'name', 'overview', 'subject', 'user' ]
         }
@@ -81,7 +81,7 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
           ],
           subview: [ 'name', 'overview', 'subject' ]
@@ -93,8 +93,8 @@
         level: 3,
         menu: {
           tabview: [
-            { prompt: 'My Studies', href: '/study', icon: 'fa-group' },
-            { prompt: 'My Profile', href: '/user', icon: 'fa-user' }
+            { prompt: 'HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
           subview: [ 'name', 'overview' ]
         }
