@@ -66,7 +66,7 @@
           var token = require('jsonwebtoken').sign(
             user,
             sails.config.session.secret,
-            { expiresInMinutes: sails.config.session.jwtExpiry }
+            { expiresIn: sails.config.session.jwtExpiry }
           );
 
           User.findOne(user.id).populate('group').exec(function (err, data) {

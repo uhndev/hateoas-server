@@ -6,6 +6,7 @@
   },
   "hooks": {
     "csrf": false,
+    "session": false,
     "views": false
   }
 }

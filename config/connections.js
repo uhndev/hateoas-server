@@ -57,12 +57,6 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  //dados_development: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-dev'
-  //},
 
   dados_audit: {
     adapter   : 'sails-mongo',
@@ -70,20 +64,6 @@ module.exports.connections = {
     port      : 27017,
     database  : 'dados-audit'
   },
-
-  //dados_test: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-test'
-  //},
-  //
-  //dados_production: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-prod'
-  //},
 
   /***************************************************************************
   *                                                                          *

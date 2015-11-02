@@ -17,7 +17,9 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  hookTimeout: 60000, // 60 seconds to allow for uglification
+  log: {
+    level: 'verbose'
+  },
   models: {
     migrate: 'safe',
     connection: 'dados_development'
