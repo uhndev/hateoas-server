@@ -17,13 +17,13 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  hookTimeout: 60000, // 60 seconds to allow for uglification
   proxyHost: 'ws69.uhnresearch.ca',
+
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
     connection: 'dados_production'
-  }
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
@@ -35,8 +35,8 @@ module.exports = {
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/
 
-  // log: {
-  //   level: "silent"
-  // }
+   log: {
+     level: "silent"
+   }
 
 };

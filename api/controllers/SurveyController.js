@@ -6,7 +6,7 @@
  */
 
 (function() {
-  var Promise = require('bluebird');
+  var Promise = require('q');
   var util = require('util');
   var pg = require('pg');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
