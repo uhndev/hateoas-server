@@ -286,7 +286,28 @@
         "href": "/api/study/*/survey"
       }
     ],
-    "template": {}
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "FORM.NAME",
+          "value": ""
+        },
+        {
+          "name": "metaData",
+          "type": "json",
+          "prompt": "FORM.METADATA",
+          "value": ""
+        },
+        {
+          "name": "questions",
+          "type": "array",
+          "prompt": "FORM.QUESTIONS",
+          "value": ""
+        }
+      ]
+    }
   },
   {
     "path": "/api/survey",

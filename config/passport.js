@@ -1,20 +1,68 @@
-// config/passport.js
+/**
+ * Passport configuration
+ *
+ * This is the configuration for your Passport.js setup and it where you'd
+ * define the authentication strategies you want your application to employ.
+ *
+ * Authentication scopes can be set through the `scope` property.
+ *
+ * For more information on the available providers, check out:
+ * http://passportjs.org/guide/providers/
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/config/passport');
+module.exports.passport = {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  local: {
+    strategy: require('passport-local').Strategy
+  }
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  //basic: {
+  //  strategy: require('passport-http').BasicStrategy,
+  //  protocol: 'basic'
+  //},
 
-  /**
-   * For example:
-   *
-   * foo: function (bar) {
-   *   bar.x = 1;
-   *   bar.y = 2;
-   *   return _super.foo(bar);
-   * }
+  /*
+   google: {
+   name: 'Google',
+   protocol: 'oauth2',
+   strategy: require('passport-google-oauth').OAuth2Strategy,
+   options: {
+   clientID: 'your-client-id',
+   clientSecret: 'your-client-secret',
+   scope: ['profile', 'email']
+   }
+   }
+
+   twitter: {
+   name: 'Twitter',
+   protocol: 'oauth',
+   strategy: require('passport-twitter').Strategy,
+   options: {
+   consumerKey: 'your-consumer-key',
+   consumerSecret: 'your-consumer-secret'
+   }
+   },
+
+   github: {
+   name: 'GitHub',
+   protocol: 'oauth2',
+   strategy: require('passport-github').Strategy,
+   options: {
+   clientID: 'your-client-id',
+   clientSecret: 'your-client-secret'
+   }
+   },
+
+   facebook: {
+   name: 'Facebook',
+   protocol: 'oauth2',
+   strategy: require('passport-facebook').Strategy,
+   options: {
+   clientID: 'your-client-id',
+   clientSecret: 'your-client-secret'
+   }
+   }
+
    */
-});
+
+};
