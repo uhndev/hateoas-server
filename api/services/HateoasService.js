@@ -42,7 +42,7 @@
           });
         }
         if (_.isObject(data)) {
-          return data.toJSON();
+          return Utils.Model.removeSystemFields(data.toJSON());
         }
       }
 
