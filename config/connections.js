@@ -57,12 +57,6 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  //arm_development: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-dev'
-  //},
 
   arm_audit: {
     adapter   : 'sails-mongo',
@@ -70,20 +64,6 @@ module.exports.connections = {
     port      : 27017,
     database  : 'dados-audit'
   },
-
-  //arm_test: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-test'
-  //},
-  //
-  //arm_production: {
-  //  adapter   : 'sails-mongo',
-  //  host      : 'localhost',
-  //  port      : 27017,
-  //  database  : 'dados-prod'
-  //},
 
   /***************************************************************************
   *                                                                          *
@@ -100,7 +80,8 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'dados_dev' },
+    database: 'dados_dev'
+  },
 
   arm_development: {
     adapter: 'sails-postgresql',

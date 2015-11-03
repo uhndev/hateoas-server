@@ -1,22 +1,57 @@
 [
-	{
-		"path": "/api/user",
-		"links": [],
-		"queries": [],
-		"template": {
-			"rel": "user",
-			"href": "http://localhost:1337/api/systemform/1",
-			"data": [
-				{"name":"username","type":"string","prompt":"Username","value":""},
-				{"name":"email","type":"string","prompt":"Email","value":""},
-				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
-				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
-				{"name":"lastname","type":"string","prompt":"Lastname","value":""},
-				{"name":"gender","type":"string","prompt":"Gender","value":""},
-				{"name":"dob","type":"date","prompt":"Date of Birth","value":""}
-			]
-		}
-	},
+  {
+    "path": "/api/user",
+    "links": [],
+    "queries": [],
+    "template": {
+      "rel": "user",
+      "href": "http://localhost:1337/api/systemform/1",
+      "data": [
+        {
+          "name": "username",
+          "type": "string",
+          "prompt": "USER.USERNAME",
+          "value": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "prompt": "USER.EMAIL",
+          "value": ""
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "prompt": "USER.PREFIX",
+          "value": ""
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "prompt": "USER.FIRSTNAME",
+          "value": ""
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "prompt": "USER.LASTNAME",
+          "value": ""
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "prompt": "USER.GENDER",
+          "value": ""
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "prompt": "USER.DOB",
+          "value": ""
+        }
+      ]
+    }
+  },
   {
     "path": "/api/subjectenrollment",
     "queries": [],
@@ -29,38 +64,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "Overview",
+        "prompt": "HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "Collection Centres",
+        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "Subjects",
+        "prompt": "HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject",
         "isActive": true
       },
       {
         "rel": "user",
-        "prompt": "Users",
+        "prompt": "HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "Forms",
+        "prompt": "HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "Surveys",
+        "prompt": "HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -71,138 +106,138 @@
         {
           "name": "subjectNumber",
           "type": "mrn",
-          "prompt": "Subject ID",
+          "prompt": "SUBJECT_ENROLLMENT.SUBJECT_NUMBER",
           "value": ""
         },
         {
           "name": "collectionCentreName",
           "type": "string",
-          "prompt": "Collection Centre",
+          "prompt": "SUBJECT_ENROLLMENT.COLLECTION_CENTRE",
           "value": ""
         },
         {
           "name": "doe",
           "type": "date",
-          "prompt": "Date of Event",
+          "prompt": "SUBJECT_ENROLLMENT.DOE",
           "value": ""
         },
         {
           "name": "studyMapping",
           "type": "json",
-          "prompt": "Study Mapping",
+          "prompt": "SUBJECT_ENROLLMENT.STUDY_MAPPING",
           "value": ""
         },
         {
           "name": "status",
           "type": "string",
-          "prompt": "Status",
+          "prompt": "SUBJECT_ENROLLMENT.STATUS",
           "value": ""
         }
       ]
     }
   },
-	{
-		"path": "/api/study",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/systemform/3",
+  {
+    "path": "/api/study",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/3",
       "data": [
         {
           "name": "name",
           "type": "string",
-          "prompt": "Study Name",
+          "prompt": "STUDY.NAME",
           "value": ""
         },
         {
           "name": "attributes",
           "type": "json",
-          "prompt": "Attributes",
+          "prompt": "STUDY.ATTRIBUTES",
           "value": ""
         },
         {
           "name": "reb",
           "type": "integer",
-          "prompt": "REB",
+          "prompt": "STUDY.REB",
           "value": ""
         }
       ]
-		}
-	},
-	{
-		"path": "/api/collectioncentre",
-		"links": [
+    }
+  },
+  {
+    "path": "/api/collectioncentre",
+    "links": [
       {
         "rel": "name",
         "prompt": "*",
         "name": "name",
         "href": "/api/study/*"
       },
-			{
-				"rel": "overview",
-				"prompt": "Overview",
-				"name": "name",
-				"href": "/api/study/*"
-			},
+      {
+        "rel": "overview",
+        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "name": "name",
+        "href": "/api/study/*"
+      },
       {
         "rel": "collectioncentre",
-        "prompt": "Collection Centres",
+        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre",
         "isActive": true
       },
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject"
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user"
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			}
-		],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/systemform/4",
+      {
+        "rel": "subject",
+        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "name": "name",
+        "href": "/api/study/*/subject"
+      },
+      {
+        "rel": "user",
+        "prompt": "HEADER.SUBMENU.USERS",
+        "name": "name",
+        "href": "/api/study/*/user"
+      },
+      {
+        "rel": "form",
+        "prompt": "HEADER.SUBMENU.FORMS",
+        "name": "name",
+        "href": "/api/study/*/form"
+      },
+      {
+        "rel": "survey",
+        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "name": "name",
+        "href": "/api/study/*/survey"
+      }
+    ],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/4",
       "data": [
         {
           "name": "name",
           "type": "string",
-          "prompt": "Name",
+          "prompt": "COLLECTION_CENTRE.NAME",
           "value": ""
         },
         {
           "name": "contactName",
           "type": "string",
-          "prompt": "Contact",
+          "prompt": "COLLECTION_CENTRE.CONTACT",
           "value": ""
         }
       ]
-		}
-	},
-	{
-		"path": "/api/group",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/systemform/5"
-		}
-	},
+    }
+  },
+  {
+    "path": "/api/group",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/5"
+    }
+  },
   {
     "path": "/api/form",
     "queries": [],
@@ -215,43 +250,64 @@
       },
       {
         "rel": "overview",
-        "prompt": "Overview",
+        "prompt": "HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "Collection Centres",
+        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "Subjects",
+        "prompt": "HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "Users",
+        "prompt": "HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "Forms",
+        "prompt": "HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form",
         "isActive": true
       },
       {
         "rel": "survey",
-        "prompt": "Surveys",
+        "prompt": "HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
     ],
-    "template": {}
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "FORM.NAME",
+          "value": ""
+        },
+        {
+          "name": "metaData",
+          "type": "json",
+          "prompt": "FORM.METADATA",
+          "value": ""
+        },
+        {
+          "name": "questions",
+          "type": "array",
+          "prompt": "FORM.QUESTIONS",
+          "value": ""
+        }
+      ]
+    }
   },
   {
     "path": "/api/survey",
@@ -265,37 +321,37 @@
       },
       {
         "rel": "overview",
-        "prompt": "Overview",
+        "prompt": "HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "Collection Centres",
+        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "Subjects",
+        "prompt": "HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "Users",
+        "prompt": "HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "Forms",
+        "prompt": "HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "Surveys",
+        "prompt": "HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey",
         "isActive": true
@@ -306,13 +362,13 @@
         {
           "name": "name",
           "type": "string",
-          "prompt": "Name",
+          "prompt": "SURVEY.NAME",
           "value": ""
         },
         {
           "name": "completedBy",
           "type": "string",
-          "prompt": "Completed By",
+          "prompt": "SURVEY.COMPLETED_BY",
           "value": ""
         }
       ]
@@ -330,38 +386,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "Overview",
+        "prompt": "HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "Collection Centres",
+        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "Subjects",
+        "prompt": "HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "Users",
+        "prompt": "HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user",
         "isActive": true
       },
       {
         "rel": "form",
-        "prompt": "Forms",
+        "prompt": "HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "Surveys",
+        "prompt": "HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -371,43 +427,43 @@
         {
           "name": "username",
           "type": "string",
-          "prompt": "Username",
+          "prompt": "USER_ENROLLMENT.USERNAME",
           "value": ""
         },
         {
           "name": "email",
           "type": "string",
-          "prompt": "Email",
+          "prompt": "USER_ENROLLMENT.EMAIL",
           "value": ""
         },
         {
           "name": "prefix",
           "type": "string",
-          "prompt": "Prefix",
+          "prompt": "USER_ENROLLMENT.PREFIX",
           "value": ""
         },
         {
           "name": "firstname",
           "type": "string",
-          "prompt": "Firstname",
+          "prompt": "USER_ENROLLMENT.FIRSTNAME",
           "value": ""
         },
         {
           "name": "lastname",
           "type": "string",
-          "prompt": "Lastname",
+          "prompt": "USER_ENROLLMENT.LASTNAME",
           "value": ""
         },
         {
           "name": "gender",
           "type": "string",
-          "prompt": "Gender",
+          "prompt": "USER_ENROLLMENT.GENDER",
           "value": ""
         },
         {
           "name": "dob",
           "type": "date",
-          "prompt": "Date of Birth",
+          "prompt": "USER_ENROLLMENT.DOB",
           "value": ""
         }
       ]

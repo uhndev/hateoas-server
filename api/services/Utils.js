@@ -45,7 +45,7 @@ var self = {
     /**
      * List of system fields that SailsJS will add to all objects
      */
-    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'expiredAt', 'owner'],
+    SYSTEM_FIELDS: ['createdAt', 'updatedAt', 'createdBy', 'owner'],
     removeSystemFields: function removeSystemFields(data) {
       if (_.isArray(data)) {
         return data.map(function(item) {
@@ -60,6 +60,17 @@ var self = {
 
   /** Start of "User" Utils **/
   "User": {
+
+    /**
+     * Use validator module isEmail function
+     *
+     * @see <https://github.com/chriso/validator.js/blob/3.18.0/validator.js#L38>
+     * @see <https://github.com/chriso/validator.js/blob/3.18.0/validator.js#L141-L143>
+     */
+    validateEmail: function(str) {
+      var EMAIL_REGEX = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+      return EMAIL_REGEX.test(str);
+    },
 
     getFullName: function getFullName(user) {
       return [user.prefix, user.firstname, user.lastname].join(' ');

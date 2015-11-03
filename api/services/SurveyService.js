@@ -7,7 +7,7 @@
   var pgp = require('pg-promise')();
   var _ = require('lodash');
   var moment = require('moment');
-  var Promise = require('bluebird');
+  var Promise = require('q');
 
   module.exports = {
 
@@ -80,8 +80,8 @@
                   var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
                     .add(session.availableTo, 'days');
                   queries.push({
-                    from: (session.type == 'scheduled') ? availableFrom.toDate() : null,
-                    to: (session.type == 'scheduled') ? availableTo.toDate() : null,
+                    from: (session.type !== 'non-scheduled') ? availableFrom.toDate() : null,
+                    to: (session.type !== 'non-scheduled') ? availableTo.toDate() : null,
                     status: 'IN PROGRESS',
                     session: session.id,
                     enrollment: enrollment.id,
@@ -140,8 +140,8 @@
                 var availableTo = moment(enrollment.doe).add(sessionObj.timepoint, 'days')
                   .add(sessionObj.availableTo, 'days');
                 return SubjectSchedule.findOrCreate({
-                  availableFrom: (sessionObj.type == 'scheduled') ? availableFrom.toDate() : null,
-                  availableTo: (sessionObj.type == 'scheduled') ? availableTo.toDate() : null,
+                  availableFrom: (sessionObj.type !== 'non-scheduled') ? availableFrom.toDate() : null,
+                  availableTo: (sessionObj.type !== 'non-scheduled') ? availableTo.toDate() : null,
                   status: 'IN PROGRESS',
                   session: sessionObj.id,
                   subjectEnrollment: enrollment.id
@@ -192,8 +192,8 @@
                 // create subjectSchedules if not exist
                 if (!updatedSession.subjectSchedules) {
                   return SubjectSchedule.create({
-                    availableFrom: (updatedSession.type == 'scheduled') ? availableFrom.toDate() : null,
-                    availableTo: (updatedSession.type == 'scheduled') ? availableTo.toDate() : null,
+                    availableFrom: (updatedSession.type !== 'non-scheduled') ? availableFrom.toDate() : null,
+                    availableTo: (updatedSession.type !== 'non-scheduled') ? availableTo.toDate() : null,
                     status: 'IN PROGRESS',
                     session: updatedSession.id,
                     subjectEnrollment: enrollment.id
@@ -202,8 +202,8 @@
                 // update existing subjectSchedules
                 else {
                   return SubjectSchedule.update({session: updatedSession.id, subjectEnrollment: enrollment.id}, {
-                    availableFrom: (updatedSession.type == 'scheduled') ? availableFrom.toDate() : null,
-                    availableTo: (updatedSession.type == 'scheduled') ? availableTo.toDate() : null
+                    availableFrom: (updatedSession.type !== 'non-scheduled') ? availableFrom.toDate() : null,
+                    availableTo: (updatedSession.type !== 'non-scheduled') ? availableTo.toDate() : null
                   });
                 }
               })
@@ -243,8 +243,8 @@
                 var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
                   .add(session.availableTo, 'days');
                 queries.push({
-                  availableFrom: (session.type == 'scheduled') ? availableFrom.toDate() : null,
-                  availableTo: (session.type == 'scheduled') ? availableTo.toDate() : null,
+                  availableFrom: (session.type !== 'non-scheduled') ? availableFrom.toDate() : null,
+                  availableTo: (session.type !== 'non-scheduled') ? availableTo.toDate() : null,
                   status: 'IN PROGRESS',
                   session: session.id,
                   subjectEnrollment: enrollment.id

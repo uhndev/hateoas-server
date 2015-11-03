@@ -32,11 +32,11 @@ describe('The Auth Controller', function() {
 			});
 		});
 
-		it('should redirect to login page when accessing /logout', function(done) {
+		it('should be ok after accessing /logout', function(done) {
 			request.get('/logout')
 				.end(function (err, res) {
 					if (err) throw err;
-					res.statusCode.should.be.exactly(302);
+					res.statusCode.should.be.exactly(200);
 					done();
 				});
 		});

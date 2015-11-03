@@ -45,28 +45,22 @@
     }), 'id');
 
     var groups = [
-        {
-          name: 'admin',
-          roles: _.pluck(roles, 'id'),
-          level: 1,
-          menu: {
-            tabview: [{"prompt": "Studies", "href": "/study", "icon": "fa-group"}, {
-              "href": "/assessment",
-              "icon": "fa-stethoscope",
-              "prompt": "Assessments"
-            }, {"prompt": "User Manager", "href": "/user", "icon": "fa-user"}, {
-              "prompt": "Tools",
-              "icon": "fa-cog",
-              "dropdown": [{
-                "prompt": "Form Builder",
-                "href": "/formbuilder",
-                "icon": "fa-wrench"
-              }, {"prompt": "Workflow Editor", "href": "/workflow", "icon": "fa-code"}, {
-                "prompt": "Groups",
-                "href": "/group",
-                "icon": "fa-users"
-              }, {"prompt": "Access Management", "href": "/access", "icon": "fa-lock"}]
-            }, {
+      {
+        name: 'admin',
+        roles: _.pluck(roles, 'id'),
+        level: 1,
+        menu: {
+          tabview: [
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { "href": "/assessment", "icon": "fa-stethoscope", "prompt": "Assessments" },
+            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
+              { prompt: 'HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
+              { prompt: 'HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
+              { prompt: 'HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
+              { prompt: 'HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
+            ]},
+            {
               "prompt": "Altum Settings",
               "icon": "fa-cog",
               "dropdown": [{"prompt": "Approvers", "href": "/approver", "icon": "fa-male"}, {
@@ -82,48 +76,48 @@
                 "href": "/program",
                 "icon": "fa-medkit"
               }, {"prompt": "Status", "href": "/status", "icon": "fa-calandar-check-o"}]
-            }],
-            subview: ["name", "overview", "collectioncentre", "subject", "user", "form", "survey"]
-          }
-        },
-        {
-          name: 'coordinator',
-          roles: coordinatorRoles,
-          level: 2,
-          menu: {
-            tabview: [
-              {prompt: 'Studies', href: '/study', icon: 'fa-group'},
-              {prompt: 'User Manager', href: '/user', icon: 'fa-user'}
-            ],
-            subview: ['name', 'overview', 'subject', 'user']
-          }
-        },
-        {
-          name: 'interviewer',
-          roles: interviewerRoles,
-          level: 2,
-          menu: {
-            tabview: [
-              {prompt: 'Studies', href: '/study', icon: 'fa-group'},
-              {prompt: 'My Profile', href: '/user', icon: 'fa-user'}
-            ],
-            subview: ['name', 'overview', 'subject']
-          }
-        },
-        {
-          name: 'subject',
-          roles: subjectRoles,
-          level: 3,
-          menu: {
-            tabview: [
-              {prompt: 'My Studies', href: '/study', icon: 'fa-group'},
-              {prompt: 'My Profile', href: '/user', icon: 'fa-user'}
-            ],
-            subview: ['name', 'overview']
-          }
+            }
+          ],
+          subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
         }
-      ]
-      ;
+      },
+      {
+        name: 'coordinator',
+        roles: coordinatorRoles,
+        level: 2,
+        menu: {
+          tabview: [
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
+          ],
+          subview: [ 'name', 'overview', 'subject', 'user' ]
+        }
+      },
+      {
+        name: 'interviewer',
+        roles: interviewerRoles,
+        level: 2,
+        menu: {
+          tabview: [
+            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+          ],
+          subview: [ 'name', 'overview', 'subject' ]
+        }
+      },
+      {
+        name: 'subject',
+        roles: subjectRoles,
+        level: 3,
+        menu: {
+          tabview: [
+            { prompt: 'HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+          ],
+          subview: [ 'name', 'overview' ]
+        }
+      }
+    ];
 
     return Promise.all(
       _.map(groups, function (group) {

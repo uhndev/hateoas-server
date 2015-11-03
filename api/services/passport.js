@@ -10,6 +10,8 @@
   passport.prototype = Object.create(_super);
   _.extend(passport.prototype, {
 
+    protocols: require('./protocols')
+
     // Extend with custom logic here by adding additional fields and methods,
     // and/or overriding methods in the superclass.
   });

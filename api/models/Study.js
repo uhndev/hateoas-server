@@ -141,7 +141,7 @@
           },
           {
             'rel': 'overview',
-            'prompt': 'Overview',
+            'prompt': 'HEADER.SUBMENU.OVERVIEW',
             'name': 'name',
             'href': [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
@@ -149,7 +149,7 @@
           },
           {
             'rel': 'collectioncentre',
-            'prompt': 'Collection Centres',
+            'prompt': 'HEADER.SUBMENU.COLLECTION_CENTRES',
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
@@ -157,7 +157,7 @@
           },
           {
             'rel': 'subject',
-            'prompt': 'Subjects',
+            'prompt': 'HEADER.SUBMENU.SUBJECTS',
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
@@ -165,7 +165,7 @@
           },
           {
             'rel': 'user',
-            'prompt': 'Users',
+            'prompt': 'HEADER.SUBMENU.USERS',
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
@@ -173,7 +173,7 @@
           },
           {
             'rel': 'form',
-            'prompt': 'Forms',
+            'prompt': 'HEADER.SUBMENU.FORMS',
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
@@ -181,7 +181,7 @@
           },
           {
             'rel': 'survey',
-            'prompt': 'Surveys',
+            'prompt': 'HEADER.SUBMENU.SURVEYS',
             'name': 'name',
             'href' : [
               sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'

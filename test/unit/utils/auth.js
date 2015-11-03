@@ -46,7 +46,7 @@ var Auth = {
         identifier: 'interviewer',
         password: 'interviewer1234'
       }
-    },    
+    },
     coordinator: {
       create: {
         username: 'coordinator',
@@ -78,7 +78,7 @@ var Auth = {
       }
     }
   },
-  
+
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
       Group.findOneByName(credentials.group).then(function (group) {
@@ -91,8 +91,8 @@ var Auth = {
           .end(function(err, res) {
             done(JSON.parse(res.text).items.id);
           });
-      });      
-    });    
+      });
+    });
   },
 
   authenticate: function(user, done) {
@@ -109,7 +109,7 @@ var Auth = {
     request.get('/logout')
       .end(function (err, res) {
         if (err) throw err;
-        res.statusCode.should.be.exactly(302);
+        res.statusCode.should.be.exactly(200);
         done();
       });
   }
