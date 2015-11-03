@@ -50,7 +50,7 @@
        * Private method that creates the data object based on the schema
        * of the given model.
        */
-      function makeTemplate(modelName) {
+      function makeTemplate(modelName, previousModel) {
         var attributes = [];
         var models = sails.models;
 
@@ -71,9 +71,9 @@
               template.value = definition.enum;
             }
 
-            if (definition.model) {
+            if (definition.model && (definition.model != previousModel)) {
               template = _.merge(template,
-                makeTemplate(definition.model));
+                makeTemplate(definition.model,modelName));
             }
 
             return template;
