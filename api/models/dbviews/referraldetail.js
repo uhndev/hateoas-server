@@ -10,7 +10,6 @@
   _.merge(exports, {
 
     migrate:'safe',
-    connection: 'arm_development',
     attributes: {
       id: {
         type: 'integer'

@@ -93,6 +93,17 @@
       },
 
       /**
+       * owner
+       * @description Reference to who the 'person' of this is -
+       *
+       * @type {Association}
+       */
+
+      person: {
+        model:'person'
+      },
+
+      /**
        * enrollments
        * @description Linked associations of UserEnrollments denoting which collection
        *              centres/studies this user is overseeing as a coordinator/interviewer.

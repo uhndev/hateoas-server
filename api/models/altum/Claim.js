@@ -31,34 +31,13 @@
 
 
       /**
-       * program
-       * @description A claim's program
+       * payor
+       * @description A claim's payor
        * @type {model}
        */
 
-      program: {
-        model: 'program'
-      },
-
-
-      /**
-       * referralDate
-       * @description A claim's referral date.
-       * @type {datea}
-       */
-      referralDate: {
-        type: 'date'
-      },
-
-
-      /**
-       * payor
-       * @description a claim's payor
-       * @type {string}
-       */
-
       payor: {
-        type: 'string'
+        model: 'payor'
       },
 
 
@@ -73,15 +52,6 @@
       },
 
 
-      /**
-       * referralSource
-       * @description A claim's referral Source
-       * @type {string}
-       */
-
-      referralSource: {
-        type: 'string'
-      },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 

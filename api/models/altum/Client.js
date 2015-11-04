@@ -16,23 +16,13 @@
     attributes: {
 
       /**
-       * contact
-       * @description A client's contact
-       * @type {String}
+       * person
+       * @description A client's person record
+       * @type {model}
        */
-      contact: {
-        model: 'contact'
+      person: {
+        model: 'person'
       },
-
-      /**
-       * emergencyContacts
-       * @description A client's emergencyContacts
-       * @type {String}
-       */
-      /*emergencyContacts: {
-        model: 'emergencyContact',
-        via: 'client'
-      },*/
 
       /**
        * MRN
@@ -60,7 +50,7 @@
        */
       referrals: {
         collection: 'referral',
-        via: 'client'
+        via: 'clients'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

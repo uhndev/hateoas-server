@@ -1,7 +1,7 @@
 /**
- * Payor.js
+ * Employment.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @description :: a table representing the employment of persons in compnaies
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -18,8 +18,8 @@
 
     /**
      * company
-     * @description a payor's company
-     * @type {String}
+     * @description the company this employment is at
+     * @type {model}
      */
 
     company: {
@@ -27,31 +27,29 @@
     },
 
     /**
-     * referrals
-     * @description a payor's referrals
-     * @type {String}
+     * person
+     * @description the person who's employed
+     * @type {model}
      */
 
-    referrals: {
-      collection: 'referral',
-      via: 'payors'
+    person: {
+      model: 'person'
     },
 
     /**
-     * programs
-     * @description a payor's programs
-     * @type {String}
+     * phoneNumber
+     * @description the employed person's work number
+     * @type {model}
      */
 
-    payorPrograms : {
-      collection: 'PayorProgram',
-      via: 'payors'
+    phoneNumber: {
+      type: 'string'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-
   }
   });
 })();
+
 
