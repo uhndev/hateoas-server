@@ -58,11 +58,11 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
 
-  dados_audit: {
+  dados_cache: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
-    database  : 'dados-audit'
+    database  : 'dados-cache'
   },
 
   /***************************************************************************
