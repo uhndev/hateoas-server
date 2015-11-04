@@ -1,5 +1,5 @@
 /**
- * ContactRole.js
+ * PersonRole.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -20,7 +20,7 @@
 
     /**
      * name
-     * @description a contact role's name
+     * @description a person role's name
      * @type {string}
      */
 
@@ -31,7 +31,7 @@
 
     /**
      * description
-     * @description a contact role's description
+     * @description a person role's description
      * @type {string}
      */
 

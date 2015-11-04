@@ -3,7 +3,7 @@
  */
 module.exports = {
 
-  connection: 'arm_development',
+  migrate: 'safe',
 
   attributes: {
 
@@ -38,7 +38,7 @@ module.exports = {
      */
 
     deletedBy: {
-      model: 'user'
+      type: 'string'
     }
   }
 }

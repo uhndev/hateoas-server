@@ -81,7 +81,7 @@
       },
       /**
        * region
-       * @description A contact's region
+       * @description A address's region
        * @type {String}
        */
 
@@ -105,6 +105,25 @@
        */
       longitude: {
         type: 'string'
+      },
+
+      /**
+       * person
+       * @description an address's associated person
+       * @type {model}
+       */
+
+      person: {
+        model: 'person'
+      },
+
+      /**
+       * company
+       * @description an address's associated company
+       * @type {model}
+       */
+      company: {
+        model: 'company'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

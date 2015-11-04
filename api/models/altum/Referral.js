@@ -12,7 +12,6 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-
     attributes: {
       /**
        * client
@@ -64,7 +63,7 @@
        * @type {string}
        */
       status: {
-        type: 'string'
+        model: 'status'
       },
 
 
@@ -140,9 +139,6 @@
       dischargeDate: {
         type: 'datetime'
       },
-      status: {
-        model: 'status'
-      },
 
       /**
        * clients
@@ -177,7 +173,7 @@
       referralContacts: {
         collection: 'referralContact',
         via: 'referral'
-      }
+      },
 
     }
 

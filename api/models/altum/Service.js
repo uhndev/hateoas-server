@@ -1,7 +1,7 @@
 /**
- * ReferralContact.js
+ * Service.js
  *
- * @description :: manual relationship table between referrals and contacts
+ * @description :: a model representation of a service, and instance of actual work being done at altum
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -18,7 +18,7 @@
 
     /**
      * referral
-     * @description referral key from referral table side of relationship
+     * @description a service's associated referral
      * @type {model}
      */
 
@@ -26,30 +26,27 @@
       model: 'referral'
     },
 
-
     /**
-     * contact
-     * @description person from person side of the relationship
+     * payorService
+     * @description a serivce's associated payorService
      * @type {model}
      */
 
-    person: {
-      model: 'person'
+    payorService: {
+      model: 'payorService'
     },
 
-
     /**
-     * role
-     * @description role of this relationship
-     * @type {model}
+     * serviceProviders
+     * @description a collection of a serivce's associated provider
+     * @type {collection}
      */
 
-    role: {
-      model: 'contactRole'
+    serviceProviders: {
+      collection: 'user'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
 
   }
   });

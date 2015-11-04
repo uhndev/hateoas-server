@@ -1,5 +1,5 @@
 /**
- * Contact.js
+ * EmergencyContact.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -20,23 +20,14 @@ schema: true,
 
     /**
      * contact
-     * @description A emergency contact's associated contact id
+     * @description A emergency contact's associated person
      * @type {model}
      */
 
-    contact: {
-      model: 'contact'
+    person: {
+      model: 'person'
     },
 
-    /**
-     *
-     * @description A emergency contact's associated client id
-     * @type {model}
-     */
-
-    emergencyContact: {
-      model: 'contact'
-    },
 
     /**
      * relationship
@@ -49,12 +40,12 @@ schema: true,
     },
 
     /**
-     * emergencyPriority
+     * priority
      * @description A emergencyContact's priority
      * @type {integer}
      */
 
-    emergencyPriority: {
+    priority: {
       type: 'integer'
     },
 

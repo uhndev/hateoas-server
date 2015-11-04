@@ -30,13 +30,13 @@
       },
 
       /**
-       * caseContact
-       * @description A case's contact
+       * person
+       * @description A case's person
        * @type {model}
        */
 
-      contact: {
-        model: 'contact'
+      person: {
+        model: 'person'
       },
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 

@@ -21,7 +21,7 @@
 
 
       /**
-       * siteName
+       * name
        * @description A site's name
        * @type {string}
        */
@@ -43,17 +43,6 @@
 
 
       /**
-       * role
-       * @description role of this relationship
-       * @type {model}
-       */
-
-      role: {
-        model: 'contactRole'
-      },
-
-
-      /**
        * phone
        * @description a site's phone number
        * @type {integer}
@@ -62,6 +51,18 @@
       phone: {
         type: 'string'
       },
+
+      /**
+       * altumServices
+       * @description a collection of a site's offered services at altum
+       * @type {integer}
+       */
+
+      siteService: {
+        collection: 'SiteService',
+        via: 'site'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 

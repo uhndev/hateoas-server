@@ -17,20 +17,18 @@
   attributes: {
 
     /**
-     * contact
-     * @description a physician's contact
+     * person
+     * @description a physician's person model
      * @type {String}
      */
-    // TODO: Causes infinite loop with Hateoas Templating:
-    // client -> (contact -> address --> physician) -> (contact -> address -> physician)...
-    //contact: {
-    //  model: 'Contact'
-    //}
-
+    person: {
+      model: 'person'
+    },
 
     name: {
       type: 'string'
     },
+
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 

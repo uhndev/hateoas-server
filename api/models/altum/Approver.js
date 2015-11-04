@@ -25,6 +25,7 @@
       user: {
         model: 'user'
       },
+
       /**
        * title
        * @description A approver's title
