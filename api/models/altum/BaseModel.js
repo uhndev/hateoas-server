@@ -3,7 +3,7 @@
  */
 module.exports = {
 
-  migrate: 'safe',
+  migrate: 'alter',
 
   attributes: {
 

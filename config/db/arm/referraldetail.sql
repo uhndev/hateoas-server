@@ -7,12 +7,12 @@ CREATE OR REPLACE VIEW referraldetail AS
     referral."referralDate",
     referral."createdAt",
     referral."updatedAt",
-    contact."firstName" as "client_firstName",
+    person."firstName" as "client_firstName",
     client."MRN" as client_mrn,
-    contact."lastName" as "client_lastName",
-    contact.prefix as client_prefix,
-    contact.gender as client_gender,
-    contact."dateOfBirth" as "client_dateOfBirth",
+    person."lastName" as "client_lastName",
+    person.prefix as client_prefix,
+    person.gender as client_gender,
+    person."dateOfBirth" as "client_dateOfBirth",
     address.address1 as client_address1,
     address.address2 as client_address2,
     address.city as client_city,
@@ -21,10 +21,10 @@ CREATE OR REPLACE VIEW referraldetail AS
     address.country as client_country,
     address.latitude as client_latitude,
     address.longitude as client_longitude,
-    contact."homePhone" as "client_homePhone",
-    contact."workPhone" as "client_workPhone",
-    contact."familyDoctor" as "client_familyDoctor",
-    contact.language as client_language,
+    person."homePhone" as "client_homePhone",
+    person."workPhone" as "client_workPhone",
+    person."familyDoctor" as "client_familyDoctor",
+    person.language as client_language,
     claim."claimNum" as "claim_claimNum",
     claim."policyNum" as "claim_policyNum",
     referral.owner,
@@ -34,7 +34,7 @@ CREATE OR REPLACE VIEW referraldetail AS
    FROM referral
         left join claim on referral.claim=claim.id
         left join client on referral.client=client.id
-        left join contact on client.contact=contact.id
-        left join address on contact.address=address.id
+        left join person on client.person=person.id
+        left join address on address.person=person.id
         left join status on referral.status=status.id
         left join physician on referral.physician=physician.id;
