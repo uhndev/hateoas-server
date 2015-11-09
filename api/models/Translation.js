@@ -22,7 +22,18 @@
        */
       language: {
         type: 'string',
-        enum: sails.config.i18n.locales,
+        unique: true,
+        required: true
+      },
+
+      /**
+       * translationKey
+       * @description The translation key that should appear to correctly display the full language name
+       * @type {String}
+       */
+      translationKey: {
+        type: 'string',
+        unique: true,
         required: true
       },
 

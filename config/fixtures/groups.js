@@ -57,6 +57,7 @@
               { prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
               { prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
               { prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
+              { prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
               { prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
             ]}
           ],

@@ -21,6 +21,7 @@
         "FORM_BUILDER": "Form Builder",
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
+        "TRANSLATIONS": "Translations",
         "ACCESS_MANAGEMENT": "Access Management"
       },
       "SUBMENU": {
@@ -68,7 +69,6 @@
       "FORM": {
         "CONTROLS": {
           "ADD_FORM_PLACEHOLDER": "Select a form to add",
-          "OPEN_BTN": "Open",
           "NEW_BTN": "Create Form",
           "EDIT_BTN": "Edit Form",
           "ARCHIVE_BTN": "Archive"
