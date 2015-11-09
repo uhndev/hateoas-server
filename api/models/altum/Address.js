@@ -41,7 +41,8 @@
        * @type {string}
        */
       address2: {
-        type: 'string'
+        type: 'string',
+        required: false
       },
 
       /**
@@ -95,7 +96,8 @@
        * @type {string}
        */
       latitude: {
-        type: 'string'
+        type: 'string',
+        required: false
       },
 
       /**
@@ -104,7 +106,8 @@
        * @type {string}
        */
       longitude: {
-        type: 'string'
+        type: 'string',
+        required: false
       },
 
       /**
@@ -114,7 +117,8 @@
        */
 
       person: {
-        model: 'person'
+        model: 'person',
+        required: false
       },
 
       /**
@@ -123,7 +127,8 @@
        * @type {model}
        */
       company: {
-        model: 'company'
+        model: 'company',
+        required: false
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
