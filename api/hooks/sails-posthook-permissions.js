@@ -13,6 +13,7 @@
                 .then(initializeGroups)
                 .then(checkAdminUser)
                 .then(initializePermissions)
+                .then(initializeTranslations)
                 .then(next);
             })
             .catch(function (error) {
@@ -109,5 +110,19 @@
       });
   }
 
+  /**
+   * Creates default translations from files in config/locales
+   * @return {Array} translations
+   */
+  function initializeTranslations () {
+    sails.log('checking for valid translations');
+    return require('../../config/fixtures/translations').create()
+      .then(function (translations) {
+        return null;
+      })
+      .catch(function (error) {
+        sails.log.error(error);
+      });
+  }
 })();
 
