@@ -73,6 +73,7 @@
                 "icon": "fa-wheelchair"
               },
                 {"prompt": "Work Status", "href": "/workstatus", "icon": "fa-calendar-check-o"},
+                {"prompt": "Prognosis", "href": "/prognosis", "icon": "fa-check-square"},
               {"prompt": "Physician", "href": "/physician", "icon": "fa-stethoscope"},
               {
                 "prompt": "Program",
