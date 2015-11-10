@@ -71,11 +71,15 @@
                 "prompt": "Claim",
                 "href": "/claim",
                 "icon": "fa-wheelchair"
-              }, {"prompt": "Physician", "href": "/physician", "icon": "fa-stethoscope"}, {
+              },
+                {"prompt": "Work Status", "href": "/workstatus", "icon": "fa-calendar-check-o"},
+              {"prompt": "Physician", "href": "/physician", "icon": "fa-stethoscope"},
+              {
                 "prompt": "Program",
                 "href": "/program",
                 "icon": "fa-medkit"
-              }, {"prompt": "Status", "href": "/status", "icon": "fa-calandar-check-o"}]
+              },
+                {"prompt": "Status", "href": "/status", "icon": "fa-calandar-check-o"}]
             }
           ],
           subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
