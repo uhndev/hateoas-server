@@ -3,8 +3,7 @@
  *
  * @class prognosis
  * @description Model representation of a prognosis
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/prognosis.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/prognosis.js
+ *
  */
 
   (function () {
