@@ -88,7 +88,8 @@
     "LANGUAGES": {
       "LANGUAGE": "Langue",
       "ENGLISH": "Anglais",
-      "FRENCH": "Francais"
+      "FRENCH": "Francais",
+      "ALTUM": "Altum"
     },
     "HATEOAS": {
       "TITLE": {
