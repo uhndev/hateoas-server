@@ -61,7 +61,10 @@
               { prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
             ]}
           ],
-          subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
+          subview: {
+            'study': ['name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -73,7 +76,10 @@
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview', 'subject', 'user' ]
+          subview: {
+            'study': [ 'name', 'overview', 'subject', 'user' ],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -85,7 +91,10 @@
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview', 'subject' ]
+          subview: {
+            'study': [ 'name', 'overview', 'subject' ],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -97,7 +106,10 @@
             { prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview' ]
+          subview: {
+            'study': [ 'name', 'overview' ],
+            'user': ['name', 'overview']
+          }
         }
       }
     ];

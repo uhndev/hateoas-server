@@ -11,7 +11,7 @@
     },
     "HEADER": {
       "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
-      "SELECTED_STUDY": "Selected Study:",
+      "SELECTED": "Selected:",
       "MENU": {
         "STUDIES": "Studies",
         "MY_STUDIES": "My Studies",
