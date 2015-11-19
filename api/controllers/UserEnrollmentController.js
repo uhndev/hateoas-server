@@ -10,7 +10,12 @@
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  module.exports = {
+  var EnrollmentBase = require('./Base/EnrollmentBaseController');
+  var StudyBase = require('./Base/StudyBaseController');
+
+  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
+  _.merge(exports, {
 
     /**
      * create
@@ -103,29 +108,9 @@
       .catch(function (err) {
         res.serverError(err);
       });
-    },
-
-    /**
-     * findByStudyName
-     * @description Calls the UserEnrollment model function findByStudyName to return the list
-     *              of users that are enrolled in a given study.  Further filtering
-     *              of users based on enrollment is also done in the UserEnrollment model function.
-     */
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
-      UserEnrollment.findByStudyName(studyName, req.user,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) }
-      ).then(function(users) {
-          var err = users[0];
-          var userItems = users[1];
-          if (err) res.serverError(err);
-          res.ok(userItems);
-        });
     }
-  };
+
+  });
 
 })();
 

@@ -12,7 +12,12 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('q');
 
-  module.exports = {
+  var EnrollmentBase = require('./Base/EnrollmentBaseController');
+  var StudyBase = require('./Base/StudyBaseController');
+
+  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
+  _.merge(exports, {
 
     findOne: function(req, res, next) {
       studysubject.findOne(req.param('id')).exec(function (err, enrollment) {
@@ -177,23 +182,8 @@
           message: err.details || 'Error creating subject'
         });
       });
-    },
-
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
-      SubjectEnrollment.findByStudyName(studyName, req.user,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) }
-      ).then(function(subjects) {
-        var err = subjects[0];
-        var subjectItems = subjects[1];
-        if (err) res.serverError(err);
-        res.ok(subjectItems);
-      });
     }
 
-  };
+  });
 
 })();

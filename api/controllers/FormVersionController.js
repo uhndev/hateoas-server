@@ -11,7 +11,7 @@ module.exports = {
 
     Form.findOne(formID).then(function (form){
       var options = _.pick(req.body, 'name', 'metaData', 'questions');
-      
+
       FormVersion.find({ form: formID })
         .sort('revision DESC')
         .then(function (latestFormVersions) {
@@ -43,6 +43,6 @@ module.exports = {
         message: err.details
       });
     });
-  },
+  }
 };
 

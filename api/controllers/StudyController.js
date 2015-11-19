@@ -8,64 +8,13 @@
 
 (function() {
   var _ = require('lodash');
+  var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  module.exports = {
+  var EnrollmentBase = require('./Base/EnrollmentBaseController');
 
-    /**
-     * find
-     * @description Finds and returns a list of studies with 3 modes of filtering
-     *              based on the current user's group.  Admins are simply returned
-     *              all studies, coordinators are filtered based on their enrollments
-     *              at their respective collection centres and similarily so for
-     *              subjects and their enrollments.
-     */
-    find: function (req, res, next) {
-      var query = ModelService.filterExpiredRecords('study')
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-
-      query.populate('collectionCentres');
-      query.exec(function found(err, studies) {
-        if (err) {
-          return res.serverError(err);
-        }
-
-        Group.findOne(req.user.group).then(function (group) {
-          switch(group.level) {
-            case 1: // allow all as admin
-              return res.ok(studies);
-            case 2: // find specific user's access
-              return User.findOne(req.user.id).populate('enrollments')
-              .then(function(user) {
-                var filteredRecords = _.filter(studies, function (record) {
-                  return _.some(record.collectionCentres, function(centre) {
-                    return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
-                  });
-                });
-                res.ok(filteredRecords);
-              }).catch(function (err) {
-                return res.serverError(err);
-              });
-            case 3: // find subject's collection centre access
-              return Subject.findOne({user: req.user.id}).populate('enrollments')
-              .then(function(user) {
-                var filteredRecords = _.filter(studies, function (record) {
-                  return _.some(record.collectionCentres, function(centre) {
-                    return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
-                  });
-                });
-                res.ok(filteredRecords);
-              }).catch(function (err) {
-                return res.serverError(err);
-              });
-            default: return res.notFound();
-          }
-        });
-      });
-    },
+  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
+  _.merge(exports, {
 
     /**
      * findOne
@@ -87,7 +36,7 @@
         switch (this.group.level) {
           case 1: return collectioncentreoverview.find({ study: name });
           case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
-          case 3: return null; //TODO
+          case 3: return collectioncentresubjectoverview.find({username: req.user.username, study: name});
           default: return res.notFound();
         }
       })
@@ -95,7 +44,7 @@
         if (_.isUndefined(this.study)) {
           return res.notFound();
         }
-        else if (this.group.level === 2 && centres.length === 0 || this.group.level === 3) {
+        else if (this.group.level > 1 && centres.length === 0) {
           return res.forbidden({
             title: 'Error',
             code: 403,
@@ -211,7 +160,7 @@
       });
     }
 
-  };
+  });
 
 })();
 
