@@ -141,17 +141,6 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    checkGroupLevel: function(user) {
-      return User.findOne(user.id).populate('group')
-        .then(function (user) {
-          return {
-            isAdmin: user.group.level === 1,
-            isCoordinator: user.group.level === 2,
-            isSubject: user.group.level === 3
-          };
-        });
-    },
-
     /**
      * afterCreate
      * @description Lifecycle function that fires after a User is created.  We

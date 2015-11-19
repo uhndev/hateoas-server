@@ -20,9 +20,6 @@
      * @return {Array|Promise}  list of enrollments, or promise
      */
     findEnrollments: function(user, centre) {
-      return User.checkGroupLevel(user).then(function (userLevel) {
-        userLevel.isAdmin
-      })
       return Group.findOne(user.group).then(function (group) {
         this.group = group;
         switch (group.level) {
