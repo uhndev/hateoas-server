@@ -109,6 +109,35 @@
         datetime: true
       },
 
+      /**
+       * getResponseLinks
+       * @description Provides the response links array in our HATEOAS response; these links
+       *              should denote transitionable states that are accessible from state /api/user.
+       *
+       * @param  {ID} id Study ID
+       * @return {Array} Array of response links
+       */
+      getResponseLinks: function(id) {
+        return [
+          {
+            'rel': 'name',
+            'prompt': Utils.User.getFullName(this),
+            'name': 'name',
+            'href': [
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'user', this.id
+            ].join('/')
+          },
+          {
+            'rel': 'overview',
+            'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
+            'name': 'name',
+            'href': [
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'user', this.id
+            ].join('/')
+          }
+        ]
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

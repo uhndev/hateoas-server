@@ -58,11 +58,11 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
 
-  dados_audit: {
+  dados_cache: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
-    database  : 'dados-audit'
+    database  : 'dados-cache'
   },
 
   /***************************************************************************
@@ -81,6 +81,15 @@ module.exports.connections = {
     user: 'postgres',
     password: 'password',
     database: 'dados_dev'
+  },
+
+  dados_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'dados_prod'
   },
 
   dados_production: {

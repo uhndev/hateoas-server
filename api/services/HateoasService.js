@@ -42,7 +42,7 @@
           });
         }
         if (_.isObject(data)) {
-          return Utils.Model.removeSystemFields(data.toJSON());
+          return _.omit(data.toJSON(), _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
         }
       }
 
@@ -50,7 +50,7 @@
        * Private method that creates the data object based on the schema
        * of the given model.
        */
-      function makeTemplate(modelName) {
+      function makeTemplate(modelName, previousModel) {
         var attributes = [];
         var models = sails.models;
 
@@ -71,9 +71,9 @@
               template.value = definition.enum;
             }
 
-            if (definition.model) {
+            if (definition.model && (definition.model != previousModel)) {
               template = _.merge(template,
-                makeTemplate(definition.model));
+                makeTemplate(definition.model,modelName));
             }
 
             return template;
@@ -128,16 +128,6 @@
           response.template = _.merge(response.template,
                               makeTemplate(modelName))
         }
-
-        // if template.data is explicitly set in workflow, use it exactly.
-        // else {
-        //   var required = makeTemplate(modelName);
-        //   response.template.data = _.unique(
-        //     response.template.data.concat(required.data),
-        //     false, function(item, index, list) {
-        //       return item.name;
-        //     });
-        // }
 
         return response;
       }

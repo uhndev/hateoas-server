@@ -51,16 +51,20 @@
         level: 1,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
-            { prompt: 'HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
-              { prompt: 'HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
-              { prompt: 'HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
-              { prompt: 'HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
-              { prompt: 'HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
+            { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
+              { prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
+              { prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
+              { prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
+              { prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
+              { prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
             ]}
           ],
-          subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
+          subview: {
+            'study': ['name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -69,10 +73,13 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview', 'subject', 'user' ]
+          subview: {
+            'study': [ 'name', 'overview', 'subject', 'user' ],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -81,10 +88,13 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview', 'subject' ]
+          subview: {
+            'study': [ 'name', 'overview', 'subject' ],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -93,10 +103,13 @@
         level: 3,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
           ],
-          subview: [ 'name', 'overview' ]
+          subview: {
+            'study': [ 'name', 'overview' ],
+            'user': ['name', 'overview']
+          }
         }
       }
     ];

@@ -1,0 +1,178 @@
+{
+  "APP": {
+    "AUTH": {
+      "TITLE": "Login",
+      "USERNAME": "Username",
+      "EMAIL": "Email",
+      "USERNAME_OR_EMAIL": "Username or Email",
+      "PASSWORD": "Password",
+      "SIGN_IN": "Sign in",
+      "SIGN_IN_ERROR": "Incorrect username or password"
+    },
+    "HEADER": {
+      "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
+      "SELECTED": "Selected:",
+      "MENU": {
+        "STUDIES": "Studies",
+        "MY_STUDIES": "My Studies",
+        "MY_PROFILE": "My Profile",
+        "USER_MANAGER": "User Manager",
+        "TOOLS": "Tools",
+        "FORM_BUILDER": "Form Builder",
+        "WORKFLOW_EDITOR": "Workflow Editor",
+        "GROUPS": "Groups",
+        "TRANSLATIONS": "Translations",
+        "ACCESS_MANAGEMENT": "Access Management"
+      },
+      "SUBMENU": {
+        "OVERVIEW": "Overview",
+        "COLLECTION_CENTRES": "Collection Centres",
+        "SUBJECTS": "Subjects",
+        "USERS": "Users",
+        "FORMS": "Forms",
+        "SURVEYS": "Surveys"
+      }
+    },
+    "STUDY": {
+      "OVERVIEW": {
+        "TITLE": "Study Overview: {{name}}",
+        "ENROLLMENT": {
+          "TITLE": "Enrollment",
+          "COLLECTION_CENTRES": "Collection Centres",
+          "CONTACT": "@:COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
+          "COORDINATORS": "Coordinators",
+          "INTERVIEWERS": "Interviewers",
+          "SUBJECTS": "Subjects",
+          "SUBJECTS_ENROLLED": "Subjects Enrolled"
+        },
+        "STUDY_INFORMATION": {
+          "TITLE": "Study Information"
+        }
+      },
+      "SUBJECT": {
+        "CONTROLS": {
+          "OPEN_BTN": "View Subject",
+          "NEW_BTN": "Add Subject",
+          "EDIT_BTN": "Edit Subject",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "USER": {
+        "CONTROLS": {
+          "SAVE_CHANGES": "Save Changes",
+          "OPEN_BTN": "View User",
+          "NEW_BTN": "Add User",
+          "EDIT_BTN": "Edit User",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "FORM": {
+        "CONTROLS": {
+          "ADD_FORM_PLACEHOLDER": "Select a form to add",
+          "NEW_BTN": "Create Form",
+          "EDIT_BTN": "Edit Form",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "SURVEY": {
+        "CONTROLS": {
+          "OPEN_BTN": "View Survey",
+          "NEW_BTN": "Add Survey",
+          "EDIT_BTN": "Edit Survey",
+          "ARCHIVE_BTN": "Archive"
+        }
+      }
+    }
+  },
+  "COMMON": {
+    "LANGUAGES": {
+      "LANGUAGE": "Language",
+      "ENGLISH": "English",
+      "FRENCH": "French",
+      "ALTUM": "Altum"
+    },
+    "HATEOAS": {
+      "TITLE": {
+        "TOTAL": "Total: {{total}}"
+      },
+      "QUERY": {
+        "ADVANCED": {
+          "SEARCH_BTN": "Advanced Search",
+          "OPERATORS": {
+            "NOT": "Not",
+            "IS": "Is",
+            "CONTAINS": "Contains",
+            "LIKE": "Like",
+            "STARTS_WITH": "Starts With",
+            "ENDS_WITH": "Ends With"
+          }
+        },
+        "PLACEHOLDER": "Search Value",
+        "ADD_BTN": "Add",
+        "RESET_BTN": "Reset"
+      },
+      "CONTROLS": {
+        "OPEN_BTN": "Open",
+        "NEW_BTN": "New",
+        "EDIT_BTN": "Edit",
+        "ARCHIVE_BTN": "Archive"
+      }
+    },
+    "MODELS": {
+      "STUDY": {
+        "IDENTITY": "Study",
+        "NAME": "Study Name",
+        "ATTRIBUTES": "Attributes",
+        "REB": "REB #",
+        "ADMINISTRATOR": "Administrator",
+        "PI": "PI"
+      },
+      "USER": {
+        "IDENTITY": "User",
+        "USERNAME": "Username",
+        "EMAIL": "Email",
+        "PREFIX": "Prefix",
+        "FIRSTNAME": "Firstname",
+        "LASTNAME": "Lastname",
+        "GENDER": "Gender",
+        "DOB": "Date of Birth"
+      },
+      "COLLECTION_CENTRE": {
+        "IDENTITY": "Collection Centre",
+        "NAME": "Collection Centre Name",
+        "CONTACT": "Contact"
+      },
+      "SUBJECT_ENROLLMENT": {
+        "IDENTITY": "Subject",
+        "SUBJECT_NUMBER": "Subject ID",
+        "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
+        "DOE": "Date of Event",
+        "STUDY_MAPPING": "Study Mapping",
+        "STATUS": "Status"
+      },
+      "USER_ENROLLMENT": {
+        "IDENTITY": "User",
+        "USERNAME": "Username",
+        "EMAIL": "Email",
+        "PREFIX": "Prefix",
+        "FIRSTNAME": "Firstname",
+        "LASTNAME": "Lastname",
+        "GENDER": "Gender",
+        "DOB": "Date of Birth",
+        "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
+        "CENTRE_ACCESS": "Role"
+      },
+      "FORM": {
+        "IDENTITY": "Form",
+        "NAME": "Form Name",
+        "METADATA": "Meta Data",
+        "QUESTIONS": "Questions"
+      },
+      "SURVEY": {
+        "IDENTITY": "Survey",
+        "NAME": "Survey Name",
+        "COMPLETED_BY": "Completed By"
+      }
+    }
+  }
+}

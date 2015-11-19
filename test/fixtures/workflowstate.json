@@ -10,43 +10,43 @@
         {
           "name": "username",
           "type": "string",
-          "prompt": "USER.USERNAME",
+          "prompt": "COMMON.MODELS.USER.USERNAME",
           "value": ""
         },
         {
           "name": "email",
           "type": "string",
-          "prompt": "USER.EMAIL",
+          "prompt": "COMMON.MODELS.USER.EMAIL",
           "value": ""
         },
         {
           "name": "prefix",
           "type": "string",
-          "prompt": "USER.PREFIX",
+          "prompt": "COMMON.MODELS.USER.PREFIX",
           "value": ""
         },
         {
           "name": "firstname",
           "type": "string",
-          "prompt": "USER.FIRSTNAME",
+          "prompt": "COMMON.MODELS.USER.FIRSTNAME",
           "value": ""
         },
         {
           "name": "lastname",
           "type": "string",
-          "prompt": "USER.LASTNAME",
+          "prompt": "COMMON.MODELS.USER.LASTNAME",
           "value": ""
         },
         {
           "name": "gender",
           "type": "string",
-          "prompt": "USER.GENDER",
+          "prompt": "COMMON.MODELS.USER.GENDER",
           "value": ""
         },
         {
           "name": "dob",
           "type": "date",
-          "prompt": "USER.DOB",
+          "prompt": "COMMON.MODELS.USER.DOB",
           "value": ""
         }
       ]
@@ -64,38 +64,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
+        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject",
         "isActive": true
       },
       {
         "rel": "user",
-        "prompt": "HEADER.SUBMENU.USERS",
+        "prompt": "APP.HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "HEADER.SUBMENU.FORMS",
+        "prompt": "APP.HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -106,31 +106,31 @@
         {
           "name": "subjectNumber",
           "type": "mrn",
-          "prompt": "SUBJECT_ENROLLMENT.SUBJECT_NUMBER",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER",
           "value": ""
         },
         {
           "name": "collectionCentreName",
           "type": "string",
-          "prompt": "SUBJECT_ENROLLMENT.COLLECTION_CENTRE",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE",
           "value": ""
         },
         {
           "name": "doe",
           "type": "date",
-          "prompt": "SUBJECT_ENROLLMENT.DOE",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.DOE",
           "value": ""
         },
         {
           "name": "studyMapping",
           "type": "json",
-          "prompt": "SUBJECT_ENROLLMENT.STUDY_MAPPING",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.STUDY_MAPPING",
           "value": ""
         },
         {
           "name": "status",
           "type": "string",
-          "prompt": "SUBJECT_ENROLLMENT.STATUS",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.STATUS",
           "value": ""
         }
       ]
@@ -146,19 +146,13 @@
         {
           "name": "name",
           "type": "string",
-          "prompt": "STUDY.NAME",
-          "value": ""
-        },
-        {
-          "name": "attributes",
-          "type": "json",
-          "prompt": "STUDY.ATTRIBUTES",
+          "prompt": "COMMON.MODELS.STUDY.NAME",
           "value": ""
         },
         {
           "name": "reb",
           "type": "integer",
-          "prompt": "STUDY.REB",
+          "prompt": "COMMON.MODELS.STUDY.REB",
           "value": ""
         }
       ]
@@ -175,38 +169,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
+        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre",
         "isActive": true
       },
       {
         "rel": "subject",
-        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "HEADER.SUBMENU.USERS",
+        "prompt": "APP.HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "HEADER.SUBMENU.FORMS",
+        "prompt": "APP.HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -218,13 +212,13 @@
         {
           "name": "name",
           "type": "string",
-          "prompt": "COLLECTION_CENTRE.NAME",
+          "prompt": "COMMON.MODELS.COLLECTION_CENTRE.NAME",
           "value": ""
         },
         {
           "name": "contactName",
           "type": "string",
-          "prompt": "COLLECTION_CENTRE.CONTACT",
+          "prompt": "COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
           "value": ""
         }
       ]
@@ -250,38 +244,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
+        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "HEADER.SUBMENU.USERS",
+        "prompt": "APP.HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "HEADER.SUBMENU.FORMS",
+        "prompt": "APP.HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form",
         "isActive": true
       },
       {
         "rel": "survey",
-        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -291,19 +285,19 @@
         {
           "name": "name",
           "type": "string",
-          "prompt": "FORM.NAME",
+          "prompt": "COMMON.MODELS.FORM.NAME",
           "value": ""
         },
         {
           "name": "metaData",
           "type": "json",
-          "prompt": "FORM.METADATA",
+          "prompt": "COMMON.MODELS.FORM.METADATA",
           "value": ""
         },
         {
           "name": "questions",
           "type": "array",
-          "prompt": "FORM.QUESTIONS",
+          "prompt": "COMMON.MODELS.FORM.QUESTIONS",
           "value": ""
         }
       ]
@@ -321,37 +315,37 @@
       },
       {
         "rel": "overview",
-        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
+        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "HEADER.SUBMENU.USERS",
+        "prompt": "APP.HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user"
       },
       {
         "rel": "form",
-        "prompt": "HEADER.SUBMENU.FORMS",
+        "prompt": "APP.HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey",
         "isActive": true
@@ -362,13 +356,13 @@
         {
           "name": "name",
           "type": "string",
-          "prompt": "SURVEY.NAME",
+          "prompt": "COMMON.MODELS.SURVEY.NAME",
           "value": ""
         },
         {
           "name": "completedBy",
           "type": "string",
-          "prompt": "SURVEY.COMPLETED_BY",
+          "prompt": "COMMON.MODELS.SURVEY.COMPLETED_BY",
           "value": ""
         }
       ]
@@ -386,38 +380,38 @@
       },
       {
         "rel": "overview",
-        "prompt": "HEADER.SUBMENU.OVERVIEW",
+        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
         "name": "name",
         "href": "/api/study/*"
       },
       {
         "rel": "collectioncentre",
-        "prompt": "HEADER.SUBMENU.COLLECTION_CENTRES",
+        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
         "name": "name",
         "href": "/api/study/*/collectioncentre"
       },
       {
         "rel": "subject",
-        "prompt": "HEADER.SUBMENU.SUBJECTS",
+        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
         "name": "name",
         "href": "/api/study/*/subject"
       },
       {
         "rel": "user",
-        "prompt": "HEADER.SUBMENU.USERS",
+        "prompt": "APP.HEADER.SUBMENU.USERS",
         "name": "name",
         "href": "/api/study/*/user",
         "isActive": true
       },
       {
         "rel": "form",
-        "prompt": "HEADER.SUBMENU.FORMS",
+        "prompt": "APP.HEADER.SUBMENU.FORMS",
         "name": "name",
         "href": "/api/study/*/form"
       },
       {
         "rel": "survey",
-        "prompt": "HEADER.SUBMENU.SURVEYS",
+        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
         "name": "name",
         "href": "/api/study/*/survey"
       }
@@ -427,43 +421,43 @@
         {
           "name": "username",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.USERNAME",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.USERNAME",
           "value": ""
         },
         {
           "name": "email",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.EMAIL",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.EMAIL",
           "value": ""
         },
         {
           "name": "prefix",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.PREFIX",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.PREFIX",
           "value": ""
         },
         {
           "name": "firstname",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.FIRSTNAME",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.FIRSTNAME",
           "value": ""
         },
         {
           "name": "lastname",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.LASTNAME",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.LASTNAME",
           "value": ""
         },
         {
           "name": "gender",
           "type": "string",
-          "prompt": "USER_ENROLLMENT.GENDER",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.GENDER",
           "value": ""
         },
         {
           "name": "dob",
           "type": "date",
-          "prompt": "USER_ENROLLMENT.DOB",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.DOB",
           "value": ""
         }
       ]
