@@ -10,6 +10,8 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readSurvey',
+        'readSubjectSchedule',
         'readUserEnrollment',
         'readUser',
         'readUserOwner',
@@ -17,6 +19,7 @@
         'createUser',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -26,10 +29,13 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readSurvey',
+        'readSubjectSchedule',
         'readUserOwner',
         'updateUserOwner',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -37,9 +43,11 @@
     var subjectRoles = _.pluck(_.filter(roles, function (role) {
       return _.contains([
         'readStudy',
+        'readCollectionCentre',
         'readUserOwner',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -53,6 +61,7 @@
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' },
             { prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
               { prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
               { prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
@@ -74,7 +83,8 @@
         menu: {
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview', 'subject', 'user' ],
@@ -89,7 +99,8 @@
         menu: {
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview', 'subject' ],
@@ -104,7 +115,8 @@
         menu: {
           tabview: [
             { prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview' ],

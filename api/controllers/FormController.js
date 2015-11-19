@@ -7,30 +7,12 @@
 
 (function() {
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  
-  module.exports = {
+  var StudyBase = require('./Base/StudyBaseController');
 
-    /**
-     * findByStudyName
-     * @description Finds forms by their associations to a given study.
-     */
-    findByStudyName: function (req, res) {
-      var studyName = req.param('name');
+  _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudyName
+  _.merge(exports, {
 
-      Form.findByStudyName(studyName, req.user,
-        {
-          where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req)
-        }
-      ).then(function (forms) {
-          var err = forms[0];
-          var formItems = forms[1];
-          if (err) res.serverError(err);
-          res.ok(formItems);
-        });
-    }
-  };
+  });
+
 })();
 
