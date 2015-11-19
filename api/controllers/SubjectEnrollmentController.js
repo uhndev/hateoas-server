@@ -179,7 +179,7 @@
         res.serverError({
           title: 'Subject Enrollment Error',
           code: err.status || 500,
-          message: err.details || 'Error creating subject'
+          message: 'Error enrolling subject ' + JSON.stringify(options) + ' to enrollment ' + JSON.stringify(enrollmentOptions)
         });
       });
     }
