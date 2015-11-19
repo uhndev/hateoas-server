@@ -40,6 +40,47 @@
     },
 
     /**
+     * filterByEnrollment
+     * @description Given a user object and an array collection, filter the collection based
+     *              on the enrollments that user holds.
+     * @memberOf PermissionService
+     * @param   {Object} user
+     * @param   {Array}  collection
+     * @returns {Array|Promise}
+       */
+    filterByEnrollment: function(user, collection) {
+      var filterCollection = function(user) {
+        return _.filter(collection, function (record) {
+          if (_.has(record, 'collectionCentres')) { // check if collection centres has user enrollment
+            return _.some(record.collectionCentres, function(centre) {
+              return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+            });
+          } else if (_.has(record, 'collectionCentre')) { // check if user enrollment has collection centre
+            return _.includes(_.pluck(user.enrollments, 'collectionCentre'), record.collectionCentre);
+          } else {
+            return true;
+          }
+        });
+      };
+
+      return Group.findOne(user.group)
+        .then(function (group) {
+          switch(group.level) {
+            case 1: // allow all as admin
+              return collection;
+            case 2: // find specific user's access
+              return User.findOne(user.id).populate('enrollments').then(filterCollection);
+            case 3: // find subject's collection centre access
+              return Subject.findOne({user: user.id}).populate('enrollments').then(filterCollection);
+            default: return null;
+          }
+        })
+        .then(function (filteredCollection) {
+          return filteredCollection;
+        });
+    },
+
+    /**
      * setUserRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService

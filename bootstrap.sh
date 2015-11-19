@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+echo "-------------------------------------------------------------------------"
+echo " Adding PPAs"
+echo "-------------------------------------------------------------------------"
+add-apt-repository ppa:webupd8team/sublime-text-3
 apt-get update
 
 ###########################################################
@@ -8,13 +12,17 @@ apt-get update
 echo "-------------------------------------------------------------------------"
 echo " Installing Base Packages"
 echo "-------------------------------------------------------------------------"
-curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
+apt-get install --yes curl
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 apt-get install --yes git
 apt-get install --yes vim
 apt-get install --yes nodejs
 apt-get install --yes build-essential
 apt-get install --yes mongodb
-apt-get install --yes postgresql postgresql-contrib
+apt-get install --yes postgresql
+apt-get install --yes chromium-browser
+apt-get install --yes pgadmin3
+apt-get install --yes sublime-text-installer
 
 # install python modules for dados-pygen
 echo "-------------------------------------------------------------------------"

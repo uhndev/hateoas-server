@@ -11,53 +11,12 @@
   var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  module.exports = {
+  var EnrollmentBase = require('./Base/EnrollmentBaseController');
+  var StudyBase = require('./Base/StudyBaseController');
 
-    /**
-     * find
-     * @description Finds and returns collection centres by enrollment
-     */
-    find: function (req, res, next) {
-      var query = ModelService.filterExpiredRecords('collectioncentre')
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-
-      query.exec(function found(err, centres) {
-        if (err) {
-          return res.serverError(err);
-        }
-
-        Group.findOne(req.user.group).then(function (group) {
-          switch(group.level) {
-            case 1: // allow all as admin
-              return res.ok(centres);
-            case 2: // find specific user's access
-              return User.findOne(req.user.id).populate('enrollments')
-              .then(function(user) {
-                var filteredRecords = _.filter(centres, function (centre) {
-                  return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
-                });
-                res.ok(filteredRecords);
-              }).catch(function (err) {
-                return res.serverError(err);
-              });
-            case 3: // find subject's collection centre access
-              return Subject.findOne({user: req.user.id}).populate('enrollments')
-              .then(function(subject) {
-                var filteredRecords = _.filter(centres, function (record) {
-                  return _.includes(_.pluck(subject.enrollments, 'collectionCentre'), centre.id);
-                });
-                res.ok(filteredRecords);
-              }).catch(function (err) {
-                return res.serverError(err);
-              });
-            default: return res.notFound();
-          }
-        });
-      });
-    },
+  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
+  _.merge(exports, {
 
     /**
      * findOne
@@ -77,33 +36,33 @@
             res.notFound();
           } else {
             PermissionService.findEnrollments(req.user, centre)
-            .then(function (enrollments) {
-              // if no enrollments found for coordinator/subject, DENY
-              if (this.group.level > 1 && enrollments.length === 0) {
-                return res.forbidden({
-                  title: 'Error',
-                  code: 403,
-                  message: "User "+req.user.email+" is not permitted to GET "
-                });
-              } else {
-                var filteredUsers = { collectionCentre: centre.id },
-                  filteredSubjects = { collectionCentre: centre.id };
-                if (enrollments) { // return users with matching enrollments
-                  filteredUsers.userenrollment = _.pluck(enrollments, 'id');
-                  if (this.group.level === 3) { // if user is a subject, only return their enrollments
-                    filteredSubjects.subjectenrollment = _.pluck(enrollments, 'id');
+              .then(function (enrollments) {
+                // if no enrollments found for coordinator/subject, DENY
+                if (this.group.level > 1 && enrollments.length === 0) {
+                  return res.forbidden({
+                    title: 'Error',
+                    code: 403,
+                    message: "User "+req.user.email+" is not permitted to GET "
+                  });
+                } else {
+                  var filteredUsers = { collectionCentre: centre.id },
+                    filteredSubjects = { collectionCentre: centre.id };
+                  if (enrollments) { // return users with matching enrollments
+                    filteredUsers.userenrollment = _.pluck(enrollments, 'id');
+                    if (this.group.level === 3) { // if user is a subject, only return their enrollments
+                      filteredSubjects.subjectenrollment = _.pluck(enrollments, 'id');
+                    }
                   }
+                  return Promise.all([
+                    collectioncentreuser.find(filteredUsers),
+                    collectioncentresubject.find(filteredSubjects)
+                  ]).spread(function (users, subjects) {
+                    centre.coordinators = users;
+                    centre.subjects = subjects;
+                    res.ok(centre);
+                  });
                 }
-                return Promise.all([
-                  collectioncentreuser.find(filteredUsers),
-                  collectioncentresubject.find(filteredSubjects)
-                ]).spread(function (users, subjects) {
-                  centre.coordinators = users;
-                  centre.subjects = subjects;
-                  res.ok(centre);
-                });
-              }
-            });
+              });
           }
         });
     },
@@ -117,8 +76,8 @@
      */
     create: function(req, res, next) {
       var ccName = req.param('name'),
-          ccContact = req.param('contact'),
-          studyId = req.param('study');
+        ccContact = req.param('contact'),
+        studyId = req.param('study');
       var options = _.pick(_.pick(req.body, 'name', 'contact', 'study'), _.identity);
 
       Study.findOne(studyId).populate('collectionCentres')
@@ -155,8 +114,8 @@
      */
     update: function(req, res, next) {
       var ccId = req.param('id'),
-          ccName = req.param('name'),
-          ccContact = req.param('contact');
+        ccName = req.param('name'),
+        ccContact = req.param('contact');
       var options = _.pick(_.pick(req.body, 'name', 'contact'), _.identity);
 
       CollectionCentre.update({id: ccId}, options)
@@ -170,28 +129,9 @@
             message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(options)
           });
         });
-    },
-
-    /**
-     * findByStudyName
-     * @description Finds collection centres by their associations to a given
-     *              study.  Is used for each of the hateoas response link objects.
-     */
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
-
-      CollectionCentre.findByStudyName(studyName, req.user,
-        { where: actionUtil.parseCriteria(req),
-          limit: actionUtil.parseLimit(req),
-          skip: actionUtil.parseSkip(req),
-          sort: actionUtil.parseSort(req) }
-      ).then(function(centres) {
-        var err = centres[0];
-        var centreItems = centres[1];
-        if (err) res.serverError(err);
-        res.ok(centreItems);
-      });
     }
-  };
+
+  });
+
 })();
 
