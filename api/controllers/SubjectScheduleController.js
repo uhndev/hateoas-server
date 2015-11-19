@@ -6,46 +6,58 @@
  */
 
 (function() {
-  var moment = require('moment'); // I need a minute
-  var _ = require('lodash');
-  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var Promise = require('q');
 
   module.exports = {
 
+    /**
+     * findScheduledForm
+     * @description Given a schedule and form version IDs returns the form with
+     *              session and subject enrollment needed to create answerSets.
+     */
     findScheduledForm: function(req, res, next) {
       var formID = req.param('formID');
+      var scheduleID = req.param('id');
       
-      SubjectSchedule.findOne(req.param('id')).populate('answerSets').exec(function (err, schedule) {
-        sails.log.debug(schedule);
-        var response = _.pick(schedule, 'id', 'status', 'session', 'subjectEnrollment');
-        sails.log.debug(response);
-        // use schedule.subjectEnrollment
-        
-        Session.findOne({id: schedule.session})
-          .populate('formVersions')
-          .then(function (session) {
-            return _.find(session.formVersions, function (formVersion) {
-              return formVersion.id == formID;
-            });
-          })
-          .then(function (formVersion) {
-            if(formVersion === undefined) {
-              res.notFound();
-            } else {
-              var answerSet = _.find(schedule.answerSets, function (as) {
-                return as.formVersion == formID;
-              });
-              if (answerSet !== undefined) {
-                formVersion.answerSetID = answerSet.id;
-              }
-              formVersion.subjectEnrollmentID = schedule.subjectEnrollment;
-              formVersion.scheduleID = schedule.id;
-              formVersion.sessionID = schedule.session;
-              res.ok(formVersion);
-            }
+      SubjectSchedule.findOne(scheduleID).populate('answerSets')
+        .then(function (schedule) {
+          if (_.isUndefined(schedule)) {
+            err = new Error('Schedule '+scheduleID+' does not exist.');
+            err.status = 400;
+            throw err;
+          } else {
+            this.schedule = schedule;
+            
+            return Session.findOne({id: schedule.session}).populate('formVersions');
+          }
+        })
+        .then(function (session) {
+          return _.find(session.formVersions, function (formVersion) {
+            return formVersion.id == formID;
           });
-      });
+        })
+        .then(function (formVersion) {
+          if(formVersion === undefined) {
+            res.notFound();
+          } else {
+            var answerSet = _.find(this.schedule.answerSets, function (as) {
+              return as.formVersion == formID;
+            });
+            if (answerSet !== undefined) {
+              formVersion.answerSetID = answerSet.id;
+            }
+            formVersion.subjectEnrollmentID = this.schedule.subjectEnrollment;
+            formVersion.scheduleID = this.schedule.id;
+            formVersion.sessionID = this.schedule.session;
+            res.ok(formVersion);
+          }
+        })
+        .catch(function (err) {
+          res.badRequest({
+            title: 'Error',
+            code: err.status,
+            message: err.details
+          });
+        });
     }
     
   };

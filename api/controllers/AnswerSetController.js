@@ -20,8 +20,6 @@
           subjectEnrollmentID = req.param('subjectEnrollmentID'),
           formID = req.param('formID'),
           answers = req.param('answers');
-          
-      console.log(answers);
       
       studysession.findOne({ id: sessionID })
         .then(function (studysess) {
