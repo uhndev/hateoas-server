@@ -1,45 +1,57 @@
 /**
- * program
+ * PayorProgram.js
  *
- * @class program
- * @description Model representation of a program
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/program.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/program.js
+ * @description :: A model representing all programs belonging to a particular payor
+ * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
-  (function () {
+(function () {
 
-    var _super = require('./BaseModel.js');
-    var _ = require('lodash');
-    var HateoasService = require('../../services/HateoasService.js');
+  var _super = require('./BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
 
-    _.merge(exports, _super);
-    _.merge(exports, {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-    schema: true,
-    attributes: {
+  attributes: {
 
-      /**
-       * programName
-       * @description A program's name
-       * @type {Date}
-       */
-      programName: {
-        type: 'string'
-      },
+    /**
+     * payors
+     * @description a PayorProgram's payor
+     * @type {collection}
+     */
 
-      /**
-       * programCode
-       * @description A program's code
-       * @type {string}
-       */
-      programCode: {
-        type: 'string'
-      },
-      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    payors: {
+      model: 'payor',
 
+    },
 
-    }
-    });
-  })();
+    /**
+     * name
+     * @description a PayorProgram's name
+     * @type {String}
+     */
+
+    name: {
+      type:'string'
+    },
+
+    /**
+     * ProgramServices
+     * @description a payor's ProgramServices
+     * @type {String}
+     */
+
+    programServices: {
+      collection: 'ProgramService',
+      via: 'payorPrograms',
+      dominant:true
+    },
+
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+
+  }
+  });
+})();
 

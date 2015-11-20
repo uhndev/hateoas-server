@@ -1,7 +1,7 @@
 /**
- * ProgramService.js
+ * PayorService.js
  *
- * @description :: A model representing all services belonging to a particular payor program
+ * @description :: a model representation of payor services
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -17,26 +17,63 @@
   attributes: {
 
     /**
-     * PayorProgram
-     * @description a ProgramService's PayorProgram
-     * @type {model}
+     * program
+     * @description a payorService's program (at altum), only for driving dropdowns
+     * @type {String}
      */
 
-    payorPrograms: {
-      collection: 'payorProgram',
-      via: 'programServices'
+    program: {
+      model: 'program'
     },
 
     /**
+     * price
+     * @description a payor's billing max price for a service
+     * @type {integer}
+     */
+
+    price: {
+      type: 'integer'
+    },
+
+    /**
+     * altumService
+     * @description a payorService's mapping to it's altumService
+     * @type {String}
+     */
+
+    altumService: {
+      model: 'altumService'
+    },
+
+    /**
+     * payor
+     * @description a payorService's payor
+     * @type {String}
+     */
+
+    payor: {
+      model: 'payor'
+    },
+
+    /**
+     * program
+     * @description a payorService's associated program
+     * @type {String}
+     */
+
+    program: {
+      model: 'program'
+    },
+    /**
      * name
-     * @description a ProgramService's name
+     * @description a payorService's name
      * @type {String}
      */
 
     name: {
-      type:'string'
+      type: 'string'
     },
-
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
   }
