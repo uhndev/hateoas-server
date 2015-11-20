@@ -39,9 +39,7 @@
           if(formVersion === undefined) {
             res.notFound();
           } else {
-            var answerSet = _.find(this.schedule.answerSets, function (as) {
-              return as.formVersion == formID;
-            });
+            var answerSet = _.find(session.formVersions, { id: formID });
             if (answerSet !== undefined) {
               formVersion.answerSetID = answerSet.id;
             }

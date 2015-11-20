@@ -22,34 +22,34 @@
           answers = req.param('answers');
       
       studysession.findOne({ id: sessionID })
-        .then(function (studysess) {
-          if (_.isUndefined(studysess)) {
+        .then(function (studySession) {
+          if (_.isUndefined(studySession)) {
             err = new Error('Session '+sessionID+' does not exist.');
             err.status = 400;
             throw err;
           } else {
-            this.studySessionView = studysess;
+            this.studySessionView = studySession;
             
             return SubjectEnrollment.findOne(subjectEnrollmentID);
           }
         })
-        .then(function (sEnroll) {
-          if (_.isUndefined(sEnroll)) {
+        .then(function (subjectEnrollment) {
+          if (_.isUndefined(subjectEnrollment)) {
             err = new Error('SubjectEnrollment '+subjectEnrollmentID+' does not exist.');
             err.status = 400;
             throw err;
           } else {
             return UserEnrollment.findOne({
               user: req.user.id,
-              collectionCentre: sEnroll.collectionCentre
+              collectionCentre: subjectEnrollment.collectionCentre
             });
           }
         })
-        .then(function (uEnroll) {
+        .then(function (userEnrollment) {
           // user enrollment can be null
           var userEnrollmentID = null;
-          if (!_.isUndefined(uEnroll)) {
-            userEnrollmentID = uEnroll.id;
+          if (!_.isUndefined(userEnrollment)) {
+            userEnrollmentID = userEnrollment.id;
           }
           
           return AnswerSet.create({
