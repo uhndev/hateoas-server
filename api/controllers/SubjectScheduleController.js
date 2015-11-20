@@ -12,10 +12,10 @@
     /**
      * findScheduledForm
      * @description Given a schedule and form version IDs returns the form with
-     *              session and subject enrollment needed to create answerSets.
+     *              its answerSet if exists.
      */
     findScheduledForm: function(req, res, next) {
-      var formID = req.param('formID');
+      var formVersionID = req.param('formID');
       var scheduleID = req.param('id');
       
       SubjectSchedule.findOne(scheduleID).populate('answerSets')
@@ -31,21 +31,27 @@
           }
         })
         .then(function (session) {
-          return _.find(session.formVersions, function (formVersion) {
-            return formVersion.id == formID;
-          });
+          if (_.isUndefined(session)) {
+            err = new Error('Session '+this.schedule.session+' does not exist.');
+            err.status = 400;
+            throw err;
+          } else {
+            return _.find(session.formVersions, function (formVersion) {
+              return formVersion.id == formVersionID; 
+            });
+          }          
         })
         .then(function (formVersion) {
           if(formVersion === undefined) {
             res.notFound();
           } else {
-            var answerSet = _.find(session.formVersions, { id: formID });
+            var answerSet = _.find(this.schedule.answerSets, function (answers) {
+              return answers.formVersion == formVersionID; 
+            });
             if (answerSet !== undefined) {
               formVersion.answerSetID = answerSet.id;
             }
-            formVersion.subjectEnrollmentID = this.schedule.subjectEnrollment;
             formVersion.scheduleID = this.schedule.id;
-            formVersion.sessionID = this.schedule.session;
             res.ok(formVersion);
           }
         })

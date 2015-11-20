@@ -11,31 +11,40 @@
   module.exports = {
     /**
      * create
-     * @description Creates a new answerset given a schedule, subject enrollment,
-     *              session, form and answers array.
+     * @description Creates a new answerset given a schedule, form and answers array.
      */
     create: function(req, res, next) {
-      var sessionID = req.param('sessionID'),
-          scheduleID = req.param('scheduleID'),
-          subjectEnrollmentID = req.param('subjectEnrollmentID'),
+      var scheduleID = req.param('scheduleID'),
           formID = req.param('formID'),
           answers = req.param('answers');
       
-      studysession.findOne({ id: sessionID })
+      SubjectSchedule.findOne({ id: scheduleID })
+        .then(function (subjectSchedule) {
+          if (_.isUndefined(subjectSchedule)) {
+            err = new Error('Subject schedule '+scheduleID+' does not exist.');
+            err.status = 400;
+            throw err;
+          } else {
+            this.schedule = subjectSchedule;
+            
+            return studysession.findOne({ id: this.schedule.session });
+          }
+        
+        })
         .then(function (studySession) {
           if (_.isUndefined(studySession)) {
-            err = new Error('Session '+sessionID+' does not exist.');
+            err = new Error('Session '+this.schedule.session+' does not exist.');
             err.status = 400;
             throw err;
           } else {
             this.studySessionView = studySession;
             
-            return SubjectEnrollment.findOne(subjectEnrollmentID);
+            return SubjectEnrollment.findOne(this.schedule.subjectEnrollment);
           }
         })
         .then(function (subjectEnrollment) {
           if (_.isUndefined(subjectEnrollment)) {
-            err = new Error('SubjectEnrollment '+subjectEnrollmentID+' does not exist.');
+            err = new Error('SubjectEnrollment '+this.schedule.subjectEnrollment+' does not exist.');
             err.status = 400;
             throw err;
           } else {
@@ -58,7 +67,7 @@
             surveyVersion : this.studySessionView.surveyVersion,
             formVersion : formID,
             subjectSchedule : scheduleID,
-            subjectEnrollment : subjectEnrollmentID,
+            subjectEnrollment : this.schedule.subjectEnrollment,
             userEnrollment : userEnrollmentID,
           });
         })
