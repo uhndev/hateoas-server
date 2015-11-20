@@ -143,7 +143,7 @@ describe('The User Controller', function () {
 						globals.users.coordinator2 = collection.items.id;
 						collection.items.username.should.equal('coordinator2');
 						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
-							user.roles.length.should.equal(14);
+							user.roles.length.should.equal(15);
 							done(err);
 						});
 					});

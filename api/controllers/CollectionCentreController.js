@@ -11,12 +11,46 @@
   var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  var EnrollmentBase = require('./Base/EnrollmentBaseController');
   var StudyBase = require('./Base/StudyBaseController');
 
-  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
   _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
+
+    /**
+     * find
+     * @description Finds and returns collection centres by enrollment
+     */
+    find: function (req, res, next) {
+      var query = ModelService.filterExpiredRecords('collectioncentre')
+        .where( actionUtil.parseCriteria(req) )
+        .limit( actionUtil.parseLimit(req) )
+        .skip( actionUtil.parseSkip(req) )
+        .sort( actionUtil.parseSort(req) );
+
+      query.exec(function found(err, centres) {
+        if (err) {
+          return res.serverError(err);
+        }
+
+        var filterCentres = function(user) {
+          return res.ok(_.filter(centres, function (centre) {
+            return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+          }));
+        };
+
+        Group.findOne(req.user.group).then(function (group) {
+          switch(group.level) {
+            case 1: // allow all as admin
+              return res.ok(centres);
+            case 2: // find specific user's access
+              return User.findOne(req.user.id).populate('enrollments').then(filterCentres);
+            case 3: // find subject's collection centre access
+              return Subject.findOne({user: req.user.id}).populate('enrollments').then(filterCentres);
+            default: return res.notFound();
+          }
+        });
+      });
+    },
 
     /**
      * findOne
@@ -46,12 +80,9 @@
                   });
                 } else {
                   var filteredUsers = { collectionCentre: centre.id },
-                    filteredSubjects = { collectionCentre: centre.id };
-                  if (enrollments) { // return users with matching enrollments
-                    filteredUsers.userenrollment = _.pluck(enrollments, 'id');
-                    if (this.group.level === 3) { // if user is a subject, only return their enrollments
-                      filteredSubjects.subjectenrollment = _.pluck(enrollments, 'id');
-                    }
+                      filteredSubjects = { collectionCentre: centre.id };
+                  if (this.group.level === 3 && enrollments) { // if user is a subject, only return their enrollments
+                    filteredSubjects.subjectenrollment = _.pluck(enrollments, 'id');
                   }
                   return Promise.all([
                     collectioncentreuser.find(filteredUsers),
