@@ -69,5 +69,10 @@ module.exports.routes = {
   ****************************************************************************/
   'put /api/survey/:id/addSessions'       : 'SurveyController.addSessions',
   'put /api/survey/:id/updateSessions'    : 'SurveyController.updateSessions',
-  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions'
+  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions',
+  
+  /***************************************************************************
+  * Study Routes                                                             *
+  ***************************************************************************/
+  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
 };

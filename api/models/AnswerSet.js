@@ -69,8 +69,7 @@
        * @type {Association} one-way association to UserEnrollment model
        */
       userEnrollment: {
-        model: 'userenrollment',
-        required: true
+        model: 'userenrollment'
       },
 
       /**
@@ -101,9 +100,9 @@
     // Set most recent previous answerset to be expired
     beforeCreate: function(values, cb) {
       AnswerSet.findOne({ where: {
-        form: values.form,
-        subject: values.subject,
-        person: values.person
+        subjectSchedule: values.subjectSchedule,
+        formVersion: values.formVersion,
+        subjectEnrollment: values.subjectEnrollment
       }, sort: 'updatedAt DESC'}).exec(function (err, answer) {
         if (err) return cb(err);
         if (answer) {
