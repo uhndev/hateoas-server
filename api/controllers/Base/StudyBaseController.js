@@ -35,7 +35,13 @@
         .then(function(collection) {
           var err = collection[0];
           var collectionItems = collection[1];
-          if (err) res.serverError(err);
+          if (err) {
+            res.serverError({
+              title: 'StudyBase Error',
+              code: err.status || 500,
+              message: err.details
+            });
+          }
           res.ok(collectionItems, { filteredTotal: this.filteredTotal });
         });
     }

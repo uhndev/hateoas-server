@@ -29,7 +29,11 @@
 
       query.exec(function found(err, centres) {
         if (err) {
-          return res.serverError(err);
+          return res.serverError({
+            title: 'CollectionCentre Error',
+            code: err.status || 500,
+            message: err.details
+          });
         }
 
         var filterCentres = function(user) {

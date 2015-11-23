@@ -37,7 +37,11 @@
 
       query.exec(function found(err, collection) {
         if (err) {
-          return res.serverError(err);
+          return res.serverError({
+            title: 'EnrollmentBase Error',
+            code: err.status || 500,
+            message: err.details
+          });
         }
 
         if (hasCollection || hasAssociation) {
@@ -45,8 +49,12 @@
             .then(function (filteredCollection) {
               res.ok(filteredCollection, { filteredTotal: filteredCollection.length });
             }).catch(function (err) {
-            return res.serverError(err);
-          });
+              return res.serverError({
+                title: 'EnrollmentBase Error',
+                code: err.status || 500,
+                message: 'An error occurred when filtering collection by enrollment for user: ' + req.user.username + '\n' + err.details
+              });
+            });
         } else {
           res.ok(collection);
         }
