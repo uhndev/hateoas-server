@@ -6,43 +6,50 @@
  */
 
 module.exports = {
-  create: function(req, res, next) {
+
+  create: function(req, res) {
     var formID = req.param('id');
+    var formOptions = _.pick(req.body, 'name', 'metaData', 'questions');
 
-    Form.findOne(formID).then(function (form){
-      var options = _.pick(req.body, 'name', 'metaData', 'questions');
-
-      FormVersion.find({ form: formID })
-        .sort('revision DESC')
-        .then(function (latestFormVersions) {
-          // if lastPublished set on Form, then there are AnswerSets referring to this version
-          if (form.lastPublished !== null) {
-            // create new form version with updated revision number
-            var newFormVersion = {
-              revision: _.first(latestFormVersions).revision + 1,
-              form: formID
-            };
-            _.merge(newFormVersion, options);
-            return FormVersion.create(newFormVersion);
-          } else {
-            return _.first(latestFormVersions);
-          }
-        })
-        .then(function (formVersion) {
-          if (form.lastPublished !== null) {
+    FormVersion.find({ form: formID })
+      .sort('revision DESC')
+      .then(function (latestFormVersions) {
+        this.latestFormVersion = _.first(latestFormVersions);
+        return AnswerSet.count({formVersion: _.pluck(latestFormVersions, 'id')});
+      })
+      .then(function (answerSets) {
+        // if AnswerSets exist for any form versions, Form has been published
+        if (answerSets > 0) {
+          // create new form version with updated revision number
+          var newFormVersion = {
+            revision: this.latestFormVersion.revision + 1,
+            form: formID
+          };
+          _.merge(newFormVersion, formOptions);
+          return FormVersion.create(newFormVersion).then(function (formVersion) {
             res.created(formVersion);
-          } else {
-            res.ok(formVersion);
-          }
+          });
+        }
+        // otherwise updates are done in place for the current head
+        else {
+          var updatedFormVersion = {
+            revision: this.latestFormVersion.revision,
+            form: formID
+          };
+          _.merge(updatedFormVersion, formOptions);
+          return FormVersion.update({ id: this.latestFormVersion.id }, updatedFormVersion)
+            .then(function (formVersion) {
+              res.ok(_.first(formVersion));
+            });
+        }
+      })
+      .catch(function (err) {
+        res.badRequest({
+          title: 'FormVersion Error: formID '+ formID,
+          code: err.status,
+          message: err.details
         });
-    })
-    .catch(function (err) {
-      res.badRequest({
-        title: 'FormVersion Error: formID '+ formID,
-        code: err.status,
-        message: err.details
       });
-    });
   }
 };
 
