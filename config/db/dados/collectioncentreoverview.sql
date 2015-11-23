@@ -39,6 +39,7 @@ CREATE OR REPLACE VIEW collectioncentreoverview AS
   WHERE "user"."expiredAt" IS NULL AND
         subject."expiredAt" IS NULL AND
         collectioncentre."expiredAt" IS NULL AND
+        userenrollment."expiredAt" IS NULL AND
         userenrollment.id IS NOT NULL;
 ALTER TABLE collectioncentreoverview
 OWNER TO postgres;

@@ -18,15 +18,24 @@
           return Group.findOne(req.user.group);
         })
         .then(function (group) {
+          var query = {};
           switch (group.level) {
-            case 1: return schedulesubjects.find();
-            case 2: return schedulesubjects.find({ collectionCentre: _.pluck(this.user.enrollments, 'collectionCentre') });
-            case 3: return schedulesubjects.find({ user: req.user.id });
+            case 1: break;
+            case 2: query = { collectionCentre: _.pluck(_.filter(this.user.enrollments, { expiredAt: null }), 'collectionCentre') }; break;
+            case 3: query = { user: req.user.id }; break;
             default: return null;
           }
+          return [
+            schedulesubjects.count(query),
+            schedulesubjects.find(query)
+              .where( actionUtil.parseCriteria(req) )
+              .limit( actionUtil.parseLimit(req) )
+              .skip( actionUtil.parseSkip(req) )
+              .sort( actionUtil.parseSort(req) )
+          ];
         })
-        .then(function (studySubjects) {
-          res.ok(studySubjects);
+        .spread(function (filteredTotal, scheduleSubjects) {
+          res.ok(scheduleSubjects, { filteredTotal: filteredTotal });
         })
         .catch(function (err) {
           res.serverError(err);

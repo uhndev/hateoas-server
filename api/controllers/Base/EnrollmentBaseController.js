@@ -21,16 +21,15 @@
      */
     find: function (req, res, next) {
       var model = actionUtil.parseModel(req);
-      var query = (_.has(model.definition, 'expiredAt')) ?
-                  model.find({expiredAt: null}) : model.find();
+      var hasCollection  = _.find(model.associations, { alias: 'collectionCentres' });
+      var hasAssociation = _.find(model.associations, { alias: 'collectionCentre'  });
+
+      var query = (_.has(model.definition, 'expiredAt')) ? model.find({expiredAt: null}) : model.find();
 
       query.where( actionUtil.parseCriteria(req) )
         .limit( actionUtil.parseLimit(req) )
         .skip( actionUtil.parseSkip(req) )
         .sort( actionUtil.parseSort(req) );
-
-      var hasCollection  = _.find(model.associations, { alias: 'collectionCentres' });
-      var hasAssociation = _.find(model.associations, { alias: 'collectionCentre'  });
 
       if (hasCollection) {
         query.populate('collectionCentres');
@@ -44,7 +43,7 @@
         if (hasCollection || hasAssociation) {
           PermissionService.filterByEnrollment(req.user, collection)
             .then(function (filteredCollection) {
-              res.ok(filteredCollection);
+              res.ok(filteredCollection, { filteredTotal: filteredCollection.length });
             }).catch(function (err) {
             return res.serverError(err);
           });

@@ -34,7 +34,7 @@
 
         var filterCentres = function(user) {
           return res.ok(_.filter(centres, function (centre) {
-            return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+            return _.includes(_.pluck(_.filter(user.enrollments, { expiredAt: null }), 'collectionCentre'), centre.id);
           }));
         };
 
