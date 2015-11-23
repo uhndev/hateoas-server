@@ -11,6 +11,12 @@
 
   module.exports = {
 
+    /**
+     * find
+     * @description Controller find method for the schedulesubjects view, containing the scheduled sessions
+     *              any particular subject may have upcoming. Primarily used exclusively by subjects to pull
+     *              only their relevant data.
+     */
     find: function(req, res) {
       User.findOne(req.user.id).populate('enrollments')
         .then(function (user) {

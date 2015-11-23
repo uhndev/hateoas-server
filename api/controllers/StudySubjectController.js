@@ -11,6 +11,11 @@
 
   module.exports = {
 
+    /**
+     * find
+     * @description Controller find method for the studysubject view, containing the valid studies any particular
+     *              subject may be enrolled in. Primarily used exclusively by subjects to pull only their relevant data.
+     */
     find: function(req, res) {
       User.findOne(req.user.id).populate('enrollments')
         .then(function (user) {
