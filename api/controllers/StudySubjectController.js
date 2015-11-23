@@ -43,7 +43,11 @@
           res.ok(studySubjects, { filteredTotal: filteredTotal });
         })
         .catch(function (err) {
-          res.serverError(err);
+          res.serverError({
+            title: 'StudySubject Error',
+            code: err.status || 500,
+            message: 'An error occurred when fetching studysubject for user: ' + req.user.username + '\n' + err.details
+          });
         });
     }
 
