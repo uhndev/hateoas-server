@@ -52,7 +52,7 @@
               return res.serverError({
                 title: 'EnrollmentBase Error',
                 code: err.status || 500,
-                message: 'An error occurred when filtering collection by enrollment for user: ' + req.user.username + '\n' + err.details
+                message: 'An error occurred when filtering ' + model.adapter.identity + ' by enrollment for user: ' + req.user.username + '\n' + err.details
               });
             });
         } else {

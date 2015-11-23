@@ -39,7 +39,7 @@
             res.serverError({
               title: 'StudyBase Error',
               code: err.status || 500,
-              message: err.details
+              message: 'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName + err.details
             });
           }
           res.ok(collectionItems, { filteredTotal: this.filteredTotal });
