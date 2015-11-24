@@ -122,12 +122,6 @@
           "value": ""
         },
         {
-          "name": "studyMapping",
-          "type": "json",
-          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.STUDY_MAPPING",
-          "value": ""
-        },
-        {
           "name": "status",
           "type": "string",
           "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.STATUS",

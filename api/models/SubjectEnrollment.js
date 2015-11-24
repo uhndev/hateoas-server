@@ -135,7 +135,7 @@
         .then(function (user) {
           var whereOp = { studyName: studyName };
           if (user.group.level > 1) {
-            whereOp.collectionCentre = _.pluck(user.enrollments, 'collectionCentre');
+            whereOp.collectionCentre = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'collectionCentre');
           }
           return studysubject.find(query).where(whereOp);
         })

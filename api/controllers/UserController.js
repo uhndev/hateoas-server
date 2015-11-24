@@ -180,7 +180,7 @@
         res.serverError({
           title: 'User Update Error',
           code: 500,
-          message: 'An error occurred when updating user: ' + options.username
+          message: 'An error occurred when updating user: ' + options.username + ' ' + err.details
         });
       });
     },

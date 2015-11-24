@@ -43,7 +43,7 @@ describe('The Auth Controller', function() {
 
 		it('should return the user data and JWT after logging in', function(done) {
 			auth.authenticate('admin', function(resp) {
-				resp.res.body.should.have.properties('user', 'group', 'token')
+				resp.res.body.should.have.properties('user', 'group', 'token');
 				done();
 			});
 		})

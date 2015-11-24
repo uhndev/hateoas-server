@@ -26,12 +26,14 @@
           case 1: return null;
           case 2: return UserEnrollment.find({
             user: user.id,
-            collectionCentre: centre.id || centre
+            collectionCentre: centre.id || centre,
+            expiredAt: null
           });
           case 3: return Subject.findOne({ user: user.id }).then(function (subject) {
             return SubjectEnrollment.find({
               subject: subject.id,
-              collectionCentre: centre.id || centre
+              collectionCentre: centre.id || centre,
+              expiredAt: null
             });
           });
           default: return res.notFound();
@@ -50,13 +52,14 @@
        */
     filterByEnrollment: function(user, collection) {
       var filterCollection = function(user) {
+        var validEnrollments = _.filter(user.enrollments, { expiredAt: null });
         return _.filter(collection, function (record) {
           if (_.has(record, 'collectionCentres')) { // check if collection centres has user enrollment
             return _.some(record.collectionCentres, function(centre) {
-              return _.includes(_.pluck(user.enrollments, 'collectionCentre'), centre.id);
+              return _.includes(_.pluck(validEnrollments, 'collectionCentre'), centre.id);
             });
           } else if (_.has(record, 'collectionCentre')) { // check if user enrollment has collection centre
-            return _.includes(_.pluck(user.enrollments, 'collectionCentre'), record.collectionCentre);
+            return _.includes(_.pluck(validEnrollments, 'collectionCentre'), record.collectionCentre);
           } else {
             return true;
           }
