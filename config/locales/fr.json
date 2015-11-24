@@ -22,7 +22,8 @@
         "WORKFLOW_EDITOR": "Travailler l'Editeur",
         "GROUPS": "Groupes",
         "TRANSLATIONS": "Traductions",
-        "ACCESS_MANAGEMENT": "Gestion de L'acces"
+        "ACCESS_MANAGEMENT": "Gestion de L'acces",
+        "SUBJECT_PORTAL": "Subject Portal"
       },
       "SUBMENU": {
         "OVERVIEW": "Vue d'ensemble",

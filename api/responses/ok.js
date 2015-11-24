@@ -42,12 +42,9 @@ module.exports = function sendOK (data, options) {
           filterQuery.where = JSON.parse(query.where);
         }
 
-        // for models with the method findByStudyName, hateoas total should be filtered by study
-        if (req.options.action === 'findbystudyname') {
-          var studyName = req.param('name');
-          promise = model.findByStudyName(studyName, req.user, filterQuery).then(function (studyItems) {
-            return studyItems[1].length;
-          });
+        // when options.filteredTotal is passed to res.ok, use the filtered total instead
+        if (options && _.has(options, 'filteredTotal')) {
+          promise = Q(options.filteredTotal);
         }
         // otherwise, we can just return the model count total
         else {

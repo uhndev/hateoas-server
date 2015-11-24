@@ -41,7 +41,7 @@
               })
               .then(function (user) {
                 // if we were modifying an enrollment, nothing needs to be done
-                if (!_.includes(_.pluck(user.enrollments, 'id'), this.enrollment.id)) {
+                if (!_.includes(_.pluck(_.filter(user.enrollments, { expiredAt: null }), 'id'), this.enrollment.id)) {
                   return user;
                 } else {
                   // otherwise, we are adding a new enrollment

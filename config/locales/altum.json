@@ -22,7 +22,8 @@
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
         "TRANSLATIONS": "Translations",
-        "ACCESS_MANAGEMENT": "Access Management"
+        "ACCESS_MANAGEMENT": "Access Management",
+        "SUBJECT_PORTAL": "Subject Portal"
       },
       "SUBMENU": {
         "OVERVIEW": "Overview",

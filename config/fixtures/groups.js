@@ -10,6 +10,8 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readstudysubject',
+        'readschedulesubjects',
         'readSurvey',
         'readSubjectSchedule',
         'readUserEnrollment',
@@ -29,6 +31,8 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readstudysubject',
+        'readschedulesubjects',
         'readSurvey',
         'readSubjectSchedule',
         'readUserOwner',
@@ -43,6 +47,8 @@
     var subjectRoles = _.pluck(_.filter(roles, function (role) {
       return _.contains([
         'readStudy',
+        'readstudysubject',
+        'readschedulesubjects',
         'readCollectionCentre',
         'readUserOwner',
         'readSystemForm',

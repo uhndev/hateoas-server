@@ -90,7 +90,7 @@
             return [false, _.filter(studyUsers, function (user) {
               // return users whose enrollments has at least one with proposed user
               return (_.some(_.pluck(this.user.enrollments, 'id'), function (currEnrollment) {
-                return _.includes(user.userEnrollments, currEnrollment);
+                return _.includes(user.userEnrollments, currEnrollment) || user.userEnrollments == currEnrollment;
               }));
             })];
           } else {
