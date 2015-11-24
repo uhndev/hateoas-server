@@ -24,11 +24,14 @@
           return Group.findOne(req.user.group);
         })
         .then(function (group) {
-          var query = {};
+          var query = {
+            availableFrom: { '<=': new Date() },
+            availableTo:   { '>=': new Date() }
+          };
           switch (group.level) {
             case 1: break;
-            case 2: query = { collectionCentre: _.pluck(_.filter(this.user.enrollments, { expiredAt: null }), 'collectionCentre') }; break;
-            case 3: query = { user: req.user.id }; break;
+            case 2: query.collectionCentre = _.pluck(_.filter(this.user.enrollments, { expiredAt: null }), 'collectionCentre'); break;
+            case 3: query.user = req.user.id; break;
             default: return null;
           }
           return [
