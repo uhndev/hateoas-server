@@ -22,8 +22,7 @@
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
         "TRANSLATIONS": "Translations",
-        "ACCESS_MANAGEMENT": "Access Management",
-        "SUBJECT_PORTAL": "Subject Portal"
+        "ACCESS_MANAGEMENT": "Access Management"
       },
       "SUBMENU": {
         "OVERVIEW": "Overview",
@@ -80,7 +79,9 @@
           "OPEN_BTN": "View Survey",
           "NEW_BTN": "Add Survey",
           "EDIT_BTN": "Edit Survey",
-          "ARCHIVE_BTN": "Archive"
+          "ARCHIVE_BTN": "Archive",
+          "SAVE_BTN": "Save",
+          "CANCEL_BTN": "Cancel"
         }
       }
     }
@@ -173,6 +174,25 @@
         "IDENTITY": "Survey",
         "NAME": "Survey Name",
         "COMPLETED_BY": "Completed By"
+      },
+      "SUBJECT_SCHEDULE": {
+        "AVAILABLE_FROM": "Available From",
+        "STATUS": "Status",
+        "AVAILABLE_TO": "Available To",
+        "IDENTITY": "Subject Schedule"
+      },
+      "SESSION": {
+        "IDENTITY": "Session",
+        "NAME": "Session Name",
+        "TIMEPOINT": "Timepoint",
+        "AVAILABLE_FROM": "Available From",
+        "AVAILABLE_TO": "Available To",
+        "TYPE": "Type",
+        "TYPE_ENUM": {
+          "SCHEDULED": "Scheduled",
+          "RECURRING": "Recurring",
+          "NON_SCHEDULED": "Non-Scheduled"
+        }
       }
     }
   }

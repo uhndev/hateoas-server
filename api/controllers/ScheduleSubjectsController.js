@@ -25,8 +25,17 @@
         })
         .then(function (group) {
           var query = {
-            availableFrom: { '<=': new Date() },
-            availableTo:   { '>=': new Date() }
+            or: [
+              {
+                availableFrom: { '<=': new Date() },
+                availableTo:   { '>=': new Date() }
+              },
+              {
+                availableFrom: null,
+                availableTo:   null,
+                type:          'non-scheduled'
+              }
+            ]
           };
           switch (group.level) {
             case 1: break;

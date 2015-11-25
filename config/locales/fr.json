@@ -22,8 +22,7 @@
         "WORKFLOW_EDITOR": "Travailler l'Editeur",
         "GROUPS": "Groupes",
         "TRANSLATIONS": "Traductions",
-        "ACCESS_MANAGEMENT": "Gestion de L'acces",
-        "SUBJECT_PORTAL": "Subject Portal"
+        "ACCESS_MANAGEMENT": "Gestion de L'acces"
       },
       "SUBMENU": {
         "OVERVIEW": "Vue d'ensemble",
@@ -80,7 +79,9 @@
           "OPEN_BTN": "Voir Enquête",
           "NEW_BTN": "Ajouter Enquête",
           "EDIT_BTN": "Modifier Enquête",
-          "ARCHIVE_BTN": "Archiver"
+          "ARCHIVE_BTN": "Archiver",
+          "SAVE_BTN": "Sauvegarder",
+          "CANCEL_BTN": "Annuler"
         }
       }
     }
@@ -173,6 +174,25 @@
         "IDENTITY": "Enquête",
         "NAME": "Nom de L'enquête",
         "COMPLETED_BY": "Terminé Par"
+      },
+      "SUBJECT_SCHEDULE": {
+        "AVAILABLE_FROM": "Disponible Depuis",
+        "AVAILABLE_TO": "Disponible Pour",
+        "STATUS": "Status",
+        "IDENTITY": "Horaire Sujet"
+      },
+      "SESSION": {
+        "IDENTITY": "Session",
+        "NAME": "Nom de Session",
+        "TIMEPOINT": "Temps Point",
+        "AVAILABLE_FROM": "Disponible Depuis",
+        "AVAILABLE_TO": "Disponible Pour",
+        "TYPE": "Type",
+        "TYPE_ENUM": {
+          "SCHEDULED": "Prévu",
+          "RECURRING": "Récurrent",
+          "NON_SCHEDULED": "Non Régulier"
+        }
       }
     }
   }
