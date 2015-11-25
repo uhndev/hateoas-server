@@ -1,5 +1,5 @@
 /**
- * PayorService.js
+ * ProgramSerivce.js
  *
  * @description :: a model representation of payor services
  * @docs        :: http://sailsjs.org/#!documentation/models

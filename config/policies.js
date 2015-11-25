@@ -67,6 +67,10 @@ module.exports.policies = {
     'create': false,
     'update': false,
     'destroy': false
+  },
+
+  TranslationController: {
+    'getLocale': true
   }
 
 };

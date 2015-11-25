@@ -53,7 +53,7 @@
        * @description a altumPayorService's name
        * @type {String}
        */
-      altumPayorService_id: {
+      altumProgramService_id: {
 
         type: 'string'
 
@@ -64,7 +64,7 @@
        * @description a altumPayorService's name
        * @type {String}
        */
-      altumPayorService_name: {
+      altumProgramService_name: {
 
         type: 'string'
       },

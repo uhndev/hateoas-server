@@ -15,7 +15,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    connection: 'arm_audit'
+    connection: 'dados_cache'
 
   });
 })();
