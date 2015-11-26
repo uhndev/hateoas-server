@@ -47,6 +47,16 @@
     },
 
     /**
+     * serviceCategory
+     * @description a ProgramService's mapping to it's serviceCategory
+     * @type {model}
+     */
+
+    serviceCategory: {
+      model: 'serviceCategory'
+    },
+
+    /**
      * payor
      * @description a payorService's payor
      * @type {String}

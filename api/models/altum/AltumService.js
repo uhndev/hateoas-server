@@ -27,17 +27,6 @@
     },
 
     /**
-     * payor
-     * @description an AvailableSerivces payor
-     * @type {model}
-     */
-
-    payor: {
-      model: 'payor'
-    },
-
-
-    /**
      * payorService
      * @description an AvailableService's payorService
      * @type {collection}
@@ -65,8 +54,9 @@
      * @type {integer}
      */
 
-    siteService: {
-      model:'siteService'
+    sites: {
+      collection:'site',
+      via: 'altumServices'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

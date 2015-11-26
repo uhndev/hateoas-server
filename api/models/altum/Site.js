@@ -55,17 +55,15 @@
       /**
        * altumServices
        * @description a collection of a site's offered services at altum
-       * @type {integer}
+       * @type {collection}
        */
 
-      siteService: {
-        collection: 'SiteService',
-        via: 'site'
+      altumServices: {
+        collection: 'altumService',
+        via: 'sites'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
     }
     });
   })();

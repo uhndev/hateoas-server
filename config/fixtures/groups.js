@@ -69,7 +69,12 @@
               {"prompt": "HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
               {"prompt": "HEADER.MENU.AT.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
               {"prompt": "HEADER.MENU.AT.PHYSICIAN", "href": "/physician", "icon": "fa-stethoscope"},
-              { "prompt": "HEADER.MENU.AT.PROGRAM", "href": "/program", "icon": "fa-medkit" },
+              {"prompt": "HEADER.MENU.AT.PROGRAMS", "href": "/program", "icon": "fa-medkit" },
+              {"prompt": "HEADER.MENU.AT.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": "fa-cog" },
+              {"prompt": "HEADER.MENU.AT.ALTUM_SERVICES", "href": "/altumservice", "icon": "fa-cog" },
+              {"prompt": "HEADER.MENU.AT.PROGRAM_SERVICE", "href": "/programservice", "icon": "fa-cog" },
+              {"prompt": "HEADER.MENU.AT.SITES", "href": "/site", "icon": "fa-hospital-o" },
+              {"prompt": "HEADER.MENU.AT.COMPANY", "href": "/company", "icon": "fa-cog" },
               {"prompt": "HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
             },
             {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
