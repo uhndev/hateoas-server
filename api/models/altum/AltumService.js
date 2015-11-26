@@ -40,11 +40,12 @@
     /**
      * payorService
      * @description an AvailableService's payorService
-     * @type {model}
+     * @type {collection}
      */
 
-    payorService: {
-      model: 'payorService'
+    programServices: {
+      collection: 'programService',
+      via: 'altumService'
     },
 
 

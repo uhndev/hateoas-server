@@ -59,10 +59,17 @@ module.exports.connections = {
   ***************************************************************************/
 
   arm_audit: {
+      adapter   : 'sails-mongo',
+      host      : 'localhost',
+      port      : 27017,
+      database  : 'dados-cache'
+    },
+
+  dados_cache: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
-    database  : 'dados-audit'
+    database  : 'dados-cache'
   },
 
   /***************************************************************************
@@ -83,7 +90,15 @@ module.exports.connections = {
     database: 'dados_dev'
   },
 
-  arm_development: {
+ arm_development: {
+    adapter: 'sails-postgresql',
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: 'password',
+      database: 'arm_dev'
+  },
+  dados_migrate: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
@@ -92,7 +107,7 @@ module.exports.connections = {
     database: 'arm_dev'
   },
 
-  arm_production: {
+  dados_production: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,

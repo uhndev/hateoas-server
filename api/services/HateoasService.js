@@ -42,7 +42,7 @@
           });
         }
         if (_.isObject(data)) {
-          return Utils.Model.removeSystemFields(data.toJSON());
+          return _.omit(data.toJSON(), _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
         }
       }
 
@@ -128,16 +128,6 @@
           response.template = _.merge(response.template,
                               makeTemplate(modelName))
         }
-
-        // if template.data is explicitly set in workflow, use it exactly.
-        // else {
-        //   var required = makeTemplate(modelName);
-        //   response.template.data = _.unique(
-        //     response.template.data.concat(required.data),
-        //     false, function(item, index, list) {
-        //       return item.name;
-        //     });
-        // }
 
         return response;
       }

@@ -24,16 +24,16 @@
 
     referral: {
       model: 'referral'
-    },
+  },
 
     /**
-     * payorService
-     * @description a serivce's associated payorService
+     * programService
+     * @description a serivce's associated programService
      * @type {model}
      */
 
-    payorService: {
-      model: 'payorService'
+    programService: {
+      model: 'programService'
     },
 
     /**

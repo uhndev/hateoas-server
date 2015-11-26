@@ -43,8 +43,8 @@
      * @type {String}
      */
 
-    payorPrograms : {
-      collection: 'PayorProgram',
+    programs : {
+      collection: 'program',
       via: 'payors'
     },
 

@@ -10,6 +10,8 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readSurvey',
+        'readSubjectSchedule',
         'readUserEnrollment',
         'readUser',
         'readUserOwner',
@@ -17,6 +19,7 @@
         'createUser',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -26,10 +29,13 @@
         'readStudy',
         'readCollectionCentre',
         'readSubjectEnrollment',
+        'readSurvey',
+        'readSubjectSchedule',
         'readUserOwner',
         'updateUserOwner',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -37,9 +43,11 @@
     var subjectRoles = _.pluck(_.filter(roles, function (role) {
       return _.contains([
         'readStudy',
+        'readCollectionCentre',
         'readUserOwner',
         'readSystemForm',
         'readForm',
+        'readTranslation',
         'createAnswerSet'
       ], role.name);
     }), 'id');
@@ -51,39 +59,30 @@
         level: 1,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { "href": "/assessment", "icon": "fa-stethoscope", "prompt": "Assessments" },
-            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
-            { prompt: 'HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
-              { prompt: 'HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
-              { prompt: 'HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
-              { prompt: 'HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
-              { prompt: 'HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
-            ]},
+            {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "Assessments"},
             {
-              "prompt": "Altum Settings",
-              "icon": "fa-cog",
-              "dropdown": [{"prompt": "Approvers", "href": "/approver", "icon": "fa-male"}, {
-                "prompt": "Address",
-                "href": "/address",
-                "icon": "fa-paw"
-              }, {"prompt": "Payor", "href": "/payor", "icon": "fa-bank"}, {
-                "prompt": "Claim",
-                "href": "/claim",
-                "icon": "fa-wheelchair"
-              },
-                {"prompt": "Work Status", "href": "/workstatus", "icon": "fa-calendar-check-o"},
-                {"prompt": "Prognosis", "href": "/prognosis", "icon": "fa-check-square"},
-              {"prompt": "Physician", "href": "/physician", "icon": "fa-stethoscope"},
-              {
-                "prompt": "Program",
-                "href": "/program",
-                "icon": "fa-medkit"
-              },
-                {"prompt": "Status", "href": "/status", "icon": "fa-calandar-check-o"}]
+              "prompt": "HEADER.MENU.AT", "icon": "fa-cog", "dropdown": [
+              {"prompt": "HEADER.MENU.AT.APPROVERS", "href": "/approver", "icon": "fa-male"},
+              {"prompt": "HEADER.MENU.AT.ADDRESS", "href": "/address", "icon": "fa-paw" },
+              {"prompt": "HEADER.MENU.AT.PAYOR", "href": "/payor", "icon": "fa-bank"},
+              {"prompt": "HEADER.MENU.AT.CLAIM", "href": "/claim", "icon": "fa-wheelchair"},
+              {"prompt": "HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
+              {"prompt": "HEADER.MENU.AT.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
+              {"prompt": "HEADER.MENU.AT.PHYSICIAN", "href": "/physician", "icon": "fa-stethoscope"},
+              { "prompt": "HEADER.MENU.AT.PROGRAM", "href": "/program", "icon": "fa-medkit" },
+              {"prompt": "HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
+            },
+            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
+              {prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench'},
+              {prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code'},
+              {prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
+              {prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
+              {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
+            ]
             }
           ],
-          subview: [ 'name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey' ]
         }
       },
       {
@@ -92,10 +91,19 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' }
+            {prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
           ],
-          subview: [ 'name', 'overview', 'subject', 'user' ]
+          subview: {
+            'study': ['name', 'overview', 'subject', 'user'],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -104,10 +112,19 @@
         level: 2,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            {prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
           ],
-          subview: [ 'name', 'overview', 'subject' ]
+          subview: {
+            'study': ['name', 'overview', 'subject'],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
@@ -116,10 +133,19 @@
         level: 3,
         menu: {
           tabview: [
-            { prompt: 'HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
-            { prompt: 'HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' }
+            {prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
           ],
-          subview: [ 'name', 'overview' ]
+          subview: {
+            'study': ['name', 'overview'],
+            'user': ['name', 'overview']
+          }
         }
       }
     ];

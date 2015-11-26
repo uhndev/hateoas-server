@@ -45,7 +45,7 @@
 
     programServices: {
       collection: 'ProgramService',
-      via: 'payorPrograms',
+      via: 'program',
       dominant:true
     },
 
