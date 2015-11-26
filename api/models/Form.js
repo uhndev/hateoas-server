@@ -143,11 +143,7 @@
     findLatestFormVersions: function(forms) {
       return Promise.all(
         _.map(forms, function (form) {
-          return FormVersion.find({ form: form.id })
-            .sort('revision DESC')
-            .then(function (latestFormVersions) {
-              return _.first(latestFormVersions);
-            });
+          return FormVersion.getLatestFormVersion(form.id);
         })
       );
     },
