@@ -191,14 +191,13 @@
           if (!_.isNull(survey.lastPublished) && _.isNull(survey.expiredAt)) {
             // in that case, stamp out next survey version
             // create new survey version with updated revision number
-            SurveyVersion.find({survey: values.id})
-              .sort('revision DESC')
-              .then(function (latestSurveyVersions) {
+            SurveyVersion.getLatestSurveyVersion(values.id)
+              .then(function (latestSurveyVersion) {
                 var currentSessions = _.pluck(survey.sessions, 'id');
-                var previousSessions = _.first(latestSurveyVersions).sessions;
+                var previousSessions = latestSurveyVersion.sessions;
                 if (_.difference(currentSessions, previousSessions).length > 0) {
                   var newSurveyVersion = {
-                    revision: _.first(latestSurveyVersions).revision + 1,
+                    revision: latestSurveyVersion.revision + 1,
                     survey: values.id,
                     sessions: _.pluck(survey.sessions, 'id')
                   };

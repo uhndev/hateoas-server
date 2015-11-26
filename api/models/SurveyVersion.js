@@ -81,6 +81,19 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * getLatestSurveyVersion
+     * @description Convenience method to return latest survey version given an options object
+     * @param survey object with id, or surveyID
+     */
+    getLatestSurveyVersion: function(survey) {
+      return SurveyVersion.find({ survey: (survey.id || survey)})
+        .sort('revision DESC')
+        .then(function (latestSurveyVersions) {
+          return _.first(latestSurveyVersions);
+        });
     }
   };
 })();
