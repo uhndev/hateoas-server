@@ -51,6 +51,7 @@
         'readschedulesubjects',
         'readCollectionCentre',
         'readUserOwner',
+        'updateUserOwner',
         'readSystemForm',
         'readForm',
         'readTranslation',
