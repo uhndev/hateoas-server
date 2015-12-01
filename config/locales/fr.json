@@ -83,6 +83,17 @@
           "SAVE_BTN": "Sauvegarder",
           "CANCEL_BTN": "Annuler"
         }
+      },
+      "COLLECTION_CENTRE": {
+        "OVERVIEW": {
+          "TITLE": "Aperçu de L'étude: {{name}}",
+          "SUBJECTS" : {
+            "TITLE": "Sujets"
+          },
+          "COORDINATORS": {
+            "TITLE": "Coordonnateurs"
+          }
+        }
       }
     }
   },

@@ -83,6 +83,17 @@
           "SAVE_BTN": "Save",
           "CANCEL_BTN": "Cancel"
         }
+      },
+      "COLLECTION_CENTRE": {
+        "OVERVIEW": {
+          "TITLE": "Program Overview: {{name}}",
+          "SUBJECTS" : {
+            "TITLE": "Clients"
+          },
+          "COORDINATORS": {
+            "TITLE": "Managers"
+          }
+        }
       }
     }
   },
