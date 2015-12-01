@@ -53,9 +53,9 @@ module.exports = function sendOK (data, options) {
           }
           // we do not want to include subjects' users in our total count
           if (model.identity === 'user') {
-            if (req.user.group == subjectGroup.id) {
+            if (req.user.group == subjectGroup.id) { // if subject, return self count
               filterQuery.where.id = req.user.id;
-            } else {
+            } else { // otherwise, omit subjects from count
               filterQuery.where.group = {"!": subjectGroup.id};
             }
           }

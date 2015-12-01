@@ -28,6 +28,12 @@
           return Form.destroyLifecycle(formID, {}).then(function () {
             // call blueprint destroy to actually destroy
             return require('../blueprints/destroy')(req, res);
+          }).catch(function (err) {
+            return res.serverError({
+              title: 'Form Error',
+              code: 500,
+              message: 'An error occurred when archiving form ' + formID + ': ' + err.details
+            });
           });
         }
       });

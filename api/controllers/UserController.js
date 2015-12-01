@@ -20,6 +20,7 @@
     find: function (req, res) {
       Group.findOneByName('subject').then(function (subjectGroup) {
         var query = ModelService.filterExpiredRecords('user');
+        // if non-subject user, omit subject users from search
         if (req.user.group != subjectGroup.id) {
           query.where(_.merge(actionUtil.parseCriteria(req), {group: {'!': subjectGroup.id}}));
         }
