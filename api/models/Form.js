@@ -150,11 +150,7 @@
           this.affectedFormVersionIds = _.pluck(form.versions, 'id');
           return studysession.find(criteria).then(function (studySessions) {
             return _.filter(studySessions, function (session) {
-              if (_.isArray(session.formVersions)) {
-                return _.xor(this.affectedFormVersionIds, session.formVersions).length > 0;
-              } else {
-                return _.includes(this.affectedFormVersionIds, session.formVersions);
-              }
+              return _.xor(this.affectedFormVersionIds, _.flatten([session.formVersions])).length > 0;
             });
           });
         })
