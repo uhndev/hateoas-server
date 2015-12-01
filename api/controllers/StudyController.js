@@ -194,6 +194,7 @@
               if (sails.hooks.pubsub) {
                 Study.publishRemove(studyRecord.id, 'forms', formID, !sails.config.blueprints.mirror && req);
               }
+              // update any associated sessions to form in question
               return Form.destroyLifecycle(formID, { study: studyID });
             })
             .then(function () {

@@ -134,6 +134,16 @@
       }
     },
 
+	  /**
+     * destroyLifecycle
+     * @description Lifecycle method for archiving forms; affected form versions in any existing survey
+     *              sessions must be updated when removing a form from a study or archiving it altogether.
+     *              If any answersets exists, this function should not even be called.  See FormController.destroy
+     *              and StudyController.removeFormFromStudy for usages.
+     * @param formID    ID of form to archive
+     * @param criteria  Waterline find criteria for studysession when archiving form
+     * @returns {Promise}
+	   */
     destroyLifecycle: function(formID, criteria) {
       return Form.findOne(formID).populate('versions')
         .then(function (form) { // find affected form versions to be removed

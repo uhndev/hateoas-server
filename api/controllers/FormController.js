@@ -24,7 +24,9 @@
             message: 'Unable to archive form, there are answers associated to the requested form.'
           });
         } else {
+          // update any associated sessions to form in question
           return Form.destroyLifecycle(formID, {}).then(function () {
+            // call blueprint destroy to actually destroy
             return require('../blueprints/destroy')(req, res);
           });
         }
