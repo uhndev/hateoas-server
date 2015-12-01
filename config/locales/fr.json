@@ -87,7 +87,7 @@
       "COLLECTION_CENTRE": {
         "OVERVIEW": {
           "TITLE": "Aperçu de L'étude: {{name}}",
-          "SUBJECTS" : {
+          "SUBJECTS": {
             "TITLE": "Sujets"
           },
           "COORDINATORS": {
@@ -95,6 +95,13 @@
           }
         }
       }
+    },
+    "SUBJECT_PORTAL": {
+      "PROFILE_TAB_TITLE": "Mon Profil",
+      "SURVEYS_TAB_TITLE": "Enquêtes à Venir",
+      "PROFILE_TITLE": "Profil de L'utilisateur",
+      "STUDIES_TITLE": "Liste des études inscrits",
+      "SCHEDULE_TITLE": "Liste des enquêtes à venir"
     }
   },
   "COMMON": {
