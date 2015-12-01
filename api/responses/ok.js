@@ -53,7 +53,11 @@ module.exports = function sendOK (data, options) {
           }
           // we do not want to include subjects' users in our total count
           if (model.identity === 'user') {
-            filterQuery.where.group = {"!": subjectGroup.id};
+            if (req.user.group == subjectGroup.id) {
+              filterQuery.where.id = req.user.id;
+            } else {
+              filterQuery.where.group = {"!": subjectGroup.id};
+            }
           }
 
           promise = model.count(filterQuery);

@@ -6,6 +6,7 @@
  */
 
 (function() {
+  var Promise = require('q');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var StudyBase = require('./Base/StudyBaseController');
 
@@ -23,7 +24,9 @@
             message: 'Unable to archive form, there are answers associated to the requested form.'
           });
         } else {
-          return require('../blueprints/destroy')(req, res);
+          return Form.destroyLifecycle(formID, {}).then(function () {
+            return require('../blueprints/destroy')(req, res);
+          });
         }
       });
     }
