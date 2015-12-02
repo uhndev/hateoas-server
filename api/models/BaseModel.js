@@ -1,9 +1,10 @@
 /**
- * Created by calvinsu on 15-09-11.
+ * BaseModel
+ * @class BaseModel
+ * @description the basemodel to be inherited by all other models
  */
-module.exports = {
 
-  migrate: 'alter',
+module.exports = {
 
   attributes: {
 
