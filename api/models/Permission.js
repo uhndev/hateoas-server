@@ -7,6 +7,7 @@
  */
 
 (function() {
+  var _super = require('./BaseModel.js');
   'use strict';
 
   var _ = require('lodash');

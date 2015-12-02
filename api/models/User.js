@@ -7,7 +7,9 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/User.js
  */
 
+
 (function() {
+  var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
   var _super = require('sails-permissions/api/models/User');
@@ -193,5 +195,5 @@
     }
 
   });
-})();
+}());
 

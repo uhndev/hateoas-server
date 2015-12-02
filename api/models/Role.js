@@ -9,6 +9,7 @@
 
 
 (function() {
+  var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
   var _super = require('sails-permissions/api/models/Role');

@@ -14,8 +14,8 @@
  * @extends http://github.com/tjwebb/sails-auth/blob/master/api/models/Passport.js
  */
 
-(function() {
 
+(function() {
   var _ = require('lodash');
   var _super = require('sails-permissions/api/models/Passport');
 

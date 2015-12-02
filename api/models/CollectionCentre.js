@@ -7,10 +7,12 @@
  */
 
 (function() {
-
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     schema: true,
     attributes: {
       /**
@@ -131,6 +133,6 @@
       }
     }
 
-  };
+  });
 
 }());

@@ -1,6 +1,7 @@
 // api/models/SecurityLog.js
 
 (function() {
+  var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
   var _super = require('sails-permissions/api/models/SecurityLog');
