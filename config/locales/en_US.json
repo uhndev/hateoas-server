@@ -87,7 +87,7 @@
       "COLLECTION_CENTRE": {
         "OVERVIEW": {
           "TITLE": "Study Overview: {{name}}",
-          "SUBJECTS" : {
+          "SUBJECTS": {
             "TITLE": "Subjects"
           },
           "COORDINATORS": {
@@ -95,6 +95,13 @@
           }
         }
       }
+    },
+    "SUBJECT_PORTAL": {
+      "PROFILE_TAB_TITLE": "My Profile",
+      "SURVEYS_TAB_TITLE": "Upcoming Surveys",
+      "PROFILE_TITLE": "User Profile",
+      "STUDIES_TITLE": "List of enrolled studies",
+      "SCHEDULE_TITLE": "List of upcoming surveys"
     }
   },
   "COMMON": {

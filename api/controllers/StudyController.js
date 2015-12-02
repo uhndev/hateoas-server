@@ -194,32 +194,8 @@
               if (sails.hooks.pubsub) {
                 Study.publishRemove(studyRecord.id, 'forms', formID, !sails.config.blueprints.mirror && req);
               }
-              return Form.findOne(formID).populate('versions')
-            })
-            .then(function (form) { // find affected form versions to be removed
-              this.affectedFormVersionIds = _.pluck(form.versions, 'id');
-              return studysession.find({study: studyID}).then(function (studySessions) {
-                return _.filter(studySessions, function (session) {
-                  if (_.isArray(session.formVersions)) {
-                    return _.xor(this.affectedFormVersionIds, session.formVersions).length > 0;
-                  } else {
-                    return _.includes(this.affectedFormVersionIds, session.formVersions);
-                  }
-                });
-              });
-            })
-            .then(function (affectedStudySessions) { // perform updates on related sessions
-              return Promise.all(
-                _.map(affectedStudySessions, function (affectedSession) {
-                  return Session.findOne(affectedSession.id).then(function (session) {
-                    _.each(this.affectedFormVersionIds, function (formVersionToRemove) {
-                      session.formOrder = _.without(session.formOrder, formVersionToRemove);
-                      session.formVersions.remove(formVersionToRemove);
-                    });
-                    session.save();
-                  })
-                })
-              );
+              // update any associated sessions to form in question
+              return Form.destroyLifecycle(formID, { study: studyID });
             })
             .then(function () {
               return res.ok(this.studyRecord);

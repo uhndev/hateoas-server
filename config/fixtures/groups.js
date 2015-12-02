@@ -51,6 +51,7 @@
         'readschedulesubjects',
         'readCollectionCentre',
         'readUserOwner',
+        'updateUserOwner',
         'readSystemForm',
         'readForm',
         'readTranslation',
@@ -67,7 +68,7 @@
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
-            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' },
             { prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
               { prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench' },
               { prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code' },
@@ -90,7 +91,7 @@
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
-            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview', 'subject', 'user' ],
@@ -106,7 +107,7 @@
           tabview: [
             { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' },
-            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview', 'subject' ],
@@ -122,7 +123,7 @@
           tabview: [
             { prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group' },
             { prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user' },
-            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal', href: '/subjectportal', icon: 'fa-arrow-right' }
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
           ],
           subview: {
             'study': [ 'name', 'overview' ],
