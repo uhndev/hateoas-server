@@ -31,13 +31,8 @@ module.exports = {
    */
 
   beforeCreate: function (values,cb) {
-    //init blank displayName
-    display = '';
-
     //for each field listed in default, check values for those fields and add to display
-    _.forEach(values.displayName.split(' '), function (field) {
-      display += values[field] ? values[field] + ' ' : '';
-    });
+    display= _.values(_.pick(values, values.displayName.split(' '))).join(' ');
 
     //if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
@@ -55,13 +50,8 @@ module.exports = {
    */
 
   beforeUpdate: function (values,cb) {
-    //init blank displayName
-    display = '';
-
     //for each field listed in default, check values for those fields and add to display
-    _.forEach(values.displayName.split(' '), function (field) {
-      display += values[field] ? values[field] + ' ' : '';
-    });
+    display= _.values(_.pick(values, values.displayName.split(' '))).join(' ');
 
     //if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
