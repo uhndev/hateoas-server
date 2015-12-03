@@ -6,6 +6,8 @@
  * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/Model.js
  */
 
+
+
 (function() {
 
   var _ = require('lodash');

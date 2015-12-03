@@ -7,17 +7,20 @@
 */
 
 (function() {
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
-    schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
 
     attributes: {
+
       /**
        * study
        * @description Associated study pertinent to this AnswerSet
        * @type {Association} one-way association to Study model
        */
+
       study: {
         model: 'study',
         required: true
@@ -88,6 +91,7 @@
        *              that if it is not null, we do not include this entity in our response.
        * @type {Date} Date of expiry
        */
+
       expiredAt: {
         type: 'datetime',
         defaultsTo: null,
@@ -112,6 +116,6 @@
         cb();
       });
     }
-  };
+  });
 })();
 

@@ -7,13 +7,16 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/User.js
  */
 
+
 (function() {
+  var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/User');
+  var _user = require('sails-permissions/api/models/User');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
+  _.merge(exports, _user);
   _.merge(exports, {
 
     schema: true,

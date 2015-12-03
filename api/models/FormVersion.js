@@ -5,11 +5,15 @@
  * @description Model representation of a version of a form
  * @docs        http://sailsjs.org/#!documentation/models
  */
+
+
 (function() {
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
     attributes: {
 
@@ -140,6 +144,6 @@
         })
     }
 
-  };
+  });
 
 }());
