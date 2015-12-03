@@ -7,12 +7,14 @@
 */
 
 (function() {
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
-    schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
 
     attributes: {
+
       /**
        * study
        * @description Associated study pertinent to this AnswerSet
@@ -112,6 +114,6 @@
         cb();
       });
     }
-  };
+  });
 })();
 
