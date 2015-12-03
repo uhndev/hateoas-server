@@ -6,7 +6,7 @@
  */
 
 (function() {
-  var Promise = require('q');
+  var Promise = require('bluebird');
 
   module.exports = {
 
@@ -64,18 +64,18 @@
               })
               .then(function (formSessionsToUpdate) {
                 // update previous session with answersets by leaving previous form version in formOrder
-                return Promise.all(
-                  _.map(formSessionsToUpdate, function (formsession) {
-                    return Session.findOne(formsession.session).then(function (sessionToUpdate) {
+                return Session.find({ id: _.pluck(formSessionsToUpdate, 'session') }).then(function (sessionsToUpdate) {
+                  return Promise.all(
+                    _.map(sessionsToUpdate, function (sessionToUpdate) {
                       // remove previous FormVersion and replace with newly created FormVersion
                       sessionToUpdate.formVersions.remove(this.latestFormVersion.id);
                       sessionToUpdate.formVersions.add(this.createdFormVersion.id);
                       // update each session.formOrder
                       sessionToUpdate.formOrder[sessionToUpdate.formOrder.indexOf(this.latestFormVersion.id)] = this.createdFormVersion.id;
                       return sessionToUpdate.save();
-                    });
-                  })
-                );
+                    })
+                  );
+                });
               })
               .then(function () {
                 res.created(this.createdFormVersion);

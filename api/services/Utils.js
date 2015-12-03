@@ -1,6 +1,6 @@
 module.exports = function() {
 
-var Q = require('q');
+var Q = require('bluebird');
 
 var self = {
   /** Start of "String" Utils **/

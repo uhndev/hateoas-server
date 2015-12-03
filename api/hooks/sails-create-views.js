@@ -15,7 +15,7 @@
   var fs = require('fs');
   var pgp = require('pg-promise')();
   var _ = require('lodash');
-  var Promise = require('q');
+  var Promise = require('bluebird');
 
   module.exports = function (sails) {
     var env = sails.config.environment;

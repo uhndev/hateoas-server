@@ -10,7 +10,7 @@
 
 (function () {
   var moment = require('moment');
-  var Promise = require('q');
+  var Promise = require('bluebird');
   var HateoasService = require('../services/HateoasService.js');
 
   module.exports = {

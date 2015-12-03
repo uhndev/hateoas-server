@@ -7,7 +7,7 @@
 */
 
 (function() {
-  var Promise = require('q');
+  var Promise = require('bluebird');
   var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
