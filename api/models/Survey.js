@@ -8,8 +8,8 @@
  */
 
 (function () {
+  var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
-  var Promise = require('q');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);

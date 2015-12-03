@@ -8,8 +8,8 @@
 
 
 (function() {
+  var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
-  var Promise = require('q');
   var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');

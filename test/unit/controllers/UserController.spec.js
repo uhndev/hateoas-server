@@ -9,7 +9,7 @@
  */
 
 var UserController = require('../../../api/controllers/UserController');
-var Promise = require('q');
+var Promise = require('bluebird');
 
 describe('The User Controller', function () {
 

@@ -6,9 +6,9 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 (function() {
+  var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
-  var Promise = require('q');
   var _ = require('lodash');
 
   _.merge(exports, _super);
@@ -213,4 +213,4 @@
 
   });
 
-}());
+})();

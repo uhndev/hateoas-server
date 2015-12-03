@@ -20,7 +20,6 @@
        * @description Associated study pertinent to this AnswerSet
        * @type {Association} one-way association to Study model
        */
-
       study: {
         model: 'study',
         required: true
@@ -91,7 +90,6 @@
        *              that if it is not null, we do not include this entity in our response.
        * @type {Date} Date of expiry
        */
-
       expiredAt: {
         type: 'datetime',
         defaultsTo: null,

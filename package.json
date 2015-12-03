@@ -8,6 +8,7 @@
     "async": "^1.4.2",
     "barrels": "^1.4.1",
     "bcryptjs": "^2.1.0",
+    "bluebird": "^3.0.6",
     "bower": "^1.4.1",
     "connect-mongo": "^0.8.0",
     "connect-redis": "~1.4.5",
@@ -34,7 +35,7 @@
   },
   "scripts": {
     "start": "node app.js",
-		"watch": "forever -w app.js",
+    "watch": "forever -w app.js",
     "debug": "node debug app.js"
   },
   "main": "app.js",

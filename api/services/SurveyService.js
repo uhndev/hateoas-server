@@ -7,7 +7,7 @@
   var pgp = require('pg-promise')();
   var _ = require('lodash');
   var moment = require('moment');
-  var Promise = require('q');
+  var Promise = require('bluebird');
 
   module.exports = {
 

@@ -1,5 +1,5 @@
 (function() {
-  var Promise = require('q');
+  var Promise = require('bluebird');
   /**
    * Create default Role permissions
    */
