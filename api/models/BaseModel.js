@@ -4,10 +4,11 @@
  * @description the basemodel to be inherited by all other models
  */
 
-//array of field names to concatenate into display names, override in child models to pick unique fields for displayName
-displayFields= ['name','prefix','firstname','lastname'];
-
 module.exports = {
+
+  //array of field names to concatenate into display names, override in child models to pick unique fields for displayName
+  displayFields: ['name','prefix','firstname','lastname'],
+
   attributes: {
     /**
      * displayName
@@ -33,7 +34,7 @@ module.exports = {
   beforeCreate: function (values, cb) {
 
     //for each field listed in default, check values for those fields and add to display
-    display = _.values(_.pick(values, displayFields)).join(' ');
+    display = _.values(_.pick(values, this.displayFields)).join(' ');
 
     //if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
@@ -49,10 +50,11 @@ module.exports = {
    * @param  {Object}   values  given subject enrollment object for creation
    * @param  {Function} cb      callback function on completion
    */
+
   beforeUpdate: function (values, cb) {
 
     //for each field listed in default, check values for those fields and add to display
-    display = _.values(_.pick(values, displayFields)).join(' ');
+    display = _.values(_.pick(values, this.displayFields)).join(' ');
 
     //if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
