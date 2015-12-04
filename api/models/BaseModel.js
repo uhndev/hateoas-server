@@ -4,6 +4,9 @@
  * @description the basemodel to be inherited by all other models
  */
 
+//array of field names to concatenate into display names, override in child models to pick unique fields for displayName
+displayFields=','['name','prefix','firstname','lastname'];
+
 module.exports = {
   attributes: {
     /**
@@ -28,8 +31,6 @@ module.exports = {
    */
 
   beforeCreate: function (values, cb) {
-    //array of field names to concatenate into display names
-    displayFields=','['name','prefix','firstname','lastname'];
 
     //for each field listed in default, check values for those fields and add to display
     display = _.values(_.pick(values, displayFields)).join(' ');
@@ -49,8 +50,6 @@ module.exports = {
    * @param  {Function} cb      callback function on completion
    */
   beforeUpdate: function (values, cb) {
-    //array of field names to concatenate into display names
-    displayFields=','['name','prefix','firstname','lastname'];
 
     //for each field listed in default, check values for those fields and add to display
     display = _.values(_.pick(values, displayFields)).join(' ');
