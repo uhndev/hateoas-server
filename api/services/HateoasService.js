@@ -57,24 +57,24 @@
         if (_.has(models, modelName)
              && _.has(models[modelName], 'definition')) {
           var schema = Utils.Model.removeSystemFields(
-                         models[modelName].definition);
+                         models[modelName]._attributes);
 
-          attributes = _.map(schema, function(definition, field) {
+          attributes = _.map(schema, function(_attributes, field) {
             var template = {
               'name': field,
-              'type': definition.model || definition.type,
+              'type': _attributes.model || _attributes.type,
               'prompt': Utils.String.camelCaseToText(field),
               'value': '',
-              'required': definition.required || false
+              'required': _attributes.required || false
             };
 
-            if (definition.enum) {
-              template.value = definition.enum;
+            if (_attributes.enum) {
+              template.value = _attributes.enum;
             }
 
-            if (definition.model && (definition.model != previousModel)) {
+            if (_attributes.model && (_attributes.model != previousModel)) {
               template = _.merge(template,
-                makeTemplate(definition.model,modelName));
+                makeTemplate(_attributes.model,modelName));
             }
 
             return template;
