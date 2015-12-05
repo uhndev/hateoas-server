@@ -5,8 +5,6 @@
  * @description Model representation of a version of a form
  * @docs        http://sailsjs.org/#!documentation/models
  */
-
-
 (function() {
   var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');

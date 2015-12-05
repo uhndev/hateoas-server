@@ -1,5 +1,5 @@
 (function () {
-  var Promise = require('q');
+  var Promise = require('bluebird');
   /**
    * Maps crud x dadosModel permission creations for each default role
    * @param  {Array}  roles

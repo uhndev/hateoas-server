@@ -6,8 +6,6 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
-
-
 (function() {
   var _super = require('./BaseModel.js');
 

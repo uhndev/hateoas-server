@@ -13,7 +13,7 @@
 (function () {
   var _super = require('./BaseModel.js');
   var moment = require('moment');
-  var Promise = require('q');
+  var Promise = require('bluebird');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
