@@ -64,7 +64,8 @@
               'name': field,
               'type': definition.model || definition.type,
               'prompt': Utils.String.camelCaseToText(field),
-              'value': ''
+              'value': '',
+              'required': definition.required || false
             };
 
             if (definition.enum) {

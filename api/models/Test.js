@@ -12,18 +12,24 @@
   var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
-  var _role = require('sails-permissions/api/models/Role');
 
   _.merge(exports, _super);
-  _.merge(exports, _role);
   _.merge(exports, {
 
     // Extend with custom logic here by adding additional fields, methods, etc.
 
     attributes: {
-      groups: {
-        collection: 'group',
-        via: 'roles'
+      name: {
+        type:'string'
+      },
+      reqField: {
+        type: 'string',
+        required:true
+      },
+
+      notReqField: {
+        type: 'string',
+        required: false
       }
     }
   });
