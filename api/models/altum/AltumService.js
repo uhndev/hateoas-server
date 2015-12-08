@@ -37,7 +37,6 @@
       via: 'altumService'
     },
 
-
     /**
      * available
      * @description an AvailableService's payorService
