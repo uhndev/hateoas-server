@@ -11,7 +11,7 @@ class User:
     self.firstname = fake.first_name()
     self.lastname = fake.last_name()
     self.dob = fake.iso8601()
-    self.password = self.firstname + self.lastname + "123"
+    self.password = "Password123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])
     self.group = 2
@@ -48,7 +48,7 @@ class SubjectEnrollment:
     self.firstname = fake.first_name()
     self.lastname = fake.last_name()
     self.dob = fake.iso8601()
-    self.password = self.firstname + self.lastname + "123"
+    self.password = "Password123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])
 

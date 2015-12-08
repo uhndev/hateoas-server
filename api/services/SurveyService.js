@@ -7,7 +7,7 @@
   var pgp = require('pg-promise')();
   var _ = require('lodash');
   var moment = require('moment');
-  var Promise = require('q');
+  var Promise = require('bluebird');
 
   module.exports = {
 
@@ -22,15 +22,14 @@
       if (survey.lastPublished !== null && _.isNull(survey.expiredAt)) {
         // in that case, stamp out next survey version
         // create new survey version with updated revision number
-        return SurveyVersion.find({ survey: survey.id })
-          .sort('revision DESC')
-          .then(function (latestSurveyVersions) {
+        return SurveyVersion.getLatestSurveyVersion(survey.id)
+          .then(function (latestSurveyVersion) {
             // create new SurveyVersion iff we've added or removed a session
             var currentSessions = _.pluck(survey.sessions, 'id');
-            var previousSessions = _.first(latestSurveyVersions).sessions;
+            var previousSessions = latestSurveyVersion.sessions;
             if (_.difference(currentSessions, previousSessions).length > 0) {
               var newSurveyVersion = {
-                revision: _.first(latestSurveyVersions).revision + 1,
+                revision: latestSurveyVersion.revision + 1,
                 survey: survey.id,
                 sessions: _.pluck(survey.sessions, 'id')
               };

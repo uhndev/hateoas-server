@@ -59,6 +59,8 @@ module.exports.routes = {
   'get /api/study/:name/survey'           : 'SurveyController.findByStudyName',
   'get /api/study/:name/collectioncentre' : 'CollectionCentreController.findByStudyName',
 
+  'delete /api/study/:id/forms/:formID'   : 'StudyController.removeFormFromStudy',
+
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
@@ -69,5 +71,10 @@ module.exports.routes = {
   ****************************************************************************/
   'put /api/survey/:id/addSessions'       : 'SurveyController.addSessions',
   'put /api/survey/:id/updateSessions'    : 'SurveyController.updateSessions',
-  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions'
+  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions',
+
+  /***************************************************************************
+  * Study Routes                                                             *
+  ***************************************************************************/
+  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
 };

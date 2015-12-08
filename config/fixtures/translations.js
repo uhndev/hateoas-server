@@ -1,5 +1,5 @@
 (function () {
-  var Promise = require('q');
+  var Promise = require('bluebird');
   /**
    * Creates default Translations
    *

@@ -79,9 +79,29 @@
           "OPEN_BTN": "View Survey",
           "NEW_BTN": "Add Survey",
           "EDIT_BTN": "Edit Survey",
-          "ARCHIVE_BTN": "Archive"
+          "ARCHIVE_BTN": "Archive",
+          "SAVE_BTN": "Save",
+          "CANCEL_BTN": "Cancel"
+        }
+      },
+      "COLLECTION_CENTRE": {
+        "OVERVIEW": {
+          "TITLE": "Study Overview: {{name}}",
+          "SUBJECTS": {
+            "TITLE": "Subjects"
+          },
+          "COORDINATORS": {
+            "TITLE": "Coordinators"
+          }
         }
       }
+    },
+    "SUBJECT_PORTAL": {
+      "PROFILE_TAB_TITLE": "My Profile",
+      "SURVEYS_TAB_TITLE": "Upcoming Surveys",
+      "PROFILE_TITLE": "User Profile",
+      "STUDIES_TITLE": "List of enrolled studies",
+      "SCHEDULE_TITLE": "List of upcoming surveys"
     }
   },
   "COMMON": {
@@ -172,6 +192,25 @@
         "IDENTITY": "Survey",
         "NAME": "Survey Name",
         "COMPLETED_BY": "Completed By"
+      },
+      "SUBJECT_SCHEDULE": {
+        "AVAILABLE_FROM": "Available From",
+        "STATUS": "Status",
+        "AVAILABLE_TO": "Available To",
+        "IDENTITY": "Subject Schedule"
+      },
+      "SESSION": {
+        "IDENTITY": "Session",
+        "NAME": "Session Name",
+        "TIMEPOINT": "Timepoint",
+        "AVAILABLE_FROM": "Available From",
+        "AVAILABLE_TO": "Available To",
+        "TYPE": "Type",
+        "TYPE_ENUM": {
+          "SCHEDULED": "Scheduled",
+          "RECURRING": "Recurring",
+          "NON_SCHEDULED": "Non-Scheduled"
+        }
       }
     }
   }

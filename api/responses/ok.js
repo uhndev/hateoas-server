@@ -11,7 +11,7 @@
  *          - pass string to render specified view
  */
 module.exports = function sendOK (data, options) {
-  var Q = require('q');
+  var Promise = require('bluebird');
   var url = require('url');
 
   // Get access to `req`, `res`, & `sails`
@@ -42,12 +42,9 @@ module.exports = function sendOK (data, options) {
           filterQuery.where = JSON.parse(query.where);
         }
 
-        // for models with the method findByStudyName, hateoas total should be filtered by study
-        if (req.options.action === 'findbystudyname') {
-          var studyName = req.param('name');
-          promise = model.findByStudyName(studyName, req.user, filterQuery).then(function (studyItems) {
-            return studyItems[1].length;
-          });
+        // when options.filteredTotal is passed to res.ok, use the filtered total instead
+        if (options && _.has(options, 'filteredTotal')) {
+          promise = options.filteredTotal;
         }
         // otherwise, we can just return the model count total
         else {
@@ -56,7 +53,11 @@ module.exports = function sendOK (data, options) {
           }
           // we do not want to include subjects' users in our total count
           if (model.identity === 'user') {
-            filterQuery.where.group = {"!": subjectGroup.id};
+            if (req.user.group == subjectGroup.id) { // if subject, return self count
+              filterQuery.where.id = req.user.id;
+            } else { // otherwise, omit subjects from count
+              filterQuery.where.group = {"!": subjectGroup.id};
+            }
           }
 
           promise = model.count(filterQuery);
@@ -65,7 +66,7 @@ module.exports = function sendOK (data, options) {
         return promise;
       });
     }
-    return Q.when(0);
+    return Promise.resolve(0);
   }
 
   /**
@@ -76,35 +77,27 @@ module.exports = function sendOK (data, options) {
    * @return {promise}
    */
   function fetchPermissions(model, user) {
-    var promises = [];
     // find for current model/user, which CRUD operations are permitted
-    _.map(['GET','POST','PUT','DELETE'], function(method) {
-      var options = {
-        method: method,
-        model: model,
-        user: user
-      }
-      promises.push(PermissionService.findModelPermissions(options)
-        .then(function (permissions) {
-          return permissions;
-        })
-      );
-    });
-
-    var permissions = [];
-    var promise = Q.allSettled(promises).then(function (results) {
-      results.forEach(function(result) {
-        if (result.value.length > 0)
-          permissions.push(result.value[0].action);
-      });
-    }).then(function() {
-      permissions = permissions.join(',');
-      return permissions;
-    }).catch(function (err) {
+    return Promise.all(
+      _.map(['GET','POST','PUT','DELETE'], function(method) {
+        return PermissionService.findModelPermissions({
+          method: method,
+          model: model,
+          user: user
+        });
+      })
+    ).then(function (permissions) {
+      return _.reduce(permissions, function (result, permission) {
+        var perm = _.first(permission);
+        if (!_.isUndefined(perm) && _.has(perm, 'action')) {
+          return result.concat(_.first(permission).action);
+        }
+        return result;
+      }, []).join(',');
+    })
+    .catch(function (err) {
       return err;
     });
-
-    return promise;
   }
 
   function sanitize(data) {

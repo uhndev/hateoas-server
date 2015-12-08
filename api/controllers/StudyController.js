@@ -8,7 +8,7 @@
 
 (function() {
   var _ = require('lodash');
-  var Promise = require('q');
+  var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   var EnrollmentBase = require('./Base/EnrollmentBaseController');
@@ -158,10 +158,58 @@
         }
         res.ok(_.first(study));
       });
-    }
+    },
 
+    /**
+     * removeFormFromStudy
+     * @description Overrides default blueprint behaviour of removing form from study.  Additionally
+     *              will check and update any sessions which contain forms affected by this removal
+     *              as long as no AnswerSets rely on those forms.
+     * @param req
+     * @param res
+     */
+    removeFormFromStudy: function(req, res) {
+      var studyID = req.param('id');    // study primary key to remove form from
+      var formID = req.param('formID'); // form primary key to remove
+
+      FormVersion.hasAnswerSets(formID).then(function (hasAnswerSets) {
+        if (hasAnswerSets) {
+          return res.badRequest({
+            title: 'Study Error',
+            code: 400,
+            message: 'Unable to remove form from study, there are answers associated to the requested form.'
+          });
+        } else {
+          Study.findOne(studyID)
+            .populate('forms')
+            .then(function (studyRecord) {
+              if (!studyRecord) return res.notFound();
+              if (!studyRecord.forms) return res.notFound();
+
+              studyRecord.forms.remove(formID);
+              return studyRecord.save();
+            })
+            .then(function (studyRecord) {
+              this.studyRecord = studyRecord;
+              if (sails.hooks.pubsub) {
+                Study.publishRemove(studyRecord.id, 'forms', formID, !sails.config.blueprints.mirror && req);
+              }
+              // update any associated sessions to form in question
+              return Form.destroyLifecycle(formID, { study: studyID });
+            })
+            .then(function () {
+              return res.ok(this.studyRecord);
+            })
+            .catch(function (err) {
+              return res.serverError({
+                title: 'Study Error',
+                code: err.status || 500,
+                message: 'An error occurred when removing form ' + formID + ' from study ' + studyID + ' for user: ' + req.user.username + '\n' + err.details
+              });
+            });
+        }
+      });
+    }
   });
 
 })();
-
-

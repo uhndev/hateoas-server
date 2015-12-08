@@ -9,7 +9,7 @@
  */
 
 var UserController = require('../../../api/controllers/UserController');
-var Promise = require('q');
+var Promise = require('bluebird');
 
 describe('The User Controller', function () {
 
@@ -143,7 +143,7 @@ describe('The User Controller', function () {
 						globals.users.coordinator2 = collection.items.id;
 						collection.items.username.should.equal('coordinator2');
 						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
-							user.roles.length.should.equal(14);
+							user.roles.length.should.equal(16);
 							done(err);
 						});
 					});
@@ -529,14 +529,12 @@ describe('The User Controller', function () {
 		});
 
 		describe('update()', function () {
-			it('should not be able to update themselves', function (done) {
-				request.put('/api/user/' + globals.users.coordinator2)
+			it('should be able to update themselves', function (done) {
+				request.put('/api/user/' + globals.users.subjectUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({ email: 'subjectupdated@example.com' })
-					.expect(400)
+					.expect(200)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
@@ -548,7 +546,7 @@ describe('The User Controller', function () {
 					.expect(400)
 					.end(function (err, res) {
 						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
+						collection.error.should.equal('Cannot perform action [update] on foreign object');
 						done(err);
 					});
 			});

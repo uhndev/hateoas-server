@@ -98,6 +98,7 @@ module.exports.connections = {
       password: 'password',
       database: 'arm_dev'
   },
+
   dados_migrate: {
     adapter: 'sails-postgresql',
     host: 'localhost',

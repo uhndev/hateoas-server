@@ -6,10 +6,12 @@
  * @docs        http://sailsjs.org/#!documentation/models
  */
 (function() {
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
     attributes: {
 
@@ -106,8 +108,40 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * getLatestFormVersion
+     * @description Convenience method to return latest form version given an options object
+     * @param form object with id, or formID
+     * @returns {Object}
+     */
+    getLatestFormVersion: function(form) {
+      return FormVersion.find({ form: (form.id || form)})
+        .sort('revision DESC')
+        .then(function (latestFormVersions) {
+          return _.first(latestFormVersions);
+        });
+    },
+
+    /**
+     * hasAnswerSets
+     * @description Convenience method to return true if given form has AnswerSets associated with it.
+     * @param form object with id, or formID
+     * @returns {Boolean}
+       */
+    hasAnswerSets: function(form) {
+      return FormVersion.find({ form: (form.id || form) })
+        .sort('revision DESC')
+        .then(function (latestFormVersions) {
+          this.latestFormVersion = _.first(latestFormVersions);
+          return AnswerSet.count({formVersion: _.pluck(latestFormVersions, 'id')});
+        })
+        .then(function (numAnswers) {
+          return (numAnswers > 0);
+        })
     }
 
-  };
+  });
 
 }());

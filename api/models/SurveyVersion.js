@@ -6,10 +6,13 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
+
 (function () {
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
     attributes: {
 
@@ -81,8 +84,21 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * getLatestSurveyVersion
+     * @description Convenience method to return latest survey version given an options object
+     * @param survey object with id, or surveyID
+     */
+    getLatestSurveyVersion: function(survey) {
+      return SurveyVersion.find({ survey: (survey.id || survey)})
+        .sort('revision DESC')
+        .then(function (latestSurveyVersions) {
+          return _.first(latestSurveyVersions);
+        });
     }
-  };
+  });
 })();
 
 

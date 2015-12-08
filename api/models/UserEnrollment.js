@@ -6,11 +6,14 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
+
 (function() {
+  var _super = require('./BaseModel.js');
   var _ = require('lodash');
   var UserModel = require('./User.js');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
     attributes: {
 
@@ -90,7 +93,7 @@
             return [false, _.filter(studyUsers, function (user) {
               // return users whose enrollments has at least one with proposed user
               return (_.some(_.pluck(this.user.enrollments, 'id'), function (currEnrollment) {
-                return _.includes(user.userEnrollments, currEnrollment);
+                return _.includes(user.userEnrollments, currEnrollment) || user.userEnrollments == currEnrollment;
               }));
             })];
           } else {
@@ -102,7 +105,7 @@
         });
     }
 
-  };
+  });
 
 })();
 

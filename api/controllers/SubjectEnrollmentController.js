@@ -10,7 +10,7 @@
   var moment = require('moment'); // I need a minute
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var Promise = require('q');
+  var Promise = require('bluebird');
 
   var EnrollmentBase = require('./Base/EnrollmentBaseController');
   var StudyBase = require('./Base/StudyBaseController');

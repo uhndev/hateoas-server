@@ -79,9 +79,29 @@
           "OPEN_BTN": "Voir Enquête",
           "NEW_BTN": "Ajouter Enquête",
           "EDIT_BTN": "Modifier Enquête",
-          "ARCHIVE_BTN": "Archiver"
+          "ARCHIVE_BTN": "Archiver",
+          "SAVE_BTN": "Sauvegarder",
+          "CANCEL_BTN": "Annuler"
+        }
+      },
+      "COLLECTION_CENTRE": {
+        "OVERVIEW": {
+          "TITLE": "Aperçu de L'étude: {{name}}",
+          "SUBJECTS": {
+            "TITLE": "Sujets"
+          },
+          "COORDINATORS": {
+            "TITLE": "Coordonnateurs"
+          }
         }
       }
+    },
+    "SUBJECT_PORTAL": {
+      "PROFILE_TAB_TITLE": "Mon Profil",
+      "SURVEYS_TAB_TITLE": "Enquêtes à Venir",
+      "PROFILE_TITLE": "Profil de L'utilisateur",
+      "STUDIES_TITLE": "Liste des études inscrits",
+      "SCHEDULE_TITLE": "Liste des enquêtes à venir"
     }
   },
   "COMMON": {
@@ -172,6 +192,25 @@
         "IDENTITY": "Enquête",
         "NAME": "Nom de L'enquête",
         "COMPLETED_BY": "Terminé Par"
+      },
+      "SUBJECT_SCHEDULE": {
+        "AVAILABLE_FROM": "Disponible Depuis",
+        "AVAILABLE_TO": "Disponible Pour",
+        "STATUS": "Status",
+        "IDENTITY": "Horaire Sujet"
+      },
+      "SESSION": {
+        "IDENTITY": "Session",
+        "NAME": "Nom de Session",
+        "TIMEPOINT": "Temps Point",
+        "AVAILABLE_FROM": "Disponible Depuis",
+        "AVAILABLE_TO": "Disponible Pour",
+        "TYPE": "Type",
+        "TYPE_ENUM": {
+          "SCHEDULED": "Prévu",
+          "RECURRING": "Récurrent",
+          "NON_SCHEDULED": "Non Régulier"
+        }
       }
     }
   }

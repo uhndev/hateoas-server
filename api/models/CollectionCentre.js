@@ -7,10 +7,12 @@
  */
 
 (function() {
-
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     schema: true,
     attributes: {
       /**
@@ -94,7 +96,7 @@
         .then(function (user) {
           var whereOp = { studyName: studyName };
           if (user.group.level > 1) {
-            whereOp.userenrollment = _.pluck(user.enrollments, 'id');
+            whereOp.userenrollment = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'id');
           }
           return studycollectioncentre.find(query).where(whereOp);
         })
@@ -131,6 +133,6 @@
       }
     }
 
-  };
+  });
 
 }());

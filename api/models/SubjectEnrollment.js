@@ -6,13 +6,16 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
+
 (function() {
-  var Promise = require('q');
+  var Promise = require('bluebird');
+  var _super = require('./BaseModel.js');
   var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
     attributes: {
       /**
@@ -135,7 +138,7 @@
         .then(function (user) {
           var whereOp = { studyName: studyName };
           if (user.group.level > 1) {
-            whereOp.collectionCentre = _.pluck(user.enrollments, 'collectionCentre');
+            whereOp.collectionCentre = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'collectionCentre');
           }
           return studysubject.find(query).where(whereOp);
         })
@@ -232,7 +235,7 @@
       cb();
     }
 
-  };
+  });
 
 })();
 

@@ -6,12 +6,15 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 (function() {
-  var Promise = require('q');
+  var Promise = require('bluebird');
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
     schema: true,
+
     attributes: {
 
       /**
@@ -134,6 +137,41 @@
       }
     },
 
+	  /**
+     * destroyLifecycle
+     * @description Lifecycle method for archiving forms; affected form versions in any existing survey
+     *              sessions must be updated when removing a form from a study or archiving it altogether.
+     *              If any answersets exists, this function should not even be called.  See FormController.destroy
+     *              and StudyController.removeFormFromStudy for usages.
+     * @param formID    ID of form to archive
+     * @param criteria  Waterline find criteria for studysession when archiving form
+     * @returns {Promise}
+	   */
+    destroyLifecycle: function(formID, criteria) {
+      return Form.findOne(formID).populate('versions')
+        .then(function (form) { // find affected form versions to be removed
+          this.affectedFormVersionIds = _.pluck(form.versions, 'id');
+          return studysession.find(criteria).then(function (studySessions) {
+            return _.filter(studySessions, function (session) {
+              return _.xor(this.affectedFormVersionIds, _.flatten([session.formVersions])).length > 0;
+            });
+          });
+        })
+        .then(function (affectedStudySessions) { // perform updates on related sessions
+          return Promise.all(
+            _.map(affectedStudySessions, function (affectedSession) {
+              return Session.findOne(affectedSession.id).then(function (session) {
+                _.each(this.affectedFormVersionIds, function (formVersionToRemove) {
+                  session.formOrder = _.without(session.formOrder, formVersionToRemove);
+                  session.formVersions.remove(formVersionToRemove);
+                });
+                session.save();
+              })
+            })
+          );
+        });
+    },
+
     /**
      * findLatestFormVersions
      * @description Given a list of form objects, return a list of latest corresponding FormVersions
@@ -143,11 +181,7 @@
     findLatestFormVersions: function(forms) {
       return Promise.all(
         _.map(forms, function (form) {
-          return FormVersion.find({ form: form.id })
-            .sort('revision DESC')
-            .then(function (latestFormVersions) {
-              return _.first(latestFormVersions);
-            });
+          return FormVersion.getLatestFormVersion(form.id);
         })
       );
     },
@@ -177,6 +211,6 @@
         });
     }
 
-  };
+  });
 
-}());
+})();

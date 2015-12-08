@@ -1,5 +1,5 @@
-(function () {
-  var Promise = require('q');
+(function() {
+  var Promise = require('bluebird');
   /**
    * Create default Role permissions
    */
@@ -45,6 +45,7 @@
         'readStudy',
         'readCollectionCentre',
         'readUserOwner',
+        'updateUserOwner',
         'readSystemForm',
         'readForm',
         'readTranslation',

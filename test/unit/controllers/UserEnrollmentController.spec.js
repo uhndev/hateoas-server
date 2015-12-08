@@ -8,7 +8,7 @@
  */
 
 var UserEnrollmentController = require('../../../api/controllers/UserEnrollmentController');
-var Promise = require('q');
+var Promise = require('bluebird');
 
 describe('The UserEnrollment Controller', function () {
 

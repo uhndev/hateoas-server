@@ -6,12 +6,15 @@
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
+
 (function() {
+  var _super = require('./BaseModel.js');
 
 	var HateoasService = require('../services/HateoasService.js');
 
-	module.exports = {
-		schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
+    schema: true,
 		attributes: {
 			// system, user generated form
 			form_type: {
@@ -46,6 +49,6 @@
 			},
 			toJSON: HateoasService.makeToHATEOAS.call(this, module)
 		}
-	};
+	});
 
 }());
