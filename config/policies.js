@@ -16,12 +16,12 @@
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.policies.html
  */
 
-(function() {
+module.exports.policies = {
 
-  /**************************************************************************
-  * Default Sails Permissions Policies                                      *
-  ***************************************************************************/
-  var permissionsPolicies = [
+  /***************************************************************************
+   * Sails Permissions Policies                                              *
+   ***************************************************************************/
+  '*': [
     'basicAuth',
     'passport',
     'tokenAuth',
@@ -32,73 +32,46 @@
     'PermissionPolicy',
     'RolePolicy',
     'CriteriaPolicy'
-  ];
+  ],
 
-  module.exports.policies = {
+  AuthController: {
+    '*': [ 'passport' ]
+  },
 
-    /***************************************************************************
-     * Sails Permissions Policies                                              *
-     ***************************************************************************/
-    '*': permissionsPolicies,
+  /***************************************************************************
+   * Preventing Disastrous Changes                                           *
+   ***************************************************************************/
+  GroupController: {
+    'destroy': false
+  },
 
-    AuthController: {
-      '*': [ 'passport' ]
-    },
+  CriteriaController: {
+    '*': false
+  },
 
-    /***************************************************************************
-     * Enrollment findOne Policies                                             *
-     ***************************************************************************/
-    StudyController: {
-      'findOne': _.union(permissionsPolicies, ['EnrollmentPolicy'])
-    },
+  ModelController: {
+    'create': false,
+    'update': false,
+    'destroy': false
+  },
 
-    CollectionCentreController: {
-      'findOne': _.union(permissionsPolicies, ['EnrollmentPolicy'])
-    },
+  RoleController: {
+    'create': false,
+    'update': false,
+    'destroy': false
+  },
 
-    UserEnrollmentController: {
-      'findOne': _.union(permissionsPolicies, ['EnrollmentPolicy'])
-    },
+  PermissionController: {
+    'create': false,
+    'update': false,
+    'destroy': false
+  },
 
-    SubjectEnrollmentController: {
-      'findOne': _.union(permissionsPolicies, ['EnrollmentPolicy'])
-    },
+  /***************************************************************************
+   * Translation Policies                                                    *
+   ***************************************************************************/
+  TranslationController: {
+    'getLocale': true
+  }
 
-    /***************************************************************************
-     * Preventing Disastrous Changes                                           *
-     ***************************************************************************/
-    GroupController: {
-      'destroy': false
-    },
-
-    CriteriaController: {
-      '*': false
-    },
-
-    ModelController: {
-      'create': false,
-      'update': false,
-      'destroy': false
-    },
-
-    RoleController: {
-      'create': false,
-      'update': false,
-      'destroy': false
-    },
-
-    PermissionController: {
-      'create': false,
-      'update': false,
-      'destroy': false
-    },
-
-    /***************************************************************************
-     * Translation Policies                                                    *
-     ***************************************************************************/
-    TranslationController: {
-      'getLocale': true
-    }
-
-  };
-})();
+};

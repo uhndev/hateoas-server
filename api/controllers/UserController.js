@@ -10,7 +10,7 @@
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  _.merge(exports, require('sails-permissions/api/controllers/UserController'));
+  _.merge(exports, require('sails-auth/dist/api/controllers/UserController'));
   _.merge(exports, {
 
     /**
