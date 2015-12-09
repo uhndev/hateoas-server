@@ -7,7 +7,7 @@
 module.exports = {
 
   //array of field names to concatenate into display names, override in child models to pick unique fields for displayName
-  displayFields: [ 'name' ],
+  displayFields: [ 'name', 'prefix', 'firstname', 'lastname' ],
 
   attributes: {
     /**
