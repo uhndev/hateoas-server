@@ -3,7 +3,7 @@
 (function() {
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/services/PermissionService');
+  var _super = require('sails-permissions/dist/api/services/PermissionService');
 
   /** @namespace */
   function PermissionService () { }

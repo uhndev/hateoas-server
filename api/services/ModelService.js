@@ -6,7 +6,7 @@
 (function () {
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/services/ModelService');
+  var _super = require('sails-permissions/dist/api/services/ModelService');
 
   function ModelService() {
   }

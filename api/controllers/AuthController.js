@@ -13,7 +13,7 @@
 
   var _ = require('lodash');
 
-  _.merge(module.exports, require('sails-permissions/api/controllers/AuthController'));
+  _.merge(module.exports, require('sails-auth/dist/api/controllers/AuthController'));
   _.merge(module.exports, {
 
     /**

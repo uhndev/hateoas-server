@@ -458,10 +458,8 @@ describe('The Study Controller', function () {
 						administrator: globals.users.coordinatorUserId,
 						pi: globals.users.coordinatorUserId
 					})
-					.expect(400)
+					.expect(403)
 					.end(function(err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User coordinator@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -474,10 +472,8 @@ describe('The Study Controller', function () {
 					.send({
 						name: 'TEST'
 					})
-					.expect(400)
+					.expect(403)
 					.end(function(err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User coordinator@example.com is not permitted to PUT ');
 						done(err);
 					});
 			})
@@ -549,10 +545,8 @@ describe('The Study Controller', function () {
 						administrator: globals.users.coordinatorUserId,
 						pi: globals.users.coordinatorUserId
 					})
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -563,10 +557,8 @@ describe('The Study Controller', function () {
 				request.put('/api/study/' + study2)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({ reb: 2000 })
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
