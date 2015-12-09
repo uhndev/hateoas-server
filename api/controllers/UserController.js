@@ -18,25 +18,32 @@
      * @description finds and returns all users with populated roles associations
      */
     find: function (req, res) {
-      Group.findOneByName('subject').then(function (subjectGroup) {
-        var query = ModelService.filterExpiredRecords('user');
-        // if non-subject user, omit subject users from search
-        if (req.user.group != subjectGroup.id) {
-          query.where(_.merge(actionUtil.parseCriteria(req), {group: {'!': subjectGroup.id}}));
-        }
-        query
-          .where( actionUtil.parseCriteria(req) )
-          .limit( actionUtil.parseLimit(req) )
-          .skip( actionUtil.parseSkip(req) )
-          .sort( actionUtil.parseSort(req) );
-        query.populate('roles');
-        query.exec(function found(err, users) {
-          if (err) {
-            return res.serverError(err);
-          }
-          res.ok(users);
+      var whereQuery = actionUtil.parseCriteria(req);
+      // admins have every permission so omit subject users from search
+      if (req.user.group == 'admin') {
+        whereQuery = _.merge(actionUtil.parseCriteria(req), {group: {'!': 'subject'}});
+      }
+
+      ModelService.filterExpiredRecords('user').where( whereQuery )
+        .then(function (totalUsers) {
+          var query = ModelService.filterExpiredRecords('user');
+          query
+            .where( whereQuery )
+            .limit( actionUtil.parseLimit(req) )
+            .skip( actionUtil.parseSkip(req) )
+            .sort( actionUtil.parseSort(req) );
+          query.populate('roles');
+          query.exec(function found(err, users) {
+            if (err) {
+              return res.serverError(err);
+            }
+            if (req.user.group == 'admin') {
+              res.ok(users, { filteredTotal: totalUsers.length });
+            } else {
+              res.ok(users);
+            }
+          });
         });
-      });
     },
 
     /**
@@ -82,62 +89,32 @@
      * @description Overrides sails-auth's UserController.create to include role
      */
     create: function (req, res, next) {
-      var password = req.param('password'),
-          groupID = req.param('group');
-      var options = _.pick(_.pick(req.body,
-        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      var userOptions = _.pick(_.pick(req.body,
+        'username', 'email', 'password'
+      ), _.identity);
+      var personInfo = _.pick(_.pick(req.body,
+        'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
 
-      Group.findOne(groupID).exec(function (err, group) {
-        if (err || !group) {
-          res.badRequest({
-            title: 'User Error',
-            code: 400,
-            message: 'Group ' + groupID + ' is not a valid group'
-          });
-        } else {
-          User.create(options).exec(function (uerr, user) {
-            if (uerr || !user) {
-              return res.badRequest({
-                title: 'User Error',
-                code: uerr.status || 400,
-                message: uerr.details || 'Error creating user'
+      User
+        .register(userOptions)
+        .then(function (createdUser) {
+          return User.update({id: createdUser.id}, personInfo);
+        })
+        .then(function (updatedUser) {
+          return PermissionService.setUserRoles(_.first(updatedUser))
+            .then(function (user) {
+              res.ok(user);
+            })
+            .catch(function (err) {
+              user.destroy(function (destroyErr) {
+                next(destroyErr || err);
               });
-            } else {
-              if (_.isEmpty(password)) {
-                user.destroy(function (destroyErr) {
-                  return res.badRequest({
-                    title: 'User Error',
-                    code: 400,
-                    message: 'Password cannot be empty'
-                  });
-                });
-              } else {
-                Passport.create({
-                  protocol : 'local',
-                  password : password,
-                  user     : user.id
-                }, function (err, passport) {
-                  if (err) {
-                    user.destroy(function (destroyErr) {
-                      next(destroyErr || err);
-                    });
-                  }
-                  PermissionService.setUserRoles(user)
-                    .then(function (user) {
-                      res.ok(user);
-                    })
-                    .catch(function (err) {
-                      user.destroy(function (destroyErr) {
-                        next(destroyErr || err);
-                      });
-                    });
-                });
-              }
-            }
-          });
-        }
-      });
+            });
+        })
+        .catch(function (err) {
+          next(err);
+        });
     },
 
     /**

@@ -10,7 +10,7 @@
   'use strict';
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/models/Permission');
+  var _super = require('sails-permissions/dist/api/models/Permission');
 
   _.merge(exports, _super);
   _.merge(exports, {

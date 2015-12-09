@@ -86,22 +86,16 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByStudyName: function(studyName, currUser, options, cb) {
+    findByStudyName: function(studyName, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      return User.findOne(currUser.id)
-        .populate('enrollments')
-        .populate('group')
-        .then(function (user) {
-          var whereOp = { studyName: studyName };
-          if (user.group.level > 1) {
-            whereOp.userenrollment = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'id');
-          }
-          return studycollectioncentre.find(query).where(whereOp);
+      return Study.findOneByName(studyName)
+        .then(function (study) {
+          return CollectionCentre.find(query).where({ study: study.id });
         })
         .then(function (centres) {
-          return [false, _.unique(centres, 'id')];
+          return [false, centres];
         })
         .catch(function (err) {
           return [err, null];

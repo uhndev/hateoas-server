@@ -217,7 +217,7 @@ describe('The CollectionCentre Controller', function () {
       });
 
       afterEach(function (done) {
-        UserEnrollment.destroy(ueID).exec(function (err, destroyed) {
+        UserEnrollment.update(ueID).exec(function (err, destroyed) {
           done(err);
         });
       });

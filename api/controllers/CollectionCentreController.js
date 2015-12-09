@@ -17,46 +17,6 @@
   _.merge(exports, {
 
     /**
-     * find
-     * @description Finds and returns collection centres by enrollment
-     */
-    find: function (req, res, next) {
-      var query = ModelService.filterExpiredRecords('collectioncentre')
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-
-      query.exec(function found(err, centres) {
-        if (err) {
-          return res.serverError({
-            title: 'CollectionCentre Error',
-            code: err.status || 500,
-            message: err.details
-          });
-        }
-
-        var filterCentres = function(user) {
-          return res.ok(_.filter(centres, function (centre) {
-            return _.includes(_.pluck(_.filter(user.enrollments, { expiredAt: null }), 'collectionCentre'), centre.id);
-          }));
-        };
-
-        Group.findOne(req.user.group).then(function (group) {
-          switch(group.level) {
-            case 1: // allow all as admin
-              return res.ok(centres);
-            case 2: // find specific user's access
-              return User.findOne(req.user.id).populate('enrollments').then(filterCentres);
-            case 3: // find subject's collection centre access
-              return Subject.findOne({user: req.user.id}).populate('enrollments').then(filterCentres);
-            default: return res.notFound();
-          }
-        });
-      });
-    },
-
-    /**
      * findOne
      * @description Finds one collection centre given an id
      *              and populates enrolled coordinators and subjects
@@ -76,21 +36,16 @@
             PermissionService.findEnrollments(req.user, centre)
               .then(function (enrollments) {
                 // if no enrollments found for coordinator/subject, DENY
-                if (this.group.level > 1 && enrollments.length === 0) {
+                if (this.group.level > 1 && !enrollments) {
                   return res.forbidden({
                     title: 'Error',
                     code: 403,
                     message: "User "+req.user.email+" is not permitted to GET "
                   });
                 } else {
-                  var filteredUsers = { collectionCentre: centre.id },
-                      filteredSubjects = { collectionCentre: centre.id };
-                  if (this.group.level === 3 && enrollments) { // if user is a subject, only return their enrollments
-                    filteredSubjects.subjectenrollment = _.pluck(enrollments, 'id');
-                  }
                   return Promise.all([
-                    collectioncentreuser.find(filteredUsers),
-                    collectioncentresubject.find(filteredSubjects)
+                    collectioncentreuser.find({ collectionCentre: centre.id }),
+                    collectioncentresubject.find({ collectionCentre: centre.id })
                   ]).spread(function (users, subjects) {
                     centre.coordinators = users;
                     centre.subjects = subjects;

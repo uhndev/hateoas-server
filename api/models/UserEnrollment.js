@@ -66,6 +66,143 @@
     },
 
     /**
+     * beforeCreate
+     * @description Lifecycle method for ensuring valid user enrollments
+     */
+    beforeCreate: function (values, cb) {
+      // find and create or update user enrollment data
+      UserEnrollment
+        .findOne({
+          user: values.user,
+          collectionCentre: values.collectionCentre,
+          expiredAt: null
+        })
+        .then(function (enrollment) {
+          if (!enrollment) {
+            cb();
+          } else {
+            // otherwise we're trying to update an enrollment to something that already exists
+            cb({
+              title: 'Enrollment Error',
+              status: 400,
+              message: 'Unable to enroll user, user may already be registered at another collection centre.'
+            });
+          }
+        }).catch(cb);
+    },
+
+    /**
+     * beforeUpdate
+     * @description Lifecycle method for ensuring valid user enrollments
+     */
+    beforeUpdate: function (values, cb) {
+      // check if we're trying to update an enrollment to something that already exists
+      UserEnrollment.findOne({
+        collectionCentre: values.collectionCentre,
+        user: values.user,
+        expiredAt: null,
+        id: { '!': values.id }
+      })
+      .then(function (enrollment) {
+        if (!enrollment) { // if no existing enrollment found, update can be performed safely
+          cb();
+        } else { // otherwise, we are trying to register an invalid enrollment
+          cb({
+            title: 'Enrollment Error',
+            status: 400,
+            message: 'Unable to enroll user, user may already be registered at another collection centre.'
+          });
+        }
+      }).catch(cb);
+    },
+
+    afterCreate: function (values, cb) {
+      CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
+        if (err || !centre) {
+          cb(err);
+        } else {
+          User.findOne(values.user).then(function (user) {
+              this.user = user;
+              this.roleName = ['CollectionCentre', values.collectionCentre, 'Role'].join('');
+              return Role.findOne({ name: roleName });
+            })
+            .then(function (role) {
+              if (_.isUndefined(role)) {
+                console.log('**************************************');
+                console.log(role);
+                console.log(_.isUndefined(role));
+                console.log('**************************************');
+                return PermissionService.createRole({
+                  name: this.roleName,
+                  permissions: [
+                    {
+                      model: 'study',
+                      action: 'read',
+                      criteria: [
+                        { where: { id: centre.study } }
+                      ]
+                    },
+                    {
+                      model: 'collectioncentre',
+                      action: 'read',
+                      criteria: [
+                        { where: { id: values.collectionCentre } }
+                      ]
+                    },
+                    {
+                      model: 'userenrollment',
+                      action: 'read',
+                      criteria: [
+                        { where: { collectionCentre: values.collectionCentre } }
+                      ]
+                    },
+                    {
+                      model: 'subjectenrollment',
+                      action: 'read',
+                      criteria: [
+                        { where: { collectionCentre: values.collectionCentre } }
+                      ]
+                    },
+                    {
+                      model: 'survey',
+                      action: 'read',
+                      criteria: [
+                        { where: { study: centre.study } }
+                      ]
+                    }
+                  ],
+                  users: [ this.user.username ]
+                });
+              } else {
+                if (this.user.group != 'admin') {
+                  return PermissionService.addUsersToRole(this.user.username, this.roleName);
+                }
+                return role;
+              }
+            })
+            .then(function (newRole) {
+              cb();
+            }).catch(cb);
+        }
+      });
+    },
+
+    afterUpdate: function (values, cb) {
+      if (!_.isNull(values.expiredAt)) {
+        var roleName = ['CollectionCentre', values.collectionCentre, 'Role'].join('');
+        User.findOne(values.user)
+          .then(function (user) {
+            return PermissionService.removeUsersFromRole(user.username, roleName);
+          })
+          .then(function () {
+            cb();
+          });
+      } else {
+        cb();
+      }
+    },
+
+    /**
      * findByStudyName
      * @description End function for handling /api/study/:name/user.  Should return a list
      *              of users in a given study and depending on the current users' group

@@ -34,37 +34,33 @@ module.exports = function sendOK (data, options) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
-      return Group.findOneByName('subject').then(function (subjectGroup) {
-        var promise;
-        var filterQuery = { where: {} };
-        // if provided a query, include in where clause
-        if (query.where) {
-          filterQuery.where = JSON.parse(query.where);
+      var promise;
+      var filterQuery = { where: {} };
+      // if provided a query, include in where clause
+      if (query.where) {
+        filterQuery.where = JSON.parse(query.where);
+      }
+
+      // when options.filteredTotal is passed to res.ok, use the filtered total instead
+      if (options && _.has(options, 'filteredTotal')) {
+        promise = options.filteredTotal;
+      }
+      // otherwise, we can just return the model count total
+      else {
+        if (_.has(model.attributes, 'expiredAt')) {
+          filterQuery.where.expiredAt = null;
         }
 
-        // when options.filteredTotal is passed to res.ok, use the filtered total instead
-        if (options && _.has(options, 'filteredTotal')) {
-          promise = options.filteredTotal;
-        }
-        // otherwise, we can just return the model count total
-        else {
-          if (_.has(model.attributes, 'expiredAt')) {
-            filterQuery.where.expiredAt = null;
-          }
-          // we do not want to include subjects' users in our total count
-          if (model.identity === 'user') {
-            if (req.user.group == subjectGroup.id) { // if subject, return self count
-              filterQuery.where.id = req.user.id;
-            } else { // otherwise, omit subjects from count
-              filterQuery.where.group = {"!": subjectGroup.id};
-            }
-          }
-
+        if (_.has(req, 'criteria') && req.criteria.length > 0) {
+          promise = model.find(filterQuery).then(function (totalItems) {
+            return PermissionService.filterByCriteria(req.criteria, totalItems).length;
+          });
+        } else {
           promise = model.count(filterQuery);
         }
+      }
 
-        return promise;
-      });
+      return promise;
     }
     return Promise.resolve(0);
   }

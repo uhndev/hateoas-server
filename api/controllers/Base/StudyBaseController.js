@@ -24,7 +24,7 @@
 
       model.findByStudyName(studyName, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
-          this.filteredTotal = totalCollection[1].length;
+          this.filteredTotal = PermissionService.filterByCriteria(req.criteria, totalCollection[1]).length;
           return model.findByStudyName(studyName, req.user,
             { where: actionUtil.parseCriteria(req),
               limit: actionUtil.parseLimit(req),
@@ -35,6 +35,8 @@
         .then(function(collection) {
           var err = collection[0];
           var collectionItems = collection[1];
+          sails.log.info("Study Base Collection", collectionItems.length);
+          sails.log.info("Study Base Total", this.filteredTotal);
           if (err) {
             res.serverError({
               title: 'StudyBase Error',

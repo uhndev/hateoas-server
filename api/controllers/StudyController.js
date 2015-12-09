@@ -11,10 +11,11 @@
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  var EnrollmentBase = require('./Base/EnrollmentBaseController');
-
-  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
-  _.merge(exports, {
+  //var EnrollmentBase = require('./Base/EnrollmentBaseController');
+  //
+  //_.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
+  //_.merge(exports, {
+  module.exports = {
 
     /**
      * findOne
@@ -27,43 +28,39 @@
     findOne: function (req, res, next) {
       var name = req.param('name');
 
-      Group.findOne(req.user.group).then(function (group) {
-        this.group = group;
-        return Study.findOne({name: name}).populate('administrator').populate('pi');
-      })
-      .then(function (study) {
-        this.study = study;
-        switch (this.group.level) {
-          case 1: return collectioncentreoverview.find({ study: name });
-          case 2: return collectioncentreoverview.find({ username: req.user.username, study: name });
-          case 3: return collectioncentresubjectoverview.find({username: req.user.username, study: name});
-          default: return res.notFound();
-        }
-      })
-      .then(function (centres) {
-        if (_.isUndefined(this.study)) {
-          return res.notFound();
-        }
-        else if (this.group.level > 1 && centres.length === 0) {
-          return res.forbidden({
-            title: 'Error',
-            code: 403,
-            message: "User "+req.user.email+" is not permitted to GET "
+      Study.findOne({name: name}).populate('administrator').populate('pi')
+        .then(function (study) {
+          this.study = study;
+          if (req.user.group == 'admin') { // is admin
+            return collectioncentreoverview.find({study: name});
+          } else {
+            return collectioncentreoverview.find({username: req.user.username, study: name});
+          }
+        })
+        .then(function (centres) {
+          if (_.isUndefined(this.study)) {
+            return res.notFound();
+          }
+          else if (req.user.group != 'admin' && centres.length === 0) {
+            return res.forbidden({
+              title: 'Error',
+              code: 403,
+              message: "User " + req.user.email + " is not permitted to GET "
+            });
+          }
+          else {
+            this.study.centreSummary = _.unique(centres, 'name');
+            res.ok(this.study);
+          }
+        })
+        .catch(function (err) {
+          sails.log.error(err);
+          return res.serverError({
+            title: 'Server Error',
+            code: err.status,
+            message: err.details
           });
-        }
-        else {
-          this.study.centreSummary = _.unique(centres, 'name');
-          res.ok(this.study);
-        }
-      })
-      .catch(function (err) {
-        sails.log.error(err);
-        return res.serverError({
-          title: 'Server Error',
-          code: err.status,
-          message: err.details
         });
-      });
     },
 
     /**
@@ -90,8 +87,8 @@
         } else {
           // validating passed in study attribute object structure
           if (_.isObject(attributes) &&
-              _.all(_.keys(attributes), _.isString) &&
-              _.all(_.values(attributes), _.isArray)) {
+            _.all(_.keys(attributes), _.isString) &&
+            _.all(_.values(attributes), _.isArray)) {
 
             Study.create(options).exec(function (err, study) {
               if (err || !study) {
@@ -130,14 +127,14 @@
     update: function (req, res, next) {
       // can only update study collection centres via CollectionCentre model
       var id = req.param('id'),
-          attributes = req.param('attributes');
+        attributes = req.param('attributes');
       var options = _.pick(_.pick(req.body, 'name', 'reb', 'administrator', 'pi'), _.identity);
 
       if (attributes) {
         // validating passed in study attribute object structure
         if (_.isObject(attributes) &&
-            _.all(_.keys(attributes), _.isString) &&
-            _.all(_.values(attributes), _.isArray)) {
+          _.all(_.keys(attributes), _.isString) &&
+          _.all(_.values(attributes), _.isArray)) {
           options.attributes = attributes;
         } else {
           return res.badRequest({
@@ -168,7 +165,7 @@
      * @param req
      * @param res
      */
-    removeFormFromStudy: function(req, res) {
+    removeFormFromStudy: function (req, res) {
       var studyID = req.param('id');    // study primary key to remove form from
       var formID = req.param('formID'); // form primary key to remove
 
@@ -195,7 +192,7 @@
                 Study.publishRemove(studyRecord.id, 'forms', formID, !sails.config.blueprints.mirror && req);
               }
               // update any associated sessions to form in question
-              return Form.destroyLifecycle(formID, { study: studyID });
+              return Form.destroyLifecycle(formID, {study: studyID});
             })
             .then(function () {
               return res.ok(this.studyRecord);
@@ -210,6 +207,7 @@
         }
       });
     }
-  });
+    //});
+  };
 
 })();

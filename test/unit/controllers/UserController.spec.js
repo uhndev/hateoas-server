@@ -13,7 +13,7 @@ var Promise = require('bluebird');
 
 describe('The User Controller', function () {
 
-	var study1, cc1Id, cc2Id, enrollment1, enrollment2, enrollment3;
+	var study1, cc1Id, cc2Id, cc3Id, enrollment1, enrollment2, enrollment3;
 
 	describe('User with Admin Role', function () {
 
@@ -132,7 +132,7 @@ describe('The User Controller', function () {
 						username: 'coordinator2',
 						email: 'coordinator2@example.com',
 						password: 'coordinator21234',
-						group: globals.groups.coordinator,
+						group: 'coordinator',
 						prefix: 'Ms.',
 						firstname: 'Coord',
 						lastname: 'Inator'
@@ -143,7 +143,6 @@ describe('The User Controller', function () {
 						globals.users.coordinator2 = collection.items.id;
 						collection.items.username.should.equal('coordinator2');
 						User.findOneByUsername('coordinator2').populate('roles').then(function (user) {
-							user.roles.length.should.equal(16);
 							done(err);
 						});
 					});
@@ -183,7 +182,7 @@ describe('The User Controller', function () {
 						username: 'newuser',
 						email: 'newuser@example.com',
 						password: 'user1234',
-						group: 12345,
+						group: '12345',
 						prefix: 'Mrs.',
 						firstname: 'Qwer',
 						lastname: 'Ty'
@@ -231,7 +230,7 @@ describe('The User Controller', function () {
             username: 'tempuser',
             email: 'tempuser@example.com',
             password: 'tempuser1234',
-            group: globals.groups.coordinator,
+            group: 'coordinator',
             prefix: 'Mr.',
             firstname: 'Temp',
             lastname: 'User'
@@ -374,7 +373,7 @@ describe('The User Controller', function () {
 			it('should not be able to delete users', function (done) {
 				request.del('/api/user/' + globals.users.coordinator2)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.send().expect(400).end(function (err) {
+					.send().expect(403).end(function (err) {
 					done(err);
 				})
 			});
@@ -419,26 +418,22 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						group: globals.groups.interviewer
+						group: 'interviewer'
 					})
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User interviewer@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
 		});
 
 		describe('update()', function() {
-			it('should not be able to update themselves', function (done) {
-				request.put('/api/user/' + globals.users.coordinator2)
+			it('should be able to update themselves', function (done) {
+				request.put('/api/user/' + globals.users.interviewerUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.send({ email: 'subjectupdated@example.com' })
-					.expect(400)
+					.send({ email: 'interviewerupdated@example.com' })
+					.expect(200)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('Cannot perform action [update] on foreign object');
 						done(err);
 					});
 			});
@@ -447,7 +442,7 @@ describe('The User Controller', function () {
 				request.put('/api/user/' + globals.users.adminUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({ email: 'crapadminemail@example.com' })
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
 						done(err);
 					});
@@ -468,7 +463,7 @@ describe('The User Controller', function () {
 			it('should not be able to delete users', function (done) {
 				request.del('/api/user/' + globals.users.coordinator2)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.send().expect(400).end(function (err) {
+					.send().expect(403).end(function (err) {
 						done(err);
 					});
 			});
@@ -500,8 +495,6 @@ describe('The User Controller', function () {
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						//collection.items.length.should.equal(1);
 						done(err);
 					});
 			});
@@ -517,12 +510,10 @@ describe('The User Controller', function () {
 						username: 'newuser1',
 						email: 'newuser1@example.com',
 						password: 'lalalal1234',
-						group: globals.groups.subject
+						group: 'subject'
 					})
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -543,10 +534,8 @@ describe('The User Controller', function () {
 				request.put('/api/user/' + globals.users.adminUserId)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({ email: 'crapadminemail@example.com' })
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('Cannot perform action [update] on foreign object');
 						done(err);
 					});
 			});
@@ -566,7 +555,7 @@ describe('The User Controller', function () {
 			it('should not be able to delete users', function (done) {
 				request.del('/api/user/' + globals.users.coordinator2)
 					.set('Authorization', 'Bearer ' + globals.token)
-					.send().expect(400).end(function (err) {
+					.send().expect(403).end(function (err) {
 					done(err);
 				})
 			});

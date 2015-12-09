@@ -4,12 +4,47 @@
 
   var _ = require('lodash');
   var _super = require('sails-permissions/api/services/PermissionService');
+  var wlFilter = require('../../node_modules/sails-permissions/node_modules/waterline-criteria');
 
   /** @namespace */
   function PermissionService () { }
 
   PermissionService.prototype = Object.create(_super);
   _.extend(PermissionService.prototype, {
+
+	  /**
+     * filterByCriteria
+     * @description Filters a collection of items by an array of sails-permission criteria
+     * @param criteria    Array of sails-permissions criteria, typically passed in as req.criteria
+     * @param totalItems  Collection of items to filter
+     * @returns {Array}   Filtered array of items by criteria
+     */
+    filterByCriteria: function(criteria, totalItems) {
+      if (criteria && criteria.length > 0) {
+        return totalItems.reduce(function(memo, item) {
+          criteria.some(function(crit) {
+            var filtered = wlFilter([item], {
+              where: {
+                or: [crit.where]
+              }
+            }).results;
+
+            if (filtered.length) {
+              if (crit.blacklist && crit.blacklist.length) {
+                crit.blacklist.forEach(function(term) {
+                  delete item[term];
+                });
+              }
+              memo.push(item);
+              return true;
+            }
+          });
+          return memo;
+        }, []);
+      } else {
+        return totalItems;
+      }
+    },
 
     /**
      * findEnrollments
@@ -92,9 +127,14 @@
      */
     setUserRoles: function(user) {
       var self = this;
-      var uID = user.group.id || user.group;
-      return Group.findOne(uID).populate('roles')
+      var groupID = user.group.id || user.group;
+      return Group.findOne(groupID).populate('roles')
         .then(function (group) {
+          if (!group) {
+            var err = new Error('Group '+groupID+' is not a valid group');
+            err.status = 400;
+            throw err;
+          }
           return self.grantPermissions(user, group.roles);
         });
     },

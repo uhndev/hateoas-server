@@ -17,7 +17,7 @@
       var scheduleID = req.param('scheduleID'),
           formID = req.param('formID'),
           answers = req.param('answers');
-      
+
       SubjectSchedule.findOne({ id: scheduleID })
         .then(function (subjectSchedule) {
           if (_.isUndefined(subjectSchedule)) {
@@ -26,10 +26,10 @@
             throw err;
           } else {
             this.schedule = subjectSchedule;
-            
+
             return studysession.findOne({ id: this.schedule.session });
           }
-        
+
         })
         .then(function (studySession) {
           if (_.isUndefined(studySession)) {
@@ -38,7 +38,7 @@
             throw err;
           } else {
             this.studySessionView = studySession;
-            
+
             return SubjectEnrollment.findOne(this.schedule.subjectEnrollment);
           }
         })
@@ -60,7 +60,7 @@
           if (!_.isUndefined(userEnrollment)) {
             userEnrollmentID = userEnrollment.id;
           }
-          
+
           return AnswerSet.create({
             answers : answers,
             study : this.studySessionView.study,
@@ -81,7 +81,7 @@
             message: err.details
           });
         });
-    },
+    }
   };
 })();
 
