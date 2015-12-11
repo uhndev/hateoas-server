@@ -13,7 +13,7 @@
 
   var _ = require('lodash');
 
-  _.merge(module.exports, require('sails-permissions/api/controllers/AuthController'));
+  _.merge(module.exports, require('sails-auth/dist/api/controllers/AuthController'));
   _.merge(module.exports, {
 
     /**
@@ -51,6 +51,13 @@
      * @param {Object} res response object
      */
     callback: function (req, res) {
+      // since we disabled sessions, we must also override req.flash
+      req.flash = function(type, message) {
+        var err = new Error(message);
+        err.code = 400;
+        return err;
+      };
+
       sails.services.passport.callback(req, res, function (err, user) {
         if (err || !user) {
           sails.log.warn(err);
