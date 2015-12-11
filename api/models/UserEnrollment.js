@@ -124,7 +124,7 @@
           User.findOne(values.user).then(function (user) {
               this.user = user;
               this.roleName = ['CollectionCentre', values.collectionCentre, 'Role'].join('');
-              return Role.findOne({ name: roleName });
+              return Role.findOne({ name: this.roleName });
             })
             .then(function (role) {
               if (_.isUndefined(role)) {
@@ -164,6 +164,20 @@
                       action: 'read',
                       criteria: [
                         { where: { study: centre.study } }
+                      ]
+                    },
+                    {
+                      model: 'studysubject',
+                      action: 'read',
+                      criteria: [
+                        { where: { collectionCentre: values.collectionCentre } }
+                      ]
+                    },
+                    {
+                      model: 'schedulesubjects',
+                      action: 'read',
+                      criteria: [
+                        { where: { collectionCentre: values.collectionCentre } }
                       ]
                     }
                   ],

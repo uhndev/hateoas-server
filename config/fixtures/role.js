@@ -19,7 +19,13 @@
               { model: 'form',              action: 'read' },
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
-              { model: 'user',              action: 'read' },
+              {
+                model: 'user',
+                action: 'read',
+                criteria: [
+                  { where: { group: { '!': 'subject' } } }
+                ]
+              },
               {
                 model: 'user',
                 action: 'update',
@@ -79,11 +85,9 @@
       }),
       Role.findOneByName('subject').then(function (role) {
         if (!role) {
-          PermissionService.createRole({
+          return PermissionService.createRole({
             name: 'subject',
             permissions: [
-              { model: 'studysubject',      action: 'read' },
-              { model: 'schedulesubjects',  action: 'read' },
               { model: 'systemform',        action: 'read' },
               { model: 'form',              action: 'read' },
               { model: 'translation',       action: 'read' },

@@ -176,37 +176,84 @@
      *              find a list of study surveys, flatten out all the Sessions for each study in survey
      *              and create SubjectSchedules based on the Sessions.
      */
-    afterCreate: function (values, cb) {
-      Study.findOne(values.study).populate('surveys')
-        .then(function (study) {
-          return Survey.find(_.pluck(study.surveys, 'id')).populate('sessions');
-        })
-        .then(function (surveys) {
-          // flattens out sessions by foldr-ing over sessions
-          return _.reduce(surveys, function (result, survey) {
-            return result.concat(survey.sessions);
-          }, []);
-        })
-        .then(function (sessions) {
-          return Promise.all(
-            _.map(sessions, function (session) {
-              var availableFrom = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
-              var availableTo = moment(values.doe).add(session.timepoint, 'days').add(session.availableTo, 'days');
-              return SubjectSchedule.create({
-                availableFrom: availableFrom.toDate(),
-                availableTo: availableTo.toDate(),
-                status: 'IN PROGRESS',
-                session: session.id,
-                subjectEnrollment: values.id
+    afterCreate: [
+
+      function createSubjectSchedules(values, cb) {
+        Study.findOne(values.study).populate('surveys')
+          .then(function (study) {
+            return Survey.find(_.pluck(study.surveys, 'id')).populate('sessions');
+          })
+          .then(function (surveys) {
+            // flattens out sessions by foldr-ing over sessions
+            return _.reduce(surveys, function (result, survey) {
+              return result.concat(survey.sessions);
+            }, []);
+          })
+          .then(function (sessions) {
+            return Promise.all(
+              _.map(sessions, function (session) {
+                var availableFrom = moment(values.doe).add(session.timepoint, 'days').subtract(session.availableFrom, 'days');
+                var availableTo = moment(values.doe).add(session.timepoint, 'days').add(session.availableTo, 'days');
+                return SubjectSchedule.create({
+                  availableFrom: availableFrom.toDate(),
+                  availableTo: availableTo.toDate(),
+                  status: 'IN PROGRESS',
+                  session: session.id,
+                  subjectEnrollment: values.id
+                });
+              })
+            );
+          })
+          .then(function (createdSchedules) {
+            cb();
+          })
+          .catch(cb);
+      },
+
+      function createPermissions(values, cb) {
+        Subject.findOne(values.subject)
+          .then(function (subject) {
+            return User.findOne(subject.user)
+          })
+          .then(function (user) {
+            this.user = user;
+            this.roleName = ['SubjectEnrollment', values.id, 'Role'].join('');
+            return Role.findOne({ name: this.roleName });
+          })
+          .then(function (role) {
+            if (_.isUndefined(role)) {
+              return PermissionService.createRole({
+                name: this.roleName,
+                permissions: [
+                  {
+                    model: 'studysubject',
+                    action: 'read',
+                    criteria: [
+                      { where: { id: values.id } }
+                    ]
+                  },
+                  {
+                    model: 'schedulesubjects',
+                    action: 'read',
+                    criteria: [
+                      { where: { subjectEnrollment: values.id } }
+                    ]
+                  }
+                ],
+                users: [ this.user.username ]
               });
-            })
-          );
-        })
-        .then(function (createdSchedules) {
-          cb();
-        })
-        .catch(cb);
-    },
+            } else {
+              if (this.user.group != 'admin') {
+                return PermissionService.addUsersToRole(this.user.username, this.roleName);
+              }
+              return role;
+            }
+          })
+          .then(function (newRole) {
+            cb();
+          }).catch(cb);
+      }
+    ],
 
     /**
      * beforeUpdate

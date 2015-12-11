@@ -12,7 +12,7 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('bluebird');
 
-  var StudyBase = require('./Base/StudyBaseController');
+  var StudyBase = require('./BaseControllers/StudyBaseController');
 
   _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
@@ -85,7 +85,7 @@
 
       options.group = 'subject';
       User.create(options).then(function (user) {
-        return PermissionService.setUserRoles(user);
+        return PermissionService.setDefaultGroupRoles(user);
       })
       .then(function (user) { // create passport
         this.user = user;

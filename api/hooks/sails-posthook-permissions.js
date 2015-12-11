@@ -5,7 +5,7 @@
   module.exports = function (sails) {
     return {
       initialize: function (next) {
-        sails.after('hook:sails-permissions:loaded', function () {
+        sails.after('hook:permissions:loaded', function () {
           Model.count()
             .then(function (count) {
               if (count == sails.models.length) return next();

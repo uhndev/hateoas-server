@@ -35,8 +35,6 @@
         .then(function(collection) {
           var err = collection[0];
           var collectionItems = collection[1];
-          sails.log.info("Study Base Collection", collectionItems.length);
-          sails.log.info("Study Base Total", this.filteredTotal);
           if (err) {
             res.serverError({
               title: 'StudyBase Error',

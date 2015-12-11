@@ -102,7 +102,7 @@
           return User.update({id: createdUser.id}, personInfo);
         })
         .then(function (updatedUser) {
-          return PermissionService.setUserRoles(_.first(updatedUser))
+          return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
             .then(function (user) {
               res.ok(user);
             })
@@ -140,7 +140,7 @@
       })
       .then(function (user) { // updating group, apply new permissions
         if (this.previousGroup !== options.group && this.group.level === 1) {
-          return PermissionService.setUserRoles(_.first(user));
+          return PermissionService.setDefaultGroupRoles(_.first(user));
         } else {
           return user;
         }
@@ -185,7 +185,7 @@
           return user.save();
         })
         .then(function (user) {
-          return PermissionService.setUserRoles(user);
+          return PermissionService.setDefaultGroupRoles(user);
         })
         .then(function (user) {
           res.ok(user);

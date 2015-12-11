@@ -119,13 +119,13 @@
     },
 
     /**
-     * setUserRoles
+     * setDefaultGroupRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService
      * @param  {Object}         user
      * @return {Object|Promise} user with updated roles, or promise
      */
-    setUserRoles: function(user) {
+    setDefaultGroupRoles: function(user) {
       var self = this;
       var groupID = user.group.id || user.group;
       return Group.findOne(groupID).populate('roles')
