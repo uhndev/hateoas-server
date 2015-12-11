@@ -276,11 +276,12 @@ describe('The Study Controller', function () {
           .send()
           .expect(200)
           .end(function (err, res) {
-            var collection = JSON.parse(res.text);
-            collection.items[0].expiredAt.should.be.truthy;
-            CollectionCentre.findOne(centreID).exec(function (err, centre) {
-              centre.expiredAt.should.be.truthy;
-              done(err);
+            Study.findOne(studyID).then(function (study) {
+              study.expiredAt.should.be.truthy;
+              CollectionCentre.findOne(centreID).exec(function (err, centre) {
+                centre.expiredAt.should.be.truthy;
+                done(err);
+              });
             });
           });
       });

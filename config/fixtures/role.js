@@ -14,18 +14,12 @@
             name: 'coordinator',
             permissions: [
               { model: 'studysubject',      action: 'read' },
-              { model: 'subjectschedule',   action: 'read' },
+              { model: 'schedulesubjects',  action: 'read' },
               { model: 'systemform',        action: 'read' },
               { model: 'form',              action: 'read' },
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
-              {
-                model: 'user',
-                action: 'read',
-                criteria: [
-                  { where: { group: { '!': 'subject' } } }
-                ]
-              },
+              { model: 'user',              action: 'read' },
               {
                 model: 'user',
                 action: 'update',
@@ -56,7 +50,7 @@
             name: 'interviewer',
             permissions: [
               { model: 'studysubject',      action: 'read' },
-              { model: 'subjectschedule',   action: 'read' },
+              { model: 'schedulesubjects',  action: 'read' },
               { model: 'systemform',        action: 'read' },
               { model: 'form',              action: 'read' },
               { model: 'translation',       action: 'read' },

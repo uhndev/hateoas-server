@@ -9,11 +9,8 @@
 (function() {
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-
-  var EnrollmentBase = require('./Base/EnrollmentBaseController');
   var StudyBase = require('./Base/StudyBaseController');
 
-  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
   _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
 

@@ -128,10 +128,6 @@
             })
             .then(function (role) {
               if (_.isUndefined(role)) {
-                console.log('**************************************');
-                console.log(role);
-                console.log(_.isUndefined(role));
-                console.log('**************************************');
                 return PermissionService.createRole({
                   name: this.roleName,
                   permissions: [

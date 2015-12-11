@@ -11,10 +11,6 @@
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  //var EnrollmentBase = require('./Base/EnrollmentBaseController');
-  //
-  //_.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
-  //_.merge(exports, {
   module.exports = {
 
     /**

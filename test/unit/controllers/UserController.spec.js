@@ -46,8 +46,7 @@ describe('The User Controller', function () {
 					cc2Id = centre2.id;
 					return Study.create({
 						name: 'USER-LEAP2-ADMIN',
-						reb: 200,
-						users: [globals.users.coordinatorUserId]
+						reb: 200
 					});
 				})
 				.then(function (study) {
@@ -79,6 +78,10 @@ describe('The User Controller', function () {
           ]);
 				})
 				.spread(function (e1, e2, e3) {
+          console.log(e1);
+          console.log(e2);
+          console.log(e3);
+
           enrollment1 = e1;
           enrollment2 = e2;
           enrollment3 = e3;
@@ -313,7 +316,7 @@ describe('The User Controller', function () {
 		});
 
 		describe('find()', function () {
-			it('should be able to list all coordinators my collection centres', function (done) {
+			it.skip('should be able to list all coordinators my collection centres', function (done) {
 				// TODO
 				done();
 			});
@@ -329,41 +332,41 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should be able to access a user only if they are in my collection centre', function (done) {
+			it.skip('should be able to access a user only if they are in my collection centre', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should not be able to access a user not in my collection centre', function (done) {
+			it.skip('should not be able to access a user not in my collection centre', function (done) {
 				// TODO
 				done();
 			});
 		});
 
 		describe('create()', function () {
-			it('should only be able to create new user in collection centres I am part of', function (done) {
+			it.skip('should only be able to create new user in collection centres I am part of', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should return bad request if trying to creating user with admin role', function (done) {
+			it.skip('should return bad request if trying to creating user with admin role', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should only be able to create new user with coordinator or interviewer role', function (done) {
+			it.skip('should only be able to create new user with coordinator or interviewer role', function (done) {
 				// TODO
 				done();
 			});
 		});
 
 		describe('update()', function() {
-			it('should only be able to update self', function (done) {
+			it.skip('should only be able to update self', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should not be able to update role', function (done) {
+			it.skip('should not be able to update role', function (done) {
 				// TODO
 				done();
 			});
@@ -393,17 +396,17 @@ describe('The User Controller', function () {
 		});
 
 		describe('find()', function () {
-			it('should not be able to see other coordinators not in my collection centres', function (done) {
+			it.skip('should not be able to see other coordinators not in my collection centres', function (done) {
 				done();
 			});
 		});
 
 		describe('findOne()', function () {
-			it('should be able to read self user', function (done) {
+			it.skip('should be able to read self user', function (done) {
         done();
 			});
 
-			it('should not be able to access a user not in my collection centre', function (done) {
+			it.skip('should not be able to access a user not in my collection centre', function (done) {
 				done();
 			});
 		});
@@ -448,12 +451,12 @@ describe('The User Controller', function () {
 					});
 			});
 
-			it('should not be able to update role', function (done) {
+			it.skip('should not be able to update role', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should not be able to update centreAccess', function (done) {
+			it.skip('should not be able to update centreAccess', function (done) {
 				// TODO
 				done();
 			});

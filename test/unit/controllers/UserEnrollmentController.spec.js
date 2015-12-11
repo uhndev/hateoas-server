@@ -228,7 +228,7 @@ describe('The UserEnrollment Controller', function () {
       it ('should not allow coordinator to access a collection centre they are not enrolled at', function (done) {
         request.get('/api/collectioncentre/' + cc3Id)
           .set('Authorization', 'Bearer ' + globals.token)
-          .expect(403)
+          .expect(404)
           .end(function (err, res) {
             done(err);
           });

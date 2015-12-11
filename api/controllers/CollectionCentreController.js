@@ -21,7 +21,7 @@
      * @description Finds one collection centre given an id
      *              and populates enrolled coordinators and subjects
      */
-    findOne: function (req, res, next) {
+    findOne: function (req, res) {
       CollectionCentre.findOne(req.param('id'))
         .populate('study')
         .populate('contact')
@@ -33,26 +33,20 @@
           if (_.isUndefined(centre)) {
             res.notFound();
           } else {
-            PermissionService.findEnrollments(req.user, centre)
-              .then(function (enrollments) {
-                // if no enrollments found for coordinator/subject, DENY
-                if (this.group.level > 1 && !enrollments) {
-                  return res.forbidden({
-                    title: 'Error',
-                    code: 403,
-                    message: "User "+req.user.email+" is not permitted to GET "
-                  });
-                } else {
-                  return Promise.all([
-                    collectioncentreuser.find({ collectionCentre: centre.id }),
-                    collectioncentresubject.find({ collectionCentre: centre.id })
-                  ]).spread(function (users, subjects) {
-                    centre.coordinators = users;
-                    centre.subjects = subjects;
-                    res.ok(centre);
-                  });
-                }
-              });
+            return Promise.all([
+              collectioncentreuser.find({ collectionCentre: centre.id }),
+              collectioncentresubject.find({ collectionCentre: centre.id })
+            ]).spread(function (users, subjects) {
+              centre.coordinators = users;
+              centre.subjects = subjects;
+              res.ok(centre);
+            }).catch(function (err) {
+              res.serverError({
+                title: 'Collection Centre findOne Error',
+                code: err.code || 500,
+                message: err.details
+              })
+            });
           }
         });
     },

@@ -28,47 +28,45 @@ module.exports = function(req, res, next) {
     return next();
   }
 
-  // get all of the where clauses and blacklists into one flat array
-  // if a permission has no criteria then it is always true
-  sails.log.info('Request Query Before', req.query);
-
-  req.query.or = req.query.or || [];
-  var criteria = _.compact(_.flatten(
-    _.map(permissions, function(permission) {
-      if (_.isEmpty(permission.criteria)) {
-        permission.criteria = [{
-          where: {}
-        }];
-      }
-
-      var criteriaList = permission.criteria;
-      return _.map(criteriaList, function(criteria) {
-        // ensure criteria.where is initialized
-        criteria.where = criteria.where || {};
-
-        if (permission.relation == 'owner') {
-          criteria.where.owner = req.user.id;
-        }
-
-        if (!_.isEmpty(criteria.where)) {
-          req.query.or.push(criteria.where);
-        }
-
-        return criteria;
-      });
-    })
-  ));
-
-  if (_.isEmpty(req.query.or)) {
-    delete req.query.or;
-  }
-
-  sails.log.info('Request Query After', req.query);
-
-  req.criteria = criteria;
 
   // set up response filters if we are not mutating an existing object
   if (!_.contains(['update', 'delete'], action)) {
+
+    // get all of the where clauses and blacklists into one flat array
+    // if a permission has no criteria then it is always true
+    req.query.or = req.query.or || [];
+    var criteria = _.compact(_.flatten(
+      _.map(permissions, function(permission) {
+        if (_.isEmpty(permission.criteria)) {
+          permission.criteria = [{
+            where: {}
+          }];
+        }
+
+        var criteriaList = permission.criteria;
+        return _.map(criteriaList, function(criteria) {
+          // ensure criteria.where is initialized
+          criteria.where = criteria.where || {};
+
+          if (permission.relation == 'owner') {
+            criteria.where.owner = req.user.id;
+          }
+
+          if (!_.isEmpty(criteria.where)) {
+            req.query.or.push(criteria.where);
+          }
+
+          return criteria;
+        });
+      })
+    ));
+
+    if (_.isEmpty(req.query.or)) {
+      delete req.query.or;
+    }
+
+    req.criteria = criteria;
+
     if (criteria.length) {
       bindResponsePolicy(req, res, criteria);
     }
@@ -88,6 +86,7 @@ module.exports = function(req, res, next) {
           error: 'Can\'t ' + action + ', because of failing where clause or attribute permissions'
         });
       }
+
       next();
     })
     .catch(next);
@@ -103,8 +102,6 @@ function bindResponsePolicy(req, res, criteria) {
 }
 
 function responsePolicy(criteria, _data, options) {
-  sails.log.info('responsePolicy');
-
   var req = this.req;
   var res = this.res;
   var user = req.owner;
@@ -113,21 +110,22 @@ function responsePolicy(criteria, _data, options) {
 
   var data = isResponseArray ? _data : [_data];
 
-  sails.log.info('data', data.length);
-  sails.log.info('options', options);
-  sails.log.info('criteria!', criteria);
+  sails.log.silly('data', data);
+  sails.log.silly('options', options);
+  sails.log.silly('criteria!', criteria);
 
   var permitted = data.reduce(function(memo, item) {
     criteria.some(function(crit) {
       var filtered = wlFilter([item], {
         where: {
-          or: [crit.where]
+          or: [crit.where || {}]
         }
       }).results;
 
       if (filtered.length) {
+
         if (crit.blacklist && crit.blacklist.length) {
-          crit.blacklist.forEach(function(term) {
+          crit.blacklist.forEach(function (term) {
             delete item[term];
           });
         }
@@ -139,8 +137,10 @@ function responsePolicy(criteria, _data, options) {
   }, []);
 
   if (isResponseArray) {
-    sails.log.info('Response Policy', permitted.length);
     return res._ok(permitted, options);
+  } else if (permitted.length === 0) {
+    sails.log.silly('permitted.length === 0');
+    return res.send(404);
   } else {
     res._ok(permitted[0], options);
   }

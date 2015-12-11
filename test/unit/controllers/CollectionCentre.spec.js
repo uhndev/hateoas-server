@@ -217,7 +217,7 @@ describe('The CollectionCentre Controller', function () {
       });
 
       afterEach(function (done) {
-        UserEnrollment.update(ueID).exec(function (err, destroyed) {
+        UserEnrollment.update(ueID, { expiredAt: new Date() }).exec(function (err, updated) {
           done(err);
         });
       });
@@ -228,9 +228,10 @@ describe('The CollectionCentre Controller', function () {
           .send()
           .expect(200)
           .end(function (err, res) {
-            var collection = JSON.parse(res.text);
-            collection.items[0].expiredAt.should.be.truthy;
-            done(err);
+            CollectionCentre.findOne(cc1Id).then(function (centre) {
+              centre.expiredAt.should.be.truthy;
+              done(err);
+            });
           });
 			});
 
