@@ -4,6 +4,8 @@
 
 module.exports = {
 
+  hookTimeout: 900000,
+
   models: {
     migrate: 'drop',
     connection: 'arm_test'

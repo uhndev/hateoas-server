@@ -14,7 +14,7 @@ describe('The Auth Controller', function() {
 	describe('when accessing Auth API', function() {
 
 		it('should use the correct test database', function(done) {
-			sails.config.models.connection.should.equal('dados_test');
+			sails.config.models.connection.should.equal('arm_test');
 			done();
 		});
 
