@@ -17,12 +17,11 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  hookTimeout: 99999999,
   log: {
     level: 'verbose'
   },
   models: {
-    migrate: 'alter',
+    migrate: 'safe',
     connection: 'arm_development'
   }
 };
