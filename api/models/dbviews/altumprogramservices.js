@@ -9,7 +9,6 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    migrate: 'safe',
     attributes: {
       /**
        * payor_id

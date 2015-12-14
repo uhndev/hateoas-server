@@ -87,10 +87,19 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'dados_dev'
+    database: 'arm_dev'
   },
 
- arm_development: {
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'arm_prod'
+  },
+
+  arm_development: {
     adapter: 'sails-postgresql',
       host: 'localhost',
       port: 5432,
@@ -99,7 +108,7 @@ module.exports.connections = {
       database: 'arm_dev'
   },
 
-  dados_migrate: {
+  arm_migrate: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
@@ -108,7 +117,7 @@ module.exports.connections = {
     database: 'arm_dev'
   },
 
-  dados_production: {
+  arm_production: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
