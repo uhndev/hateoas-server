@@ -125,6 +125,66 @@
       } else {
         cb();
       }
+    },
+
+    afterCreate: function (values, cb) {
+      PermissionService.createRole({
+        name: ['CollectionCentre', values.id, 'Role'].join(''),
+        permissions: [
+          {
+            model: 'study',
+            action: 'read',
+            criteria: [
+              { where: { id: values.study } }
+            ]
+          },
+          {
+            model: 'collectioncentre',
+            action: 'read',
+            criteria: [
+              { where: { id: values.id } }
+            ]
+          },
+          {
+            model: 'userenrollment',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'subjectenrollment',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'survey',
+            action: 'read',
+            criteria: [
+              { where: { study: values.study } }
+            ]
+          },
+          {
+            model: 'studysubject',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'schedulesubjects',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          }
+        ]
+      })
+      .then(function (newRole) {
+        cb();
+      }).catch(cb);
     }
 
   });

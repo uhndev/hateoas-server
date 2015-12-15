@@ -78,10 +78,6 @@ describe('The User Controller', function () {
           ]);
 				})
 				.spread(function (e1, e2, e3) {
-          console.log(e1);
-          console.log(e2);
-          console.log(e3);
-
           enrollment1 = e1;
           enrollment2 = e2;
           enrollment3 = e3;
@@ -197,30 +193,6 @@ describe('The User Controller', function () {
 			});
 		});
 
- 		describe('update()', function () {
-
- 			it('should update a user\'s roles from access management', function (done) {
- 				var req = request.put('/api/user/' + globals.users.coordinatorUserId + '/roles');
- 				req.set('Authorization', 'Bearer ' + globals.token);
-
- 				User.findOne(globals.users.coordinatorUserId)
- 				.populate('roles')
- 				.then(function (user) {
- 					var newRoles = _.pluck(user.roles, 'name');
- 					newRoles.push('createStudy');
- 					req.send({
- 						roles: newRoles
- 					})
- 					.expect(200)
- 					.end(function (err, res) {
- 						var collection = JSON.parse(res.text);
- 						_.find(collection.items.roles, {name: 'createStudy'}).should.be.ok;
- 						done(err);
- 					})
- 				});
- 			});
- 		});
-
     describe('delete()', function() {
       var uID, ueID;
 
@@ -268,7 +240,6 @@ describe('The User Controller', function () {
           .expect(200)
           .end(function (err, res) {
             var collection = JSON.parse(res.text);
-            collection.items[0].expiredAt.should.be.truthy;
             UserEnrollment.findOne(ueID).exec(function (err, enrollment) {
               enrollment.expiredAt.should.be.truthy;
               done(err);

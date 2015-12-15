@@ -10,8 +10,6 @@
   'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
  */
 
-var StudyController = require('../../../api/controllers/StudyController');
-
 describe('The Study Controller', function () {
 
 	var study1, study2, study3, cc1Id, cc2Id;

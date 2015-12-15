@@ -99,7 +99,14 @@
       User
         .register(userOptions)
         .then(function (createdUser) {
-          return User.update({id: createdUser.id}, personInfo);
+          return Group.findOne(personInfo.group).then(function (newGroup) {
+            if (!newGroup) {
+              err = new Error('Group '+personInfo.group+' does not exist.');
+              err.status = 400;
+              throw err;
+            }
+            return User.update({id: createdUser.id}, personInfo);
+          });
         })
         .then(function (updatedUser) {
           return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
@@ -113,7 +120,12 @@
             });
         })
         .catch(function (err) {
-          next(err);
+          sails.log.error(err);
+          res.badRequest({
+            title: 'User Create Error',
+            code: err.status || 400,
+            message: 'An error occurred when creating user: ' + userOptions.username + ' ' + err.details
+          });
         });
     },
 
@@ -158,9 +170,10 @@
         res.ok(this.user);
       })
       .catch(function (err) {
-        res.serverError({
+        sails.log.error(err);
+        res.badRequest({
           title: 'User Update Error',
-          code: 500,
+          code: err.status || 400,
           message: 'An error occurred when updating user: ' + options.username + ' ' + err.details
         });
       });
@@ -208,6 +221,7 @@
           res.ok(user);
         })
         .catch(function (err) {
+          sails.log.error(err);
           res.serverError({
             title: 'Role Update Error',
             code: 500,

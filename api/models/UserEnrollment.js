@@ -122,77 +122,77 @@
           cb(err);
         } else {
           User.findOne(values.user).then(function (user) {
-              this.user = user;
-              this.roleName = ['CollectionCentre', values.collectionCentre, 'Role'].join('');
-              return Role.findOne({ name: this.roleName });
-            })
-            .then(function (role) {
-              if (_.isUndefined(role)) {
-                return PermissionService.createRole({
-                  name: this.roleName,
-                  permissions: [
-                    {
-                      model: 'study',
-                      action: 'read',
-                      criteria: [
-                        { where: { id: centre.study } }
-                      ]
-                    },
-                    {
-                      model: 'collectioncentre',
-                      action: 'read',
-                      criteria: [
-                        { where: { id: values.collectionCentre } }
-                      ]
-                    },
-                    {
-                      model: 'userenrollment',
-                      action: 'read',
-                      criteria: [
-                        { where: { collectionCentre: values.collectionCentre } }
-                      ]
-                    },
-                    {
-                      model: 'subjectenrollment',
-                      action: 'read',
-                      criteria: [
-                        { where: { collectionCentre: values.collectionCentre } }
-                      ]
-                    },
-                    {
-                      model: 'survey',
-                      action: 'read',
-                      criteria: [
-                        { where: { study: centre.study } }
-                      ]
-                    },
-                    {
-                      model: 'studysubject',
-                      action: 'read',
-                      criteria: [
-                        { where: { collectionCentre: values.collectionCentre } }
-                      ]
-                    },
-                    {
-                      model: 'schedulesubjects',
-                      action: 'read',
-                      criteria: [
-                        { where: { collectionCentre: values.collectionCentre } }
-                      ]
-                    }
-                  ],
-                  users: [ this.user.username ]
-                });
-              } else {
-                if (this.user.group != 'admin') {
-                  return PermissionService.addUsersToRole(this.user.username, this.roleName);
-                }
-                return role;
+            this.user = user;
+            this.roleName = ['CollectionCentre', values.collectionCentre, 'Role'].join('');
+            return Role.findOne({ name: this.roleName });
+          })
+          .then(function (role) {
+            if (_.isUndefined(role)) {
+              return PermissionService.createRole({
+                name: this.roleName,
+                permissions: [
+                  {
+                    model: 'study',
+                    action: 'read',
+                    criteria: [
+                      { where: { id: centre.study } }
+                    ]
+                  },
+                  {
+                    model: 'collectioncentre',
+                    action: 'read',
+                    criteria: [
+                      { where: { id: values.collectionCentre } }
+                    ]
+                  },
+                  {
+                    model: 'userenrollment',
+                    action: 'read',
+                    criteria: [
+                      { where: { collectionCentre: values.collectionCentre } }
+                    ]
+                  },
+                  {
+                    model: 'subjectenrollment',
+                    action: 'read',
+                    criteria: [
+                      { where: { collectionCentre: values.collectionCentre } }
+                    ]
+                  },
+                  {
+                    model: 'survey',
+                    action: 'read',
+                    criteria: [
+                      { where: { study: centre.study } }
+                    ]
+                  },
+                  {
+                    model: 'studysubject',
+                    action: 'read',
+                    criteria: [
+                      { where: { collectionCentre: values.collectionCentre } }
+                    ]
+                  },
+                  {
+                    model: 'schedulesubjects',
+                    action: 'read',
+                    criteria: [
+                      { where: { collectionCentre: values.collectionCentre } }
+                    ]
+                  }
+                ],
+                users: [ this.user.username ]
+              });
+            } else {
+              if (this.user.group != 'admin') {
+                return PermissionService.addUsersToRole(this.user.username, this.roleName);
               }
-            })
-            .then(function (newRole) {
-              cb();
-            }).catch(cb);
+              return role;
+            }
+          })
+          .then(function (newRole) {
+            cb();
+          }).catch(cb);
         }
       });
     },
