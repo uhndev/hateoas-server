@@ -156,17 +156,15 @@
      *
      * @type {Array} Functions that are called in sequence following user creation
      */
-    afterCreate: [
-      function setOwner (user, cb) {
-        sails.log('User.afterCreate.setOwner', user);
-        User
-          .update({ id: user.id }, { owner: user.id })
-          .then(function (user) {
-            cb();
-          })
-          .catch(cb);
-      }
-    ],
+    afterCreate: function (user, cb) {
+      sails.log('User.afterCreate.setOwner', user);
+      User
+        .update({ id: user.id }, { owner: user.id })
+        .then(function (user) {
+          cb();
+        })
+        .catch(cb);
+    },
 
     /**
      * afterUpdate

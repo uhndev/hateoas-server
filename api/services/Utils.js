@@ -1,8 +1,7 @@
 module.exports = function() {
+  var _ = require('lodash');
 
-var Q = require('bluebird');
-
-var self = {
+  var self = {
   /** Start of "String" Utils **/
   "String" : {
     /**
@@ -90,6 +89,5 @@ var self = {
   }
   /** End of "User" Utils **/
 }
-
-return self;
+  return self;
 }();

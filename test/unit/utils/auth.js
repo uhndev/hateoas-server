@@ -81,17 +81,13 @@ var Auth = {
 
   createUser: function(credentials, done) {
     this.authenticate('admin', function(agent, resp) {
-      Group.findOneByName(credentials.group).then(function (group) {
-        delete credentials.group;
-        credentials.group = group.id;
-        request.post('/api/user')
-          .set('Authorization', 'Bearer ' + globals.token)
-          .send(credentials)
-          .expect(201)
-          .end(function(err, res) {
-            done(JSON.parse(res.text).items.id);
-          });
-      });
+      request.post('/api/user')
+        .set('Authorization', 'Bearer ' + globals.token)
+        .send(credentials)
+        .expect(201)
+        .end(function(err, res) {
+          done(JSON.parse(res.text).items.id);
+        });
     });
   },
 

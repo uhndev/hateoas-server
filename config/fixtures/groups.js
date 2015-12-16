@@ -1,68 +1,15 @@
 (function() {
   var Promise = require('bluebird');
+
   /**
-   * Create default Role permissions
+   * Create default Groups
    */
-  exports.create = function (roles, models, admin) {
-
-    var coordinatorRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readCollectionCentre',
-        'readSubjectEnrollment',
-        'readstudysubject',
-        'readschedulesubjects',
-        'readSurvey',
-        'readSubjectSchedule',
-        'readUserEnrollment',
-        'readUser',
-        'readUserOwner',
-        'updateUserOwner',
-        'createUser',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
-
-    var interviewerRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readCollectionCentre',
-        'readSubjectEnrollment',
-        'readstudysubject',
-        'readschedulesubjects',
-        'readSurvey',
-        'readSubjectSchedule',
-        'readUserOwner',
-        'updateUserOwner',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
-
-    var subjectRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readstudysubject',
-        'readschedulesubjects',
-        'readCollectionCentre',
-        'readUserOwner',
-        'updateUserOwner',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
+  exports.create = function (roles, admin) {
 
     var groups = [
       {
         name: 'admin',
-        roles: _.pluck(roles, 'id'),
+        roles: _.find(roles, { name: 'admin' }).id,
         level: 1,
         menu: {
           tabview: [
@@ -85,7 +32,9 @@
       },
       {
         name: 'coordinator',
-        roles: coordinatorRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'coordinator' ], role.name);
+        }), 'id'),
         level: 2,
         menu: {
           tabview: [
@@ -94,14 +43,16 @@
             { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
           ],
           subview: {
-            'study': [ 'name', 'overview', 'subject', 'user' ],
+            'study': [ 'name', 'overview', 'collectioncentre', 'subject', 'user' ],
             'user': ['name', 'overview']
           }
         }
       },
       {
         name: 'interviewer',
-        roles: interviewerRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'interviewer' ], role.name);
+        }), 'id'),
         level: 2,
         menu: {
           tabview: [
@@ -117,7 +68,9 @@
       },
       {
         name: 'subject',
-        roles: subjectRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'subject' ], role.name);
+        }), 'id'),
         level: 3,
         menu: {
           tabview: [

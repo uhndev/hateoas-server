@@ -8,6 +8,7 @@ var Sails = require('sails'),
 request = require('supertest');
 auth = require('./unit/utils/auth');
 should = require('should');
+Promise = require('bluebird');
 globals = {
   users: {},
   subjects: {},

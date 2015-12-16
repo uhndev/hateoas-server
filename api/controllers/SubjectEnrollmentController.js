@@ -12,10 +12,8 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('bluebird');
 
-  var EnrollmentBase = require('./Base/EnrollmentBaseController');
-  var StudyBase = require('./Base/StudyBaseController');
+  var StudyBase = require('./BaseControllers/StudyBaseController');
 
-  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
   _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
 
@@ -24,65 +22,57 @@
         if (_.isUndefined(enrollment)) {
           res.notFound();
         } else {
-          PermissionService.findEnrollments(req.user, enrollment.collectionCentre)
-            .then(function (enrollments) {
-              // if no enrollments found for coordinator/subject, DENY
-              if (this.group.level > 1 && enrollments.length === 0) {
-                return res.forbidden({
-                  title: 'Error',
-                  code: 403,
-                  message: "User "+req.user.email+" is not permitted to GET "
+          // find subject schedule with session information
+          schedulesessions.find({ subjectEnrollment: enrollment.id })
+            .then(function (schedules) {
+              this.schedules = _.sortBy(schedules, 'timepoint');
+              // get flattened dictionary of possible formVersions in each schedule
+              return FormVersion.find({ id: _.flatten(_.pluck(schedules, 'formVersions'))})
+                .then(function (formVersions) {
+                  return _.indexBy(_.map(formVersions, function (form) {
+                    return _.pick(form, 'id', 'name', 'revision', 'form');
+                  }), 'id');
                 });
-              } else {
-                // find subject schedule with session information
-                schedulesessions.find({ subjectEnrollment: enrollment.id })
-                  .then(function (schedules) {
-                    this.schedules = _.sortBy(schedules, 'timepoint');
-                    // get flattened dictionary of possible formVersions in each schedule
-                    return FormVersion.find({ id: _.flatten(_.pluck(schedules, 'formVersions'))})
-                      .then(function (formVersions) {
-                        return _.indexBy(_.map(formVersions, function (form) {
-                          return _.pick(form, 'id', 'name', 'revision', 'form');
-                        }), 'id');
-                      });
+            })
+            .then(function (possibleForms) {
+              enrollment.formSchedules = [];
+              // create 1D list of scheduled forms
+              _.each(this.schedules, function (schedule) {
+                _.each(schedule.formOrder, function (formOrderId) {
+                  // if ordered form is active for this session
+                  if (_.includes(schedule.formVersions, formOrderId) || schedule.formVersions == formOrderId) {
+                    var scheduledForm = _.clone(schedule);
+                    scheduledForm.scheduledForm = possibleForms[formOrderId];
+                    enrollment.formSchedules.push(scheduledForm);
+                  }
+                });
+              });
+            })
+            .then(function () {
+              return Promise.all(
+                _.map(enrollment.formSchedules, function (schedule) {
+                  return AnswerSet.count({
+                    formVersion: schedule.scheduledForm.id,
+                    surveyVersion: schedule.surveyVersion,
+                    subjectSchedule: schedule.id,
+                    subjectEnrollment: enrollment.id
+                  }).then(function (answers) {
+                    // TODO: Support [unavailable, late, incomplete, and completed] status types
+                    // TODO: Verify semi-completed answer sets (possibly store state in AnswerSet itself?)
+                    schedule.scheduledForm.status = (answers > 0) ? "Complete" : "Incomplete";
                   })
-                  .then(function (possibleForms) {
-                    enrollment.formSchedules = [];
-                    // create 1D list of scheduled forms
-                    _.each(this.schedules, function (schedule) {
-                      _.each(schedule.formOrder, function (formOrderId) {
-                        // if ordered form is active for this session
-                        if (_.includes(schedule.formVersions, formOrderId) || schedule.formVersions == formOrderId) {
-                          var scheduledForm = _.clone(schedule);
-                          scheduledForm.scheduledForm = possibleForms[formOrderId];
-                          enrollment.formSchedules.push(scheduledForm);
-                        }
-                      });
-                    });
-                  })
-                  .then(function () {
-                    return Promise.all(
-                      _.map(enrollment.formSchedules, function (schedule) {
-                        return AnswerSet.count({
-                          formVersion: schedule.scheduledForm.id,
-                          surveyVersion: schedule.surveyVersion,
-                          subjectSchedule: schedule.id,
-                          subjectEnrollment: enrollment.id
-                        }).then(function (answers) {
-                          // TODO: Support [unavailable, late, incomplete, and completed] status types
-                          // TODO: Verify semi-completed answer sets (possibly store state in AnswerSet itself?)
-                          schedule.scheduledForm.status = (answers > 0) ? "Complete" : "Incomplete";
-                        })
-                      })
-                    );
-                  })
-                  .then(function (answers) {
-                    res.ok(enrollment);
-                  })
-                  .catch(function (err) {
-                    res.serverError(err);
-                  });
-              }
+                })
+              );
+            })
+            .then(function (answers) {
+              res.ok(enrollment);
+            })
+            .catch(function (err) {
+              sails.log.error([
+                'SubjectEnrollment.findOne for user: ' + req.user.id,
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
+              res.serverError();
             });
         }
       });
@@ -97,12 +87,9 @@
         'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
-      Group.findOne({ name: 'subject' })
-      .then(function (subjectGroup) { // create user with subject group
-        options.group = subjectGroup.id;
-        return User.create(options).then(function (user) {
-          return PermissionService.setUserRoles(user);
-        });
+      options.group = 'subject';
+      User.create(options).then(function (user) {
+        return PermissionService.setDefaultGroupRoles(user);
       })
       .then(function (user) { // create passport
         this.user = user;
@@ -176,11 +163,12 @@
         }
       })
       .catch(function (err) {
-        res.serverError({
-          title: 'Subject Enrollment Error',
-          code: err.status || 500,
-          message: 'Error enrolling subject ' + JSON.stringify(options) + ' to enrollment ' + JSON.stringify(enrollmentOptions)
-        });
+        sails.log.error([
+          'SubjectEnrollment.create for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.serverError();
       });
     }
 

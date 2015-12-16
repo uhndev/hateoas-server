@@ -24,7 +24,7 @@
 
       model.findByStudyName(studyName, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
-          this.filteredTotal = totalCollection[1].length;
+          this.filteredTotal = PermissionService.filterByCriteria(req.criteria, totalCollection[1]).length;
           return model.findByStudyName(studyName, req.user,
             { where: actionUtil.parseCriteria(req),
               limit: actionUtil.parseLimit(req),
@@ -36,13 +36,14 @@
           var err = collection[0];
           var collectionItems = collection[1];
           if (err) {
-            res.serverError({
-              title: 'StudyBase Error',
-              code: err.status || 500,
-              message: 'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName + err.details
-            });
+            sails.log.error([
+              'StudyBase.findByStudyName for user: ' + req.user.id,
+              'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName,
+              'Error: ' + JSON.stringify(err)
+            ].join('\n'));
+            return res.serverError();
           }
-          res.ok(collectionItems, { filteredTotal: this.filteredTotal });
+          return res.ok(collectionItems, { filteredTotal: this.filteredTotal });
         });
     }
 

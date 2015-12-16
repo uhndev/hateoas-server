@@ -1,5 +1,6 @@
 (function() {
   var HATEOAS_VERSION = '1.0';
+  var _ = require('lodash');
 
   module.exports = {
     makeToHATEOAS: function(model) {

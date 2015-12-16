@@ -14,6 +14,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
     schema: true,
+    autoPK: false,
 
     attributes: {
       /**
@@ -23,6 +24,7 @@
        */
       name: {
         type: 'string',
+        primaryKey: true,
         required: true,
         unique: true
       },

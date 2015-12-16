@@ -9,11 +9,8 @@
 (function() {
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var StudyBase = require('./BaseControllers/StudyBaseController');
 
-  var EnrollmentBase = require('./Base/EnrollmentBaseController');
-  var StudyBase = require('./Base/StudyBaseController');
-
-  _.merge(exports, EnrollmentBase); // inherits EnrollmentBaseController.find
   _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
 
@@ -62,11 +59,12 @@
           }
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'Collection Centre Access Error',
-            code: 500,
-            message: 'Error when updating user centre access for user: ' + err
-          });
+          sails.log.error([
+            'UserEnrollment.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     },
 
@@ -106,7 +104,12 @@
         }
       })
       .catch(function (err) {
-        res.serverError(err);
+        sails.log.error([
+          'UserEnrollment.update for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.serverError();
       });
     }
 
