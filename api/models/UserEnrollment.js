@@ -65,57 +65,6 @@
       toJSON: UserModel.attributes.toJSON
     },
 
-    /**
-     * beforeCreate
-     * @description Lifecycle method for ensuring valid user enrollments
-     */
-    beforeCreate: function (values, cb) {
-      // find and create or update user enrollment data
-      UserEnrollment
-        .findOne({
-          user: values.user,
-          collectionCentre: values.collectionCentre,
-          expiredAt: null
-        })
-        .then(function (enrollment) {
-          if (!enrollment) {
-            cb();
-          } else {
-            // otherwise we're trying to update an enrollment to something that already exists
-            cb({
-              title: 'Enrollment Error',
-              status: 400,
-              message: 'Unable to enroll user, user may already be registered at another collection centre.'
-            });
-          }
-        }).catch(cb);
-    },
-
-    /**
-     * beforeUpdate
-     * @description Lifecycle method for ensuring valid user enrollments
-     */
-    beforeUpdate: function (values, cb) {
-      // check if we're trying to update an enrollment to something that already exists
-      UserEnrollment.findOne({
-        collectionCentre: values.collectionCentre,
-        user: values.user,
-        expiredAt: null,
-        id: { '!': values.id }
-      })
-      .then(function (enrollment) {
-        if (!enrollment) { // if no existing enrollment found, update can be performed safely
-          cb();
-        } else { // otherwise, we are trying to register an invalid enrollment
-          cb({
-            title: 'Enrollment Error',
-            status: 400,
-            message: 'Unable to enroll user, user may already be registered at another collection centre.'
-          });
-        }
-      }).catch(cb);
-    },
-
     afterCreate: function (values, cb) {
       CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
         if (err || !centre) {
