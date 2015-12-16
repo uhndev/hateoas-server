@@ -27,11 +27,11 @@
           res.ok(studySubjects, { filteredTotal: filteredTotal });
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'StudySubject Error',
-            code: err.status || 500,
-            message: 'An error occurred when fetching studysubject for user: ' + req.user.username + '\n' + err.details
-          });
+          sails.log.error([
+            'StudySubject.find for user: ' + req.user.id,
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     }
 

@@ -41,11 +41,11 @@
               centre.subjects = subjects;
               res.ok(centre);
             }).catch(function (err) {
-              res.serverError({
-                title: 'Collection Centre findOne Error',
-                code: err.code || 500,
-                message: err.details
-              })
+              sails.log.error([
+                'CollectionCentre.findOne for user: ' + req.user.id,
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
+              res.serverError();
             });
           }
         });
@@ -84,11 +84,12 @@
           res.status(201).jsonx(centre);
         })
         .catch(function (err) {
-          res.badRequest({
-            title: 'Error',
-            code: err.status,
-            message: err.details
-          });
+          sails.log.error([
+            'CollectionCentre.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.badRequest();
         });
     },
 
@@ -107,11 +108,12 @@
           res.ok(centre);
         })
         .catch(function (err) {
-          res.badRequest({
-            title: 'Error',
-            code: 400,
-            message: 'Unable to update collection centre with id ' + ccId + ' and fields: ' + JSON.stringify(options)
-          });
+          sails.log.error([
+            'CollectionCentre.update for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.badRequest();
         });
     }
 

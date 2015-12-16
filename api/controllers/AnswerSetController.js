@@ -68,18 +68,19 @@
             formVersion : formID,
             subjectSchedule : scheduleID,
             subjectEnrollment : this.schedule.subjectEnrollment,
-            userEnrollment : userEnrollmentID,
+            userEnrollment : userEnrollmentID
           });
         })
         .then(function (answerSet) {
           res.status(201).jsonx(answerSet);
         })
         .catch(function (err) {
-          res.badRequest({
-            title: 'Error',
-            code: err.status,
-            message: err.details
-          });
+          sails.log.error([
+            'AnswerSet.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     }
   };

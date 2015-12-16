@@ -17,7 +17,7 @@
     findScheduledForm: function(req, res, next) {
       var formVersionID = req.param('formID');
       var scheduleID = req.param('id');
-      
+
       SubjectSchedule.findOne(scheduleID).populate('answerSets')
         .then(function (schedule) {
           if (_.isUndefined(schedule)) {
@@ -26,7 +26,7 @@
             throw err;
           } else {
             this.schedule = schedule;
-            
+
             return Session.findOne({id: schedule.session}).populate('formVersions');
           }
         })
@@ -37,16 +37,16 @@
             throw err;
           } else {
             return _.find(session.formVersions, function (formVersion) {
-              return formVersion.id == formVersionID; 
+              return formVersion.id == formVersionID;
             });
-          }          
+          }
         })
         .then(function (formVersion) {
           if(formVersion === undefined) {
             res.notFound();
           } else {
             var answerSet = _.find(this.schedule.answerSets, function (answers) {
-              return answers.formVersion == formVersionID; 
+              return answers.formVersion == formVersionID;
             });
             if (answerSet !== undefined) {
               formVersion.answerSetID = answerSet.id;
@@ -56,14 +56,15 @@
           }
         })
         .catch(function (err) {
-          res.badRequest({
-            title: 'Error',
-            code: err.status,
-            message: err.details
-          });
+          sails.log.error([
+            'SubjectSchedule.findScheduledForm for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.badRequest();
         });
     }
-    
+
   };
 
 })();

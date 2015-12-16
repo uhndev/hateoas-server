@@ -59,11 +59,12 @@
           }
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'Collection Centre Access Error',
-            code: 500,
-            message: 'Error when updating user centre access for user: ' + err
-          });
+          sails.log.error([
+            'UserEnrollment.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     },
 
@@ -103,7 +104,12 @@
         }
       })
       .catch(function (err) {
-        res.serverError(err);
+        sails.log.error([
+          'UserEnrollment.update for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.serverError();
       });
     }
 

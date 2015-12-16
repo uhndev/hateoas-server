@@ -87,7 +87,12 @@
             res.ok(this.group);
           })
           .catch(function (err) {
-            return res.serverError(err);
+            sails.log.error([
+              'Group.update for user: ' + req.user.id,
+              'Data: ' + JSON.stringify(req.body),
+              'Error: ' + JSON.stringify(err)
+            ].join('\n'));
+            return res.serverError();
           });
         } else {
           return res.forbidden();

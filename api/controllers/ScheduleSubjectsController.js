@@ -39,11 +39,11 @@
         res.ok(scheduleSubjects, { filteredTotal: filteredTotal });
       })
       .catch(function (err) {
-        res.serverError({
-          title: 'ScheduleSubjects Error',
-          code: err.status || 500,
-          message: 'An error occurred when fetching schedulesubjects for user: ' + req.user.username + '\n' + err.details
-        });
+        sails.log.error([
+          'ScheduleSubjects.find for user: ' + req.user.id,
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.serverError();
       });
     }
 

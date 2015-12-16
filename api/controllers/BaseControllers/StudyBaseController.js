@@ -36,13 +36,14 @@
           var err = collection[0];
           var collectionItems = collection[1];
           if (err) {
-            res.serverError({
-              title: 'StudyBase Error',
-              code: err.status || 500,
-              message: 'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName + err.details
-            });
+            sails.log.error([
+              'StudyBase.findByStudyName for user: ' + req.user.id,
+              'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName,
+              'Error: ' + JSON.stringify(err)
+            ].join('\n'));
+            return res.serverError();
           }
-          res.ok(collectionItems, { filteredTotal: this.filteredTotal });
+          return res.ok(collectionItems, { filteredTotal: this.filteredTotal });
         });
     }
 

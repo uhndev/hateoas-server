@@ -50,12 +50,10 @@
           }
         })
         .catch(function (err) {
-          sails.log.error(err);
-          return res.serverError({
-            title: 'Server Error',
-            code: err.status,
-            message: err.details
-          });
+          sails.log.error(['Study.findOne for user: ' + req.user.id,
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          return res.serverError();
         });
     },
 
@@ -194,16 +192,16 @@
               return res.ok(this.studyRecord);
             })
             .catch(function (err) {
-              return res.serverError({
-                title: 'Study Error',
-                code: err.status || 500,
-                message: 'An error occurred when removing form ' + formID + ' from study ' + studyID + ' for user: ' + req.user.username + '\n' + err.details
-              });
+              sails.log.error([
+                'Study.removeFormFromStudy for user: ' + req.user.id,
+                'Data: ' + JSON.stringify(req.body),
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
+              return res.serverError();
             });
         }
       });
     }
-    //});
   };
 
 })();

@@ -68,7 +68,11 @@
               res.ok(enrollment);
             })
             .catch(function (err) {
-              res.serverError(err);
+              sails.log.error([
+                'SubjectEnrollment.findOne for user: ' + req.user.id,
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
+              res.serverError();
             });
         }
       });
@@ -159,11 +163,12 @@
         }
       })
       .catch(function (err) {
-        res.serverError({
-          title: 'Subject Enrollment Error',
-          code: err.status || 500,
-          message: 'Error enrolling subject ' + JSON.stringify(options) + ' to enrollment ' + JSON.stringify(enrollmentOptions)
-        });
+        sails.log.error([
+          'SubjectEnrollment.create for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.serverError();
       });
     }
 

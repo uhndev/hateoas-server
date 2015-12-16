@@ -35,6 +35,11 @@
           query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
+              sails.log.error([
+                'User.find for user: ' + req.user.id,
+                'Data: ' + JSON.stringify(req.body),
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
               return res.serverError(err);
             }
             if (req.user.group == 'admin') {
@@ -80,7 +85,12 @@
           res.ok(this.user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          sails.log.error([
+            'User.findOne for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     },
 
@@ -120,12 +130,12 @@
             });
         })
         .catch(function (err) {
-          sails.log.error(err);
-          res.badRequest({
-            title: 'User Create Error',
-            code: err.status || 400,
-            message: 'An error occurred when creating user: ' + userOptions.username + ' ' + err.details
-          });
+          sails.log.error([
+            'User.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.badRequest();
         });
     },
 
@@ -170,12 +180,12 @@
         res.ok(this.user);
       })
       .catch(function (err) {
-        sails.log.error(err);
-        res.badRequest({
-          title: 'User Update Error',
-          code: err.status || 400,
-          message: 'An error occurred when updating user: ' + options.username + ' ' + err.details
-        });
+        sails.log.error([
+          'User.update for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.badRequest();
       });
     },
 
@@ -204,11 +214,12 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'Role Update Error',
-            code: 500,
-            message: 'Error when updating roles for user: ' + user.username
-          });
+          sails.log.error([
+            'User.updateRoles for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
       }
       // Update user access matrix
@@ -221,12 +232,12 @@
           res.ok(user);
         })
         .catch(function (err) {
-          sails.log.error(err);
-          res.serverError({
-            title: 'Role Update Error',
-            code: 500,
-            message: 'Error when updating access roles for user: ' + userId
-          });
+          sails.log.error([
+            'User.updateRoles for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
       }
     }
