@@ -1,94 +1,50 @@
 (function() {
   var Promise = require('bluebird');
+
   /**
-   * Create default Role permissions
+   * Create default Groups
    */
-  exports.create = function (roles, models, admin) {
-
-    var coordinatorRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readCollectionCentre',
-        'readSubjectEnrollment',
-        'readSurvey',
-        'readSubjectSchedule',
-        'readUserEnrollment',
-        'readUser',
-        'readUserOwner',
-        'updateUserOwner',
-        'createUser',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
-
-    var interviewerRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readCollectionCentre',
-        'readSubjectEnrollment',
-        'readSurvey',
-        'readSubjectSchedule',
-        'readUserOwner',
-        'updateUserOwner',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
-
-    var subjectRoles = _.pluck(_.filter(roles, function (role) {
-      return _.contains([
-        'readStudy',
-        'readCollectionCentre',
-        'readUserOwner',
-        'updateUserOwner',
-        'readSystemForm',
-        'readForm',
-        'readTranslation',
-        'createAnswerSet'
-      ], role.name);
-    }), 'id');
-
+  exports.create = function (roles, admin) {
     var groups = [
       {
         name: 'admin',
-        roles: _.pluck(roles, 'id'),
+        roles: _.find(roles, { name: 'admin' }).id,
         level: 1,
         menu: {
           tabview: [
-            {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "Assessments"},
-            {
-              "prompt": "HEADER.MENU.AT", "icon": "fa-cog", "dropdown": [
+            { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { "prompt": "Assessments", "href": "/assessment", "icon": "fa-stethoscope" },
+            {"prompt": "HEADER.MENU.ALTUM_TOOLS", "icon": "fa-cog", "dropdown": [
               {"prompt": "HEADER.MENU.AT.APPROVERS", "href": "/approver", "icon": "fa-male"},
               {"prompt": "HEADER.MENU.AT.ADDRESS", "href": "/address", "icon": "fa-paw" },
               {"prompt": "HEADER.MENU.AT.PAYOR", "href": "/payor", "icon": "fa-bank"},
               {"prompt": "HEADER.MENU.AT.CLAIM", "href": "/claim", "icon": "fa-wheelchair"},
-              {"prompt": "HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
+              {"prompt": "HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-o"},
               {"prompt": "HEADER.MENU.AT.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
               {"prompt": "HEADER.MENU.AT.PHYSICIAN", "href": "/physician", "icon": "fa-stethoscope"},
-              { "prompt": "HEADER.MENU.AT.PROGRAM", "href": "/program", "icon": "fa-medkit" },
-              {"prompt": "HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
-            },
+              {"prompt": "HEADER.MENU.AT.PROGRAM", "href": "/program", "icon": "fa-medkit" },
+              {"prompt": "HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-tasks"}
+            ]},
             {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
-            {
-              prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
+            {prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
               {prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench'},
               {prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code'},
               {prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
               {prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
               {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
-            ]
-            }
+            ]}
           ],
+          subview: {
+            'study': ['name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
+            'user': ['name', 'overview']
+          }
         }
       },
       {
         name: 'coordinator',
-        roles: coordinatorRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'coordinator' ], role.name);
+        }), 'id'),
         level: 2,
         menu: {
           tabview: [
@@ -102,14 +58,16 @@
             }
           ],
           subview: {
-            'study': ['name', 'overview', 'subject', 'user'],
+            'study': [ 'name', 'overview', 'collectioncentre', 'subject', 'user' ],
             'user': ['name', 'overview']
           }
         }
       },
       {
         name: 'interviewer',
-        roles: interviewerRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'interviewer' ], role.name);
+        }), 'id'),
         level: 2,
         menu: {
           tabview: [
@@ -130,7 +88,9 @@
       },
       {
         name: 'subject',
-        roles: subjectRoles,
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'subject' ], role.name);
+        }), 'id'),
         level: 3,
         menu: {
           tabview: [

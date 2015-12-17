@@ -10,7 +10,7 @@
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  _.merge(exports, require('sails-permissions/api/controllers/UserController'));
+  _.merge(exports, require('sails-auth/dist/api/controllers/UserController'));
   _.merge(exports, {
 
     /**
@@ -18,25 +18,37 @@
      * @description finds and returns all users with populated roles associations
      */
     find: function (req, res) {
-      Group.findOneByName('subject').then(function (subjectGroup) {
-        var query = ModelService.filterExpiredRecords('user');
-        // if non-subject user, omit subject users from search
-        if (req.user.group != subjectGroup.id) {
-          query.where(_.merge(actionUtil.parseCriteria(req), {group: {'!': subjectGroup.id}}));
-        }
-        query
-          .where( actionUtil.parseCriteria(req) )
-          .limit( actionUtil.parseLimit(req) )
-          .skip( actionUtil.parseSkip(req) )
-          .sort( actionUtil.parseSort(req) );
-        query.populate('roles');
-        query.exec(function found(err, users) {
-          if (err) {
-            return res.serverError(err);
-          }
-          res.ok(users);
+      var whereQuery = actionUtil.parseCriteria(req);
+      // admins have every permission so omit subject users from search
+      if (req.user.group == 'admin') {
+        whereQuery = _.merge(actionUtil.parseCriteria(req), {group: {'!': 'subject'}});
+      }
+
+      ModelService.filterExpiredRecords('user').where( whereQuery )
+        .then(function (totalUsers) {
+          var query = ModelService.filterExpiredRecords('user');
+          query
+            .where( whereQuery )
+            .limit( actionUtil.parseLimit(req) )
+            .skip( actionUtil.parseSkip(req) )
+            .sort( actionUtil.parseSort(req) );
+          query.populate('roles');
+          query.exec(function found(err, users) {
+            if (err) {
+              sails.log.error([
+                'User.find for user: ' + req.user.id,
+                'Data: ' + JSON.stringify(req.body),
+                'Error: ' + JSON.stringify(err)
+              ].join('\n'));
+              return res.serverError(err);
+            }
+            if (req.user.group == 'admin') {
+              res.ok(users, { filteredTotal: totalUsers.length });
+            } else {
+              res.ok(users);
+            }
+          });
         });
-      });
     },
 
     /**
@@ -73,7 +85,12 @@
           res.ok(this.user);
         })
         .catch(function (err) {
-          res.serverError(err);
+          sails.log.error([
+            'User.findOne for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     },
 
@@ -82,62 +99,44 @@
      * @description Overrides sails-auth's UserController.create to include role
      */
     create: function (req, res, next) {
-      var password = req.param('password'),
-          groupID = req.param('group');
-      var options = _.pick(_.pick(req.body,
-        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      var userOptions = _.pick(_.pick(req.body,
+        'username', 'email', 'password'
+      ), _.identity);
+      var personInfo = _.pick(_.pick(req.body,
+        'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
 
-      Group.findOne(groupID).exec(function (err, group) {
-        if (err || !group) {
-          res.badRequest({
-            title: 'User Error',
-            code: 400,
-            message: 'Group ' + groupID + ' is not a valid group'
-          });
-        } else {
-          User.create(options).exec(function (uerr, user) {
-            if (uerr || !user) {
-              return res.badRequest({
-                title: 'User Error',
-                code: uerr.status || 400,
-                message: uerr.details || 'Error creating user'
-              });
-            } else {
-              if (_.isEmpty(password)) {
-                user.destroy(function (destroyErr) {
-                  return res.badRequest({
-                    title: 'User Error',
-                    code: 400,
-                    message: 'Password cannot be empty'
-                  });
-                });
-              } else {
-                Passport.create({
-                  protocol : 'local',
-                  password : password,
-                  user     : user.id
-                }, function (err, passport) {
-                  if (err) {
-                    user.destroy(function (destroyErr) {
-                      next(destroyErr || err);
-                    });
-                  }
-                  PermissionService.setUserRoles(user)
-                    .then(function (user) {
-                      res.ok(user);
-                    })
-                    .catch(function (err) {
-                      user.destroy(function (destroyErr) {
-                        next(destroyErr || err);
-                      });
-                    });
-                });
-              }
+      User
+        .register(userOptions)
+        .then(function (createdUser) {
+          return Group.findOne(personInfo.group).then(function (newGroup) {
+            if (!newGroup) {
+              err = new Error('Group '+personInfo.group+' does not exist.');
+              err.status = 400;
+              throw err;
             }
+            return User.update({id: createdUser.id}, personInfo);
           });
-        }
-      });
+        })
+        .then(function (updatedUser) {
+          return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
+            .then(function (user) {
+              res.ok(user);
+            })
+            .catch(function (err) {
+              user.destroy(function (destroyErr) {
+                next(destroyErr || err);
+              });
+            });
+        })
+        .catch(function (err) {
+          sails.log.error([
+            'User.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.badRequest();
+        });
     },
 
     /**
@@ -163,7 +162,7 @@
       })
       .then(function (user) { // updating group, apply new permissions
         if (this.previousGroup !== options.group && this.group.level === 1) {
-          return PermissionService.setUserRoles(_.first(user));
+          return PermissionService.setDefaultGroupRoles(_.first(user));
         } else {
           return user;
         }
@@ -181,11 +180,12 @@
         res.ok(this.user);
       })
       .catch(function (err) {
-        res.serverError({
-          title: 'User Update Error',
-          code: 500,
-          message: 'An error occurred when updating user: ' + options.username + ' ' + err.details
-        });
+        sails.log.error([
+          'User.update for user: ' + req.user.id,
+          'Data: ' + JSON.stringify(req.body),
+          'Error: ' + JSON.stringify(err)
+        ].join('\n'));
+        res.badRequest();
       });
     },
 
@@ -208,17 +208,18 @@
           return user.save();
         })
         .then(function (user) {
-          return PermissionService.setUserRoles(user);
+          return PermissionService.setDefaultGroupRoles(user);
         })
         .then(function (user) {
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'Role Update Error',
-            code: 500,
-            message: 'Error when updating roles for user: ' + user.username
-          });
+          sails.log.error([
+            'User.updateRoles for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
       }
       // Update user access matrix
@@ -231,11 +232,12 @@
           res.ok(user);
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'Role Update Error',
-            code: 500,
-            message: 'Error when updating access roles for user: ' + userId
-          });
+          sails.log.error([
+            'User.updateRoles for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
       }
     }

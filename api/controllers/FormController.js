@@ -8,7 +8,7 @@
 (function() {
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./Base/StudyBaseController');
+  var StudyBase = require('./BaseControllers/StudyBaseController');
 
   _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudyName
   _.merge(exports, {
@@ -29,11 +29,11 @@
             // call blueprint destroy to actually destroy
             return require('../blueprints/destroy')(req, res);
           }).catch(function (err) {
-            return res.serverError({
-              title: 'Form Error',
-              code: 500,
-              message: 'An error occurred when archiving form ' + formID + ': ' + err.details
-            });
+            sails.log.error([
+              'Form.destroy for user: ' + req.user.id,
+              'Error: ' + JSON.stringify(err)
+            ].join('\n'));
+            return res.serverError();
           });
         }
       });

@@ -17,7 +17,7 @@
       var scheduleID = req.param('scheduleID'),
           formID = req.param('formID'),
           answers = req.param('answers');
-      
+
       SubjectSchedule.findOne({ id: scheduleID })
         .then(function (subjectSchedule) {
           if (_.isUndefined(subjectSchedule)) {
@@ -26,10 +26,10 @@
             throw err;
           } else {
             this.schedule = subjectSchedule;
-            
+
             return studysession.findOne({ id: this.schedule.session });
           }
-        
+
         })
         .then(function (studySession) {
           if (_.isUndefined(studySession)) {
@@ -38,7 +38,7 @@
             throw err;
           } else {
             this.studySessionView = studySession;
-            
+
             return SubjectEnrollment.findOne(this.schedule.subjectEnrollment);
           }
         })
@@ -60,7 +60,7 @@
           if (!_.isUndefined(userEnrollment)) {
             userEnrollmentID = userEnrollment.id;
           }
-          
+
           return AnswerSet.create({
             answers : answers,
             study : this.studySessionView.study,
@@ -68,20 +68,21 @@
             formVersion : formID,
             subjectSchedule : scheduleID,
             subjectEnrollment : this.schedule.subjectEnrollment,
-            userEnrollment : userEnrollmentID,
+            userEnrollment : userEnrollmentID
           });
         })
         .then(function (answerSet) {
           res.status(201).jsonx(answerSet);
         })
         .catch(function (err) {
-          res.badRequest({
-            title: 'Error',
-            code: err.status,
-            message: err.details
-          });
+          sails.log.error([
+            'AnswerSet.create for user: ' + req.user.id,
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
-    },
+    }
   };
 })();
 

@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW collectioncentreoverview AS
     study.name AS study,
     collectioncentre.name,
     "user".id AS contact,
-    concat_ws(' '::text, "user".prefix, "user".firstname, "user".lastname) AS "contactName",
+    concat_ws(' '::text, "contactUser".prefix, "contactUser".firstname, "contactUser".lastname) AS "contactName",
     collectioncentre."owner",
     collectioncentre."createdBy",
     collectioncentre."createdAt",
@@ -22,6 +22,7 @@ CREATE OR REPLACE VIEW collectioncentreoverview AS
      LEFT JOIN userenrollment ON "user".id = userenrollment."user"
      LEFT JOIN subject ON subject."user" = "user".id
      LEFT JOIN collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN "user" "contactUser" ON collectioncentre.contact = "contactUser".id
      LEFT JOIN study ON study.id = collectioncentre.study
      LEFT JOIN subjectenrollment ON subjectenrollment."collectionCentre" = collectioncentre.id
      LEFT JOIN ( SELECT count(1) AS coordinators_count,

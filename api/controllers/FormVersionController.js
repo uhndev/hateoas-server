@@ -95,11 +95,12 @@
           }
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'FormVersion Error: formID '+ formID,
-            code: err.status,
-            message: 'An error occurred when saving FormVersion ' + formOptions + ': ' + err.details
-          });
+          sails.log.error([
+            'FormVersion.create for user:', req.user.id, '\n',
+            'Data: ' + JSON.stringify(req.body),
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     }
   };

@@ -80,6 +80,47 @@
       } else {
         cb();
       }
+    },
+
+    afterCreate: function (values, cb) {
+      User.findOne(values.user)
+        .then(function (user) {
+          this.user = user;
+          this.roleName = ['Subject', values.id, 'Role'].join('');
+          return Role.findOne({ name: this.roleName });
+        })
+        .then(function (role) {
+          if (_.isUndefined(role)) {
+            return PermissionService.createRole({
+              name: this.roleName,
+              permissions: [
+                {
+                  model: 'studysubject',
+                  action: 'read',
+                  criteria: [
+                    { where: { subject: values.id } }
+                  ]
+                },
+                {
+                  model: 'schedulesubjects',
+                  action: 'read',
+                  criteria: [
+                    { where: { subject: values.id } }
+                  ]
+                }
+              ],
+              users: [ this.user.username ]
+            });
+          } else {
+            if (this.user.group != 'admin') {
+              return PermissionService.addUsersToRole(this.user.username, this.roleName);
+            }
+            return role;
+          }
+        })
+        .then(function (newRole) {
+          cb();
+        }).catch(cb);
     }
 
   });

@@ -7,11 +7,13 @@
 	'post /auth/local'          : 'AuthController.callback'
  */
 
-var AuthController = require('../../../api/controllers/AuthController');
-
 describe('The Auth Controller', function() {
 
 	describe('when accessing Auth API', function() {
+
+    afterEach(function (done) {
+      request.get('/logout').end(done);
+    });
 
 		it('should use the correct test database', function(done) {
 			sails.config.models.connection.should.equal('arm_test');

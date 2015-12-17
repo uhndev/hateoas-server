@@ -86,22 +86,16 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByStudyName: function(studyName, currUser, options, cb) {
+    findByStudyName: function(studyName, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      return User.findOne(currUser.id)
-        .populate('enrollments')
-        .populate('group')
-        .then(function (user) {
-          var whereOp = { studyName: studyName };
-          if (user.group.level > 1) {
-            whereOp.userenrollment = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'id');
-          }
-          return studycollectioncentre.find(query).where(whereOp);
+      return Study.findOneByName(studyName)
+        .then(function (study) {
+          return CollectionCentre.find(query).where({ study: study.id });
         })
         .then(function (centres) {
-          return [false, _.unique(centres, 'id')];
+          return [false, centres];
         })
         .catch(function (err) {
           return [err, null];
@@ -131,6 +125,66 @@
       } else {
         cb();
       }
+    },
+
+    afterCreate: function (values, cb) {
+      PermissionService.createRole({
+        name: ['CollectionCentre', values.id, 'Role'].join(''),
+        permissions: [
+          {
+            model: 'study',
+            action: 'read',
+            criteria: [
+              { where: { id: values.study } }
+            ]
+          },
+          {
+            model: 'collectioncentre',
+            action: 'read',
+            criteria: [
+              { where: { id: values.id } }
+            ]
+          },
+          {
+            model: 'userenrollment',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'subjectenrollment',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'survey',
+            action: 'read',
+            criteria: [
+              { where: { study: values.study } }
+            ]
+          },
+          {
+            model: 'studysubject',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          },
+          {
+            model: 'schedulesubjects',
+            action: 'read',
+            criteria: [
+              { where: { collectionCentre: values.id } }
+            ]
+          }
+        ]
+      })
+      .then(function (newRole) {
+        cb();
+      }).catch(cb);
     }
 
   });

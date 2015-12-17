@@ -126,21 +126,14 @@
      * @param  {String}   studyName Name of study to search.  Passed in from SubjectEnrollmentController.
      * @param  {Object}   currUser  Current user used in determining filtering options based on access
      * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
-     * @param  {Function} cb        Callback function upon completion
      */
-    findByStudyName: function(studyName, currUser, options, cb) {
+    findByStudyName: function(studyName, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.name;
-      return User.findOne(currUser.id)
-        .populate('enrollments')
-        .populate('group')
-        .then(function (user) {
-          var whereOp = { studyName: studyName };
-          if (user.group.level > 1) {
-            whereOp.collectionCentre = _.pluck(_.filter(user.enrollments, { expiredAt: null }), 'collectionCentre');
-          }
-          return studysubject.find(query).where(whereOp);
+      return Study.findOneByName(studyName)
+        .then(function (study) {
+          return studysubject.find(query).where({ study: study.id });
         })
         .then(function (studySubjects) {
           return [false, studySubjects];
