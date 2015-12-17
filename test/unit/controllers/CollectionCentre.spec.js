@@ -47,7 +47,7 @@ describe('The CollectionCentre Controller', function () {
       .spread(function (centres, studies) {
         centres.should.equal(0);
         studies.should.equal(0);
-        auth.logout(done);
+        done();
       }).catch(done);
 		});
 
