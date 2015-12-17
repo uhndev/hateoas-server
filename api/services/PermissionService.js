@@ -3,7 +3,8 @@
 (function() {
 
   var _ = require('lodash');
-  var _super = require('sails-permissions/api/services/PermissionService');
+  var _super = require('sails-permissions/dist/api/services/PermissionService');
+  var wlFilter = require('../../node_modules/sails-permissions/node_modules/waterline-criteria');
 
   /** @namespace */
   function PermissionService () { }
@@ -11,90 +12,57 @@
   PermissionService.prototype = Object.create(_super);
   _.extend(PermissionService.prototype, {
 
-    /**
-     * findEnrollments
-     * @description Given a user with arbitrary group, check for valid enrollments for the given collection centre
-     * @memberOf PermissionService
-     * @param  {Object}         user req.user object
-     * @param  {Object|Integer} centre collection centre object or centre ID
-     * @return {Array|Promise}  list of enrollments, or promise
+	  /**
+     * filterByCriteria
+     * @description Filters a collection of items by an array of sails-permission criteria
+     * @param criteria    Array of sails-permissions criteria, typically passed in as req.criteria
+     * @param totalItems  Collection of items to filter
+     * @returns {Array}   Filtered array of items by criteria
      */
-    findEnrollments: function(user, centre) {
-      return Group.findOne(user.group).then(function (group) {
-        this.group = group;
-        switch (group.level) {
-          case 1: return null;
-          case 2: return UserEnrollment.find({
-            user: user.id,
-            collectionCentre: centre.id || centre,
-            expiredAt: null
+    filterByCriteria: function(criteria, totalItems) {
+      if (criteria && criteria.length > 0) {
+        return totalItems.reduce(function(memo, item) {
+          criteria.some(function(crit) {
+            var filtered = wlFilter([item], {
+              where: {
+                or: [crit.where]
+              }
+            }).results;
+
+            if (filtered.length) {
+              if (crit.blacklist && crit.blacklist.length) {
+                crit.blacklist.forEach(function(term) {
+                  delete item[term];
+                });
+              }
+              memo.push(item);
+              return true;
+            }
           });
-          case 3: return Subject.findOne({ user: user.id }).then(function (subject) {
-            return SubjectEnrollment.find({
-              subject: subject.id,
-              collectionCentre: centre.id || centre,
-              expiredAt: null
-            });
-          });
-          default: return res.notFound();
-        }
-      });
+          return memo;
+        }, []);
+      } else {
+        return totalItems;
+      }
     },
 
     /**
-     * filterByEnrollment
-     * @description Given a user object and an array collection, filter the collection based
-     *              on the enrollments that user holds.
-     * @memberOf PermissionService
-     * @param   {Object} user
-     * @param   {Array}  collection
-     * @returns {Array|Promise}
-       */
-    filterByEnrollment: function(user, collection) {
-      var filterCollection = function(user) {
-        var validEnrollments = _.filter(user.enrollments, { expiredAt: null });
-        return _.filter(collection, function (record) {
-          if (_.has(record, 'collectionCentres')) { // check if collection centres has user enrollment
-            return _.some(record.collectionCentres, function(centre) {
-              return _.includes(_.pluck(validEnrollments, 'collectionCentre'), centre.id);
-            });
-          } else if (_.has(record, 'collectionCentre')) { // check if user enrollment has collection centre
-            return _.includes(_.pluck(validEnrollments, 'collectionCentre'), record.collectionCentre);
-          } else {
-            return true;
-          }
-        });
-      };
-
-      return Group.findOne(user.group)
-        .then(function (group) {
-          switch(group.level) {
-            case 1: // allow all as admin
-              return collection;
-            case 2: // find specific user's access
-              return User.findOne(user.id).populate('enrollments').then(filterCollection);
-            case 3: // find subject's collection centre access
-              return Subject.findOne({user: user.id}).populate('enrollments').then(filterCollection);
-            default: return null;
-          }
-        })
-        .then(function (filteredCollection) {
-          return filteredCollection;
-        });
-    },
-
-    /**
-     * setUserRoles
+     * setDefaultGroupRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService
      * @param  {Object}         user
      * @return {Object|Promise} user with updated roles, or promise
      */
-    setUserRoles: function(user) {
+    setDefaultGroupRoles: function(user) {
       var self = this;
-      var uID = user.group.id || user.group;
-      return Group.findOne(uID).populate('roles')
+      var groupID = user.group.id || user.group;
+      return Group.findOne(groupID).populate('roles')
         .then(function (group) {
+          if (!group) {
+            var err = new Error('Group '+groupID+' is not a valid group');
+            err.status = 400;
+            throw err;
+          }
           return self.grantPermissions(user, group.roles);
         });
     },

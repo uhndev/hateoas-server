@@ -116,7 +116,7 @@ describe('The SubjectEnrollment Controller', function () {
             username: 'testsubject',
             email: 'testsubject@example.com',
             password: 'testsubject1234',
-            group: globals.groups.subject,
+            group: 'subject',
             prefix: 'Mr.',
             firstname: 'Test',
             lastname: 'Subject',

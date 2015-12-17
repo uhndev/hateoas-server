@@ -7,25 +7,112 @@
    */
   exports.create = function () {
 
-    var promises = [];
-    var crud = ['create', 'read', 'update', 'delete'];
-
-    return Model.find()
-      .then(function (models) {
-        var dadosModels = _.pluck(models, 'name');
-        dadosModels.push('UserOwner');
-
-        // setup granular model-specific roles
-        _.each(dadosModels, function(model) {
-          _.each(crud, function(operation) {
-            promises.push(
-              Role.findOrCreate({ name: operation + model }, { name: operation + model })
-            );
-          })
-        });
-
-        return Promise.all(promises);
-      });
+    return Promise.all([
+      Role.findOneByName('coordinator').then(function (role) {
+        if (!role) {
+          return PermissionService.createRole({
+            name: 'coordinator',
+            permissions: [
+              { model: 'studysubject',      action: 'read' },
+              { model: 'schedulesubjects',  action: 'read' },
+              { model: 'systemform',        action: 'read' },
+              { model: 'form',              action: 'read' },
+              { model: 'translation',       action: 'read' },
+              { model: 'answerset',         action: 'create' },
+              {
+                model: 'user',
+                action: 'read',
+                criteria: [
+                  { where: { group: { '!': 'subject' } } }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'update',
+                relation: 'owner',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'create',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              }
+            ]
+          });
+        }
+        return role;
+      }),
+      Role.findOneByName('interviewer').then(function (role) {
+        if (!role) {
+          return PermissionService.createRole({
+            name: 'interviewer',
+            permissions: [
+              { model: 'studysubject',      action: 'read' },
+              { model: 'schedulesubjects',  action: 'read' },
+              { model: 'systemform',        action: 'read' },
+              { model: 'form',              action: 'read' },
+              { model: 'translation',       action: 'read' },
+              { model: 'answerset',         action: 'create' },
+              {
+                model: 'user',
+                action: 'read',
+                criteria: [
+                  { where: { group: { '!': 'subject' } } }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'update',
+                relation: 'owner',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              }
+            ]
+          });
+        }
+        return role;
+      }),
+      Role.findOneByName('subject').then(function (role) {
+        if (!role) {
+          return PermissionService.createRole({
+            name: 'subject',
+            permissions: [
+              { model: 'systemform',        action: 'read' },
+              { model: 'form',              action: 'read' },
+              { model: 'translation',       action: 'read' },
+              { model: 'answerset',         action: 'create' },
+              {
+                model: 'user',
+                action: 'read',
+                relation: 'owner'
+              },
+              {
+                model: 'user',
+                action: 'update',
+                relation: 'owner',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              }
+            ]
+          });
+        }
+        return role;
+      })
+    ]);
   };
 
 })();

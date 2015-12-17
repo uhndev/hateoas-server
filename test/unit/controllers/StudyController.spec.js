@@ -10,8 +10,6 @@
   'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
  */
 
-var StudyController = require('../../../api/controllers/StudyController');
-
 describe('The Study Controller', function () {
 
 	var study1, study2, study3, cc1Id, cc2Id;
@@ -276,11 +274,12 @@ describe('The Study Controller', function () {
           .send()
           .expect(200)
           .end(function (err, res) {
-            var collection = JSON.parse(res.text);
-            collection.items[0].expiredAt.should.be.truthy;
-            CollectionCentre.findOne(centreID).exec(function (err, centre) {
-              centre.expiredAt.should.be.truthy;
-              done(err);
+            Study.findOne(studyID).then(function (study) {
+              study.expiredAt.should.be.truthy;
+              CollectionCentre.findOne(centreID).exec(function (err, centre) {
+                centre.expiredAt.should.be.truthy;
+                done(err);
+              });
             });
           });
       });
@@ -458,10 +457,8 @@ describe('The Study Controller', function () {
 						administrator: globals.users.coordinatorUserId,
 						pi: globals.users.coordinatorUserId
 					})
-					.expect(400)
+					.expect(403)
 					.end(function(err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User coordinator@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -474,10 +471,8 @@ describe('The Study Controller', function () {
 					.send({
 						name: 'TEST'
 					})
-					.expect(400)
+					.expect(403)
 					.end(function(err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User coordinator@example.com is not permitted to PUT ');
 						done(err);
 					});
 			})
@@ -549,10 +544,8 @@ describe('The Study Controller', function () {
 						administrator: globals.users.coordinatorUserId,
 						pi: globals.users.coordinatorUserId
 					})
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to POST ');
 						done(err);
 					});
 			});
@@ -563,28 +556,12 @@ describe('The Study Controller', function () {
 				request.put('/api/study/' + study2)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({ reb: 2000 })
-					.expect(400)
+					.expect(403)
 					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.error.should.equal('User subject@example.com is not permitted to PUT ');
 						done(err);
 					});
 			});
 		});
-
-		// TODO: until subjects can be created
-		// describe('allow correct headers', function() {
-		// 	it('should only allow read access for /api/study', function (done) {
-		// 		request.get('/api/study');
-		// 		agent.attachCookies(req);
-		// 		req.expect(200)
-		// 			.end(function (err, res) {
-		// 				var headers = res.headers['allow'];
-		// 				headers.should.equal('read');
-		// 				done(err);
-		// 			});
-		// 	});
-		// });
 	});
 
 });

@@ -12,7 +12,7 @@
   var _super = require('./BaseModel.js');
 
   var _ = require('lodash');
-  var _role = require('sails-permissions/api/models/Role');
+  var _role = require('sails-permissions/dist/api/models/Role');
 
   _.merge(exports, _super);
   _.merge(exports, _role);

@@ -17,37 +17,21 @@
      *              subject may be enrolled in. Primarily used exclusively by subjects to pull only their relevant data.
      */
     find: function(req, res) {
-      User.findOne(req.user.id).populate('enrollments')
-        .then(function (user) {
-          this.user = user;
-          return Group.findOne(req.user.group);
-        })
-        .then(function (group) {
-          var query = {};
-          switch (group.level) {
-            case 1: break;
-            case 2: query = { collectionCentre: _.pluck(_.filter(this.user.enrollments, { expiredAt: null }), 'collectionCentre') }; break;
-            case 3: query = { user: req.user.id }; break;
-            default: return null;
-          }
-          return [
-            studysubject.count(query),
-            studysubject.find(query)
-              .where( actionUtil.parseCriteria(req) )
-              .limit( actionUtil.parseLimit(req) )
-              .skip( actionUtil.parseSkip(req) )
-              .sort( actionUtil.parseSort(req) )
-          ];
-        })
-        .spread(function (filteredTotal, studySubjects) {
+      studysubject.find()
+        .where( actionUtil.parseCriteria(req) )
+        .limit( actionUtil.parseLimit(req) )
+        .skip( actionUtil.parseSkip(req) )
+        .sort( actionUtil.parseSort(req) )
+        .then(function (studySubjects) {
+          var filteredTotal = PermissionService.filterByCriteria(req.criteria, studySubjects).length;
           res.ok(studySubjects, { filteredTotal: filteredTotal });
         })
         .catch(function (err) {
-          res.serverError({
-            title: 'StudySubject Error',
-            code: err.status || 500,
-            message: 'An error occurred when fetching studysubject for user: ' + req.user.username + '\n' + err.details
-          });
+          sails.log.error([
+            'StudySubject.find for user: ' + req.user.id,
+            'Error: ' + JSON.stringify(err)
+          ].join('\n'));
+          res.serverError();
         });
     }
 

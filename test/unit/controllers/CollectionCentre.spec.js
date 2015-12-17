@@ -3,8 +3,6 @@
  * File Location: test/controllers/CollectionCentreController.spec.js
  */
 
-var CollectionCentreController = require('../../../api/controllers/CollectionCentreController');
-
 describe('The CollectionCentre Controller', function () {
 
 	var study1, cc1Id, cc2Id;
@@ -39,12 +37,18 @@ describe('The CollectionCentre Controller', function () {
 		});
 
 		after(function(done) {
-			CollectionCentre.destroy(cc1Id).exec(function (err, cc) {
-				Study.destroy(study1).exec(function (err, cc) {
-					if (err) return done(err);
-					auth.logout(done);
-				});
-			});
+      Promise.all([
+        CollectionCentre.destroy({ id: [cc1Id, cc2Id] }),
+        Study.destroy(study1)
+      ])
+      .then(function (destroyed) {
+        return [ CollectionCentre.count(), Study.count() ];
+      })
+      .spread(function (centres, studies) {
+        centres.should.equal(0);
+        studies.should.equal(0);
+        auth.logout(done);
+      }).catch(done);
 		});
 
 		describe('find()', function () {
@@ -181,22 +185,22 @@ describe('The CollectionCentre Controller', function () {
  					});
 			});
 
-			it('should be able to add users to this collection centre', function (done) {
+			it.skip('should be able to add users to this collection centre', function (done) {
         // TODO
         done();
 			});
 
-			it('should be able to add subjects to this collection centre', function (done) {
+			it.skip('should be able to add subjects to this collection centre', function (done) {
 				// TODO
 				done();
 			});
 
-			it('should be able to remove users from this collection centre', function (done) {
+			it.skip('should be able to remove users from this collection centre', function (done) {
 				// TODO
 	 			done();
 			});
 
-			it('should be able to remove subjects from this collection centre', function (done) {
+			it.skip('should be able to remove subjects from this collection centre', function (done) {
 				// TODO
 				done();
 			});
@@ -218,7 +222,11 @@ describe('The CollectionCentre Controller', function () {
 
       afterEach(function (done) {
         UserEnrollment.destroy(ueID).exec(function (err, destroyed) {
-          done(err);
+          PermissionService.removeUsersFromRole('coordinator', ['CollectionCentre', cc1Id, 'Role'].join(''))
+            .then(function () {
+              done();
+            })
+            .catch(done);
         });
       });
 
@@ -228,9 +236,10 @@ describe('The CollectionCentre Controller', function () {
           .send()
           .expect(200)
           .end(function (err, res) {
-            var collection = JSON.parse(res.text);
-            collection.items[0].expiredAt.should.be.truthy;
-            done(err);
+            CollectionCentre.findOne(cc1Id).then(function (centre) {
+              centre.expiredAt.should.be.truthy;
+              done(err);
+            });
           });
 			});
 
@@ -248,7 +257,7 @@ describe('The CollectionCentre Controller', function () {
           });
       });
 
-      it('should have marked all associated subject enrollments as expired', function (done) {
+      it.skip('should have marked all associated subject enrollments as expired', function (done) {
         // TODO
         done();
       });

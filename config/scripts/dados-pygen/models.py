@@ -14,7 +14,7 @@ class User:
     self.password = "Password123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])
-    self.group = 2
+    self.group = 'coordinator'
 
 class Study:
   def __init__(self, id):
@@ -30,7 +30,7 @@ class Study:
 class CollectionCentre:
   def __init__(self, id, study):
     self.id = id
-    self.name = 'CC-' + `id` + '-' + study.name
+    self.name = 'CC-' + `id` + '-' + fake.city()
     self.study = study.id
     self.contact = random.randint(config.minCoord, config.maxCoord - 1)
 

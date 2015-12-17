@@ -5,14 +5,13 @@
   module.exports = function (sails) {
     return {
       initialize: function (next) {
-        sails.after('hook:sails-permissions:loaded', function () {
+        sails.after('hook:permissions:loaded', function () {
           Model.count()
             .then(function (count) {
               if (count == sails.models.length) return next();
               initializeRoles()
                 .then(initializeGroups)
                 .then(checkAdminUser)
-                .then(initializePermissions)
                 .then(initializeTranslations)
                 .then(next);
             })
@@ -31,7 +30,15 @@
    */
   function initializeRoles () {
     sails.log('finding or creating roles');
-    return require('../../config/fixtures/role').create();
+    return Promise.all(
+      _.map(['public', 'registered'], function (defaultRole) {
+        return Role.findOne({ name: defaultRole }).then(function (role) {
+          return Permission.destroy({ role: role.id });
+        });
+      })
+    ).then(function () {
+      return require('../../config/fixtures/role').create();
+    });
   }
 
   /**
@@ -43,44 +50,17 @@
     return User.findOne({ email: sails.config.permissions.adminEmail })
       .then(function (user) {
         if (_.isUndefined(user.group) || _.isNull(user.group)) {
-          return Group.findOneByName('admin')
-            .then(function (group) {
-              return User.update({ id: user.id }, {
-                prefix: 'Mr.',
-                firstname: 'Admin',
-                lastname: 'Admin',
-                group: group.id
-              });
-            });
+          return User.update({ id: user.id }, {
+            prefix: 'Mr.',
+            firstname: 'Admin',
+            lastname: 'Admin',
+            gender: 'Male',
+            dob: new Date(),
+            group: 'admin'
+          });
         } else {
           return user;
         }
-      });
-  }
-
-  /**
-   * Creates associated permission for each created role in previous step
-   * @return {Array} permissions
-   */
-  function initializePermissions () {
-    return Model.find()
-      .then(function (models) {
-        this.models = models;
-        return Role.find();
-      })
-      .then(function (roles) {
-        this.roles = roles;
-        return User.findOne({ email: sails.config.permissions.adminEmail });
-      })
-      .then(function (admin) {
-        sails.log('setting additional permissions');
-        return require('../../config/fixtures/permissions').create(this.roles, this.models, admin);
-      })
-      .then(function (permissions) {
-        return null;
-      })
-      .catch(function (error) {
-        sails.log.error(error);
       });
   }
 
@@ -89,18 +69,14 @@
    * @return {Array} groups
    */
   function initializeGroups () {
-    return Model.find()
-      .then(function (models) {
-        this.models = models;
-        return Role.find();
-      })
+    return Role.find()
       .then(function (roles) {
         this.roles = roles;
         return User.findOne({ email: sails.config.permissions.adminEmail });
       })
       .then(function (admin) {
         sails.log('setting additional groups');
-        return require('../../config/fixtures/groups').create(this.roles, this.models, admin);
+        return require('../../config/fixtures/groups').create(this.roles, admin);
       })
       .then(function (groups) {
         return null;
