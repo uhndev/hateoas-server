@@ -17,6 +17,7 @@ CREATE OR REPLACE VIEW studyuser AS
     "user".lastname,
     "user".gender,
     "user".dob,
+    study.id AS study,
     study.name AS "studyName",
     userenrollment."collectionCentre",
     collectioncentre.name AS "collectionCentreName",

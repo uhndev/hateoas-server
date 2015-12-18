@@ -14,7 +14,7 @@
 
   var StudyBase = require('./BaseControllers/StudyBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
   _.merge(exports, {
 
     findOne: function(req, res, next) {

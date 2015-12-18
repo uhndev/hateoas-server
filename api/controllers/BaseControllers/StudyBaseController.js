@@ -14,18 +14,17 @@
   module.exports = {
 
     /**
-     * findByStudyName
-     * @description Calls the respective model function findByStudyName to return the list
+     * findByStudy
+     * @description Calls the respective model function findByStudy to return the list
      *              of models under a particular study.
      */
-    findByStudyName: function(req, res) {
-      var studyName = req.param('name');
+    findByStudy: function(req, res) {
+      var study = req.param('id');
       var model = actionUtil.parseModel(req);
 
-      model.findByStudyName(studyName, req.user, { where: actionUtil.parseCriteria(req) })
+      model.findByStudy(study, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
-          this.filteredTotal = PermissionService.filterByCriteria(req.criteria, totalCollection[1]).length;
-          return model.findByStudyName(studyName, req.user,
+          return model.findByStudy(study, req.user,
             { where: actionUtil.parseCriteria(req),
               limit: actionUtil.parseLimit(req),
               skip: actionUtil.parseSkip(req),
@@ -37,13 +36,14 @@
           var collectionItems = collection[1];
           if (err) {
             sails.log.error([
-              'StudyBase.findByStudyName for user: ' + req.user.id,
-              'Error fetching ' + model.adapter.identity + ' by study name: ' + studyName,
+              'StudyBase.findByStudy for user: ' + req.user.id,
+              'Error fetching ' + model.adapter.identity + ' by study name: ' + study,
               'Error: ' + JSON.stringify(err)
             ].join('\n'));
             return res.serverError();
           }
-          return res.ok(collectionItems, { filteredTotal: this.filteredTotal });
+          var filteredTotal = PermissionService.filterByCriteria(req.criteria, collectionItems).length;
+          return res.ok(collectionItems, { filteredTotal: filteredTotal });
         });
     }
 

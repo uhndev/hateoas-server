@@ -37,6 +37,9 @@
       dob: {
         type: 'date'
       },
+      study: {
+        type: 'model'
+      },
       studyName: {
         type: 'string'
       },
