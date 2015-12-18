@@ -9,10 +9,6 @@
         obj.rel = model.exports.identity;
         obj.href = HateoasService.getSelfLink(model.exports.identity, this.id);
 
-        if (_.contains(Utils.Model.SLUG_ROUTES, obj.rel) && this.name) {
-          obj.slug = HateoasService.getSelfLink(model.exports.identity, this.name);
-        }
-
         if (_.isFunction(this.getResponseLinks)) {
           obj.links = this.getResponseLinks(this.id);
         }

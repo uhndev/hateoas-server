@@ -74,7 +74,8 @@
                 .then(function (centre) {
                   enrollment.collectionCentre = centre.id;
                   enrollment.collectionCentreName = centre.name;
-                  enrollment.study = centre.study.name;
+                  enrollment.study = centre.study.id;
+                  enrollment.studyName = centre.study.name;
                   return enrollment;
                 });
             })
