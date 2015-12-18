@@ -71,19 +71,8 @@ describe('The Study Controller', function () {
 		});
 
 		describe('findOne()', function () {
-			it('should be able to retrieve a specific study by name', function (done) {
-				request.get('/api/study/STUDY-LEAP-ADMIN')
-					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.items.name.should.equal('STUDY-LEAP-ADMIN');
-						done(err);
-					});
-			});
-
 			it('should return a 404 if study does not exist', function (done) {
-				request.get('/api/study/DNE')
+				request.get('/api/study/' + 99)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(404)
 					.end(function (err, res) {
@@ -92,7 +81,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				request.get('/api/study/STUDY-LEAP-ADMIN/subject')
+				request.get('/api/study/' + study1 + '/subject')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -103,7 +92,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should have rel userenrollment in workflowstate template', function (done) {
-				request.get('/api/study/STUDY-LEAP-ADMIN/user')
+				request.get('/api/study/' + study1 + '/user')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -299,7 +288,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should return full CRUD access for /api/study/:name', function (done) {
-				request.get('/api/study/STUDY-LEAP-ADMIN')
+				request.get('/api/study/' + study1)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -394,7 +383,7 @@ describe('The Study Controller', function () {
 
 		describe('findOne()', function () {
 			it('should be able to retrieve a specific study by name if associated to a CC', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD')
+				request.get('/api/study/' + study3)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -405,7 +394,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should not be able to retrieve a specific study by name if not associated to a CC', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD')
+				request.get('/api/study/' + study3)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -416,7 +405,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should return a 404 if study does not exist', function (done) {
-				request.get('/api/study/DNE')
+				request.get('/api/study/' + 99)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(404)
 					.end(function (err, res) {
@@ -425,7 +414,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD/subject')
+				request.get('/api/study/' + study3 + '/subject')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -436,7 +425,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should have rel userenrollment in the workflowstate template', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD/user')
+				request.get('/api/study/' + study3 + '/user')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -466,7 +455,7 @@ describe('The Study Controller', function () {
 
 		describe('update()', function() {
 			it('should not be able to update studies', function(done) {
-				request.put('/api/study/STUDY-LEAP-COORD')
+				request.put('/api/study/' + study3)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.send({
 						name: 'TEST'
@@ -491,7 +480,7 @@ describe('The Study Controller', function () {
 			});
 
 			it('should only allow read access for /api/study/:name', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD')
+				request.get('/api/study/' + study3)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -523,7 +512,7 @@ describe('The Study Controller', function () {
 		describe('findOne()', function() {
 
 			it('should not be allowed access to restricted study', function (done) {
-				request.get('/api/study/STUDY-LEAP-COORD')
+				request.get('/api/study/' + study3)
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(403)
 					.end(function (err, res) {

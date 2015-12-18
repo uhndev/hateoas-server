@@ -50,7 +50,6 @@
           }
         })
         .catch(function (err) {
-          sails.log.error(err);
           sails.log.error(['Study.findOne for user: ' + req.user.id,
             'Error: ' + JSON.stringify(err)
           ].join('\n'));
