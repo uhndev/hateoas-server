@@ -1,7 +1,7 @@
 /**
- * Service.js
+ * ServiceCategory.js
  *
- * @description :: a model representation of a service, and instance of actual work being done at altum
+ * @description :: a model representation of a serviceCategory
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -17,29 +17,17 @@
   attributes: {
 
     /**
-     * invoice
-     * @description an invoiceService's associated invoice
+     * name
+     * @description a serivceCategory's name
      * @type {model}
      */
 
-    invoice: {
-      model: 'invoice'
+    name: {
+      type: 'string'
     },
-
-    /**
-     * service
-     * @description an invoiceSerivce's associated service
-     * @type {model}
-     */
-
-    service: {
-      model: 'service'
-    },
-
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
   }
   });
 })();
-

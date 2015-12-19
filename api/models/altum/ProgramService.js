@@ -1,5 +1,5 @@
 /**
- * ProgramSerivce.js
+ * ProgramService.js
  *
  * @description :: a model representation of payor services
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -7,7 +7,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -47,6 +47,16 @@
     },
 
     /**
+     * serviceCategory
+     * @description a ProgramService's mapping to it's serviceCategory
+     * @type {model}
+     */
+
+    serviceCategory: {
+      model: 'serviceCategory'
+    },
+
+    /**
      * payor
      * @description a payorService's payor
      * @type {String}
@@ -74,8 +84,18 @@
     name: {
       type: 'string'
     },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
+    /**
+     * serviceCategory
+     * @description a programService's associated serviceCategory
+     * @type {String}
+     */
+
+    serviceCategory: {
+      model: 'serviceCategory'
+    },
+
+    toJSON: HateoasService.makeToHATEOAS.call(this, module)
   }
   });
 })();

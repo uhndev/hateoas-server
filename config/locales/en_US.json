@@ -13,6 +13,22 @@
       "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
       "SELECTED": "Selected:",
       "MENU": {
+        "AT": {
+          "APPROVERS": "Approvers",
+          "ADDRESS": "Address",
+          "PAYOR": "Payor",
+          "CLAIM": "Claim",
+          "WORK_STATUS": "Work Status",
+          "PROGNOSIS": "Prognosis",
+          "ALTUMSERVICES": "Altum Services",
+          "PROGRAM_SERVICE": "Program Services",
+          "SITES": "Sites",
+          "COMPANY": "Company",
+          "PROGRAMS": "Programs",
+          "PROGRAMSERVICES": "Program Services",
+          "SERVICECATEGORIES": "Service Categories",
+          "STATUS": "Status"
+        },
         "STUDIES": "Studies",
         "MY_STUDIES": "My Studies",
         "MY_PROFILE": "My Profile",

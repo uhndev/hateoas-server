@@ -8,7 +8,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
@@ -141,6 +141,27 @@
       },
 
       /**
+       * recommendationsMade
+       * @description A bool set when recommendations have been made
+       * @type {boolean}
+       */
+
+      recommendationsMade: {
+        type: 'boolean'
+      },
+
+      /**
+       * services
+       * @description A referral's services
+       * @type {string}
+       */
+
+      services: {
+        collection: 'service',
+        via: 'referral'
+      },
+
+      /**
        * clients
        * @description A referral's clients
        * @type {string}
@@ -148,8 +169,7 @@
 
       clients: {
         collection: 'client',
-        via: 'referrals',
-        dominant: true
+        via: 'referrals'
       },
 
       /**

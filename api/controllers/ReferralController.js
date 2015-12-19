@@ -19,6 +19,7 @@
         .skip(actionUtil.parseSkip(req))
         .sort(actionUtil.parseSort(req));
       query.populate('payors');
+      //query.populate('services');
       query.exec(function found(err, sites) {
         if (err) {
           return res.serverError(err);

@@ -7,7 +7,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -27,17 +27,6 @@
     },
 
     /**
-     * payor
-     * @description an AvailableSerivces payor
-     * @type {model}
-     */
-
-    payor: {
-      model: 'payor'
-    },
-
-
-    /**
      * payorService
      * @description an AvailableService's payorService
      * @type {collection}
@@ -47,7 +36,6 @@
       collection: 'programService',
       via: 'altumService'
     },
-
 
     /**
      * available
@@ -65,8 +53,9 @@
      * @type {integer}
      */
 
-    siteService: {
-      model:'siteService'
+    sites: {
+      collection:'site',
+      via: 'altumServices'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

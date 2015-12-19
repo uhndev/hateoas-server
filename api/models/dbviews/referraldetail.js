@@ -2,6 +2,7 @@
  * A virtual model representing a database view.
  * See config/db/studyuser.sql for view definition.
  */
+
 (function() {
   var UserModel = require('./../User.js');
   var _super = require('./baseView.js');
@@ -18,6 +19,9 @@
       },
       program: {
         type: 'integer'
+      },
+      program_name: {
+        type: 'string'
       },
       physician: {
         type: 'integer'
@@ -85,10 +89,11 @@
       physician_name: {
         type: 'string'
       },
+      recommendationsMade: {
+        type: 'boolean'
+      },
       toJSON: UserModel.attributes.toJSON
-
     }
   });
-
 })();
 

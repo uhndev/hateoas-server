@@ -1,6 +1,7 @@
 CREATE OR REPLACE VIEW referraldetail AS
  SELECT referral.client,
     referral.program,
+    program.name as "program_name",
     referral.physician,
     status.name as status,
     referral.id,
@@ -29,7 +30,8 @@ CREATE OR REPLACE VIEW referraldetail AS
     claim."policyNum" as "claim_policyNum",
     referral.owner,
     physician.name as "physician_name",
-    referral."createdBy"
+    referral."createdBy",
+    referral."recommendationsMade"
 
    FROM referral
         left join claim on referral.claim=claim.id
@@ -37,4 +39,5 @@ CREATE OR REPLACE VIEW referraldetail AS
         left join person on client.person=person.id
         left join address on address.person=person.id
         left join status on referral.status=status.id
-        left join physician on referral.physician=physician.id;
+        left join physician on referral.physician=physician.id
+        left join program on referral.program=program.id;

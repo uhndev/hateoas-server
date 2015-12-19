@@ -7,7 +7,7 @@
 
   (function () {
 
-    var _super = require('./BaseModel.js');
+    var _super = require('../BaseModel.js');
     var _ = require('lodash');
     var HateoasService = require('../../services/HateoasService.js');
 

@@ -11,6 +11,40 @@ module.exports = {
 
   attributes: {
     /**
+     * isDeleted
+     * @description deleted flag
+     * @type {string}
+     */
+
+    isDeleted: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    /**
+     * deletedAt
+     * @description deleted date
+     * @type {string}
+     */
+
+    deletedAt: {
+      type: 'datetime',
+      defaultsTo: null,
+      datetime: true
+    },
+
+
+    /**
+     * deletedBy
+     * @description record of who deleted record
+     * @type {string}
+     */
+
+    deletedBy: {
+      type: 'string'
+    },
+
+    /**
      * displayName
      * @description stores persistent displayName of child models, filled in by beforeCreate and beforeUpdate
      *              using the potential fields listed in defaultsTo

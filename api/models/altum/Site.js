@@ -9,7 +9,7 @@
 
   (function () {
 
-    var _super = require('./BaseModel.js');
+    var _super = require('../BaseModel.js');
     var _ = require('lodash');
     var HateoasService = require('../../services/HateoasService.js');
 
@@ -55,17 +55,15 @@
       /**
        * altumServices
        * @description a collection of a site's offered services at altum
-       * @type {integer}
+       * @type {collection}
        */
 
-      siteService: {
-        collection: 'SiteService',
-        via: 'site'
+      altumServices: {
+        collection: 'altumService',
+        via: 'sites'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
     }
     });
   })();
