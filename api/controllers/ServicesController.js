@@ -1,17 +1,16 @@
 /**
- * ProgramServiceController
+ * ServicesController
  *
- * @module  controllers/ProgramService
- * @description Server-side logic for managing ProgramService
+ * @module  controllers/Referral
+ * @description Server-side logic for managing Referrals
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 
-(function () {
+(function() {
 
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
 
-  }
+  };
 })();
-

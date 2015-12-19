@@ -20,6 +20,9 @@
       program: {
         type: 'integer'
       },
+      program_name: {
+        type: 'string'
+      },
       physician: {
         type: 'integer'
       },
@@ -85,6 +88,9 @@
       },
       physician_name: {
         type: 'string'
+      },
+      recommendationsMade: {
+        type: 'boolean'
       },
       toJSON: UserModel.attributes.toJSON
 

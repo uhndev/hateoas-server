@@ -7,7 +7,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -16,6 +16,15 @@
 
   attributes: {
 
+    /**
+     * name
+     * @description a payor's name
+     * @type {String}
+     */
+
+    name: {
+      type: 'string'
+    },
     /**
      * company
      * @description a payor's company

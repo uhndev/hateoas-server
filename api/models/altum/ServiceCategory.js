@@ -7,7 +7,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -18,9 +18,8 @@
 
     /**
      * name
-     * @description a serviceCateogry's name
-     *
-     * @type {collection}
+     * @description a serivceCategory's name
+     * @type {model}
      */
 
     name: {
@@ -28,6 +27,7 @@
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
+
   }
   });
 })();

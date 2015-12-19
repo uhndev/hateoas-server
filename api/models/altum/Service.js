@@ -7,7 +7,7 @@
 
 (function () {
 
-  var _super = require('./BaseModel.js');
+  var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -44,6 +44,17 @@
 
     serviceProviders: {
       collection: 'user'
+    },
+
+    /**
+     * approval
+     * @description presently this is just a boolean to flag it as approved
+     * @type {boolean}
+     */
+
+    approved: {
+      type: 'string',
+      defaultsTo: false
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

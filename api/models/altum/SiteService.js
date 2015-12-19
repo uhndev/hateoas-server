@@ -1,7 +1,7 @@
 /**
- * Service.js
+ * SiteService.js
  *
- * @description :: a model representation of a service, and instance of actual work being done at altum
+ * @description :: a model of Site Services, used for populating/organizing services on the altum side during daily operations
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -17,25 +17,24 @@
   attributes: {
 
     /**
-     * invoice
-     * @description an invoiceService's associated invoice
+     *
+     * @description an SiteService's altumService
      * @type {model}
      */
 
-    invoice: {
-      model: 'invoice'
+    altumService: {
+      model: 'altumService'
     },
 
     /**
-     * service
-     * @description an invoiceSerivce's associated service
+     * site
+     * @description an AvailableService's payorService
      * @type {model}
      */
 
-    service: {
-      model: 'service'
+    site: {
+      model: 'site'
     },
-
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 

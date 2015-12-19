@@ -55,7 +55,7 @@
         var models = sails.models;
 
         if (_.has(models, modelName)
-             && _.has(models[modelName], 'definition')) {
+             && _.has(models[modelName], '_attributes')) {
           var schema = Utils.Model.removeSystemFields(
                          models[modelName].definition);
 

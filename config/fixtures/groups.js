@@ -59,23 +59,23 @@
         level: 1,
         menu: {
           tabview: [
-            {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "Assessments"},
+            {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "APP.HEADER.MENU.RECOMMENDATIONS"},
             {
-              "prompt": "HEADER.MENU.AT", "icon": "fa-cog", "dropdown": [
-              {"prompt": "HEADER.MENU.AT.APPROVERS", "href": "/approver", "icon": "fa-male"},
-              {"prompt": "HEADER.MENU.AT.ADDRESS", "href": "/address", "icon": "fa-paw" },
-              {"prompt": "HEADER.MENU.AT.PAYOR", "href": "/payor", "icon": "fa-bank"},
-              {"prompt": "HEADER.MENU.AT.CLAIM", "href": "/claim", "icon": "fa-wheelchair"},
-              {"prompt": "HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
-              {"prompt": "HEADER.MENU.AT.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
-              {"prompt": "HEADER.MENU.AT.PHYSICIAN", "href": "/physician", "icon": "fa-stethoscope"},
-              {"prompt": "HEADER.MENU.AT.PROGRAMS", "href": "/program", "icon": "fa-medkit" },
-              {"prompt": "HEADER.MENU.AT.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": "fa-cog" },
-              {"prompt": "HEADER.MENU.AT.ALTUM_SERVICES", "href": "/altumservice", "icon": "fa-cog" },
-              {"prompt": "HEADER.MENU.AT.PROGRAM_SERVICE", "href": "/programservice", "icon": "fa-cog" },
-              {"prompt": "HEADER.MENU.AT.SITES", "href": "/site", "icon": "fa-hospital-o" },
-              {"prompt": "HEADER.MENU.AT.COMPANY", "href": "/company", "icon": "fa-cog" },
-              {"prompt": "HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
+              "prompt": "APP.HEADER.MENU.AT", "icon": "fa-cog", "dropdown": [
+              {"prompt": "APP.HEADER.MENU.AT.APPROVERS", "href": "/approver", "icon": "fa-male"},
+              {"prompt": "APP.HEADER.MENU.AT.ADDRESS", "href": "/address", "icon": "fa-paw" },
+              {"prompt": "APP.HEADER.MENU.AT.PAYOR", "href": "/payor", "icon": "fa-bank"},
+              {"prompt": "APP.HEADER.MENU.AT.CLAIM", "href": "/claim", "icon": "fa-wheelchair"},
+              {"prompt": "APP.HEADER.MENU.AT.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
+              {"prompt": "APP.HEADER.MENU.AT.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
+              {"prompt": "APP.HEADER.MENU.AT.ALTUMSERVICES", "href": "/altumservice", "icon": "fa-cog" },
+              {"prompt": "APP.HEADER.MENU.AT.PROGRAM_SERVICE", "href": "/programservice", "icon": "fa-cog" },
+              {"prompt": "APP.HEADER.MENU.AT.SITES", "href": "/site", "icon": "fa-hospital-o" },
+              {"prompt": "APP.HEADER.MENU.AT.COMPANY", "href": "/company", "icon": "fa-cog" },
+              {"prompt": "APP.HEADER.MENU.AT.PROGRAMS", "href": "/program", "icon": "fa-stethoscope" },
+              {"prompt": "APP.HEADER.MENU.AT.PROGRAMSERVICES", "href": "/programservice", "icon": "fa-stethoscope" },
+              {"prompt": "APP.HEADER.MENU.AT.SERVICECATEGORIES", "href": "/servicecategory", "icon": "fa-stethoscope" },
+              {"prompt": "APP.HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
             },
             {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
             {
