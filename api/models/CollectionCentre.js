@@ -35,8 +35,7 @@
        * @type {Association} linked study reference
        */
       study: {
-      	model: 'study',
-      	required: true
+      	model: 'study'
       },
 
       /**

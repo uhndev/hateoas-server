@@ -155,7 +155,7 @@
             'prompt': 'APP.HEADER.SUBMENU.COLLECTION_CENTRES',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'collectioncentre'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'collectioncentres'
             ].join('/')
           },
           {
@@ -163,7 +163,7 @@
             'prompt': 'APP.HEADER.SUBMENU.SUBJECTS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'subject'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'subjects'
             ].join('/')
           },
           {
@@ -171,7 +171,7 @@
             'prompt': 'APP.HEADER.SUBMENU.USERS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'user'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'users'
             ].join('/')
           },
           {
@@ -179,7 +179,7 @@
             'prompt': 'APP.HEADER.SUBMENU.FORMS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'form'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'forms'
             ].join('/')
           },
           {
@@ -187,7 +187,7 @@
             'prompt': 'APP.HEADER.SUBMENU.SURVEYS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'survey'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'surveys'
             ].join('/')
           }
         ]

@@ -108,7 +108,7 @@
         var response = {
           version: HATEOAS_VERSION,
           href: HateoasService.getSelfLink(modelName),
-          referrer: address.href,
+          referrer: sails.getBaseUrl() + address.pathname,
           items: dataToJson(data),
           template: {
             rel: modelName
