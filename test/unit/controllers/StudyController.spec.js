@@ -80,19 +80,8 @@ describe('The Study Controller', function () {
 					});
 			});
 
-			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				request.get('/api/study/' + study1 + '/subject')
-					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
-						done(err);
-					});
-			});
-
 			it('should have rel userenrollment in workflowstate template', function (done) {
-				request.get('/api/study/' + study1 + '/user')
+				request.get('/api/study/' + study1 + '/users')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {
@@ -413,19 +402,8 @@ describe('The Study Controller', function () {
 					});
 			});
 
-			it('should retrieve a saved subject form href from the workflowstate', function (done) {
-				request.get('/api/study/' + study3 + '/subject')
-					.set('Authorization', 'Bearer ' + globals.token)
-					.expect(200)
-					.end(function (err, res) {
-						var collection = JSON.parse(res.text);
-						collection.template.should.have.property('href');
-						done(err);
-					});
-			});
-
 			it('should have rel userenrollment in the workflowstate template', function (done) {
-				request.get('/api/study/' + study3 + '/user')
+				request.get('/api/study/' + study3 + '/users')
 					.set('Authorization', 'Bearer ' + globals.token)
 					.expect(200)
 					.end(function (err, res) {

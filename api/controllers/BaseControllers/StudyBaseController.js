@@ -24,6 +24,7 @@
 
       model.findByStudy(study, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
+          this.totalCollection = totalCollection[1];
           return model.findByStudy(study, req.user,
             { where: actionUtil.parseCriteria(req),
               limit: actionUtil.parseLimit(req),
@@ -42,7 +43,7 @@
             ].join('\n'));
             return res.serverError();
           }
-          var filteredTotal = PermissionService.filterByCriteria(req.criteria, collectionItems).length;
+          var filteredTotal = PermissionService.filterByCriteria(req.criteria, this.totalCollection).length;
           return res.ok(collectionItems, { filteredTotal: filteredTotal });
         });
     }
