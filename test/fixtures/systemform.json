@@ -257,7 +257,7 @@
         "field_hasItem": true,
         "field_required": false,
         "field_userURL": "user",
-        "field_labels": "prefix firstname lastname"
+        "field_labels": "displayName"
       },
       {
         "field_id": 5,
@@ -274,7 +274,7 @@
         "field_hasItem": true,
         "field_required": false,
         "field_userURL": "user",
-        "field_labels": "prefix firstname lastname"
+        "field_labels": "displayName"
       }
     ]
 	},
@@ -314,7 +314,7 @@
         "field_hasItem": true,
         "field_required": true,
         "field_userURL": "user",
-        "field_labels": "prefix firstname lastname"
+        "field_labels": "displayName"
       }
     ]
   },
@@ -393,7 +393,7 @@
         "field_hasItems": true,
         "field_required": true,
         "field_userURL": "study",
-        "field_labels": "name reb"
+        "field_labels": "name"
       },
       {
         "field_id": 2,
@@ -410,7 +410,7 @@
         "field_hasItems": true,
         "field_required": true,
         "field_userURL": "user",
-        "field_labels": "prefix firstname lastname"
+        "field_labels": "displayName"
       },
       {
         "field_id": 3,
