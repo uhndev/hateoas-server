@@ -83,18 +83,28 @@
         'collectionCentre', 'user', 'centreAccess', 'expiredAt'
       ), _.identity);
 
-      // check if we're trying to update an enrollment to something that already exists
-      UserEnrollment.findOne({
-        collectionCentre: req.param('collectionCentre'),
-        user: req.param('user'),
-        expiredAt: null,
-        id: { '!': id }
+      UserEnrollment.findOne(id).then(function (existingEnrollment) {
+        this.existingRoleName = ['CollectionCentre', existingEnrollment.collectionCentre, 'Role'].join('');
+        this.newRoleName = ['CollectionCentre', req.param('collectionCentre'), 'Role'].join('');
+        // check if we're trying to update an enrollment to something that already exists
+        return UserEnrollment.findOne({
+          collectionCentre: req.param('collectionCentre'),
+          user: req.param('user'),
+          expiredAt: null,
+          id: { '!': id }
+        });
       })
       .then(function (enrollment) {
         if (!enrollment) { // if no existing enrollment found, update can be performed safely
-          return UserEnrollment.update({ id: id }, options).then(function (enrollment) {
-            res.ok(enrollment);
-          });
+          return UserEnrollment.update({ id: id }, options)
+            .then(function (enrollment) {
+              this.enrollment = enrollment;
+              // swap previous role with new role to update permissions
+              //return PermissionService.swapRoles(req.param('user'), this.existingRoleName, this.newRoleName);
+            })
+            .then(function () {
+              res.ok(this.enrollment);
+            });
         } else { // otherwise, we are trying to register an invalid enrollment
           res.badRequest({
             title: 'Enrollment Error',

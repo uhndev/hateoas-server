@@ -49,6 +49,24 @@
         }
       },
       {
+        name: 'provider',
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains([ 'registered', 'provider' ], role.name);
+        }), 'id'),
+        level: 2,
+        menu: {
+          tabview: [
+            { prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group' },
+            { prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user' },
+            { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
+          ],
+          subview: {
+            'study': [ 'name', 'overview', 'collectioncentre', 'subject', 'user' ],
+            'user': ['name', 'overview']
+          }
+        }
+      },
+      {
         name: 'interviewer',
         roles: _.pluck(_.filter(roles, function (role) {
           return _.contains([ 'registered', 'interviewer' ], role.name);

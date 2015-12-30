@@ -185,6 +185,11 @@
           },
           {
             "option_id": 3,
+            "option_title": "Provider",
+            "option_value": "provider"
+          },
+          {
+            "option_id": 4,
             "option_title": "Interviewer",
             "option_value": "interviewer"
           }
