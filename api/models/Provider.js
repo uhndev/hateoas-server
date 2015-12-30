@@ -67,13 +67,11 @@
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      console.log(values);
       if (values.user) {
         User.findOne(values.user).exec(function (err, user) {
           if (err) {
             cb(err);
           } else {
-            console.log(user);
             values.displayName = user.displayName;
             cb();
           }

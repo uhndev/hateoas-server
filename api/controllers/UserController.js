@@ -83,7 +83,16 @@
         })
         .then(function (enrollments) {
           this.user.enrollments = enrollments;
-          res.ok(this.user);
+          Provider.findOne({ user: this.user.id }).populate('subjects').then(function (provider) {
+            if (provider) {
+              studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
+                this.user.providerSubjects = providerSubjects;
+                res.ok(this.user);
+              });
+            } else {
+              res.ok(this.user);
+            }
+          });
         })
         .catch(function (err) {
           sails.log.error([
