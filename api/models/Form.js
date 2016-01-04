@@ -122,12 +122,13 @@
     afterUpdate: function(values, cb) {
       if (!_.isNull(values.expiredAt)) {
         Form.findOne(values.id)
+          .populate('versions')
           .then(function (form) {
             return FormVersion.update({ id: _.pluck(form.versions, 'id') }, {
               expiredAt: new Date()
             });
           })
-          .then(function () {
+          .then(function (versions) {
             cb();
           })
           .catch(cb);
