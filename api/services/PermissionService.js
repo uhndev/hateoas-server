@@ -54,14 +54,17 @@
      * @param newRole
      */
     swapRoles: function (userID, previousRole, newRole) {
-      var self = this;
-      return User.findOne(userID)
-        .then(function (user) {
-          this.user = user;
-          return self.removeUsersFromRole(this.user.username, previousRole);
+      return Role.findOneByName(previousRole).populate('users')
+        .then(function (previousRoleUsers) {
+          previousRoleUsers.users.remove(userID);
+          return previousRoleUsers.save();
         })
         .then(function () {
-          return self.addUsersToRole(this.user.username, newRole);
+          return Role.findOneByName(newRole).populate('users');
+        })
+        .then(function (newRoleUsers) {
+          newRoleUsers.users.add(userID);
+          return newRoleUsers.save();
         });
     },
 

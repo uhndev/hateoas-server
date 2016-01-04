@@ -86,6 +86,8 @@
       UserEnrollment.findOne(id).then(function (existingEnrollment) {
         this.existingRoleName = ['CollectionCentre', existingEnrollment.collectionCentre, 'Role'].join('');
         this.newRoleName = ['CollectionCentre', req.param('collectionCentre'), 'Role'].join('');
+        this.updatePermissions = existingEnrollment.collectionCentre != req.param('collectionCentre');
+
         // check if we're trying to update an enrollment to something that already exists
         return UserEnrollment.findOne({
           collectionCentre: req.param('collectionCentre'),
@@ -99,8 +101,10 @@
           return UserEnrollment.update({ id: id }, options)
             .then(function (enrollment) {
               this.enrollment = enrollment;
-              // swap previous role with new role to update permissions
-              //return PermissionService.swapRoles(req.param('user'), this.existingRoleName, this.newRoleName);
+              // swap previous role with new role to update permissions iff collectionCentre in UserEnrollment changed
+              if (this.updatePermissions) {
+                return PermissionService.swapRoles(req.param('user'), this.existingRoleName, this.newRoleName);
+              }
             })
             .then(function () {
               res.ok(this.enrollment);
@@ -109,7 +113,7 @@
           res.badRequest({
             title: 'Enrollment Error',
             status: 400,
-            message: 'Unable to enroll user, user may already be registered at another collection centre.'
+            message: 'Unable to enroll user with ID ' + options.user + ', may already be registered at another collection centre.'
           });
         }
       })
@@ -119,7 +123,7 @@
           'Data: ' + JSON.stringify(req.body),
           'Error: ' + JSON.stringify(err)
         ].join('\n'));
-        res.serverError();
+        res.serverError(err);
       });
     }
 
