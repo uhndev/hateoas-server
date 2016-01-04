@@ -16,6 +16,9 @@
       userEnrollments: {
         type: 'array'
       },
+      displayName: {
+        type: 'string'
+      },
       username: {
         type: 'string'
       },

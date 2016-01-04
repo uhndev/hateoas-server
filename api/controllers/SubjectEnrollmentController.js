@@ -65,7 +65,14 @@
               );
             })
             .then(function (answers) {
-              res.ok(enrollment);
+              if (enrollment.providers.length > 0) {
+                Provider.find({ id: enrollment.providers }).then(function (providers) {
+                  enrollment.providers = providers;
+                  res.ok(enrollment);
+                });
+              } else {
+                res.ok(enrollment);
+              }
             })
             .catch(function (err) {
               sails.log.error([
@@ -84,7 +91,7 @@
       ), _.identity);
 
       var enrollmentOptions = _.pick(_.pick(req.body,
-        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+        'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
       options.group = 'subject';
