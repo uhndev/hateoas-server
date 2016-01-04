@@ -65,7 +65,7 @@
               );
             })
             .then(function (answers) {
-              if (enrollment.providers.length > 0) {
+              if (enrollment.providers) {
                 Provider.find({ id: enrollment.providers }).then(function (providers) {
                   enrollment.providers = providers;
                   res.ok(enrollment);
