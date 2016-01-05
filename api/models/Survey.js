@@ -223,13 +223,13 @@
       promise.catch(cb);
     },
 
-    findByStudyName: function (studyName, currUser, options, cb) {
+    findByStudy: function (studyID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
-      delete query.where.name;
+      delete query.where.id;
 
       // get study surveys
-      return Study.findOneByName(studyName).populate('surveys')
+      return Study.findOne(studyID).populate('surveys')
         .then(function (study) {
           var studySurveyIds = _.pluck(study.surveys, 'id');
           return ModelService.filterExpiredRecords('survey')

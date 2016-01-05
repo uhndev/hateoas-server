@@ -19,11 +19,16 @@
     find: function(req, res) {
       studysubject.find()
         .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) )
+        .then(function (totalStudySubjects) {
+          this.totalStudySubjects = totalStudySubjects;
+          return studysubject.find()
+            .where( actionUtil.parseCriteria(req) )
+            .limit( actionUtil.parseLimit(req) )
+            .skip( actionUtil.parseSkip(req) )
+            .sort( actionUtil.parseSort(req) );
+        })
         .then(function (studySubjects) {
-          var filteredTotal = PermissionService.filterByCriteria(req.criteria, studySubjects).length;
+          var filteredTotal = PermissionService.filterByCriteria(req.criteria, this.totalStudySubjects).length;
           res.ok(studySubjects, { filteredTotal: filteredTotal });
         })
         .catch(function (err) {

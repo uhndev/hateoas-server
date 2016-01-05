@@ -20,6 +20,9 @@
         type: 'integer'
       },
       study: {
+        model: 'study'
+      },
+      studyName: {
         type: 'string'
       },
       name: {

@@ -186,13 +186,13 @@
       );
     },
 
-    findByStudyName: function(studyName, currUser, options, cb) {
+    findByStudy: function(studyID, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
-      delete query.where.name;
+      delete query.where.id;
 
       // get study forms
-      return Study.findOneByName(studyName).populate('forms')
+      return Study.findOne(studyID).populate('forms')
         .then(function (study) {
           var studyFormIds = _.pluck(study.forms, 'id');
           return ModelService.filterExpiredRecords('form')

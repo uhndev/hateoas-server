@@ -10,6 +10,7 @@ CREATE OR REPLACE VIEW studyuser AS
      FROM userenrollment
      WHERE userenrollment."collectionCentre" = collectioncentre.id
      AND userenrollment."expiredAt" IS NULL)) AS "userEnrollments",
+    "user"."displayName" AS "displayName",
     "user".username,
     "user".email,
     "user".prefix,
@@ -17,6 +18,7 @@ CREATE OR REPLACE VIEW studyuser AS
     "user".lastname,
     "user".gender,
     "user".dob,
+    study.id AS study,
     study.name AS "studyName",
     userenrollment."collectionCentre",
     collectioncentre.name AS "collectionCentreName",

@@ -28,7 +28,7 @@
       query.populate('roles');
       query.exec(function found(err, groups) {
         if (err) {
-          return res.serverErr({
+          return res.serverError({
             title: 'Error',
             code: err.status,
             message: err.details

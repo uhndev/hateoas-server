@@ -139,7 +139,7 @@
             'prompt': this.name,
             'name': 'name',
             'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id
             ].join('/')
           },
           {
@@ -147,7 +147,7 @@
             'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
             'name': 'name',
             'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id
             ].join('/')
           },
           {
@@ -155,7 +155,7 @@
             'prompt': 'APP.HEADER.SUBMENU.COLLECTION_CENTRES',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'collectioncentre'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'collectioncentres'
             ].join('/')
           },
           {
@@ -163,7 +163,7 @@
             'prompt': 'APP.HEADER.SUBMENU.SUBJECTS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'subject'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'subjects'
             ].join('/')
           },
           {
@@ -171,7 +171,7 @@
             'prompt': 'APP.HEADER.SUBMENU.USERS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'user'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'users'
             ].join('/')
           },
           {
@@ -179,7 +179,7 @@
             'prompt': 'APP.HEADER.SUBMENU.FORMS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'form'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'forms'
             ].join('/')
           },
           {
@@ -187,7 +187,7 @@
             'prompt': 'APP.HEADER.SUBMENU.SURVEYS',
             'name': 'name',
             'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.name, 'survey'
+              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'surveys'
             ].join('/')
           }
         ]

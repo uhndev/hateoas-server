@@ -10,7 +10,7 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var StudyBase = require('./BaseControllers/StudyBaseController');
 
-  _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudyName
+  _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudy
   _.merge(exports, {
 
     destroy: function (req, res) {

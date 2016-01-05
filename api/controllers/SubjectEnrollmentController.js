@@ -14,7 +14,7 @@
 
   var StudyBase = require('./BaseControllers/StudyBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudyName
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
   _.merge(exports, {
 
     findOne: function(req, res, next) {
@@ -65,7 +65,14 @@
               );
             })
             .then(function (answers) {
-              res.ok(enrollment);
+              if (enrollment.providers) {
+                Provider.find({ id: enrollment.providers }).then(function (providers) {
+                  enrollment.providers = providers;
+                  res.ok(enrollment);
+                });
+              } else {
+                res.ok(enrollment);
+              }
             })
             .catch(function (err) {
               sails.log.error([
@@ -84,7 +91,7 @@
       ), _.identity);
 
       var enrollmentOptions = _.pick(_.pick(req.body,
-        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+        'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
       options.group = 'subject';

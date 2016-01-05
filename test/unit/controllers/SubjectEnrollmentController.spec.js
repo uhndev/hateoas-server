@@ -147,7 +147,7 @@ describe('The SubjectEnrollment Controller', function () {
 
     describe('find()', function () {
       it('should show subject enrollments in given study', function (done) {
-        request.get('/api/study/ENROLLMENT-LEAP-ADMIN/subject')
+        request.get('/api/study/' + study1 + '/subjects')
           .set('Authorization', 'Bearer ' + globals.token)
           .expect(200)
           .end(function (err, res) {
@@ -158,7 +158,7 @@ describe('The SubjectEnrollment Controller', function () {
       });
 
       it('should show correct count based on study', function (done) {
-        request.get('/api/study/ENROLLMENT-LEAP-ADMIN/subject')
+        request.get('/api/study/' + study1 + '/subjects')
           .set('Authorization', 'Bearer ' + globals.token)
           .expect(200)
           .end(function (err, res) {

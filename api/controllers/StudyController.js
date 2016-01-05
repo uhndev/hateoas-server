@@ -22,15 +22,15 @@
      *              registered in that study.
      */
     findOne: function (req, res, next) {
-      var name = req.param('name');
+      var studyID = req.param('id');
 
-      Study.findOne({name: name}).populate('administrator').populate('pi')
+      Study.findOne(studyID).populate('administrator').populate('pi')
         .then(function (study) {
           this.study = study;
           if (req.user.group == 'admin') { // is admin
-            return collectioncentreoverview.find({study: name});
+            return collectioncentreoverview.find({study: studyID});
           } else {
-            return collectioncentreoverview.find({username: req.user.username, study: name});
+            return collectioncentreoverview.find({username: req.user.username, study: studyID});
           }
         })
         .then(function (centres) {

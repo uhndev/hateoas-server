@@ -52,19 +52,18 @@ module.exports.routes = {
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/study/:name'                  : 'StudyController.findOne',
-  'get /api/study/:name/subject'          : 'SubjectEnrollmentController.findByStudyName',
-  'get /api/study/:name/user'             : 'UserEnrollmentController.findByStudyName',
-  'get /api/study/:name/form'             : 'FormController.findByStudyName',
-  'get /api/study/:name/survey'           : 'SurveyController.findByStudyName',
-  'get /api/study/:name/collectioncentre' : 'CollectionCentreController.findByStudyName',
+  'get /api/study/:id/collectioncentres'  : 'CollectionCentreController.findByStudy',
+  'get /api/study/:id/subjects'           : 'SubjectEnrollmentController.findByStudy',
+  'get /api/study/:id/users'              : 'UserEnrollmentController.findByStudy',
+  'get /api/study/:id/forms'              : 'FormController.findByStudy',
+  'get /api/study/:id/surveys'            : 'SurveyController.findByStudy',
 
   'delete /api/study/:id/forms/:formID'   : 'StudyController.removeFormFromStudy',
 
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
-  'put /api/user/:id/roles'        : 'UserController.updateRoles',
+  'put /api/user/:id/roles'               : 'UserController.updateRoles',
 
   /***************************************************************************
   * Survey Session Lifecycle Routes                                          *
@@ -76,5 +75,5 @@ module.exports.routes = {
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
+  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm'
 };
