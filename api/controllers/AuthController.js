@@ -76,16 +76,10 @@
             { expiresIn: sails.config.session.jwtExpiry }
           );
 
-          User.findOne(user.id).populate('group').exec(function (err, data) {
-            var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname');
+          User.findOne(user.id).exec(function (err, data) {
+            var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname', 'group');
             var resp = {
               user: userObj,
-              group: {
-                name: data.group.name,
-                level: data.group.level,
-                tabview: data.group.menu.tabview,
-                subview: data.group.menu.subview
-              },
               token: {
                 payload: token,
                 expires: sails.config.session.jwtExpiry
