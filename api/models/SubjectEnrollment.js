@@ -6,7 +6,6 @@
 * @docs        http://sailsjs.org/#!documentation/models
 */
 
-
 (function() {
   var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
@@ -54,6 +53,16 @@
       subject: {
         model: 'subject',
         required: true
+      },
+
+      /**
+       * provider
+       * @description Collection of providers who oversee this subject enrollment
+       * @type {Collection}
+       */
+      providers: {
+        collection: 'provider',
+        via: 'subjects'
       },
 
       /**
@@ -163,7 +172,6 @@
         }
         cb();
       });
-
     },
 
     /**

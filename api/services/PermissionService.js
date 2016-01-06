@@ -47,6 +47,28 @@
     },
 
     /**
+     * swapRoles
+     * @description Convenience function for removing a user from a given role, then adding them to another
+     * @param userID
+     * @param previousRole
+     * @param newRole
+     */
+    swapRoles: function (userID, previousRole, newRole) {
+      return Role.findOneByName(previousRole).populate('users')
+        .then(function (previousRoleUsers) {
+          previousRoleUsers.users.remove(userID);
+          return previousRoleUsers.save();
+        })
+        .then(function () {
+          return Role.findOneByName(newRole).populate('users');
+        })
+        .then(function (newRoleUsers) {
+          newRoleUsers.users.add(userID);
+          return newRoleUsers.save();
+        });
+    },
+
+    /**
      * setDefaultGroupRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService
