@@ -22,7 +22,7 @@
      * @type {collection}
      */
 
-    payors: {
+    payor: {
       model: 'payor',
 
     },

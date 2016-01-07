@@ -54,11 +54,10 @@
 
     programs : {
       collection: 'program',
-      via: 'payors'
+      via: 'payor'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
 
   }
   });
