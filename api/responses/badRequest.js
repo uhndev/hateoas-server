@@ -27,6 +27,15 @@ module.exports = function badRequest(data, options) {
 
   // Log error to console
   if (data !== undefined) {
+    sails.log.error('Bad Request for user at ' + new Date() + ': \n', {
+      user: _.pick(req.user, 'id', 'username', 'group'),
+      params: req.params,
+      query: req.query,
+      body: req.body,
+      path: req.path,
+      transport: req.transport,
+      protocol: req.protocol
+    });
     sails.log.verbose('Sending 400 ("Bad Request") response: \n',data);
   }
   else sails.log.verbose('Sending 400 ("Bad Request") response');

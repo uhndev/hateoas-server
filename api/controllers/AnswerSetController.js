@@ -75,12 +75,7 @@
           res.status(201).jsonx(answerSet);
         })
         .catch(function (err) {
-          sails.log.error([
-            'AnswerSet.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     }
   };

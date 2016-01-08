@@ -50,10 +50,7 @@
           }
         })
         .catch(function (err) {
-          sails.log.error(['Study.findOne for user: ' + req.user.id,
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.serverError();
+          return res.serverError(err);
         });
     },
 
@@ -192,12 +189,7 @@
               return res.ok(this.studyRecord);
             })
             .catch(function (err) {
-              sails.log.error([
-                'Study.removeFormFromStudy for user: ' + req.user.id,
-                'Data: ' + JSON.stringify(req.body),
-                'Error: ' + JSON.stringify(err)
-              ].join('\n'));
-              return res.serverError();
+              return res.serverError(err);
             });
         }
       });
