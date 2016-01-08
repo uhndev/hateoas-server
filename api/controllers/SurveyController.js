@@ -45,12 +45,7 @@
           return res.ok(this.createdSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.addSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -85,12 +80,7 @@
           return res.ok(this.updatedSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.updateSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -117,12 +107,7 @@
           return res.ok(this.removedSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.removeSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -165,12 +150,7 @@
           res.ok(this.survey);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.findOne for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         })
     }
 

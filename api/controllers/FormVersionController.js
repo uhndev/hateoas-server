@@ -95,12 +95,7 @@
           }
         })
         .catch(function (err) {
-          sails.log.error([
-            'FormVersion.create for user:', req.user.id, '\n',
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     }
   };

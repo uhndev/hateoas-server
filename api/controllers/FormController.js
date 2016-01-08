@@ -29,11 +29,7 @@
             // call blueprint destroy to actually destroy
             return require('../blueprints/destroy')(req, res);
           }).catch(function (err) {
-            sails.log.error([
-              'Form.destroy for user: ' + req.user.id,
-              'Error: ' + JSON.stringify(err)
-            ].join('\n'));
-            return res.serverError();
+            return res.serverError(err);
           });
         }
       });

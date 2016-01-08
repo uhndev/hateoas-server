@@ -56,12 +56,7 @@
           }
         })
         .catch(function (err) {
-          sails.log.error([
-            'SubjectSchedule.findScheduledForm for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     }
 
