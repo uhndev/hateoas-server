@@ -1,11 +1,11 @@
 /**
-* Form
-*
-* @class  Form
-* @description Model representation of a form
-* @docs        http://sailsjs.org/#!documentation/models
-*/
-(function() {
+ * Form
+ *
+ * @class  Form
+ * @description Model representation of a form
+ * @docs        http://sailsjs.org/#!documentation/models
+ */
+(function () {
   var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
@@ -137,7 +137,7 @@
       }
     },
 
-	  /**
+    /**
      * destroyLifecycle
      * @description Lifecycle method for archiving forms; affected form versions in any existing survey
      *              sessions must be updated when removing a form from a study or archiving it altogether.
@@ -146,8 +146,8 @@
      * @param formID    ID of form to archive
      * @param criteria  Waterline find criteria for studysession when archiving form
      * @returns {Promise}
-	   */
-    destroyLifecycle: function(formID, criteria) {
+     */
+    destroyLifecycle: function (formID, criteria) {
       return Form.findOne(formID).populate('versions')
         .then(function (form) { // find affected form versions to be removed
           this.affectedFormVersionIds = _.pluck(form.versions, 'id');
@@ -178,7 +178,7 @@
      * @param forms Array of form objects to search upon
      * @returns {Array | Promise} Array of form versions or promise
      */
-    findLatestFormVersions: function(forms) {
+    findLatestFormVersions: function (forms) {
       return Promise.all(
         _.map(forms, function (form) {
           return FormVersion.getLatestFormVersion(form.id);
@@ -186,7 +186,7 @@
       );
     },
 
-    findByStudy: function(studyID, currUser, options, cb) {
+    findByStudy: function (studyID, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
@@ -198,10 +198,10 @@
           return ModelService.filterExpiredRecords('form')
             .where(query.where)
             .populate('versions').then(function (forms) {
-            return _.filter(forms, function (form) {
-              return _.includes(studyFormIds, form.id);
+              return _.filter(forms, function (form) {
+                return _.includes(studyFormIds, form.id);
+              });
             });
-          });
         })
         .then(function (filteredForms) {
           return [false, filteredForms];

@@ -59,12 +59,7 @@
           }
         })
         .catch(function (err) {
-          sails.log.error([
-            'UserEnrollment.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     },
 
@@ -118,11 +113,6 @@
         }
       })
       .catch(function (err) {
-        sails.log.error([
-          'UserEnrollment.update for user: ' + req.user.id,
-          'Data: ' + JSON.stringify(req.body),
-          'Error: ' + JSON.stringify(err)
-        ].join('\n'));
         res.serverError(err);
       });
     }

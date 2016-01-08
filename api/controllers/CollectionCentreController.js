@@ -41,11 +41,7 @@
               centre.subjects = subjects;
               res.ok(centre);
             }).catch(function (err) {
-              sails.log.error([
-                'CollectionCentre.findOne for user: ' + req.user.id,
-                'Error: ' + JSON.stringify(err)
-              ].join('\n'));
-              res.serverError();
+              res.serverError(err);
             });
           }
         });
@@ -84,12 +80,7 @@
           res.status(201).jsonx(centre);
         })
         .catch(function (err) {
-          sails.log.error([
-            'CollectionCentre.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     },
 
@@ -108,12 +99,7 @@
           res.ok(centre);
         })
         .catch(function (err) {
-          sails.log.error([
-            'CollectionCentre.update for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     }
 

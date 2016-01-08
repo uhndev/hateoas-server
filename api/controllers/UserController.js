@@ -35,11 +35,6 @@
           query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
-              sails.log.error([
-                'User.find for user: ' + req.user.id,
-                'Data: ' + JSON.stringify(req.body),
-                'Error: ' + JSON.stringify(err)
-              ].join('\n'));
               return res.serverError(err);
             }
             if (req.user.group == 'admin') {
@@ -95,12 +90,7 @@
           });
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.findOne for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     },
 
@@ -140,12 +130,7 @@
             });
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     },
 
@@ -188,12 +173,7 @@
           res.ok(this.user);
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.update for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     },
 
@@ -222,12 +202,7 @@
           res.ok(user);
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.updateRoles for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
       }
       // Update user access matrix
@@ -240,12 +215,7 @@
           res.ok(user);
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.updateRoles for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
       }
     }

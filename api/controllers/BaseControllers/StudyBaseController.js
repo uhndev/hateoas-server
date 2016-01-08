@@ -36,12 +36,7 @@
           var err = collection[0];
           var collectionItems = collection[1];
           if (err) {
-            sails.log.error([
-              'StudyBase.findByStudy for user: ' + req.user.id,
-              'Error fetching ' + model.adapter.identity + ' by study name: ' + study,
-              'Error: ' + JSON.stringify(err)
-            ].join('\n'));
-            return res.serverError();
+            return res.serverError(err);
           }
           var filteredTotal = PermissionService.filterByCriteria(req.criteria, this.totalCollection).length;
           return res.ok(collectionItems, { filteredTotal: filteredTotal });
