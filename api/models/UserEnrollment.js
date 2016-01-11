@@ -162,7 +162,7 @@
     },
 
     /**
-     * findByStudy
+     * findByBaseModel
      * @description End function for handling /api/study/:name/user.  Should return a list
      *              of users in a given study and depending on the current users' group
      *              permissions, this list will be further filtered down based on whether
@@ -172,16 +172,20 @@
      * @param  {Object}   currUser  Current user used in determining filtering options based on access
      * @param  {Object}   options   Query options potentially passed from queryBuilder in frontend
      */
-    findByStudy: function(studyID, currUser, options) {
+    findByBaseModel: function(studyID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
-      return studyuser.find(query).where({ study: studyID })
-        .then(function (studyUsers) {
-          return [false, studyUsers];
+
+      return Study.findOne(studyID).then(function (study) {
+          this.links = study.getResponseLinks();
+          return studyuser.find(query).where({ study: studyID })
         })
-        .catch(function (err) {
-          return [err, null];
+        .then(function (studyUsers) {
+          return {
+            data: studyUsers,
+            links: this.links
+          };
         });
     }
 

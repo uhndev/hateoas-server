@@ -11,9 +11,9 @@
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     /**
@@ -39,7 +39,7 @@
             ]).spread(function (users, subjects) {
               centre.coordinators = users;
               centre.subjects = subjects;
-              res.ok(centre);
+              res.ok(centre, { links: centre.study.getResponseLinks() });
             }).catch(function (err) {
               res.serverError(err);
             });

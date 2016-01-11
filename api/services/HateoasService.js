@@ -28,7 +28,7 @@
 
       return components.join('/');
     },
-    create: function(req, res, data) {
+    create: function(req, res, data, options) {
       var url = require('url');
       var address = url.parse(Utils.Path.getFullUrl(req));
 
@@ -114,6 +114,16 @@
             rel: modelName
           }
         };
+
+        // when options.links is passed to res.ok, pass onward to HateoasService.create under req.links
+        if (options && _.has(options, 'links')) {
+          response.links = options.links;
+          _.each(response.links, function (link) {
+            if (link.rel === modelName) {
+              link.isActive = true;
+            }
+          });
+        }
 
         if (state) {
           _.each(state.links, addBaseUrl);

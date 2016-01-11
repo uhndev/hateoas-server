@@ -45,6 +45,7 @@ module.exports = function sendOK (data, options) {
       if (options && _.has(options, 'filteredTotal')) {
         promise = options.filteredTotal;
       }
+
       // otherwise, we can just return the model count total
       else {
         if (_.has(model.attributes, 'expiredAt')) {
@@ -110,7 +111,7 @@ module.exports = function sendOK (data, options) {
     return JSON.parse(sanitized);
   }
 
-  HateoasService.create(req, res, data)
+  HateoasService.create(req, res, data, options)
     .then(function(hateoasResponse) {
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);

@@ -14,18 +14,18 @@
   module.exports = {
 
     /**
-     * findByStudy
-     * @description Calls the respective model function findByStudy to return the list
-     *              of models under a particular study.
+     * findByBaseModel
+     * @description Calls the respective model function findByBaseModel to return the list
+     *              of models under a particular BaseModel.
      */
-    findByStudy: function(req, res) {
-      var study = req.param('id');
+    findByBaseModel: function(req, res) {
+      var modelID = req.param('id');
       var model = actionUtil.parseModel(req);
 
-      model.findByStudy(study, req.user, { where: actionUtil.parseCriteria(req) })
+      model.findByBaseModel(modelID, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
-          this.totalCollection = totalCollection[1];
-          return model.findByStudy(study, req.user,
+          this.totalCollection = totalCollection.data;
+          return model.findByBaseModel(modelID, req.user,
             { where: actionUtil.parseCriteria(req),
               limit: actionUtil.parseLimit(req),
               skip: actionUtil.parseSkip(req),
@@ -33,13 +33,14 @@
           );
         })
         .then(function(collection) {
-          var err = collection[0];
-          var collectionItems = collection[1];
-          if (err) {
-            return res.serverError(err);
-          }
           var filteredTotal = PermissionService.filterByCriteria(req.criteria, this.totalCollection).length;
-          return res.ok(collectionItems, { filteredTotal: filteredTotal });
+          return res.ok(collection.data, {
+            filteredTotal: filteredTotal,
+            links: collection.links
+          });
+        })
+        .catch(function (err) {
+          return res.badRequest(err);
         });
     }
 

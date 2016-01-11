@@ -41,8 +41,8 @@
             ]}
           ],
           subview: {
-            'study': ['name', 'overview', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
-            'user': ['name', 'overview']
+            'study': ['name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment', 'form', 'survey'],
+            'user': ['name', 'user']
           }
         }
       },
@@ -59,8 +59,8 @@
             { prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL', sref: 'subjectportal.surveys', href: '/subjectportal/surveys', icon: 'fa-arrow-right' }
           ],
           subview: {
-            'study': [ 'name', 'overview', 'collectioncentre', 'subject', 'user' ],
-            'user': ['name', 'overview']
+            'study': [ 'name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment' ],
+            'user': ['name', 'user']
           }
         }
       },
@@ -82,8 +82,8 @@
             }
           ],
           subview: {
-            'study': [ 'name', 'overview', 'collectioncentre', 'subject', 'user' ],
-            'user': ['name', 'overview']
+            'study': [ 'name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment' ],
+            'user': ['name', 'user']
           }
         }
       },
@@ -105,8 +105,8 @@
             }
           ],
           subview: {
-            'study': ['name', 'overview', 'subject'],
-            'user': ['name', 'overview']
+            'study': [ 'name', 'study', 'subject' ],
+            'user': ['name', 'user']
           }
         }
       },
@@ -128,8 +128,8 @@
             }
           ],
           subview: {
-            'study': ['name', 'overview'],
-            'user': ['name', 'overview']
+            'study': [ 'name', 'study' ],
+            'user': ['name', 'user']
           }
         }
       }

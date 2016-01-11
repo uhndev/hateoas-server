@@ -36,7 +36,6 @@
        */
       name: {
         type: 'string',
-        primaryKey: true,
         required: true,
         unique: true
       },

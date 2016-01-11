@@ -15,6 +15,75 @@
 
   var HateoasService = require('../services/HateoasService.js');
 
+  /**
+   * getResponseLinks
+   * @description Provides the response links array in our HATEOAS response; these links
+   *              should denote transitionable states that are accessible from state /api/study.
+   *
+   * @param  {ID} id of study
+   * @return {Array} Array of response links
+   */
+  var getResponseLinks = function(id, name) {
+    return [
+      {
+        'rel': 'name',
+        'prompt': name,
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id
+        ].join('/')
+      },
+      {
+        'rel': sails.models.study.identity,
+        'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id
+        ].join('/')
+      },
+      {
+        'rel': sails.models.collectioncentre.identity,
+        'prompt': 'APP.HEADER.SUBMENU.COLLECTION_CENTRES',
+        'name': 'name',
+        'href' : [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'collectioncentres'
+        ].join('/')
+      },
+      {
+        'rel': sails.models.subjectenrollment.identity,
+        'prompt': 'APP.HEADER.SUBMENU.SUBJECTS',
+        'name': 'name',
+        'href' : [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'subjects'
+        ].join('/')
+      },
+      {
+        'rel': sails.models.userenrollment.identity,
+        'prompt': 'APP.HEADER.SUBMENU.USERS',
+        'name': 'name',
+        'href' : [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'users'
+        ].join('/')
+      },
+      {
+        'rel': sails.models.form.identity,
+        'prompt': 'APP.HEADER.SUBMENU.FORMS',
+        'name': 'name',
+        'href' : [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'forms'
+        ].join('/')
+      },
+      {
+        'rel': sails.models.survey.identity,
+        'prompt': 'APP.HEADER.SUBMENU.SURVEYS',
+        'name': 'name',
+        'href' : [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'surveys'
+        ].join('/')
+      }
+    ];
+  };
+
   _.merge(exports, _super);
   _.merge(exports, {
     schema: true,
@@ -126,74 +195,18 @@
 
       /**
        * getResponseLinks
-       * @description Provides the response links array in our HATEOAS response; these links
-       *              should denote transitionable states that are accessible from state /api/study.
-       *
-       * @param  {ID} id Study ID
-       * @return {Array} Array of response links
        */
-      getResponseLinks: function(id) {
-        return [
-          {
-            'rel': 'name',
-            'prompt': this.name,
-            'name': 'name',
-            'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id
-            ].join('/')
-          },
-          {
-            'rel': 'overview',
-            'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
-            'name': 'name',
-            'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id
-            ].join('/')
-          },
-          {
-            'rel': 'collectioncentre',
-            'prompt': 'APP.HEADER.SUBMENU.COLLECTION_CENTRES',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'collectioncentres'
-            ].join('/')
-          },
-          {
-            'rel': 'subject',
-            'prompt': 'APP.HEADER.SUBMENU.SUBJECTS',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'subjects'
-            ].join('/')
-          },
-          {
-            'rel': 'user',
-            'prompt': 'APP.HEADER.SUBMENU.USERS',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'users'
-            ].join('/')
-          },
-          {
-            'rel': 'form',
-            'prompt': 'APP.HEADER.SUBMENU.FORMS',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'forms'
-            ].join('/')
-          },
-          {
-            'rel': 'survey',
-            'prompt': 'APP.HEADER.SUBMENU.SURVEYS',
-            'name': 'name',
-            'href' : [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', this.id, 'surveys'
-            ].join('/')
-          }
-        ]
+      getResponseLinks: function() {
+        return getResponseLinks(this.id, this.name);
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
+
+    /**
+     * getResponseLinks
+     */
+    getResponseLinks: getResponseLinks,
 
     /**
      * afterUpdate

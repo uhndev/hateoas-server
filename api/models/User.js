@@ -150,7 +150,7 @@
             ].join('/')
           },
           {
-            'rel': 'overview',
+            'rel': sails.models.user.identity,
             'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
             'name': 'name',
             'href': [

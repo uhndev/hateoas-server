@@ -46,7 +46,7 @@
           }
           else {
             this.study.centreSummary = _.unique(centres, 'name');
-            res.ok(this.study);
+            res.ok(this.study, { links: study.getResponseLinks() });
           }
         })
         .catch(function (err) {

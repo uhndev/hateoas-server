@@ -85,16 +85,19 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByStudy: function(studyID, currUser, options) {
+    findByBaseModel: function(studyID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
-      return studycollectioncentre.find(query).where({ study: studyID })
-        .then(function (centres) {
-          return [false, centres];
+      return Study.findOne(studyID).then(function (study) {
+          this.links = study.getResponseLinks();
+          return studycollectioncentre.find(query).where({ study: studyID })
         })
-        .catch(function (err) {
-          return [err, null];
+        .then(function (centres) {
+          return {
+            data: _.unique(centres, 'id'),
+            links: this.links
+          };
         });
     },
 
