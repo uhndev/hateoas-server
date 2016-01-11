@@ -8,9 +8,9 @@
 (function() {
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase); // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     destroy: function (req, res) {

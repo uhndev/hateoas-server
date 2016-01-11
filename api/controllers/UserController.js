@@ -82,10 +82,10 @@
             if (provider) {
               studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
                 this.user.providerSubjects = providerSubjects;
-                res.ok(this.user);
+                res.ok(this.user, { links: user.getResponseLinks() });
               });
             } else {
-              res.ok(this.user);
+              res.ok(this.user, { links: user.getResponseLinks() });
             }
           });
         })

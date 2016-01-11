@@ -12,9 +12,9 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('bluebird');
 
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     findOne: function(req, res, next) {
@@ -68,10 +68,10 @@
               if (enrollment.providers) {
                 Provider.find({ id: enrollment.providers }).then(function (providers) {
                   enrollment.providers = providers;
-                  res.ok(enrollment);
+                  res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
                 });
               } else {
-                res.ok(enrollment);
+                res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
               }
             })
             .catch(function (err) {

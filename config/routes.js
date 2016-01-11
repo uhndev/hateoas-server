@@ -52,11 +52,11 @@ module.exports.routes = {
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/study/:id/collectioncentres'  : 'CollectionCentreController.findByStudy',
-  'get /api/study/:id/subjects'           : 'SubjectEnrollmentController.findByStudy',
-  'get /api/study/:id/users'              : 'UserEnrollmentController.findByStudy',
-  'get /api/study/:id/forms'              : 'FormController.findByStudy',
-  'get /api/study/:id/surveys'            : 'SurveyController.findByStudy',
+  'get /api/study/:id/collectioncentres'  : 'CollectionCentreController.findByBaseModel',
+  'get /api/study/:id/subjects'           : 'SubjectEnrollmentController.findByBaseModel',
+  'get /api/study/:id/users'              : 'UserEnrollmentController.findByBaseModel',
+  'get /api/study/:id/forms'              : 'FormController.findByBaseModel',
+  'get /api/study/:id/surveys'            : 'SurveyController.findByBaseModel',
 
   'delete /api/study/:id/forms/:formID'   : 'StudyController.removeFormFromStudy',
 
