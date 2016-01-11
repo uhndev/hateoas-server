@@ -186,7 +186,7 @@
       );
     },
 
-    findByStudy: function (studyID, currUser, options, cb) {
+    findByBaseModel: function (studyID, currUser, options, cb) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
@@ -194,6 +194,7 @@
       // get study forms
       return Study.findOne(studyID).populate('forms')
         .then(function (study) {
+          this.links = study.getResponseLinks();
           var studyFormIds = _.pluck(study.forms, 'id');
           return ModelService.filterExpiredRecords('form')
             .where(query.where)
@@ -204,10 +205,10 @@
             });
         })
         .then(function (filteredForms) {
-          return [false, filteredForms];
-        })
-        .catch(function (err) {
-          return [err, null];
+          return {
+            data: filteredForms,
+            links: this.links
+          };
         });
     }
 

@@ -76,51 +76,7 @@
   },
   {
     "path": "/api/collectioncentre",
-    "links": [
-      {
-        "rel": "name",
-        "prompt": "*",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "overview",
-        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "collectioncentre",
-        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
-        "name": "name",
-        "href": "/api/study/*/collectioncentres",
-        "isActive": true
-      },
-      {
-        "rel": "subject",
-        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
-        "name": "name",
-        "href": "/api/study/*/subjects"
-      },
-      {
-        "rel": "user",
-        "prompt": "APP.HEADER.SUBMENU.USERS",
-        "name": "name",
-        "href": "/api/study/*/users"
-      },
-      {
-        "rel": "form",
-        "prompt": "APP.HEADER.SUBMENU.FORMS",
-        "name": "name",
-        "href": "/api/study/*/forms"
-      },
-      {
-        "rel": "survey",
-        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
-        "name": "name",
-        "href": "/api/study/*/surveys"
-      }
-    ],
+    "links": [],
     "queries": [],
     "template": {
       "href": "http://localhost:1337/api/systemform/3",
@@ -151,51 +107,7 @@
   {
     "path": "/api/subjectenrollment",
     "queries": [],
-    "links": [
-      {
-        "rel": "name",
-        "prompt": "*",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "overview",
-        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "collectioncentre",
-        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
-        "name": "name",
-        "href": "/api/study/*/collectioncentres"
-      },
-      {
-        "rel": "subject",
-        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
-        "name": "name",
-        "href": "/api/study/*/subjects",
-        "isActive": true
-      },
-      {
-        "rel": "user",
-        "prompt": "APP.HEADER.SUBMENU.USERS",
-        "name": "name",
-        "href": "/api/study/*/users"
-      },
-      {
-        "rel": "form",
-        "prompt": "APP.HEADER.SUBMENU.FORMS",
-        "name": "name",
-        "href": "/api/study/*/forms"
-      },
-      {
-        "rel": "survey",
-        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
-        "name": "name",
-        "href": "/api/study/*/surveys"
-      }
-    ],
+    "links": [],
     "template": {
       "data": [
         {
@@ -228,51 +140,7 @@
   {
     "path": "/api/form",
     "queries": [],
-    "links": [
-      {
-        "rel": "name",
-        "prompt": "*",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "overview",
-        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "collectioncentre",
-        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
-        "name": "name",
-        "href": "/api/study/*/collectioncentres"
-      },
-      {
-        "rel": "subject",
-        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
-        "name": "name",
-        "href": "/api/study/*/subjects"
-      },
-      {
-        "rel": "user",
-        "prompt": "APP.HEADER.SUBMENU.USERS",
-        "name": "name",
-        "href": "/api/study/*/users"
-      },
-      {
-        "rel": "form",
-        "prompt": "APP.HEADER.SUBMENU.FORMS",
-        "name": "name",
-        "href": "/api/study/*/forms",
-        "isActive": true
-      },
-      {
-        "rel": "survey",
-        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
-        "name": "name",
-        "href": "/api/study/*/surveys"
-      }
-    ],
+    "links": [],
     "template": {
       "data": [
         {
@@ -299,51 +167,7 @@
   {
     "path": "/api/survey",
     "queries": [],
-    "links": [
-      {
-        "rel": "name",
-        "prompt": "*",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "overview",
-        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "collectioncentre",
-        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
-        "name": "name",
-        "href": "/api/study/*/collectioncentres"
-      },
-      {
-        "rel": "subject",
-        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
-        "name": "name",
-        "href": "/api/study/*/subjects"
-      },
-      {
-        "rel": "user",
-        "prompt": "APP.HEADER.SUBMENU.USERS",
-        "name": "name",
-        "href": "/api/study/*/users"
-      },
-      {
-        "rel": "form",
-        "prompt": "APP.HEADER.SUBMENU.FORMS",
-        "name": "name",
-        "href": "/api/study/*/forms"
-      },
-      {
-        "rel": "survey",
-        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
-        "name": "name",
-        "href": "/api/study/*/surveys",
-        "isActive": true
-      }
-    ],
+    "links": [],
     "template": {
       "data": [
         {
@@ -364,51 +188,7 @@
   {
     "path": "/api/userenrollment",
     "queries": [],
-    "links": [
-      {
-        "rel": "name",
-        "prompt": "*",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "overview",
-        "prompt": "APP.HEADER.SUBMENU.OVERVIEW",
-        "name": "name",
-        "href": "/api/study/*"
-      },
-      {
-        "rel": "collectioncentre",
-        "prompt": "APP.HEADER.SUBMENU.COLLECTION_CENTRES",
-        "name": "name",
-        "href": "/api/study/*/collectioncentres"
-      },
-      {
-        "rel": "subject",
-        "prompt": "APP.HEADER.SUBMENU.SUBJECTS",
-        "name": "name",
-        "href": "/api/study/*/subjects"
-      },
-      {
-        "rel": "user",
-        "prompt": "APP.HEADER.SUBMENU.USERS",
-        "name": "name",
-        "href": "/api/study/*/users",
-        "isActive": true
-      },
-      {
-        "rel": "form",
-        "prompt": "APP.HEADER.SUBMENU.FORMS",
-        "name": "name",
-        "href": "/api/study/*/forms"
-      },
-      {
-        "rel": "survey",
-        "prompt": "APP.HEADER.SUBMENU.SURVEYS",
-        "name": "name",
-        "href": "/api/study/*/surveys"
-      }
-    ],
+    "links": [],
     "template": {
       "data": [
         {

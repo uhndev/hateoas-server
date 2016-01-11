@@ -365,7 +365,7 @@
         "field_name": "menu",
         "field_title": "Main and Sub Menu Definitions",
         "field_type": "json",
-        "field_value": {},
+        "field_value": "",
         "field_placeholder": "Enter a json value",
         "field_validation": {
           "rule": "none",
