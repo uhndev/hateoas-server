@@ -21,7 +21,7 @@
       /**
        * caseNumber
        * @description A case's number
-       * @type {integer}
+       * @type {Integer}
        */
 
       caseNumber: {
@@ -31,7 +31,7 @@
       /**
        * person
        * @description A case's person
-       * @type {model}
+       * @type {Model}
        */
 
       person: {

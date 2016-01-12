@@ -29,7 +29,7 @@
       /**
        * price
        * @description a payor's billing max price for a service
-       * @type {integer}
+       * @type {Integer}
        */
 
       price: {
@@ -49,7 +49,7 @@
       /**
        * serviceCategory
        * @description a ProgramService's mapping to it's serviceCategory
-       * @type {model}
+       * @type {Model}
        */
 
       serviceCategory: {

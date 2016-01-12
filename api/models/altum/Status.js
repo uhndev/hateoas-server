@@ -19,7 +19,7 @@
       /**
        * name
        * @description A status's name
-       * @type {model}
+       * @type {String}
        */
 
       name: {

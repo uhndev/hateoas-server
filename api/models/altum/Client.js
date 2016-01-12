@@ -19,7 +19,7 @@
       /**
        * person
        * @description A client's person record
-       * @type {model}
+       * @type {Model}
        */
       person: {
         model: 'person'
@@ -28,7 +28,7 @@
       /**
        * MRN
        * @description A client's mrn
-       * @type {string}
+       * @type {String}
        */
       MRN: {
         type: 'string',
@@ -38,7 +38,7 @@
       /**
        * familyDoctor
        * @description A client's familyDoctor
-       * @type {integer}
+       * @type {Model}
        */
       familyDoctor: {
         model: 'physician'
@@ -47,7 +47,7 @@
       /**
        * referrals
        * @description A client's referrals
-       * @type {integer}
+       * @type {Collection}
        */
       referrals: {
         collection: 'referral',

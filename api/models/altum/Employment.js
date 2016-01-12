@@ -19,7 +19,7 @@
       /**
        * company
        * @description the company this employment is at
-       * @type {model}
+       * @type {Model}
        */
 
       company: {
@@ -29,7 +29,7 @@
       /**
        * person
        * @description the person who's employed
-       * @type {model}
+       * @type {Model}
        */
 
       person: {
@@ -39,7 +39,7 @@
       /**
        * phoneNumber
        * @description the employed person's work number
-       * @type {model}
+       * @type {String}
        */
 
       phoneNumber: {

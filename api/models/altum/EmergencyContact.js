@@ -19,7 +19,7 @@
       /**
        * contact
        * @description A emergency contact's associated person
-       * @type {model}
+       * @type {Model}
        */
 
       person: {
@@ -39,7 +39,7 @@
       /**
        * priority
        * @description A emergencyContact's priority
-       * @type {integer}
+       * @type {Integer}
        */
 
       priority: {

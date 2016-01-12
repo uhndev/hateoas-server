@@ -25,6 +25,7 @@
       name: {
         type: 'string'
       },
+
       /**
        * company
        * @description a payor's company

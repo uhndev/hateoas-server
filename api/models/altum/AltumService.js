@@ -19,7 +19,7 @@
       /**
        * name
        * @description an AltumService's name
-       * @type {model}
+       * @type {String}
        */
 
       name: {
@@ -29,7 +29,7 @@
       /**
        * programServices
        * @description an AvailableService's programServices
-       * @type {collection}
+       * @type {Collection}
        */
 
       programServices: {
@@ -40,7 +40,7 @@
       /**
        * available
        * @description an AvailableService's availability
-       * @type {model}
+       * @type {String}
        */
 
       available: {
@@ -50,7 +50,7 @@
       /**
        * sites
        * @description a collection of a site's where the altumService is offered
-       * @type {integer}
+       * @type {Collection}
        */
 
       sites: {

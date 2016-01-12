@@ -19,7 +19,7 @@
       /**
        * name
        * @description a serivceCategory's name
-       * @type {model}
+       * @type {String}
        */
 
       name: {

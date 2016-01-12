@@ -21,7 +21,7 @@
       /**
        * claimNum
        * @description A claim's external number
-       * @type {integer}
+       * @type {String}
        */
 
       claimNum: {
@@ -32,7 +32,7 @@
       /**
        * payor
        * @description A claim's payor
-       * @type {model}
+       * @type {Model}
        */
 
       payor: {
@@ -43,7 +43,7 @@
       /**
        * policyNum
        * @description a claim's external policyNum
-       * @type {integer}
+       * @type {String}
        */
 
       policyNum: {

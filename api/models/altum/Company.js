@@ -40,7 +40,7 @@
       /**
        * address
        * @description A company's addresses
-       * @type {model}
+       * @type {Model}
        */
 
       address: {
@@ -50,7 +50,7 @@
       /**
        * faxl
        * @description A company's fax number
-       * @type {string}
+       * @type {String}
        */
 
       fax: {
@@ -60,7 +60,7 @@
       /**
        * email
        * @description A company's email
-       * @type {string}
+       * @type {String}
        */
 
       email: {

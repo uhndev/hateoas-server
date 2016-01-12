@@ -19,7 +19,7 @@
       /**
        * invoice
        * @description an invoiceService's associated invoice
-       * @type {model}
+       * @type {Model}
        */
 
       invoice: {
@@ -29,7 +29,7 @@
       /**
        * service
        * @description an invoiceSerivce's associated service
-       * @type {model}
+       * @type {Model}
        */
 
       service: {

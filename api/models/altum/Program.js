@@ -19,7 +19,7 @@
       /**
        * payors
        * @description a PayorProgram's payor
-       * @type {collection}
+       * @type {Model}
        */
 
       payors: {

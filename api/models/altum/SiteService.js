@@ -19,7 +19,7 @@
       /**
        *
        * @description an SiteService's altumService
-       * @type {model}
+       * @type {Model}
        */
 
       altumService: {
@@ -29,7 +29,7 @@
       /**
        * site
        * @description an AvailableService's payorService
-       * @type {model}
+       * @type {Model}
        */
 
       site: {

@@ -19,7 +19,7 @@
       /**
        * payor
        * @description an invoice's associated payor
-       * @type {model}
+       * @type {Model}
        */
 
       payor: {
@@ -29,7 +29,7 @@
       /**
        * invoiceServices
        * @description a collection of an invoices billed for services
-       * @type {collection}
+       * @type {Collection}
        */
 
       invoiceServices: {

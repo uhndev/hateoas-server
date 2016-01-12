@@ -21,7 +21,7 @@
       /**
        * name
        * @description A site's name
-       * @type {string}
+       * @type {String}
        */
 
       name: {
@@ -31,7 +31,7 @@
       /**
        * address
        * @description A site's address
-       * @type {model}
+       * @type {Model}
        */
 
       address: {
@@ -41,7 +41,7 @@
       /**
        * phone
        * @description a site's phone number
-       * @type {integer}
+       * @type {String}
        */
 
       phone: {
@@ -51,7 +51,7 @@
       /**
        * altumServices
        * @description a collection of a site's offered services at altum
-       * @type {collection}
+       * @type {Collection}
        */
 
       altumServices: {

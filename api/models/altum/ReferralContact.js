@@ -19,7 +19,7 @@
       /**
        * referral
        * @description referral key from referral table side of relationship
-       * @type {model}
+       * @type {Model}
        */
 
       referral: {
@@ -30,7 +30,7 @@
       /**
        * contact
        * @description person from person side of the relationship
-       * @type {model}
+       * @type {Model}
        */
 
       person: {
@@ -41,7 +41,7 @@
       /**
        * role
        * @description role of this relationship
-       * @type {model}
+       * @type {Model}
        */
 
       role: {

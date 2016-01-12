@@ -19,7 +19,7 @@
       /**
        * name
        * @description referral type name
-       * @type {model}
+       * @type {String}
        */
       name: {
         type: 'string'

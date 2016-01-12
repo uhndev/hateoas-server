@@ -20,7 +20,7 @@
       /**
        * user
        * @description A approver's user reference
-       * @type {model}
+       * @type {Model}
        */
       user: {
         model: 'user'
@@ -29,7 +29,7 @@
       /**
        * title
        * @description A approver's title
-       * @type {model}
+       * @type {String}
        */
       title: {
         type: 'string'
@@ -37,7 +37,7 @@
       /**
        * name
        * @description A approver's name
-       * @type {model}
+       * @type {String}
        */
       name: {
         type: 'string'

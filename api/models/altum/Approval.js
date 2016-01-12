@@ -21,7 +21,7 @@
       /**
        * approver
        * @description A approval's approver
-       * @type {model}
+       * @type {Model}
        */
       approver: {
         model: 'approver'

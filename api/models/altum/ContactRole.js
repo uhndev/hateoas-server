@@ -19,7 +19,7 @@
       /**
        * name
        * @description a person role's name
-       * @type {string}
+       * @type {String}
        */
 
       name: {
@@ -29,7 +29,7 @@
       /**
        * description
        * @description a person role's description
-       * @type {string}
+       * @type {String}
        */
 
       description: {

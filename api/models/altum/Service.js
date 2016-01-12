@@ -19,7 +19,7 @@
       /**
        * referral
        * @description a service's associated referral
-       * @type {model}
+       * @type {Model}
        */
 
       referral: {
@@ -29,7 +29,7 @@
       /**
        * programService
        * @description a serivce's associated programService
-       * @type {model}
+       * @type {Model}
        */
 
       programService: {
@@ -39,7 +39,7 @@
       /**
        * serviceProviders
        * @description a collection of a service's associated providers
-       * @type {collection}
+       * @type {Collection}
        */
 
       serviceProviders: {
