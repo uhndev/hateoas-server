@@ -171,6 +171,15 @@
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
               {
+                model: 'group',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { level: 3 }
+                  }
+                ]
+              },
+              {
                 model: 'user',
                 action: 'read',
                 relation: 'owner',
