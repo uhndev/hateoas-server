@@ -40,8 +40,6 @@
     },
     toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-
   }
   });
 })();
-
