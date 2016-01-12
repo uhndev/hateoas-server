@@ -182,8 +182,8 @@
        */
 
       referralContacts: {
-        collection: 'referralContact',
-        via: 'referral'
+        collection: 'person',
+        via: 'referrals'
       }
 
     }

@@ -264,6 +264,17 @@
         type: 'boolean'
       },
 
+	    /**
+       * referrals
+       * @description Mapping to a person's collection of referrals
+       * @type {Collection}
+       */
+
+      referrals: {
+        collection: 'referral',
+        via: 'referralContacts'
+      },
+
       /**
        * user
        * @description a persons associated users
