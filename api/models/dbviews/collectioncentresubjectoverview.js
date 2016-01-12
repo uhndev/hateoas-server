@@ -20,7 +20,7 @@
         type: 'integer'
       },
       study: {
-        type: 'string'
+        model: 'study'
       },
       name: {
         type: 'string'

@@ -41,7 +41,7 @@
         type: 'date'
       },
       study: {
-        type: 'model'
+        model: 'study'
       },
       studyName: {
         type: 'string'
