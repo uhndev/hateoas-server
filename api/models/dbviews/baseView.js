@@ -7,10 +7,10 @@ module.exports = {
       type: 'integer'
     },
     owner: {
-    	type: 'user'
+    	model: 'user'
     },
     createdBy: {
-    	type: 'user'
+    	model: 'user'
     },
     createdAt: {
       type: 'date'
