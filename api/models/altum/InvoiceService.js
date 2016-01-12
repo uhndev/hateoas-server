@@ -14,32 +14,31 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * invoice
-     * @description an invoiceService's associated invoice
-     * @type {model}
-     */
+      /**
+       * invoice
+       * @description an invoiceService's associated invoice
+       * @type {Model}
+       */
 
-    invoice: {
-      model: 'invoice'
-    },
+      invoice: {
+        model: 'invoice'
+      },
 
-    /**
-     * service
-     * @description an invoiceSerivce's associated service
-     * @type {model}
-     */
+      /**
+       * service
+       * @description an invoiceSerivce's associated service
+       * @type {Model}
+       */
 
-    service: {
-      model: 'service'
-    },
+      service: {
+        model: 'service'
+      },
 
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-  }
   });
 })();
 

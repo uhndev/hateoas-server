@@ -7,20 +7,20 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/approver.js
  */
 
-  (function () {
+(function () {
 
-    var _super = require('../BaseModel.js');
-    var _ = require('lodash');
-    var HateoasService = require('../../services/HateoasService.js');
+  var _super = require('../BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
 
-    _.merge(exports, _super);
-    _.merge(exports, {
-    schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     attributes: {
       /**
        * user
        * @description A approver's user reference
-       * @type {model}
+       * @type {Model}
        */
       user: {
         model: 'user'
@@ -29,23 +29,24 @@
       /**
        * title
        * @description A approver's title
-       * @type {model}
+       * @type {String}
        */
       title: {
         type: 'string'
       },
+      
       /**
        * name
        * @description A approver's name
-       * @type {model}
+       * @type {String}
        */
       name: {
         type: 'string'
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
     }
+
   });
 })();
 

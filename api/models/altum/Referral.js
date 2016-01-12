@@ -12,11 +12,13 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     attributes: {
+
       /**
        * client
        * @description A referral's client
-       * @type {model}
+       * @type {Model}
        */
 
       client: {
@@ -27,7 +29,7 @@
       /**
        * claim
        * @description A referral's client
-       * @type {model}
+       * @type {Model}
        */
 
       claim: {
@@ -38,7 +40,7 @@
       /**
        * program
        * @description A referral's program.
-       * @type {model}
+       * @type {Model}
        */
 
       program: {
@@ -49,7 +51,7 @@
       /**
        * physician
        * @description a referral's physician
-       * @type {model}
+       * @type {Model}
        */
 
       physician: {
@@ -60,7 +62,7 @@
       /**
        * status
        * @description A referral's status
-       * @type {string}
+       * @type {Model}
        */
       status: {
         model: 'status'
@@ -78,19 +80,9 @@
 
 
       /**
-       * referralType
-       * @description A referral's type
-       * @type {string}
-       */
-
-      referralType: {
-        model: 'referralType'
-      },
-
-      /**
        *
        * @description A referral's case
-       * @type {string}
+       * @type {Model}
        */
 
       case: {
@@ -101,7 +93,7 @@
       /**
        * accidentDate
        * @description A referral's accidentDate
-       * @type {string}
+       * @type {Datetime}
        */
 
       accidentDate: {
@@ -112,7 +104,7 @@
       /**
        * receiveDate
        * @description A referral's receiveDate
-       * @type {string}
+       * @type {Datetime}
        */
 
       receiveDate: {
@@ -123,7 +115,7 @@
       /**
        * sentDate
        * @description A referral's sentDate
-       * @type {string}
+       * @type {Datetime}
        */
 
       sentDate: {
@@ -133,7 +125,7 @@
       /**
        * dischargeDate
        * @description A referral's dischargeDate
-       * @type {string}
+       * @type {Datetime}
        */
 
       dischargeDate: {
@@ -153,7 +145,7 @@
       /**
        * services
        * @description A referral's services
-       * @type {string}
+       * @type {Collection}
        */
 
       services: {
@@ -164,7 +156,7 @@
       /**
        * clients
        * @description A referral's clients
-       * @type {string}
+       * @type {Collection}
        */
 
       clients: {
@@ -175,7 +167,7 @@
       /**
        * payors
        * @description A referral's payors
-       * @type {string}
+       * @type {Collection}
        */
 
       payors: {
@@ -183,17 +175,16 @@
         via: 'referrals'
       },
 
-
       /**
        * referralContacts
        * @description A referral's referralContacts
-       * @type {string}
+       * @type {Collection}
        */
 
       referralContacts: {
-        collection: 'referralContact',
-        via: 'referral'
-      },
+        collection: 'person',
+        via: 'referrals'
+      }
 
     }
 

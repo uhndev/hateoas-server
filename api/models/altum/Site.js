@@ -7,45 +7,41 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/site.js
  */
 
-  (function () {
+(function () {
 
-    var _super = require('../BaseModel.js');
-    var _ = require('lodash');
-    var HateoasService = require('../../services/HateoasService.js');
+  var _super = require('../BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
 
-    _.merge(exports, _super);
-    _.merge(exports, {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-    schema:true,
     attributes: {
-
 
       /**
        * name
        * @description A site's name
-       * @type {string}
+       * @type {String}
        */
 
       name: {
         type: 'string'
       },
 
-
       /**
        * address
        * @description A site's address
-       * @type {model}
+       * @type {Model}
        */
 
       address: {
         model: 'address'
       },
 
-
       /**
        * phone
        * @description a site's phone number
-       * @type {integer}
+       * @type {String}
        */
 
       phone: {
@@ -55,7 +51,7 @@
       /**
        * altumServices
        * @description a collection of a site's offered services at altum
-       * @type {collection}
+       * @type {Collection}
        */
 
       altumServices: {
@@ -65,7 +61,7 @@
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
-    });
-  })();
+  });
+})();
 
 

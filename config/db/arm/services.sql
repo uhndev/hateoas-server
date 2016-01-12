@@ -12,7 +12,6 @@ altumService.name as "altumService_name",
 service.owner,
 service."createdAt",
 service."createdBy",
-service."deletedAt",
 service."deletedBy",
 service."updatedAt"
 
