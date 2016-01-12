@@ -38,17 +38,18 @@
       },
 
       /**
-       * address
+       * addresses
        * @description A company's addresses
        * @type {Model}
        */
 
-      address: {
-        model: 'address'
+      addresses: {
+        collection: 'address',
+        via: 'company'
       },
 
       /**
-       * faxl
+       * fax
        * @description A company's fax number
        * @type {String}
        */

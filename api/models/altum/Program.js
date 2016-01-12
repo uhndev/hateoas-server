@@ -17,12 +17,11 @@
     attributes: {
 
       /**
-       * payors
+       * payor
        * @description a PayorProgram's payor
        * @type {Model}
        */
-
-      payors: {
+      payor: {
         model: 'payor'
       },
 

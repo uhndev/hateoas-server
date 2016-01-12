@@ -52,14 +52,14 @@
        * @description a payor's programs
        * @type {String}
        */
-
       programs: {
         collection: 'program',
-        via: 'payors'
+        via: 'payor'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
+
   });
 })();
 
