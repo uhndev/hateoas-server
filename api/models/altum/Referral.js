@@ -12,7 +12,9 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     attributes: {
+
       /**
        * client
        * @description A referral's client
@@ -183,7 +185,6 @@
         via: 'referrals'
       },
 
-
       /**
        * referralContacts
        * @description A referral's referralContacts
@@ -193,7 +194,7 @@
       referralContacts: {
         collection: 'referralContact',
         via: 'referral'
-      },
+      }
 
     }
 

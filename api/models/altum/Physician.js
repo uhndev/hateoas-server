@@ -14,25 +14,23 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * person
-     * @description a physician's person model
-     * @type {String}
-     */
-    person: {
-      model: 'person'
-    },
+      /**
+       * person
+       * @description a physician's person model
+       * @type {String}
+       */
+      person: {
+        model: 'person'
+      },
 
-    name: {
-      type: 'string'
-    },
+      name: {
+        type: 'string'
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
-  }
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
   });
 })();
 

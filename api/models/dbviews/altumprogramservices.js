@@ -10,6 +10,7 @@
   _.merge(exports, {
 
     attributes: {
+
       /**
        * payor_id
        * @description a altumPayorService's payor id
@@ -43,7 +44,6 @@
        * @type {String}
        */
       altumService_id: {
-
         type: 'string'
       },
 
@@ -53,9 +53,7 @@
        * @type {String}
        */
       altumProgramService_id: {
-
         type: 'string'
-
       },
 
       /**
@@ -64,7 +62,6 @@
        * @type {String}
        */
       altumProgramService_name: {
-
         type: 'string'
       },
 
@@ -74,7 +71,6 @@
        * @type {String}
        */
       program_id: {
-
         type: 'string'
       },
 
@@ -84,14 +80,12 @@
        * @type {String}
        */
       program_name: {
-
         type: 'string'
       },
 
       toJSON: UserModel.attributes.toJSON
-
     }
-  });
 
+  });
 })();
 

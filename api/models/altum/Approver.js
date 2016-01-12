@@ -7,15 +7,15 @@
  * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/approver.js
  */
 
-  (function () {
+(function () {
 
-    var _super = require('../BaseModel.js');
-    var _ = require('lodash');
-    var HateoasService = require('../../services/HateoasService.js');
+  var _super = require('../BaseModel.js');
+  var _ = require('lodash');
+  var HateoasService = require('../../services/HateoasService.js');
 
-    _.merge(exports, _super);
-    _.merge(exports, {
-    schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     attributes: {
       /**
        * user
@@ -42,10 +42,10 @@
       name: {
         type: 'string'
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
     }
+
   });
 })();
 

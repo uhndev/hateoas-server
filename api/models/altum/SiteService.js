@@ -14,31 +14,31 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     *
-     * @description an SiteService's altumService
-     * @type {model}
-     */
+      /**
+       *
+       * @description an SiteService's altumService
+       * @type {model}
+       */
 
-    altumService: {
-      model: 'altumService'
-    },
+      altumService: {
+        model: 'altumService'
+      },
 
-    /**
-     * site
-     * @description an AvailableService's payorService
-     * @type {model}
-     */
+      /**
+       * site
+       * @description an AvailableService's payorService
+       * @type {model}
+       */
 
-    site: {
-      model: 'site'
-    },
+      site: {
+        model: 'site'
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-  }
+    }
   });
 })();
 

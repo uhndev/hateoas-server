@@ -14,52 +14,52 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * referral
-     * @description a service's associated referral
-     * @type {model}
-     */
+      /**
+       * referral
+       * @description a service's associated referral
+       * @type {model}
+       */
 
-    referral: {
-      model: 'referral'
-  },
+      referral: {
+        model: 'referral'
+      },
 
-    /**
-     * programService
-     * @description a serivce's associated programService
-     * @type {model}
-     */
+      /**
+       * programService
+       * @description a serivce's associated programService
+       * @type {model}
+       */
 
-    programService: {
-      model: 'programService'
-    },
+      programService: {
+        model: 'programService'
+      },
 
-    /**
-     * serviceProviders
-     * @description a collection of a serivce's associated provider
-     * @type {collection}
-     */
+      /**
+       * serviceProviders
+       * @description a collection of a service's associated providers
+       * @type {collection}
+       */
 
-    serviceProviders: {
-      collection: 'user'
-    },
+      serviceProviders: {
+        collection: 'user'
+      },
 
-    /**
-     * approval
-     * @description presently this is just a boolean to flag it as approved
-     * @type {boolean}
-     */
+      /**
+       * approved
+       * @description presently this is just a boolean to flag it as approved
+       * @type {boolean}
+       */
 
-    approved: {
-      type: 'string',
-      defaultsTo: false
-    },
+      approved: {
+        type: 'boolean',
+        defaultsTo: false
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-  }
+    }
   });
 })();
 

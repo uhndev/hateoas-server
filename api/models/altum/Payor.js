@@ -14,53 +14,51 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * name
-     * @description a payor's name
-     * @type {String}
-     */
+      /**
+       * name
+       * @description a payor's name
+       * @type {String}
+       */
 
-    name: {
-      type: 'string'
-    },
-    /**
-     * company
-     * @description a payor's company
-     * @type {String}
-     */
+      name: {
+        type: 'string'
+      },
+      /**
+       * company
+       * @description a payor's company
+       * @type {String}
+       */
 
-    company: {
-      model: 'company'
-    },
+      company: {
+        model: 'company'
+      },
 
-    /**
-     * referrals
-     * @description a payor's referrals
-     * @type {String}
-     */
+      /**
+       * referrals
+       * @description a payor's referrals
+       * @type {String}
+       */
 
-    referrals: {
-      collection: 'referral',
-      via: 'payors'
-    },
+      referrals: {
+        collection: 'referral',
+        via: 'payors'
+      },
 
-    /**
-     * programs
-     * @description a payor's programs
-     * @type {String}
-     */
+      /**
+       * programs
+       * @description a payor's programs
+       * @type {String}
+       */
 
-    programs : {
-      collection: 'program',
-      via: 'payors'
-    },
+      programs: {
+        collection: 'program',
+        via: 'payors'
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
-  }
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
   });
 })();
 

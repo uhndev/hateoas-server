@@ -14,54 +14,51 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-schema: true,
+    attributes: {
 
-  attributes: {
+      /**
+       * contact
+       * @description A emergency contact's associated person
+       * @type {model}
+       */
 
-    /**
-     * contact
-     * @description A emergency contact's associated person
-     * @type {model}
-     */
+      person: {
+        model: 'person'
+      },
 
-    person: {
-      model: 'person'
-    },
+      /**
+       * relationship
+       * @description A emergencyContact's relationship
+       * @type {String}
+       */
 
+      relationship: {
+        type: 'string'
+      },
 
-    /**
-     * relationship
-     * @description A emergencyContact's relationship
-     * @type {String}
-     */
+      /**
+       * priority
+       * @description A emergencyContact's priority
+       * @type {integer}
+       */
 
-    relationship: {
-      type: 'string'
-    },
+      priority: {
+        type: 'integer'
+      },
 
-    /**
-     * priority
-     * @description A emergencyContact's priority
-     * @type {integer}
-     */
+      /**
+       * notes
+       * @description A emergencyContact's notes
+       * @type {String}
+       */
 
-    priority: {
-      type: 'integer'
-    },
+      notes: {
+        type: 'string'
+      },
 
-    /**
-     * notes
-     * @description A emergencyContact's notes
-     * @type {String}
-     */
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
 
-    notes: {
-      type: 'string'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
-  }
   });
 })();
 

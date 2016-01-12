@@ -14,22 +14,20 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
+      /**
+       * name
+       * @description referral type name
+       * @type {model}
+       */
+      name: {
+        type: 'string'
+      },
 
-    /**
-     * name
-     * @description referral type name
-     * @type {model}
-     */
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
 
-    name: {
-      type: 'string'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
-  }
   });
 })();
 

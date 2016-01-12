@@ -14,89 +14,80 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * program
-     * @description a payorService's program (at altum), only for driving dropdowns
-     * @type {String}
-     */
+      /**
+       * program
+       * @description a payorService's program (at altum), only for driving dropdowns
+       * @type {String}
+       */
 
-    program: {
-      model: 'program'
-    },
+      program: {
+        model: 'program'
+      },
 
-    /**
-     * price
-     * @description a payor's billing max price for a service
-     * @type {integer}
-     */
+      /**
+       * price
+       * @description a payor's billing max price for a service
+       * @type {integer}
+       */
 
-    price: {
-      type: 'integer'
-    },
+      price: {
+        type: 'integer'
+      },
 
-    /**
-     * altumService
-     * @description a payorService's mapping to it's altumService
-     * @type {String}
-     */
+      /**
+       * altumService
+       * @description a payorService's mapping to it's altumService
+       * @type {String}
+       */
 
-    altumService: {
-      model: 'altumService'
-    },
+      altumService: {
+        model: 'altumservice'
+      },
 
-    /**
-     * serviceCategory
-     * @description a ProgramService's mapping to it's serviceCategory
-     * @type {model}
-     */
+      /**
+       * serviceCategory
+       * @description a ProgramService's mapping to it's serviceCategory
+       * @type {model}
+       */
 
-    serviceCategory: {
-      model: 'serviceCategory'
-    },
+      serviceCategory: {
+        model: 'servicecategory'
+      },
 
-    /**
-     * payor
-     * @description a payorService's payor
-     * @type {String}
-     */
+      /**
+       * payor
+       * @description a payorService's payor
+       * @type {String}
+       */
 
-    payor: {
-      model: 'payor'
-    },
+      payor: {
+        model: 'payor'
+      },
 
-    /**
-     * program
-     * @description a payorService's associated program
-     * @type {String}
-     */
+      /**
+       * program
+       * @description a payorService's associated program
+       * @type {String}
+       */
 
-    program: {
-      model: 'program'
-    },
-    /**
-     * name
-     * @description a payorService's name
-     * @type {String}
-     */
+      program: {
+        model: 'program'
+      },
+      /**
+       * name
+       * @description a payorService's name
+       * @type {String}
+       */
 
-    name: {
-      type: 'string'
-    },
+      name: {
+        type: 'string'
+      },
 
-    /**
-     * serviceCategory
-     * @description a programService's associated serviceCategory
-     * @type {String}
-     */
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
 
-    serviceCategory: {
-      model: 'serviceCategory'
-    },
-
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  }
   });
 })();
 

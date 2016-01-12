@@ -6,42 +6,21 @@
 
 module.exports = {
 
-  //array of field names to concatenate into display names, override in child models to pick unique fields for displayName
+  // enforce schema by default
+  schema: true,
+
+  // array of field names to concatenate into display names, override in child models to pick unique fields for displayName
   displayFields: [ 'name', 'prefix', 'firstname', 'lastname' ],
 
   attributes: {
-    /**
-     * isDeleted
-     * @description deleted flag
-     * @type {string}
-     */
-
-    isDeleted: {
-      type: 'boolean',
-      defaultsTo: false
-    },
-
-    /**
-     * deletedAt
-     * @description deleted date
-     * @type {string}
-     */
-
-    deletedAt: {
-      type: 'datetime',
-      defaultsTo: null,
-      datetime: true
-    },
-
 
     /**
      * deletedBy
      * @description record of who deleted record
      * @type {string}
      */
-
     deletedBy: {
-      type: 'string'
+      model: 'user'
     },
 
     /**

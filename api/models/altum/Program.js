@@ -1,5 +1,5 @@
 /**
- * PayorProgram.js
+ * Program.js
  *
  * @description :: A model representing all programs belonging to a particular payor
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -14,44 +14,43 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * payors
-     * @description a PayorProgram's payor
-     * @type {collection}
-     */
+      /**
+       * payors
+       * @description a PayorProgram's payor
+       * @type {collection}
+       */
 
-    payors: {
-      model: 'payor',
+      payors: {
+        model: 'payor'
+      },
 
-    },
+      /**
+       * name
+       * @description a PayorProgram's name
+       * @type {String}
+       */
 
-    /**
-     * name
-     * @description a PayorProgram's name
-     * @type {String}
-     */
+      name: {
+        type: 'string'
+      },
 
-    name: {
-      type:'string'
-    },
+      /**
+       * ProgramServices
+       * @description a payor's ProgramServices
+       * @type {String}
+       */
 
-    /**
-     * ProgramServices
-     * @description a payor's ProgramServices
-     * @type {String}
-     */
+      programServices: {
+        collection: 'ProgramService',
+        via: 'program',
+        dominant: true
+      },
 
-    programServices: {
-      collection: 'ProgramService',
-      via: 'program',
-      dominant:true
-    },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-  }
+    }
   });
 })();
 

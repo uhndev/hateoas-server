@@ -13,7 +13,6 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-    schema:true,
 
     attributes: {
 
@@ -50,7 +49,7 @@
        * @type {stringj}
        */
       city: {
-        type: 'string'
+        model: 'city'
       },
 
       /**

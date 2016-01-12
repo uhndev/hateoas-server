@@ -14,53 +14,54 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     *
-     * @description an AltumService's name
-     * @type {model}
-     */
+      /**
+       * name
+       * @description an AltumService's name
+       * @type {model}
+       */
 
-    name: {
-      type: 'string'
-    },
+      name: {
+        type: 'string'
+      },
 
-    /**
-     * payorService
-     * @description an AvailableService's payorService
-     * @type {collection}
-     */
+      /**
+       * programServices
+       * @description an AvailableService's programServices
+       * @type {collection}
+       */
 
-    programServices: {
-      collection: 'programService',
-      via: 'altumService'
-    },
+      programServices: {
+        collection: 'programService',
+        via: 'altumService'
+      },
 
-    /**
-     * available
-     * @description an AvailableService's payorService
-     * @type {model}
-     */
+      /**
+       * available
+       * @description an AvailableService's availability
+       * @type {model}
+       */
 
-    available: {
-      type: 'boolean'
-    },
+      available: {
+        type: 'boolean'
+      },
 
-    /**
-     * sites
-     * @description a collection of a site's where the altumService is offered
-     * @type {integer}
-     */
+      /**
+       * sites
+       * @description a collection of a site's where the altumService is offered
+       * @type {integer}
+       */
 
-    sites: {
-      collection:'site',
-      via: 'altumServices'
-    },
+      sites: {
+        collection: 'site',
+        via: 'altumServices'
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-  }
+    }
+
   });
 })();
 

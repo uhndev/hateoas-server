@@ -10,11 +10,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    migrate: 'safe',
     attributes: {
-      id: {
-        type: 'integer'
-      },
       approved: {
         type: 'boolean'
       },

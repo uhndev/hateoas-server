@@ -13,35 +13,31 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-  schema:true,
 
-  attributes: {
+    attributes: {
 
+      /**
+       * name
+       * @description a person role's name
+       * @type {string}
+       */
 
-    /**
-     * name
-     * @description a person role's name
-     * @type {string}
-     */
+      name: {
+        type: 'string'
+      },
 
-    name: {
-      type: 'string'
-    },
+      /**
+       * description
+       * @description a person role's description
+       * @type {string}
+       */
 
+      description: {
+        type: 'string'
+      },
 
-    /**
-     * description
-     * @description a person role's description
-     * @type {string}
-     */
-
-    description: {
-      type: 'string'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-
-  }
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
   });
 })();
 
