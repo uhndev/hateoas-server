@@ -34,6 +34,7 @@
       title: {
         type: 'string'
       },
+      
       /**
        * name
        * @description A approver's name
