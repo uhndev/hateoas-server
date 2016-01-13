@@ -6,7 +6,7 @@
 var should = require('should');
 var moment = require('moment');
 
-describe('The Survey Model', function() {
+describe('The Survey Model', function () {
   var studyID;
 
   before(function (done) {
@@ -16,11 +16,11 @@ describe('The Survey Model', function() {
         attributes: {},
         reb: '123',
         collectionCentres: [
-          { name: 'CC1' }, { name: 'CC2' }
+          {name: 'CC1'}, {name: 'CC2'}
         ],
         forms: [
-          { name: 'FORM1', metaData: {}, questions: [] },
-          { name: 'FORM2', metaData: {}, questions: [] }
+          {name: 'FORM1', metaData: {}, questions: []},
+          {name: 'FORM2', metaData: {}, questions: []}
         ]
       })
       .then(function (study) {
@@ -61,7 +61,7 @@ describe('The Survey Model', function() {
       });
   });
 
-  describe('before subjects have been enrolled', function() {
+  describe('before subjects have been enrolled', function () {
     it('should create initial survey version after create', function (done) {
       SurveyVersion.findOne({survey: 1})
         .exec(function (err, surveyVersion) {
@@ -81,7 +81,7 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should have created defaultFormVersions array if not given', function(done) {
+    it('should have created defaultFormVersions array if not given', function (done) {
       Survey.findOneByName('SURVEY').exec(function (err, survey) {
         survey.defaultFormVersions.length.should.equal(2);
         survey.defaultFormVersions[0].active.should.be.ok;
@@ -90,16 +90,16 @@ describe('The Survey Model', function() {
       });
     });
 
-    it('should update the head revision in place if no AnswerSets filled yet', function(done) {
-      Survey.update({ name: 'SURVEY' }, {
+    it('should update the head revision in place if no AnswerSets filled yet', function (done) {
+      Survey.update({name: 'SURVEY'}, {
         name: 'SURVEY2'
       }).exec(function (err, updatedSurvey) {
-        Survey.findOne({ name: 'SURVEY2' })
+        Survey.findOne({name: 'SURVEY2'})
           .populate('sessions')
           .exec(function (err, survey) {
             survey.sessions[0].surveyVersion.should.equal(1);
             survey.sessions[1].surveyVersion.should.equal(1);
-            SurveyVersion.find({ survey: 1 }).exec(function (err, surveyVersions) {
+            SurveyVersion.find({survey: 1}).exec(function (err, surveyVersions) {
               surveyVersions.length.should.equal(1);
               done(err);
             });
@@ -107,11 +107,11 @@ describe('The Survey Model', function() {
       });
     });
 
-    it('should not create subject schedules if no subjects enrolled yet', function(done) {
+    it('should not create subject schedules if no subjects enrolled yet', function (done) {
       Survey.findOneByName('SURVEY2')
         .populate('sessions')
         .then(function (survey) {
-          return SubjectSchedule.count({ session:_.pluck(survey.sessions, 'id') });
+          return SubjectSchedule.count({session: _.pluck(survey.sessions, 'id')});
         })
         .then(function (schedules) {
           schedules.should.equal(0);
@@ -119,7 +119,7 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should have edited survey in place and not have created new version if not published yet', function(done) {
+    it('should have edited survey in place and not have created new version if not published yet', function (done) {
       Survey.findOneByName('SURVEY2')
         .populate('versions')
         .exec(function (err, survey) {
@@ -129,7 +129,7 @@ describe('The Survey Model', function() {
     });
   });
 
-  describe('after subjects have been enrolled but before being published', function() {
+  describe('after subjects have been enrolled but before being published', function () {
     var enrollment1, enrollment2;
     before(function (done) {
       Study.findOneByName('STUDY')
@@ -160,28 +160,28 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should update the head revision in place if no AnswerSets filled yet', function(done) {
-      Survey.update({ name: 'SURVEY2' }, {
+    it('should update the head revision in place if no AnswerSets filled yet', function (done) {
+      Survey.update({name: 'SURVEY2'}, {
         name: 'SURVEY3'
       }).exec(function (err, updatedSurvey) {
-        SurveyVersion.find({ survey: 1 }).exec(function (err, surveyVersions) {
+        SurveyVersion.find({survey: 1}).exec(function (err, surveyVersions) {
           surveyVersions.length.should.equal(1);
           done(err);
         });
       });
     });
 
-    it('should have created subject schedules if subjects enrolled', function(done) {
+    it('should have created subject schedules if subjects enrolled', function (done) {
       SubjectSchedule
-        .find({ subjectEnrollment: [enrollment1.id, enrollment2.id] })
+        .find({subjectEnrollment: [enrollment1.id, enrollment2.id]})
         .exec(function (err, schedules) {
           schedules.length.should.equal(4);
           done();
         });
     });
 
-    it('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function(done) {
-      Session.updateLifecycle({ id: 1 }, { availableFrom: 10, availableTo: 10 })
+    it('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function (done) {
+      Session.updateLifecycle({id: 1}, {availableFrom: 10, availableTo: 10})
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
           return SurveyVersion.count().then(function (versions) {
@@ -204,16 +204,16 @@ describe('The Survey Model', function() {
     });
   });
 
-  describe('after subjects enrolled and Survey is published', function() {
+  describe('after subjects enrolled and Survey is published', function () {
     before(function (done) {
       Survey.update({name: 'SURVEY3'}, {lastPublished: new Date()}).exec(function (err, survey) {
-        Form.update({ name: ['FORM1', 'FORM2' ] }, { lastPublished: new Date()}).exec(function (err, forms) {
+        Form.update({name: ['FORM1', 'FORM2']}, {lastPublished: new Date()}).exec(function (err, forms) {
           done(err);
         });
       });
     });
 
-    it('should update the head revision and create new SurveyVersion if published', function(done) {
+    it('should update the head revision and create new SurveyVersion if published', function (done) {
       Survey.update({name: 'SURVEY3'}, {name: 'SURVEY4'})
         .then(function (finalSurvey) {
           SurveyVersion.count().exec(function (err, versions) {
@@ -223,8 +223,8 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should not create a new SurveyVersion if Session is edited', function(done) {
-      Session.updateLifecycle({ id: 1 }, { availableFrom: 5, availableTo: 5 })
+    it('should not create a new SurveyVersion if Session is edited', function (done) {
+      Session.updateLifecycle({id: 1}, {availableFrom: 5, availableTo: 5})
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
           return SurveyVersion.count();
@@ -247,7 +247,7 @@ describe('The Survey Model', function() {
         .catch(done);
     });
 
-    it('should create a new SurveyVersion if adding a Session to Survey', function(done) {
+    it('should create a new SurveyVersion if adding a Session to Survey', function (done) {
       Survey.findOne({name: 'SURVEY4'})
         .populate('sessions')
         .exec(function (err, survey) {
@@ -268,7 +268,7 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should have set availableFrom/To to null if session type was non-scheduled', function(done) {
+    it('should have set availableFrom/To to null if session type was non-scheduled', function (done) {
       Session.findOneByName('Future').populate('subjectSchedules').exec(function (err, session) {
         _.each(session.subjectSchedules, function (schedule) {
           _.isNull(schedule.availableFrom).should.be.ok;
@@ -278,7 +278,7 @@ describe('The Survey Model', function() {
       })
     });
 
-    it('should create a new SurveyVersion if removing a Session from a Survey', function(done) {
+    it('should create a new SurveyVersion if removing a Session from a Survey', function (done) {
       Survey.findOne({name: 'SURVEY4'})
         .populate('sessions')
         .then(function (survey) {
@@ -294,8 +294,8 @@ describe('The Survey Model', function() {
         });
     });
 
-    it('should not create a new SurveyVersion if a formVersion is added to a Session', function(done) {
-      Form.create({ name: 'FORM3', metaData: {}, questions: [] })
+    it('should not create a new SurveyVersion if a formVersion is added to a Session', function (done) {
+      Form.create({name: 'FORM3', metaData: {}, questions: []})
         .then(function (form) {
           this.form = form;
           return Session.findOneByName('Baseline').populate('formVersions');
@@ -313,7 +313,7 @@ describe('The Survey Model', function() {
         .catch(done);
     });
 
-    it('should not allow user to remove formVersion from Session if already published', function(done) {
+    it('should not allow user to remove formVersion from Session if already published', function (done) {
       // TODO: this cannot be done using Model lifecycle methods.  Will probably need to overwrite the
       // blueprint remove() function for the FormVersion controller.
       done();
@@ -335,7 +335,7 @@ describe('The Survey Model', function() {
     });
 
     it('should set expiredAt for all associated Sessions, SurveyVersions, and SubjectSchedules', function (done) {
-      Survey.update({ id: 1 }, { expiredAt: new Date() })
+      Survey.update({id: 1}, {expiredAt: new Date()})
         .exec(function (err, survey) {
           SurveyVersion.find()
             .then(function (surveys) {
