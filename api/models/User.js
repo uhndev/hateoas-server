@@ -19,6 +19,8 @@
   _.merge(exports, _user);
   _.merge(exports, {
 
+    defaultSortBy: 'displayName ASC',
+
     displayFields: [ 'prefix', 'firstname', 'lastname' ],
 
     schema: true,

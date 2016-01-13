@@ -20,13 +20,18 @@
      *              Will only perform filter if model definition includes an
      *              `expiredAt` attribute.
      * @param  {String} model Model name
+     * @param  {Object} query Optional waterline query
      * @return {Promise}      Chainable model promise after find operation
      */
-    filterExpiredRecords: function (model) {
+    filterExpiredRecords: function (model, query) {
+      if (_.isUndefined(query)) {
+        query = {};
+      }
+
       if (_.has(sails.models[model].definition, 'expiredAt')) {
-        return sails.models[model].find({expiredAt: null});
+        return sails.models[model].find(_.merge(query, {expiredAt: null}));
       } else {
-        return sails.models[model].find();
+        return sails.models[model].find(query);
       }
     }
 
