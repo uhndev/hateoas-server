@@ -53,10 +53,13 @@
         via: 'clients'
       },
 
+
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
 
     }
+
     });
   })();
 

@@ -13,6 +13,8 @@
         menu: {
           tabview: [
             {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "APP.HEADER.MENU.RECOMMENDATIONS"},
+            {"href": "/client", "icon": "fa-users", "prompt": "Clients"},
+            {"href": "/referral", "icon": "fa-ambulance", "prompt": "Referrals"},
             {
               "prompt": "APP.HEADER.MENU.AT", "icon": "fa-cog", "dropdown": [
               {"prompt": "APP.HEADER.MENU.AT.APPROVERS", "href": "/approver", "icon": "fa-male"},
@@ -30,19 +32,14 @@
               {"prompt": "APP.HEADER.MENU.AT.SERVICECATEGORIES", "href": "/servicecategory", "icon": "fa-stethoscope" },
               {"prompt": "HEADER.MENU.AT.PROGRAM", "href": "/program", "icon": "fa-medkit" },
               {"prompt": "APP.HEADER.MENU.AT.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}]
-            },
-            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
-            {prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
-              {prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench'},
-              {prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code'},
-              {prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
-              {prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
-              {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
-            ]}
+            }
+
           ],
           subview: {
-            'study': ['name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment', 'form', 'survey'],
-            'user': ['name', 'user']
+            'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
+            'user': ['name', 'user'],
+            'client': ['name', 'client', 'referral'],
+            'referral': ['name', 'referral', 'client']
           }
         }
       },

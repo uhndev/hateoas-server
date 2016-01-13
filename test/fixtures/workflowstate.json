@@ -235,5 +235,82 @@
         }
       ]
     }
+  },
+  {"path": "/api/referral",
+    "links": [
+
+    ],
+    "template": {}
+  },
+  {
+    "path": "/api/client",
+    "links": [
+
+    ],
+    "queries": [],
+    "template": {
+      "data": [
+        {
+          "name": "MRN",
+          "type": "string",
+          "prompt": "MRN",
+          "value": ""
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "prompt": "First Name",
+          "value": ""
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "prompt": "Last Name",
+          "value": ""
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "prompt": "City",
+          "value": ""
+        },
+        {
+          "name": "province",
+          "type": "string",
+          "prompt": "Province",
+          "value": ""
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "prompt": "Postal Code",
+          "value": ""
+        },
+        {
+          "name": "homePhone",
+          "type": "string",
+          "prompt": "Home Phone",
+          "value": ""
+        },
+        {
+          "name": "homeEmail",
+          "type": "string",
+          "prompt": "Home Email",
+          "value": ""
+        },
+        {
+          "name": "fax",
+          "type": "string",
+          "prompt": "Fax",
+          "value": ""
+        },
+        {
+          "name": "dateOfBirth",
+          "type": "datetime",
+          "prompt": "Birth Day",
+          "value": ""
+        }
+      ]
+    }
   }
-]
+  ]

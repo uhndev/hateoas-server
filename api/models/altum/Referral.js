@@ -9,6 +9,7 @@
 (function () {
 
   var _super = require('../BaseModel.js');
+  var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
@@ -195,7 +196,23 @@
         via: 'referral'
       },
 
-    }
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+    findByBaseModel: function(clientID, currUser, options) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.id;
+      return clientcontact.findOne(clientID).then(function (client) {
+            this.links = client.getResponseLinks();
+            return Referral.find(query).where({ client: clientID });
+          })
+          .then(function (referrals) {
+            return {
+              data: referrals,
+              links: this.links
+            };
+          });
+    },
 
   });
 
