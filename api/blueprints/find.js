@@ -40,13 +40,22 @@
     // Lookup for records that match the specified criteria that are not expired
     var query = (_.has(Model.definition, 'expiredAt')) ? Model.find({expiredAt: null}) : Model.find();
 
+    // if not given any request params in req, use defaults found in Model
     query
-      .where(actionUtil.parseCriteria(req))
-      .limit(actionUtil.parseLimit(req))
-      .skip(actionUtil.parseSkip(req))
-      .sort(actionUtil.parseSort(req));
+      .where(actionUtil.parseCriteria(req) || Model.defaultQuery || undefined)
+      .limit(actionUtil.parseLimit(req) || Model.defaultLimit || BaseModel.defaultLimit)
+      .skip(actionUtil.parseSkip(req) || Model.defaultSkip || BaseModel.defaultSkip)
+      .sort(actionUtil.parseSort(req) || Model.defaultSortBy || undefined);
     // TODO: .populateEach(req.options);
     query = actionUtil.populateEach(query, req);
+
+    // auto-populate based on Model.defaultPopulate
+    if (Model.defaultPopulate) {
+      _.each(Model.defaultPopulate, function (attribute) {
+        query = query.populate(attribute);
+      });
+    }
+
     query.exec(function found(err, matchingRecords) {
       if (err) return res.serverError(err);
 

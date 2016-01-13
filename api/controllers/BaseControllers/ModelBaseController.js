@@ -25,11 +25,12 @@
       model.findByBaseModel(modelID, req.user, { where: actionUtil.parseCriteria(req) })
         .then(function (totalCollection) {
           this.totalCollection = totalCollection.data;
+          // if not given any request params in req, use defaults found in Model
           return model.findByBaseModel(modelID, req.user,
-            { where: actionUtil.parseCriteria(req),
-              limit: actionUtil.parseLimit(req),
-              skip: actionUtil.parseSkip(req),
-              sort: actionUtil.parseSort(req) }
+            { where: actionUtil.parseCriteria(req) || model['defaultQuery'],
+              limit: actionUtil.parseLimit(req) || model['defaultLimit'],
+              skip: actionUtil.parseSkip(req) || model['defaultSkip'],
+              sort: actionUtil.parseSort(req) || model['defaultSortBy']}
           );
         })
         .then(function(collection) {

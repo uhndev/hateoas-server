@@ -6,15 +6,32 @@
 
 module.exports = {
 
-  //array of field names to concatenate into display names, override in child models to pick unique fields for displayName
-  displayFields: [ 'name', 'prefix', 'firstname', 'lastname' ],
+  // default sorting order
+  defaultSortBy: 'displayName ASC',
 
+  // default limit to restrict max number of records to return
+  defaultLimit: 30,
+
+  // default number of records to skip over
+  defaultSkip: 0,
+
+  // default attribute names to populate when querying model
+  defaultPopulate: [],
+
+  // default base query to apply to all finds
+  defaultQuery: undefined,
+
+  // array of field names to concatenate into display names, override in child models to pick unique fields for displayName
+  displayFields: [ 'name' ],
+
+  // BaseModel attributes
   attributes: {
+
     /**
      * displayName
      * @description stores persistent displayName of child models, filled in by beforeCreate and beforeUpdate
      *              using the potential fields listed in defaultsTo
-     * @type {string}
+     * @type {String}
      */
     displayName: {
       type: 'string'
@@ -31,10 +48,10 @@ module.exports = {
    * @param  {Function} cb      callback function on completion
    */
   beforeValidate: function (values, cb) {
-    //for each field listed in default, check values for those fields and add to display
+    // for each field listed in default, check values for those fields and add to display
     var display = _.values(_.pick(values, this.displayFields)).join(' ');
 
-    //if display fields are found in values set the displayName, otherwise set default
+    // if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
     cb();
   }

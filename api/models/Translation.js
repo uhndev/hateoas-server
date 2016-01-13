@@ -13,6 +13,10 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultSortBy: 'translationKey ASC', // overrides BaseModel.defaultSortBy
+
+    displayFields: ['language', 'translationKey'],
+
     connection: 'dados_cache',
     schema: true,
     attributes: {
