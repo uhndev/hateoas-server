@@ -29,7 +29,7 @@ CREATE OR REPLACE VIEW referraldetail AS
     claim."claimNum" as "claim_claimNum",
     claim."policyNum" as "claim_policyNum",
     referral.owner,
-    physician.name as "physician_name",
+    physician."displayName" as "physician_name",
     referral."createdBy",
     referral."recommendationsMade"
 
