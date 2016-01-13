@@ -23,7 +23,6 @@
        * @description A site's name
        * @type {String}
        */
-
       name: {
         type: 'string'
       },
@@ -33,7 +32,6 @@
        * @description A site's address
        * @type {Model}
        */
-
       address: {
         model: 'address'
       },
@@ -43,7 +41,6 @@
        * @description a site's phone number
        * @type {String}
        */
-
       phone: {
         type: 'string'
       },
@@ -53,10 +50,19 @@
        * @description a collection of a site's offered services at altum
        * @type {Collection}
        */
-
       altumServices: {
         collection: 'altumService',
         via: 'sites'
+      },
+
+      /**
+       * sitePhysicians
+       * @description Collection of physicians registered at this site
+       * @type {Collection}
+       */
+      sitePhysicians: {
+        collection: 'sitephysician',
+        via: 'site'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
