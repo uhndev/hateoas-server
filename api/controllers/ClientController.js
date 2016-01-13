@@ -8,51 +8,37 @@
 
 (function () {
 
-    var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-    module.exports = {
-        findOne: function (req, res) {
-            Client.findOne(req.param('id'))
-                .populate('person')
-                //  .populate('contact')
-                .exec(function (err, client) {
-                    if (err) {
-                        return res.serverError(err);
-                    }
+  module.exports = {
+    findOne: function (req, res) {
+      Client.findOne(req.param('id'))
+        .populate('person')
+        .exec(function (err, client) {
+          if (err) {
+            return res.serverError(err);
+          }
+          res.ok(client);
+        });
+    },
 
-                    if (_.isUndefined(client)) {
-                        res.notFound();
-                    } else {
+    find: function (req, res, next) {
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.clientcontact.identity;
+      var query = clientcontact.find()
+        .where(actionUtil.parseCriteria(req))
+        .limit(actionUtil.parseLimit(req))
+        .skip(actionUtil.parseSkip(req))
+        .sort(actionUtil.parseSort(req));
 
-                        res.ok(client);
-
-                    }
-                });
-        },
-
-        find: function (req, res, next) {
-            req.options.model = sails.models.clientcontact.identity;  //manually override model name for paganation in ok.jd
-            console.log('client find');
-            var query = clientcontact.find()
-                .where(actionUtil.parseCriteria(req))
-                .limit(actionUtil.parseLimit(req))
-                .skip(actionUtil.parseSkip(req))
-                .sort(actionUtil.parseSort(req));
-
-            query.exec(function found(err, groups) {
-                console.log(groups);
-                if (err) {
-                 //   console.log('ERRORRRRR');
-                    return res.serverError({
-                        title: 'Error',
-                        code: err.status,
-                        message: err.details
-                    });
-                }
-
-                res.ok(groups);
-            });
+      query.exec(function found(err, clients) {
+        if (err) {
+          return res.serverError(err);
         }
 
-    };
+        res.ok(clients);
+      });
+    }
+
+  };
 })();

@@ -67,7 +67,7 @@
         },
         {
           "name": "reb",
-          "type": "integer",
+          "type": "string",
           "prompt": "COMMON.MODELS.STUDY.REB",
           "value": ""
         }

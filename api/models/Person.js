@@ -8,287 +8,284 @@
 (function () {
 
   var _ = require('lodash');
-    var _super = require('./BaseModel.js');
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-    _.merge(exports, _super);
-    _.merge(exports, {
-      schema: true,
-      attributes: {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-        /**
-         * salutation
-         * @description A person's salutation
-         * @type {String}
-         */
-        salutation: {
-          type: 'string'
-        },
+    attributes: {
 
-        /**
-         * firstName
-         * @description A person's first name.
-         * @type {String}
-         */
-        firstName: {
-          type: 'string'
-        },
+      /**
+       * salutation
+       * @description A person's salutation
+       * @type {String}
+       */
+      salutation: {
+        type: 'string'
+      },
 
-        /**
-         * middleName
-         * @description A person's middle name
-         * @type {String}
-         */
-        middleName: {
-          type: 'string'
-        },
+      /**
+       * firstName
+       * @description A person's first name.
+       * @type {String}
+       */
+      firstName: {
+        type: 'string'
+      },
 
-        /**
-         * lastName
-         * @description A person's last name.
-         * @type {String}
-         */
-        lastName: {
-          type: 'string'
-        },
+      /**
+       * middleName
+       * @description A person's middle name
+       * @type {String}
+       */
+      middleName: {
+        type: 'string'
+      },
 
-        /**
-         * prefix
-         * @description Enumeration of allowable prefixes for a client.
-         * @type {Enum}
-         */
-        prefix: {
-          type: 'string',
-          enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
-        },
+      /**
+       * lastName
+       * @description A person's last name.
+       * @type {String}
+       */
+      lastName: {
+        type: 'string'
+      },
 
-        /**
-         * gender
-         * @description Enumeration of allowable genders of a client.
-         * @type {Enum}
-         */
-        gender: {
-          type: 'string',
-          enum: ['Male', 'Female']
-        },
+      /**
+       * prefix
+       * @description Enumeration of allowable prefixes for a client.
+       * @type {Enum}
+       */
+      prefix: {
+        type: 'string',
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+      },
 
-        /**
-         * dateOfBirth
-         * @description A client's date of birth.
-         * @type {Date}
-         */
-        dateOfBirth: {
-          type: 'date'
-        },
+      /**
+       * gender
+       * @description Enumeration of allowable genders of a client.
+       * @type {Enum}
+       */
+      gender: {
+        type: 'string',
+        enum: ['Male', 'Female']
+      },
 
-        /**
-         * address
-         * @description A collection of a person's addresses
-         * @type {collection}
-         */
-        addresses: {
-          collection: 'address',
-          via: 'person'
-        },
+      /**
+       * dateOfBirth
+       * @description A client's date of birth.
+       * @type {Date}
+       */
+      dateOfBirth: {
+        type: 'date'
+      },
 
-        /**
-         * homePhone
-         * @description A client's homePhone
-         * @type {string}
-         */
-        homePhone: {
-          type: 'string'
-        },
+      /**
+       * address
+       * @description A collection of a person's addresses
+       * @type {Collection}
+       */
+      addresses: {
+        collection: 'address',
+        via: 'person'
+      },
 
-        /**
-         * workPhone
-         * @description A client's workPhone
-         * @type {string}
-         */
-        workPhone: {
-          type: 'string'
-        },
+      /**
+       * homePhone
+       * @description A client's homePhone
+       * @type {String}
+       */
+      homePhone: {
+        type: 'string'
+      },
 
+      /**
+       * workPhone
+       * @description A client's workPhone
+       * @type {String}
+       */
+      workPhone: {
+        type: 'string'
+      },
 
-        /**
-         * cellPhone
-         * @description A client's cellPhone
-         * @type {string}
-         */
-        cellPhone: {
-          type: 'string'
-        },
+      /**
+       * cellPhone
+       * @description A client's cellPhone
+       * @type {String}
+       */
+      cellPhone: {
+        type: 'string'
+      },
 
-        /**
-         * otherPhone
-         * @description A client's otherPhone
-         * @type {string}
-         */
-        otherPhone: {
-          type: 'string'
-        },
+      /**
+       * otherPhone
+       * @description A client's otherPhone
+       * @type {String}
+       */
+      otherPhone: {
+        type: 'string'
+      },
 
+      /**
+       * company
+       * @description A person's company
+       * @type {String}
+       */
+      company: {
+        type: 'string'
+      },
 
-        /**
-         * company
-         * @description A person's company
-         * @type {String}
-         */
-        company: {
-          type: 'string'
-        },
+      /**
+       * title
+       * @description A person's title
+       * @type {String}
+       */
+      title: {
+        type: 'string'
+      },
 
-        /**
-         * title
-         * @description A person's title
-         * @type {String}
-         */
-        title: {
-          type: 'string'
-        },
+      /**
+       * a person's licence
+       * @description A person's licence
+       * @type {String}
+       */
+      license: {
+        type: 'string'
+      },
 
-        /**
-         * a person's licence
-         * @description A person's licence
-         * @type {String}
-         */
-        license: {
-          type: 'string'
-        },
+      /**
+       * familyDoctor
+       * @description A person's family doctor
+       * @type {String}
+       */
+      familyDoctor: {
+        model: 'physician'
+      },
 
-        /**
-         * familyDoctor
-         * @description A person's family doctor
-         * @type {String}
-         */
-        familyDoctor: {
-          model: 'physician'
-       },
+      /**
+       * fax
+       * @description A person's fax number
+       * @type {String}
+       */
+      fax: {
+        type: 'string'
+      },
 
-        /**
-         * fax
-         * @description A person's fax number
-         * @type {String}
-         */
-        fax: {
-          type: 'string'
-        },
+      /**
+       * homeEmail
+       * @description A person's homeEmail
+       * @type {String}
+       */
+      homeEmail: {
+        type: 'string'
+      },
 
-        /**
-         * homeEmail
-         * @description A person's homeEmail
-         * @type {String}
-         */
-        homeEmail: {
-          type: 'string'
-        },
+      /**
+       * workEmail
+       * @description A person's work eMail
+       * @type {String}
+       */
+      workEmail: {
+        type: 'string'
+      },
 
-        /**
-         * workEmail
-         * @description A person's work eMail
-         * @type {String}
-         */
-        workEmail: {
-          type: 'string'
-        },
+      /**
+       * otherEmail
+       * @description A person's other eMail
+       * @type {String}
+       */
+      otherEmail: {
+        type: 'string'
+      },
 
-        /**
-         * otherEmail
-         * @description A person's other eMail
-         * @type {String}
-         */
-        otherEmail: {
-          type: 'string'
-        },
+      /**
+       * occupation
+       * @description A person's occupation
+       * @type {String}
+       */
+      occupation: {
+        type: 'string'
+      },
 
-        /**
-         * occupation
-         * @description A person's occupation
-         * @type {String}
-         */
-        occupation: {
-          type: 'string'
-        },
+      /**
+       * occupationType
+       * @description A person's occupation type
+       * @type {String}
+       */
+      occupationType: {
+        type: 'string'
+      },
 
-        /**
-         * occupationType
-         * @description A person's occupation type
-         * @type {String}
-         */
-        occupationType: {
-          type: 'string'
-        },
+      /**
+       * occupationSector
+       * @description A person's occupation sector
+       * @type {String}
+       */
+      occupationSector: {
+        type: 'string'
+      },
 
-        /**
-         * occupationSector
-         * @description A person's occupation sector
-         * @type {String}
-         */
-        occupationSector: {
-          type: 'string'
-        },
+      /**
+       * employment
+       * @description A collection of a person's employment
+       * @type {Collection}
+       */
+      employment: {
+        collection: 'employment',
+        via: 'person'
+      },
 
-        /**
-         * employment
-         * @description A collection of a person's employment
-         * @type {collection}
-         */
-        employment: {
-          collection:'employment',
-          via: 'person'
-        },
+      /**
+       * personComments
+       * @description A person's comments
+       * @type {String}
+       */
+      personComments: {
+        type: 'string'
+      },
 
-        /**
-         * personComments
-         * @description A person's comments
-         * @type {String}
-         */
-        personComments: {
-          type: 'string'
-        },
+      /**
+       * language
+       * @description A person's language
+       * @type {String}
+       */
+      language: {
+        type: 'string'
+      },
 
+      /**
+       * requiresInterperter
+       * @description a persons requires interperter flag
+       * @type {String}
+       */
+      requiresInterpreter: {
+        type: 'boolean'
+      },
 
-        /**
-         * language
-         * @description A person's language
-         * @type {String}
-         */
-        language: {
-          type: 'string'
-        },
+      /**
+       * referrals
+       * @description Mapping to a person's collection of referrals
+       * @type {Collection}
+       */
+      referrals: {
+        collection: 'referral',
+        via: 'referralContacts'
+      },
 
-        /**
-         * requiresInterperter
-         * @description a persons requires interperter flag
-         * @type {String}
-         */
-        requiresInterpreter: {
-          type: 'boolean'
-        },
+      /**
+       * users
+       * @description a persons associated users
+       * @type {Collection}
+       */
+      users: {
+        collection: 'user',
+        via: 'person'
+      },
 
-        /**
-         * language
-         * @description a persons language
-         * @type {String}
-         */
-        language: {
-          type: 'string'
-        },
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
-        /**
-         * user
-         * @description a persons associated users
-         * @type {collection}
-         */
-
-        users: {
-          collection: 'user',
-          via: 'person'
-        },
-
-        toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-      }
-    });
+    }
+  });
 })();
 

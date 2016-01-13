@@ -3,7 +3,7 @@
  * See config/db/studyuser.sql for view definition.
  */
 
-(function() {
+(function () {
   var UserModel = require('./../User.js');
   var _super = require('./baseView.js');
 
@@ -11,23 +11,20 @@
   _.merge(exports, {
 
     attributes: {
-      id: {
-        type: 'integer'
-      },
       client: {
-        type: 'integer'
+        model: 'client'
       },
       program: {
-        type: 'integer'
+        model: 'program'
       },
       program_name: {
         type: 'string'
       },
       physician: {
-        type: 'integer'
+        model: 'physician'
       },
       status: {
-        type: 'integer'
+        model: 'status'
       },
       referralDate: {
         type: 'date'
@@ -54,7 +51,7 @@
         type: 'string'
       },
       client_city: {
-        type: 'string'
+        model: 'city'
       },
       client_province: {
         type: 'string'

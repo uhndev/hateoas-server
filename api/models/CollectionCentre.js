@@ -6,12 +6,14 @@
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
-(function() {
+(function () {
   var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    defaultSortBy: 'name ASC', // overrides BaseModel.defaultSortBy
 
     schema: true,
     attributes: {
@@ -23,8 +25,8 @@
        * @type {String} name of collection centre
        */
       name: {
-      	type: 'string',
-      	required: true
+        type: 'string',
+        required: true
       },
 
       /**
@@ -35,7 +37,7 @@
        * @type {Association} linked study reference
        */
       study: {
-      	model: 'study'
+        model: 'study'
       },
 
       /**
@@ -82,10 +84,11 @@
         defaultsTo: null,
         datetime: true
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    findByBaseModel: function(studyID, currUser, options) {
+    findByBaseModel: function (studyID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
@@ -111,7 +114,7 @@
      * @param  {Object}   updated updated collection centre object
      * @param  {Function} cb      callback function on completion
      */
-    afterUpdate: function(updated, cb) {
+    afterUpdate: function (updated, cb) {
       if (!_.isNull(updated.expiredAt)) {
         UserEnrollment.update({ collectionCentre: updated.id }, { expiredAt: new Date() })
         .then(function (userEnrollments) {

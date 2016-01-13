@@ -14,41 +14,40 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-  attributes: {
+    attributes: {
 
-    /**
-     * company
-     * @description the company this employment is at
-     * @type {model}
-     */
+      /**
+       * company
+       * @description the company this employment is at
+       * @type {Model}
+       */
 
-    company: {
-      model: 'company'
-    },
+      company: {
+        model: 'company'
+      },
 
-    /**
-     * person
-     * @description the person who's employed
-     * @type {model}
-     */
+      /**
+       * person
+       * @description the person who's employed
+       * @type {Model}
+       */
 
-    person: {
-      model: 'person'
-    },
+      person: {
+        model: 'person'
+      },
 
-    /**
-     * phoneNumber
-     * @description the employed person's work number
-     * @type {model}
-     */
+      /**
+       * phoneNumber
+       * @description the employed person's work number
+       * @type {String}
+       */
 
-    phoneNumber: {
-      type: 'string'
-    },
+      phoneNumber: {
+        type: 'string'
+      },
 
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
-  }
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    }
   });
 })();
 

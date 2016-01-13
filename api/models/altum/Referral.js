@@ -1,10 +1,9 @@
 /**
- * referral.js
+ * Referral.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
-
 
 (function () {
 
@@ -13,60 +12,53 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     attributes: {
+
       /**
        * client
        * @description A referral's client
-       * @type {model}
+       * @type {Model}
        */
-
       client: {
         model: 'client'
       },
 
-
       /**
        * claim
        * @description A referral's client
-       * @type {model}
+       * @type {Model}
        */
-
       claim: {
         model: 'claim'
       },
 
-
       /**
        * program
        * @description A referral's program.
-       * @type {model}
+       * @type {Model}
        */
-
       program: {
         model: 'program'
       },
 
-
       /**
        * physician
        * @description a referral's physician
-       * @type {model}
+       * @type {Model}
        */
-
       physician: {
         model: 'physician'
       },
 
-
       /**
        * status
        * @description A referral's status
-       * @type {string}
+       * @type {Model}
        */
       status: {
         model: 'status'
       },
-
 
       /**
        * referralDate
@@ -77,56 +69,38 @@
         type: 'date'
       },
 
-
-      /**
-       * referralType
-       * @description A referral's type
-       * @type {string}
-       */
-
-      referralType: {
-        model: 'referralType'
-      },
-
       /**
        *
        * @description A referral's case
-       * @type {string}
+       * @type {Model}
        */
-
       case: {
         model: 'case'
       },
 
-
       /**
        * accidentDate
        * @description A referral's accidentDate
-       * @type {string}
+       * @type {Datetime}
        */
-
       accidentDate: {
         type: 'datetime'
       },
 
-
       /**
        * receiveDate
        * @description A referral's receiveDate
-       * @type {string}
+       * @type {Datetime}
        */
-
       receiveDate: {
         type: 'datetime'
       },
 
-
       /**
        * sentDate
        * @description A referral's sentDate
-       * @type {string}
+       * @type {Datetime}
        */
-
       sentDate: {
         type: 'datetime'
       },
@@ -134,9 +108,8 @@
       /**
        * dischargeDate
        * @description A referral's dischargeDate
-       * @type {string}
+       * @type {Datetime}
        */
-
       dischargeDate: {
         type: 'datetime'
       },
@@ -146,7 +119,6 @@
        * @description A bool set when recommendations have been made
        * @type {boolean}
        */
-
       recommendationsMade: {
         type: 'boolean'
       },
@@ -154,9 +126,8 @@
       /**
        * services
        * @description A referral's services
-       * @type {string}
+       * @type {Collection}
        */
-
       services: {
         collection: 'service',
         via: 'referral'
@@ -165,9 +136,8 @@
       /**
        * clients
        * @description A referral's clients
-       * @type {string}
+       * @type {Collection}
        */
-
       clients: {
         collection: 'client',
         via: 'referrals'
@@ -176,43 +146,41 @@
       /**
        * payors
        * @description A referral's payors
-       * @type {string}
+       * @type {Collection}
        */
-
       payors: {
         collection: 'payor',
         via: 'referrals'
       },
 
-
       /**
        * referralContacts
        * @description A referral's referralContacts
-       * @type {string}
+       * @type {Collection}
        */
-
       referralContacts: {
-        collection: 'referralContact',
-        via: 'referral'
+        collection: 'person',
+        via: 'referrals'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
-    findByBaseModel: function(clientID, currUser, options) {
+
+    findByBaseModel: function (clientID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
       return clientcontact.findOne(clientID).then(function (client) {
-            this.links = client.getResponseLinks();
-            return Referral.find(query).where({ client: clientID });
-          })
-          .then(function (referrals) {
-            return {
-              data: referrals,
-              links: this.links
-            };
-          });
-    },
+          this.links = client.getResponseLinks();
+          return Referral.find(query).where({client: clientID});
+        })
+        .then(function (referrals) {
+          return {
+            data: referrals,
+            links: this.links
+          };
+        });
+    }
 
   });
 

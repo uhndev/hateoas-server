@@ -13,14 +13,13 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-    schema:true,
 
     attributes: {
 
       /**
        * name
        * @description an address's name
-       * @type {string}
+       * @type {String}
        */
       name: {
         type: 'string'
@@ -29,7 +28,7 @@
       /**
        * address1
        * @description an address's first line
-       * @type {string}
+       * @type {String}
        */
 
       address1: {
@@ -38,7 +37,7 @@
       /**
        * address2
        * @description an address's second line
-       * @type {string}
+       * @type {String}
        */
       address2: {
         type: 'string'
@@ -50,7 +49,7 @@
        * @type {stringj}
        */
       city: {
-        type: 'string'
+        model: 'city'
       },
 
       /**
@@ -65,7 +64,7 @@
       /**
        * postalCode
        * @description an address's postal code
-       * @type {string}
+       * @type {String}
        */
       postalCode: {
         type: 'string'
@@ -74,7 +73,7 @@
       /**
        * country
        * @description an address's country
-       * @type {string}
+       * @type {String}
        */
       country: {
         type: 'string'
@@ -92,7 +91,7 @@
       /**
        * latitude
        * @description an address's latitude
-       * @type {string}
+       * @type {String}
        */
       latitude: {
         type: 'string'
@@ -101,7 +100,7 @@
       /**
        * longitude
        * @description an address's longitude
-       * @type {string}
+       * @type {String}
        */
       longitude: {
         type: 'string'
@@ -110,7 +109,7 @@
       /**
        * person
        * @description an address's associated person
-       * @type {model}
+       * @type {Model}
        */
 
       person: {
@@ -120,7 +119,7 @@
       /**
        * company
        * @description an address's associated company
-       * @type {model}
+       * @type {Model}
        */
       company: {
         model: 'company'
