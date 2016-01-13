@@ -196,8 +196,7 @@
         .then(function (study) {
           this.links = study.getResponseLinks();
           var studyFormIds = _.pluck(study.forms, 'id');
-          return ModelService.filterExpiredRecords('form')
-            .where(query.where)
+          return ModelService.filterExpiredRecords('form', query)
             .populate('versions').then(function (forms) {
               return _.filter(forms, function (form) {
                 return _.includes(studyFormIds, form.id);

@@ -15,6 +15,9 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    defaultSortBy: 'subjectNumber ASC', // overrides BaseModel.defaultSortBy
+
     schema: true,
     attributes: {
       /**

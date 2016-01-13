@@ -13,8 +13,13 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     schema: true,
     autoPK: false,
+
+    defaultSortBy: 'name ASC',  // overrides BaseModel.defaultSortBy
+
+    defaultPopulate: ['roles'], // overrides BaseModel.defaultPopulate
 
     attributes: {
 

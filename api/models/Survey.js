@@ -233,8 +233,7 @@
         .then(function (study) {
           this.links = study.getResponseLinks();
           var studySurveyIds = _.pluck(study.surveys, 'id');
-          return ModelService.filterExpiredRecords('survey')
-            .where(query.where)
+          return ModelService.filterExpiredRecords('survey', query)
             .populate('versions')
             .then(function (surveys) {
               return _.filter(surveys, function (survey) {
