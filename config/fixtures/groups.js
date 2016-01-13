@@ -13,6 +13,8 @@
         menu: {
           tabview: [
             {"href": "/assessment", "icon": "fa-stethoscope", "prompt": "APP.HEADER.MENU.RECOMMENDATIONS"},
+            {"href": "/client", "icon": "fa-users", "prompt": "Clients"},
+            {"href": "/referral", "icon": "fa-ambulance", "prompt": "Referrals"},
             {
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-cog", "dropdown": [
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": "fa-male"},
@@ -44,8 +46,10 @@
             }
           ],
           subview: {
-            'study': ['name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment', 'form', 'survey'],
-            'user': ['name', 'user']
+            'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
+            'user': ['name', 'user'],
+            'client': ['name', 'client', 'referral'],
+            'referral': ['name', 'referral', 'client']
           }
         }
       },

@@ -36,15 +36,6 @@
       },
 
       /**
-       * familyDoctor
-       * @description A client's familyDoctor
-       * @type {Model}
-       */
-      familyDoctor: {
-        model: 'physician'
-      },
-
-      /**
        * referrals
        * @description A client's referrals
        * @type {Collection}
@@ -55,9 +46,7 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-
     }
-
   });
 })();
 

@@ -235,5 +235,74 @@
         }
       ]
     }
+  },
+  {
+    "path": "/api/client",
+    "links": [],
+    "queries": [],
+    "template": {
+      "data": [
+        {
+          "name": "MRN",
+          "type": "string",
+          "prompt": "COMMON.MODELS.CLIENT.MRN",
+          "value": ""
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.FIRST_NAME",
+          "value": ""
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.LAST_NAME",
+          "value": ""
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.CITY",
+          "value": ""
+        },
+        {
+          "name": "province",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.PROVINCE",
+          "value": ""
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.POSTAL_CODE",
+          "value": ""
+        },
+        {
+          "name": "homePhone",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.HOME_PHONE",
+          "value": ""
+        },
+        {
+          "name": "homeEmail",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.HOME_EMAIL",
+          "value": ""
+        },
+        {
+          "name": "fax",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.FAX",
+          "value": ""
+        },
+        {
+          "name": "dateOfBirth",
+          "type": "datetime",
+          "prompt": "COMMON.MODELS.PERSON.DATE_OF_BIRTH",
+          "value": ""
+        }
+      ]
+    }
   }
 ]

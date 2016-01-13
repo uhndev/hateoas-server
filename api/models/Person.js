@@ -8,10 +8,12 @@
 (function () {
 
   var _ = require('lodash');
+  var _super = require('./BaseModel.js');
   var HateoasService = require('../services/HateoasService.js');
 
-  module.exports = {
-    schema: true,
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     attributes: {
 
       /**
@@ -82,7 +84,7 @@
       /**
        * address
        * @description A collection of a person's addresses
-       * @type {collection}
+       * @type {Collection}
        */
       addresses: {
         collection: 'address',
@@ -92,7 +94,7 @@
       /**
        * homePhone
        * @description A client's homePhone
-       * @type {string}
+       * @type {String}
        */
       homePhone: {
         type: 'string'
@@ -101,17 +103,16 @@
       /**
        * workPhone
        * @description A client's workPhone
-       * @type {string}
+       * @type {String}
        */
       workPhone: {
         type: 'string'
       },
 
-
       /**
        * cellPhone
        * @description A client's cellPhone
-       * @type {string}
+       * @type {String}
        */
       cellPhone: {
         type: 'string'
@@ -120,12 +121,11 @@
       /**
        * otherPhone
        * @description A client's otherPhone
-       * @type {string}
+       * @type {String}
        */
       otherPhone: {
         type: 'string'
       },
-
 
       /**
        * company
@@ -229,7 +229,7 @@
       /**
        * employment
        * @description A collection of a person's employment
-       * @type {collection}
+       * @type {Collection}
        */
       employment: {
         collection: 'employment',
@@ -244,7 +244,6 @@
       personComments: {
         type: 'string'
       },
-
 
       /**
        * language
@@ -264,23 +263,21 @@
         type: 'boolean'
       },
 
-	    /**
+      /**
        * referrals
        * @description Mapping to a person's collection of referrals
        * @type {Collection}
        */
-
       referrals: {
         collection: 'referral',
         via: 'referralContacts'
       },
 
       /**
-       * user
+       * users
        * @description a persons associated users
-       * @type {collection}
+       * @type {Collection}
        */
-
       users: {
         collection: 'user',
         via: 'person'
@@ -289,6 +286,6 @@
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     }
-  }
+  });
 })();
 
