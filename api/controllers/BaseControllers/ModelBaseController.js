@@ -27,10 +27,10 @@
           this.totalCollection = totalCollection.data;
           // if not given any request params in req, use defaults found in Model
           return model.findByBaseModel(modelID, req.user,
-            { where: actionUtil.parseCriteria(req) || model['defaultQuery'],
-              limit: actionUtil.parseLimit(req) || model['defaultLimit'],
-              skip: actionUtil.parseSkip(req) || model['defaultSkip'],
-              sort: actionUtil.parseSort(req) || model['defaultSortBy']}
+            { where: actionUtil.parseCriteria(req) || model['defaultQuery'] || undefined,
+              limit: actionUtil.parseLimit(req) || model['defaultLimit'] || BaseModel.defaultLimit,
+              skip: actionUtil.parseSkip(req) || model['defaultSkip'] || BaseModel.defaultSkip,
+              sort: actionUtil.parseSort(req) || model['defaultSortBy'] || undefined }
           );
         })
         .then(function(collection) {
