@@ -74,7 +74,7 @@
 
               if (definition.model) { // haven't recursed on this model yet, so safe to recurse
                 previousModels.push(modelName);
-                template = _.merge(template, makeTemplate(definition.model, previousModels));
+                template = _.merge(template, makeTemplate(definition.model, [modelName]));
               }
 
               return result.concat(template);
@@ -82,18 +82,7 @@
             } else {
               return result;
             }
-<<<<<<< HEAD
-
-            if (definition.model && (definition.model != previousModel)) {
-              template = _.merge(template,
-                makeTemplate(definition.model,[modelName]));
-            }
-
-            return template;
-          });
-=======
           }, []);
->>>>>>> af9f6b00eba7d0e0ac2ff4d3e07903547cee4bf0
         }
         return { data: attributes };
       }
