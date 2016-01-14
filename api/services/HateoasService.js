@@ -47,7 +47,8 @@
        * Private method that creates the data object based on the schema
        * of the given model.
        */
-      function makeTemplate(modelName, previousModel) {
+
+      function makeTemplate(modelName, previousModels) {
         var attributes = [];
         var models = sails.models;
 
@@ -140,7 +141,7 @@
 
         if (!_.has(response.template, 'data')) {
           response.template = _.merge(response.template,
-                              makeTemplate(modelName))
+                              makeTemplate(modelName, [modelName]))
         }
 
         return response;
