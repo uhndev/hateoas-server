@@ -47,7 +47,7 @@
        * Private method that creates the data object based on the schema
        * of the given model.
        */
-      function makeTemplate(modelName, previousModel) {
+      function makeTemplate(modelName, previousModels) {
         var attributes = [];
         var models = sails.models;
 
