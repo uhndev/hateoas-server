@@ -24,7 +24,10 @@
        */
       collectionCentre: {
         model: 'collectioncentre',
-        required: true
+        required: true,
+        generator: function() {
+          return _.random(1, sails.config.models.limits.collectioncentre * sails.config.models.limits.study);
+        }
       },
 
       /**
@@ -34,7 +37,10 @@
        */
       user: {
         model: 'user',
-        required: true
+        required: true,
+        generator: function() {
+          return _.random(2, sails.config.models.limits.user);
+        }
       },
 
       /**
@@ -47,7 +53,10 @@
        */
       centreAccess: {
         type: 'string',
-        enum: ['coordinator', 'interviewer']
+        enum: ['coordinator', 'interviewer'],
+        generator: function() {
+          return _.sample(['coordinator', 'interviewer']);
+        }
       },
 
       /**

@@ -10,6 +10,7 @@
 
 (function() {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
   var _ = require('lodash');
   var _user = require('sails-permissions/api/models/User');
@@ -31,7 +32,8 @@
        * @type {String}
        */
       firstname: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.firstName
       },
 
       /**
@@ -40,7 +42,8 @@
        * @type {String}
        */
       lastname: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.lastName
       },
 
       /**
@@ -50,7 +53,10 @@
        */
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        generator: function () {
+          return _.sample(['Mr.', 'Mrs.', 'Ms.', 'Dr.']);
+        }
       },
 
       /**
@@ -60,7 +66,10 @@
        */
       gender: {
         type: 'string',
-        enum: ['Male', 'Female']
+        enum: ['Male', 'Female'],
+        generator: function() {
+          return _.sample(['Male', 'Female']);
+        }
       },
 
       /**
@@ -69,7 +78,8 @@
        * @type {Date}
        */
       dob: {
-        type: 'date'
+        type: 'date',
+        generator: faker.date.past
       },
 
       /**
@@ -79,7 +89,10 @@
        * @type {Association}
        */
       group: {
-        model: 'group'
+        model: 'group',
+        generator: function() {
+          return 'coordinator';
+        }
       },
 
       /**
@@ -217,6 +230,22 @@
       } else {
         cb();
       }
+    },
+
+    /**
+     * generateAndCreate
+     * @description Calls the default sails model create method with randomly generated data retrieved
+     *              from the generate above for any respective model.
+     * @returns {Promise}
+     */
+    generateAndCreate: function (id) {
+      return User.register({
+        username: faker.internet.userName(),
+        email: faker.internet.email(),
+        password: 'Password123'
+      }).then(function (createdUser) {
+        return User.update({id: createdUser.id}, User.generate(id));
+      });
     }
 
   });

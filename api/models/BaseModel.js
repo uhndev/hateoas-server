@@ -54,6 +54,35 @@ module.exports = {
     // if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
     cb();
+  },
+
+  /**
+   * generate
+   * @description Convenience method for returning a Model object to be created.  The function
+   *              loops through Model attributes that have a generator function defined.
+   * @returns {Object}
+   */
+  generate: function(id) {
+    var generatedObject = {
+      owner: 1,
+      createdBy: 1
+    };
+    _.each(this._attributes, function (value, key) {
+      if (_.isFunction(value.generator)) {
+        generatedObject[key] = value.generator(id);
+      }
+    });
+    return generatedObject;
+  },
+
+  /**
+   * generateAndCreate
+   * @description Calls the default sails model create method with randomly generated data retrieved
+   *              from the generate above for any respective model.
+   * @returns {Promise}
+   */
+  generateAndCreate: function (id) {
+    return this.create(this.generate(id));
   }
 
 };

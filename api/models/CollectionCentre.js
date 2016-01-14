@@ -8,6 +8,7 @@
 
 (function () {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -26,7 +27,10 @@
        */
       name: {
         type: 'string',
-        required: true
+        required: true,
+        generator: function(id) {
+          return ['CC', id, faker.address.city()].join('-');
+        }
       },
 
       /**
@@ -48,7 +52,10 @@
        * @type {Association} linked user representing main point of contact for this collection centre
        */
       contact: {
-        model: 'user'
+        model: 'user',
+        generator: function() {
+          return _.random(1, sails.config.models.limits.user);
+        }
       },
 
       /**

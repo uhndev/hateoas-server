@@ -9,6 +9,7 @@
 
 (function() {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
@@ -121,6 +122,21 @@
         .then(function (newRole) {
           cb();
         }).catch(cb);
+    },
+
+    generateAndCreate: function(id) {
+      var userObj = User.generate();
+      userObj.group = 'subject';
+      return User.register({
+        username: faker.internet.userName(),
+        email: faker.internet.email(),
+        password: 'Password123'
+      }).then(function (createdUser) {
+        this.userID = createdUser.id;
+        return User.update({id: createdUser.id}, userObj);
+      }).then(function (updatedUser) {
+        return Subject.create({ user: this.userID });
+      });
     }
 
   });

@@ -9,6 +9,7 @@
 (function() {
   var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
   var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
@@ -20,6 +21,7 @@
 
     schema: true,
     attributes: {
+
       /**
        * subjectNumber
        * @description Equivalent of DADOS 2.0 subjectId that autoincrements with each
@@ -45,7 +47,10 @@
        * @type {Association} linked collection centre in enrollment
        */
       collectionCentre: {
-        model: 'collectioncentre'
+        model: 'collectioncentre',
+        generator: function(subject, study, collectionCentreID) {
+          return collectionCentreID;
+        }
       },
 
       /**
@@ -55,7 +60,10 @@
        */
       subject: {
         model: 'subject',
-        required: true
+        required: true,
+        generator: function(subject, study, collectionCentreID) {
+          return subject;
+        }
       },
 
       /**
@@ -76,7 +84,9 @@
        */
       doe: {
         type: 'date',
-        date: true
+        generator: function(subject, study, collectionCentreID) {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -88,7 +98,14 @@
       studyMapping: {
         type: 'json',
         json: true,
-        defaultsTo: {}
+        defaultsTo: {},
+        generator: function (subject, study, collectionCentreID) {
+          var studyMapping = {};
+          _.each(study.attributes, function (value, key) {
+            studyMapping[key] = _.sample(value);
+          });
+          return studyMapping;
+        }
       },
 
       /**
@@ -110,7 +127,19 @@
           'DECEASED',
           'TERMINATED',
           'COMPLETED'
-        ]
+        ],
+        generator: function() {
+          return _.sample([
+            'REGISTERED',
+            'ONGOING',
+            'LOST TO FOLLOWUP',
+            'WITHDRAWN',
+            'INELIGIBLE',
+            'DECEASED',
+            'TERMINATED',
+            'COMPLETED'
+          ]);
+        }
       },
 
       /**
@@ -177,7 +206,15 @@
         } else {
           values.status = 'ONGOING';
         }
-        cb();
+
+        if (!values.study && values.collectionCentre) {
+          CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
+            values.study = centre.study;
+            cb(err);
+          });
+        } else {
+          cb();
+        }
       });
     },
 
@@ -238,6 +275,23 @@
         values.status = 'REGISTERED';
       }
       cb();
+    },
+
+    generate: function (subject, study, collectionCentreID) {
+      var generatedObject = {
+        owner: 1,
+        createdBy: 1
+      };
+      _.each(this._attributes, function (value, key) {
+        if (_.isFunction(value.generator)) {
+          generatedObject[key] = value.generator(subject, study, collectionCentreID);
+        }
+      });
+      return generatedObject;
+    },
+
+    generateAndCreate: function(subject, study, collectionCentreID) {
+      return SubjectEnrollment.create(SubjectEnrollment.generate(subject, study, collectionCentreID));
     }
 
   });
