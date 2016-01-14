@@ -74,7 +74,7 @@
 
               if (definition.model) { // haven't recursed on this model yet, so safe to recurse
                 previousModels.push(modelName);
-                template = _.merge(template, makeTemplate(definition.model, [modelName]));
+                template = _.merge(template, makeTemplate(definition.model, previousModels));
               }
 
               return result.concat(template);
@@ -141,7 +141,7 @@
 
         if (!_.has(response.template, 'data')) {
           response.template = _.merge(response.template,
-                              makeTemplate(modelName))
+                              makeTemplate(modelName, [modelName]))
         }
 
         return response;
