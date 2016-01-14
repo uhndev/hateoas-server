@@ -223,7 +223,7 @@
       promise.catch(cb);
     },
 
-    findByStudy: function (studyID, currUser, options) {
+    findByBaseModel: function (studyID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
       delete query.where.id;
@@ -231,9 +231,9 @@
       // get study surveys
       return Study.findOne(studyID).populate('surveys')
         .then(function (study) {
+          this.links = study.getResponseLinks();
           var studySurveyIds = _.pluck(study.surveys, 'id');
-          return ModelService.filterExpiredRecords('survey')
-            .where(query.where)
+          return ModelService.filterExpiredRecords('survey', query)
             .populate('versions')
             .then(function (surveys) {
               return _.filter(surveys, function (survey) {
@@ -242,10 +242,10 @@
             });
         })
         .then(function (filteredSurveys) {
-          return [false, filteredSurveys];
-        })
-        .catch(function (err) {
-          return [err, null];
+          return {
+            data: filteredSurveys,
+            links: this.links
+          };
         });
     }
 

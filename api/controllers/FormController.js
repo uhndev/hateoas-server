@@ -8,9 +8,9 @@
 (function() {
   var Promise = require('bluebird');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase); // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase); // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     destroy: function (req, res) {
@@ -29,11 +29,7 @@
             // call blueprint destroy to actually destroy
             return require('../blueprints/destroy')(req, res);
           }).catch(function (err) {
-            sails.log.error([
-              'Form.destroy for user: ' + req.user.id,
-              'Error: ' + JSON.stringify(err)
-            ].join('\n'));
-            return res.serverError();
+            return res.serverError(err);
           });
         }
       });

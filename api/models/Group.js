@@ -13,10 +13,27 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
     schema: true,
     autoPK: false,
 
+    defaultSortBy: 'name ASC',  // overrides BaseModel.defaultSortBy
+
+    defaultPopulate: ['roles'], // overrides BaseModel.defaultPopulate
+
     attributes: {
+
+	    /**
+       * id
+       * @description Unique string primary key for group
+       * @type {String}
+       */
+      id: {
+        type: 'string',
+        primaryKey: true,
+        unique: true
+      },
+
       /**
        * name
        * @description Unique name of our group of roles.
@@ -24,7 +41,6 @@
        */
       name: {
         type: 'string',
-        primaryKey: true,
         required: true,
         unique: true
       },
@@ -94,6 +110,17 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+	  /**
+     * beforeCreate
+     * @description To support having group names as the primary key, we simply map it over on the beforeCreate
+     * @param values
+     * @param cb
+     */
+    beforeCreate: function (values, cb) {
+      values.id = values.name;
+      cb();
     }
   });
 })();

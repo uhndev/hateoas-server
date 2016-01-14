@@ -39,11 +39,7 @@
         res.ok(scheduleSubjects, { filteredTotal: filteredTotal });
       })
       .catch(function (err) {
-        sails.log.error([
-          'ScheduleSubjects.find for user: ' + req.user.id,
-          'Error: ' + JSON.stringify(err)
-        ].join('\n'));
-        res.serverError();
+        res.serverError(err);
       });
     }
 

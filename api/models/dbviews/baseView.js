@@ -3,14 +3,14 @@ var HateoasService = require('../../services/HateoasService.js');
 module.exports = {
   migrate: 'safe',
   attributes: {
-  	id: {
+    id: {
       type: 'integer'
     },
     owner: {
-    	type: 'user'
+      model: 'user'
     },
     createdBy: {
-    	type: 'user'
+      model: 'user'
     },
     createdAt: {
       type: 'date'

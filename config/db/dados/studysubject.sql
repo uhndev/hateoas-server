@@ -7,12 +7,16 @@ CREATE OR REPLACE VIEW studysubject AS
   SELECT subjectenrollment.id,
     subject.id AS "subject",
     "user".id AS "user",
+    "user"."displayName" AS "displayName",
     subjectenrollment."collectionCentre",
     subjectenrollment."subjectNumber",
     study.id AS "study",
     study.name AS "studyName",
     collectioncentre.name AS "collectionCentreName",
     study.attributes AS "studyAttributes",
+    ( SELECT ARRAY( SELECT DISTINCT providers.provider_subjects
+                       FROM provider_subjects__subjectenrollment_providers "providers"
+                      WHERE providers."subjectenrollment_providers" = subjectenrollment.id AND subjectenrollment."expiredAt" IS NULL) AS "array") AS "providers",
     subjectenrollment."studyMapping",
     subjectenrollment.status,
     subjectenrollment.doe,

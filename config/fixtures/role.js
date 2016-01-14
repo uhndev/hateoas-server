@@ -20,10 +20,76 @@
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
               {
+                model: 'group',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { level: 2 }
+                  }
+                ]
+              },
+              {
                 model: 'user',
                 action: 'read',
                 criteria: [
-                  { where: { group: { '!': 'subject' } } }
+                  {
+                    where: { group: { '!': 'subject' } },
+                    blacklist: ['group']
+                  }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'update',
+                relation: 'owner',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'create',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
+              }
+            ]
+          });
+        }
+        return role;
+      }),
+      Role.findOneByName('provider').then(function (role) {
+        if (!role) {
+          return PermissionService.createRole({
+            name: 'provider',
+            permissions: [
+              { model: 'studysubject',      action: 'read' },
+              { model: 'schedulesubjects',  action: 'read' },
+              { model: 'systemform',        action: 'read' },
+              { model: 'form',              action: 'read' },
+              { model: 'translation',       action: 'read' },
+              { model: 'answerset',         action: 'create' },
+              {
+                model: 'group',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { level: 2 }
+                  }
+                ]
+              },
+              {
+                model: 'user',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { group: { '!': 'subject' } },
+                    blacklist: ['group']
+                  }
                 ]
               },
               {
@@ -62,10 +128,22 @@
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
               {
+                model: 'group',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { level: 2 }
+                  }
+                ]
+              },
+              {
                 model: 'user',
                 action: 'read',
                 criteria: [
-                  { where: { group: { '!': 'subject' } } }
+                  {
+                    where: { group: { '!': 'subject' } },
+                    blacklist: ['group']
+                  }
                 ]
               },
               {
@@ -93,9 +171,23 @@
               { model: 'translation',       action: 'read' },
               { model: 'answerset',         action: 'create' },
               {
+                model: 'group',
+                action: 'read',
+                criteria: [
+                  {
+                    where: { level: 3 }
+                  }
+                ]
+              },
+              {
                 model: 'user',
                 action: 'read',
-                relation: 'owner'
+                relation: 'owner',
+                criteria: [
+                  {
+                    blacklist: ['group']
+                  }
+                ]
               },
               {
                 model: 'user',

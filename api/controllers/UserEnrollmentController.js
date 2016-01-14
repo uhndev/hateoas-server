@@ -9,9 +9,9 @@
 (function() {
   var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     /**
@@ -59,12 +59,7 @@
           }
         })
         .catch(function (err) {
-          sails.log.error([
-            'UserEnrollment.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     },
 
@@ -83,33 +78,42 @@
         'collectionCentre', 'user', 'centreAccess', 'expiredAt'
       ), _.identity);
 
-      // check if we're trying to update an enrollment to something that already exists
-      UserEnrollment.findOne({
-        collectionCentre: req.param('collectionCentre'),
-        user: req.param('user'),
-        expiredAt: null,
-        id: { '!': id }
+      UserEnrollment.findOne(id).then(function (existingEnrollment) {
+        this.existingRoleName = ['CollectionCentre', existingEnrollment.collectionCentre, 'Role'].join('');
+        this.newRoleName = ['CollectionCentre', req.param('collectionCentre'), 'Role'].join('');
+        this.updatePermissions = existingEnrollment.collectionCentre != req.param('collectionCentre');
+
+        // check if we're trying to update an enrollment to something that already exists
+        return UserEnrollment.findOne({
+          collectionCentre: req.param('collectionCentre'),
+          user: req.param('user'),
+          expiredAt: null,
+          id: { '!': id }
+        });
       })
       .then(function (enrollment) {
         if (!enrollment) { // if no existing enrollment found, update can be performed safely
-          return UserEnrollment.update({ id: id }, options).then(function (enrollment) {
-            res.ok(enrollment);
-          });
+          return UserEnrollment.update({ id: id }, options)
+            .then(function (enrollment) {
+              this.enrollment = enrollment;
+              // swap previous role with new role to update permissions iff collectionCentre in UserEnrollment changed
+              if (this.updatePermissions) {
+                return PermissionService.swapRoles(req.param('user'), this.existingRoleName, this.newRoleName);
+              }
+            })
+            .then(function () {
+              res.ok(this.enrollment);
+            });
         } else { // otherwise, we are trying to register an invalid enrollment
           res.badRequest({
             title: 'Enrollment Error',
             status: 400,
-            message: 'Unable to enroll user, user may already be registered at another collection centre.'
+            message: 'Unable to enroll user with ID ' + options.user + ', may already be registered at another collection centre.'
           });
         }
       })
       .catch(function (err) {
-        sails.log.error([
-          'UserEnrollment.update for user: ' + req.user.id,
-          'Data: ' + JSON.stringify(req.body),
-          'Error: ' + JSON.stringify(err)
-        ].join('\n'));
-        res.serverError();
+        res.serverError(err);
       });
     }
 

@@ -35,11 +35,6 @@
           query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
-              sails.log.error([
-                'User.find for user: ' + req.user.id,
-                'Data: ' + JSON.stringify(req.body),
-                'Error: ' + JSON.stringify(err)
-              ].join('\n'));
               return res.serverError(err);
             }
             if (req.user.group == 'admin') {
@@ -83,15 +78,19 @@
         })
         .then(function (enrollments) {
           this.user.enrollments = enrollments;
-          res.ok(this.user);
+          Provider.findOne({ user: this.user.id }).populate('subjects').then(function (provider) {
+            if (provider) {
+              studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
+                this.user.providerSubjects = providerSubjects;
+                res.ok(this.user, { links: user.getResponseLinks() });
+              });
+            } else {
+              res.ok(this.user, { links: user.getResponseLinks() });
+            }
+          });
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.findOne for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
     },
 
@@ -131,12 +130,7 @@
             });
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.create for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.badRequest();
+          res.badRequest(err);
         });
     },
 
@@ -150,44 +144,37 @@
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
 
-      Group.findOne(req.user.group).then(function (group) {
-        this.group = group;
-        if (group.level > 1) { // prevent all non-admin users from updating group
-          delete options.group;
-        }
-        return User.findOne(userId);
-      })
-      .then(function (user) { // update user fields
-        this.previousGroup = user.group;
-        return User.update({id: user.id}, options);
-      })
-      .then(function (user) { // updating group, apply new permissions
-        if (this.previousGroup !== options.group && this.group.level === 1) {
-          return PermissionService.setDefaultGroupRoles(_.first(user));
-        } else {
-          return user;
-        }
-      })
-      .then(function (user) { // find and update user's associated passport
-        this.user = user;
-        if (!_.isEmpty(req.param('password'))) {
-          return Passport.findOne({ user : userId }).then(function (passport) {
-            return Passport.update(passport.id, { password : req.param('password') });
-          });
-        }
-        return this.user;
-      })
-      .then(function (user) {
-        res.ok(this.user);
-      })
-      .catch(function (err) {
-        sails.log.error([
-          'User.update for user: ' + req.user.id,
-          'Data: ' + JSON.stringify(req.body),
-          'Error: ' + JSON.stringify(err)
-        ].join('\n'));
-        res.badRequest();
-      });
+      if (req.user.group !== 'admin') { // prevent all non-admin users from updating group
+        delete options.group;
+      }
+
+      User.findOne(userId)
+        .then(function (user) { // update user fields
+          this.previousGroup = user.group;
+          return User.update({id: user.id}, options);
+        })
+        .then(function (user) { // updating group, apply new permissions
+          if (this.previousGroup !== options.group && req.user.group === 'admin') {
+            return PermissionService.swapRoles(userId, this.previousGroup, options.group);
+          } else {
+            return user;
+          }
+        })
+        .then(function (user) { // find and update user's associated passport
+          this.user = user;
+          if (!_.isEmpty(req.param('password'))) {
+            return Passport.findOne({ user : userId }).then(function (passport) {
+              return Passport.update(passport.id, { password : req.param('password') });
+            });
+          }
+          return this.user;
+        })
+        .then(function (user) {
+          res.ok(this.user);
+        })
+        .catch(function (err) {
+          res.badRequest(err);
+        });
     },
 
     /**
@@ -215,12 +202,7 @@
           res.ok(user);
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.updateRoles for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
       }
       // Update user access matrix
@@ -233,12 +215,7 @@
           res.ok(user);
         })
         .catch(function (err) {
-          sails.log.error([
-            'User.updateRoles for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         });
       }
     }

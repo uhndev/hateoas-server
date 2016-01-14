@@ -16,6 +16,9 @@
       userEnrollments: {
         type: 'array'
       },
+      displayName: {
+        type: 'string'
+      },
       username: {
         type: 'string'
       },
@@ -38,7 +41,7 @@
         type: 'date'
       },
       study: {
-        type: 'model'
+        model: 'study'
       },
       studyName: {
         type: 'string'

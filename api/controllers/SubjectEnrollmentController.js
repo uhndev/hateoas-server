@@ -12,9 +12,9 @@
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('bluebird');
 
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     findOne: function(req, res, next) {
@@ -65,14 +65,17 @@
               );
             })
             .then(function (answers) {
-              res.ok(enrollment);
+              if (enrollment.providers) {
+                Provider.find({ id: enrollment.providers }).then(function (providers) {
+                  enrollment.providers = providers;
+                  res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
+                });
+              } else {
+                res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
+              }
             })
             .catch(function (err) {
-              sails.log.error([
-                'SubjectEnrollment.findOne for user: ' + req.user.id,
-                'Error: ' + JSON.stringify(err)
-              ].join('\n'));
-              res.serverError();
+              res.serverError(err);
             });
         }
       });
@@ -84,7 +87,7 @@
       ), _.identity);
 
       var enrollmentOptions = _.pick(_.pick(req.body,
-        'study', 'collectionCentre', 'studyMapping', 'doe', 'status'
+        'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
       options.group = 'subject';
@@ -163,12 +166,7 @@
         }
       })
       .catch(function (err) {
-        sails.log.error([
-          'SubjectEnrollment.create for user: ' + req.user.id,
-          'Data: ' + JSON.stringify(req.body),
-          'Error: ' + JSON.stringify(err)
-        ].join('\n'));
-        res.serverError();
+        res.serverError(err);
       });
     }
 

@@ -185,6 +185,11 @@
           },
           {
             "option_id": 3,
+            "option_title": "Provider",
+            "option_value": "provider"
+          },
+          {
+            "option_id": 4,
             "option_title": "Interviewer",
             "option_value": "interviewer"
           }
@@ -360,7 +365,7 @@
         "field_name": "menu",
         "field_title": "Main and Sub Menu Definitions",
         "field_type": "json",
-        "field_value": {},
+        "field_value": "",
         "field_placeholder": "Enter a json value",
         "field_validation": {
           "rule": "none",

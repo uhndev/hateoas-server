@@ -19,6 +19,8 @@
   _.merge(exports, _user);
   _.merge(exports, {
 
+    defaultSortBy: 'displayName ASC',
+
     displayFields: [ 'prefix', 'firstname', 'lastname' ],
 
     schema: true,
@@ -133,7 +135,7 @@
             ].join('/')
           },
           {
-            'rel': 'overview',
+            'rel': sails.models.user.identity,
             'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
             'name': 'name',
             'href': [
@@ -156,15 +158,26 @@
      *
      * @type {Array} Functions that are called in sequence following user creation
      */
-    afterCreate: function (user, cb) {
-      sails.log('User.afterCreate.setOwner', user);
-      User
-        .update({ id: user.id }, { owner: user.id })
-        .then(function (user) {
+    afterCreate: [
+      function setOwner(user, cb) {
+        User.update({id: user.id}, {owner: user.id})
+          .then(function (user) {
+            cb();
+          })
+          .catch(cb);
+      },
+      function setProvider(user, cb) {
+        if (user.group == 'provider') { // if desired group is provider, create associated provider
+          Provider.create({ user: user.id })
+            .then(function (user) {
+              cb();
+            })
+            .catch(cb);
+        } else {
           cb();
-        })
-        .catch(cb);
-    },
+        }
+      }
+    ],
 
     /**
      * afterUpdate
@@ -190,6 +203,17 @@
           cb();
         })
         .catch(cb);
+      } else if (updated.group == 'provider') {
+        Provider.findOne({ user: updated.id }).exec(function (err, provider) {
+          if (err) {
+            cb(err);
+          } else {
+            var promise = (!provider) ? Provider.create({ user: updated.id }) : Provider.update({ id: provider.id }, { user: updated.id });
+            promise.then(function (updatedProvider) {
+              cb();
+            }).catch(cb);
+          }
+        });
       } else {
         cb();
       }

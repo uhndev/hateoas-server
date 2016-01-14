@@ -11,10 +11,13 @@
 
     attributes: {
       subject: {
-        type: 'integer'
+        model: 'subject'
       },
       user: {
         model: 'user'
+      },
+      displayName: {
+        type: 'string'
       },
       collectionCentre: {
         model: 'collectioncentre'
@@ -33,6 +36,9 @@
       },
       studyAttributes: {
         type: 'json'
+      },
+      providers: {
+        type: 'array'
       },
       studyMapping: {
         type: 'json'

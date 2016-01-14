@@ -11,9 +11,9 @@
   var pg = require('pg');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-  var StudyBase = require('./BaseControllers/StudyBaseController');
+  var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByStudy
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
   _.merge(exports, {
 
     /**
@@ -45,12 +45,7 @@
           return res.ok(this.createdSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.addSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -85,12 +80,7 @@
           return res.ok(this.updatedSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.updateSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -117,12 +107,7 @@
           return res.ok(this.removedSessions);
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.removeSessions for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          return res.badRequest();
+          return res.badRequest(err);
         });
     },
 
@@ -138,6 +123,7 @@
           return Study.findOne(this.survey.study);
         })
         .then(function (study) {
+          this.studyLinks = study.getResponseLinks();
           this.survey.sessionStudy = _.pick(study, 'id', 'name');
           // get flattened dictionary of possible formVersions in each schedule
           return FormVersion.find({ id: _.flatten(_.pluck(this.sessions, 'formVersions'))})
@@ -162,15 +148,10 @@
         })
         .then(function (sessions) {
           this.survey.sessionForms = sessions;
-          res.ok(this.survey);
+          res.ok(this.survey, { links: this.studyLinks });
         })
         .catch(function (err) {
-          sails.log.error([
-            'Survey.findOne for user: ' + req.user.id,
-            'Data: ' + JSON.stringify(req.body),
-            'Error: ' + JSON.stringify(err)
-          ].join('\n'));
-          res.serverError();
+          res.serverError(err);
         })
     }
 

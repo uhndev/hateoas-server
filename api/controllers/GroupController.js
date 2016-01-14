@@ -14,32 +14,6 @@
   module.exports = {
 
     /**
-     * find
-     * @description Finds and returns groups with populated roles.  Is called from the
-     *              access management page in the frontend.
-     */
-    find: function(req, res, next) {
-      var query = Group.find()
-        .where( actionUtil.parseCriteria(req) )
-        .limit( actionUtil.parseLimit(req) )
-        .skip( actionUtil.parseSkip(req) )
-        .sort( actionUtil.parseSort(req) );
-
-      query.populate('roles');
-      query.exec(function found(err, groups) {
-        if (err) {
-          return res.serverErr({
-            title: 'Error',
-            code: err.status,
-            message: err.details
-          });
-        }
-
-        res.ok(groups);
-      });
-    },
-
-    /**
      * update
      * @description Updates a group's associated roles (only as admin).  Expects an
      *              array of role name strings which will then be found and applied
@@ -87,12 +61,7 @@
             res.ok(this.group);
           })
           .catch(function (err) {
-            sails.log.error([
-              'Group.update for user: ' + req.user.id,
-              'Data: ' + JSON.stringify(req.body),
-              'Error: ' + JSON.stringify(err)
-            ].join('\n'));
-            return res.serverError();
+            return res.serverError(err);
           });
         } else {
           return res.forbidden();
