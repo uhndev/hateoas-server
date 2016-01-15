@@ -21,7 +21,7 @@ module.exports = {
     level: 'verbose'
   },
   models: {
-    migrate: 'drop',
+    migrate: 'alter',
     connection: 'arm_development'
   }
 };

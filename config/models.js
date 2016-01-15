@@ -18,6 +18,7 @@ module.exports.models = {
   * connections (see `config/connections.js`)                                *
   *                                                                          *
   ***************************************************************************/
+
   // elements in this array will be ignored as Model attributes
   validations: {
     ignoreProperties: ['generator']
