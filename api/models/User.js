@@ -10,6 +10,7 @@
 
 (function() {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
   var _ = require('lodash');
   var _user = require('sails-permissions/api/models/User');
@@ -31,7 +32,8 @@
        * @type {String}
        */
       firstname: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.firstName
       },
 
       /**
@@ -40,7 +42,8 @@
        * @type {String}
        */
       lastname: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.lastName
       },
 
 
@@ -52,7 +55,10 @@
 
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        generator: function () {
+          return _.sample(User.attributes.prefix.enum);
+        }
       },
 
 
@@ -63,7 +69,10 @@
        */
       gender: {
         type: 'string',
-        enum: ['Male', 'Female']
+        enum: ['Male', 'Female'],
+        generator: function() {
+          return _.sample(User.attributes.gender.enum);
+        }
       },
 
 
@@ -73,7 +82,10 @@
        * @type {Date}
        */
       dob: {
-        type: 'date'
+        type: 'date',
+        generator: function(state) {
+          return faker.date.past();
+        }
       },
 
 
@@ -84,7 +96,10 @@
        * @type {Association}
        */
       group: {
-        model: 'group'
+        model: 'group',
+        generator: function(state) {
+          return (state && _.has(state, 'group')) ? state.group: 'coordinator';
+        }
       },
 
 
@@ -234,6 +249,38 @@
       } else {
         cb();
       }
+    },
+
+    /**
+     * generate
+     * @description Convenience method for returning a Model object to be created.  The function
+     *              loops through Model attributes that have a generator function defined.  For the
+     *              User model however, we add additional auth attributes that were inherited from
+     *              sails-auth and sails-permissions.
+     * @param state {Object}
+     * @returns {Object}
+     */
+    generate: function (state) {
+      var userInfo = {
+        owner: 1,
+        createdBy: 1
+      };
+      _.each(User._attributes, function (value, key) {
+        if (_.isFunction(value.generator)) {
+          userInfo[key] = value.generator(state);
+        }
+      });
+
+      return _.merge({
+        username: faker.internet.userName(),
+        email: faker.internet.email(),
+        passports: [
+          {
+            protocol: 'local',
+            password: 'Password123'
+          }
+        ]
+      }, userInfo);
     }
   });
 })();

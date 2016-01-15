@@ -9,6 +9,7 @@
 
 (function() {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
@@ -28,7 +29,10 @@
        */
       user: {
         model: 'user',
-        required: true
+        required: true,
+        generator: function (state) {
+          return BaseModel.defaultGenerator(state, 'user', User);
+        }
       },
 
       /**

@@ -9,6 +9,7 @@
 (function() {
   var Promise = require('bluebird');
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
   var moment = require('moment');
   var HateoasService = require('../services/HateoasService.js');
   var _ = require('lodash');
@@ -20,6 +21,7 @@
 
     schema: true,
     attributes: {
+
       /**
        * subjectNumber
        * @description Equivalent of DADOS 2.0 subjectId that autoincrements with each
@@ -45,7 +47,10 @@
        * @type {Association} linked collection centre in enrollment
        */
       collectionCentre: {
-        model: 'collectioncentre'
+        model: 'collectioncentre',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'collectionCentre', CollectionCentre);
+        }
       },
 
       /**
@@ -55,7 +60,10 @@
        */
       subject: {
         model: 'subject',
-        required: true
+        required: true,
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'subject', Subject);
+        }
       },
 
       /**
@@ -76,7 +84,9 @@
        */
       doe: {
         type: 'date',
-        date: true
+        generator: function(state) {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -110,7 +120,10 @@
           'DECEASED',
           'TERMINATED',
           'COMPLETED'
-        ]
+        ],
+        generator: function() {
+          return _.sample(SubjectEnrollment.attributes.status.enum);
+        }
       },
 
       /**
@@ -177,7 +190,15 @@
         } else {
           values.status = 'ONGOING';
         }
-        cb();
+
+        if (!values.study && values.collectionCentre) {
+          CollectionCentre.findOne(values.collectionCentre).exec(function (err, centre) {
+            values.study = centre.study;
+            cb(err);
+          });
+        } else {
+          cb();
+        }
       });
     },
 
@@ -238,6 +259,23 @@
         values.status = 'REGISTERED';
       }
       cb();
+    },
+
+    generate: function (subject, study, collectionCentreID) {
+      var generatedObject = {
+        owner: 1,
+        createdBy: 1
+      };
+      _.each(this._attributes, function (value, key) {
+        if (_.isFunction(value.generator)) {
+          generatedObject[key] = value.generator(subject, study, collectionCentreID);
+        }
+      });
+      return generatedObject;
+    },
+
+    generateAndCreate: function(subject, study, collectionCentreID) {
+      return SubjectEnrollment.create(SubjectEnrollment.generate(subject, study, collectionCentreID));
     }
 
   });

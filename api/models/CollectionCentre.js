@@ -8,6 +8,7 @@
 
 (function () {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -26,7 +27,10 @@
        */
       name: {
         type: 'string',
-        required: true
+        required: true,
+        generator: function() {
+          return ['CC', _.random(1, 20), faker.address.city()].join('-');
+        }
       },
 
       /**
@@ -37,7 +41,10 @@
        * @type {Association} linked study reference
        */
       study: {
-        model: 'study'
+        model: 'study',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'study', Study);
+        }
       },
 
       /**
@@ -48,7 +55,10 @@
        * @type {Association} linked user representing main point of contact for this collection centre
        */
       contact: {
-        model: 'user'
+        model: 'user',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'contact', User);
+        }
       },
 
       /**
