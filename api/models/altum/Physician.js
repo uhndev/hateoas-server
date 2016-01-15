@@ -52,7 +52,7 @@
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      if (values.user) {
+      if (values.person) {
         Person.findOne(values.person).exec(function (err, person) {
           if (err) {
             cb(err);

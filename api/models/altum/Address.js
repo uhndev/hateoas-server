@@ -14,6 +14,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    displayFields: [ 'address1', 'address2', 'province', 'country' ],
+
     attributes: {
 
       /**

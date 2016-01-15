@@ -20,11 +20,11 @@
     attributes: {
 
       /**
-       * cityName
+       * name
        * @description A city's name, next to CityWok in ShiPaTown
-       * @type {Date}
+       * @type {String}
        */
-      cityName: {
+      name: {
         type: 'string',
         generator: faker.address.city
       },
