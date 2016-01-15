@@ -20,21 +20,21 @@
       /**
        * name
        * @description A company's name
-       * @type {Date}
+       * @type {String}
        */
-
       name: {
-        type: 'string'
+        type: 'string',
+        generator: faker.company.companyName
       },
 
       /**
        * phone
        * @description A company's phone
-       * @type {Date}
+       * @type {String}
        */
-
       phone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -53,9 +53,9 @@
        * @description A company's fax number
        * @type {String}
        */
-
       fax: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -63,9 +63,9 @@
        * @description A company's email
        * @type {String}
        */
-
       email: {
-        type: 'string'
+        type: 'string',
+        generator: faker.internet.email
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

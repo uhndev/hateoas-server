@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -21,9 +21,11 @@
        * @description A emergency contact's associated person
        * @type {Model}
        */
-
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -31,9 +33,11 @@
        * @description A emergencyContact's relationship
        * @type {String}
        */
-
       relationship: {
-        type: 'string'
+        type: 'string',
+        generator: function() {
+          return _.sample(['Father', 'Mother', 'Brother', 'Sister', 'Wife', 'Husband']);
+        }
       },
 
       /**
@@ -41,9 +45,11 @@
        * @description A emergencyContact's priority
        * @type {Integer}
        */
-
       priority: {
-        type: 'integer'
+        type: 'integer',
+        generator: function() {
+          return _.random(1, 10);
+        }
       },
 
       /**
@@ -51,9 +57,9 @@
        * @description A emergencyContact's notes
        * @type {String}
        */
-
       notes: {
-        type: 'string'
+        type: 'string',
+        generator: faker.lorem.sentence
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

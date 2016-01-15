@@ -22,7 +22,10 @@
        * @type {Model}
        */
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -32,7 +35,10 @@
        */
       MRN: {
         type: 'string',
-        index: true
+        index: true,
+        generator: function(state) {
+          return _.random(100000, 999999);
+        }
       },
 
       /**

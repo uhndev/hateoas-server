@@ -6,7 +6,6 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -17,21 +16,19 @@
     attributes: {
 
       /**
-       *
+       * altumService
        * @description an SiteService's altumService
        * @type {Model}
        */
-
       altumService: {
         model: 'altumService'
       },
 
       /**
        * site
-       * @description an AvailableService's payorService
+       * @description an AvailableService's site
        * @type {Model}
        */
-
       site: {
         model: 'site'
       },

@@ -6,24 +6,17 @@
  */
 
 (function () {
-
   var _ = require('lodash');
   var _super = require('./BaseModel.js');
+  var faker = requier('faker');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
 
-    attributes: {
+    displayFields: [ 'prefix', 'firstName', 'lastName' ],
 
-      /**
-       * salutation
-       * @description A person's salutation
-       * @type {String}
-       */
-      salutation: {
-        type: 'string'
-      },
+    attributes: {
 
       /**
        * firstName
@@ -31,7 +24,8 @@
        * @type {String}
        */
       firstName: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.firstName
       },
 
       /**
@@ -40,7 +34,8 @@
        * @type {String}
        */
       middleName: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.firstName
       },
 
       /**
@@ -49,7 +44,8 @@
        * @type {String}
        */
       lastName: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.lastName
       },
 
       /**
@@ -59,7 +55,10 @@
        */
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.']
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        generator: function() {
+          return _.sample(Person.attributes.prefix.enum);
+        }
       },
 
       /**
@@ -69,7 +68,10 @@
        */
       gender: {
         type: 'string',
-        enum: ['Male', 'Female']
+        enum: ['Male', 'Female'],
+        generate: function() {
+          return _.sample(Person.attributes.gender.enum);
+        }
       },
 
       /**
@@ -78,7 +80,10 @@
        * @type {Date}
        */
       dateOfBirth: {
-        type: 'date'
+        type: 'date',
+        generate: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -97,7 +102,8 @@
        * @type {String}
        */
       homePhone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -106,7 +112,8 @@
        * @type {String}
        */
       workPhone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -115,7 +122,8 @@
        * @type {String}
        */
       cellPhone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -124,7 +132,8 @@
        * @type {String}
        */
       otherPhone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -133,7 +142,8 @@
        * @type {String}
        */
       company: {
-        type: 'string'
+        type: 'string',
+        generator: faker.company.companyName
       },
 
       /**
@@ -142,7 +152,8 @@
        * @type {String}
        */
       title: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.title
       },
 
       /**
@@ -160,7 +171,10 @@
        * @type {String}
        */
       familyDoctor: {
-        model: 'physician'
+        model: 'physician',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'familyDoctor', Physician);
+        }
       },
 
       /**
@@ -169,7 +183,8 @@
        * @type {String}
        */
       fax: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
@@ -178,7 +193,8 @@
        * @type {String}
        */
       homeEmail: {
-        type: 'string'
+        type: 'string',
+        generator: faker.internet.email
       },
 
       /**
@@ -187,7 +203,8 @@
        * @type {String}
        */
       workEmail: {
-        type: 'string'
+        type: 'string',
+        generator: faker.internet.email
       },
 
       /**
@@ -196,7 +213,8 @@
        * @type {String}
        */
       otherEmail: {
-        type: 'string'
+        type: 'string',
+        generator: faker.internet.email
       },
 
       /**
@@ -205,7 +223,8 @@
        * @type {String}
        */
       occupation: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.jobTitle
       },
 
       /**
@@ -214,7 +233,8 @@
        * @type {String}
        */
       occupationType: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.jobType
       },
 
       /**
@@ -223,7 +243,8 @@
        * @type {String}
        */
       occupationSector: {
-        type: 'string'
+        type: 'string',
+        generator: faker.name.jobArea
       },
 
       /**
@@ -260,7 +281,8 @@
        * @type {String}
        */
       requiresInterpreter: {
-        type: 'boolean'
+        type: 'boolean',
+        defaultsTo: false
       },
 
       /**

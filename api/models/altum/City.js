@@ -10,6 +10,7 @@
 (function () {
 
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -24,7 +25,8 @@
        * @type {Date}
        */
       cityName: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.city
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

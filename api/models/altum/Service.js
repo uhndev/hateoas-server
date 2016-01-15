@@ -6,7 +6,6 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -21,9 +20,11 @@
        * @description a service's associated referral
        * @type {Model}
        */
-
       referral: {
-        model: 'referral'
+        model: 'referral',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'referral', Referral);
+        }
       },
 
       /**
@@ -31,7 +32,6 @@
        * @description a serivce's associated programService
        * @type {Model}
        */
-
       programService: {
         model: 'programService'
       },
@@ -41,7 +41,6 @@
        * @description a collection of a service's associated providers
        * @type {Collection}
        */
-
       serviceProviders: {
         collection: 'user'
       },
@@ -51,7 +50,6 @@
        * @description presently this is just a boolean to flag it as approved
        * @type {boolean}
        */
-
       approved: {
         type: 'boolean',
         defaultsTo: false

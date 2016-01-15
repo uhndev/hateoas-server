@@ -3,18 +3,20 @@ CREATE OR REPLACE VIEW clientcontact AS
 SELECT
 	client.id,
 	client."MRN",
-	client."createdAt",
-	client."updatedAt",
-	client."owner",
-	client."createdBy",
-	person."language",
-	person."requiresInterpreter",
-	person."salutation",
+	person."displayName",
 	person."firstName",
 	person."middleName",
 	person."lastName",
 	person."gender",
 	person."dateOfBirth",
+	person."homePhone",
+	person."workPhone",
+	person."fax",
+	person."otherPhone",
+	person."homeEmail",
+	person."workEmail",
+  person."language",
+	person."requiresInterpreter",
 	address."address1",
 	address."address2",
 	address."city",
@@ -23,14 +25,10 @@ SELECT
 	address."region",
 	address."company",
 	address."country",
-	person."homePhone",
-	person."workPhone",
-	person."fax",
-	person."otherPhone",
-	person."homeEmail",
-	person."workEmail",
-	person."displayName"
-
+	client."owner",
+	client."createdBy",
+	client."createdAt",
+	client."updatedAt"
 FROM
 	(
 		client

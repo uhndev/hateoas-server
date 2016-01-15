@@ -17,22 +17,13 @@
     attributes: {
 
       /**
-       * name
-       * @description an address's name
-       * @type {String}
-       */
-      name: {
-        type: 'string'
-      },
-
-      /**
        * address1
        * @description an address's first line
        * @type {String}
        */
-
       address1: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.streetAddress
       },
       /**
        * address2
@@ -40,25 +31,30 @@
        * @type {String}
        */
       address2: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.secondaryAddress
       },
 
       /**
        * city
        * @description an address's city.
-       * @type {stringj}
+       * @type {Model}
        */
       city: {
-        model: 'city'
+        model: 'city',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'city', City);
+        }
       },
 
       /**
        * province
        * @description An address's province
-       * @type {stringj}
+       * @type {String}
        */
       province: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.state
       },
 
       /**
@@ -67,7 +63,8 @@
        * @type {String}
        */
       postalCode: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.zipCode
       },
 
       /**
@@ -76,16 +73,18 @@
        * @type {String}
        */
       country: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.country
       },
+
       /**
        * region
        * @description A address's region
        * @type {String}
        */
-
       region: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.county
       },
 
       /**
@@ -94,7 +93,8 @@
        * @type {String}
        */
       latitude: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.latitude
       },
 
       /**
@@ -103,7 +103,8 @@
        * @type {String}
        */
       longitude: {
-        type: 'string'
+        type: 'string',
+        generator: faker.address.longitude
       },
 
       /**
@@ -111,9 +112,11 @@
        * @description an address's associated person
        * @type {Model}
        */
-
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -122,7 +125,10 @@
        * @type {Model}
        */
       company: {
-        model: 'company'
+        model: 'company',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'company', Company);
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
