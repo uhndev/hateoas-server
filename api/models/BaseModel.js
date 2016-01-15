@@ -54,6 +54,59 @@ module.exports = {
     // if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
     cb();
+  },
+
+	/**
+   * defaultGenerator
+   * @description Depending on a state's possible attributes, return and ID or recurse on
+   *              given model's generator function with sub state.
+   * @param state
+   * @param attribute
+   * @param model
+   * @returns {Object}
+	 */
+  defaultGenerator: function(state, attribute, model) {
+    if (state && _.has(state, attribute)) {
+      if (_.isNumber(state[attribute]) || _.isString(state[attribute])) {
+        return state[attribute];
+      } else {
+        return model.generate(state[attribute]);
+      }
+    } else {
+      return model.generate(state);
+    }
+  },
+
+  /**
+   * generate
+   * @description Convenience method for returning a Model object to be created.  The function
+   *              loops through Model attributes that have a generator function defined.
+   *              Can be overridden from any child model that inherits BaseModel.
+   * @param state {Object}
+   * @returns {Object}
+   */
+  generate: function(state) {
+    var generatedObject = {
+      owner: 1,
+      createdBy: 1
+    };
+    _.each(this._attributes, function (value, key) {
+      if (_.isFunction(value.generator)) {
+        generatedObject[key] = value.generator(state);
+      }
+    });
+    return generatedObject;
+  },
+
+  /**
+   * generateAndCreate
+   * @description Calls the default sails model create method with randomly generated data retrieved
+   *              from the generate above for any respective model.
+   *              Can be overridden from any child model that inherits BaseModel.
+   * @returns {Promise}
+   */
+  generateAndCreate: function (state) {
+    return this.create(this.generate(state));
   }
 
 };

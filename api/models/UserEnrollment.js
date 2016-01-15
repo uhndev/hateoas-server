@@ -24,7 +24,10 @@
        */
       collectionCentre: {
         model: 'collectioncentre',
-        required: true
+        required: true,
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'collectionCentre', CollectionCentre);
+        }
       },
 
       /**
@@ -34,7 +37,10 @@
        */
       user: {
         model: 'user',
-        required: true
+        required: true,
+        generator: function() {
+          return BaseModel.defaultGenerator(state, 'user', User);
+        }
       },
 
       /**
@@ -47,7 +53,10 @@
        */
       centreAccess: {
         type: 'string',
-        enum: ['coordinator', 'interviewer']
+        enum: ['coordinator', 'interviewer'],
+        generator: function() {
+          return _.sample(UserEnrollment.attributes.centreAccess.enum);
+        }
       },
 
       /**
