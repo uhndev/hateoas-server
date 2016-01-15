@@ -20,6 +20,7 @@ module.exports = {
 
   hooks: {
     "grunt": false,
-    "csrf": false
+    "csrf": false,
+		"views": false
   }
 };
