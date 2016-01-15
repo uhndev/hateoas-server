@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -21,9 +21,11 @@
        * @description the company this employment is at
        * @type {Model}
        */
-
       company: {
-        model: 'company'
+        model: 'company',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'company', Company);
+        }
       },
 
       /**
@@ -31,9 +33,11 @@
        * @description the person who's employed
        * @type {Model}
        */
-
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -41,9 +45,9 @@
        * @description the employed person's work number
        * @type {String}
        */
-
       phoneNumber: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

@@ -22,7 +22,10 @@
        * @type {Model}
        */
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -32,7 +35,10 @@
        */
       MRN: {
         type: 'string',
-        index: true
+        index: true,
+        generator: function(state) {
+          return _.random(100000, 999999);
+        }
       },
 
       /**
@@ -46,7 +52,32 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given physician object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.person) {
+        Person.findOne(values.person).exec(function (err, person) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = person.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     }
+
   });
 })();
 

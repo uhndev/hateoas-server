@@ -23,7 +23,6 @@
        * @description A workStatus's name
        * @type {Date}
        */
-
       name: {
         type: 'string'
       },

@@ -21,7 +21,6 @@
        * @description a serivceCategory's name
        * @type {String}
        */
-
       name: {
         type: 'string'
       },

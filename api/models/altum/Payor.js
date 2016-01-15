@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -21,9 +21,9 @@
        * @description a payor's name
        * @type {String}
        */
-
       name: {
-        type: 'string'
+        type: 'string',
+        generator: faker.company.companyName
       },
 
       /**
@@ -31,9 +31,11 @@
        * @description a payor's company
        * @type {String}
        */
-
       company: {
-        model: 'company'
+        model: 'company',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'company', Company);
+        }
       },
 
       /**
@@ -41,7 +43,6 @@
        * @description a payor's referrals
        * @type {String}
        */
-
       referrals: {
         collection: 'referral',
         via: 'payors'

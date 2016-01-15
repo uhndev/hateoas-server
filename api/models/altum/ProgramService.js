@@ -6,7 +6,6 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -17,11 +16,19 @@
     attributes: {
 
       /**
+       * name
+       * @description a payorService's name
+       * @type {String}
+       */
+      name: {
+        type: 'string'
+      },
+
+      /**
        * program
        * @description a payorService's program (at altum), only for driving dropdowns
        * @type {String}
        */
-
       program: {
         model: 'program'
       },
@@ -31,7 +38,6 @@
        * @description a payor's billing max price for a service
        * @type {Integer}
        */
-
       price: {
         type: 'integer'
       },
@@ -41,7 +47,6 @@
        * @description a payorService's mapping to it's altumService
        * @type {String}
        */
-
       altumService: {
         model: 'altumservice'
       },
@@ -51,7 +56,6 @@
        * @description a ProgramService's mapping to it's serviceCategory
        * @type {Model}
        */
-
       serviceCategory: {
         model: 'servicecategory'
       },
@@ -61,28 +65,8 @@
        * @description a payorService's payor
        * @type {String}
        */
-
       payor: {
         model: 'payor'
-      },
-
-      /**
-       * program
-       * @description a payorService's associated program
-       * @type {String}
-       */
-
-      program: {
-        model: 'program'
-      },
-      /**
-       * name
-       * @description a payorService's name
-       * @type {String}
-       */
-
-      name: {
-        type: 'string'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

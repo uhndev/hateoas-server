@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -21,7 +21,10 @@
        * @type {Model}
        */
       client: {
-        model: 'client'
+        model: 'client',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'client', Client);
+        }
       },
 
       /**
@@ -48,7 +51,10 @@
        * @type {Model}
        */
       physician: {
-        model: 'physician'
+        model: 'physician',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'physician', Physician);
+        }
       },
 
       /**
@@ -66,7 +72,10 @@
        * @type {date}
        */
       referralDate: {
-        type: 'date'
+        type: 'date',
+        generator: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -84,7 +93,10 @@
        * @type {Datetime}
        */
       accidentDate: {
-        type: 'datetime'
+        type: 'datetime',
+        generator: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -93,7 +105,10 @@
        * @type {Datetime}
        */
       receiveDate: {
-        type: 'datetime'
+        type: 'datetime',
+        generator: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -102,7 +117,10 @@
        * @type {Datetime}
        */
       sentDate: {
-        type: 'datetime'
+        type: 'datetime',
+        generator: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -111,7 +129,10 @@
        * @type {Datetime}
        */
       dischargeDate: {
-        type: 'datetime'
+        type: 'datetime',
+        generator: function() {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -120,7 +141,8 @@
        * @type {boolean}
        */
       recommendationsMade: {
-        type: 'boolean'
+        type: 'boolean',
+        defaultsTo: false
       },
 
       /**

@@ -23,33 +23,27 @@
        * @description A claim's external number
        * @type {String}
        */
-
       claimNum: {
         type: 'string'
       },
-
 
       /**
        * payor
        * @description A claim's payor
        * @type {Model}
        */
-
       payor: {
         model: 'payor'
       },
-
 
       /**
        * policyNum
        * @description a claim's external policyNum
        * @type {String}
        */
-
       policyNum: {
         type: 'string'
       },
-
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }

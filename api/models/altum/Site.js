@@ -8,8 +8,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -24,7 +24,22 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        generator: function() {
+          return _.sample([
+            'Ajax',
+            'Barrie',
+            'Cambridge',
+            'Hamilton Centennial',
+            'Hamilton Queensdale',
+            'Mississauga',
+            'Ottawa',
+            'Sudbury',
+            'Toronto: Toronto Western Hospital',
+            'Toronto: Outpatient Physiotherapy Department',
+            'Vaughan'
+          ]);
+        }
       },
 
       /**
@@ -33,7 +48,10 @@
        * @type {Model}
        */
       address: {
-        model: 'address'
+        model: 'address',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'address', Address);
+        }
       },
 
       /**
@@ -42,7 +60,8 @@
        * @type {String}
        */
       phone: {
-        type: 'string'
+        type: 'string',
+        generator: faker.phone.phoneNumber
       },
 
       /**
