@@ -48,8 +48,8 @@
        */
       collectionCentre: {
         model: 'collectioncentre',
-        generator: function(subject, study, collectionCentreID) {
-          return collectionCentreID;
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'collectionCentre', CollectionCentre);
         }
       },
 
@@ -61,8 +61,8 @@
       subject: {
         model: 'subject',
         required: true,
-        generator: function(subject, study, collectionCentreID) {
-          return subject;
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'subject', Subject);
         }
       },
 
@@ -84,7 +84,7 @@
        */
       doe: {
         type: 'date',
-        generator: function(subject, study, collectionCentreID) {
+        generator: function(state) {
           return faker.date.past();
         }
       },
@@ -98,14 +98,7 @@
       studyMapping: {
         type: 'json',
         json: true,
-        defaultsTo: {},
-        generator: function (subject, study, collectionCentreID) {
-          var studyMapping = {};
-          _.each(study.attributes, function (value, key) {
-            studyMapping[key] = _.sample(value);
-          });
-          return studyMapping;
-        }
+        defaultsTo: {}
       },
 
       /**
@@ -129,16 +122,7 @@
           'COMPLETED'
         ],
         generator: function() {
-          return _.sample([
-            'REGISTERED',
-            'ONGOING',
-            'LOST TO FOLLOWUP',
-            'WITHDRAWN',
-            'INELIGIBLE',
-            'DECEASED',
-            'TERMINATED',
-            'COMPLETED'
-          ]);
+          return _.sample(SubjectEnrollment.attributes.status.enum);
         }
       },
 

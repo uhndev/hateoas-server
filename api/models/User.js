@@ -55,7 +55,7 @@
         type: 'string',
         enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
         generator: function () {
-          return _.sample(['Mr.', 'Mrs.', 'Ms.', 'Dr.']);
+          return _.sample(User.attributes.prefix.enum);
         }
       },
 
@@ -68,7 +68,7 @@
         type: 'string',
         enum: ['Male', 'Female'],
         generator: function() {
-          return _.sample(['Male', 'Female']);
+          return _.sample(User.attributes.gender.enum);
         }
       },
 
@@ -79,7 +79,9 @@
        */
       dob: {
         type: 'date',
-        generator: faker.date.past
+        generator: function(state) {
+          return faker.date.past();
+        }
       },
 
       /**
@@ -90,8 +92,8 @@
        */
       group: {
         model: 'group',
-        generator: function() {
-          return 'coordinator';
+        generator: function(state) {
+          return (state && _.has(state, 'group')) ? state.group: 'coordinator';
         }
       },
 
@@ -233,19 +235,35 @@
     },
 
     /**
-     * generateAndCreate
-     * @description Calls the default sails model create method with randomly generated data retrieved
-     *              from the generate above for any respective model.
-     * @returns {Promise}
+     * generate
+     * @description Convenience method for returning a Model object to be created.  The function
+     *              loops through Model attributes that have a generator function defined.  For the
+     *              User model however, we add additional auth attributes that were inherited from
+     *              sails-auth and sails-permissions.
+     * @param state {Object}
+     * @returns {Object}
      */
-    generateAndCreate: function (id) {
-      return User.register({
+    generate: function (state) {
+      var userInfo = {
+        owner: 1,
+        createdBy: 1
+      };
+      _.each(User._attributes, function (value, key) {
+        if (_.isFunction(value.generator)) {
+          userInfo[key] = value.generator(state);
+        }
+      });
+
+      return _.merge({
         username: faker.internet.userName(),
         email: faker.internet.email(),
-        password: 'Password123'
-      }).then(function (createdUser) {
-        return User.update({id: createdUser.id}, User.generate(id));
-      });
+        passports: [
+          {
+            protocol: 'local',
+            password: 'Password123'
+          }
+        ]
+      }, userInfo);
     }
 
   });

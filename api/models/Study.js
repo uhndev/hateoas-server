@@ -107,8 +107,8 @@
         required: true,
         notEmpty: true,
         unique: true,
-        generator: function(id) {
-          return ['STUDY', id, _.first(faker.lorem.words()).toUpperCase()].join('-');
+        generator: function(state) {
+          return ['STUDY', _.random(1, 10), _.first(faker.lorem.words()).toUpperCase()].join('-');
         }
       },
 
@@ -184,8 +184,8 @@
        */
       administrator: {
         model: 'user',
-        generator: function() {
-          return _.random(1, sails.config.models.limits.user);
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'administrator', User);
         }
       },
 
@@ -195,8 +195,8 @@
        */
       pi: {
         model: 'user',
-        generator: function() {
-          return _.random(1, sails.config.models.limits.user);
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'pi', User);
         }
       },
 

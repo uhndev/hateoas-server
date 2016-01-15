@@ -25,8 +25,8 @@
       collectionCentre: {
         model: 'collectioncentre',
         required: true,
-        generator: function() {
-          return _.random(1, sails.config.models.limits.collectioncentre * sails.config.models.limits.study);
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'collectionCentre', CollectionCentre);
         }
       },
 
@@ -39,7 +39,7 @@
         model: 'user',
         required: true,
         generator: function() {
-          return _.random(2, sails.config.models.limits.user);
+          return BaseModel.defaultGenerator(state, 'user', User);
         }
       },
 
@@ -55,7 +55,7 @@
         type: 'string',
         enum: ['coordinator', 'interviewer'],
         generator: function() {
-          return _.sample(['coordinator', 'interviewer']);
+          return _.sample(UserEnrollment.attributes.centreAccess.enum);
         }
       },
 

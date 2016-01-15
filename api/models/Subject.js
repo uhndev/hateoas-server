@@ -29,7 +29,10 @@
        */
       user: {
         model: 'user',
-        required: true
+        required: true,
+        generator: function (state) {
+          return BaseModel.defaultGenerator(state, 'user', User);
+        }
       },
 
       /**
@@ -122,21 +125,6 @@
         .then(function (newRole) {
           cb();
         }).catch(cb);
-    },
-
-    generateAndCreate: function(id) {
-      var userObj = User.generate();
-      userObj.group = 'subject';
-      return User.register({
-        username: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: 'Password123'
-      }).then(function (createdUser) {
-        this.userID = createdUser.id;
-        return User.update({id: createdUser.id}, userObj);
-      }).then(function (updatedUser) {
-        return Subject.create({ user: this.userID });
-      });
     }
 
   });

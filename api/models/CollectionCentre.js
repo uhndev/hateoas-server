@@ -28,8 +28,8 @@
       name: {
         type: 'string',
         required: true,
-        generator: function(id) {
-          return ['CC', id, faker.address.city()].join('-');
+        generator: function() {
+          return ['CC', _.random(1, 20), faker.address.city()].join('-');
         }
       },
 
@@ -41,7 +41,10 @@
        * @type {Association} linked study reference
        */
       study: {
-        model: 'study'
+        model: 'study',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'study', Study);
+        }
       },
 
       /**
@@ -53,8 +56,8 @@
        */
       contact: {
         model: 'user',
-        generator: function() {
-          return _.random(1, sails.config.models.limits.user);
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'contact', User);
         }
       },
 
