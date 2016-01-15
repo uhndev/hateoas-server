@@ -95,7 +95,7 @@
         type: 'string'
       },
       city: {
-        type: 'string'
+        model: 'city'
       },
       province: {
         type: 'string'
@@ -107,7 +107,7 @@
         type: 'string'
       },
       company: {
-        type: 'string'
+        model: 'company'
       },
       country: {
         type: 'string'

@@ -30,11 +30,8 @@ SELECT
 	client."createdAt",
 	client."updatedAt"
 FROM
-	(
 		client
 		LEFT JOIN person ON
 			(client.person = person.ID)
-		LEFT JOIN address on (person.id = address.person)
-
-	);
+		LEFT JOIN address on (person.id = address.person);
 

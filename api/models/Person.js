@@ -8,7 +8,7 @@
 (function () {
   var _ = require('lodash');
   var _super = require('./BaseModel.js');
-  var faker = requier('faker');
+  var faker = require('faker');
   var HateoasService = require('../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -81,7 +81,7 @@
        */
       dateOfBirth: {
         type: 'date',
-        generate: function() {
+        generator: function() {
           return faker.date.past();
         }
       },
@@ -93,7 +93,10 @@
        */
       addresses: {
         collection: 'address',
-        via: 'person'
+        via: 'person',
+        generator: function(state) {
+          return [BaseModel.defaultGenerator(state, 'addresses', Address)];
+        }
       },
 
       /**
@@ -171,10 +174,7 @@
        * @type {String}
        */
       familyDoctor: {
-        model: 'physician',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'familyDoctor', Physician);
-        }
+        model: 'physician'
       },
 
       /**
