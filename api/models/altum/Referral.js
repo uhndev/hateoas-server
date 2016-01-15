@@ -13,6 +13,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'payors' ],
+
     attributes: {
 
       /**
@@ -34,6 +36,15 @@
        */
       claim: {
         model: 'claim'
+      },
+
+      /**
+       * site
+       * @description A referral's site
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
       },
 
       /**

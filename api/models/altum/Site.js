@@ -16,6 +16,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'address', 'sitePhysicians' ],
+
     attributes: {
 
       /**

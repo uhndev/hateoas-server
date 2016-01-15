@@ -69,7 +69,7 @@
       gender: {
         type: 'string',
         enum: ['Male', 'Female'],
-        generate: function() {
+        generator: function() {
           return _.sample(Person.attributes.gender.enum);
         }
       },

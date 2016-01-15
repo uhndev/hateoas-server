@@ -13,6 +13,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'serviceCategory' ],
+
     attributes: {
 
       /**
