@@ -1,10 +1,10 @@
- /**
+/**
  * Test File: Testing UserEnrollmentController
  * File Location: test/controllers/UserEnrollmentController.spec.js
  *
  * Tests the following routes:
-  'put /api/user/:id/access'       : 'UserController.updateAccess',
-  'put /api/userenrollment/:id'    : 'UserEnrollmentController.update'
+ 'put /api/user/:id/access'       : 'UserController.updateAccess',
+ 'put /api/userenrollment/:id'    : 'UserEnrollmentController.update'
  */
 
 var UserEnrollmentController = require('../../../api/controllers/UserEnrollmentController');
@@ -16,77 +16,77 @@ describe('The UserEnrollment Controller', function () {
 
   describe('User with Admin Role', function () {
 
-    before(function(done) {
-      auth.authenticate('admin', function(resp) {
+    before(function (done) {
+      auth.authenticate('admin', function (resp) {
         resp.statusCode.should.be.exactly(200);
         globals.users.adminUserId = JSON.parse(resp.text).user.id;
 
         Study.create({
-          name: 'ENROLLMENT-LEAP-ADMIN',
-          reb: 100
-        })
-        .then(function (study) {
-          study1 = study.id;
-          return Promise.all([
-            CollectionCentre.create({
-              name: 'ENROLLMENT-LEAP-ADMIN-TWH',
+            name: 'ENROLLMENT-LEAP-ADMIN',
+            reb: 100
+          })
+          .then(function (study) {
+            study1 = study.id;
+            return Promise.all([
+              CollectionCentre.create({
+                name: 'ENROLLMENT-LEAP-ADMIN-TWH',
+                reb: 200,
+                study: study1
+              }),
+              CollectionCentre.create({
+                name: 'ENROLLMENT-LEAP-ADMIN-TGH',
+                reb: 300,
+                study: study1
+              })
+            ]);
+          })
+          .spread(function (centre1, centre2) {
+            cc1Id = centre1.id;
+            cc2Id = centre2.id;
+            return Study.create({
+              name: 'ENROLLMENT-LEAP2-ADMIN',
+              reb: 200
+            });
+          })
+          .then(function (study) {
+            study2 = study.id;
+            return CollectionCentre.create({
+              name: 'ENROLLMENT-LEAP2-ADMIN-TWH',
               reb: 200,
-              study: study1
-            }),
-            CollectionCentre.create({
-              name: 'ENROLLMENT-LEAP-ADMIN-TGH',
-              reb: 300,
-              study: study1
-            })
-          ]);
-        })
-        .spread(function (centre1, centre2) {
-          cc1Id = centre1.id;
-          cc2Id = centre2.id;
-          return Study.create({
-            name: 'ENROLLMENT-LEAP2-ADMIN',
-            reb: 200
-          });
-        })
-        .then(function (study) {
-          study2 = study.id;
-          return CollectionCentre.create({
-            name: 'ENROLLMENT-LEAP2-ADMIN-TWH',
-            reb: 200,
-            study: study2
-          });
-        })
-        .then(function (centre) {
-          cc3Id = centre.id;
-          return Promise.all([
-            UserEnrollment.create({
-              user: globals.users.coordinatorUserId,
-              collectionCentre: cc1Id,
-              centreAccess: 'coordinator'
-            }),
-            UserEnrollment.create({
-              user: globals.users.interviewerUserId,
-              collectionCentre: cc2Id,
-              centreAccess: 'interviewer'
-            }),
-            UserEnrollment.create({
-              user: globals.users.interviewerUserId,
-              collectionCentre: cc3Id,
-              centreAccess: 'interviewer'
-            })
-          ]);
-        })
-        .spread(function (e1, e2, e3) {
-          enrollment1 = e1;
-          enrollment2 = e2;
-          enrollment3 = e3;
-          done();
-        })
-        .catch(done);
+              study: study2
+            });
+          })
+          .then(function (centre) {
+            cc3Id = centre.id;
+            return Promise.all([
+              UserEnrollment.create({
+                user: globals.users.coordinatorUserId,
+                collectionCentre: cc1Id,
+                centreAccess: 'coordinator'
+              }),
+              UserEnrollment.create({
+                user: globals.users.interviewerUserId,
+                collectionCentre: cc2Id,
+                centreAccess: 'interviewer'
+              }),
+              UserEnrollment.create({
+                user: globals.users.interviewerUserId,
+                collectionCentre: cc3Id,
+                centreAccess: 'interviewer'
+              })
+            ]);
+          })
+          .spread(function (e1, e2, e3) {
+            enrollment1 = e1;
+            enrollment2 = e2;
+            enrollment3 = e3;
+            done();
+          })
+          .catch(done);
       });
     });
 
-    after(function(done) {
+    after(function (done) {
       Study.destroy({id: study1.id}).exec(function (err) {
         auth.logout(done);
       });
@@ -175,7 +175,7 @@ describe('The UserEnrollment Controller', function () {
 
     });
 
-    describe('allow correct headers', function() {
+    describe('allow correct headers', function () {
       it('should return full CRUD access for /api/user', function (done) {
         request.get('/api/user')
           .set('Authorization', 'Bearer ' + globals.token)
@@ -200,15 +200,15 @@ describe('The UserEnrollment Controller', function () {
     });
   });
 
-  describe('User with Coordinator Role', function() {
-    before(function(done) {
-      auth.authenticate('coordinator', function(resp) {
+  describe('User with Coordinator Role', function () {
+    before(function (done) {
+      auth.authenticate('coordinator', function (resp) {
         resp.statusCode.should.be.exactly(200);
         done();
       });
     });
 
-    after(function(done) {
+    after(function (done) {
       auth.logout(done);
     });
 
@@ -216,7 +216,7 @@ describe('The UserEnrollment Controller', function () {
     });
 
     describe('findOne()', function () {
-      it ('should not allow coordinator to access a study they are not enrolled at', function (done) {
+      it('should not allow coordinator to access a study they are not enrolled at', function (done) {
         request.get('/api/study/' + study2)
           .set('Authorization', 'Bearer ' + globals.token)
           .expect(403)
@@ -225,7 +225,7 @@ describe('The UserEnrollment Controller', function () {
           });
       });
 
-      it ('should not allow coordinator to access a collection centre they are not enrolled at', function (done) {
+      it('should not allow coordinator to access a collection centre they are not enrolled at', function (done) {
         request.get('/api/collectioncentre/' + cc3Id)
           .set('Authorization', 'Bearer ' + globals.token)
           .expect(404)
@@ -238,27 +238,27 @@ describe('The UserEnrollment Controller', function () {
     describe('create()', function () {
     });
 
-    describe('update()', function() {
+    describe('update()', function () {
     });
 
-    describe('delete()', function() {
+    describe('delete()', function () {
     });
   });
 
   describe('User with Subject Role', function () {
 
-    before(function(done) {
-      auth.authenticate('subject', function(resp) {
+    before(function (done) {
+      auth.authenticate('subject', function (resp) {
         resp.statusCode.should.be.exactly(200);
         done();
       });
     });
 
-    after(function(done) {
+    after(function (done) {
       auth.logout(done);
     });
 
-    describe('find()', function() {
+    describe('find()', function () {
     });
 
     describe('create()', function () {
@@ -267,7 +267,7 @@ describe('The UserEnrollment Controller', function () {
     describe('update()', function () {
     });
 
-    describe('delete()', function() {
+    describe('delete()', function () {
     });
 
   });

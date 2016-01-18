@@ -79,19 +79,19 @@ var Auth = {
     }
   },
 
-  createUser: function(credentials, done) {
-    this.authenticate('admin', function(agent, resp) {
+  createUser: function (credentials, done) {
+    this.authenticate('admin', function (agent, resp) {
       request.post('/api/user')
         .set('Authorization', 'Bearer ' + globals.token)
         .send(credentials)
         .expect(201)
-        .end(function(err, res) {
+        .end(function (err, res) {
           done(JSON.parse(res.text).items.id);
         });
     });
   },
 
-  authenticate: function(user, done) {
+  authenticate: function (user, done) {
     request.post('/auth/local')
       .send(this.credentials[user].login)
       .end(function (err, result) {
@@ -101,7 +101,7 @@ var Auth = {
       });
   },
 
-  logout: function(done) {
+  logout: function (done) {
     request.get('/logout')
       .end(function (err, res) {
         if (err) throw err;

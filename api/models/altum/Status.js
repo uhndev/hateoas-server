@@ -21,7 +21,6 @@
        * @description A status's name
        * @type {String}
        */
-
       name: {
         type: 'string'
       },

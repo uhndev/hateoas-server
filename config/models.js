@@ -9,6 +9,7 @@
  * http://sailsjs.org/#/documentation/concepts/ORM
  */
 
+var Promise = require('bluebird');
 module.exports.models = {
 
   /***************************************************************************
@@ -17,7 +18,9 @@ module.exports.models = {
   * connections (see `config/connections.js`)                                *
   *                                                                          *
   ***************************************************************************/
-  //migrate: 'drop',
-  //connection: 'arm_mysql',
-  //connection: 'arm_development'
+
+  // elements in this array will be ignored as Model attributes
+  validations: {
+    ignoreProperties: ['generator']
+  }
 };

@@ -30,7 +30,6 @@
        * @description a PayorProgram's name
        * @type {String}
        */
-
       name: {
         type: 'string'
       },
@@ -40,7 +39,6 @@
        * @description a payor's ProgramServices
        * @type {String}
        */
-
       programServices: {
         collection: 'ProgramService',
         via: 'program',

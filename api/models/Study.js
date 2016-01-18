@@ -12,6 +12,7 @@
 
 (function() {
   var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
   var HateoasService = require('../services/HateoasService.js');
 
@@ -105,7 +106,10 @@
         index: true,
         required: true,
         notEmpty: true,
-        unique: true
+        unique: true,
+        generator: function(state) {
+          return ['STUDY', _.random(1, 10), _.first(faker.lorem.words()).toUpperCase()].join('-');
+        }
       },
 
       /**
@@ -119,7 +123,13 @@
        */
       attributes: {
         type: 'json',
-        defaultsTo: {}
+        defaultsTo: {},
+        generator: function() {
+          return {
+            procedure: faker.lorem.words(),
+            area: ['BOTH', 'LEFT', 'RIGHT']
+          };
+        }
       },
 
       /**
@@ -129,7 +139,10 @@
        */
       reb: {
         type: 'string',
-        required: true
+        required: true,
+        generator: function() {
+          return [faker.address.countryCode(), _.random(100, 999)].join('-');
+        }
       },
 
       /**
@@ -170,7 +183,10 @@
        * @type {Integer}
        */
       administrator: {
-        model: 'user'
+        model: 'user',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'administrator', User);
+        }
       },
 
       /**
@@ -178,7 +194,10 @@
        * @type {Integer}
        */
       pi: {
-        model: 'user'
+        model: 'user',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'pi', User);
+        }
       },
 
       /**

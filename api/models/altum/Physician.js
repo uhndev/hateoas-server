@@ -8,6 +8,7 @@
 (function () {
 
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -22,7 +23,10 @@
        * @type {String}
        */
       person: {
-        model: 'person'
+        model: 'person',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'person', Person);
+        }
       },
 
       /**
@@ -48,7 +52,7 @@
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      if (values.user) {
+      if (values.person) {
         Person.findOne(values.person).exec(function (err, person) {
           if (err) {
             cb(err);
