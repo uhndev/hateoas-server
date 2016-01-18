@@ -43,7 +43,6 @@
        * @description A company's addresses
        * @type {Model}
        */
-
       addresses: {
         collection: 'address',
         via: 'company'
@@ -67,6 +66,16 @@
       email: {
         type: 'string',
         generator: faker.internet.email
+      },
+
+      /**
+       * employees
+       * @description Collection of employees employed at this company
+       * @type {Collection}
+       */
+      employees: {
+        collection: 'employee',
+        via: 'company'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

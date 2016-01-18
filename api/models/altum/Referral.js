@@ -187,13 +187,15 @@
       },
 
       /**
-       * referralContacts
-       * @description A referral's referralContacts
-       * @type {Collection}
+       * referralContact
+       * @description A referral's referralContact
+       * @type {Model}
        */
-      referralContacts: {
-        collection: 'person',
-        via: 'referrals'
+      referralContact: {
+        model: 'employee',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'referralContact', Employee);
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

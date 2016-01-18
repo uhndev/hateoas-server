@@ -21,6 +21,10 @@
      */
     findOne: function (req, res) {
       Referral.findOne(req.param('id'))
+        .populate('program')
+        .populate('site')
+        .populate('physician')
+        .populate('referralContact')
         .exec(function (err, referral) {
           if (err) {
             return res.serverError(err);
