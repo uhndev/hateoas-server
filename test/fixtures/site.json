@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Hamilton",
+    "address": {
+      "address1": "516 Centennial Parkway North",
+      "address2": "Unit 4",
+      "city": {
+        "name": "Hamilton"
+      },
+      "province": "ON",
+      "postalCode": "L8E 0G2",
+      "country": "Canada",
+      "region": "Hamilton",
+      "latitude": "43.2420258",
+      "longitude": "-79.7563235"
+    }
+  },
+  {
+    "name": "Mississauga",
+    "address": {
+      "address1": "989 Derry Road East",
+      "address2": "Suite 200",
+      "city": {
+        "name": "Mississauga"
+      },
+      "province": "ON",
+      "postalCode": "L5T 2J8",
+      "country": "Canada",
+      "latitude": 43.665768,
+      "longitude": -79.6859843
+    }
+  },
+  {
+    "name": "Ottawa",
+    "address": {
+      "address1": "1145 Hunt Club Road",
+      "address2": "Unit 600",
+      "city": {
+        "name": "Ottawa"
+      },
+      "province": "ON",
+      "postalCode": "K1V 0Y3",
+      "country": "Canada",
+      "latitude": 45.3517699,
+      "longitude": -75.6523359
+    }
+  },
+  {
+    "name": "Sudbury",
+    "address": {
+      "address1": "40 Elm Street",
+      "address2": "Suite 275",
+      "city": {
+        "name": "Sudbury"
+      },
+      "province": "ON",
+      "postalCode": "P3C 1S8",
+      "country": "Canada",
+      "latitude": 46.4931981,
+      "longitude": -80.9910982
+    }
+  },
+  {
+    "name": "Krembil",
+    "address": {
+      "address1": "399 Bathurst",
+      "address2": "Krembil Discovery Tower 3rd floor",
+      "city": {
+        "name": "Toronto"
+      },
+      "province": "ON",
+      "postalCode": "M5T 2S8",
+      "country": "Canada",
+      "latitude": 43.6534023,
+      "longitude": -79.4053266
+    }
+  },
+  {
+    "name": "TWH",
+    "address": {
+      "address1": "399 Bathurst",
+      "address2": "Toronto Western Hospitial",
+      "city": 5,
+      "province": "ON",
+      "postalCode": "M5T 2S8",
+      "country": "Canada",
+      "latitude": 43.6534612,
+      "longitude": -79.4060656
+    }
+  },
+  {
+    "name": "Vaughn",
+    "address": {
+      "address1": "545 North Rivermede Road",
+      "address2": "Unit 105",
+      "city": 5,
+      "province": "ON",
+      "postalCode": "L4K 4H1",
+      "country": "Canada",
+      "latitude": 43.8078239,
+      "longitude": -79.4833397
+    }
+  },
+  {
+    "name": "Barrie",
+    "address": {
+      "address1": "70 Collier Street",
+      "address2": "Terrace",
+      "city": {
+        "name": "Barrie"
+      },
+      "province": "ON",
+      "postalCode": "L4M 4T5",
+      "country": "Canada",
+      "latitude": 44.3908596,
+      "longitude": -79.6865616
+    }
+  },
+  {
+    "name": "Ajax",
+    "address": {
+      "address1": "235 Salem Road",
+      "address2": "Unit 10",
+      "city": {
+        "name": "Ajax"
+      },
+      "province": "ON",
+      "postalCode": "L1Z 0B1",
+      "country": "Canada",
+      "latitude": 43.853634,
+      "longitude": -79.00799
+    }
+  }
+]
