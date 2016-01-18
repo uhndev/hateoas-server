@@ -21,6 +21,10 @@
      */
     findOne: function (req, res) {
       Referral.findOne(req.param('id'))
+        .populate('program')
+        .populate('site')
+        .populate('physician')
+        .populate('referralContact')
         .exec(function (err, referral) {
           if (err) {
             return res.serverError(err);
@@ -37,22 +41,6 @@
             });
           }
         });
-    },
-
-    find: function (req, res, next) {
-      var query = ModelService.filterExpiredRecords('referral')
-        .where(actionUtil.parseCriteria(req))
-        .limit(actionUtil.parseLimit(req))
-        .skip(actionUtil.parseSkip(req))
-        .sort(actionUtil.parseSort(req));
-      query.populate('payors');
-      //query.populate('services');
-      query.exec(function found(err, sites) {
-        if (err) {
-          return res.serverError(err);
-        }
-        res.ok(sites);
-      });
     }
 
   });

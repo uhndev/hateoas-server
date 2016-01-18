@@ -1,7 +1,7 @@
 /**
- * Employment.js
+ * Employee.js
  *
- * @description :: a table representing the employment of persons in compnaies
+ * @description :: a table representing the employment of persons in companies
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -51,6 +51,30 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given employee object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.person) {
+        Person.findOne(values.person).exec(function (err, person) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = person.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     }
   });
 })();

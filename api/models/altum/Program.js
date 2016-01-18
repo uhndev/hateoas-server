@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -22,7 +22,10 @@
        * @type {Model}
        */
       payor: {
-        model: 'payor'
+        model: 'payor',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'payor', Payor);
+        }
       },
 
       /**
@@ -31,7 +34,10 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        generator: function(state) {
+          return _.startCase(faker.lorem.words().join(' ')) + ' Program';
+        }
       },
 
       /**

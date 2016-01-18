@@ -13,6 +13,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'payors' ],
+
     attributes: {
 
       /**
@@ -34,6 +36,15 @@
        */
       claim: {
         model: 'claim'
+      },
+
+      /**
+       * site
+       * @description A referral's site
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
       },
 
       /**
@@ -176,13 +187,15 @@
       },
 
       /**
-       * referralContacts
-       * @description A referral's referralContacts
-       * @type {Collection}
+       * referralContact
+       * @description A referral's referralContact
+       * @type {Model}
        */
-      referralContacts: {
-        collection: 'person',
-        via: 'referrals'
+      referralContact: {
+        model: 'employee',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'referralContact', Employee);
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
