@@ -90,15 +90,6 @@
       },
 
       /**
-       *
-       * @description A referral's case
-       * @type {Model}
-       */
-      case: {
-        model: 'case'
-      },
-
-      /**
        * accidentDate
        * @description A referral's accidentDate
        * @type {Datetime}
