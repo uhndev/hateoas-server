@@ -198,7 +198,7 @@
       delete query.where.id;
       return clientcontact.findOne(clientID).then(function (client) {
           this.links = client.getResponseLinks();
-          return Referral.find(query).where({client: clientID});
+          return referraldetail.find(query).where({client: clientID});
         })
         .then(function (referrals) {
           return {

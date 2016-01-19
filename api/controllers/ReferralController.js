@@ -15,6 +15,8 @@
   _.merge(exports, {
 
     find: function (req, res, next) {
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.referraldetail.identity;
       var query = referraldetail.find()
         .where(actionUtil.parseCriteria(req))
         .limit(actionUtil.parseLimit(req))
