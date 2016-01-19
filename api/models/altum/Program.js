@@ -36,7 +36,7 @@
       name: {
         type: 'string',
         generator: function(state) {
-          return _.startCase(faker.lorem.words().join(' ')) + ' Program';
+          return _.startCase(_.first(faker.lorem.words())) + ' Program';
         }
       },
 
