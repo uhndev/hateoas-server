@@ -8,13 +8,15 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    displayFields: [ 'claimNum' ],
 
     attributes: {
 
@@ -24,7 +26,10 @@
        * @type {String}
        */
       claimNum: {
-        type: 'string'
+        type: 'string',
+        generator: function(state) {
+          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
+        }
       },
 
       /**
@@ -33,7 +38,10 @@
        * @type {Model}
        */
       payor: {
-        model: 'payor'
+        model: 'payor',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'payor', Payor);
+        }
       },
 
       /**
@@ -42,7 +50,10 @@
        * @type {String}
        */
       policyNum: {
-        type: 'string'
+        type: 'string',
+        generator: function(state) {
+          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

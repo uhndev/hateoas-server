@@ -1,16 +1,21 @@
+-- View: altumprogramservices
+-- returns payor, company, altum/program service data
+
+-- DROP VIEW altumprogramservices;
 CREATE OR REPLACE VIEW altumprogramservices AS
-select payor.id as payor_id,
-company.name as payor_name,
-altumservice.name as "altumService_name",
-altumservice.id as "altumService_id",
-programservice.id as "programService_id",
-programservice.name as "programService_name",
-programservice.id as program_id,
-program.name as program_name
-
-from payor
-
-left join company on payor.company=company.id
-left join programservice on programservice.payor=payor.id
-left join altumservice on programservice."altumService"=altumservice.id
-left join program on programservice.program=program.id;
+  SELECT
+    payor.id AS payor_id,
+    company.name AS payor_name,
+    altumservice.name AS "altumService_name",
+    altumservice.id AS "altumService_id",
+    programservice.id AS "programService_id",
+    programservice.name AS "programService_name",
+    programservice.id AS program_id,
+    program.name AS program_name
+  FROM payor
+    LEFT JOIN company ON payor.company = company.id
+    LEFT JOIN programservice ON programservice.payor = payor.id
+    LEFT JOIN altumservice ON programservice."altumService" = altumservice.id
+    LEFT JOIN program ON programservice.program = program.id;
+ALTER TABLE altumprogramservices
+OWNER TO postgres;

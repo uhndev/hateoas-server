@@ -95,7 +95,7 @@
         type: 'string'
       },
       city: {
-        model: 'city'
+        type: 'string'
       },
       province: {
         type: 'string'
