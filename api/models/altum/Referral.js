@@ -175,6 +175,11 @@
         via: 'referrals'
       },
 
+      notes: {
+        collection: 'note',
+        via: 'referral'
+      },
+
       /**
        * referralContacts
        * @description A referral's referralContacts
