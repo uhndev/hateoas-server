@@ -8,11 +8,12 @@
 
 (function () {
 
-  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./BaseControllers/ModelBaseController');
+    var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+    var StudyBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
-  _.merge(exports, {
+    _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
+    _.merge(exports, {
+
 
     find: function (req, res, next) {
       // manually override model name for pagination in ok.js
@@ -39,6 +40,7 @@
      */
     findOne: function (req, res) {
       Referral.findOne(req.param('id'))
+          .populate('notes')
         .populate('program')
         .populate('site')
         .populate('physician')
@@ -65,5 +67,5 @@
         });
     }
 
-  });
+    });
 })();

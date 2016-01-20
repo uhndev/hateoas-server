@@ -51,6 +51,11 @@
         via: 'clients'
       },
 
+      notes: {
+        collection: 'note',
+        via: 'client'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
