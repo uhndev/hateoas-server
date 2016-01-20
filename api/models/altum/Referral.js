@@ -177,6 +177,11 @@
         via: 'referrals'
       },
 
+      /**
+       * notes
+       * @description Collection of referral notes
+       * @type {Collection}
+       */
       notes: {
         collection: 'note',
         via: 'referral'

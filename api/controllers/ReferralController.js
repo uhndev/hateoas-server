@@ -40,7 +40,7 @@
      */
     findOne: function (req, res) {
       Referral.findOne(req.param('id'))
-          .populate('notes')
+        .populate('notes')
         .populate('program')
         .populate('site')
         .populate('physician')

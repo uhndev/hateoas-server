@@ -7,35 +7,35 @@
 
 module.exports = {
 
-    attributes: {
+  attributes: {
 
-        /**
-         * name
-         * @description A note type name
-         * @type {string}
-         */
-        name: {
-            type: 'string'
-        },
+    /**
+     * name
+     * @description A note type name
+     * @type {string}
+     */
+    name: {
+      type: 'string'
+    },
 
-        /**
-         * name
-         * @description A note type icon will show in html
-         * @type {Model}
-         */
-        iconClass: {
-            type: 'string'
-        },
-        /**
-         * name
-         * @description note collection
-         * @type {Model}
-         */
-        notes: {
-            collection: 'note',
-            via: 'noteType'
-        }
-
+    /**
+     * name
+     * @description A note type icon will show in html
+     * @type {Model}
+     */
+    iconClass: {
+      type: 'string'
+    },
+    /**
+     * name
+     * @description note collection
+     * @type {Model}
+     */
+    notes: {
+      collection: 'note',
+      via: 'noteType'
     }
+
+  }
 };
 
