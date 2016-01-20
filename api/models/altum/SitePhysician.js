@@ -6,8 +6,8 @@
  */
 
 (function () {
-
   var _super = require('../BaseModel.js');
+  var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -22,7 +22,10 @@
        * @type {Model}
        */
       site: {
-        model: 'site'
+        model: 'site',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'site', Site);
+        }
       },
 
 	    /**
@@ -31,7 +34,10 @@
        * @type {Model}
        */
       physician: {
-        model: 'physician'
+        model: 'physician',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'physician', Physician);
+        }
       },
 
 	    /**

@@ -1,12 +1,12 @@
 /**
- * SiteController
+ * EmployeeController
  *
- * @module  controllers/Subject
- * @description Server-side logic for managing Sites
+ * @module  controllers/Employee
+ * @description Server-side logic for managing Employees
  * @help        See http://links.sailsjs.org/docs/controllers
  */
 
-(function () {
+(function() {
 
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 

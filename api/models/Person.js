@@ -69,7 +69,7 @@
       gender: {
         type: 'string',
         enum: ['Male', 'Female'],
-        generate: function() {
+        generator: function() {
           return _.sample(Person.attributes.gender.enum);
         }
       },
@@ -248,12 +248,12 @@
       },
 
       /**
-       * employment
-       * @description A collection of a person's employment
+       * employments
+       * @description A collection of a person's employments at various companies
        * @type {Collection}
        */
-      employment: {
-        collection: 'employment',
+      employments: {
+        collection: 'employee',
         via: 'person'
       },
 
@@ -283,16 +283,6 @@
       requiresInterpreter: {
         type: 'boolean',
         defaultsTo: false
-      },
-
-      /**
-       * referrals
-       * @description Mapping to a person's collection of referrals
-       * @type {Collection}
-       */
-      referrals: {
-        collection: 'referral',
-        via: 'referralContacts'
       },
 
       /**

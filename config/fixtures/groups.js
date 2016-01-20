@@ -18,19 +18,18 @@
             {
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-cog", "dropdown": [
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": "fa-male"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ADDRESS", "href": "/address", "icon": "fa-paw"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYOR", "href": "/payor", "icon": "fa-bank"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIM", "href": "/claim", "icon": "fa-wheelchair"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ADDRESSES", "href": "/address", "icon": "fa-paw"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": "fa-bank"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIMS", "href": "/claim", "icon": "fa-wheelchair"},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUMSERVICES", "href": "/altumservice", "icon": "fa-cog"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICE", "href": "/programservice", "icon": "fa-cog"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": "fa-cog"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": "fa-cog"},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": "fa-hospital-o"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANY", "href": "/company", "icon": "fa-cog"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": "fa-cog"},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": "fa-stethoscope"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMSERVICES", "href": "/programservice", "icon": "fa-stethoscope"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICECATEGORIES", "href": "/servicecategory", "icon": "fa-stethoscope"},
-                {"prompt": "HEADER.MENU.ALTUM_TOOLS.PROGRAM", "href": "/program", "icon": "fa-medkit"},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": "fa-stethoscope"},
+                {"prompt": "HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": "fa-medkit"},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STATUS", "href": "/status", "icon": "fa-calandar-check-o"}
               ]
             },

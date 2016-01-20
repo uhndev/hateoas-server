@@ -1,18 +1,18 @@
 /**
  * A virtual model representing a database view.
- * See config/db/studyuser.sql for view definition.
+ * See config/db/arm/referraldetail.sql for view definition.
  */
 
 (function () {
-  var UserModel = require('./../User.js');
+  var ReferralModel = require('./../altum/Referral.js');
   var _super = require('./baseView.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
 
     attributes: {
-      client: {
-        model: 'client'
+      displayName: {
+        type: 'string'
       },
       program: {
         model: 'program'
@@ -23,11 +23,41 @@
       physician: {
         model: 'physician'
       },
+      physician_name: {
+        type: 'string'
+      },
+      site: {
+        model: 'site'
+      },
+      site_name: {
+        type: 'string'
+      },
       status: {
         model: 'status'
       },
       referralDate: {
         type: 'date'
+      },
+      accidentDate: {
+        type: 'datetime'
+      },
+      receiveDate: {
+        type: 'datetime'
+      },
+      sentDate: {
+        type: 'datetime'
+      },
+      dischargeDate: {
+        type: 'datetime'
+      },
+      recommendationsMade: {
+        type: 'boolean'
+      },
+      client: {
+        model: 'client'
+      },
+      client_mrn: {
+        type: 'string'
       },
       client_firstName: {
         type: 'string'
@@ -35,14 +65,14 @@
       client_lastName: {
         type: 'string'
       },
-      client_mrn: {
-        type: 'string'
-      },
       client_prefix: {
         type: 'string'
       },
       client_gender: {
         type: 'string'
+      },
+      client_dateOfBirth: {
+        type: 'date'
       },
       client_address1: {
         type: 'string'
@@ -56,10 +86,10 @@
       client_province: {
         type: 'string'
       },
-      client_country: {
+      client_postalCode: {
         type: 'string'
       },
-      client_postalCode: {
+      client_country: {
         type: 'string'
       },
       client_latitude: {
@@ -83,13 +113,10 @@
       claim_claimNum: {
         type: 'string'
       },
-      physician_name: {
+      claim_policyNum: {
         type: 'string'
       },
-      recommendationsMade: {
-        type: 'boolean'
-      },
-      toJSON: UserModel.attributes.toJSON
+      toJSON: ReferralModel.attributes.toJSON
     }
   });
 })();

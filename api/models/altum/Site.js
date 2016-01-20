@@ -11,10 +11,14 @@
   var _super = require('../BaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
+  var Promise = require('bluebird');
   var HateoasService = require('../../services/HateoasService.js');
+  var siteFixtures = require('../../../test/fixtures/site.json');
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    defaultPopulate: [ 'address', 'sitePhysicians' ],
 
     attributes: {
 
@@ -24,22 +28,7 @@
        * @type {String}
        */
       name: {
-        type: 'string',
-        generator: function() {
-          return _.sample([
-            'Ajax',
-            'Barrie',
-            'Cambridge',
-            'Hamilton Centennial',
-            'Hamilton Queensdale',
-            'Mississauga',
-            'Ottawa',
-            'Sudbury',
-            'Toronto: Toronto Western Hospital',
-            'Toronto: Outpatient Physiotherapy Department',
-            'Vaughan'
-          ]);
-        }
+        type: 'string'
       },
 
       /**
@@ -48,10 +37,7 @@
        * @type {Model}
        */
       address: {
-        model: 'address',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'address', Address);
-        }
+        model: 'address'
       },
 
       /**
@@ -60,8 +46,7 @@
        * @type {String}
        */
       phone: {
-        type: 'string',
-        generator: faker.phone.phoneNumber
+        type: 'string'
       },
 
       /**
@@ -85,7 +70,22 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    generate: function (state) {
+      return siteFixtures;
+    },
+
+    generateAndCreate: function (state) {
+      return Promise.all(
+        _.map(siteFixtures, function (site) {
+          return Site.findOrCreate({ name: site.name }, site);
+        })
+      ).then(function (sites) {
+        sails.log.info(sites.length + " site(s) generated");
+      });
     }
+
   });
 })();
 

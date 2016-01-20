@@ -13,6 +13,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'payors' ],
+
     attributes: {
 
       /**
@@ -34,6 +36,15 @@
        */
       claim: {
         model: 'claim'
+      },
+
+      /**
+       * site
+       * @description A referral's site
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
       },
 
       /**
@@ -76,15 +87,6 @@
         generator: function() {
           return faker.date.past();
         }
-      },
-
-      /**
-       *
-       * @description A referral's case
-       * @type {Model}
-       */
-      case: {
-        model: 'case'
       },
 
       /**
@@ -181,13 +183,15 @@
       },
 
       /**
-       * referralContacts
-       * @description A referral's referralContacts
-       * @type {Collection}
+       * referralContact
+       * @description A referral's referralContact
+       * @type {Model}
        */
-      referralContacts: {
-        collection: 'person',
-        via: 'referrals'
+      referralContact: {
+        model: 'employee',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'referralContact', Employee);
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -199,7 +203,7 @@
       delete query.where.id;
       return clientcontact.findOne(clientID).then(function (client) {
           this.links = client.getResponseLinks();
-          return Referral.find(query).where({client: clientID});
+          return referraldetail.find(query).where({client: clientID});
         })
         .then(function (referrals) {
           return {

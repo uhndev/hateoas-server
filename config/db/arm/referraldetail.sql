@@ -1,43 +1,58 @@
-CREATE OR REPLACE VIEW referraldetail AS
- SELECT referral.client,
-    referral.program,
-    program.name as "program_name",
-    referral.physician,
-    status.name as status,
-    referral.id,
-    referral."referralDate",
-    referral."createdAt",
-    referral."updatedAt",
-    person."firstName" as "client_firstName",
-    client."MRN" as client_mrn,
-    person."lastName" as "client_lastName",
-    person.prefix as client_prefix,
-    person.gender as client_gender,
-    person."dateOfBirth" as "client_dateOfBirth",
-    address.address1 as client_address1,
-    address.address2 as client_address2,
-    address.city as client_city,
-    address.province as client_province,
-    address."postalCode" as "client_postalCode",
-    address.country as client_country,
-    address.latitude as client_latitude,
-    address.longitude as client_longitude,
-    person."homePhone" as "client_homePhone",
-    person."workPhone" as "client_workPhone",
-    person."familyDoctor" as "client_familyDoctor",
-    person.language as client_language,
-    claim."claimNum" as "claim_claimNum",
-    claim."policyNum" as "claim_policyNum",
-    referral.owner,
-    physician."displayName" as "physician_name",
-    referral."createdBy",
-    referral."recommendationsMade"
+-- View: referraldetail
+-- returns referral, program, client, site, physician data
 
-   FROM referral
-        left join claim on referral.claim=claim.id
-        left join client on referral.client=client.id
-        left join person on client.person=person.id
-        left join address on address.person=person.id
-        left join status on referral.status=status.id
-        left join physician on referral.physician=physician.id
-        left join program on referral.program=program.id;
+-- DROP VIEW referraldetail;
+
+CREATE OR REPLACE VIEW referraldetail AS
+ SELECT
+    referral.id,
+    client."displayName" AS "displayName",
+    referral.program,
+    program.name AS "program_name",
+    referral.physician,
+    physician."displayName" AS "physician_name",
+    referral.site,
+    site."displayName" AS "site_name",
+    status.name AS status,
+    referral."referralDate",
+    referral."accidentDate",
+    referral."receiveDate",
+    referral."sentDate",
+    referral."dischargeDate",
+    referral."recommendationsMade",
+    referral.client,
+    client."MRN" AS client_mrn,
+    person."firstName" AS "client_firstName",
+    person."lastName" AS "client_lastName",
+    person.prefix AS client_prefix,
+    person.gender AS client_gender,
+    person."dateOfBirth" AS "client_dateOfBirth",
+    address.address1 AS client_address1,
+    address.address2 AS client_address2,
+    address.city AS client_city,
+    address.province AS client_province,
+    address."postalCode" AS "client_postalCode",
+    address.country AS client_country,
+    address.latitude AS client_latitude,
+    address.longitude AS client_longitude,
+    person."homePhone" AS "client_homePhone",
+    person."workPhone" AS "client_workPhone",
+    person."familyDoctor" AS "client_familyDoctor",
+    person.language AS client_language,
+    claim."claimNum" AS "claim_claimNum",
+    claim."policyNum" AS "claim_policyNum",
+    referral.owner,
+    referral."createdBy",
+    referral."createdAt",
+    referral."updatedAt"
+FROM referral
+  LEFT JOIN claim ON referral.claim = claim.id
+  LEFT JOIN client ON referral.client = client.id
+  LEFT JOIN person ON client.person = person.id
+  LEFT JOIN address ON address.person = person.id
+  LEFT JOIN status ON referral.status = status.id
+  LEFT JOIN physician ON referral.physician = physician.id
+  LEFT JOIN site ON referral.site = site.id
+  LEFT JOIN program ON referral.program = program.id;
+ALTER TABLE referraldetail
+OWNER TO postgres;
