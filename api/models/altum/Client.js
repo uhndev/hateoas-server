@@ -51,6 +51,11 @@
         via: 'clients'
       },
 
+      /**
+       * notes
+       * @description Collection of client notes
+       * @type {Collection}
+       */
       notes: {
         collection: 'note',
         via: 'client'

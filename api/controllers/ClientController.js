@@ -12,8 +12,10 @@
 
   module.exports = {
     findOne: function (req, res) {
-      Client.findOne(req.param('id'))
-        .populate('person')
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.clientcontact.identity;
+      clientcontact.findOne(req.param('id'))
+        .populate('company')
         .exec(function (err, client) {
           if (err) {
             return res.serverError(err);
