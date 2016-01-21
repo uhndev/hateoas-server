@@ -35,7 +35,10 @@
        * @type {Model}
        */
       claim: {
-        model: 'claim'
+        model: 'claim',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'claim', Claim);
+        }
       },
 
       /**

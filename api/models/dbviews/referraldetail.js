@@ -7,6 +7,35 @@
   var ReferralModel = require('./../altum/Referral.js');
   var _super = require('./baseView.js');
 
+  var getResponseLinks = function (id, name) {
+    return [
+      {
+        'rel': 'name',
+        'prompt': 'Referral for ' + name,
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
+        ].join('/')
+      },
+      {
+        'rel': sails.models.referral.identity,
+        'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
+        ].join('/')
+      },
+      {
+        'rel': sails.models.service.identity,
+        'prompt': 'Services',
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'services'
+        ].join('/')
+      }
+    ];
+  };
+
   _.merge(exports, _super);
   _.merge(exports, {
 
@@ -116,7 +145,28 @@
       claim_policyNum: {
         type: 'string'
       },
+      getResponseLinks: function () {
+        return getResponseLinks(this.id, this.displayName);
+      },
       toJSON: ReferralModel.attributes.toJSON
+    },
+
+    getResponseLinks: getResponseLinks,
+
+    findByBaseModel: function (clientID, currUser, options) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.id;
+      return clientcontact.findOne(clientID).then(function (client) {
+          this.links = client.getResponseLinks();
+          return referraldetail.find(query).where({client: clientID});
+        })
+        .then(function (referrals) {
+          return {
+            data: referrals,
+            links: this.links
+          };
+        });
     }
   });
 })();

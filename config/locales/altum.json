@@ -13,28 +13,26 @@
       "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
       "SELECTED": "Selected:",
       "MENU": {
-        "AT": {
-"APPROVERS": "Approvers",
-"ADDRESS": "Address",
-"PAYOR": "Payor",
-"CLAIM": "Claim",
-"WORK_STATUS": "Work Status",
-"PROGNOSIS": "Prognosis",
-"ALTUMSERVICES": "Altum Services",
-"PROGRAM_SERVICE": "Program Services",
-"SITES": "Sites",
-"COMPANY": "Company",
-"PROGRAMS": "Programs",
-"PROGRAMSERVICES": "Program Services",
-"SERVICECATEGORIES": "Service Categories",
-"STATUS": "Status"
+        "ALTUM_TOOLS": {
+          "APPROVERS": "Approvers",
+          "ADDRESS": "Address",
+          "PAYORS": "Payor",
+          "CLAIMS": "Claim",
+          "WORK_STATUS": "Work Status",
+          "PROGNOSIS": "Prognosis",
+          "ALTUM_SERVICES": "Altum Services",
+          "PROGRAM_SERVICES": "Program Services",
+          "SITES": "Sites",
+          "COMPANIES": "Companies",
+          "PROGRAMS": "Programs",
+          "SERVICE_CATEGORIES": "Service Categories",
+          "STATUS": "Statuses"
         },
-        "RECOMMENDATIONS": "Recommendations",
         "STUDIES": "Programs",
         "MY_STUDIES": "My Programs",
         "MY_PROFILE": "My Profile",
-        "USER_MANAGER": "Client Manager",
-        "TOOLS": "Altum Tools",
+        "USER_MANAGER": "User Manager",
+        "TOOLS": "Admin Tools",
         "FORM_BUILDER": "Form Builder",
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
@@ -121,7 +119,6 @@
       "SCHEDULE_TITLE": "List of upcoming surveys"
     }
   },
-
   "COMMON": {
     "LANGUAGES": {
       "LANGUAGE": "Language",

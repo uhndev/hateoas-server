@@ -57,6 +57,22 @@
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
+    },
+
+    findByBaseModel: function (referralID, currUser, options) {
+      var query = _.cloneDeep(options);
+      query.where = query.where || {};
+      delete query.where.id;
+      return referraldetail.findOne(referralID).then(function (referral) {
+          this.links = referraldetail.getResponseLinks(referral.id, referral.displayName);
+          return Service.find(query).where({referral: referralID});
+        })
+        .then(function (services) {
+          return {
+            data: services,
+            links: this.links
+          };
+        });
     }
   });
 })();
