@@ -130,6 +130,15 @@
         }
       },
 
+      /**
+       * site
+       * @description an address's associated site
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     }
