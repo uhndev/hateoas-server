@@ -59,6 +59,30 @@
 
     },
 
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given programService object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.programService) {
+        ProgramService.findOne(values.programService).exec(function (err, programService) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = programService.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
+    },
+
     findByBaseModel: function (referralID, currUser, options) {
       var query = _.cloneDeep(options);
       query.where = query.where || {};
@@ -74,6 +98,7 @@
           };
         });
     }
+
   });
 })();
 
