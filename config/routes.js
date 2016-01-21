@@ -78,8 +78,12 @@ module.exports.routes = {
   'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
 
   /***************************************************************************
-   * Client list Routes                                                      *
-   * from the clients list to get Referrals of the client                    *
+   * Client Routes                                                           *
    ***************************************************************************/
-  'get /api/client/:id/referrals'         : 'ReferralController.findByBaseModel'
+  'get /api/client/:id/referrals'         : 'ReferralController.findByBaseModel',
+
+  /***************************************************************************
+   * Referral Routes                                                         *
+   ***************************************************************************/
+  'get /api/referral/:id/services'        : 'ServiceController.findByBaseModel'
 };

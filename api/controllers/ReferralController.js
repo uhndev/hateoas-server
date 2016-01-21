@@ -57,7 +57,7 @@
               clientcontact.findOne(referral.client).then(function (client) {
                 referral.clientcontact = client;
                 res.ok(referral, {
-                  links: client.getResponseLinks()
+                  links: referraldetail.getResponseLinks(referral.id, client.displayName)
                 });
               });
             } else {
