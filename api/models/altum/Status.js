@@ -27,14 +27,31 @@
         type: 'string'
       },
 
+	    /**
+       * category
+       * @description A status's category
+       * @type {String}
+       */
+      category: {
+        type: 'string',
+        enum: [
+          'referral',
+          'service'
+        ]
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
     generate: function (state) {
       return [
-        { name: 'Open' },
-        { name: 'Discharged' },
-        { name: 'Follow-up' }
+        { name: 'Open', category: 'referral' },
+        { name: 'Discharged', category: 'referral' },
+        { name: 'Follow-up', category: 'referral' },
+        { name: 'Approved', category: 'service' },
+        { name: 'Pending', category: 'service' },
+        { name: 'No response from WSIB', category: 'service' },
+        { name: 'Denied', category: 'service' }
       ];
     },
 

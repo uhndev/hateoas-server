@@ -11,10 +11,14 @@ CREATE OR REPLACE VIEW referraldetail AS
     program.name AS "program_name",
     referral.physician,
     physician."displayName" AS "physician_name",
+    referral.clinician,
+    clinician."displayName" AS "clinician_name",
     referral.site,
     site."displayName" AS "site_name",
-    status.name AS status,
+    status.id AS status,
+    status.name AS "statusName",
     referral."referralDate",
+    referral."clinicDate",
     referral."accidentDate",
     referral."receiveDate",
     referral."sentDate",
@@ -39,6 +43,7 @@ CREATE OR REPLACE VIEW referraldetail AS
     person."workPhone" AS "client_workPhone",
     person."familyDoctor" AS "client_familyDoctor",
     person.language AS client_language,
+    claim.id AS claim,
     claim."claimNum" AS "claim_claimNum",
     claim."policyNum" AS "claim_policyNum",
     referral.owner,
@@ -52,6 +57,7 @@ FROM referral
   LEFT JOIN address ON address.person = person.id
   LEFT JOIN status ON referral.status = status.id
   LEFT JOIN physician ON referral.physician = physician.id
+  LEFT JOIN clinician ON referral.clinician = clinician.id
   LEFT JOIN site ON referral.site = site.id
   LEFT JOIN program ON referral.program = program.id;
 ALTER TABLE referraldetail

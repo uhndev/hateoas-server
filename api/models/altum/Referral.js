@@ -61,13 +61,25 @@
 
       /**
        * physician
-       * @description a referral's physician
+       * @description The physician registered at this site
        * @type {Model}
        */
       physician: {
         model: 'physician',
         generator: function(state) {
           return BaseModel.defaultGenerator(state, 'physician', Physician);
+        }
+      },
+
+      /**
+       * clinician
+       * @description The clinician registered at this site
+       * @type {Model}
+       */
+      clinician: {
+        model: 'clinician',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'clinician', Clinician);
         }
       },
 

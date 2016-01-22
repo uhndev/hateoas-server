@@ -55,6 +55,12 @@
       physician_name: {
         type: 'string'
       },
+      clinician: {
+        model: 'clinician'
+      },
+      clinician_name: {
+        type: 'string'
+      },
       site: {
         model: 'site'
       },
@@ -64,7 +70,13 @@
       status: {
         model: 'status'
       },
+      statusName: {
+        type: 'string'
+      },
       referralDate: {
+        type: 'date'
+      },
+      clinicDate: {
         type: 'date'
       },
       accidentDate: {
@@ -138,6 +150,9 @@
       },
       client_language: {
         type: 'integer'
+      },
+      claim: {
+        model: 'claim'
       },
       claim_claimNum: {
         type: 'string'

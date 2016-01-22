@@ -48,16 +48,10 @@
       /**
        * status
        * @description Status of recommended service
-       * @type {String}
+       * @type {Model}
        */
       status: {
-        type: 'string',
-        enum: [
-          'Approved',
-          'Pending',
-          'No response from WSIB',
-          'Denied'
-        ]
+        model: 'status'
       },
 
       /**

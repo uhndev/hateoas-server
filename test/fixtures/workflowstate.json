@@ -355,7 +355,7 @@
           "value": ""
         },
         {
-          "name": "status",
+          "name": "statusName",
           "type": "string",
           "prompt": "COMMON.MODELS.REFERRAL.STATUS",
           "value": ""
@@ -364,6 +364,12 @@
           "name": "referralDate",
           "type": "date",
           "prompt": "COMMON.MODELS.REFERRAL.REFERRAL_DATE",
+          "value": ""
+        },
+        {
+          "name": "clinicDate",
+          "type": "date",
+          "prompt": "COMMON.MODELS.REFERRAL.CLINIC_DATE",
           "value": ""
         }
       ]

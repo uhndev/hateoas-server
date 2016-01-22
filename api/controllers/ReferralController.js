@@ -44,6 +44,7 @@
         .populate('program')
         .populate('site')
         .populate('physician')
+        .populate('clinician')
         .populate('referralContact')
         .exec(function (err, referral) {
           if (err) {
