@@ -10,7 +10,7 @@
       "SIGN_IN_ERROR": "Incorrect username or password"
     },
     "HEADER": {
-      "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
+      "TAGLINE": "Leading the New Way in Canadian Health Care",
       "SELECTED": "Selected:",
       "MENU": {
         "ALTUM_TOOLS": {
@@ -45,7 +45,8 @@
         "SUBJECTS": "Clients",
         "USERS": "Users",
         "FORMS": "Forms",
-        "SURVEYS": "Surveys"
+        "SURVEYS": "Surveys",
+        "SERVICES": "Recommendations"
       }
     },
     "STUDY": {

@@ -93,6 +93,18 @@
       },
 
       /**
+       * clinicDate
+       * @description A referral's clinic date
+       * @type {date}
+       */
+      clinicDate: {
+        type: 'date',
+        generator: function() {
+          return faker.date.past();
+        }
+      },
+
+      /**
        * accidentDate
        * @description A referral's accidentDate
        * @type {Datetime}

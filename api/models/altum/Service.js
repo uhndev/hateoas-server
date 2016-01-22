@@ -46,9 +46,24 @@
       },
 
       /**
+       * status
+       * @description Status of recommended service
+       * @type {String}
+       */
+      status: {
+        type: 'string',
+        enum: [
+          'Approved',
+          'Pending',
+          'No response from WSIB',
+          'Denied'
+        ]
+      },
+
+      /**
        * approved
        * @description presently this is just a boolean to flag it as approved
-       * @type {boolean}
+       * @type {Boolean}
        */
       approved: {
         type: 'boolean',

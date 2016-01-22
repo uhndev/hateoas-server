@@ -14,6 +14,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultSortBy: 'createdAt ASC',
+
     attributes: {
 
       /**
@@ -26,6 +28,25 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    generate: function (state) {
+      return [
+        { name: 'Open' },
+        { name: 'Discharged' },
+        { name: 'Follow-up' }
+      ];
+    },
+
+    generateAndCreate: function (state) {
+      var statuses = this.generate();
+      return Promise.all(
+        _.map(statuses, function (status) {
+          return Status.findOrCreate({ name: status.name }, status);
+        })
+      ).then(function (statuses) {
+        sails.log.info(statuses.length + " status(s) generated");
+      });
     }
 
   });

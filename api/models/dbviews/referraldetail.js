@@ -27,7 +27,7 @@
       },
       {
         'rel': sails.models.service.identity,
-        'prompt': 'Services',
+        'prompt': 'APP.HEADER.SUBMENU.SERVICES',
         'name': 'name',
         'href': [
           sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'services'
