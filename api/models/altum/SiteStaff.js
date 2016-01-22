@@ -1,7 +1,7 @@
 /**
- * SitePhysician.js
+ * SiteStaff.js
  *
- * @description a model representation of a physician at a site
+ * @description a model representation of a physician or clinician at a site
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
@@ -28,19 +28,31 @@
         }
       },
 
-	    /**
+      /**
        * physician
        * @description The physician registered at this site
        * @type {Model}
        */
       physician: {
         model: 'physician',
-        generator: function(state) {
+        generator: function (state) {
           return BaseModel.defaultGenerator(state, 'physician', Physician);
         }
       },
 
-	    /**
+      /**
+       * clinician
+       * @description The clinician registered at this site
+       * @type {Model}
+       */
+      clinician: {
+        model: 'clinician',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'clinician', Clinician);
+        }
+      },
+
+      /**
        * physicianSchedules
        * @description Collection of schedules for this physician at this site
        * @type {Collection}

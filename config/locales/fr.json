@@ -45,7 +45,8 @@
         "SUBJECTS": "Matieres",
         "USERS": "Utilisateurs",
         "FORMS": "Formulaires",
-        "SURVEYS": "Enquetes"
+        "SURVEYS": "Enquetes",
+        "SERVICES": "Recommendations"
       }
     },
     "STUDY": {

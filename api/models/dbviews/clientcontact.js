@@ -28,7 +28,7 @@
       },
       {
         'rel': sails.models.referral.identity,
-        'prompt': 'Referrals',
+        'prompt': 'APP.HEADER.SUBMENU.REFERRALS',
         'name': 'name',
         'href': [
           sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id, 'referrals'

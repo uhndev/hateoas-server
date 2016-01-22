@@ -45,7 +45,8 @@
         "SUBJECTS": "Subjects",
         "USERS": "Users",
         "FORMS": "Forms",
-        "SURVEYS": "Surveys"
+        "SURVEYS": "Surveys",
+        "SERVICES": "Recommendations"
       }
     },
     "STUDY": {

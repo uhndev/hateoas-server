@@ -32,25 +32,21 @@ module.exports.models = {
 
   populateDB: function() {
     var that = this;
+    var generateMultiple = function(model) {
+      var promises = [];
+      for (var i=0; i < that.limits[model]; i++) {
+        promises.push(sails.models[model].generateAndCreate());
+      }
+      return Promise.all(promises).then(function(data) {
+        sails.log.info(that.limits[model] + ' ' + model + '(s) generated');
+        return data;
+      });
+    };
+
     Site.generateAndCreate()
-      .then(function () {
-        var promises = [];
-        for (var i=0; i < that.limits.claim; i++) {
-          promises.push(Claim.generateAndCreate());
-        }
-        return Promise.all(promises);
-      })
-      .then(function () {
-        sails.log.info(that.limits.program + ' program(s) generated');
-        var promises = [];
-        for (var i=0; i < that.limits.referral; i++) {
-          promises.push(Referral.generateAndCreate());
-        }
-        return Promise.all(promises);
-      })
-      .then(function() {
-        sails.log.info(that.limits.referral + ' referral(s) generated');
-        sails.log.info('Data generation complete!');
-      })
+      .then(Status.generateAndCreate)
+      .then(generateMultiple('claim'))
+      .then(generateMultiple('program'))
+      .then(generateMultiple('referral'));
   }
 };

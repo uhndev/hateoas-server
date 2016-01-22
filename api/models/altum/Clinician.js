@@ -1,5 +1,5 @@
 /**
- * Physician.js
+ * Clinician.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -19,7 +19,7 @@
 
       /**
        * person
-       * @description a physician's person model
+       * @description a clinician's person model
        * @type {String}
        */
       person: {
@@ -30,13 +30,13 @@
       },
 
       /**
-       * physicianSites
-       * @description Collection of sites this physician is registered at
+       * clinicianSites
+       * @description Collection of sites this clinician is registered at
        * @type {Collection}
        */
-      physicianSites: {
+      clinicianSites: {
         collection: 'sitestaff',
-        via: 'physician'
+        via: 'clinician'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -48,7 +48,7 @@
      *              from fields listed in the defaultsTo attribute of displayName
      *              this can be overridden in child models inheriting from the
      *              basemodel to pick specific fields
-     * @param  {Object}   values  given physician object for creation
+     * @param  {Object}   values  given clinician object for creation
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {

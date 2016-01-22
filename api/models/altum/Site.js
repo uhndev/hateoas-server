@@ -18,7 +18,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'address', 'sitePhysicians' ],
+    defaultPopulate: [ 'address', 'siteStaff' ],
 
     attributes: {
 
@@ -60,12 +60,12 @@
       },
 
       /**
-       * sitePhysicians
-       * @description Collection of physicians registered at this site
+       * siteStaff
+       * @description Collection of physicians or clinicians registered at this site
        * @type {Collection}
        */
-      sitePhysicians: {
-        collection: 'sitephysician',
+      siteStaff: {
+        collection: 'sitestaff',
         via: 'site'
       },
 

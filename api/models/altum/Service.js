@@ -46,9 +46,18 @@
       },
 
       /**
+       * status
+       * @description Status of recommended service
+       * @type {Model}
+       */
+      status: {
+        model: 'status'
+      },
+
+      /**
        * approved
        * @description presently this is just a boolean to flag it as approved
-       * @type {boolean}
+       * @type {Boolean}
        */
       approved: {
         type: 'boolean',
