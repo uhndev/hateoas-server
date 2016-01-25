@@ -21,6 +21,9 @@ module.exports = {
   // default base query to apply to all finds
   defaultQuery: undefined,
 
+  // default fields to omit from template
+  defaultTemplateOmit: ['displayName'],
+
   // array of field names to concatenate into display names, override in child models to pick unique fields for displayName
   displayFields: [ 'name' ],
 
