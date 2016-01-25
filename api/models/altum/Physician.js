@@ -15,6 +15,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultTemplateOmit: null,
+
     attributes: {
 
       /**
