@@ -18,6 +18,8 @@
   _.merge(exports, {
     schema: true,
 
+    defaultTemplateOmit: null,
+
     attributes: {
       /**
        * user

@@ -57,6 +57,11 @@
                          models[modelName].definition);
 
           attributes = _.reduce(schema, function (result, definition, field) {
+            // if field wants to be omitted from template definition, skip
+            if (_.contains(models[modelName].defaultTemplateOmit, field)) {
+              return result;
+            }
+
             // if not a model field or is a model field that we've already built
             if (!definition.model || definition.model && !_.contains(previousModels, definition.model)) {
               var template = {
