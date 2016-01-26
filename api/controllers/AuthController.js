@@ -60,13 +60,11 @@
 
       sails.services.passport.callback(req, res, function (err, user) {
         if (err || !user) {
-          sails.log.warn('err1', err);
           return res.forbidden(err);
         }
 
         req.login(user, function (err) {
           if (err) {
-            sails.log.warn('err2', err);
             return res.forbidden(err);
           }
 
