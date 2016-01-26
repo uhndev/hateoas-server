@@ -5,9 +5,9 @@
 
 var should = require('should');
 
-describe('The Passport Model', function() {
-  describe('before the passport is created/modified', function(done) {
-    it('should hash password before creating passport', function() {
+describe('The Passport Model', function () {
+  describe('before the passport is created/modified', function (done) {
+    it('should hash password before creating passport', function () {
       Passport.beforeCreate({
         password: 'password'
       }, function (err, user) {
@@ -15,7 +15,7 @@ describe('The Passport Model', function() {
       })
     });
 
-    it('should hash password before updating passport', function() {
+    it('should hash password before updating passport', function () {
       Passport.beforeUpdate({
         password: 'password'
       }, function (err, user) {

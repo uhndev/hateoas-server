@@ -6,7 +6,6 @@
  'post /api/subjectenrollment'    : 'SubjectController.create'
  */
 
-var SubjectEnrollmentController = require('../../../api/controllers/SubjectEnrollmentController');
 var Promise = require('bluebird');
 
 describe('The SubjectEnrollment Controller', function () {
@@ -19,13 +18,13 @@ describe('The SubjectEnrollment Controller', function () {
       globals.users.adminUserId = JSON.parse(resp.text).user.id;
 
       Study.create({
-        name: 'ENROLLMENT-LEAP-ADMIN',
-        reb: 100,
-        attributes: {
-          procedure: ['A', 'B'],
-          area: ['C', 'D']
-        }
-      })
+          name: 'ENROLLMENT-LEAP-ADMIN',
+          reb: 100,
+          attributes: {
+            procedure: ['A', 'B'],
+            area: ['C', 'D']
+          }
+        })
         .then(function (study) {
           study1 = study.id;
           return Promise.all([

@@ -1,12 +1,12 @@
 [
-	{
-		"form_type": "system",
-		"form_name": "user",
-		"form_title": "User Registration",
-		"form_submitText": "Submit",
-		"form_cancelText": "Cancel",
-		"form_questions": [
- 			{
+  {
+    "form_type": "system",
+    "form_name": "user",
+    "form_title": "User Registration",
+    "form_submitText": "Submit",
+    "form_cancelText": "Cancel",
+    "form_questions": [
+      {
         "field_id": 1,
         "field_name": "username",
         "field_title": "Username",
@@ -195,9 +195,9 @@
           }
         ]
       }
-		]
-	},
-	{
+    ]
+  },
+  {
     "form_type": "system",
     "form_name": "study",
     "form_title": "Create Study",
@@ -282,7 +282,7 @@
         "field_labels": "displayName"
       }
     ]
-	},
+  },
   {
     "form_type": "system",
     "form_name": "collection_centre",

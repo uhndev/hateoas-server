@@ -46,8 +46,8 @@
       .limit(actionUtil.parseLimit(req) || Model.defaultLimit || BaseModel.defaultLimit)
       .skip(actionUtil.parseSkip(req) || Model.defaultSkip || BaseModel.defaultSkip)
       .sort(actionUtil.parseSort(req) || Model.defaultSortBy || undefined);
-    // TODO: .populateEach(req.options);
-    query = actionUtil.populateEach(query, req);
+    
+    query = actionUtil.populateRequest(query, req);
 
     // auto-populate based on Model.defaultPopulate
     if (Model.defaultPopulate) {

@@ -4,7 +4,7 @@
  *
  * Verify that the User fulfills permission 'where' conditions and attribute blacklist restrictions
  */
-var wlFilter = require('../../node_modules/sails-permissions/node_modules/waterline-criteria');
+var wlFilter = require('waterline-criteria');
 var _ = require('lodash');
 
 module.exports = function(req, res, next) {
