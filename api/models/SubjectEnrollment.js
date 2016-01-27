@@ -19,7 +19,6 @@
 
     defaultSortBy: 'subjectNumber ASC', // overrides BaseModel.defaultSortBy
 
-    schema: true,
     attributes: {
 
       /**

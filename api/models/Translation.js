@@ -18,7 +18,7 @@
     displayFields: ['language', 'translationKey'],
 
     connection: 'dados_cache',
-    schema: true,
+
     attributes: {
 
       /**

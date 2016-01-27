@@ -6,6 +6,8 @@
 
 module.exports = {
 
+  schema: true,
+
   // default sorting order
   defaultSortBy: 'displayName ASC',
 
@@ -25,7 +27,7 @@ module.exports = {
   defaultTemplateOmit: ['displayName'],
 
   // array of field names to concatenate into display names, override in child models to pick unique fields for displayName
-  displayFields: [ 'name' ],
+  displayFields: ['name'],
 
   // BaseModel attributes
   attributes: {
@@ -59,7 +61,7 @@ module.exports = {
     cb();
   },
 
-	/**
+  /**
    * defaultGenerator
    * @description Depending on a state's possible attributes, return and ID or recurse on
    *              given model's generator function with sub state.
@@ -67,8 +69,8 @@ module.exports = {
    * @param attribute
    * @param model
    * @returns {Object}
-	 */
-  defaultGenerator: function(state, attribute, model) {
+   */
+  defaultGenerator: function (state, attribute, model) {
     if (state && _.has(state, attribute)) {
       if (_.isNumber(state[attribute]) || _.isString(state[attribute])) {
         return state[attribute];
@@ -88,7 +90,7 @@ module.exports = {
    * @param state {Object}
    * @returns {Object}
    */
-  generate: function(state) {
+  generate: function (state) {
     var generatedObject = {
       owner: 1,
       createdBy: 1
