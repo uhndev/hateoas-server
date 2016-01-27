@@ -17,7 +17,6 @@
 
     displayFields: [ 'form_name' ],
 
-    schema: true,
     attributes: {
 
       // system, user generated form

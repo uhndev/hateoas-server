@@ -127,6 +127,11 @@
           }
         };
 
+        // if getQueryLinks is defined as a Model function, set in response
+        if (_.isFunction(sails.models[modelName].getQueryLinks)) {
+          response.queries = sails.models[modelName].getQueryLinks(req.user);
+        }
+
         // when options.links is passed to res.ok, pass onward to HateoasService.create under req.links
         if (options && _.has(options, 'links')) {
           response.links = options.links;

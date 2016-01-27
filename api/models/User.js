@@ -24,7 +24,6 @@
 
     displayFields: [ 'prefix', 'firstname', 'lastname' ],
 
-    schema: true,
     attributes: {
       /**
        * firstname

@@ -87,7 +87,6 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-    schema: true,
 
     attributes: {
 
@@ -224,8 +223,52 @@
 
     /**
      * getResponseLinks
+     * @see top
      */
     getResponseLinks: getResponseLinks,
+
+    /**
+     * getQueryLinks
+     * @description Provides the query links array in our HATEOAS response; these links
+     *              should denote optional queries that can be performed with returned data
+     *
+     * Each queryLink must have a JSON object with either a where key or a populate key:
+     * =================================================================================
+     *
+     * "where": {                 // waterline query to filter on (use this to filter on model records)
+     *  "administrator": user.id
+     * }
+     *
+     * -OR-
+     *
+     * "populate": {
+     *    collection: 'users',    // collection attribute on model to populate (use this to filter on collections)
+     *    where: {                // where clause to conditionally populate on
+     *      id: 1
+     *    }
+     * }
+     *
+     * @param  {Object} user - User object from req.user
+     * @return {Array} Array of query links
+     */
+    getQueryLinks: function(user) {
+      return [
+        {
+          "rel": "default",
+          "prompt": "All Studies",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'study'].join('/'),
+          "where": null
+        },
+        {
+          "rel": "findByAdmin",
+          "prompt": "My Studies",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'study'].join('/'),
+          "where": {
+            "administrator": user.id
+          }
+        }
+      ];
+    },
 
     /**
      * afterUpdate

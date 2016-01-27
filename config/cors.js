@@ -73,6 +73,6 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-  headers: 'accept,content-type,allow,Authorization'
+  headers: 'accept,content-type,allow,Authorization,X-UHN-Deep-Query'
 
 };

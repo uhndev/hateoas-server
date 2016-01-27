@@ -52,12 +52,46 @@ module.exports = function sendOK (data, options) {
           filterQuery.where.expiredAt = null;
         }
 
+        /**
+         * if header was sent from frontend (a query from getQueryLinks), apply populate here
+         * with appropriate where clause for populate to get correct filtered count.
+         *
+         * Header is set in HateoasController.js in dados-client and
+         * queryLinks are defined within the respective Model file in Sails.
+         */
+        var queryFilter = null;
+        if (_.has(req.headers, 'x-uhn-deep-query')) {
+          queryFilter = JSON.parse(req.headers['x-uhn-deep-query']);
+          promise = model.find(filterQuery)
+            .populate(queryFilter.collection, queryFilter.where)
+            .then(function (totalItems) {
+              return _.filter(totalItems, function (item) {
+                return item[queryFilter.collection].length > 0;
+              });
+            });
+        }
+
+        // for non-admins, apply criteria here to get restricted count of permitted records
         if (_.has(req, 'criteria') && req.criteria.length > 0) {
-          promise = model.find(filterQuery).then(function (totalItems) {
-            return PermissionService.filterByCriteria(req.criteria, totalItems).length;
-          });
-        } else {
-          promise = model.count(filterQuery);
+          // if header was included with populate query, filter matchingRecords by given successful matched criteria
+          if (queryFilter && _.has(req.headers, 'x-uhn-deep-query')) {
+            promise = promise.then(function (totalItems) {
+              return PermissionService.filterByCriteria(req.criteria, totalItems).length;
+            });
+          }
+          // otherwise no header set and just filter criteria from find
+          else {
+            promise = model.find(filterQuery).then(function (totalItems) {
+              return PermissionService.filterByCriteria(req.criteria, totalItems).length;
+            });
+          }
+        }
+        // otherwise no criteria set
+        else {
+          // if no header set for populate filter, just do direct count
+          if (!queryFilter) {
+            promise = model.count(filterQuery);
+          }
         }
       }
 
