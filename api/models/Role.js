@@ -18,7 +18,35 @@
   _.merge(exports, _role);
   _.merge(exports, {
 
-    // Extend with custom logic here by adding additional fields, methods, etc.
+    /**
+     * getQueryLinks
+     * @description Provides the query links array in our HATEOAS response; these links
+     *              should denote optional queries that can be performed with returned data
+     *
+     * @param  {Object} user - User object from req.user
+     * @return {Array} Array of query links
+     */
+    getQueryLinks: function(user) {
+      return [
+        {
+          "rel": "default",
+          "prompt": "All Roles",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "where": null
+        },
+        {
+          "rel": "findByAdmin",
+          "prompt": "My Roles",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "populate": {
+            collection: 'users',
+            where: {
+              id: user.id
+            }
+          }
+        }
+      ];
+    },
 
     attributes: {
       groups: {

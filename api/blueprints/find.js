@@ -56,6 +56,19 @@
       });
     }
 
+    /**
+     * if header was sent from frontend (a query from getQueryLinks), apply populate here
+     * with appropriate where clause for populate to get correct filtered count.
+     *
+     * Header is set in HateoasController.js in dados-client and
+     * queryLinks are defined within the respective Model file in Sails.
+     */
+    var queryFilter = null;
+    if (_.has(req.headers, 'x-uhn-deep-query')) {
+      queryFilter = JSON.parse(req.headers['x-uhn-deep-query']);
+      query = query.populate(queryFilter.collection, queryFilter.where);
+    }
+
     query.exec(function found(err, matchingRecords) {
       if (err) return res.serverError(err);
 
@@ -72,7 +85,14 @@
         });
       }
 
-      res.ok(matchingRecords);
+      // if header was included with populate query, filter matchingRecords by given successful matched criteria
+      if (queryFilter) {
+        res.ok(_.filter(matchingRecords, function (record) {
+          return record[queryFilter.collection].length > 0;
+        }));
+      } else {
+        res.ok(matchingRecords);
+      }
     });
   };
 
