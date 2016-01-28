@@ -37,6 +37,10 @@ module.exports.models = {
 
     Site.generateAndCreate()
       .then(Status.generateAndCreate)
+      .then(ServiceCategory.generateAndCreate)
+      .then(WorkStatus.generateAndCreate)
+      .then(Timeframe.generateAndCreate)
+      .then(Prognosis.generateAndCreate)
       .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
       .then(generateMultiple('referral'));

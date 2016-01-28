@@ -1,7 +1,7 @@
 /**
- * address
+ * Address
  *
- * @class address
+ * @class Address
  * @description Model representation of an address
  */
 

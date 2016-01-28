@@ -1,10 +1,8 @@
 /**
- * claim
+ * Claim
  *
- * @class claim
+ * @class Claim
  * @description Model representation of a claim
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/claim.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/claim.js
  */
 
 (function () {

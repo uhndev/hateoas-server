@@ -1,10 +1,8 @@
 /**
- * site
+ * Site
  *
- * @class site
+ * @class Site
  * @description Model representation of a site
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/site.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/site.js
  */
 
 (function () {

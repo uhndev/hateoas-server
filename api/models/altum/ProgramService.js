@@ -1,8 +1,12 @@
 /**
- * ProgramService.js
+ * ProgramService
  *
- * @description :: a model representation of payor services
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class ProgramService
+ * @description A model representation of a program service.  An example of this would be CT SCAN - HEAD
+ *              which would link to both a specific program (i.e. Head and Neck) and parent Altum Service
+ *              (i.e. CT SCAN).  A program service essentially serves as the link between the billing side
+ *              of the application via payors and the assessment/recommendations side via program and altumService.
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
@@ -12,8 +16,6 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-
-    defaultPopulate: [ 'serviceCategory' ],
 
     attributes: {
 
@@ -51,15 +53,6 @@
        */
       altumService: {
         model: 'altumservice'
-      },
-
-      /**
-       * serviceCategory
-       * @description a ProgramService's mapping to it's serviceCategory
-       * @type {Model}
-       */
-      serviceCategory: {
-        model: 'servicecategory'
       },
 
       /**

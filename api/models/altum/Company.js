@@ -1,10 +1,8 @@
 /**
- * company
+ * Company
  *
- * @class company
+ * @class Company
  * @description Model representation of a company
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/company.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/company.js
  */
 
 (function () {

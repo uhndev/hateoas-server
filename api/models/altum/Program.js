@@ -1,8 +1,9 @@
 /**
- * Program.js
+ * Program
  *
- * @description :: A model representing all programs belonging to a particular payor
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Program
+ * @description A model representing all programs belonging to a particular payor
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
@@ -41,12 +42,12 @@
       },
 
       /**
-       * ProgramServices
-       * @description a payor's ProgramServices
-       * @type {String}
+       * altumServices
+       * @description a program's altumServices
+       * @type {Collection}
        */
-      programServices: {
-        collection: 'ProgramService',
+      altumServices: {
+        collection: 'altumservice',
         via: 'program',
         dominant: true
       },

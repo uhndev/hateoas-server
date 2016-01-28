@@ -1,8 +1,8 @@
 /**
- * invoice.js
+ * Invoice
  *
- * @description :: a model representation of an invoice
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @description A model representation of an invoice
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {

@@ -3,8 +3,6 @@
  *
  * @class approval
  * @description Model representation of a approval
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/approval.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/approval.js
  */
 
 (function () {

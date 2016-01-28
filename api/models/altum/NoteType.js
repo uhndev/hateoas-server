@@ -1,8 +1,8 @@
 /**
- * NoteType.js
+ * NoteType
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class NoteType
+ * @description Model representation of a NoteType
  */
 
 (function () {
@@ -44,7 +44,7 @@
 
     },
 
-	  /**
+    /**
      * generate
      * @description Overrides BaseModel.generate to provide fixed NoteTypes for generators.
      * @param state
@@ -59,6 +59,10 @@
         {
           name: 'External',
           iconClass: 'external-note'
+        },
+        {
+          name: 'SOAP',
+          iconClass: 'soap-note'
         }
       ];
     }
