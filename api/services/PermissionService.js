@@ -4,7 +4,7 @@
 
   var _ = require('lodash');
   var _super = require('sails-permissions/dist/api/services/PermissionService');
-  var wlFilter = require('../../node_modules/sails-permissions/node_modules/waterline-criteria');
+  var wlFilter = require('waterline-criteria');
 
   /** @namespace */
   function PermissionService () { }

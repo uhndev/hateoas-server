@@ -16,7 +16,6 @@
 
     defaultSortBy: 'name ASC', // overrides BaseModel.defaultSortBy
 
-    schema: true,
     attributes: {
       /**
        * name

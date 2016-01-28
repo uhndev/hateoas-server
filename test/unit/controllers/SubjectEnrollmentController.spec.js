@@ -6,7 +6,6 @@
  'post /api/subjectenrollment'    : 'SubjectController.create'
  */
 
-var SubjectEnrollmentController = require('../../../api/controllers/SubjectEnrollmentController');
 var Promise = require('bluebird');
 
 describe('The SubjectEnrollment Controller', function () {

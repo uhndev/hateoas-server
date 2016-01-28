@@ -20,7 +20,12 @@ globals = {
 
 before(function (done) {
   this.timeout(30000);
-  Sails.lift({environment: 'test'}, function (err, server) {
+  Sails.lift({
+    environment: 'test',
+    hooks: {
+      grunt: false
+    }
+  }, function(err, server) {
     sails = server;
     if (err) return done(err);
 

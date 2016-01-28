@@ -8,7 +8,6 @@
  'post /api/user'        : 'UserController.create'
  */
 
-var UserController = require('../../../api/controllers/UserController');
 var Promise = require('bluebird');
 
 describe('The User Controller', function () {
@@ -85,6 +84,10 @@ describe('The User Controller', function () {
           })
           .catch(done);
       });
+    });
+
+    after(function (done) {
+      auth.logout(done);
     });
 
     describe('find()', function () {

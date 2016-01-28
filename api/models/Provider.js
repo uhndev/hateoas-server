@@ -14,7 +14,8 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
-    schema: true,
+
+    defaultTemplateOmit: null,
 
     attributes: {
       /**

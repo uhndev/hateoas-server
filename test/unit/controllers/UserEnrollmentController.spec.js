@@ -7,7 +7,6 @@
  'put /api/userenrollment/:id'    : 'UserEnrollmentController.update'
  */
 
-var UserEnrollmentController = require('../../../api/controllers/UserEnrollmentController');
 var Promise = require('bluebird');
 
 describe('The UserEnrollment Controller', function () {

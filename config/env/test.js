@@ -22,7 +22,8 @@ module.exports = {
 
   hooks: {
     "grunt": false,
+    "session": false,
     "csrf": false,
-		"views": false
+    "views": false
   }
 };
