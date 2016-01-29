@@ -1,6 +1,7 @@
 /**
- * SiteStaff.js
+ * SiteStaff
  *
+ * @class SiteStaff
  * @description a model representation of a physician or clinician at a site
  * @docs        http://sailsjs.org/#!documentation/models
  */

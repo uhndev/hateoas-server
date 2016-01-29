@@ -1,8 +1,9 @@
 /**
- * Referral.js
+ * Referral
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Referral
+ * @description Model representation of a Referral, which denotes the initial referral for a physician/site/client
+ *              selection.  After a referral is made, recommendations for medical services can be made for the client.
  */
 
 (function () {

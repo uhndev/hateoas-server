@@ -1,10 +1,8 @@
 /**
- * city
+ * City
  *
- * @class city
+ * @class City
  * @description Model representation of a city
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/city.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/city.js
  */
 
 (function () {

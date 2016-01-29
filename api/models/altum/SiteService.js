@@ -1,8 +1,8 @@
 /**
- * SiteService.js
+ * SiteService
  *
- * @description :: a model of Site Services, used for populating/organizing services on the altum side during daily operations
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @description A model of Site Services, used for populating/organizing services on the altum side during daily operations
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
@@ -16,17 +16,17 @@
     attributes: {
 
       /**
-       * altumService
-       * @description an SiteService's altumService
+       * service
+       * @description an SiteService's service
        * @type {Model}
        */
-      altumService: {
-        model: 'altumService'
+      service: {
+        model: 'service'
       },
 
       /**
        * site
-       * @description an AvailableService's site
+       * @description an Service's site
        * @type {Model}
        */
       site: {

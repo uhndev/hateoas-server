@@ -1,10 +1,8 @@
 /**
- * site
+ * Site
  *
- * @class site
+ * @class Site
  * @description Model representation of a site
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/site.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/site.js
  */
 
 (function () {
@@ -57,6 +55,16 @@
       altumServices: {
         collection: 'altumService',
         via: 'sites'
+      },
+
+      /**
+       * siteServices
+       * @description a collection of a site's services at altum
+       * @type {Collection}
+       */
+      siteServices: {
+        collection: 'siteservice',
+        via: 'site'
       },
 
       /**

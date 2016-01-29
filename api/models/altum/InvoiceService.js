@@ -1,8 +1,8 @@
 /**
- * Service.js
+ * InvoiceService
  *
- * @description :: a model representation of a service, and instance of actual work being done at altum
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @description A model representation of a service, and instance of actual work being done at altum
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {

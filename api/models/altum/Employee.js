@@ -1,8 +1,8 @@
 /**
- * Employee.js
+ * Employee
  *
- * @description :: a table representing the employment of persons in companies
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Employee
+ * @description Model representing the employment of persons in companies
  */
 
 (function () {

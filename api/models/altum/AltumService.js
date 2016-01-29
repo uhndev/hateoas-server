@@ -1,8 +1,10 @@
 /**
- * AvailableService.js
+ * AltumService
  *
- * @description :: a model of AvailableServices, used for populating/organizing services on the altum side during daily operations
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class altumservice
+ * @description A model of AltumServices, used for populating/organizing services on the altum side during daily operations
+ *              and represents the available services that Altum provides.
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
@@ -14,6 +16,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: [ 'programServices' ],
+
     attributes: {
 
       /**
@@ -21,9 +25,17 @@
        * @description an AltumService's name
        * @type {String}
        */
-
       name: {
         type: 'string'
+      },
+
+      /**
+       * program
+       * @description a altumService's program (at altum), only for driving dropdowns
+       * @type {Model}
+       */
+      program: {
+        model: 'program'
       },
 
       /**
@@ -31,20 +43,19 @@
        * @description an AvailableService's programServices
        * @type {Collection}
        */
-
       programServices: {
-        collection: 'programService',
-        via: 'altumService'
+        collection: 'programservice',
+        via: 'AHServices'
       },
 
       /**
        * available
        * @description an AvailableService's availability
-       * @type {String}
+       * @type {Boolean}
        */
-
       available: {
-        type: 'boolean'
+        type: 'boolean',
+        defaultsTo: true
       },
 
       /**
@@ -52,10 +63,18 @@
        * @description a collection of a site's where the altumService is offered
        * @type {Collection}
        */
-
       sites: {
         collection: 'site',
         via: 'altumServices'
+      },
+
+      /**
+       * serviceCategory
+       * @description a ProgramService's mapping to it's serviceCategory
+       * @type {Model}
+       */
+      serviceCategory: {
+        model: 'servicecategory'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
