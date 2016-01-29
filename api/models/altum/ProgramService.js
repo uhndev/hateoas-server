@@ -2,9 +2,10 @@
  * ProgramService
  *
  * @class ProgramService
- * @description A model of AltumServices, used for populating/organizing services on the altum side during daily operations
- *              and represents the available services that Altum provides.  Further specification is done in ProgramService
- *              where an example of an Altum Service can be CT SCAN, then a sample Program Service would be CT SCAN - HEAD.
+ * @description A model representation of an program service.  An example of this would be CT SCAN
+ *              which would link to both a specific program (i.e. Head and Neck) and Altum Services
+ *              (i.e. CT SCAN - HEAD).  A program service essentially serves as the link between the billing side
+ *              of the application via payors and the assessment/recommendations side via program and altumService.
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
@@ -66,6 +67,61 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    generate: function(state) {
+      return {
+        name: '[TEST] CT SCAN',
+        program: {
+          name: '[TEST] WSIB Back and Neck Program'
+        },
+        price: _.random(100, 100000),
+        AHServices: [
+          {
+            name: '[TEST] CT SCAN - HEAD',
+            program: null,
+            serviceCategory: null
+          },
+          {
+            name: '[TEST] CT SCAN - NECK',
+            program: null,
+            serviceCategory: null
+          },
+          {
+            name: '[TEST] CT SCAN - BACK',
+            program: null,
+            serviceCategory: null
+          }
+        ]
+      }
+    },
+
+    generateAndCreate: function(state) {
+      var programService = this.generate();
+      return Program.findOrCreate({ name: programService.program.name }, programService.program)
+        .then(function (program) {
+          // set newly created program ID
+          delete programService.program;
+          programService.program = program.id;
+
+          // apply program IDs to altumServices
+          programService.AHServices = _.map(programService.AHServices, function (altumService) {
+            altumService.program = program.id;
+            return altumService;
+          });
+          return ServiceCategory.findOneByName('Diagnosis');
+        })
+        .then(function (serviceCategory) {
+          // apply serviceCategory IDs to altumServices
+          programService.AHServices = _.map(programService.AHServices, function (altumService) {
+            altumService.serviceCategory = serviceCategory.id;
+            return altumService;
+          });
+          return ProgramService.findOrCreate({ name: programService.name }, programService);
+        })
+        .then(function (programService) {
+          sails.log.info("ProgramService: (" + programService.name + ") generated");
+        });
     }
 
   });

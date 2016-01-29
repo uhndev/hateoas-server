@@ -58,6 +58,16 @@
       },
 
       /**
+       * siteServices
+       * @description a collection of a site's services at altum
+       * @type {Collection}
+       */
+      siteServices: {
+        collection: 'siteservice',
+        via: 'site'
+      },
+
+      /**
        * siteStaff
        * @description Collection of physicians or clinicians registered at this site
        * @type {Collection}

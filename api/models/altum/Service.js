@@ -68,6 +68,16 @@
       },
 
       /**
+       * siteServices
+       * @description a collection of a site's services at altum
+       * @type {Collection}
+       */
+      siteServices: {
+        collection: 'siteservice',
+        via: 'service'
+      },
+
+      /**
        * approved
        * @description presently this is just a boolean to flag it as approved
        * @type {Boolean}
