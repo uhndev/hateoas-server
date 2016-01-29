@@ -2,9 +2,10 @@
  * AltumService
  *
  * @class altumservice
- * @description A model of AltumServices, used for populating/organizing services on the altum side during daily operations
- *              and represents the available services that Altum provides.  Further specification is done in ProgramService
- *              where an example of an Altum Service can be CT SCAN, then a sample Program Service would be CT SCAN - HEAD.
+ * @description A model representation of a program service.  An example of this would be CT SCAN - HEAD
+ *              which would link to both a specific program (i.e. Head and Neck) and parent Altum Service
+ *              (i.e. CT SCAN).  A program service essentially serves as the link between the billing side
+ *              of the application via payors and the assessment/recommendations side via program and altumService.
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
@@ -17,7 +18,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'programServices', 'serviceCategory' ],
+    defaultPopulate: [ 'programServices' ],
 
     attributes: {
 
@@ -45,8 +46,8 @@
        * @type {Collection}
        */
       programServices: {
-        collection: 'programService',
-        via: 'altumService'
+        collection: 'programservice',
+        via: 'AHServices'
       },
 
       /**
@@ -55,7 +56,8 @@
        * @type {Boolean}
        */
       available: {
-        type: 'boolean'
+        type: 'boolean',
+        defaultsTo: true
       },
 
       /**

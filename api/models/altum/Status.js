@@ -14,7 +14,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultSortBy: 'createdAt ASC',
+    defaultSortBy: 'id ASC',
 
     attributes: {
 
@@ -27,7 +27,7 @@
         type: 'string'
       },
 
-	    /**
+      /**
        * category
        * @description A status's category
        * @type {String}

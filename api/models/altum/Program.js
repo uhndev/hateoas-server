@@ -42,12 +42,12 @@
       },
 
       /**
-       * altumServices
-       * @description a program's altumServices
+       * programServices
+       * @description a program's programServices
        * @type {Collection}
        */
-      altumServices: {
-        collection: 'altumservice',
+      programServices: {
+        collection: 'programservice',
         via: 'program',
         dominant: true
       },

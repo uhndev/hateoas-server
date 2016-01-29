@@ -14,6 +14,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultSortBy: 'id ASC',
+
     attributes: {
 
       /**
@@ -41,7 +43,7 @@
        * @type {Model}
        */
       timeframe: {
-        model: 'model'
+        model: 'timeframe'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

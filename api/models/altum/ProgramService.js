@@ -2,10 +2,9 @@
  * ProgramService
  *
  * @class ProgramService
- * @description A model representation of a program service.  An example of this would be CT SCAN - HEAD
- *              which would link to both a specific program (i.e. Head and Neck) and parent Altum Service
- *              (i.e. CT SCAN).  A program service essentially serves as the link between the billing side
- *              of the application via payors and the assessment/recommendations side via program and altumService.
+ * @description A model of AltumServices, used for populating/organizing services on the altum side during daily operations
+ *              and represents the available services that Altum provides.  Further specification is done in ProgramService
+ *              where an example of an Altum Service can be CT SCAN, then a sample Program Service would be CT SCAN - HEAD.
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
@@ -21,7 +20,7 @@
 
       /**
        * name
-       * @description a payorService's name
+       * @description a programService's name
        * @type {String}
        */
       name: {
@@ -30,7 +29,7 @@
 
       /**
        * program
-       * @description a payorService's program (at altum), only for driving dropdowns
+       * @description a programService's program (at altum), only for driving dropdowns
        * @type {String}
        */
       program: {
@@ -39,7 +38,7 @@
 
       /**
        * price
-       * @description a payor's billing max price for a service
+       * @description a programService's billing max price for a service
        * @type {Integer}
        */
       price: {
@@ -47,17 +46,19 @@
       },
 
       /**
-       * altumService
-       * @description a payorService's mapping to it's altumService
-       * @type {String}
+       * AHServices
+       * @description an AvailableService's AHServices
+       * @type {Collection}
        */
-      altumService: {
-        model: 'altumservice'
+      AHServices: {
+        collection: 'altumservice',
+        via: 'programServices',
+        dominant: true
       },
 
       /**
        * payor
-       * @description a payorService's payor
+       * @description a programService's payor
        * @type {String}
        */
       payor: {

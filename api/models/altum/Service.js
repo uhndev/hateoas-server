@@ -31,6 +31,15 @@
       },
 
       /**
+       * altumService
+       * @description a serivce's associated altumService
+       * @type {Model}
+       */
+      altumService: {
+        model: 'altumService'
+      },
+
+      /**
        * programService
        * @description a serivce's associated programService
        * @type {Model}
@@ -44,9 +53,10 @@
        * @description a collection of a service's associated providers
        * @type {Collection}
        */
-      serviceProviders: {
-        collection: 'user'
-      },
+      // @TODO: Collection of physicians people who perform the service
+      //serviceProviders: {
+      //  collection: 'user'
+      //},
 
       /**
        * status
@@ -77,16 +87,16 @@
      *              from fields listed in the defaultsTo attribute of displayName
      *              this can be overridden in child models inheriting from the
      *              basemodel to pick specific fields
-     * @param  {Object}   values  given programService object for creation
+     * @param  {Object}   values  given Service object for creation
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      if (values.programService) {
-        ProgramService.findOne(values.programService).exec(function (err, programService) {
+      if (values.altumService) {
+        AltumService.findOne(values.altumService).exec(function (err, altumService) {
           if (err) {
             cb(err);
           } else {
-            values.displayName = programService.displayName;
+            values.displayName = altumService.displayName;
             cb();
           }
         });
