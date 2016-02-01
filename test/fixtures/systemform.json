@@ -710,6 +710,23 @@
       },
       {
         "field_id": 4,
+        "field_name": "sites",
+        "field_title": "Sites",
+        "field_type": "multiselect",
+        "field_value": [],
+        "field_placeholder": "Enter a multiselect value",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "missing input or invalid",
+        "field_hasItems": true,
+        "field_required": true,
+        "field_baseQuery": {},
+        "field_userURL": "site"
+      },
+      {
+        "field_id": 5,
         "field_name": "available",
         "field_title": "Available",
         "field_type": "checkbox",

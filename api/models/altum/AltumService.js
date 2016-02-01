@@ -16,7 +16,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'programServices' ],
+    defaultPopulate: [ 'programServices', 'sites' ],
 
     attributes: {
 

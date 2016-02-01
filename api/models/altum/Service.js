@@ -59,12 +59,75 @@
       //},
 
       /**
+       * physician
+       * @description Reference to the physician who recommended this particular service
+       * @type {Model}
+       */
+      physician: {
+        model: 'physician'
+      },
+
+      /**
+       * clinician
+       * @description Reference to the clinician who assisted in the recommendation of this service
+       * @type {Model}
+       */
+      clinician: {
+        model: 'clinician'
+      },
+
+      /**
        * status
        * @description Status of recommended service
        * @type {Model}
        */
       status: {
         model: 'status'
+      },
+
+      /**
+       * workStatus
+       * @description Reference to the current work status of the client at the time of service recommendation
+       * @type {Model}
+       */
+      workStatus: {
+        model: 'workstatus'
+      },
+
+      /**
+       * prognosis
+       * @description Reference to the current prognosis of the client at the time of service recommendation
+       * @type {Model}
+       */
+      prognosis: {
+        model: 'prognosis'
+      },
+
+      /**
+       * timeframe
+       * @description A prognosis's timeframe
+       * @type {Model}
+       */
+      prognosisTimeframe: {
+        model: 'timeframe'
+      },
+
+      /**
+       * serviceDate
+       * @description Date on which this service was recommended (should technically be same as createdAt but w/e)
+       * @type {Date}
+       */
+      serviceDate: {
+        type: 'date'
+      },
+
+      /**
+       * serviceType
+       * @description The type of service that it falls under
+       * @type {Model}
+       */
+      serviceType: {
+        model: 'servicetype'
       },
 
       /**
@@ -75,6 +138,16 @@
       siteServices: {
         collection: 'siteservice',
         via: 'service'
+      },
+
+      /**
+       * approvalNeeded
+       * @description Denotes whether approval is needed or not for this service
+       * @type {Boolean}
+       */
+      approvalNeeded: {
+        type: 'boolean',
+        defaultsTo: true
       },
 
       /**
