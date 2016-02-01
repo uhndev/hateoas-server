@@ -104,6 +104,15 @@
       },
 
       /**
+       * timeframe
+       * @description A prognosis's timeframe
+       * @type {Model}
+       */
+      prognosisTimeframe: {
+        model: 'timeframe'
+      },
+
+      /**
        * serviceDate
        * @description Date on which this service was recommended (should technically be same as createdAt but w/e)
        * @type {Date}

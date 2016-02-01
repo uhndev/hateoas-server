@@ -37,15 +37,6 @@
         defaultsTo: false
       },
 
-      /**
-       * timeframe
-       * @description A prognosis's timeframe
-       * @type {Model}
-       */
-      timeframe: {
-        model: 'timeframe'
-      },
-
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
