@@ -47,7 +47,7 @@
         { name: 'CA', category: 'WSIB Specialty' },
         { name: 'FPP CA', category: 'WSIB Specialty' },
         { name: 'FU', category: 'WSIB Specialty' },
-        { name: 'Re-Ax', category: 'WSIB  Specialty' },
+        { name: 'Re-Ax', category: 'WSIB Specialty' },
         { name: 'Spec Consult', category: 'WSIB Specialty' },
         { name: 'Pain Ax', category: 'WSIB Specialty' },
         { name: 'Med Spec FU', category: 'WSIB Specialty' },
