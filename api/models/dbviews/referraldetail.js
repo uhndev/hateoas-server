@@ -26,6 +26,14 @@
         ].join('/')
       },
       {
+        'rel': sails.models.altumprogramservices.identity,
+        'prompt': 'APP.HEADER.SUBMENU.RECOMMENDATIONS',
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'recommendations'
+        ].join('/')
+      },
+      {
         'rel': sails.models.service.identity,
         'prompt': 'APP.HEADER.SUBMENU.SERVICES',
         'name': 'name',
@@ -98,6 +106,9 @@
         model: 'client'
       },
       client_mrn: {
+        type: 'string'
+      },
+      client_displayName: {
         type: 'string'
       },
       client_firstName: {

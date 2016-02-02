@@ -9,9 +9,9 @@
 (function () {
 
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var StudyBase = require('./BaseControllers/ModelBaseController');
+  var ModelBase = require('./BaseControllers/ModelBaseController');
 
-  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
+  _.merge(exports, ModelBase);      // inherits ModelBaseController.findByBaseModel
   _.merge(exports, {
 
   });

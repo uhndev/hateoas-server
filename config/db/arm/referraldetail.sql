@@ -26,6 +26,7 @@ CREATE OR REPLACE VIEW referraldetail AS
     referral."recommendationsMade",
     referral.client,
     client."MRN" AS client_mrn,
+    client."displayName" AS "client_displayName",
     person."firstName" AS "client_firstName",
     person."lastName" AS "client_lastName",
     person.prefix AS client_prefix,
