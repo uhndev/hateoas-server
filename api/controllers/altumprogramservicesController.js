@@ -45,11 +45,10 @@
      * @description Finds one referral's available services with site information
      */
     findAvailableServices: function (req, res) {
-      Referral.findOne(req.param('id'))
-        .populate('client')
+      referraldetail.findOne(req.param('id'))
         .then(function (referral) {
           this.referral = referral;
-          this.displayName = referral.client.displayName;
+          this.displayName = referral.client_displayName;
           return altumprogramservices.find({ program: referral.program });
         })
         .then(function (services) {

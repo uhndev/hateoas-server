@@ -108,6 +108,9 @@
       client_mrn: {
         type: 'string'
       },
+      client_displayName: {
+        type: 'string'
+      },
       client_firstName: {
         type: 'string'
       },
