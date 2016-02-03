@@ -5,8 +5,8 @@
  */
 
 (function () {
-  var ClientModel = require('./../altum/Client.js');
-  var _super = require('./baseView.js');
+  var ClientModel = require('./../../altum/Client.js');
+  var _super = require('./altumBaseView.js');
 
   var getResponseLinks = function (id, name) {
     return [

@@ -9,7 +9,7 @@
 
 (function () {
 
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -54,6 +54,15 @@
        * @type {Boolean}
        */
       available: {
+        type: 'boolean',
+        defaultsTo: true
+      },
+
+      /**
+       * defaultNeedsApproval
+       * @description Boolean denoting whether this service needs approval or not by default
+       */
+      defaultNeedsApproval: {
         type: 'boolean',
         defaultsTo: true
       },

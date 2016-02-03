@@ -4,8 +4,8 @@
  */
 
 (function () {
-  var ReferralModel = require('./../altum/Referral.js');
-  var _super = require('./baseView.js');
+  var ReferralModel = require('./../../altum/Referral.js');
+  var _super = require('./altumBaseView.js');
 
   var getResponseLinks = function (id, name) {
     return [
