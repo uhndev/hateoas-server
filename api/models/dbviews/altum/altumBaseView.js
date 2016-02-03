@@ -1,5 +1,6 @@
 /**
- * A virtual model representing a database view.  Extends baseView to set schemaName.
+ * altumBaseView
+ * @description A virtual model representing a database view.  Inherits baseView to set schemaName.
  */
 (function () {
   var _super = require('./../baseView.js');
