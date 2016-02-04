@@ -1,11 +1,11 @@
 /**
  * A virtual model representing a database view.
- * See config/db/arm/referraldetail.sql for view definition.
+ * See config/db/altum/referraldetail.sql for view definition.
  */
 
 (function () {
-  var ReferralModel = require('./../altum/Referral.js');
-  var _super = require('./baseView.js');
+  var ReferralModel = require('./../../altum/Referral.js');
+  var _super = require('./altumBaseView.js');
 
   var getResponseLinks = function (id, name) {
     return [

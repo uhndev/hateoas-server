@@ -40,13 +40,13 @@ module.exports.connections = {
   * Run: npm install sails-mysql                                             *
   *                                                                          *
   ***************************************************************************/
-  arm_mysql: {
+  altum_mysql: {
     adapter: 'sails-mysql',
     host: 'localhost',
     port: 3306,
     user: 'root',
     password: 'password',
-    database: 'arm_dev'
+    database: 'altum_dev'
   },
 
   /***************************************************************************
@@ -58,7 +58,7 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
 
-  arm_audit: {
+  altum_audit: {
       adapter   : 'sails-mongo',
       host      : 'localhost',
       port      : 27017,
@@ -87,7 +87,7 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_dev'
+    database: 'altum_dev'
   },
 
   dados_migrate: {
@@ -96,7 +96,7 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_prod'
+    database: 'altum_prod'
   },
 
   dados_production: {
@@ -105,7 +105,7 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_prod'
+    database: 'altum_prod'
   },
 
   dados_test: {
@@ -114,43 +114,43 @@ module.exports.connections = {
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_test'
+    database: 'altum_test'
   },
 
-  arm_development: {
+  altum_development: {
     adapter: 'sails-postgresql',
       host: 'localhost',
       port: 5432,
       user: 'postgres',
       password: 'password',
-      database: 'arm_dev'
+      database: 'altum_dev'
   },
 
-  arm_migrate: {
+  altum_migrate: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_prod'
+    database: 'altum_prod'
   },
 
-  arm_production: {
+  altum_production: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_prod'
+    database: 'altum_prod'
   },
 
-  arm_test: {
+  altum_test: {
     adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'arm_test'
+    database: 'altum_test'
   }
 
   /***************************************************************************

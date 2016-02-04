@@ -10,7 +10,7 @@
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -64,6 +64,15 @@
        */
       payor: {
         model: 'payor'
+      },
+
+      /**
+       * approvalRequired
+       * @description Boolean denoting whether this service needs approval or not by default
+       */
+      approvalRequired: {
+        type: 'boolean',
+        defaultsTo: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

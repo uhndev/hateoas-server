@@ -8,7 +8,7 @@ module.exports = {
 
   models: {
     migrate: 'drop',
-    connection: 'arm_test'
+    connection: 'altum_test'
   },
 
   // configuration for testing purposes

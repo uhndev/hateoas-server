@@ -160,6 +160,8 @@
       },
       {
         "field_id": 9,
+        "field_name": "group",
+        "field_title": "Group",
         "field_type": "dropdown",
         "field_value": "",
         "field_placeholder": "Select a group",

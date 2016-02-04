@@ -2,7 +2,7 @@
 -- returns client and person data
 
 -- DROP VIEW clientcontact;
-CREATE OR REPLACE VIEW clientcontact AS
+CREATE OR REPLACE VIEW altum.clientcontact AS
   SELECT
     client.id,
     client."MRN",
@@ -32,9 +32,9 @@ CREATE OR REPLACE VIEW clientcontact AS
     client."createdBy",
     client."createdAt",
     client."updatedAt"
-  FROM client
-    LEFT JOIN person ON (client.person = person.ID)
-    LEFT JOIN address on (person.id = address.person)
-    LEFT JOIN city on (address.city = city.id);
-ALTER TABLE clientcontact
+  FROM altum.client
+    LEFT JOIN altum.person ON (client.person = person.ID)
+    LEFT JOIN altum.address on (person.id = address.person)
+    LEFT JOIN altum.city on (address.city = city.id);
+ALTER TABLE altum.clientcontact
 OWNER TO postgres;

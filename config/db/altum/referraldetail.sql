@@ -3,7 +3,7 @@
 
 -- DROP VIEW referraldetail;
 
-CREATE OR REPLACE VIEW referraldetail AS
+CREATE OR REPLACE VIEW altum.referraldetail AS
  SELECT
     referral.id,
     client."displayName" AS "displayName",
@@ -51,15 +51,15 @@ CREATE OR REPLACE VIEW referraldetail AS
     referral."createdBy",
     referral."createdAt",
     referral."updatedAt"
-FROM referral
-  LEFT JOIN claim ON referral.claim = claim.id
-  LEFT JOIN client ON referral.client = client.id
-  LEFT JOIN person ON client.person = person.id
-  LEFT JOIN address ON address.person = person.id
-  LEFT JOIN status ON referral.status = status.id
-  LEFT JOIN physician ON referral.physician = physician.id
-  LEFT JOIN clinician ON referral.clinician = clinician.id
-  LEFT JOIN site ON referral.site = site.id
-  LEFT JOIN program ON referral.program = program.id;
-ALTER TABLE referraldetail
+FROM altum.referral
+  LEFT JOIN altum.claim ON referral.claim = claim.id
+  LEFT JOIN altum.client ON referral.client = client.id
+  LEFT JOIN altum.person ON client.person = person.id
+  LEFT JOIN altum.address ON address.person = person.id
+  LEFT JOIN altum.status ON referral.status = status.id
+  LEFT JOIN altum.physician ON referral.physician = physician.id
+  LEFT JOIN altum.clinician ON referral.clinician = clinician.id
+  LEFT JOIN altum.site ON referral.site = site.id
+  LEFT JOIN altum.program ON referral.program = program.id;
+ALTER TABLE altum.referraldetail
 OWNER TO postgres;

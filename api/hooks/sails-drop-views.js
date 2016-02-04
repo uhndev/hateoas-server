@@ -18,6 +18,7 @@
 
   module.exports = function (sails) {
     var env = sails.config.environment;
+    var dropViewsSQL = fs.readFileSync('config/scripts/sql/drop-all-views.sql', "utf8");
 
     var connections = [];
     _.each(fs.readdirSync('config/db'), function(db) {
@@ -36,10 +37,7 @@
         sails.after('hook:blueprints:loaded', function () {
           Promise.all(
             _.map(connections, function (connection) {
-              var dropQuery = _.map(fs.readdirSync('config/db/' + connection.dbName), function(file) {
-                return 'DROP VIEW IF EXISTS ' + file.slice(0, -4).toString() + ';';
-              }).join(' ');
-              return connection.pgConnection.query(dropQuery);
+              return connection.pgConnection.query(dropViewsSQL);
             }))
             .then(function (result) {
               sails.log.info('Drop View Query executed successfully');

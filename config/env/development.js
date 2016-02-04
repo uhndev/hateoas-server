@@ -22,6 +22,6 @@ module.exports = {
   },
   models: {
     migrate: 'alter',
-    connection: 'arm_development'
+    connection: 'altum_development'
   }
 };

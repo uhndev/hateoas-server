@@ -5,46 +5,52 @@
  * @description Model representation of a Note
  */
 
-module.exports = {
+(function () {
+  var _super = require('./AltumBaseModel.js');
+  var _ = require('lodash');
 
-  attributes: {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-    /**
-     * name
-     * @description note text
-     * @type {String}
-     */
-    text: {
-      type: 'string'
-    },
+    attributes: {
 
-    /**
-     * name
-     * @description A referral which the note belong to
-     * @type {Model}
-     */
-    referral: {
-      model: 'referral'
-    },
+      /**
+       * name
+       * @description note text
+       * @type {String}
+       */
+      text: {
+        type: 'string'
+      },
 
-    /**
-     * name
-     * @description A client which the note belong to
-     * @type {Model}
-     */
-    client: {
-      model: 'client'
-    },
+      /**
+       * name
+       * @description A referral which the note belong to
+       * @type {Model}
+       */
+      referral: {
+        model: 'referral'
+      },
 
-    /**
-     * name
-     * @description A note type
-     * @type {Model}
-     */
-    noteType: {
-      model: 'NoteType'
+      /**
+       * name
+       * @description A client which the note belong to
+       * @type {Model}
+       */
+      client: {
+        model: 'client'
+      },
+
+      /**
+       * name
+       * @description A note type
+       * @type {Model}
+       */
+      noteType: {
+        model: 'NoteType'
+      }
     }
+  });
 
-  }
-};
+})();
 
