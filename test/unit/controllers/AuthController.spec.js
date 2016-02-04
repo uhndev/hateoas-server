@@ -16,7 +16,7 @@ describe('The Auth Controller', function () {
     });
 
     it('should use the correct test database', function (done) {
-      sails.config.models.connection.should.equal('arm_test');
+      sails.config.models.connection.should.equal('altum_test');
       done();
     });
 
