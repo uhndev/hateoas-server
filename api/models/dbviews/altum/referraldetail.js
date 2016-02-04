@@ -1,6 +1,6 @@
 /**
  * A virtual model representing a database view.
- * See config/db/arm/referraldetail.sql for view definition.
+ * See config/db/altum/referraldetail.sql for view definition.
  */
 
 (function () {

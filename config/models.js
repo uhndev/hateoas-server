@@ -42,6 +42,7 @@ module.exports.models = {
       .then(Timeframe.generateAndCreate)
       .then(Prognosis.generateAndCreate)
       .then(ServiceType.generateAndCreate)
+      .then(ProgramService.generateAndCreate)
       .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
       .then(generateMultiple('referral'));

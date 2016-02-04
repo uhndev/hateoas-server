@@ -66,6 +66,15 @@
         model: 'payor'
       },
 
+      /**
+       * approvalRequired
+       * @description Boolean denoting whether this service needs approval or not by default
+       */
+      approvalRequired: {
+        type: 'boolean',
+        defaultsTo: true
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

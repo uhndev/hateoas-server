@@ -59,15 +59,6 @@
       },
 
       /**
-       * defaultNeedsApproval
-       * @description Boolean denoting whether this service needs approval or not by default
-       */
-      defaultNeedsApproval: {
-        type: 'boolean',
-        defaultsTo: true
-      },
-
-      /**
        * sites
        * @description a collection of a site's where the altumService is offered
        * @type {Collection}
