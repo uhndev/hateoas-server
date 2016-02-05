@@ -68,7 +68,7 @@
 
       /**
        * approvalRequired
-       * @description Boolean denoting whether this service needs approval or not by default
+       * @description Boolean denoting whether this service needs approval or not by default and locked
        */
       approvalRequired: {
         type: 'boolean',

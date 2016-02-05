@@ -52,18 +52,7 @@
           return altumprogramservices.find({ program: referral.program });
         })
         .then(function (services) {
-          return AltumService.find({ id: _.pluck(services, 'id') })
-            .populate('sites')
-            .then(function (serviceSites) {
-              var serviceDirectory = _.indexBy(serviceSites, 'id');
-              return _.map(services, function (service) {
-                service.sites = serviceDirectory[service.id].sites;
-                return service;
-              });
-            });
-        })
-        .then(function (serviceSites) {
-          this.referral.availableServices = serviceSites;
+          this.referral.availableServices = services;
           res.ok(this.referral, {
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
           });

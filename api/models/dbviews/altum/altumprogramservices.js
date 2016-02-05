@@ -29,6 +29,9 @@
       program: {
         model: 'program'
       },
+      approvalRequired: {
+        type: 'boolean'
+      },
       programName: {
         type: 'string'
       },
