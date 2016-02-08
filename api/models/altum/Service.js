@@ -49,6 +49,15 @@
       },
 
       /**
+       * site
+       * @description A reference to the site this service will be performed at
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
+      },
+
+      /**
        * serviceProviders
        * @description a collection of a service's associated providers
        * @type {Collection}
@@ -74,15 +83,6 @@
        */
       clinician: {
         model: 'clinician'
-      },
-
-      /**
-       * status
-       * @description Status of recommended service
-       * @type {Model}
-       */
-      status: {
-        model: 'status'
       },
 
       /**
@@ -115,10 +115,10 @@
       /**
        * serviceDate
        * @description Date on which this service was recommended (should technically be same as createdAt but w/e)
-       * @type {Date}
+       * @type {Datetime}
        */
       serviceDate: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
@@ -128,16 +128,6 @@
        */
       serviceType: {
         model: 'servicetype'
-      },
-
-      /**
-       * siteServices
-       * @description a collection of a site's services at altum
-       * @type {Collection}
-       */
-      siteServices: {
-        collection: 'siteservice',
-        via: 'service'
       },
 
       /**
@@ -151,13 +141,13 @@
       },
 
       /**
-       * approved
-       * @description presently this is just a boolean to flag it as approved
-       * @type {Boolean}
+       * approvals
+       * @description Collection of approvals linked to a specific service (history of approvals)
+       * @type {Collection}
        */
-      approved: {
-        type: 'boolean',
-        defaultsTo: false
+      approvals: {
+        collection: 'approval',
+        via: 'service'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -188,20 +178,20 @@
       }
     },
 
-    findByBaseModel: function (referralID, currUser, options) {
-      var query = _.cloneDeep(options);
-      query.where = query.where || {};
-      delete query.where.id;
-      return referraldetail.findOne(referralID).then(function (referral) {
-          this.links = referraldetail.getResponseLinks(referral.id, referral.displayName);
-          return Service.find(query).where({referral: referralID});
-        })
-        .then(function (services) {
-          return {
-            data: services,
-            links: this.links
-          };
-        });
+    afterCreate: function (service, cb) {
+      if (service.approvalNeeded) {
+        Status.findOneByName('Pending').then(function (status) {
+            return Approval.create({
+              status: status.id,
+              service: service.id
+            });
+          })
+          .then(function () {
+            cb();
+          }).catch(cb);
+      } else {
+        cb();
+      }
     }
 
   });

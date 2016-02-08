@@ -26,6 +26,24 @@
       },
 
       /**
+       * status
+       * @description Status of approval for service
+       * @type {Model}
+       */
+      status: {
+        model: 'status'
+      },
+
+      /**
+       * service
+       * @description Reference to the service which requires approval
+       * @type {Model}
+       */
+      service: {
+        model: 'service'
+      },
+
+      /**
        * approvalDate
        * @description A approval's date
        * @type {date}

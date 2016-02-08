@@ -36,7 +36,7 @@
         type: 'string',
         enum: [
           'referral',
-          'service'
+          'approval'
         ]
       },
 
@@ -48,10 +48,10 @@
         { name: 'Open', category: 'referral' },
         { name: 'Discharged', category: 'referral' },
         { name: 'Follow-up', category: 'referral' },
-        { name: 'Approved', category: 'service' },
-        { name: 'Pending', category: 'service' },
-        { name: 'No response from WSIB', category: 'service' },
-        { name: 'Denied', category: 'service' }
+        { name: 'Approved', category: 'approval' },
+        { name: 'Pending', category: 'approval' },
+        { name: 'No response from WSIB', category: 'approval' },
+        { name: 'Denied', category: 'approval' }
       ];
     },
 
