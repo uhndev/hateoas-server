@@ -21,7 +21,7 @@ module.exports = {
     level: 'verbose'
   },
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     connection: 'dados_development'
   }
 };
