@@ -7,12 +7,34 @@
  */
 
 (function () {
-
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-  var ModelBase = require('./BaseControllers/ModelBaseController');
+  var _ = require('lodash');
 
-  _.merge(exports, ModelBase);      // inherits ModelBaseController.findByBaseModel
-  _.merge(exports, {
+  module.exports = {
 
-  });
+    /**
+     * findRecommendedServices
+     * @description Find method for returning services that were recommended for a referral
+     * @param req
+     * @param res
+     * @returns {*}
+     */
+    findRecommendedServices: function (req, res) {
+      var referralID = req.param('id');
+      return referraldetail.findOne(referralID)
+        .then(function (referral) {
+          this.referral = referral;
+          this.displayName = referral.client_displayName;
+          return servicedetail.find({referral: referralID}).sort('serviceDate ASC');
+        })
+        .then(function (services) {
+          this.referral.recommendedServices = services;
+          res.ok(this.referral, {
+            links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
+          });
+        })
+        .catch(res.badRequest);
+    }
+  };
+
 })();

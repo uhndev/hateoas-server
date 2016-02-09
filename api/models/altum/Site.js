@@ -58,12 +58,12 @@
       },
 
       /**
-       * siteServices
-       * @description a collection of a site's services at altum
+       * services
+       * @description A collection of a site's services at altum
        * @type {Collection}
        */
-      siteServices: {
-        collection: 'siteservice',
+      services: {
+        collection: 'service',
         via: 'site'
       },
 
