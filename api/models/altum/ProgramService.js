@@ -75,10 +75,19 @@
         defaultsTo: true
       },
 
+      /**
+       * code
+       * @description a programService's code
+       * @type {String}
+       */
+      code: {
+        type: 'string'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
-    generate: function(state) {
+    generate: function (state) {
       return {
         name: '[TEST] CT SCAN',
         program: {
@@ -89,25 +98,28 @@
           {
             name: '[TEST] CT SCAN - HEAD',
             program: null,
-            serviceCategory: null
+            serviceCategory: null,
+            code: 'scu1000'
           },
           {
             name: '[TEST] CT SCAN - NECK',
             program: null,
-            serviceCategory: null
+            serviceCategory: null,
+            code: 'scu1000'
           },
           {
             name: '[TEST] CT SCAN - BACK',
             program: null,
-            serviceCategory: null
+            serviceCategory: null,
+            code: 'scu`1000'
           }
         ]
       }
     },
 
-    generateAndCreate: function(state) {
+    generateAndCreate: function (state) {
       var programService = this.generate();
-      return Program.findOrCreate({ name: programService.program.name }, programService.program)
+      return Program.findOrCreate({name: programService.program.name}, programService.program)
         .then(function (program) {
           // set newly created program ID
           delete programService.program;
@@ -126,7 +138,7 @@
             altumService.serviceCategory = serviceCategory.id;
             return altumService;
           });
-          return ProgramService.findOrCreate({ name: programService.name }, programService);
+          return ProgramService.findOrCreate({name: programService.name}, programService);
         })
         .then(function (programService) {
           sails.log.info("ProgramService: (" + programService.name + ") generated");
