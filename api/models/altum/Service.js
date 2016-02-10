@@ -141,6 +141,15 @@
       },
 
       /**
+       * currentApproval
+       * @description Pointer to the current approval in our approval history
+       * @type {Model}
+       */
+      currentApproval: {
+        model: 'approval'
+      },
+
+      /**
        * approvals
        * @description Collection of approvals linked to a specific service (history of approvals)
        * @type {Collection}
@@ -178,20 +187,25 @@
       }
     },
 
+    /**
+     * afterCreate
+     * @description After creating a Service as part of the recommendations process,
+     *              add the default starting state of 'Pending' iff that service was
+     *              created with the approvalNeeded flag set to true.
+     * @param service
+     * @param cb
+     */
     afterCreate: function (service, cb) {
-      if (service.approvalNeeded) {
-        Status.findOneByName('Pending').then(function (status) {
-            return Approval.create({
-              status: status.id,
-              service: service.id
-            });
-          })
-          .then(function () {
-            cb();
-          }).catch(cb);
-      } else {
+      var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
+      Status.findOneByName(startingState).then(function (status) {
+        return Approval.create({
+          status: status.id,
+          service: service.id
+        });
+      })
+      .then(function () {
         cb();
-      }
+      }).catch(cb);
     }
 
   });
