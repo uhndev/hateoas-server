@@ -94,24 +94,22 @@
           name: '[TEST] WSIB Back and Neck Program'
         },
         price: _.random(100, 100000),
+        code: 'scu1000',
         AHServices: [
           {
             name: '[TEST] CT SCAN - HEAD',
             program: null,
-            serviceCategory: null,
-            code: 'scu1000'
+            serviceCategory: null
           },
           {
             name: '[TEST] CT SCAN - NECK',
             program: null,
-            serviceCategory: null,
-            code: 'scu1000'
+            serviceCategory: null
           },
           {
             name: '[TEST] CT SCAN - BACK',
             program: null,
-            serviceCategory: null,
-            code: 'scu`1000'
+            serviceCategory: null
           }
         ]
       }
