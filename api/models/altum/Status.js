@@ -66,9 +66,9 @@
         { name: 'Open', category: 'referral' },
         { name: 'Discharged', category: 'referral' },
         { name: 'Follow-up', category: 'referral' },
-        { name: 'Approved', category: 'approval', iconClass: 'fa-check-circle', rowClass: 'info' },
+        { name: 'Approved', category: 'approval', iconClass: 'fa-check-circle', rowClass: 'success' },
         { name: 'Pending', category: 'approval', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
-        { name: 'No response from WSIB', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'default' },
+        { name: 'No response from WSIB', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
         { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' }
       ];
     },
