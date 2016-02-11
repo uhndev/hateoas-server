@@ -64,6 +64,9 @@
       currentStatus: {
         model: 'status'
       },
+      statusName: {
+        type: 'string'
+      },
       iconClass: {
         type: 'string'
       },
