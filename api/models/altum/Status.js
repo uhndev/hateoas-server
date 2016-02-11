@@ -40,6 +40,24 @@
         ]
       },
 
+      /**
+       * iconClass
+       * @description A status's optional icon class
+       * @type {String}
+       */
+      iconClass: {
+        type: 'string'
+      },
+
+      /**
+       * rowClass
+       * @description A status's optional row class
+       * @type {String}
+       */
+      rowClass: {
+        type: 'string'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -48,10 +66,10 @@
         { name: 'Open', category: 'referral' },
         { name: 'Discharged', category: 'referral' },
         { name: 'Follow-up', category: 'referral' },
-        { name: 'Approved', category: 'approval' },
-        { name: 'Pending', category: 'approval' },
-        { name: 'No response from WSIB', category: 'approval' },
-        { name: 'Denied', category: 'approval' }
+        { name: 'Approved', category: 'approval', iconClass: 'fa-check-circle', rowClass: 'success' },
+        { name: 'Pending', category: 'approval', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
+        { name: 'No response from WSIB', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
+        { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' }
       ];
     },
 

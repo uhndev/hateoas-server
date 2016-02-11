@@ -43,16 +43,55 @@
         model: 'service'
       },
 
-      /**
-       * approvalDate
-       * @description A approval's date
-       * @type {date}
-       */
-      approvalDate: {
-        type: 'date'
-      },
-
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given approval object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.status) {
+        Status.findOne(values.status).exec(function (err, status) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = status.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
+    },
+
+    /**
+     * afterCreate
+     * @description After creating a new service, determine the default starting approval state
+     * @param approval
+     * @param cb
+     */
+    afterCreate: function (approval, cb) {
+      Service.update({ id: approval.service }, { currentApproval: approval.id }).exec(function (err, updatedService) {
+        cb(err);
+      });
+    },
+
+    /**
+     * afterUpdate
+     * @description After adding a new approval to a service via blueprint, we update the currentApproval
+     * @param approval
+     * @param cb
+     */
+    afterUpdate: function (approval, cb) {
+      Service.update({ id: approval.service }, { currentApproval: approval.id }).exec(function (err, updatedService) {
+        cb(err);
+      });
     }
 
   });

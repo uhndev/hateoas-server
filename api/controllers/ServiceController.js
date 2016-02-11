@@ -29,7 +29,7 @@
         })
         .then(function (services) {
           this.referral.recommendedServices = services;
-          res.ok(this.referral, {
+          return res.ok(this.referral, {
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
           });
         })

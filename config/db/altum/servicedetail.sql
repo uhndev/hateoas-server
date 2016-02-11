@@ -23,6 +23,11 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     servicetype.name AS "serviceType",
     service."approvalNeeded",
     referral.client,
+    approval.id AS "currentApproval",
+    approval.status AS "currentStatus",
+    status.name AS "statusName",
+    status."iconClass",
+    status."rowClass",
     client."displayName" AS "client_displayName",
     service.physician,
     physician."displayName" AS "physician_displayName",
@@ -39,6 +44,8 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.program ON program.id = programservice.program
     LEFT JOIN altum.site ON site.id = service.site
     LEFT JOIN altum.referral ON service.referral = referral.id
+    LEFT JOIN altum.approval ON service."currentApproval" = approval.id
+    LEFT JOIN altum.status ON approval.status = status.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.clinician ON service.clinician = clinician.id

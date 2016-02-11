@@ -58,6 +58,18 @@
       approvalNeeded: {
         type: 'boolean'
       },
+      currentApproval: {
+        model: 'approval'
+      },
+      currentStatus: {
+        model: 'status'
+      },
+      iconClass: {
+        type: 'string'
+      },
+      rowClass: {
+        type: 'string'
+      },
       client: {
         model: 'client'
       },
