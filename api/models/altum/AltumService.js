@@ -16,7 +16,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'programServices', 'sites' ],
+    defaultPopulate: [ 'programServices', 'sites', 'staffTypes' ],
 
     attributes: {
 
@@ -75,6 +75,16 @@
        */
       serviceCategory: {
         model: 'servicecategory'
+      },
+
+      /**
+       * staffTypes
+       * @description Collection of staff types that can be associated with this AltumService
+       * @type {Collection}
+       */
+      staffTypes: {
+        collection: 'stafftype',
+        via: 'altumServices'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

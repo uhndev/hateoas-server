@@ -85,12 +85,6 @@
       physician_displayName: {
         type: 'string'
       },
-      clinician: {
-        model: 'clinician'
-      },
-      clinician_displayName: {
-        type: 'string'
-      },
       toJSON: ServiceModel.attributes.toJSON
     }
   });

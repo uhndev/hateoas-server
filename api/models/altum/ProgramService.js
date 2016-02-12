@@ -67,21 +67,21 @@
       },
 
       /**
-       * approvalRequired
-       * @description Boolean denoting whether this service needs approval or not by default and locked
-       */
-      approvalRequired: {
-        type: 'boolean',
-        defaultsTo: true
-      },
-
-      /**
        * code
        * @description a programService's code
        * @type {String}
        */
       code: {
         type: 'string'
+      },
+
+      /**
+       * approvalRequired
+       * @description Boolean denoting whether this service needs approval or not by default and locked
+       */
+      approvalRequired: {
+        type: 'boolean',
+        defaultsTo: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

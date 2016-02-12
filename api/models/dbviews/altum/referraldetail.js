@@ -63,10 +63,10 @@
       physician_name: {
         type: 'string'
       },
-      clinician: {
-        model: 'clinician'
+      staff: {
+        model: 'staff'
       },
-      clinician_name: {
+      staff_name: {
         type: 'string'
       },
       site: {

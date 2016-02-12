@@ -77,12 +77,13 @@
       },
 
       /**
-       * clinician
-       * @description Reference to the clinician who assisted in the recommendation of this service
-       * @type {Model}
+       * staff
+       * @description Collection of staff who assisted in the recommendation of this service
+       * @type {Collection}
        */
-      clinician: {
-        model: 'clinician'
+      staff: {
+        collection: 'staff',
+        via: 'services'
       },
 
       /**
