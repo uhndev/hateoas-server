@@ -24,7 +24,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        unique: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

@@ -382,5 +382,13 @@
     "template": {
       "href": "http://localhost:1337/api/systemform/7"
     }
+  },
+  {
+    "path": "/api/programservice",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/8"
+    }
   }
 ]

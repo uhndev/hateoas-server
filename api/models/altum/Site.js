@@ -26,7 +26,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        unique: true
       },
 
       /**
@@ -69,7 +70,7 @@
 
       /**
        * siteStaff
-       * @description Collection of physicians or clinicians registered at this site
+       * @description Collection of physicians or serviceProviders registered at this site
        * @type {Collection}
        */
       siteStaff: {

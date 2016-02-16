@@ -15,24 +15,33 @@
             {"href": "/client", "icon": "fa-users", "prompt": "APP.HEADER.MENU.CLIENTS"},
             {"href": "/referral", "icon": "fa-ambulance", "prompt": "APP.HEADER.MENU.REFERRALS"},
             {"href": "/billing", "icon": "fa-usd", "prompt": "APP.HEADER.MENU.BILLING"},
+            {"href": "/user", "icon": "fa-user", "prompt": "APP.HEADER.MENU.USER_MANAGER"},
             {
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-wrench", "dropdown": [
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": "fa-male"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ADDRESSES", "href": "/address", "icon": "fa-map-marker"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": "fa-bank"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIMS", "href": "/claim", "icon": "fa-wheelchair"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.WORK_STATUS", "href": "/workstatus", "icon": "fa-calendar-check-o"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGNOSIS", "href": "/prognosis", "icon": "fa-check-square"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": "fa-briefcase"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": "fa-suitcase"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": "fa-hospital-o"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": "fa-building"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": "fa-stethoscope"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": "fa-folder"},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STATUS", "href": "/status", "icon": "fa-tasks"}
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIMS", "href": "/claim", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PHYSICIANS", "href": "/physician", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""}
               ]
             },
-            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
+            {
+              "prompt": "APP.HEADER.MENU.SETTINGS", "icon": "fa-bars", "dropdown": [
+                {"prompt": "APP.HEADER.MENU.SETTINGS.CITY", "href": "/city", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.PROGNOSIS", "href": "/prognosis", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_TYPES", "href": "/servicetype", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.STAFF_TYPES", "href": "/stafftype", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.STATUS", "href": "/status", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.TIMEFRAME", "href": "/timeframe", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.SETTINGS.WORK_STATUS", "href": "/workstatus", "icon": ""}
+              ]
+            },
             {
               prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
                 {prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench'},

@@ -8,9 +8,12 @@
 
 (function () {
 
-  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   module.exports = {
+
+    identity: 'Client',
+
     findOne: function (req, res) {
       // manually override model name for pagination in ok.js
       req.options.model = sails.models.clientcontact.identity;

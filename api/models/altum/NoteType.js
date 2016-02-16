@@ -20,7 +20,8 @@
        * @type {string}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        unique: true
       },
 
       /**
