@@ -31,8 +31,6 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     client."displayName" AS "client_displayName",
     service.physician,
     physician."displayName" AS "physician_displayName",
-    service.clinician,
-    clinician."displayName" AS "clinician_displayName",
     service.owner,
     service."createdAt",
     service."createdBy",
@@ -48,7 +46,6 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.status ON approval.status = status.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
-    LEFT JOIN altum.clinician ON service.clinician = clinician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id
     LEFT JOIN altum.prognosis ON service.prognosis = prognosis.id
     LEFT JOIN altum.timeframe ON service."prognosisTimeframe" = timeframe.id

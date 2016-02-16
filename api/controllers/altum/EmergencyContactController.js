@@ -6,6 +6,6 @@
  */
 
 module.exports = {
-	
+  identity: 'EmergencyContact'
 };
 

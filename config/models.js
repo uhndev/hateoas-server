@@ -36,6 +36,7 @@ module.exports.models = {
     };
 
     Site.generateAndCreate()
+      .then(StaffType.generateAndCreate)
       .then(Status.generateAndCreate)
       .then(ServiceCategory.generateAndCreate)
       .then(WorkStatus.generateAndCreate)
@@ -45,6 +46,9 @@ module.exports.models = {
       .then(ProgramService.generateAndCreate)
       .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
-      .then(generateMultiple('referral'));
+      .then(generateMultiple('referral'))
+      .catch(function (err) {
+        sails.log.info(err);
+      });
   }
 };

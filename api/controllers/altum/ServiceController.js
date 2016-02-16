@@ -7,10 +7,12 @@
  */
 
 (function () {
-  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var _ = require('lodash');
 
   module.exports = {
+
+    identity: 'Service',
 
     /**
      * findRecommendedServices

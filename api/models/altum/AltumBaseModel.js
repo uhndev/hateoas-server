@@ -9,9 +9,23 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    autoPK: false,
+
     meta: {
       schemaName: 'altum'
+    },
+
+    attributes: {
+      id: {
+        type: 'integer',
+        primaryKey: true,
+        unique: true,
+        autoIncrement: true,
+        index: true
+      }
     }
+
   });
 
 })();

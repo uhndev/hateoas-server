@@ -73,14 +73,14 @@
       },
 
       /**
-       * clinician
-       * @description The clinician registered at this site
+       * staff
+       * @description The staff registered at this site
        * @type {Model}
        */
-      clinician: {
-        model: 'clinician',
+      staff: {
+        model: 'staff',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'clinician', Clinician);
+          return BaseModel.defaultGenerator(state, 'staff', Staff);
         }
       },
 

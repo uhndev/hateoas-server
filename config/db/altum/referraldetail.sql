@@ -11,8 +11,8 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     program.name AS "program_name",
     referral.physician,
     physician."displayName" AS "physician_name",
-    referral.clinician,
-    clinician."displayName" AS "clinician_name",
+    referral.staff,
+    staff."displayName" AS "staff_name",
     referral.site,
     site."displayName" AS "site_name",
     status.id AS status,
@@ -58,7 +58,7 @@ FROM altum.referral
   LEFT JOIN altum.address ON address.person = person.id
   LEFT JOIN altum.status ON referral.status = status.id
   LEFT JOIN altum.physician ON referral.physician = physician.id
-  LEFT JOIN altum.clinician ON referral.clinician = clinician.id
+  LEFT JOIN altum.staff ON referral.staff = staff.id
   LEFT JOIN altum.site ON referral.site = site.id
   LEFT JOIN altum.program ON referral.program = program.id;
 ALTER TABLE altum.referraldetail
