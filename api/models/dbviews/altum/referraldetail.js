@@ -26,6 +26,14 @@
         ].join('/')
       },
       {
+        'rel': sails.models.referral.identity,
+        'prompt': 'APP.HEADER.SUBMENU.TRIAGE',
+        'name': 'name',
+        'href': [
+          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral',id, 'triage'
+        ].join('/')
+      },
+      {
         'rel': sails.models.altumprogramservices.identity,
         'prompt': 'APP.HEADER.SUBMENU.RECOMMENDATIONS',
         'name': 'name',

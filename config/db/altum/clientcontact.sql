@@ -28,6 +28,8 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     address."region",
     address."company",
     address."country",
+    address.latitude,
+    address.longitude,
     client."owner",
     client."createdBy",
     client."createdAt",

@@ -112,6 +112,12 @@
       country: {
         type: 'string'
       },
+      latitude: {
+        type: 'string'
+      },
+      longitude: {
+        type: 'string'
+      },
 
       getResponseLinks: function () {
         return getResponseLinks(this.id, this.displayName);
