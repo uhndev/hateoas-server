@@ -44,11 +44,11 @@
       },
 
       /**
-       * staffTypeName
+       * staffTypeDisplayName
        * @description A staffType's name
        * @type {String}
        */
-      staffTypeName: {
+      staffTypeDisplayName: {
         type: 'string'
       },
 
@@ -93,7 +93,7 @@
               if (err) {
                 cb(err);
               } else {
-                values.staffTypeName = staffType.name;
+                values.staffTypeDisplayName = staffType.name;
                 cb();
               }
             });
