@@ -112,6 +112,9 @@
       country: {
         type: 'string'
       },
+      personid: {
+        type: 'integer'
+      },
 
       getResponseLinks: function () {
         return getResponseLinks(this.id, this.displayName);

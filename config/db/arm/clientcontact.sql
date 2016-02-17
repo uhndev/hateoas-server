@@ -6,6 +6,7 @@ CREATE OR REPLACE VIEW clientcontact AS
   SELECT
     client.id,
     client."MRN",
+    person.ID AS personId,
     person."displayName",
     person."firstName",
     person."middleName",
@@ -22,6 +23,7 @@ CREATE OR REPLACE VIEW clientcontact AS
     person."requiresInterpreter",
     address."address1",
     address."address2",
+    city.id AS cityId,
     city.name AS "city",
     address."province",
     address."postalCode",
