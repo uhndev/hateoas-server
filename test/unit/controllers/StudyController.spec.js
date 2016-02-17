@@ -37,8 +37,7 @@ describe('The Study Controller', function () {
     after(function (done) {
       Study.destroy(study1).exec(function (err, study) {
         Study.destroy(study2).exec(function (err, study) {
-          if (err) return done(err);
-          auth.logout(done);
+          done(err);
         });
       });
     });
@@ -352,10 +351,6 @@ describe('The Study Controller', function () {
       });
     });
 
-    after(function (done) {
-      auth.logout(done);
-    });
-
     describe('find()', function () {
       it('should be able to see studies where he/she is associated with a CC', function (done) {
         request.get('/api/study')
@@ -477,10 +472,6 @@ describe('The Study Controller', function () {
         resp.statusCode.should.be.exactly(200);
         done();
       });
-    });
-
-    after(function (done) {
-      auth.logout(done);
     });
 
     describe('find()', function () {

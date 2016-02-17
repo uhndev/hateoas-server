@@ -14,72 +14,75 @@ describe('The User Controller', function () {
 
   var study1, cc1Id, cc2Id, cc3Id, enrollment1, enrollment2, enrollment3;
 
-  describe('User with Admin Role', function () {
-
-    before(function (done) {
-      Study.create({
-          name: 'USER-LEAP-ADMIN',
-          reb: 100
-        })
-        .then(function (study) {
-          study1 = study.id;
-          return Promise.all([
-            CollectionCentre.create({
-              name: 'USER-LEAP-ADMIN-TWH',
-              reb: 200,
-              study: study1
-            }),
-            CollectionCentre.create({
-              name: 'USER-LEAP-ADMIN-TGH',
-              reb: 300,
-              study: study1
-            })
-          ]);
-        })
-        .spread(function (centre1, centre2) {
-          cc1Id = centre1.id;
-          cc2Id = centre2.id;
-          return Study.create({
-            name: 'USER-LEAP2-ADMIN',
-            reb: 200
-          });
-        })
-        .then(function (study) {
-          study2 = study.id;
-          return CollectionCentre.create({
-            name: 'USER-LEAP2-ADMIN-TWH',
+  before(function (done) {
+    Study.create({
+        name: 'USER-LEAP-ADMIN',
+        reb: 100
+      })
+      .then(function (study) {
+        study1 = study.id;
+        return Promise.all([
+          CollectionCentre.create({
+            name: 'USER-LEAP-ADMIN-TWH',
             reb: 200,
-            study: study2
-          });
-        })
-        .then(function (centre) {
-          cc3Id = centre.id;
-          return Promise.all([
-            UserEnrollment.create({
-              user: globals.users.coordinatorUserId,
-              collectionCentre: cc1Id,
-              centreAccess: 'coordinator'
-            }),
-            UserEnrollment.create({
-              user: globals.users.interviewerUserId,
-              collectionCentre: cc2Id,
-              centreAccess: 'interviewer'
-            }),
-            UserEnrollment.create({
-              user: globals.users.interviewerUserId,
-              collectionCentre: cc3Id,
-              centreAccess: 'interviewer'
-            })
-          ]);
-        })
-        .spread(function (e1, e2, e3) {
-          enrollment1 = e1;
-          enrollment2 = e2;
-          enrollment3 = e3;
-          done();
-        })
-        .catch(done);
-    });
+            study: study1
+          }),
+          CollectionCentre.create({
+            name: 'USER-LEAP-ADMIN-TGH',
+            reb: 300,
+            study: study1
+          })
+        ]);
+      })
+      .spread(function (centre1, centre2) {
+        cc1Id = centre1.id;
+        cc2Id = centre2.id;
+        return Study.create({
+          name: 'USER-LEAP2-ADMIN',
+          reb: 200
+        });
+      })
+      .then(function (study) {
+        study2 = study.id;
+        return CollectionCentre.create({
+          name: 'USER-LEAP2-ADMIN-TWH',
+          reb: 200,
+          study: study2
+        });
+      })
+      .then(function (centre) {
+        cc3Id = centre.id;
+        return Promise.all([
+          UserEnrollment.create({
+            user: globals.users.coordinatorUserId,
+            collectionCentre: cc1Id,
+            centreAccess: 'coordinator'
+          }),
+          UserEnrollment.create({
+            user: globals.users.interviewerUserId,
+            collectionCentre: cc2Id,
+            centreAccess: 'interviewer'
+          }),
+          UserEnrollment.create({
+            user: globals.users.interviewerUserId,
+            collectionCentre: cc3Id,
+            centreAccess: 'interviewer'
+          })
+        ]);
+      })
+      .spread(function (e1, e2, e3) {
+        enrollment1 = e1;
+        enrollment2 = e2;
+        enrollment3 = e3;
+        done();
+      })
+      .catch(function(err) {
+        console.log(err);
+        done(err);
+      });
+  });
+
+  describe('User with Admin Role', function () {
 
     describe('find()', function () {
       it('should be able to read all users', function (done) {

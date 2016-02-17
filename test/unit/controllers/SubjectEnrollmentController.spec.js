@@ -78,13 +78,9 @@ describe('The SubjectEnrollment Controller', function () {
   });
 
   after(function (done) {
-    Study.destroy({id: study1})
-      .then(function () {
-        auth.logout(done);
-      })
-      .catch(function (err) {
-        done(err);
-      });
+    Study.destroy({id: study1}).exec(function (err, study) {
+      done(err);
+    });
   });
 
   describe('User with Admin Role', function () {
@@ -101,7 +97,7 @@ describe('The SubjectEnrollment Controller', function () {
       SubjectEnrollment.destroy(enrollment3).exec(function (err) {
         Subject.destroy(newSubject).exec(function (err) {
           User.destroy(newUser).exec(function (err) {
-            auth.logout(done);
+            done(err);
           });
         });
       });
@@ -178,10 +174,6 @@ describe('The SubjectEnrollment Controller', function () {
       });
     });
 
-    after(function (done) {
-      auth.logout(done);
-    });
-
     describe('find()', function () {
     });
 
@@ -205,10 +197,6 @@ describe('The SubjectEnrollment Controller', function () {
         resp.statusCode.should.be.exactly(200);
         done();
       });
-    });
-
-    after(function (done) {
-      auth.logout(done);
     });
 
     describe('find()', function () {
