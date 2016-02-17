@@ -26,7 +26,7 @@
         ].join('/')
       },
       {
-        'rel': sails.models.referral.identity,
+        'rel': 'triage',
         'prompt': 'APP.HEADER.SUBMENU.TRIAGE',
         'name': 'name',
         'href': [
