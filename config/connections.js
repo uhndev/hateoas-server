@@ -40,12 +40,13 @@ module.exports.connections = {
   * Run: npm install sails-mysql                                             *
   *                                                                          *
   ***************************************************************************/
-  someMysqlServer: {
+  altum_mysql: {
     adapter: 'sails-mysql',
-    host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
-    user: 'YOUR_MYSQL_USER',
-    password: 'YOUR_MYSQL_PASSWORD',
-    database: 'YOUR_MYSQL_DB'
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'password',
+    database: 'altum_dev'
   },
 
   /***************************************************************************
@@ -56,25 +57,19 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  dados_development: {
-    adapter   : 'sails-mongo',
-    host      : 'localhost',
-    port      : 27017,
-    database  : 'dados-dev'
-  },
 
-  dados_test: {
-    adapter   : 'sails-mongo',
-    host      : 'localhost',
-    port      : 27017,
-    database  : 'dados-test'
-  },
+  altum_audit: {
+      adapter   : 'sails-mongo',
+      host      : 'localhost',
+      port      : 27017,
+      database  : 'dados-cache'
+    },
 
-  dados_production: {
+  dados_cache: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
-    database  : 'dados-prod'
+    database  : 'dados-cache'
   },
 
   /***************************************************************************
@@ -86,14 +81,77 @@ module.exports.connections = {
   *                                                                          *
   *                                                                          *
   ***************************************************************************/
-  somePostgresqlServer: {
+  dados_development: {
     adapter: 'sails-postgresql',
-    host: 'YOUR_POSTGRES_SERVER_HOSTNAME_OR_IP_ADDRESS',
-    user: 'YOUR_POSTGRES_USER',
-    password: 'YOUR_POSTGRES_PASSWORD',
-    database: 'YOUR_POSTGRES_DB'
-  }
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_dev'
+  },
 
+  dados_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
+  dados_test: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_test'
+  },
+
+  altum_development: {
+    adapter: 'sails-postgresql',
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: 'password',
+      database: 'altum_dev'
+  },
+
+  altum_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
+  altum_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
+  altum_test: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_test'
+  }
 
   /***************************************************************************
   *                                                                          *

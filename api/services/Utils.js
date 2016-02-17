@@ -1,8 +1,7 @@
 module.exports = function() {
+  var _ = require('lodash');
 
-var Q = require('q');
-
-var self = {
+  var self = {
   /** Start of "String" Utils **/
   "String" : {
     /**
@@ -21,7 +20,7 @@ var self = {
   /** Start of "Path" Utils **/
   "Path" : {
     getFullUrl: function getFullUrl(req) {
-      return req.protocol + '://' + req.get('host') + req.originalUrl;
+      return sails.getBaseUrl() + req.url;
     },
 
     getWhere: function getWhere(query) {
@@ -39,19 +38,15 @@ var self = {
   /** Start of "Model" Utils **/
   "Model" : {
     /**
-     * List of routes that allow slugs in lieu of ids
-     */
-    SLUG_ROUTES: ['study'],
-    /**
      * List of system fields that SailsJS will add to all objects
      */
-    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'owner'],
+    SYSTEM_FIELDS: ['id', 'createdAt', 'updatedAt', 'createdBy', 'owner', 'expiredAt', 'deletedBy'],
     removeSystemFields: function removeSystemFields(data) {
       if (_.isArray(data)) {
         return data.map(function(item) {
           return self.Model.removeSystemFields(item);
         });
-      } 
+      }
 
       return _.omit(data, self.Model.SYSTEM_FIELDS);
     }
@@ -61,72 +56,34 @@ var self = {
   /** Start of "User" Utils **/
   "User": {
 
+    /**
+     * Use validator module isEmail function
+     *
+     * @see <https://github.com/chriso/validator.js/blob/3.18.0/validator.js#L38>
+     * @see <https://github.com/chriso/validator.js/blob/3.18.0/validator.js#L141-L143>
+     */
+    validateEmail: function(str) {
+      var EMAIL_REGEX = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+      return EMAIL_REGEX.test(str);
+    },
+
+    getFullName: function getFullName(user) {
+      return [user.prefix, user.firstname, user.lastname].join(' ');
+    },
+
     extractUserFields: function extractUserFields(data) {
       return {
         username: data.username,
         email: data.email,
-        person: data.person 
-      };
-    },
-
-    extractPersonFields: function extractPersonFields(data) {
-      return {
         prefix: data.prefix,
         firstname: data.firstname,
         lastname: data.lastname,
         gender: data.gender,
         dob: data.dob
       };
-    },
-
-    populateSubjects: function populateSubjects(subjects) {
-      var subjectObj = _.map(subjects, function (subject) {
-        _.merge(subject, Utils.User.extractUserFields(subject.user));
-        delete subject.user;
-        return subject;
-      });
-
-      return Q.all(
-        _.map(subjectObj, function (subject) {
-          return Person.findOne(subject.person);
-        })
-      )
-      .then(function (subjectPersons) {
-        var zipped = _.zip(subjectObj, subjectPersons);
-        _.reduce(zipped, function (res, zipObj) {
-          delete zipObj[0].person;
-          res.push(_.merge(zipObj[0], self.User.extractPersonFields(zipObj[1])));
-          return res;
-        }, []);
-
-        return (_.map(zipped, _.first));
-      });
-    },
-    
-    populateUsers: function populateUsers(users) {
-      return Q.all(
-        _.map(users, function (user) {
-          return User.findOne(user.id).populate('person')
-            .then(function (popUser) {
-              return _.merge(user, popUser);
-            })
-        })
-      ).then(function(users) {
-        _.map(users, function (user) {
-          if (user.person) {
-            _.merge(user, self.User.extractPersonFields(user.person));
-            delete user.person;
-          }
-        });
-        return users;  
-      })
-      .catch(function (err) {
-        return err;
-      });
     }
   }
   /** End of "User" Utils **/
 }
-
-return self;
+  return self;
 }();

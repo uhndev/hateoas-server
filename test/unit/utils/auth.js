@@ -1,6 +1,4 @@
 'use strict';
-var superagent = require('superagent'),
-		agent = superagent.agent();
 
 /**
  * Generic helper function to authenticate specified user with current sails testing instance. Function
@@ -48,7 +46,7 @@ var Auth = {
         identifier: 'interviewer',
         password: 'interviewer1234'
       }
-    },    
+    },
     coordinator: {
       create: {
         username: 'coordinator',
@@ -81,38 +79,33 @@ var Auth = {
     }
   },
 
-  createUser: function(credentials, done) {
-    this.authenticate('admin', function(agent, resp) {
-      Group.findOneByName(credentials.group).then(function (group) {
-        delete credentials.group;
-        credentials.group = group.id;
-        var req = request.post('/api/user');
-        agent.attachCookies(req);
-        req.send(credentials)
+  createUser: function (credentials, done) {
+    this.authenticate('admin', function (agent, resp) {
+      request.post('/api/user')
+        .set('Authorization', 'Bearer ' + globals.token)
+        .send(credentials)
         .expect(201)
-        .end(function(err, res) {
+        .end(function (err, res) {
           done(JSON.parse(res.text).items.id);
         });
-      });      
-    });    
+    });
   },
 
-  authenticate: function(user, done) {
+  authenticate: function (user, done) {
     request.post('/auth/local')
-      .set('Content-Type', 'application/json')
       .send(this.credentials[user].login)
       .end(function (err, result) {
         if (err) throw err;
-        agent.saveCookies(result);
-        done(agent, result);
+        if (_.has(result.body, 'token')) globals.token = result.body.token.payload;
+        done(result);
       });
   },
 
-  logout: function(done) {
+  logout: function (done) {
     request.get('/logout')
       .end(function (err, res) {
         if (err) throw err;
-        res.statusCode.should.be.exactly(302);
+        res.statusCode.should.be.exactly(200);
         done();
       });
   }

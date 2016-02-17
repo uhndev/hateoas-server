@@ -16,23 +16,27 @@ module.exports = {
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-  hookTimeout: 60000, // 60 seconds to allow for uglification
+
+  proxyHost: '10.3.128.49',
+
   models: {
-    connection: 'dados_production'
+    migrate: 'safe',
+    autoCreatedBy: true,
+    connection: 'altum_production'
   },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 80,
+  port: 1338,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/
 
-  // log: {
-  //   level: "silent"
-  // }
+  log: {
+    level: "verbose"
+  }
 
 };

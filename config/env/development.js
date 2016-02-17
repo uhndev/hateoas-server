@@ -16,9 +16,12 @@ module.exports = {
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-
+  hookTimeout: 9999999,
+  log: {
+    level: 'verbose'
+  },
   models: {
-    connection: 'dados_development'
+    migrate: 'alter',
+    connection: 'altum_development'
   }
-
 };

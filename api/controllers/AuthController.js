@@ -1,95 +1,101 @@
-// api/controllers/AuthController.js
+/**
+ * AuthController
+ *
+ * @module controllers/Auth
+ * @description Controller used for handling authentication with server.
+ *              Overrides sails-auth's AuthController to modify response
+ *              to include populated group info like main/submenu settings
+ *              for user as well as JWT token information.
+ * @see https://github.com/tjwebb/sails-auth
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/controllers/AuthController');
+(function() {
 
-_.merge(exports, _super);
-_.merge(exports, {
+  var _ = require('lodash');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  _.merge(module.exports, require('sails-auth/dist/api/controllers/AuthController'));
+  _.merge(module.exports, {
 
-  /**
-   * Create a authentication callback endpoint (Overrides sails-auth)
-   *
-   * @param {Object} req
-   * @param {Object} res
-   */
-  callback: function (req, res) {
-    function tryAgain (err) {
-      // Only certain error messages are returned via req.flash('error', someError)
-      // because we shouldn't expose internal authorization errors to the user.
-      // We do return a generic error and the original request body.
-      var flashError = req.flash('error')[0];
-      if (err || flashError) {
-        sails.log.warn(err);
-        sails.log.warn(flashError);
-      }
-
-      if (err && !flashError ) {
-        req.flash('error', 'Error.Passport.Generic');
-      }
-      else if (flashError) {
-        req.flash('error', flashError);
-      }
-      req.flash('form', req.body);
-
-      // If an error was thrown, redirect the user to the
-      // login, register or disconnect action initiator view.
-      // These views should take care of rendering the error messages.
-      var action = req.param('action');
-
-      if (action === 'register') {
-        res.redirect('/register');
-      }
-      else if (action === 'login') {
-        res.redirect('/login');
-      }
-      else if (action === 'disconnect') {
-        res.redirect('back');
+    /**
+     * Log out a user and return them to the homepage
+     *
+     * Passport exposes a logout() function on req (also aliased as logOut()) that
+     * can be called from any route handler which needs to terminate a login
+     * session. Invoking logout() will remove the req.user property and clear the
+     * login session (if any).
+     *
+     * For more information on logging out users in Passport.js, check out:
+     * http://passportjs.org/guide/logout/
+     *
+     * @param {Object} req
+     * @param {Object} res
+     */
+    logout: function (req, res) {
+      req.logout();
+      if (!req.isSocket) {
+        res.send(200);
+        // res.redirect(req.query.next || '/');
       }
       else {
-        // make sure the server always returns a response to the client
-        // i.e passport-local bad username/email or password
-        res.forbidden();
+        delete req.user;
+        delete req.session.passport;
+        req.session.authenticated = false;
+        res.ok();
       }
-    }
+    },
 
-    sails.services.passport.callback(req, res, function (err, user) {
-      if (err || !user) {
-        sails.log.warn(err);
-        return tryAgain();
-      }
+    /**
+     * Create a authentication callback endpoint (Overrides sails-auth)
+     *
+     * @param {Object} req request object
+     * @param {Object} res response object
+     */
+    callback: function (req, res) {
+      // since we disabled sessions, we must also override req.flash
+      req.flash = function(type, message) {
+        var err = new Error(message);
+        err.code = 400;
+        return err;
+      };
 
-      req.login(user, function (err) {
-        if (err) {
-          sails.log.warn(err);
-          return tryAgain();
+      sails.services.passport.callback(req, res, function (err, user) {
+        if (err || !user) {
+          return res.forbidden(err);
         }
 
-        // Upon successful login, send the user to the homepage where req.user
-        // will available.
-        req.session.authenticated = true;
-
-        User.findOne(user.id).populate('roles').populate('person').populate('group')
-        .then(function(data) {
-          var resp = {
-            id: user.id,
-            username: user.username,
-            group: data.group.name,
-            level: data.group.level,
-            tabview: data.group.menu.tabview,
-            subview: data.group.menu.subview
-          };
-
-          if (data.person) {
-            _.merge(resp, Utils.User.extractPersonFields(data.person));
+        req.login(user, function (err) {
+          if (err) {
+            return res.forbidden(err);
           }
-          
-          sails.log.info('user', resp, 'authenticated successfully');
 
-          return res.json(resp);
-        });        
+          var token = require('jsonwebtoken').sign(
+            user,
+            sails.config.session.secret,
+            { expiresIn: sails.config.session.jwtExpiry }
+          );
+
+          User.findOne(user.id).exec(function (err, data) {
+            var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname', 'group');
+            var resp = {
+              user: userObj,
+              token: {
+                payload: token,
+                expires: sails.config.session.jwtExpiry
+              }
+            };
+
+            // Upon successful login, optionally redirect the user if there is a
+            // `next` query param
+            if (req.query.next) {
+              res.status(302).set('Location', req.query.next);
+            }
+
+            sails.log.info('user', resp.user, 'authenticated successfully');
+
+            return res.json(resp);
+          });
+        });
       });
-    });
-  }   
-});
+    }
+  });
+})();

@@ -1,17 +1,59 @@
-// api/models/Role.js
+/**
+ * Role
+ *
+ * @class Role
+ * @description Roles endow Users with Permissions. Exposes Postgres-like API for
+ *              resolving granted Permissions for a User.
+ * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/Role.js
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/models/Role');
 
-_.merge(exports, _super);
-_.merge(exports, {
+(function() {
+  var _super = require('./BaseModel.js');
 
-  // Extend with custom logic here by adding additional fields, methods, etc.
+  var _ = require('lodash');
+  var _role = require('sails-permissions/dist/api/models/Role');
 
-  attributes: {
-    groups: {
-      collection: 'group',
-      via: 'roles'
+  _.merge(exports, _super);
+  _.merge(exports, _role);
+  _.merge(exports, {
+
+    /**
+     * getQueryLinks
+     * @description Provides the query links array in our HATEOAS response; these links
+     *              should denote optional queries that can be performed with returned data
+     *
+     * @param  {Object} user - User object from req.user
+     * @return {Array} Array of query links
+     */
+    getQueryLinks: function(user) {
+      return [
+        {
+          "rel": "default",
+          "prompt": "All Roles",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "where": null
+        },
+        {
+          "rel": "findByAdmin",
+          "prompt": "My Roles",
+          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "populate": {
+            collection: 'users',
+            where: {
+              id: user.id
+            }
+          }
+        }
+      ];
+    },
+
+    attributes: {
+      groups: {
+        collection: 'group',
+        via: 'roles'
+      }
     }
-  }
-});
+  });
+})();
+

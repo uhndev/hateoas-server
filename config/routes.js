@@ -23,40 +23,69 @@
 module.exports.routes = {
 
   /***************************************************************************
+   * Base Status Route                                                       *
+   ***************************************************************************/
+  'get /': function (req, res) {
+    res.json({
+      status: 'OK',
+      lastUpdated: new Date()
+    });
+  },
+
+  /***************************************************************************
   * Locale Routes                                                            *
-  ***************************************************************************/  
-  'get /api/locale'                : 'LocaleController.getLocale',
+  ***************************************************************************/
+  'get /api/locale'                       : 'TranslationController.getLocale',
 
   /***************************************************************************
   * Authentication Routes                                                    *
   ***************************************************************************/
-  'get /logout': 'AuthController.logout',
+  'get /logout'                           : 'AuthController.logout',
 
-  'post /auth/local': 'AuthController.callback',
-  'post /auth/local/:action': 'AuthController.callback',
+  'post /auth/local'                      : 'AuthController.callback',
+  'post /auth/local/:action'              : 'AuthController.callback',
 
-  'get /auth/:provider': 'AuthController.provider',
-  'get /auth/:provider/callback': 'AuthController.callback',
-  'get /auth/:provider/:action': 'AuthController.callback',
+  'get /auth/:provider'                   : 'AuthController.provider',
+  'get /auth/:provider/callback'          : 'AuthController.callback',
+  'get /auth/:provider/:action'           : 'AuthController.callback',
 
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/study/:name'           : 'StudyController.findOne',
-  'get /api/study/:name/subject'   : 'SubjectController.findByStudyName',
-  'get /api/study/:name/user'      : 'UserController.findByStudyName',
-  // 'get /api/study/:name/form'      : 'FormController.findByStudyName',
-  // 'get /api/study/:name/encounter' : 'EncounterController.findByStudyName'
-  'get /api/study/:name/collectioncentre': 'CollectionCentreController.findByStudyName',
-  
+  'get /api/study/:id/collectioncentres'  : 'CollectionCentreController.findByBaseModel',
+  'get /api/study/:id/subjects'           : 'SubjectEnrollmentController.findByBaseModel',
+  'get /api/study/:id/users'              : 'UserEnrollmentController.findByBaseModel',
+  'get /api/study/:id/forms'              : 'FormController.findByBaseModel',
+  'get /api/study/:id/surveys'            : 'SurveyController.findByBaseModel',
+
+  'delete /api/study/:id/forms/:formID'   : 'StudyController.removeFormFromStudy',
+
   /***************************************************************************
   * User Routes                                                              *
   ****************************************************************************/
-  'put /api/user/:id'              : 'UserController.update',
-  'put /api/user/:id/access'       : 'UserController.updateAccess',
-  'put /api/user/:id/roles'        : 'UserController.updateRoles'
-  
+  'put /api/user/:id/roles'               : 'UserController.updateRoles',
+
   /***************************************************************************
-  * Collection Centre Routes                                                 *
+  * Survey Session Lifecycle Routes                                          *
   ****************************************************************************/
+  'put /api/survey/:id/addSessions'       : 'SurveyController.addSessions',
+  'put /api/survey/:id/updateSessions'    : 'SurveyController.updateSessions',
+  'put /api/survey/:id/removeSessions'    : 'SurveyController.removeSessions',
+
+  /***************************************************************************
+  * Study Routes                                                             *
+  ***************************************************************************/
+  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
+
+  /***************************************************************************
+   * Client Routes                                                           *
+   ***************************************************************************/
+  'get /api/client/:id/referrals'         : 'ReferralController.findByBaseModel',
+
+  /***************************************************************************
+   * Referral Routes                                                         *
+   ***************************************************************************/
+  'get /api/referral/:id/triage'        : 'ReferralController.findOne',
+  'get /api/referral/:id/recommendations' : 'AltumServiceController.findAvailableServices',
+  'get /api/referral/:id/services'        : 'ServiceController.findRecommendedServices'
 };

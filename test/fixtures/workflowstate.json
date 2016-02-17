@@ -1,172 +1,394 @@
 [
-	{
-		"path": "/api/user",
-		"links": [
-			{
-				"rel": "overview",
-				"prompt": "*",
-				"name": "name",
-				"href": "/api/study/*"
-			},
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject"
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user",
-				"isActive": true
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			},
-			{
-				"rel": "collectioncentre",
-				"prompt": "Collection Centres",
-				"name": "name",
-				"href": "/api/study/*/collectioncentre"
-			}
-		],
-		"queries": [],
-		"template": {
-			"rel": "user",
-			"href": "http://localhost:1337/api/form/1",
-			"data": [
-				{"name":"username","type":"string","prompt":"Username","value":""},
-				{"name":"email","type":"string","prompt":"Email","value":""},
-				{"name":"prefix","type":"string","prompt":"Prefix","value":""},
-				{"name":"firstname","type":"string","prompt":"Firstname","value":""},
-				{"name":"lastname","type":"string","prompt":"Lastname","value":""}
-			]			
-		}
-	},	
-	{
-		"path": "/api/person",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/2"
-		}
-	},	
-	{
-		"path": "/api/subject",
-		"links": [
-			{
-				"rel": "overview",
-				"prompt": "*",
-				"name": "name",
-				"href": "/api/study/*"
-			},
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject",
-				"isActive": true
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user"
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			},
-			{
-				"rel": "collectioncentre",
-				"prompt": "Collection Centres",
-				"name": "name",
-				"href": "/api/study/*/collectioncentre"
-			}
-		],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/3"
-		}
-	},
-	{
-		"path": "/api/study",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/4"
-		}
-	},
-	{
-		"path": "/api/collectioncentre",
-		"links": [
-			{
-				"rel": "overview",
-				"prompt": "*",
-				"name": "name",
-				"href": "/api/study/*"
-			},
-			{
-				"rel": "subject",
-				"prompt": "Subjects",
-				"name": "name",
-				"href": "/api/study/*/subject"
-			},
-			{
-				"rel": "user",
-				"prompt": "Users",
-				"name": "name",
-				"href": "/api/study/*/user"
-			},
-			{
-				"rel": "form",
-				"prompt": "Forms",
-				"name": "name",
-				"href": "/api/study/*/form"
-			},
-			{
-				"rel": "survey",
-				"prompt": "Surveys",
-				"name": "name",
-				"href": "/api/study/*/survey"
-			},
-			{
-				"rel": "collectioncentre",
-				"prompt": "Collection Centres",
-				"name": "name",
-				"href": "/api/study/*/collectioncentre",
-				"isActive": true
-			}
-		],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/5"
-		}
-	},
-	{
-		"path": "/api/group",
-		"links": [],
-		"queries": [],
-		"template": {
-			"href": "http://localhost:1337/api/form/6"
-		}
-	}
+  {
+    "path": "/api/user",
+    "links": [],
+    "queries": [],
+    "template": {
+      "rel": "user",
+      "href": "http://localhost:1337/api/systemform/1",
+      "data": [
+        {
+          "name": "username",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.USERNAME",
+          "value": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.EMAIL",
+          "value": ""
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.PREFIX",
+          "value": ""
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.FIRSTNAME",
+          "value": ""
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.LASTNAME",
+          "value": ""
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER.GENDER",
+          "value": ""
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "prompt": "COMMON.MODELS.USER.DOB",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/study",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/2",
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.STUDY.NAME",
+          "value": ""
+        },
+        {
+          "name": "reb",
+          "type": "string",
+          "prompt": "COMMON.MODELS.STUDY.REB",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/collectioncentre",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/3",
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.COLLECTION_CENTRE.NAME",
+          "value": ""
+        },
+        {
+          "name": "contactName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/group",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/4"
+    }
+  },
+  {
+    "path": "/api/subjectenrollment",
+    "queries": [],
+    "links": [],
+    "template": {
+      "data": [
+        {
+          "name": "subjectNumber",
+          "type": "mrn",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.SUBJECT_NUMBER",
+          "value": ""
+        },
+        {
+          "name": "collectionCentreName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.COLLECTION_CENTRE",
+          "value": ""
+        },
+        {
+          "name": "doe",
+          "type": "date",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.DOE",
+          "value": ""
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "prompt": "COMMON.MODELS.SUBJECT_ENROLLMENT.STATUS",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/form",
+    "queries": [],
+    "links": [],
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.FORM.NAME",
+          "value": ""
+        },
+        {
+          "name": "metaData",
+          "type": "json",
+          "prompt": "COMMON.MODELS.FORM.METADATA",
+          "value": ""
+        },
+        {
+          "name": "questions",
+          "type": "array",
+          "prompt": "COMMON.MODELS.FORM.QUESTIONS",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/survey",
+    "queries": [],
+    "links": [],
+    "template": {
+      "data": [
+        {
+          "name": "name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.SURVEY.NAME",
+          "value": ""
+        },
+        {
+          "name": "completedBy",
+          "type": "string",
+          "prompt": "COMMON.MODELS.SURVEY.COMPLETED_BY",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/userenrollment",
+    "queries": [],
+    "links": [],
+    "template": {
+      "data": [
+        {
+          "name": "username",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.USERNAME",
+          "value": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.EMAIL",
+          "value": ""
+        },
+        {
+          "name": "prefix",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.PREFIX",
+          "value": ""
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.FIRSTNAME",
+          "value": ""
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.LASTNAME",
+          "value": ""
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.GENDER",
+          "value": ""
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "prompt": "COMMON.MODELS.USER_ENROLLMENT.DOB",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/client",
+    "links": [],
+    "queries": [],
+    "template": {
+      "data": [
+        {
+          "name": "MRN",
+          "type": "string",
+          "prompt": "COMMON.MODELS.CLIENT.MRN",
+          "value": ""
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.FIRST_NAME",
+          "value": ""
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.LAST_NAME",
+          "value": ""
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.CITY",
+          "value": ""
+        },
+        {
+          "name": "province",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.PROVINCE",
+          "value": ""
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "prompt": "COMMON.MODELS.ADDRESS.POSTAL_CODE",
+          "value": ""
+        },
+        {
+          "name": "homePhone",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.HOME_PHONE",
+          "value": ""
+        },
+        {
+          "name": "homeEmail",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.HOME_EMAIL",
+          "value": ""
+        },
+        {
+          "name": "fax",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.FAX",
+          "value": ""
+        },
+        {
+          "name": "dateOfBirth",
+          "type": "datetime",
+          "prompt": "COMMON.MODELS.PERSON.DATE_OF_BIRTH",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/referral",
+    "queries": [],
+    "links": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/6",
+      "data": [
+        {
+          "name": "client_mrn",
+          "type": "string",
+          "prompt": "COMMON.MODELS.CLIENT.MRN",
+          "value": ""
+        },
+        {
+          "name": "client_firstName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.FIRST_NAME",
+          "value": ""
+        },
+        {
+          "name": "client_lastName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.PERSON.LAST_NAME",
+          "value": ""
+        },
+        {
+          "name": "claim_claimNum",
+          "type": "string",
+          "prompt": "COMMON.MODELS.REFERRAL.CLAIM_NUM",
+          "value": ""
+        },
+        {
+          "name": "program_name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.REFERRAL.PROGRAM",
+          "value": ""
+        },
+        {
+          "name": "physician_name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.REFERRAL.PHYSICIAN",
+          "value": ""
+        },
+        {
+          "name": "site_name",
+          "type": "string",
+          "prompt": "COMMON.MODELS.REFERRAL.SITE",
+          "value": ""
+        },
+        {
+          "name": "statusName",
+          "type": "string",
+          "prompt": "COMMON.MODELS.REFERRAL.STATUS",
+          "value": ""
+        },
+        {
+          "name": "referralDate",
+          "type": "date",
+          "prompt": "COMMON.MODELS.REFERRAL.REFERRAL_DATE",
+          "value": ""
+        },
+        {
+          "name": "clinicDate",
+          "type": "date",
+          "prompt": "COMMON.MODELS.REFERRAL.CLINIC_DATE",
+          "value": ""
+        }
+      ]
+    }
+  },
+  {
+    "path": "/api/altumservice",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/7"
+    }
+  },
+  {
+    "path": "/api/programservice",
+    "links": [],
+    "queries": [],
+    "template": {
+      "href": "http://localhost:1337/api/systemform/8"
+    }
+  }
 ]

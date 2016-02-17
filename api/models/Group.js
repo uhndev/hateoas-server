@@ -1,35 +1,125 @@
 /**
-* Group.js
+* Group
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
+* @class Group
+* @description Model representation of a group.
+* @docs        http://sailsjs.org/#!documentation/models
 */
-var HateoasService = require('../services/HateoasService.js');
 
-module.exports = {
+(function() {
+  var _super = require('./BaseModel.js');
 
-  attributes: {
-  	name: {
-  		type: 'string',
-  		required: true,
-  		unique: true
-  	},
-    level: {
-      type: 'integer',
-      enum: [1, 2, 3]
+  var HateoasService = require('../services/HateoasService.js');
+
+  _.merge(exports, _super);
+  _.merge(exports, {
+
+    autoPK: false,
+
+    defaultSortBy: 'name ASC',  // overrides BaseModel.defaultSortBy
+
+    defaultPopulate: ['roles'], // overrides BaseModel.defaultPopulate
+
+    attributes: {
+
+	    /**
+       * id
+       * @description Unique string primary key for group
+       * @type {String}
+       */
+      id: {
+        type: 'string',
+        primaryKey: true,
+        unique: true
+      },
+
+      /**
+       * name
+       * @description Unique name of our group of roles.
+       * @type {String}
+       */
+      name: {
+        type: 'string',
+        required: true,
+        unique: true
+      },
+
+      /**
+       * level
+       * @description Integer denoting the level of access this group permits.
+       *              Lower has more authority, with level 1 representing admins,
+       *              level 2 representing coordinators/interviewers, and level
+       *              3 representing subject level access.
+       *
+       * @type {Integer}
+       */
+      level: {
+        type: 'integer',
+        enum: [1, 2, 3]
+      },
+
+      /**
+       * users
+       * @description Associated list of users that belong in this group.  Allows
+       *              us to very quickly retrieve users by group and apply roles
+       *              to them when editing permissions
+       *
+       * @type {Association} linked users to an instance of this group
+       */
+      users: {
+        collection: 'user',
+        via: 'group'
+      },
+
+      /**
+       * roles
+       * @description Associated list of atomic roles (i.e. readStudy, createSubject)
+       *              that members of this group can perform. Changing this collection
+       *              at runtime in the access management page will propagate these
+       *              roles to be applied to every associated group.users.  Proceed
+       *              with caution if you want to modify group permissions.
+       *
+       * @type {Association} linked roles to an instance of this group
+       */
+      roles: {
+        collection: 'role',
+        via: 'groups'
+      },
+
+      /**
+       * menu
+       * @description JSON object describing the frontend main and submenu tabs.
+       *              Object MUST contain a 'tabview' and 'subview' attribute, each
+       *              containing a list of options for each.  tabview stores the
+       *              displayed text on the main menu buttons and subview should
+       *              store the response links that are accessible for the current
+       *              user given their group.
+       * @example
+       *  menu: {
+            tabview: [
+              { prompt: 'Studies', href: '/study', icon: 'fa-group' },
+              { prompt: 'User Manager', href: '/user', icon: 'fa-user' }
+            ],
+            subview: [ 'overview', 'subject', 'user' ]
+          }
+       * @type {Object}
+       */
+      menu: {
+        type: 'json'
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
-  	users: {
-  		collection: 'user',
-  		via: 'group'
-  	},
-  	roles: {
-  		collection: 'role',
-  		via: 'groups'
-  	},
-  	menu: {
-  		type: 'json'
-  	},
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  }
-};
 
+	  /**
+     * beforeCreate
+     * @description To support having group names as the primary key, we simply map it over on the beforeCreate
+     * @param values
+     * @param cb
+     */
+    beforeCreate: function (values, cb) {
+      values.id = values.name;
+      cb();
+    }
+  });
+})();

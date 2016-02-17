@@ -2,87 +2,74 @@
  * Utility script for ensuring that sails.js has lifted fully before running tests.
  */
 
-var Barrels = require('barrels');
 var Sails = require('sails'),
-    sails;
+  sails;
 
 request = require('supertest');
 auth = require('./unit/utils/auth');
 should = require('should');
+Promise = require('bluebird');
 globals = {
   users: {},
+  subjects: {},
   groups: {},
   studies: {},
-  collectioncentres: {}
+  collectioncentres: {},
+  token: ''
 };
 
-before(function(done) {
-  console.log('Lifting sails...');
-  this.timeout(30000);
+before(function (done) {
+  this.timeout(900000);
   Sails.lift({
-    // configuration for testing purposes
-    log: {
-      level: 'error',
-      noShip: true
-    },
-    models: { 
-      connection: 'dados_test',
-      migrate: 'drop'
-    },
-    environment: 'test'
+    environment: 'test',
+    hooks: {
+      grunt: false
+    }
   }, function(err, server) {
     sails = server;
     if (err) return done(err);
-    
+
     // Shared request variable
     request = request(sails.hooks.http.app);
 
-    // temporarily disable csrf for testing
-    sails.config.csrf.grantTokenViaAjax = false;
-    sails.config.csrf.protectionEnabled = false;
-
-    // Load fixtures
-    var barrels = new Barrels();
-
-    // Save original objects in `fixtures` variable
-    fixtures = barrels.data;
-
-    // Populate the DB
-    console.log("Loading test fixtures...");
-
-    var createSubject = function() {
-      auth.createUser(auth.credentials['subject'].create, function(subId) {
-        globals.users.subjectUserId = subId; 
+    var createSubject = function () {
+      auth.createUser(auth.credentials['subject'].create, function (subId) {
+        globals.users.subjectUserId = subId;
+        Subject.create({
+          user: subId
+        }).exec(function (err, subject) {
+          globals.subjects.subjectId = subject.id;
+        });
       });
-    }
+    };
 
-    var createInterviewer = function() {
-      auth.createUser(auth.credentials['interviewer'].create, function(intId) {
+    var createInterviewer = function () {
+      auth.createUser(auth.credentials['interviewer'].create, function (intId) {
         globals.users.interviewerUserId = intId;
       });
-    }
+    };
 
-    var createCoordinator = function() {
-      auth.createUser(auth.credentials['coordinator'].create, function(cooId) {
+    var createCoordinator = function () {
+      auth.createUser(auth.credentials['coordinator'].create, function (cooId) {
         globals.users.coordinatorUserId = cooId;
       });
-    }
+    };
 
     Group.find().then(function (groups) {
-      _.each(groups, function (group) {
-        globals.groups[group.name] = group.id;
+        _.each(groups, function (group) {
+          globals.groups[group.name] = group.id;
+        });
+      })
+      .then(createSubject)
+      .then(createInterviewer)
+      .then(createCoordinator)
+      .then(function () {
+        done(err, sails);
       });
-    })
-    .then(createSubject)
-    .then(createInterviewer)
-    .then(createCoordinator)
-    .then(function () {
-      done(err, sails);
-    });
   });
 });
 
-after(function(done) {
+after(function (done) {
   // here you can clear fixtures, etc.
   sails.lower(done);
 });

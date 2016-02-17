@@ -1,293 +1,224 @@
-// api/controllers/UserController.js
+/**
+ * UserController
+ *
+ * @module controllers/User
+ * @description Server-side logic for managing users.
+ */
 
-var _ = require('lodash');
-var _super = require('sails-permissions/api/controllers/UserController');
-var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+(function() {
+  var Promise = require('bluebird');
+  var _ = require('lodash');
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
-_.merge(exports, _super);
-_.merge(exports, {
+  _.merge(exports, require('sails-auth/dist/api/controllers/UserController'));
+  _.merge(exports, {
 
-  find: function (req, res, next) {
-    var query = User.find()
-      .where( actionUtil.parseCriteria(req) )
-      .limit( actionUtil.parseLimit(req) )
-      .skip( actionUtil.parseSkip(req) )
-      .sort( actionUtil.parseSort(req) );
-
-    query.populate('roles');
-    query.populate('person'); 
-    query.exec(function found(err, users) {
-      if (err) return res.serverError(err);
-
-      _.map(users, function (user) {
-        if (user.person) {
-          _.merge(user, Utils.User.extractPersonFields(user.person));
-          delete user.person;
-        }
-      });
-      res.ok(users);
-    });        
-  },
-
-  findOne: function (req, res, next) {
-    User.findOne(req.param('id'))
-      .populate('person')
-      .populate('collectionCentres')
-    .exec(function (err, matchingRecord) {
-      if (err) res.serverError(err);
-      if(!matchingRecord) {
-        return res.notFound({
-          title: 'Not Found',
-          code: 404,
-          message: 'No record found with the specified id.'
-        });
+    /**
+     * find
+     * @description finds and returns all users with populated roles associations
+     */
+    find: function (req, res) {
+      var whereQuery = actionUtil.parseCriteria(req);
+      // admins have every permission so omit subject users from search
+      if (req.user.group == 'admin') {
+        whereQuery = _.merge(actionUtil.parseCriteria(req), {group: {'!': 'subject'}});
       }
 
-      if (matchingRecord.person) {
-        _.merge(matchingRecord, Utils.User.extractPersonFields(matchingRecord.person));
-        delete matchingRecord.person;
-      }
-
-      res.ok(matchingRecord);
-    });    
-  },
-
-  // Overrides sails-auth's UserController.create to include role
-  create: function (req, res, next) {
-    var password = req.param('password');
-
-    Person.create({
-      prefix: req.param('prefix'),
-      firstname: req.param('firstname'),
-      lastname: req.param('lastname')
-    }).exec(function (perr, person) {
-      if (perr) res.serverError(perr);
-      User.create({
-        username: req.param('username'),
-        email: req.param('email'),
-        group: req.param('group'),
-        person: person.id
-      }).exec(function (uerr, user) {
-        if (uerr || !user) {
-          person.destroy(function (destroyErr) {
-            return res.badRequest({
-              title: 'User Error',
-              code: 400,
-              message: 'Error creating user'
-            });  
-          });
-        } else {
-          if (_.isEmpty(password)) {
-            user.destroy(function (destroyErr) {
-              person.destroy(function (destroyErr) {
-                return res.badRequest({
-                  title: 'User Error',
-                  code: 400,
-                  message: 'Password cannot be empty'
-                });
-              });                
-            });
-          } else {
-            Passport.create({
-              protocol : 'local'
-            , password : password
-            , user     : user.id
-            }, function (err, passport) {
-              if (err) {
-                user.destroy(function (destroyErr) {
-                  person.destroy(function (destroyErr) {
-                    next(destroyErr || err);  
-                  });                
-                });
-              }
-              res.ok(user);
-            });
-          }            
-        }          
-      });
-    });
-  },
-
-  /**
-   * [update]
-   * Route for handling update of user/person attributes     
-   */
-  update: function (req, res) {
-    // user params
-    var userId = req.param('id');
-
-    var userFields = {
-      username: req.param('username'),
-      email: req.param('email'),
-      group: req.param('group'),
-      centreAccess: req.param('centreAccess')
-    };
-
-    Group.findOne(req.user.group).then(function (group) {
-      this.group = group;
-      if (group.level > 1) { // prevent all non-admin users
-        delete userFields.group;
-      }
-      return User.findOne(userId).populate('roles');
-    })
-    .then(function (user) {
-      this.previousGroup = user.group;
-      return User.update({id: user.id}, userFields);
-    })
-    .then(function (user) { // find and update user's associated passport
-      this.user = user;
-      if (!_.isEmpty(req.param('password'))) {
-        return Passport.findOne({ user : userId }).then(function (passport) {
-          return Passport.update(passport.id, { password : req.param('password') });
-        });
-      }
-    })
-    .then(function (passport) { // update user's associated person
-      var personFields = {
-        prefix: req.param('prefix'),
-        firstname: req.param('firstname'),
-        lastname: req.param('lastname')
-      };
-      if (personFields.prefix || personFields.firstname || personFields.lastname) {
-        if (!_.has(this.user, 'person')) {
-          return Person.create(personFields).then(function (person) {
-            return User.update(userId, { person: person.id });
-          });
-        } else {
-          return Person.update(this.user.person, personFields);
-        }  
-      }
-      return this.user;      
-    })
-    .then(function (user) { // updating group, apply new permissions
-      if (this.previousGroup !== userFields.group && this.group.level === 0) {
-        return PermissionService.setUserRoles(_.first(user));
-      } else {
-        return user;  
-      }        
-    })
-    .then(function (user) {
-      res.ok(user);
-    })
-    .catch(function (err) {
-      res.serverError(err);
-    });
-  },
-
-  /**
-   * [updateAccess]
-   * Route for handling collection centre access from study users page
-   */
-  updateAccess: function (req, res, next) {
-    // user params
-    var userId = req.param('id');
-
-    // access control params
-    var accessFields = {
-      centreAccess: req.param('centreAccess'),
-      swapWith: req.param('swapWith'),
-      isAdding: req.param('isAdding'),
-      collectionCentres: req.param('collectionCentres')
-    };
-
-    Group.findOne(req.user.group).then(function (group) {
-      this.group = group;
-      return User.findOne(userId).populate('collectionCentres');
-    })
-    .then(function (user) { // update user's collection centre access
-      this.user = user;
-      if (this.group.level === 1) {
-        if (accessFields.collectionCentres && !_.isEqual(this.user.centreAccess, accessFields.centreAccess)) {
-          _.each(accessFields.collectionCentres, function (centre) {
-            if (accessFields.isAdding) {
-              this.user.collectionCentres.add(centre);  
+      ModelService.filterExpiredRecords('user').where( whereQuery )
+        .then(function (totalUsers) {
+          var query = ModelService.filterExpiredRecords('user');
+          query
+            .where( whereQuery )
+            .limit( actionUtil.parseLimit(req) )
+            .skip( actionUtil.parseSkip(req) )
+            .sort( actionUtil.parseSort(req) );
+          query.populate('roles');
+          query.exec(function found(err, users) {
+            if (err) {
+              return res.serverError(err);
+            }
+            if (req.user.group == 'admin') {
+              res.ok(users, { filteredTotal: totalUsers.length });
             } else {
-              this.user.collectionCentres.remove(centre);
-            }          
+              res.ok(users);
+            }
           });
+        });
+    },
 
-          // if swapping centres, isAdding flag will be false so after removing, add in new centres
-          if (accessFields.swapWith && accessFields.swapWith.length > 0) {
-            _.each(accessFields.swapWith, function (centre) {
-              this.user.collectionCentres.add(centre);       
+    /**
+     * findOne
+     * @description finds one user by id and returns single user with populated collection centre association
+     */
+    findOne: function (req, res, next) {
+      User.findOne(req.param('id'))
+        .populate('enrollments')
+        .then(function (user) {
+          if(!user) {
+            return res.notFound({
+              title: 'Not Found',
+              code: 404,
+              message: 'No record found with the specified id.'
             });
           }
-          return this.user.save();
-        }
-      }      
-      return this.user;
-    })
-    .then(function (user) {        
-      if (this.group.level === 1 && !_.isUndefined(accessFields.centreAccess)) {
-        return User.update(userId, { centreAccess: accessFields.centreAccess });
-      }
-      return this.user;
-    })
-    .then(function (user) {
-      res.ok(user);
-    })
-    .catch(function (err) {
-      res.serverError(err);
-    });
-  },
 
-  /**
-   * [updateRoles]
-   * Route for handling role updates from access management page       
-   */
-  updateRoles: function (req, res, next) {
-    // user params
-    var userId = req.param('id');
-    // access control params
-    var roles = req.param('roles'),
-        updateGroup = req.param('updateGroup');
+          this.user = user;
+          return Promise.all(
+            _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
+              return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
+                .then(function (centre) {
+                  enrollment.collectionCentre = centre.id;
+                  enrollment.collectionCentreName = centre.name;
+                  enrollment.study = centre.study.id;
+                  enrollment.studyName = centre.study.name;
+                  return enrollment;
+                });
+            })
+          );
+        })
+        .then(function (enrollments) {
+          this.user.enrollments = enrollments;
+          Provider.findOne({ user: this.user.id }).populate('subjects').then(function (provider) {
+            if (provider) {
+              studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
+                this.user.providerSubjects = providerSubjects;
+                res.ok(this.user, { links: user.getResponseLinks() });
+              });
+            } else {
+              res.ok(this.user, { links: user.getResponseLinks() });
+            }
+          });
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
+    },
 
     /**
-    * Update user role from access management
-    */    
-    if (!_.isUndefined(updateGroup)) {
-      return User.findOne(userId).populate('roles')
-      .then(function (user) {
-        user.group = updateGroup;
-        return user.save();
-      })
-      .then(function (user) {
-        return PermissionService.setUserRoles(user);
-      })
-      .then(function (user) {
-        res.ok(user);
-      })
-      .catch(function (err) {
-        res.serverError(err);
-      });
-    }
-    /**
-     * Update user access matrix
+     * create
+     * @description Overrides sails-auth's UserController.create to include role
      */
-    else if (!_.isUndefined(roles)) {
-      return User.findOne(userId)
-      .then(function (user) {
-        return PermissionService.grantPermissions(user, roles);
-      })
-      .then(function (user) {
-        res.ok(user);
-      })
-      .catch(function (err) {
-        res.serverError(err);
-      });
-    }
-  },
+    create: function (req, res, next) {
+      var userOptions = _.pick(_.pick(req.body,
+        'username', 'email', 'password'
+      ), _.identity);
+      var personInfo = _.pick(_.pick(req.body,
+        'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.identity);
 
-  findByStudyName: function(req, res) {
-    var studyName = req.param('name');
-    User.findByStudyName(studyName, req.user,
-      { where: actionUtil.parseCriteria(req),
-        limit: actionUtil.parseLimit(req),
-        skip: actionUtil.parseSkip(req),
-        sort: actionUtil.parseSort(req) }, 
-      function(err, users) {
-        if (err) res.serverError(err);
-        res.ok(users);
-      });
-  }
-});
+      User
+        .register(userOptions)
+        .then(function (createdUser) {
+          return Group.findOne(personInfo.group).then(function (newGroup) {
+            if (!newGroup) {
+              err = new Error('Group '+personInfo.group+' does not exist.');
+              err.status = 400;
+              throw err;
+            }
+            return User.update({id: createdUser.id}, personInfo);
+          });
+        })
+        .then(function (updatedUser) {
+          return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
+            .then(function (user) {
+              res.ok(user);
+            })
+            .catch(function (err) {
+              user.destroy(function (destroyErr) {
+                next(destroyErr || err);
+              });
+            });
+        })
+        .catch(function (err) {
+          res.badRequest(err);
+        });
+    },
+
+    /**
+     * update
+     * @description Route for handling update of user attributes
+     */
+    update: function (req, res) {
+      var userId = req.param('id');
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      ), _.identity);
+
+      if (req.user.group !== 'admin') { // prevent all non-admin users from updating group
+        delete options.group;
+      }
+
+      User.findOne(userId)
+        .then(function (user) { // update user fields
+          this.previousGroup = user.group;
+          return User.update({id: user.id}, options);
+        })
+        .then(function (user) { // updating group, apply new permissions
+          if (this.previousGroup !== options.group && req.user.group === 'admin') {
+            return PermissionService.swapRoles(userId, this.previousGroup, options.group);
+          } else {
+            return user;
+          }
+        })
+        .then(function (user) { // find and update user's associated passport
+          this.user = user;
+          if (!_.isEmpty(req.param('password'))) {
+            return Passport.findOne({ user : userId }).then(function (passport) {
+              return Passport.update(passport.id, { password : req.param('password') });
+            });
+          }
+          return this.user;
+        })
+        .then(function (user) {
+          res.ok(this.user);
+        })
+        .catch(function (err) {
+          res.badRequest(err);
+        });
+    },
+
+    /**
+     * updateRoles
+     * @description Route for handling role updates from access management page
+     */
+    updateRoles: function (req, res, next) {
+      // user params
+      var userId = req.param('id');
+      // access control params
+      var roles = req.param('roles'),
+          updateGroup = req.param('updateGroup');
+
+      // Update user role from access management
+      if (!_.isUndefined(updateGroup)) {
+        return User.findOne(userId).populate('roles')
+        .then(function (user) {
+          user.group = updateGroup;
+          return user.save();
+        })
+        .then(function (user) {
+          return PermissionService.setDefaultGroupRoles(user);
+        })
+        .then(function (user) {
+          res.ok(user);
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
+      }
+      // Update user access matrix
+      else if (!_.isUndefined(roles)) {
+        return User.findOne(userId)
+        .then(function (user) {
+          return PermissionService.grantPermissions(user, roles);
+        })
+        .then(function (user) {
+          res.ok(user);
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
+      }
+    }
+
+  });
+})();

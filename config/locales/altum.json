@@ -1,0 +1,233 @@
+{
+  "APP": {
+    "AUTH": {
+      "TITLE": "Login",
+      "USERNAME": "Username",
+      "EMAIL": "Email",
+      "USERNAME_OR_EMAIL": "Username or Email",
+      "PASSWORD": "Password",
+      "SIGN_IN": "Sign in",
+      "SIGN_IN_ERROR": "Incorrect username or password"
+    },
+    "HEADER": {
+      "TAGLINE": "Leading the New Way in Canadian Health Care",
+      "SELECTED": "Selected:",
+      "MENU": {
+        "ALTUM_TOOLS": {
+          "APPROVERS": "Approvers",
+          "ADDRESS": "Address",
+          "PAYORS": "Payor",
+          "CLAIMS": "Claim",
+          "WORK_STATUS": "Work Status",
+          "PROGNOSIS": "Prognosis",
+          "ALTUM_SERVICES": "Altum Services",
+          "PROGRAM_SERVICES": "Program Services",
+          "SITES": "Sites",
+          "COMPANIES": "Companies",
+          "PROGRAMS": "Programs",
+          "SERVICE_CATEGORIES": "Service Categories",
+          "STATUS": "Statuses"
+        },
+        "STUDIES": "Programs",
+        "MY_STUDIES": "My Programs",
+        "MY_PROFILE": "My Profile",
+        "USER_MANAGER": "User Manager",
+        "TOOLS": "Admin Tools",
+        "FORM_BUILDER": "Form Builder",
+        "WORKFLOW_EDITOR": "Workflow Editor",
+        "GROUPS": "Groups",
+        "TRANSLATIONS": "Translations",
+        "ACCESS_MANAGEMENT": "Access Management"
+      },
+      "SUBMENU": {
+        "OVERVIEW": "Overview",
+        "COLLECTION_CENTRES": "Sites",
+        "SUBJECTS": "Clients",
+        "USERS": "Users",
+        "FORMS": "Forms",
+        "SURVEYS": "Surveys",
+        "SERVICES": "Services"
+      }
+    },
+    "STUDY": {
+      "OVERVIEW": {
+        "TITLE": "Program Overview: {{name}}",
+        "ENROLLMENT": {
+          "TITLE": "Enrollment",
+          "COLLECTION_CENTRES": "Sites",
+          "CONTACT": "@:COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
+          "COORDINATORS": "Coordinators",
+          "INTERVIEWERS": "Interviewers",
+          "SUBJECTS": "Clients",
+          "SUBJECTS_ENROLLED": "Clients Enrolled"
+        },
+        "STUDY_INFORMATION": {
+          "TITLE": "Program Information"
+        }
+      },
+      "SUBJECT": {
+        "CONTROLS": {
+          "OPEN_BTN": "View Client",
+          "NEW_BTN": "Add Client",
+          "EDIT_BTN": "Edit Client",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "USER": {
+        "CONTROLS": {
+          "SAVE_CHANGES": "Save Changes",
+          "OPEN_BTN": "View User",
+          "NEW_BTN": "Add User",
+          "EDIT_BTN": "Edit User",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "FORM": {
+        "CONTROLS": {
+          "ADD_FORM_PLACEHOLDER": "Select a form to add",
+          "NEW_BTN": "Create Form",
+          "EDIT_BTN": "Edit Form",
+          "ARCHIVE_BTN": "Archive"
+        }
+      },
+      "SURVEY": {
+        "CONTROLS": {
+          "OPEN_BTN": "View Survey",
+          "NEW_BTN": "Add Survey",
+          "EDIT_BTN": "Edit Survey",
+          "ARCHIVE_BTN": "Archive",
+          "SAVE_BTN": "Save",
+          "CANCEL_BTN": "Cancel"
+        }
+      },
+      "COLLECTION_CENTRE": {
+        "OVERVIEW": {
+          "TITLE": "Program Overview: {{name}}",
+          "SUBJECTS": {
+            "TITLE": "Clients"
+          },
+          "COORDINATORS": {
+            "TITLE": "Managers"
+          }
+        }
+      }
+    },
+    "SUBJECT_PORTAL": {
+      "PROFILE_TAB_TITLE": "My Profile",
+      "SURVEYS_TAB_TITLE": "Upcoming Surveys",
+      "PROFILE_TITLE": "User Profile",
+      "STUDIES_TITLE": "List of enrolled studies",
+      "SCHEDULE_TITLE": "List of upcoming surveys"
+    }
+  },
+  "COMMON": {
+    "LANGUAGES": {
+      "LANGUAGE": "Language",
+      "ENGLISH": "English",
+      "FRENCH": "French",
+      "ALTUM": "Altum"
+    },
+    "HATEOAS": {
+      "TITLE": {
+        "TOTAL": "Total: {{total}}"
+      },
+      "QUERY": {
+        "ADVANCED": {
+          "SEARCH_BTN": "Advanced Search",
+          "OPERATORS": {
+            "NOT": "Not",
+            "IS": "Is",
+            "CONTAINS": "Contains",
+            "LIKE": "Like",
+            "STARTS_WITH": "Starts With",
+            "ENDS_WITH": "Ends With"
+          }
+        },
+        "PLACEHOLDER": "Search Value",
+        "ADD_BTN": "Add",
+        "RESET_BTN": "Reset"
+      },
+      "CONTROLS": {
+        "OPEN_BTN": "Open",
+        "NEW_BTN": "New",
+        "EDIT_BTN": "Edit",
+        "ARCHIVE_BTN": "Archive"
+      }
+    },
+    "MODELS": {
+      "STUDY": {
+        "IDENTITY": "Program",
+        "NAME": "Program Name",
+        "ATTRIBUTES": "Attributes",
+        "REB": "REB #",
+        "ADMINISTRATOR": "Administrator",
+        "PI": "PI"
+      },
+      "USER": {
+        "IDENTITY": "User",
+        "USERNAME": "Username",
+        "EMAIL": "Email",
+        "PREFIX": "Prefix",
+        "FIRSTNAME": "Firstname",
+        "LASTNAME": "Lastname",
+        "GENDER": "Gender",
+        "DOB": "Date of Birth"
+      },
+      "COLLECTION_CENTRE": {
+        "IDENTITY": "Site",
+        "NAME": "Site Name",
+        "CONTACT": "Contact"
+      },
+      "SUBJECT_ENROLLMENT": {
+        "IDENTITY": "Client",
+        "SUBJECT_NUMBER": "Client ID",
+        "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
+        "DOE": "Date of Event",
+        "STUDY_MAPPING": "Program Mapping",
+        "STATUS": "Status"
+      },
+      "USER_ENROLLMENT": {
+        "IDENTITY": "User",
+        "USERNAME": "Username",
+        "EMAIL": "Email",
+        "PREFIX": "Prefix",
+        "FIRSTNAME": "Firstname",
+        "LASTNAME": "Lastname",
+        "GENDER": "Gender",
+        "DOB": "Date of Birth",
+        "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
+        "CENTRE_ACCESS": "Role"
+      },
+      "FORM": {
+        "IDENTITY": "Form",
+        "NAME": "Form Name",
+        "METADATA": "Meta Data",
+        "QUESTIONS": "Questions"
+      },
+      "SURVEY": {
+        "IDENTITY": "Survey",
+        "NAME": "Survey Name",
+        "COMPLETED_BY": "Completed By"
+      },
+      "SUBJECT_SCHEDULE": {
+        "AVAILABLE_FROM": "Available From",
+        "STATUS": "Status",
+        "AVAILABLE_TO": "Available To",
+        "IDENTITY": "Subject Schedule"
+      },
+      "SESSION": {
+        "IDENTITY": "Session",
+        "NAME": "Session Name",
+        "TIMEPOINT": "Timepoint",
+        "AVAILABLE_FROM": "Available From",
+        "AVAILABLE_TO": "Available To",
+        "TYPE": "Type",
+        "TYPE_ENUM": {
+          "SCHEDULED": "Scheduled",
+          "RECURRING": "Recurring",
+          "NON_SCHEDULED": "Non-Scheduled"
+        }
+      }
+    }
+  }
+}

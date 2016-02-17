@@ -1,116 +1,133 @@
 /**
-* Subject.js
+* Subject
 *
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
+* @class Subject
+* @description Model representation of a subject
+* @docs        http://sailsjs.org/#!documentation/models
 */
+
+
 (function() {
-var HateoasService = require('../services/HateoasService.js');
+  var _super = require('./BaseModel.js');
+  var faker = require('faker');
 
-module.exports = {
-  schema: true,
-  attributes: {
-    subjectId: {
-      type: 'integer',
-      autoIncrement: true,
-      defaultsTo: 0
-    },
-    user: {
-      model: 'user',
-      required: true
-    },
-    // CCs I am enrolled in as a subject
-    collectionCentres: {
-      collection: 'collectioncentre',
-      via: 'subjects'
-    },
-    toJSON: HateoasService.makeToHATEOAS.call(this, module)
-  },
+  var HateoasService = require('../services/HateoasService.js');
+  var _ = require('lodash');
 
-  findByStudyName: function(studyName, user, options, cb) {
-    Study.findOneByName(studyName)
-      .populate('collectionCentres')
-      .then(function (study) {
-        if (!study) {
-          err = new Error();
-          err.message = require('util')
-            .format('Study with name %s does not exist.', studyName);
-          err.status = 404;
-          return cb(err);
+  _.merge(exports, _super);
+  _.merge(exports, {
+
+    defaultTemplateOmit: null,
+
+    attributes: {
+      /**
+       * user
+       * @description Associated user that this subject belongs to.  The User
+       *              model holds the personal data as well as the access
+       *              attributes for logging in and permissions.
+       *
+       * @type {Association}
+       */
+      user: {
+        model: 'user',
+        required: true,
+        generator: function (state) {
+          return BaseModel.defaultGenerator(state, 'user', User);
         }
+      },
 
-        this.study = study;        
-        return study.collectionCentres;
-      })
-      .then(function (centres) {
-        if (user.role !== 'admin') {
-          return Subject.findOne(user.id)
-            .populate('user')
-            .populate('collectionCentres')
-            .then(function (subject) {
-              if (_.has(subject, 'collectionCentres')) {
-                return _.filter(subject.collectionCentres, function (centre) {
-                  return _.includes(_.pluck(centres, 'id'), centre.id );
-                });  
-              }              
-            });
-        }
-        return centres;
-      })
-      .then(function (centres) {
-        // return all subjects from each study's collection centres
-        return Promise.all(
-          _.map(centres, function (centre) {
-            return CollectionCentre.findOne(centre.id).populate('subjects');
-          })
-        );
-      })
-      .then(function (centres) {
-        var centreIds = _.pluck(centres, 'id');
-        var subjects = _.uniq(_.flattenDeep(_.pluck(centres, 'subjects')), 'id');
-        return Promise.all(
-          _.map(subjects, function (subject) {
-            return Subject.findOne(subject.id).populate('user').populate('collectionCentres');
-          })
-        );
-      })
-      .then(function (subjects) {
-        return Utils.User.populateSubjects(subjects);
-      })
-      // .then(function (subjects) {
-      //   // TODO: FIX THIS - unable to query on populated values
-      //   var query = _.cloneDeep(options);
-      //   query.where = query.where || {};
-      //   delete query.where.name;
+      /**
+       * enrollments
+       * @description List of subject enrollments storing which collection centres
+       *              and studies I, as a subject am enrolled in.
+       *
+       * @type {Association}
+       */
+      enrollments: {
+        collection: 'subjectenrollment',
+        via: 'subject'
+      },
 
-      //   this.subjects = _.pluck(subjects, 'id');
-      //   return User.find(query).populate('person');
-      // })
-      // .then(function (subjects) {
-      //   return Utils.User.populateUsers(subjects);
-      // })
-      // .then(function (subjects) {
-      //   return _.filter(subjects, function (user) {
-      //     return _.includes(this.subjects, user.id);
-      //   });
-      // })
-      .then(function (subjects) {
-        cb(false, subjects);
-      })
-      .catch(cb);
-  },
-  
-  beforeValidate: function(subject, cb) {
-    //Auto increment workaround
-    Subject.findOne({ where: {"study": subject.study}, 
-      sort:'studyId DESC' } )
-        .exec(function(err, lastSubject){
-          if (err) return err;
-          subject.studyId = (lastSubject && lastSubject.studyId ? 
-            lastSubject.studyId + 1 : 1);
+      /**
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
+       */
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * afterUpdate
+     * @description Lifecycle callback meant to handle deletions in our system; if at
+     *              any point we set this subject's expiredAt attribute, this function
+     *              will check and invalidate any active user/subject enrollments.
+     *
+     * @param  {Object}   updated updated subject object
+     * @param  {Function} cb      callback function on completion
+     */
+    afterUpdate: function(updated, cb) {
+      if (!_.isNull(updated.expiredAt)) {
+        UserEnrollment.update({ user: updated.user }, { expiredAt: new Date() })
+        .then(function (userEnrollments) {
+          return SubjectEnrollment.update({ subject: updated.id }, { expiredAt: new Date() });
+        })
+        .then(function (subjectEnrollments) {
           cb();
-        });
-  }
-};
+        })
+        .catch(cb);
+      } else {
+        cb();
+      }
+    },
+
+    afterCreate: function (values, cb) {
+      User.findOne(values.user)
+        .then(function (user) {
+          this.user = user;
+          this.roleName = ['Subject', values.id, 'Role'].join('');
+          return Role.findOne({ name: this.roleName });
+        })
+        .then(function (role) {
+          if (_.isUndefined(role)) {
+            return PermissionService.createRole({
+              name: this.roleName,
+              permissions: [
+                {
+                  model: 'studysubject',
+                  action: 'read',
+                  criteria: [
+                    { where: { subject: values.id } }
+                  ]
+                },
+                {
+                  model: 'schedulesubjects',
+                  action: 'read',
+                  criteria: [
+                    { where: { subject: values.id } }
+                  ]
+                }
+              ],
+              users: [ this.user.username ]
+            });
+          } else {
+            if (this.user.group != 'admin') {
+              return PermissionService.addUsersToRole(this.user.username, this.roleName);
+            }
+            return role;
+          }
+        })
+        .then(function (newRole) {
+          cb();
+        }).catch(cb);
+    }
+
+  });
 
 }());

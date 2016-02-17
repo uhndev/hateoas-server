@@ -6,18 +6,49 @@
  * in each of your models.
  *
  * For more info on Sails models, see:
- * http://sailsjs.org/#/documentation/concepts/ORM
+ * http://sailsjs.org/#!/documentation/concepts/ORM
  */
 
 module.exports.models = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Your app's default connection. i.e. the name of one of your app's        *
-  * connections (see `config/connections.js`)                                *
-  *                                                                          *
-  ***************************************************************************/
+  // elements in this array will be ignored as Model attributes
+  validations: {
+    ignoreProperties: ['generator']
+  },
 
-  migrate: 'drop',
-  connection: 'dados_development'
+  limits: {
+    claim: 5,
+    program: 5,
+    referral: 5
+  },
+
+  populateDB: function() {
+    var that = this;
+    var generateMultiple = function(model) {
+      var promises = [];
+      for (var i=0; i < that.limits[model]; i++) {
+        promises.push(sails.models[model].generateAndCreate());
+      }
+      return Promise.all(promises).then(function(data) {
+        sails.log.info(that.limits[model] + ' ' + model + '(s) generated');
+        return data;
+      });
+    };
+
+    Site.generateAndCreate()
+      .then(StaffType.generateAndCreate)
+      .then(Status.generateAndCreate)
+      .then(ServiceCategory.generateAndCreate)
+      .then(WorkStatus.generateAndCreate)
+      .then(Timeframe.generateAndCreate)
+      .then(Prognosis.generateAndCreate)
+      .then(ServiceType.generateAndCreate)
+      .then(ProgramService.generateAndCreate)
+      .then(generateMultiple('claim'))
+      .then(generateMultiple('program'))
+      .then(generateMultiple('referral'))
+      .catch(function (err) {
+        sails.log.info(err);
+      });
+  }
 };

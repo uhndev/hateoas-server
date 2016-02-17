@@ -11,7 +11,7 @@
  *          - pass string to render specified view
  */
 module.exports = function sendOK (data, options) {
-  var Q = require('q');
+  var Promise = require('bluebird');
   var url = require('url');
 
   // Get access to `req`, `res`, & `sails`
@@ -30,55 +30,105 @@ module.exports = function sendOK (data, options) {
   /**
    * Private method that fetches the result count for the current query.
    */
-  function fetchResultCount(query, modelName) {
+  function fetchResultCount(req, query, modelName) {
     var models = sails.models;
     if (_.has(models, modelName)) {
       var model = models[modelName];
+      var promise;
+      var filterQuery = { where: {} };
+      // if provided a query, include in where clause
       if (query.where) {
-        return model.count(JSON.parse(query.where));
-      } 
-      return model.count(query);
+        filterQuery.where = JSON.parse(query.where);
+      }
+
+      // when options.filteredTotal is passed to res.ok, use the filtered total instead
+      if (options && _.has(options, 'filteredTotal')) {
+        promise = options.filteredTotal;
+      }
+
+      // otherwise, we can just return the model count total
+      else {
+        if (_.has(model.attributes, 'expiredAt')) {
+          filterQuery.where.expiredAt = null;
+        }
+
+        /**
+         * if header was sent from frontend (a query from getQueryLinks), apply populate here
+         * with appropriate where clause for populate to get correct filtered count.
+         *
+         * Header is set in HateoasController.js in dados-client and
+         * queryLinks are defined within the respective Model file in Sails.
+         */
+        var queryFilter = null;
+        if (_.has(req.headers, 'x-uhn-deep-query')) {
+          queryFilter = JSON.parse(req.headers['x-uhn-deep-query']);
+          promise = model.find(filterQuery)
+            .populate(queryFilter.collection, queryFilter.where)
+            .then(function (totalItems) {
+              return _.filter(totalItems, function (item) {
+                return item[queryFilter.collection].length > 0;
+              });
+            });
+        }
+
+        // for non-admins, apply criteria here to get restricted count of permitted records
+        if (_.has(req, 'criteria') && req.criteria.length > 0) {
+          // if header was included with populate query, filter matchingRecords by given successful matched criteria
+          if (queryFilter && _.has(req.headers, 'x-uhn-deep-query')) {
+            promise = promise.then(function (totalItems) {
+              return PermissionService.filterByCriteria(req.criteria, totalItems).length;
+            });
+          }
+          // otherwise no header set and just filter criteria from find
+          else {
+            promise = model.find(filterQuery).then(function (totalItems) {
+              return PermissionService.filterByCriteria(req.criteria, totalItems).length;
+            });
+          }
+        }
+        // otherwise no criteria set
+        else {
+          // if no header set for populate filter, just do direct count
+          if (!queryFilter) {
+            promise = model.count(filterQuery);
+          }
+        }
+      }
+
+      return promise;
     }
-    return Q.when(0);
+    return Promise.resolve(0);
   }
 
   /**
-   * Private method for fetching which CRUD operations are permitted 
+   * Private method for fetching which CRUD operations are permitted
    * for the given model and user.
-   * @param  {[model]}
-   * @param  {[user]}
-   * @return {[promise]}
+   * @param  {model}
+   * @param  {user}
+   * @return {promise}
    */
   function fetchPermissions(model, user) {
-    var promises = [];
     // find for current model/user, which CRUD operations are permitted
-    _.map(['GET','POST','PUT','DELETE'], function(method) {
-      var options = {
-        method: method,
-        model: model,
-        user: user 
-      } 
-      promises.push(PermissionService.findModelPermissions(options)
-        .then(function (permissions) {
-          return permissions;
-        })
-      );
-    });
-
-    var permissions = [];
-    var promise = Q.allSettled(promises).then(function (results) {
-      results.forEach(function(result) {
-        if (result.value.length > 0)
-          permissions.push(result.value[0].action);
-      });
-    }).then(function() {
-      permissions = permissions.join(',');
-      return permissions;
-    }).catch(function (err) {
+    return Promise.all(
+      _.map(['GET','POST','PUT','DELETE'], function(method) {
+        return PermissionService.findModelPermissions({
+          method: method,
+          model: model,
+          user: user
+        });
+      })
+    ).then(function (permissions) {
+      return _.reduce(permissions, function (result, permission) {
+        var perm = _.first(permission);
+        if (!_.isUndefined(perm) && _.has(perm, 'action')) {
+          return result.concat(_.first(permission).action);
+        }
+        return result;
+      }, []).join(',');
+    })
+    .catch(function (err) {
       return err;
     });
-
-    return promise;
   }
 
   function sanitize(data) {
@@ -88,31 +138,28 @@ module.exports = function sendOK (data, options) {
       '&': '&amp;'
     };
 
-    var sanitized = JSON.stringify(data).replace(/[&<>]/g, 
+    var sanitized = JSON.stringify(data).replace(/[&<>]/g,
       function(key) {
         return entityMap[key];
       });
     return JSON.parse(sanitized);
   }
 
-  HateoasService.create(req, res, data)
+  HateoasService.create(req, res, data, options)
     .then(function(hateoasResponse) {
-      var address = url.parse(Utils.Path.getFullUrl(req));
       var modelName = req.options.model || req.options.controller;
       var query = Utils.Path.getWhere(req.query);
       var modelPromise = Model.findOne({name: modelName})
         .then(function (model) {
           return fetchPermissions(model, req.user);
         });
-
-      return [hateoasResponse, data.length, fetchResultCount(query, modelName), modelPromise];
-      // return [hateoasResponse, fetchResultCount(query, modelName), modelPromise];
+      return [hateoasResponse, data.length, fetchResultCount(req, query, modelName), modelPromise];
     })
     .spread(function(hateoasResponse, resultCount, modelCount, permissions) {
       hateoasResponse.count = resultCount;
       hateoasResponse.total = modelCount;
 
-      // hateoasControls will read the allow header 
+      // hateoasControls will read the allow header
       // to determine which buttons/actions to render
       res.set({
         'Access-Control-Expose-Headers': 'allow,Content-Type',
