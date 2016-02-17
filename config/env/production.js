@@ -17,7 +17,7 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  proxyHost: 'ws69.uhnresearch.ca',
+  proxyHost: '10.3.128.49',
 
   models: {
     migrate: 'safe',
