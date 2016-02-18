@@ -48,10 +48,9 @@
               sails.log.error(dropQuery);
               next(err);
             });
-          })
-        }
+        })
       }
-    };
+    }
+  };
 
 })();
-

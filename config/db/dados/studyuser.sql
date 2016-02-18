@@ -7,7 +7,7 @@ CREATE OR REPLACE VIEW studyuser AS
   SELECT "user".id,
     userenrollment.id AS "userenrollment",
     (SELECT ARRAY(SELECT userenrollment.id
-     FROM userenrollment
+     FROM dados.userenrollment
      WHERE userenrollment."collectionCentre" = collectioncentre.id
      AND userenrollment."expiredAt" IS NULL)) AS "userEnrollments",
     "user"."displayName" AS "displayName",
@@ -27,10 +27,10 @@ CREATE OR REPLACE VIEW studyuser AS
     userenrollment."createdBy",
     userenrollment."createdAt",
     userenrollment."updatedAt"
-   FROM userenrollment
+   FROM dados.userenrollment
      LEFT JOIN "user" ON "user".id = userenrollment."user"
-     LEFT JOIN collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
-     LEFT JOIN study ON collectioncentre.study = study.id
+     LEFT JOIN dados.collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE userenrollment."expiredAt" IS NULL;
 
 ALTER TABLE studyuser
