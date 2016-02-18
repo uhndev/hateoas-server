@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW studysession AS
     session."surveyVersion",
     session."formOrder",
     ( SELECT ARRAY( SELECT formsessions.formversion_sessions
-                   FROM formversion_sessions__session_formversions formsessions
+                   FROM dados.formversion_sessions__session_formversions formsessions
                   WHERE formsessions."session_formVersions" = session.id AND session."expiredAt" IS NULL) AS "array") AS "formVersions",
     survey.name AS "surveyName",
     survey."completedBy",
@@ -23,9 +23,9 @@ CREATE OR REPLACE VIEW studysession AS
     survey."createdBy",
     survey."createdAt",
     survey."updatedAt"
-   FROM survey
-     LEFT JOIN session ON survey.id = session.survey
-     LEFT JOIN study ON survey.study = study.id
+   FROM dados.survey
+     LEFT JOIN dados.session ON survey.id = session.survey
+     LEFT JOIN dados.study ON survey.study = study.id
   WHERE survey."expiredAt" IS NULL AND session."expiredAt" IS NULL;
 
 ALTER TABLE studysession

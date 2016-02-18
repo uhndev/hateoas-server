@@ -48,7 +48,7 @@
             })
             .catch(function (err) {
               sails.log.error('Error running query: ' + err);
-              sails.log.error(dropQuery);
+              sails.log.error(createQuery);
               next(err);
             });
         });

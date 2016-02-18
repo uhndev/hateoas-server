@@ -16,6 +16,7 @@ describe('The UserEnrollment Controller', function () {
   describe('User with Admin Role', function () {
 
     before(function (done) {
+      this.timeout(10000);
       Study.create({
           name: 'ENROLLMENT-LEAP-ADMIN',
           reb: 100

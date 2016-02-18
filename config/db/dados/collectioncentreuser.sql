@@ -19,10 +19,10 @@ CREATE OR REPLACE VIEW collectioncentreuser AS
     userenrollment."createdBy",
     userenrollment."createdAt",
     userenrollment."updatedAt"
-   FROM userenrollment
+   FROM dados.userenrollment
      LEFT JOIN "user" ON "user".id = userenrollment."user"
-     LEFT JOIN collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
-     LEFT JOIN study ON collectioncentre.study = study.id
+     LEFT JOIN dados.collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE userenrollment."expiredAt" IS NULL;
 
 ALTER TABLE collectioncentreuser
