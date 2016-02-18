@@ -19,7 +19,7 @@ globals = {
 };
 
 before(function(done) {
-  this.timeout(30000);
+  this.timeout(900000);
   Sails.lift({
     environment: 'test',
     hooks: {

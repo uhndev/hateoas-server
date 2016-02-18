@@ -29,14 +29,14 @@ CREATE OR REPLACE VIEW schedulesubjects AS
     subjectschedule."createdBy",
     subjectschedule."createdAt",
     subjectschedule."updatedAt"
-   FROM subjectschedule
-     LEFT JOIN session ON session.id = subjectschedule.session
-     LEFT JOIN survey ON session.survey = survey.id
-     LEFT JOIN subjectenrollment ON subjectschedule."subjectEnrollment" = subjectenrollment.id
-     LEFT JOIN subject ON subject.id = subjectenrollment.subject
+   FROM dados.subjectschedule
+     LEFT JOIN dados.session ON session.id = subjectschedule.session
+     LEFT JOIN dados.survey ON session.survey = survey.id
+     LEFT JOIN dados.subjectenrollment ON subjectschedule."subjectEnrollment" = subjectenrollment.id
+     LEFT JOIN dados.subject ON subject.id = subjectenrollment.subject
      LEFT JOIN "user" ON subject."user" = "user".id
-     LEFT JOIN collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
-     LEFT JOIN study ON collectioncentre.study = study.id
+     LEFT JOIN dados.collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL AND survey."expiredAt" IS NULL AND subjectenrollment."expiredAt" IS NULL;
 
 ALTER TABLE schedulesubjects

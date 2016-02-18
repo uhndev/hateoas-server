@@ -17,6 +17,7 @@ describe('The User Controller', function () {
   describe('User with Admin Role', function () {
 
     before(function (done) {
+      this.timeout(10000);
       Study.create({
           name: 'USER-LEAP-ADMIN',
           reb: 100
