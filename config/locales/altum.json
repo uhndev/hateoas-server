@@ -129,7 +129,9 @@
         },
         "PLACEHOLDER": "Search Value",
         "ADD_BTN": "Add",
-        "RESET_BTN": "Reset"
+        "RESET_BTN": "Reset",
+        "MY_STUDIES": "My Studies",
+        "ALL_STUDIES": "All Studies"
       },
       "CONTROLS": {
         "OPEN_BTN": "Open",
