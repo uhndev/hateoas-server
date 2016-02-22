@@ -47,13 +47,11 @@
       .skip(actionUtil.parseSkip(req) || Model.defaultSkip || BaseModel.defaultSkip)
       .sort(actionUtil.parseSort(req) || Model.defaultSortBy || undefined);
 
-    query = actionUtil.populateEach(query, req);
+    query = actionUtil.populateRequest(query, req);
 
     // auto-populate based on Model.defaultPopulate
     if (Model.defaultPopulate) {
-      _.each(Model.defaultPopulate, function (attribute) {
-        query = query.populate(attribute);
-      });
+      query = query.populate(Model.defaultPopulate);
     }
 
     /**

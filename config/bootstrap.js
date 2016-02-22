@@ -10,8 +10,15 @@
  */
 
 var Barrels = require('barrels');
+var _ = require('lodash');
 
 module.exports.bootstrap = function (cb) {
+  // Keep Bluebird warnings but don't
+  // show those about forgotten returns.
+  // They are not nice to have when using promises
+  // on policies + controllers + other
+  process.env.BLUEBIRD_WARNINGS = 1;
+  process.env.BLUEBIRD_W_FORGOTTEN_RETURN = 0;
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
@@ -38,7 +45,7 @@ module.exports.bootstrap = function (cb) {
               var idx = _.findIndex(fixtures.systemform, {'form_name': systemform.form_name});
               var workflow = fixtures.workflowstate[idx];
               if (workflow && _.has(workflow.template, 'href')) {
-                workflow.template.href = [sails.getBaseUrl() + sails.config.blueprints.prefix, 'systemform', systemform.id].join('/');
+                workflow.template.href = [sails.config.appUrl + sails.config.blueprints.prefix, 'systemform', systemform.id].join('/');
               }
             });
           })

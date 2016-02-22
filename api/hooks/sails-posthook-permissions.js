@@ -9,7 +9,7 @@
           Model.count()
             .then(function (count) {
               if (count == sails.models.length) return next();
-              initializeRoles()
+              return initializeRoles()
                 .then(initializeGroups)
                 .then(checkAdminUser)
                 .then(initializeTranslations)

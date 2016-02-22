@@ -212,7 +212,7 @@ describe('The User Controller', function () {
             }).then(function (enrollment) {
               ueID = enrollment.id;
               done(err);
-            });
+            }).catch(done);
           });
       });
 
