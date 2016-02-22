@@ -25,7 +25,7 @@
       }
 
       ModelService.filterExpiredRecords('user').where( whereQuery )
-        .then(function (totalUsers) {
+        .exec(function (err, totalUsers) {
           var query = ModelService.filterExpiredRecords('user');
           query
             .where( whereQuery )
@@ -35,7 +35,7 @@
           query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
-              return res.serverError(err);
+              res.serverError(err);
             }
             if (req.user.group == 'admin') {
               res.ok(users, { filteredTotal: totalUsers.length });
@@ -120,8 +120,8 @@
         })
         .then(function (updatedUser) {
           return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
-            .then(function (user) {
-              res.ok(user);
+            .then(function () {
+              res.ok(_.first(updatedUser));
             })
             .catch(function (err) {
               user.destroy(function (destroyErr) {
@@ -154,6 +154,7 @@
           return User.update({id: user.id}, options);
         })
         .then(function (user) { // updating group, apply new permissions
+          this.user = user;
           if (this.previousGroup !== options.group && req.user.group === 'admin') {
             return PermissionService.swapRoles(userId, this.previousGroup, options.group);
           } else {
@@ -161,7 +162,6 @@
           }
         })
         .then(function (user) { // find and update user's associated passport
-          this.user = user;
           if (!_.isEmpty(req.param('password'))) {
             return Passport.findOne({ user : userId }).then(function (passport) {
               return Passport.update(passport.id, { password : req.param('password') });
@@ -193,13 +193,14 @@
         return User.findOne(userId).populate('roles')
         .then(function (user) {
           user.group = updateGroup;
+          this.user = user;
           return user.save();
         })
-        .then(function (user) {
-          return PermissionService.setDefaultGroupRoles(user);
+        .then(function () {
+          return PermissionService.setDefaultGroupRoles(this.user);
         })
-        .then(function (user) {
-          res.ok(user);
+        .then(function () {
+          res.ok(this.user);
         })
         .catch(function (err) {
           res.serverError(err);

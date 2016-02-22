@@ -12,6 +12,7 @@
  */
 module.exports = function sendOK (data, options) {
   var Promise = require('bluebird');
+  var _ = require('lodash');
   var url = require('url');
 
   // Get access to `req`, `res`, & `sails`

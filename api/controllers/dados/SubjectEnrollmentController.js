@@ -87,89 +87,63 @@
       var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
       ), _.identity);
+      options.group = 'subject';
+      options.passports = [
+        {
+          protocol : 'local',
+          password : req.param('password')
+        }
+      ];
 
       var enrollmentOptions = _.pick(_.pick(req.body,
         'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
-      options.group = 'subject';
-      User.create(options).then(function (user) {
-        return PermissionService.setDefaultGroupRoles(user);
-      })
-      .then(function (user) { // create passport
-        this.user = user;
-        return Passport.create({
-          protocol : 'local',
-          password : req.param('password'),
-          user     : user.id
-        }).catch(function (err) {
-          this.user.destroy(function (destroyErr) {
-            throw err;
-          });
-        });
-      })
-      .then(function (passport) { // create subject
-        this.passport = passport;
-        return Subject.create({
-          user: this.user.id
-        }).catch(function (err) {
-          this.passport.destroy(function (destroyErr) {
-            this.user.destroy(function (destroyErr) {
-              throw err;
-            });
-          });
-        });
-      })
-      .then(function (subject) { // find collection centre's study
-        this.subject = subject;
-        return Study.findOne(enrollmentOptions.study).then(function (study) {
-          return study.attributes;
-        });
-      })
-      .then(function (attributes) { // verify studyMapping is valid
-        var studyMapping = enrollmentOptions.studyMapping;
-        // only if both empty we allow or if status is set to REGISTERED
-        if (_.isEmpty(attributes) && _.isEmpty(studyMapping) ||
+      Study.findOne(enrollmentOptions.study)
+        .then(function (study) {  // verify studyMapping is valid
+          var studyMapping = enrollmentOptions.studyMapping;
+          // only if both empty we allow or if status is set to REGISTERED
+          if (_.isEmpty(study.attributes) && _.isEmpty(studyMapping) ||
             _.isEmpty(studyMapping) && enrollmentOptions.status == 'REGISTERED') {
-          return true;
-        } else {
-          // verify keys of study attributes mirror keys of studyMapping
-          var valid = _.isEmpty(_.xor(_.keys(attributes), _.keys(studyMapping)));
-          // verify value of studyMapping corresponds directly to one of the values in study attributes
-          _.forIn(attributes, function (value, key) {
-            valid = valid && _.includes(value, studyMapping[key]);
-          });
-          return valid;
-        }
-      })
-      .then(function (validMapping) { // if valid, create subject enrollment
-        if (validMapping) {
-          enrollmentOptions.subject = this.subject.id;
-          return SubjectEnrollment.create(enrollmentOptions);
-        } else {
-          return null;
-        }
-      })
-      .then(function (enrollment) {
-        if (enrollment) {
-          res.ok(enrollment);
-        } else {
-          this.subject.destroy(function (destroyErr) {
-            this.passport.destroy(function (destroyErr) {
-              this.user.destroy(function (destroyErr) {
-                res.badRequest({
-                  title: 'Subject Enrollment Error',
-                  code: 400,
-                  message: 'Study mapping is invalid, please ensure options match study attributes.'
-                });
-              });
+            return true;
+          } else {
+            // verify keys of study.attributes mirror keys of studyMapping
+            var valid = _.isEmpty(_.xor(_.keys(study.attributes), _.keys(studyMapping)));
+            // verify value of studyMapping corresponds directly to one of the values in study.attributes
+            _.forIn(study.attributes, function (value, key) {
+              valid = valid && _.includes(value, studyMapping[key]);
             });
-          });
-        }
-      })
-      .catch(function (err) {
-        res.serverError(err);
-      });
+            return valid;
+          }
+        })
+        .then(function (validMapping) { // if valid, create subject enrollment
+          var that = this;
+          if (validMapping) {
+            return User.create(options).then(function (user) {
+              that.user = user;
+              return PermissionService.setDefaultGroupRoles(user);
+            }).then(function () {
+              enrollmentOptions.subject = {
+                user: that.user.id
+              };
+              return SubjectEnrollment.create(enrollmentOptions);
+            });
+          } else {
+            return null;
+          }
+        })
+        .then(function (enrollment) {
+          if (enrollment) {
+            return res.ok(enrollment);
+          } else {
+            return res.badRequest({
+              title: 'Subject Enrollment Error',
+              code: 400,
+              message: 'Study mapping is invalid, please ensure options match study attributes.'
+            });
+          }
+        })
+        .catch(res.serverError);
     }
 
   });
