@@ -50,7 +50,7 @@
                 }
               })
               .then(function () {
-                res.ok(user);
+                res.ok(this.user);
               }).catch(res.serverError);
           } else {
             // otherwise we're trying to update an enrollment to something that already exists
