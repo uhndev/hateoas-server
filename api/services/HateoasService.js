@@ -19,7 +19,7 @@
       // #here_be_dragons
       // Figure out how to get the model name within the model itself
       // in the future.
-      var components = [sails.getBaseUrl() + sails.config.blueprints.prefix,
+      var components = [sails.config.appUrl + sails.config.blueprints.prefix,
         modelName];
 
       if (id) {
@@ -39,7 +39,8 @@
           });
         }
         if (_.isObject(data)) {
-          return _.omit(data.toJSON(), _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
+          var dataToReturn = (_.isFunction(data.toJSON)) ? data.toJSON() : data;
+          return _.omit(dataToReturn, _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
         }
       }
 
@@ -93,7 +94,7 @@
       }
 
       function addBaseUrl(link) {
-        link.href = sails.getBaseUrl() + link.href;
+        link.href = sails.config.appUrl + link.href;
       }
 
       function checkBaseModel(state) {
@@ -120,7 +121,7 @@
         var response = {
           version: HATEOAS_VERSION,
           href: HateoasService.getSelfLink(modelName),
-          referrer: sails.getBaseUrl() + address.pathname,
+          referrer: sails.config.appUrl + address.pathname,
           items: dataToJson(data),
           template: {
             rel: modelName

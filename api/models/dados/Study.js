@@ -31,7 +31,7 @@
         'prompt': name,
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id
         ].join('/')
       },
       {
@@ -39,7 +39,7 @@
         'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id
         ].join('/')
       },
       {
@@ -47,7 +47,7 @@
         'prompt': 'APP.HEADER.SUBMENU.COLLECTION_CENTRES',
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'collectioncentres'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id, 'collectioncentres'
         ].join('/')
       },
       {
@@ -55,7 +55,7 @@
         'prompt': 'APP.HEADER.SUBMENU.SUBJECTS',
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'subjects'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id, 'subjects'
         ].join('/')
       },
       {
@@ -63,7 +63,7 @@
         'prompt': 'APP.HEADER.SUBMENU.USERS',
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'users'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id, 'users'
         ].join('/')
       },
       {
@@ -71,7 +71,7 @@
         'prompt': 'APP.HEADER.SUBMENU.FORMS',
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'forms'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id, 'forms'
         ].join('/')
       },
       {
@@ -79,7 +79,7 @@
         'prompt': 'APP.HEADER.SUBMENU.SURVEYS',
         'name': 'name',
         'href' : [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'study', id, 'surveys'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'study', id, 'surveys'
         ].join('/')
       }
     ];
@@ -256,13 +256,13 @@
         {
           "rel": "default",
           "prompt": "All Studies",
-          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'study'].join('/'),
+          "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'study'].join('/'),
           "where": null
         },
         {
           "rel": "findByAdmin",
           "prompt": "My Studies",
-          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'study'].join('/'),
+          "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'study'].join('/'),
           "where": {
             "administrator": user.id
           }

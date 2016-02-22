@@ -16,7 +16,7 @@ There are 2 parts of the NODEJS Windows installer.
 
 ## Installing Prerequisites
 ```
-$ curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
+$ curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 $ apt-get install --yes git
 $ apt-get install --yes vim
 $ apt-get install --yes nodejs
