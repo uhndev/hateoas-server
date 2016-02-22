@@ -101,6 +101,7 @@
 
       Study.findOne(enrollmentOptions.study)
         .then(function (study) {  // verify studyMapping is valid
+          this.study = study;
           var studyMapping = enrollmentOptions.studyMapping;
           // only if both empty we allow or if status is set to REGISTERED
           if (_.isEmpty(study.attributes) && _.isEmpty(studyMapping) ||
@@ -139,7 +140,7 @@
             return res.badRequest({
               title: 'Subject Enrollment Error',
               code: 400,
-              message: 'Study mapping is invalid, please ensure options match study attributes.'
+              message: 'Study mapping is invalid, please ensure options match study ' + this.study.name+ ' attributes.'
             });
           }
         })

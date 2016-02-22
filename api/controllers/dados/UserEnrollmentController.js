@@ -57,7 +57,7 @@
             res.badRequest({
               title: 'Enrollment Error',
               status: 400,
-              message: 'Unable to enroll user, user may already be registered at another collection centre.'
+              message: 'Unable to enroll user ' + options.user + ' , user may already be registered at another collection centre.'
             });
           }
         })
