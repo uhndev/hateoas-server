@@ -1,8 +1,14 @@
 {
-  "name": "dados-upgrade",
+  "author": "University Health Network",
+  "name": "dados-server",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
+  "homepage": "https://dados.technainstitute.com/stash/projects/DAD/repos/dados-server/browse",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://dados.technainstitute.com/stash/projects/DAD/repos/dados-server/browse/LICENSE"
+  },
   "keywords": [],
   "dependencies": {
     "barrels": "^1.6.4",
@@ -18,7 +24,7 @@
     "pg": "^4.4.3",
     "pg-promise": "^3.0.6",
     "rc": "1.0.1",
-    "sails": "0.12.0-rc4",
+    "sails": "0.12.1",
     "sails-auth": "^2.1.3",
     "sails-disk": "~0.10.8",
     "sails-mongo": "^0.12.0",
@@ -40,8 +46,6 @@
     "type": "git",
     "url": "ssh://git@dados.technainstitute.com:7999/dad/dados-server.git"
   },
-  "author": "Techna Institute",
-  "license": "MIT",
   "devDependencies": {
     "faker": "^3.0.1",
     "grunt": "0.4.5",

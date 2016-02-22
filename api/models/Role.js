@@ -31,13 +31,13 @@
         {
           "rel": "default",
           "prompt": "All Roles",
-          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'role'].join('/'),
           "where": null
         },
         {
           "rel": "findByAdmin",
           "prompt": "My Roles",
-          "href": [sails.getBaseUrl() + sails.config.blueprints.prefix, 'role'].join('/'),
+          "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'role'].join('/'),
           "populate": {
             collection: 'users',
             where: {

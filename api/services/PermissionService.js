@@ -120,9 +120,7 @@
         _.each(user.roles, function (role) {
           user.roles.remove(role.id);
         });
-        return user.save();
-      })
-      .then(function (user) {
+
         /**
          * Depending on how we're creating or updating this user's roles,
          * either full roles with ids will be passed through, or simply

@@ -17,6 +17,7 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
+  appUrl: 'http://10.3.128.49:1337',
   proxyHost: '10.3.128.49',
 
   models: {

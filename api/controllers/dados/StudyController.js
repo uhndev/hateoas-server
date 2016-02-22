@@ -175,12 +175,12 @@
             .then(function (studyRecord) {
               if (!studyRecord) return res.notFound();
               if (!studyRecord.forms) return res.notFound();
+              this.studyRecord = studyRecord;
 
               studyRecord.forms.remove(formID);
               return studyRecord.save();
             })
             .then(function (studyRecord) {
-              this.studyRecord = studyRecord;
               if (sails.hooks.pubsub) {
                 Study.publishRemove(studyRecord.id, 'forms', formID, !sails.config.blueprints.mirror && req);
               }
