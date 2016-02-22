@@ -6,6 +6,7 @@
  */
 
 (function() {
+  var _ = require('lodash');
   var Promise = require('bluebird');
   var util = require('util');
   var pg = require('pg');
