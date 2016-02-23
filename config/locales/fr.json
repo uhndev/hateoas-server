@@ -213,5 +213,22 @@
         }
       }
     }
-  }
+  },
+  "Create Study":"Create Etude",
+  "Submit": "Sauvegarder",
+  "Cancel": "Annuler",
+  "name": "Nom",
+  "Study Name": "Nom de L'étude",
+  "LEAP": "LEAP",
+  "missing input or invalid": "missing input or invalid",
+  "reb": "reb",
+  "Enter an REB number": "Entrer une REB nombre",
+  "attributes": "attributs",
+  "Attributes": "Attributs",
+  "Enter a json value": "Entre une json valeur",
+  "administrator": "administrateur",
+  "Administrator": "Administrateur",
+  "Select user": "Select user",
+  "pi": "pi",
+  "PI": "PI"
 }
