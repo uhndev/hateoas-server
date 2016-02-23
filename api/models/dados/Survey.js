@@ -151,14 +151,15 @@
         completedBy: values.completedBy,
         sessions: _.pluck(values.sessions, 'id')
       }).exec(function (err, surveyVersion) {
-        cb();
         // jesus take the wheel
         SurveyService.batchUpdateSessions(values).then(function () {
           sails.log.info('QUERY COMPLETE: Schedules created.');
+          cb();
         }).catch(function (err) {
           Session.destroy({ survey: values.id }).exec(function (sessionErr) {
             Survey.destroy(values.id).exec(function (surveyErr) {
-              sails.log.error(sessionErr || surveyErr);
+              sails.log.error(err);
+              cb(err);
             });
           });
         });
