@@ -4,7 +4,7 @@
  */
 (function() {
   var CollectionCentreModel = require('./../../dados/CollectionCentre.js');
-  var _super = require('./../baseView.js');
+  var _super = require('./dadosBaseView.js');
 
   _.merge(exports, _super);
   _.merge(exports, {

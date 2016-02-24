@@ -35,15 +35,7 @@ module.exports.models = {
       });
     };
 
-    Site.generateAndCreate()
-      .then(StaffType.generateAndCreate)
-      .then(Status.generateAndCreate)
-      .then(ServiceCategory.generateAndCreate)
-      .then(WorkStatus.generateAndCreate)
-      .then(Timeframe.generateAndCreate)
-      .then(Prognosis.generateAndCreate)
-      .then(ServiceType.generateAndCreate)
-      .then(ProgramService.generateAndCreate)
+    ProgramService.generateAndCreate()
       .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
       .then(generateMultiple('referral'))

@@ -15,7 +15,7 @@
         'prompt': name,
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id
         ].join('/')
       },
       {
@@ -23,7 +23,7 @@
         'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id
         ].join('/')
       },
       {
@@ -31,7 +31,7 @@
         'prompt': 'APP.HEADER.SUBMENU.REFERRALS',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id, 'referrals'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id, 'referrals'
         ].join('/')
       }
     ];

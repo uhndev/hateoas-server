@@ -96,19 +96,6 @@
         link.href = sails.config.appUrl + link.href;
       }
 
-      function checkBaseModel(state) {
-        var modelName = req.options.model || req.options.controller;
-        if (!state) {
-          // if WorkflowState not found, try again with the base model
-          var response = url.parse(HateoasService.getSelfLink(modelName)).pathname;
-          var href = decodeURIComponent(response);
-          return WorkflowState.findOne({
-            path: url.parse(href).pathname
-          });
-        }
-        return state;
-      }
-
       /**
        * Private method creates a HATEOAS Response
        * Once the promise has been resolved, the HATEOAS response is
@@ -157,10 +144,12 @@
         return response;
       }
 
-      return WorkflowState.findOne({
-        path: decodeURIComponent(address.pathname)
+      // search workflows for states whose paths contains the current route
+      return WorkflowState.find().then(function (workflowstates) {
+        return _.find(workflowstates, function (workflowstate) {
+          return _.contains(workflowstate.path, req.route.path);
+        });
       })
-      .then(checkBaseModel)
       .then(makeResponse);
     }
   };

@@ -3,7 +3,7 @@
 
 -- DROP VIEW collectioncentreuser;
 
-CREATE OR REPLACE VIEW collectioncentreuser AS
+CREATE OR REPLACE VIEW dados.collectioncentreuser AS
  SELECT "user".id,
     collectioncentre.id AS "collectionCentre",
     "user".username,
@@ -25,5 +25,5 @@ CREATE OR REPLACE VIEW collectioncentreuser AS
      LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE userenrollment."expiredAt" IS NULL;
 
-ALTER TABLE collectioncentreuser
+ALTER TABLE dados.collectioncentreuser
   OWNER TO postgres;

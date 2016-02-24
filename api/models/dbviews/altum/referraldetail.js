@@ -4,6 +4,7 @@
  */
 
 (function () {
+  var _ = require('lodash');
   var ReferralModel = require('./../../altum/Referral.js');
   var _super = require('./altumBaseView.js');
 
@@ -14,7 +15,7 @@
         'prompt': 'Referral for ' + name,
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id
         ].join('/')
       },
       {
@@ -22,7 +23,7 @@
         'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id
         ].join('/')
       },
       {
@@ -30,7 +31,7 @@
         'prompt': 'APP.HEADER.SUBMENU.TRIAGE',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral',id, 'triage'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral',id, 'triage'
         ].join('/')
       },
       {
@@ -38,7 +39,7 @@
         'prompt': 'APP.HEADER.SUBMENU.RECOMMENDATIONS',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'recommendations'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'recommendations'
         ].join('/')
       },
       {
@@ -46,7 +47,7 @@
         'prompt': 'APP.HEADER.SUBMENU.SERVICES',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'services'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'services'
         ].join('/')
       }
     ];
