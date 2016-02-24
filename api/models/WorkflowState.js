@@ -19,12 +19,23 @@
 */
 
 (function() {
+  var _super = require('./BaseModel.js');
+  var _ = require('lodash');
+  var Promise = require('bluebird');
+  var workflowFixtures = require('../../test/fixtures/workflowstate.json');
 
-  module.exports = {
+  _.merge(exports, _super);
+  _.merge(exports, {
+
     schema: true,
     attributes: {
-      path: {
+      model: {
         type: 'string',
+        required: true,
+        unique: true
+      },
+      path: {
+        type: 'array',
         required: true
       },
       queries: {
@@ -36,6 +47,29 @@
       template: {
         type: 'json'
       }
+    },
+
+    generate: function (state) {
+      return workflowFixtures;
+    },
+
+    generateAndCreate: function (state) {
+      return SystemForm.generateAndCreate()
+        .then(function (systemforms) {
+          return Promise.all(
+            _.map(workflowFixtures, function (workflowstate) {
+              var systemform = _.find(systemforms, {form_name: workflowstate.template.systemform});
+              if (systemform && _.has(systemform, 'id')) {
+                workflowstate.template.href = [sails.config.appUrl + sails.config.blueprints.prefix, 'systemform', systemform.id].join('/');
+              }
+              return WorkflowState.findOrCreate({ model: workflowstate.model }, workflowstate);
+            })
+          );
+        })
+        .then(function (workflowstates) {
+          sails.log.info(workflowstates.length + " workflowstate(s) found/generated");
+        });
     }
-  };
+
+  });
 })();
