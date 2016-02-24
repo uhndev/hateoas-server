@@ -2,7 +2,7 @@
 
 -- DROP VIEW schedulesessions;
 
-CREATE OR REPLACE VIEW schedulesessions AS
+CREATE OR REPLACE VIEW dados.schedulesessions AS
  SELECT subjectschedule.id,
     subjectschedule."availableFrom",
     subjectschedule."availableTo",
@@ -28,5 +28,5 @@ CREATE OR REPLACE VIEW schedulesessions AS
      LEFT JOIN dados.survey ON session.survey = survey.id
   WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL AND survey."expiredAt" IS NULL;
 
-ALTER TABLE schedulesessions
+ALTER TABLE dados.schedulesessions
   OWNER TO postgres;
