@@ -145,6 +145,7 @@
         return response;
       }
 
+      // search workflows for states whose paths contains the current route
       return WorkflowState.find().then(function (workflowstates) {
         return _.find(workflowstates, function (workflowstate) {
           return _.contains(workflowstate.path, req.route.path);

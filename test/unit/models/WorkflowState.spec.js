@@ -4,6 +4,7 @@
  */
 
 var should = require('should');
+var workflowFixtures = require('../../fixtures/workflowstate.json');
 
 describe('The WorkflowState Model', function () {
 
@@ -22,7 +23,7 @@ describe('The WorkflowState Model', function () {
 
     it('should begin with the correct WorkflowStates', function (done) {
       WorkflowState.count(function (err, states) {
-        states.should.be.exactly(8);
+        states.should.be.exactly(workflowFixtures.length);
         done(err);
       });
     });
