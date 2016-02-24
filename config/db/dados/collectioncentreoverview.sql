@@ -4,7 +4,7 @@
 
 -- DROP VIEW collectioncentreoverview;
 
-CREATE OR REPLACE VIEW collectioncentreoverview AS
+CREATE OR REPLACE VIEW dados.collectioncentreoverview AS
   SELECT
     userenrollment."collectionCentre" AS id,
     "user".username,
@@ -43,5 +43,5 @@ CREATE OR REPLACE VIEW collectioncentreoverview AS
         collectioncentre."expiredAt" IS NULL AND
         userenrollment."expiredAt" IS NULL AND
         userenrollment.id IS NOT NULL;
-ALTER TABLE collectioncentreoverview
+ALTER TABLE dados.collectioncentreoverview
 OWNER TO postgres;

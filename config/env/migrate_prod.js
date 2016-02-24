@@ -1,5 +1,5 @@
 /**
- * Production environment settings
+ * Migrate -> Production environment settings
  *
  * This file can include shared settings for a production environment,
  * such as API keys or remote database passwords.  If you're using
@@ -22,16 +22,16 @@ module.exports = {
   keepResponseErrors: true,
 
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     autoCreatedBy: true,
-    connection: 'altum_production'
+    connection: 'dados_production'
   },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 1338,
+  // port: 80,
 
   /***************************************************************************
   * Set the log level in production environment to "silent"                 *
