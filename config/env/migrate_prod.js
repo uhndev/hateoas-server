@@ -1,5 +1,5 @@
 /**
- * Production environment settings
+ * Migrate -> Production environment settings
  *
  * This file can include shared settings for a production environment,
  * such as API keys or remote database passwords.  If you're using
@@ -22,7 +22,7 @@ module.exports = {
   keepResponseErrors: true,
 
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     autoCreatedBy: true,
     connection: 'dados_production'
   },
