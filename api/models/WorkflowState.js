@@ -27,6 +27,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    displayFields: ['model'],
+
     schema: true,
     attributes: {
 

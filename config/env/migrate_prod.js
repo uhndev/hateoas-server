@@ -17,8 +17,9 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://10.3.128.49:1338',
-  proxyHost: '10.3.128.49',
+  appUrl: 'http://altumuat.uhn.ca:1338',
+  proxyHost: 'altumuat.uhn.ca',
+  hookTimeout: 9999999,
   keepResponseErrors: true,
 
   models: {
@@ -31,7 +32,7 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 80,
+  port: 1338,
 
   /***************************************************************************
   * Set the log level in production environment to "silent"                 *
