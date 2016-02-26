@@ -18,6 +18,7 @@ module.exports = {
    ***************************************************************************/
 
   appUrl: 'http://ws98.uhnresearch.ca:1337',
+  hookTimeout: 9999999,
   proxyHost: 'ws98.uhnresearch.ca',
   keepResponseErrors: true,
 
