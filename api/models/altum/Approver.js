@@ -1,15 +1,13 @@
 /**
- * approver
+ * Approver
  *
- * @class approver
+ * @class Approver
  * @description Model representation of a approver
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/approver.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/approver.js
  */
 
 (function () {
 
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -34,7 +32,7 @@
       title: {
         type: 'string'
       },
-      
+
       /**
        * name
        * @description A approver's name

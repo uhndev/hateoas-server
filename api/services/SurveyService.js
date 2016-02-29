@@ -8,6 +8,10 @@
   var _ = require('lodash');
   var moment = require('moment');
   var Promise = require('bluebird');
+  var knex = require('knex')({
+    client: 'pg',
+    connection: sails.config.connections[sails.config.models.connection]
+  });
 
   module.exports = {
 
@@ -64,47 +68,35 @@
           if (subjectEnrollments) {
             // for each Session X SubjectEnrollment, generate a SubjectSchedule
             var sessions = this.currentSurvey.sessions;
-            var queryTotal = sessions.length * subjectEnrollments.length;
             var now =  pgp.as.date(new Date());
-            var connection = sails.config.connections['arm_' + sails.config.environment];
-            var db = pgp(connection);
+            var queries = [];
 
-            return db.tx(function (t) {
-              var queries = [];
-              // creating a sequence of transaction queries:
-              _.each(sessions, function (session) {
-                _.each(subjectEnrollments, function (enrollment) {
-                  var availableFrom = moment(enrollment.doe).add(session.timepoint, 'days')
-                    .subtract(session.availableFrom, 'days');
-                  var availableTo = moment(enrollment.doe).add(session.timepoint, 'days')
-                    .add(session.availableTo, 'days');
-                  queries.push({
-                    from: (session.type !== 'non-scheduled') ? availableFrom.toDate() : null,
-                    to: (session.type !== 'non-scheduled') ? availableTo.toDate() : null,
-                    status: 'IN PROGRESS',
-                    session: session.id,
-                    enrollment: enrollment.id,
-                    created: now,
-                    updated: now
-                  });
+            // creating a sequence of transaction queries:
+            _.each(sessions, function (session) {
+              _.each(subjectEnrollments, function (enrollment) {
+                var fromDate = moment(enrollment.doe).add(session.timepoint, 'days')
+                  .subtract(session.availableFrom, 'days');
+                var toDate = moment(enrollment.doe).add(session.timepoint, 'days')
+                  .add(session.availableTo, 'days');
+                queries.push({
+                  availableFrom: (session.type !== 'non-scheduled') ? fromDate.toDate() : null,
+                  availableTo: (session.type !== 'non-scheduled') ? toDate.toDate() : null,
+                  status: 'IN PROGRESS',
+                  session: session.id,
+                  subjectEnrollment: enrollment.id,
+                  createdAt: now,
+                  updatedAt: now
                 });
               });
-
-              return t.sequence(function (idx) {
-                sails.log.info(idx + '/' + queryTotal);
-                if (idx < queryTotal) {
-                  return t.none("INSERT INTO subjectschedule " +
-                    "(\"availableFrom\", \"availableTo\", status, session, \"subjectEnrollment\", \"createdAt\", \"updatedAt\") VALUES " +
-                    "(${from}, ${to}, ${status}, ${session}, ${enrollment}, ${created}, ${updated})", queries[idx]);
-                }
-              }, true);
-            })
-            .then(function (data) {
-              return data;
-            }, function (reason) {
-              sails.log.error(reason);
-              return reason;
             });
+
+            return knex.batchInsert('dados.subjectschedule', queries)
+              .then(function (data) {
+                return data;
+              })
+              .catch(function (err) {
+                throw err;
+              });
           } else {
             return null;
           }

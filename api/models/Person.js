@@ -7,7 +7,7 @@
 
 (function () {
   var _ = require('lodash');
-  var _super = require('./BaseModel.js');
+  var _super = require('./altum/AltumBaseModel.js');
   var faker = require('faker');
   var HateoasService = require('../services/HateoasService.js');
 

@@ -1,12 +1,12 @@
 /**
- * EmergencyContact.js
+ * EmergencyContact
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class EmergencyContact
+ * @description Model representation of a EmergencyContact
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');

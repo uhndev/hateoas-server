@@ -1,12 +1,13 @@
 /**
- * Service.js
+ * Service
  *
- * @description :: a model representation of a service, and instance of actual work being done at altum
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Service
+ * @description A model representation of a service, and instance of actual work being done at altum
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -30,6 +31,15 @@
       },
 
       /**
+       * altumService
+       * @description a serivce's associated altumService
+       * @type {Model}
+       */
+      altumService: {
+        model: 'altumService'
+      },
+
+      /**
        * programService
        * @description a serivce's associated programService
        * @type {Model}
@@ -39,31 +49,115 @@
       },
 
       /**
+       * site
+       * @description A reference to the site this service will be performed at
+       * @type {Model}
+       */
+      site: {
+        model: 'site'
+      },
+
+      /**
        * serviceProviders
        * @description a collection of a service's associated providers
        * @type {Collection}
        */
-      serviceProviders: {
-        collection: 'user'
-      },
+      // @TODO: Collection of physicians people who perform the service
+      //serviceProviders: {
+      //  collection: 'user'
+      //},
 
       /**
-       * status
-       * @description Status of recommended service
+       * physician
+       * @description Reference to the physician who recommended this particular service
        * @type {Model}
        */
-      status: {
-        model: 'status'
+      physician: {
+        model: 'physician'
       },
 
       /**
-       * approved
-       * @description presently this is just a boolean to flag it as approved
+       * staff
+       * @description Collection of staff who assisted in the recommendation of this service
+       * @type {Collection}
+       */
+      staff: {
+        collection: 'staff',
+        via: 'services'
+      },
+
+      /**
+       * workStatus
+       * @description Reference to the current work status of the client at the time of service recommendation
+       * @type {Model}
+       */
+      workStatus: {
+        model: 'workstatus'
+      },
+
+      /**
+       * prognosis
+       * @description Reference to the current prognosis of the client at the time of service recommendation
+       * @type {Model}
+       */
+      prognosis: {
+        model: 'prognosis'
+      },
+
+      /**
+       * timeframe
+       * @description A prognosis's timeframe
+       * @type {Model}
+       */
+      prognosisTimeframe: {
+        model: 'timeframe'
+      },
+
+      /**
+       * serviceDate
+       * @description Date on which this service was recommended (should technically be same as createdAt but w/e)
+       * @type {Datetime}
+       */
+      serviceDate: {
+        type: 'datetime'
+      },
+
+      /**
+       * serviceType
+       * @description The type of service that it falls under
+       * @type {Model}
+       */
+      serviceType: {
+        model: 'servicetype'
+      },
+
+      /**
+       * approvalNeeded
+       * @description Denotes whether approval is needed or not for this service
        * @type {Boolean}
        */
-      approved: {
+      approvalNeeded: {
         type: 'boolean',
-        defaultsTo: false
+        defaultsTo: true
+      },
+
+      /**
+       * currentApproval
+       * @description Pointer to the current approval in our approval history
+       * @type {Model}
+       */
+      currentApproval: {
+        model: 'approval'
+      },
+
+      /**
+       * approvals
+       * @description Collection of approvals linked to a specific service (history of approvals)
+       * @type {Collection}
+       */
+      approvals: {
+        collection: 'approval',
+        via: 'service'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -76,16 +170,16 @@
      *              from fields listed in the defaultsTo attribute of displayName
      *              this can be overridden in child models inheriting from the
      *              basemodel to pick specific fields
-     * @param  {Object}   values  given programService object for creation
+     * @param  {Object}   values  given Service object for creation
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      if (values.programService) {
-        ProgramService.findOne(values.programService).exec(function (err, programService) {
+      if (values.altumService) {
+        AltumService.findOne(values.altumService).exec(function (err, altumService) {
           if (err) {
             cb(err);
           } else {
-            values.displayName = programService.displayName;
+            values.displayName = altumService.displayName;
             cb();
           }
         });
@@ -94,20 +188,25 @@
       }
     },
 
-    findByBaseModel: function (referralID, currUser, options) {
-      var query = _.cloneDeep(options);
-      query.where = query.where || {};
-      delete query.where.id;
-      return referraldetail.findOne(referralID).then(function (referral) {
-          this.links = referraldetail.getResponseLinks(referral.id, referral.displayName);
-          return Service.find(query).where({referral: referralID});
-        })
-        .then(function (services) {
-          return {
-            data: services,
-            links: this.links
-          };
+    /**
+     * afterCreate
+     * @description After creating a Service as part of the recommendations process,
+     *              add the default starting state of 'Pending' iff that service was
+     *              created with the approvalNeeded flag set to true.
+     * @param service
+     * @param cb
+     */
+    afterCreate: function (service, cb) {
+      var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
+      Status.findOneByName(startingState).then(function (status) {
+        return Approval.create({
+          status: status.id,
+          service: service.id
         });
+      })
+      .then(function () {
+        cb();
+      }).catch(cb);
     }
 
   });

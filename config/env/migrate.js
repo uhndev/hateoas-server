@@ -17,12 +17,14 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
+  appUrl: 'http://ws69.uhnresearch.ca:1338',
+  hookTimeout: 9999999,
   proxyHost: 'ws69.uhnresearch.ca',
 
   models: {
     migrate: 'alter',
     autoCreatedBy: true,
-    connection: 'arm_production'
+    connection: 'altum_production'
   },
 
   /***************************************************************************

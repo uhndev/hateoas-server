@@ -1,14 +1,12 @@
 /**
- * site
+ * Site
  *
- * @class site
+ * @class Site
  * @description Model representation of a site
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/site.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/site.js
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var Promise = require('bluebird');
@@ -28,7 +26,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        unique: true
       },
 
       /**
@@ -60,8 +59,18 @@
       },
 
       /**
+       * services
+       * @description A collection of a site's services at altum
+       * @type {Collection}
+       */
+      services: {
+        collection: 'service',
+        via: 'site'
+      },
+
+      /**
        * siteStaff
-       * @description Collection of physicians or clinicians registered at this site
+       * @description Collection of physicians or serviceProviders registered at this site
        * @type {Collection}
        */
       siteStaff: {

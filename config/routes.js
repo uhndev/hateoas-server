@@ -85,5 +85,7 @@ module.exports.routes = {
   /***************************************************************************
    * Referral Routes                                                         *
    ***************************************************************************/
-  'get /api/referral/:id/services'        : 'ServiceController.findByBaseModel'
+  'get /api/referral/:id/triage'        : 'ReferralController.findOne',
+  'get /api/referral/:id/recommendations' : 'AltumServiceController.findAvailableServices',
+  'get /api/referral/:id/services'        : 'ServiceController.findRecommendedServices'
 };

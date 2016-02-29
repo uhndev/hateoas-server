@@ -1,13 +1,13 @@
 /**
- * invoice.js
+ * Invoice
  *
- * @description :: a model representation of an invoice
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @description A model representation of an invoice
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
 
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 

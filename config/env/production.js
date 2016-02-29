@@ -17,12 +17,15 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  proxyHost: 'ws69.uhnresearch.ca',
+  appUrl: 'http://altumuat.uhn.ca:1338',
+  proxyHost: 'altumuat.uhn.ca',
+  hookTimeout: 9999999,
+  keepResponseErrors: true,
 
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
-    connection: 'arm_production'
+    connection: 'altum_production'
   },
 
   /***************************************************************************
@@ -32,11 +35,11 @@ module.exports = {
   port: 1338,
 
   /***************************************************************************
-   * Set the log level in production environment to "silent"                 *
-   ***************************************************************************/
+  * Set the log level in production environment to "silent"                 *
+  ***************************************************************************/
 
   log: {
-    level: "verbose"
+    level: "silent"
   }
 
 };

@@ -12,6 +12,7 @@
  */
 module.exports = function sendOK (data, options) {
   var Promise = require('bluebird');
+  var _ = require('lodash');
   var url = require('url');
 
   // Get access to `req`, `res`, & `sails`
@@ -72,7 +73,7 @@ module.exports = function sendOK (data, options) {
         }
 
         // for non-admins, apply criteria here to get restricted count of permitted records
-        if (_.has(req, 'criteria') && req.criteria.length > 0) {
+        if (_.has(req, 'criteria') && req.criteria.length > 0 && !_.isEmpty(_.first(req.criteria).where)) {
           // if header was included with populate query, filter matchingRecords by given successful matched criteria
           if (queryFilter && _.has(req.headers, 'x-uhn-deep-query')) {
             promise = promise.then(function (totalItems) {
@@ -80,10 +81,15 @@ module.exports = function sendOK (data, options) {
             });
           }
           // otherwise no header set and just filter criteria from find
+          // and merge filterQuery with any applicable criteria
           else {
-            promise = model.find(filterQuery).then(function (totalItems) {
-              return PermissionService.filterByCriteria(req.criteria, totalItems).length;
-            });
+            var criteriaList = _.pluck(req.criteria, 'where');
+            if (!filterQuery.where.or) {
+              filterQuery.where.or = criteriaList;
+            } else {
+              filterQuery.where.or.concat(criteriaList);
+            }
+            promise = model.count().where(filterQuery);
           }
         }
         // otherwise no criteria set
@@ -91,6 +97,12 @@ module.exports = function sendOK (data, options) {
           // if no header set for populate filter, just do direct count
           if (!queryFilter) {
             promise = model.count(filterQuery);
+          }
+          // header set and no criteria, so just return direct count
+          else {
+            promise = promise.then(function (totalItems) {
+              return totalItems.length;
+            });
           }
         }
       }

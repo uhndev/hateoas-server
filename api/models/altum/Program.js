@@ -1,12 +1,13 @@
 /**
- * Program.js
+ * Program
  *
- * @description :: A model representing all programs belonging to a particular payor
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Program
+ * @description A model representing all programs belonging to a particular payor
+ * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -41,12 +42,12 @@
       },
 
       /**
-       * ProgramServices
-       * @description a payor's ProgramServices
-       * @type {String}
+       * programServices
+       * @description a program's programServices
+       * @type {Collection}
        */
       programServices: {
-        collection: 'ProgramService',
+        collection: 'programservice',
         via: 'program',
         dominant: true
       },

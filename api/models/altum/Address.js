@@ -1,12 +1,12 @@
 /**
- * address
+ * Address
  *
- * @class address
+ * @class Address
  * @description Model representation of an address
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');

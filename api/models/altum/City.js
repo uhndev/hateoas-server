@@ -1,15 +1,13 @@
 /**
- * city
+ * City
  *
- * @class city
+ * @class City
  * @description Model representation of a city
- * @extends https://github.com/tjwebb/sails-permissions/edit/master/api/models/city.js
- * @extends https://github.com/tjwebb/sails-auth/edit/master/api/models/city.js
  */
 
 (function () {
 
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');

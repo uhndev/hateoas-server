@@ -1,12 +1,13 @@
 /**
- * SiteStaff.js
+ * SiteStaff
  *
- * @description a model representation of a physician or clinician at a site
+ * @class SiteStaff
+ * @description a model representation of a physician or staff at a site
  * @docs        http://sailsjs.org/#!documentation/models
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -41,14 +42,14 @@
       },
 
       /**
-       * clinician
-       * @description The clinician registered at this site
+       * staff
+       * @description The staff registered at this site
        * @type {Model}
        */
-      clinician: {
-        model: 'clinician',
+      staff: {
+        model: 'staff',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'clinician', Clinician);
+          return BaseModel.defaultGenerator(state, 'staff', Staff);
         }
       },
 

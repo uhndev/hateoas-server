@@ -1,18 +1,20 @@
 /**
- * Employee.js
+ * Employee
  *
- * @description :: a table representing the employment of persons in companies
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @class Employee
+ * @description Model representing the employment of persons in companies
  */
 
 (function () {
-  var _super = require('../BaseModel.js');
+  var _super = require('./AltumBaseModel.js');
   var faker = require('faker');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
   _.merge(exports, {
+
+    defaultTemplateOmit: null,
 
     attributes: {
 

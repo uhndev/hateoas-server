@@ -35,10 +35,12 @@ module.exports.models = {
       });
     };
 
-    Site.generateAndCreate()
-      .then(Status.generateAndCreate)
+    ProgramService.generateAndCreate()
       .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
-      .then(generateMultiple('referral'));
+      .then(generateMultiple('referral'))
+      .catch(function (err) {
+        sails.log.info(err);
+      });
   }
 };

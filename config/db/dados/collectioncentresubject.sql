@@ -3,7 +3,7 @@
 
 -- DROP VIEW collectioncentresubject;
 
-CREATE OR REPLACE VIEW collectioncentresubject AS
+CREATE OR REPLACE VIEW dados.collectioncentresubject AS
  SELECT subject.id,
     subject."user" AS "user",
     collectioncentre.id AS "collectionCentre",
@@ -16,11 +16,11 @@ CREATE OR REPLACE VIEW collectioncentresubject AS
     subjectenrollment."createdBy",
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"
-   FROM subjectenrollment
-     LEFT JOIN subject ON subject.id = subjectenrollment.subject
-     LEFT JOIN collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
-     LEFT JOIN study ON study.id = collectioncentre.study
+   FROM dados.subjectenrollment
+     LEFT JOIN dados.subject ON subject.id = subjectenrollment.subject
+     LEFT JOIN dados.collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
+     LEFT JOIN dados.study ON study.id = collectioncentre.study
   WHERE subjectenrollment."expiredAt" IS NULL;
 
-ALTER TABLE collectioncentresubject
+ALTER TABLE dados.collectioncentresubject
   OWNER TO postgres;
