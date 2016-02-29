@@ -255,13 +255,13 @@
       return [
         {
           "rel": "default",
-          "prompt": "All Studies",
+          "prompt": "COMMON.HATEOAS.QUERY.ALL_STUDIES",
           "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'study'].join('/'),
           "where": null
         },
         {
           "rel": "findByAdmin",
-          "prompt": "My Studies",
+          "prompt": "COMMON.HATEOAS.QUERY.MY_STUDIES",
           "href": [sails.config.appUrl + sails.config.blueprints.prefix, 'study'].join('/'),
           "where": {
             "administrator": user.id
