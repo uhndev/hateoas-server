@@ -9,8 +9,10 @@
 
 (function () {
   var _super = require('./BaseModel.js');
-
+  var _ = require('lodash');
+  var Promise = require('bluebird');
   var HateoasService = require('../services/HateoasService.js');
+  var formFixtures = require('../../test/fixtures/systemform.json');
 
   _.merge(exports, _super);
   _.merge(exports, {
@@ -57,6 +59,21 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    generate: function (state) {
+      return formFixtures;
+    },
+
+    generateAndCreate: function (state) {
+      return Promise.all(
+        _.map(formFixtures, function (form) {
+          return SystemForm.findOrCreate({ form_name: form.form_name }, form);
+        })
+      ).then(function (forms) {
+        sails.log.info(forms.length + " systemform(s) found/generated");
+        return forms;
+      });
     }
   });
 

@@ -291,6 +291,7 @@ describe('The Study Controller', function () {
 
   describe('User with Coordinator/Interviewer Role', function () {
     before(function (done) {
+      this.timeout(10000);
       auth.authenticate('coordinator', function (resp) {
         resp.statusCode.should.be.exactly(200);
 

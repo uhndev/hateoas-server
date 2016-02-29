@@ -7,7 +7,7 @@
  */
 
 (function() {
-
+  var _ = require('lodash');
   var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
   var Promise = require('bluebird');
 
@@ -41,7 +41,7 @@
             this.roles = roles;
             return PermissionService.revokeGroupPermissions(this.group);
           })
-          .then(function (group) { // apply roles to group
+          .then(function () { // apply roles to group
             if (menu) {
               this.group.menu = menu;
             }
@@ -52,12 +52,12 @@
           })
           .then(function (updatedGroup) { // update user roles of updated group
             return Promise.all(
-              _.map(updatedGroup.users, function (user) {
+              _.map(this.group.users, function (user) {
                 return PermissionService.grantPermissions(user, this.roles);
               })
             );
           })
-          .then(function (users) {
+          .then(function () {
             res.ok(this.group);
           })
           .catch(function (err) {

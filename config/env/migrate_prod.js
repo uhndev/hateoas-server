@@ -1,5 +1,5 @@
 /**
- * Migrate environment settings
+ * Migrate -> Production environment settings
  *
  * This file can include shared settings for a production environment,
  * such as API keys or remote database passwords.  If you're using
@@ -17,9 +17,9 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://ws69.uhnresearch.ca:1337',
-  hookTimeout: 9999999,
-  proxyHost: 'ws69.uhnresearch.ca',
+  appUrl: 'http://ws98.uhnresearch.ca:1337',
+  proxyHost: 'ws98.uhnresearch.ca',
+  keepResponseErrors: true,
 
   models: {
     migrate: 'alter',
@@ -34,11 +34,11 @@ module.exports = {
   // port: 80,
 
   /***************************************************************************
-   * Set the log level in production environment to "silent"                 *
-   ***************************************************************************/
+  * Set the log level in production environment to "silent"                 *
+  ***************************************************************************/
 
   log: {
-    level: "verbose"
+    level: "silent"
   }
 
 };

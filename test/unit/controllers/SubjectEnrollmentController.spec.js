@@ -13,6 +13,7 @@ describe('The SubjectEnrollment Controller', function () {
   var study1, cc1Id, cc2Id, enrollment1, enrollment2, enrollment3, newUser, newSubject;
 
   before(function (done) {
+    this.timeout(10000);
     auth.authenticate('admin', function (resp) {
       resp.statusCode.should.be.exactly(200);
       globals.users.adminUserId = JSON.parse(resp.text).user.id;

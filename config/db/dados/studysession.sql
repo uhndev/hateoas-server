@@ -2,7 +2,7 @@
 
 -- DROP VIEW studysurvey;
 
-CREATE OR REPLACE VIEW studysession AS
+CREATE OR REPLACE VIEW dados.studysession AS
  SELECT session.id,
     session.type,
     session.name,
@@ -28,5 +28,5 @@ CREATE OR REPLACE VIEW studysession AS
      LEFT JOIN dados.study ON survey.study = study.id
   WHERE survey."expiredAt" IS NULL AND session."expiredAt" IS NULL;
 
-ALTER TABLE studysession
+ALTER TABLE dados.studysession
   OWNER TO postgres;
