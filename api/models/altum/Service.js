@@ -160,6 +160,16 @@
         via: 'service'
       },
 
+      /**
+       * programSupplyItems
+       * @description Collection of supplies related to this service
+       * @type {Collection}
+       */
+      programSupplyItems: {
+        collection: 'programsupplyitem',
+        via: 'services'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     },
