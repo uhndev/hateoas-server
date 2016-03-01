@@ -10,6 +10,46 @@
     <directory>&#x2f;</directory>
     <parameters>
         <parameter>
+            <name>anzioIP</name>
+            <default_value>10.3.128.58</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioInstance</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioName</name>
+            <default_value>Rehabilitation</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPass</name>
+            <default_value>399Bathurst</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPort</name>
+            <default_value>1433</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioSchema</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioUser</name>
+            <default_value>arm</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>sourcePath</name>
+            <default_value>&#x2f;home&#x2f;walter&#x2f;src&#x2f;altum&#x2f;migration&#x2f;source&#x2f;</default_value>
+            <description/>
+        </parameter>
+        <parameter>
             <name>targetDB</name>
             <default_value>altum_dev</default_value>
             <description/>
@@ -106,6 +146,32 @@
   <notepads>
   </notepads>
   <connection>
+    <name>ANZIO</name>
+    <server>&#x24;&#x7b;anzioIP&#x7d;</server>
+    <type>MSSQL</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;anzioName&#x7d;</database>
+    <port>1433</port>
+    <username>&#x24;&#x7b;anzioUser&#x7d;</username>
+    <password>&#x24;&#x7b;anzioPass&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MSSQL.instance</code><attribute>&#x24;&#x7b;anzioInstance&#x7d;</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1433</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
     <name>target</name>
     <server>&#x24;&#x7b;targetIP&#x7d;</server>
     <type>POSTGRESQL</type>
@@ -131,13 +197,49 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Microsoft Excel Input</from><to>Concat Fields</to><enabled>Y</enabled> </hop>
   <hop> <from>Insert &#x2f; Update</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
   <hop> <from>Blocking Step</from><to>Database lookup</to><enabled>Y</enabled> </hop>
   <hop> <from>Database lookup</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
   <hop> <from>Concat Fields</from><to>Replace in string</to><enabled>Y</enabled> </hop>
+  <hop> <from>Microsoft Excel Input</from><to>Add constants</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants</from><to>Concat Fields</to><enabled>Y</enabled> </hop>
   <hop> <from>Replace in string</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input</from><to>Select values</to><enabled>N</enabled> </hop>
+  <hop> <from>Select values</from><to>Add constants</to><enabled>N</enabled> </hop>
   </order>
+  <step>
+    <name>Add constants</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>birthdate</name>
+        <type>Date</type>
+        <format>yyyy&#x2f;MM&#x2f;dd</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>1978&#x2f;01&#x2f;16</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>384</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Blocking Step</name>
     <type>BlockingStep</type>
@@ -157,7 +259,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>400</yloc>
+      <yloc>608</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -250,7 +352,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>176</yloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -289,8 +391,8 @@
         <name2/>
       </key>
       <key>
-        <name>birthdate</name>
-        <field>dateOfBirth</field>
+        <name>homePhone</name>
+        <field>homePhone</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
@@ -304,7 +406,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>464</yloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -345,8 +447,8 @@
         <name2/>
       </key>
       <key>
-        <name>birthdate</name>
-        <field>dateOfBirth</field>
+        <name>homePhone</name>
+        <field>homePhone</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
@@ -381,11 +483,6 @@
         <update>Y</update>
       </value>
       <value>
-        <name>dateOfBirth</name>
-        <rename>birthdate</rename>
-        <update>Y</update>
-      </value>
-      <value>
         <name>company</name>
         <rename>Country</rename>
         <update>Y</update>
@@ -414,7 +511,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>320</yloc>
+      <yloc>496</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -461,7 +558,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>576</yloc>
+      <yloc>784</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -493,7 +590,17 @@
     <accept_field/>
     <accept_stepname/>
     <file>
-      <name>&#x2f;home&#x2f;walter&#x2f;Desktop&#x2f;clients.xlsx</name>
+      <name>&#x24;&#x7b;sourcePath&#x7d;clients.xlsx</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <name>&#x24;&#x7b;sourcePath&#x7d;arm 1 client export.xlsx</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <name/>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -585,13 +692,13 @@
         <group/>
       </field>
       <field>
-        <name>birthdate</name>
-        <type>Date</type>
+        <name>birthdateold</name>
+        <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
-        <format/>
+        <format>yyyy-MM-dd</format>
         <currency/>
         <decimal/>
         <group/>
@@ -645,7 +752,7 @@
         <group/>
       </field>
       <field>
-        <name>addreess1</name>
+        <name>address1</name>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
@@ -780,8 +887,8 @@
     <spreadsheet_type>POI</spreadsheet_type>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>96</yloc>
+      <xloc>208</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -813,7 +920,245 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>256</yloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>RS_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>POLICY_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>WSIB_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REGION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LAST</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FIRST</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>SEX</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>BIRTH_DATE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PROGRAM</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>GROUP</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>SERVICE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_REG</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>STREET</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>APT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>CITY</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PROVINCE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>POSTAL_CODE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>HOME_PHONE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LANGUAGE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>INTERPRETER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FAMILY_DR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DR_ADDRESS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REFERRAL_SRC</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REF_CONTACT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REF_ADDRESS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REF_PHONE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REF_FAX</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_ACCIDENT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_RS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_RR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_RP</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_APP</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_VISIT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>EARLY</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_DIS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_CLOSE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>EMPLOYER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LAWYER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUPATION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUP_TYPE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUP_SECTOR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OTHER_CONTACT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>CONTACT_PHONE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LOCATION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>MRN</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PAYOR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PAYOR_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>COUNTRY</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>416</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ANZIO</connection>
+    <sql>SELECT&#xa;  RS_NO&#xa;, POLICY_NO&#xa;, WSIB_NO&#xa;, REGION&#xa;, &#x22;LAST&#x22;&#xa;, &#x22;FIRST&#x22;&#xa;, SEX&#xa;, BIRTH_DATE&#xa;, PROGRAM&#xa;, &#x22;GROUP&#x22;&#xa;, SERVICE&#xa;, DATE_REG&#xa;, STREET&#xa;, APT&#xa;, CITY&#xa;, PROVINCE&#xa;, POSTAL_CODE&#xa;, HOME_PHONE&#xa;, &#x22;LANGUAGE&#x22;&#xa;, INTERPRETER&#xa;, FAMILY_DR&#xa;, DR_ADDRESS&#xa;&#xa;, EMPLOYER&#xa;, LAWYER&#xa;, OCCUPATION&#xa;, OCCUP_TYPE&#xa;, OCCUP_SECTOR&#xa;, OTHER_CONTACT&#xa;, LOCATION&#xa;, MRN&#xa;, PAYOR&#xa;, PAYOR_NO&#xa;, COUNTRY&#xa;FROM pat_file&#xa;</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>464</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
