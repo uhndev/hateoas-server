@@ -8,6 +8,7 @@
 (function () {
   var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
+  var faker = require('faker');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -21,7 +22,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        generator: faker.commerce.product
       },
 
       /**
@@ -30,7 +32,10 @@
        * @type {String}
        */
       UPC: {
-        type: 'string'
+        type: 'string',
+        generator: function(state) {
+          return _.random(100000000000, 999999999999)
+        }
       },
 
       /**
@@ -39,7 +44,8 @@
        * @type {Number}
        */
       cost: {
-        type: 'integer'
+        type: 'integer',
+        generator: faker.commerce.price
       },
 
       /**

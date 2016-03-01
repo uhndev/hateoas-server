@@ -8,6 +8,7 @@
 (function () {
   var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
+  var faker = require('faker');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -21,7 +22,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        generator: faker.commerce.product
       },
 
       /**
@@ -30,7 +32,10 @@
        * @type {Model}
        */
       program: {
-        model: 'program'
+        model: 'program',
+        generator: function(state) {
+          return BaseModel.defaultGenerator(state, 'program', Program);
+        }
       },
 
       /**
@@ -39,7 +44,10 @@
        * @type {String}
        */
       code: {
-        type: 'string'
+        type: 'string',
+        generator: function() {
+          return [faker.address.countryCode(), _.random(100, 999)].join('-');
+        }
       },
 
       /**
@@ -48,7 +56,8 @@
        * @type {Number}
        */
       cost: {
-        type: 'integer'
+        type: 'float',
+        generator: faker.commerce.price
       },
 
       /**
