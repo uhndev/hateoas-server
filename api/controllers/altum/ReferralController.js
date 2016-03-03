@@ -40,13 +40,18 @@
        *              and populates program, site, physician and referralContact data
        */
       findOne: function (req, res) {
+        var populateFields = ['program', 'site', 'physician'];
+
+        // if hitting findOne for Referral overview (not triage), override base model and populate additional fields
+        if (req.route.path === '/api/referral/:id') {
+          req.options.model = sails.models.referraldetail.identity;
+          ['notes', 'staff', 'referralContact'].map(function (model) {
+            populateFields.push(model);
+          });
+        }
+
         Referral.findOne(req.param('id'))
-          .populate('notes')
-          .populate('program')
-          .populate('site')
-          .populate('physician')
-          .populate('staff')
-          .populate('referralContact')
+          .populate(populateFields)
           .exec(function (err, referral) {
             if (err) {
               return res.serverError(err);

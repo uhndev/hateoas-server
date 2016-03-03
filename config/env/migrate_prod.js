@@ -25,7 +25,7 @@ module.exports = {
   models: {
     migrate: 'alter',
     autoCreatedBy: true,
-    connection: 'dados_production'
+    connection: 'altum_production'
   },
 
   /***************************************************************************
@@ -39,7 +39,7 @@ module.exports = {
   ***************************************************************************/
 
   log: {
-    level: "silent"
+    level: "verbose"
   }
 
 };

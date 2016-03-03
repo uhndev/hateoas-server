@@ -56,7 +56,7 @@
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
             'user': ['name', 'user'],
             'client': ['name', 'client', 'referral'],
-            'referral': ['name', 'referral', 'triage', 'altumprogramservices', 'service']
+            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service']
           }
         }
       },

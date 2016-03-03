@@ -17,6 +17,8 @@
      * @description Finds one referral's available services with site information
      */
     findAvailableServices: function (req, res) {
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.altumprogramservices.identity;
       var criteria = actionUtil.parseCriteria(req);
       referraldetail.findOne(req.param('id'))
         .then(function (referral) {
