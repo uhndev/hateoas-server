@@ -88,14 +88,13 @@
 
       /**
        * address
-       * @description A collection of a person's addresses
+       * @description A person's address
        * @type {Collection}
        */
-      addresses: {
-        collection: 'address',
-        via: 'person',
+      address: {
+        model: 'address',
         generator: function(state) {
-          return [BaseModel.defaultGenerator(state, 'addresses', Address)];
+          return BaseModel.defaultGenerator(state, 'addresses', Address);
         }
       },
 
