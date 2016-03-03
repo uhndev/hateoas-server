@@ -18,12 +18,12 @@
         </parameter>
         <parameter>
             <name>targetDB</name>
-            <default_value>altum_prod</default_value>
+            <default_value>altum_dev</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>targetIP</name>
-            <default_value>ws69.uhnresearch.ca</default_value>
+            <default_value>localhost</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -435,7 +435,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>800</xloc>
-      <yloc>80</yloc>
+      <yloc>240</yloc>
       </entry>
     <entry>
       <name>add clients</name>
@@ -489,7 +489,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>800</xloc>
-      <yloc>240</yloc>
+      <yloc>64</yloc>
       </entry>
     <entry>
       <name>create referrals</name>
@@ -791,24 +791,6 @@
   </entries>
   <hops>
     <hop>
-      <from>add client addresses</from>
-      <to>add clients</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>add clients</from>
-      <to>create referrals</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>START</from>
       <to>Check Db connections</to>
       <from_nr>0</from_nr>
@@ -838,15 +820,6 @@
     <hop>
       <from>Check Db connections</from>
       <to>add payors</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>map services to sites</from>
-      <to>add client addresses</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -910,6 +883,33 @@
     <hop>
       <from>map services</from>
       <to>add sites</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>map services to sites</from>
+      <to>add clients</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>add clients</from>
+      <to>add client addresses</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>add client addresses</from>
+      <to>create referrals</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
