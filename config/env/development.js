@@ -23,7 +23,7 @@ module.exports = {
     level: 'verbose'
   },
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     connection: 'altum_development'
   }
 };
