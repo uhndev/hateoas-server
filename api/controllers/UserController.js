@@ -51,47 +51,77 @@
      * @description finds one user by id and returns single user with populated collection centre association
      */
     findOne: function (req, res, next) {
-      User.findOne(req.param('id'))
-        .populate('enrollments')
-        .then(function (user) {
-          if(!user) {
-            return res.notFound({
-              title: 'Not Found',
-              code: 404,
-              message: 'No record found with the specified id.'
-            });
-          }
-
-          this.user = user;
-          return Promise.all(
-            _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
-              return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
-                .then(function (centre) {
-                  enrollment.collectionCentre = centre.id;
-                  enrollment.collectionCentreName = centre.name;
-                  enrollment.study = centre.study.id;
-                  enrollment.studyName = centre.study.name;
-                  return enrollment;
-                });
-            })
-          );
-        })
-        .then(function (enrollments) {
-          this.user.enrollments = enrollments;
-          Provider.findOne({ user: this.user.id }).populate('subjects').then(function (provider) {
-            if (provider) {
-              studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
-                this.user.providerSubjects = providerSubjects;
-                res.ok(this.user, { links: user.getResponseLinks() });
-              });
-            } else {
-              res.ok(this.user, { links: user.getResponseLinks() });
-            }
+      var query = User.findOne(req.param('id'));
+      query = actionUtil.populateRequest(query, req);
+      query.populate('enrollments');
+      query.then(function (user) {
+        if(!user) {
+          return res.notFound({
+            title: 'Not Found',
+            code: 404,
+            message: 'No record found with the specified id.'
           });
-        })
-        .catch(function (err) {
-          res.serverError(err);
+        }
+
+        this.user = user;
+        return Promise.all(
+          _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
+            return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
+              .then(function (centre) {
+                enrollment.collectionCentre = centre.id;
+                enrollment.collectionCentreName = centre.name;
+                enrollment.study = centre.study.id;
+                enrollment.studyName = centre.study.name;
+                return enrollment;
+              });
+          })
+        );
+      })
+      .then(function (enrollments) {
+        this.user.enrollments = enrollments;
+        Provider.findOne({ user: this.user.id }).populate('subjects').then(function (provider) {
+          if (provider) {
+            studysubject.find({ id: _.pluck(provider.subjects, 'id') }).then(function (providerSubjects) {
+              this.user.providerSubjects = providerSubjects;
+              res.ok(this.user, { links: user.getResponseLinks() });
+            });
+          } else {
+            res.ok(this.user, { links: user.getResponseLinks() });
+          }
         });
+      })
+      .catch(function (err) {
+        res.serverError(err);
+      });
+    },
+
+    /**
+     * findPermissions
+     * @description Endpoint for returning all role permissions and user permissions for a given user
+     * @param req
+     * @param res
+     */
+    findPermissions: function (req, res) {
+      var resp = {};
+      return User.findOne(req.param('id')).populate('roles')
+        .then(function (user) {
+          this.user = user;
+          return Permission.find({user: user.id})
+                           .populate(['role', 'model', 'criteria', 'user']);
+        })
+        .then(function (userPermissions) {
+          resp.permissions = userPermissions;
+          return Permission.find({role: _.pluck(this.user.roles, 'id')})
+                           .populate(['role', 'model', 'criteria', 'user']);
+        })
+        .then(function (rolePermissions) {
+          resp.roles = _.map(rolePermissions, function (rolePermission) {
+            rolePermission.roleName = rolePermission.role.name;
+            return rolePermission;
+          });
+          res.ok(resp);
+        })
+        .catch(res.badRequest);
     },
 
     /**

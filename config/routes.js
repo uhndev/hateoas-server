@@ -64,6 +64,7 @@ module.exports.routes = {
   * User Routes                                                              *
   ****************************************************************************/
   'put /api/user/:id/roles'               : 'UserController.updateRoles',
+  'get /api/user/:id/findPermissions'     : 'UserController.findPermissions',
 
   /***************************************************************************
   * Survey Session Lifecycle Routes                                          *
