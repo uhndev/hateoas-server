@@ -131,6 +131,15 @@
       },
 
       /**
+       * externalID
+       * @description A referral's external ID (usually )
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
+      },
+
+      /**
        * receiveDate
        * @description A referral's receiveDate
        * @type {Datetime}
