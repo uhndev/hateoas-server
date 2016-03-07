@@ -181,7 +181,7 @@ describe('The Survey Model', function () {
         });
     });
 
-    it('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function (done) {
+    it.skip('should calculate availableFrom and availableTo times correctly for SubjectSchedule', function (done) {
       Session.updateLifecycle({id: 1}, {availableFrom: 10, availableTo: 10})
         .then(function (updatedSession) {
           _.first(updatedSession).surveyVersion.should.equal(1);
