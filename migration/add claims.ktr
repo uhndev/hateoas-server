@@ -845,7 +845,7 @@
            <schema_name/>
            </partitioning>
     <connection>ANZIO</connection>
-    <sql>SELECT&#xa;RS_no,&#xa; REGION&#xa;, &#x22;LAST&#x22;&#xa;, &#x22;FIRST&#x22;&#xa;, SEX&#xa;, BIRTH_DATE&#xa;, STREET&#xa;, APT&#xa;, CITY&#xa;, PROVINCE&#xa;, POSTAL_CODE&#xa;, HOME_PHONE&#xa;, &#x22;LANGUAGE&#x22;&#xa;, INTERPRETER&#xa;, FAMILY_DR&#xa;, DR_ADDRESS&#xa;, EMPLOYER&#xa;, LAWYER&#xa;, OCCUPATION&#xa;, OCCUP_TYPE&#xa;, OCCUP_SECTOR&#xa;, OTHER_CONTACT&#xa;, LOCATION&#xa;, MRN&#xa;, COUNTRY&#xa;FROM pat_file&#xa;</sql>
+    <sql>SELECT  WSIB_NO&#xa;&#xa;FROM pat_file&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>

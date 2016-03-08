@@ -275,6 +275,15 @@
       },
 
       /**
+       * externalID
+       * @description A person's external ID (usually MRN)
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
+      },
+
+      /**
        * requiresInterperter
        * @description a persons requires interperter flag
        * @type {String}

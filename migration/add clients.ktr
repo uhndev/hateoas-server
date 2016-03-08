@@ -56,7 +56,7 @@
         </parameter>
         <parameter>
             <name>targetIP</name>
-            <default_value>localhost</default_value>
+            <default_value>ws69.uhnresearch.ca</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -193,53 +193,23 @@
       <attribute><code>QUOTE_ALL_FIELDS</code><attribute>Y</attribute></attribute>
       <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
       <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>Y</attribute></attribute>
     </attributes>
   </connection>
   <order>
   <hop> <from>Insert &#x2f; Update</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
   <hop> <from>Blocking Step</from><to>Database lookup</to><enabled>Y</enabled> </hop>
-  <hop> <from>Database lookup</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
   <hop> <from>Concat Fields</from><to>Replace in string</to><enabled>Y</enabled> </hop>
-  <hop> <from>Microsoft Excel Input</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Concat Fields</to><enabled>Y</enabled> </hop>
-  <hop> <from>Replace in string</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
-  <hop> <from>Table input</from><to>Select values</to><enabled>N</enabled> </hop>
-  <hop> <from>Select values</from><to>Add constants</to><enabled>N</enabled> </hop>
+  <hop> <from>Select values</from><to>Concat Fields</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input</from><to>Null if...</to><enabled>Y</enabled> </hop>
+  <hop> <from>Null if...</from><to>Select values</to><enabled>Y</enabled> </hop>
+  <hop> <from>Sort rows</from><to>Unique rows</to><enabled>Y</enabled> </hop>
+  <hop> <from>Replace in string</from><to>Sort rows</to><enabled>Y</enabled> </hop>
+  <hop> <from>Unique rows</from><to>Blocking Step 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step 2</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup</from><to>Blocking Step 3</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step 3</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
   </order>
-  <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>birthdate</name>
-        <type>Date</type>
-        <format>yyyy&#x2f;MM&#x2f;dd</format>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>1978&#x2f;01&#x2f;16</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
   <step>
     <name>Blocking Step</name>
     <type>BlockingStep</type>
@@ -258,8 +228,56 @@
       <compress>Y</compress>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>608</yloc>
+      <xloc>752</xloc>
+      <yloc>112</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Blocking Step 2</name>
+    <type>BlockingStep</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <pass_all_rows>Y</pass_all_rows>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>block</prefix>
+      <cache_size>5000</cache_size>
+      <compress>Y</compress>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>656</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Blocking Step 3</name>
+    <type>BlockingStep</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <pass_all_rows>Y</pass_all_rows>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>block</prefix>
+      <cache_size>5000</cache_size>
+      <compress>Y</compress>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>752</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -308,18 +326,6 @@
     </file>
     <fields>
       <field>
-        <name>prefix</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
         <name>firstname</name>
         <type>None</type>
         <format/>
@@ -352,7 +358,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>304</yloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -379,20 +385,8 @@
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>firstname</name>
-        <field>firstName</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>lastname</name>
-        <field>lastName</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>homePhone</name>
-        <field>homePhone</field>
+        <name>MRN</name>
+        <field>MRN</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
@@ -405,8 +399,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>704</yloc>
+      <xloc>752</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -426,55 +420,17 @@
     <commit>100</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
-      <schema/>
+      <schema>altum</schema>
       <table>person</table>
       <key>
-        <name>firstname</name>
-        <field>firstName</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>lastname</name>
-        <field>lastName</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>gender</name>
-        <field>gender</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>homePhone</name>
-        <field>homePhone</field>
+        <name>MRN</name>
+        <field>MRN</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
       <value>
         <name>displayName</name>
         <rename>displayName</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>prefix</name>
-        <rename>prefix</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>firstName</name>
-        <rename>firstname</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>middleName</name>
-        <rename>middlename</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>lastName</name>
-        <rename>lastname</rename>
         <update>Y</update>
       </value>
       <value>
@@ -488,30 +444,35 @@
         <update>Y</update>
       </value>
       <value>
-        <name>homeEmail</name>
-        <rename>homeMail</rename>
-        <update>Y</update>
-      </value>
-      <value>
         <name>homePhone</name>
         <rename>homePhone</rename>
         <update>Y</update>
       </value>
       <value>
-        <name>workPhone</name>
-        <rename>workPhone</rename>
+        <name>firstName</name>
+        <rename>firstname</rename>
         <update>Y</update>
       </value>
       <value>
-        <name>workEmail</name>
-        <rename>workMail</rename>
+        <name>lastName</name>
+        <rename>lastname</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>dateOfBirth</name>
+        <rename>dateOfBirth</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>MRN</name>
+        <rename>MRN</rename>
         <update>Y</update>
       </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>496</yloc>
+      <xloc>752</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -557,15 +518,15 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>784</yloc>
+      <xloc>752</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Microsoft Excel Input</name>
-    <type>ExcelInput</type>
+    <name>Null if...</name>
+    <type>NullIf</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -574,321 +535,16 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <header>Y</header>
-    <noempty>Y</noempty>
-    <stoponempty>N</stoponempty>
-    <filefield/>
-    <sheetfield/>
-    <sheetrownumfield/>
-    <rownumfield/>
-    <sheetfield/>
-    <filefield/>
-    <limit>0</limit>
-    <encoding/>
-    <add_to_result_filenames>Y</add_to_result_filenames>
-    <accept_filenames>N</accept_filenames>
-    <accept_field/>
-    <accept_stepname/>
-    <file>
-      <name>&#x24;&#x7b;sourcePath&#x7d;clients.xlsx</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;sourcePath&#x7d;arm 1 client export.xlsx</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name/>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-    </file>
     <fields>
       <field>
-        <name>MRN</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>prefix</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>firstname</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>middlename</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>lastname</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>dummy</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>gender</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>birthdateold</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format>yyyy-MM-dd</format>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>homeMail</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>workMail</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>homePhone</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>workPhone</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>address1</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>address2</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>City</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>Province</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>PostalCode</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>Country</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>Region</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>lat</name>
-        <type>Number</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>lng</name>
-        <type>Number</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-    </fields>
-    <sheets>
-      <sheet>
-        <name>Sheet1</name>
-        <startrow>0</startrow>
-        <startcol>0</startcol>
-        </sheet>
-    </sheets>
-    <strict_types>N</strict_types>
-    <error_ignored>N</error_ignored>
-    <error_line_skipped>N</error_line_skipped>
-    <bad_line_files_destination_directory/>
-    <bad_line_files_extension>warning</bad_line_files_extension>
-    <error_line_files_destination_directory/>
-    <error_line_files_extension>error</error_line_files_extension>
-    <line_number_files_destination_directory/>
-    <line_number_files_extension>line</line_number_files_extension>
-    <shortFileFieldName/>
-    <pathFieldName/>
-    <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
-    <uriNameFieldName/>
-    <rootUriNameFieldName/>
-    <extensionFieldName/>
-    <sizeFieldName/>
-    <spreadsheet_type>POI</spreadsheet_type>
+        <name>BIRTH_DATE</name>
+        <value>--</value>
+        </field>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>208</xloc>
-      <yloc>32</yloc>
+      <xloc>384</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -897,7 +553,7 @@
     <name>Replace in string</name>
     <type>ReplaceString</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
          <partitioning>
@@ -929,87 +585,59 @@
     <name>Select values</name>
     <type>SelectValues</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
          <partitioning>
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <fields>      <field>        <name>RS_NO</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>POLICY_NO</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>WSIB_NO</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REGION</name>
+    <fields>      <field>        <name>REGION</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>LAST</name>
-        <rename/>
+        <rename>lastname</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>FIRST</name>
-        <rename/>
+        <rename>firstname</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>SEX</name>
-        <rename/>
+        <rename>gender</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>BIRTH_DATE</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>PROGRAM</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>GROUP</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>SERVICE</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_REG</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
       </field>      <field>        <name>STREET</name>
-        <rename/>
+        <rename>address1</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>APT</name>
-        <rename/>
+        <rename>apartment</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>CITY</name>
-        <rename/>
+        <rename>City</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>PROVINCE</name>
-        <rename/>
+        <rename>Province</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>POSTAL_CODE</name>
-        <rename/>
+        <rename>PostalCode</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>HOME_PHONE</name>
-        <rename/>
+        <rename>homePhone</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>LANGUAGE</name>
-        <rename/>
+        <rename>Language</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>INTERPRETER</name>
@@ -1017,66 +645,6 @@
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>FAMILY_DR</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DR_ADDRESS</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REFERRAL_SRC</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REF_CONTACT</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REF_ADDRESS</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REF_PHONE</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>REF_FAX</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_ACCIDENT</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_RS</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_RR</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_RP</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_APP</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_VISIT</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>EARLY</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_DIS</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>DATE_CLOSE</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
@@ -1104,10 +672,6 @@
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>CONTACT_PHONE</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
       </field>      <field>        <name>LOCATION</name>
         <rename/>
         <length>-2</length>
@@ -1116,23 +680,86 @@
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>PAYOR</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>PAYOR_NO</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
       </field>      <field>        <name>COUNTRY</name>
+        <rename>Country</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>RS_no</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
-    </fields>     <cluster_schema/>
+      <meta>        <name>BIRTH_DATE</name>
+        <rename>dateOfBirth</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>true</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>128</yloc>
+      <xloc>384</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Sort rows</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <sort_size>1000000</sort_size>
+      <free_memory/>
+      <compress>N</compress>
+      <compress_variable/>
+      <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>firstname</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>lastname</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>dateOfBirth</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>RS_no</name>
+        <ascending>N</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>480</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -1149,21 +776,62 @@
            <schema_name/>
            </partitioning>
     <connection>ANZIO</connection>
-    <sql>SELECT&#xa;  RS_NO&#xa;, POLICY_NO&#xa;, WSIB_NO&#xa;, REGION&#xa;, &#x22;LAST&#x22;&#xa;, &#x22;FIRST&#x22;&#xa;, SEX&#xa;, BIRTH_DATE&#xa;, PROGRAM&#xa;, &#x22;GROUP&#x22;&#xa;, SERVICE&#xa;, DATE_REG&#xa;, STREET&#xa;, APT&#xa;, CITY&#xa;, PROVINCE&#xa;, POSTAL_CODE&#xa;, HOME_PHONE&#xa;, &#x22;LANGUAGE&#x22;&#xa;, INTERPRETER&#xa;, FAMILY_DR&#xa;, DR_ADDRESS&#xa;&#xa;, EMPLOYER&#xa;, LAWYER&#xa;, OCCUPATION&#xa;, OCCUP_TYPE&#xa;, OCCUP_SECTOR&#xa;, OTHER_CONTACT&#xa;, LOCATION&#xa;, MRN&#xa;, PAYOR&#xa;, PAYOR_NO&#xa;, COUNTRY&#xa;FROM pat_file&#xa;</sql>
-    <limit>0</limit>
+    <sql>SELECT&#xa;RS_no,&#xa; REGION&#xa;, &#x22;LAST&#x22;&#xa;, &#x22;FIRST&#x22;&#xa;, SEX&#xa;, BIRTH_DATE&#xa;, STREET&#xa;, APT&#xa;, CITY&#xa;, PROVINCE&#xa;, POSTAL_CODE&#xa;, HOME_PHONE&#xa;, &#x22;LANGUAGE&#x22;&#xa;, INTERPRETER&#xa;, FAMILY_DR&#xa;, DR_ADDRESS&#xa;, EMPLOYER&#xa;, LAWYER&#xa;, OCCUPATION&#xa;, OCCUP_TYPE&#xa;, OCCUP_SECTOR&#xa;, OTHER_CONTACT&#xa;, LOCATION&#xa;, MRN&#xa;, COUNTRY&#xa;FROM pat_file&#xa;</sql>
+    <limit/>
     <lookup/>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>464</xloc>
+      <xloc>384</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
+  <step>
+    <name>Unique rows</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <count_rows>N</count_rows>
+      <count_field/>
+      <reject_duplicate_row>N</reject_duplicate_row>
+      <error_description/>
+    <fields>      <field>        <name>firstname</name>
+        <case_insensitive>Y</case_insensitive>
+        </field>      <field>        <name>lastname</name>
+        <case_insensitive>Y</case_insensitive>
+        </field>      <field>        <name>dateOfBirth</name>
+        <case_insensitive>N</case_insensitive>
+        </field>      </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>560</xloc>
+      <yloc>384</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step_error_handling>
+      <error>
+        <source_step>Select values</source_step>
+        <target_step/>
+        <is_enabled>Y</is_enabled>
+        <nr_valuename/>
+        <descriptions_valuename/>
+        <fields_valuename/>
+        <codes_valuename/>
+        <max_errors/>
+        <max_pct_errors/>
+        <min_pct_rows/>
+      </error>
   </step_error_handling>
    <slave-step-copy-partition-distribution>
 </slave-step-copy-partition-distribution>

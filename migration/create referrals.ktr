@@ -10,13 +10,48 @@
     <directory>&#x2f;</directory>
     <parameters>
         <parameter>
+            <name>anzioIP</name>
+            <default_value>10.3.128.58</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioInstance</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioName</name>
+            <default_value>Rehabilitation</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPass</name>
+            <default_value>399Bathurst</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPort</name>
+            <default_value>1433</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioSchema</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioUser</name>
+            <default_value>arm</default_value>
+            <description/>
+        </parameter>
+        <parameter>
             <name>targetDB</name>
-            <default_value>arm_dev</default_value>
+            <default_value>altum_dev</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>targetIP</name>
-            <default_value>localhost</default_value>
+            <default_value>ws69.uhnresearch.ca</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -106,6 +141,31 @@
   <notepads>
   </notepads>
   <connection>
+    <name>ANZIO</name>
+    <server>&#x24;&#x7b;anzioIP&#x7d;</server>
+    <type>MSSQL</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;anzioDB&#x7d;</database>
+    <port>1433</port>
+    <username>&#x24;&#x7b;anzioUser&#x7d;</username>
+    <password>&#x24;&#x7b;anzioPass&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1433</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
     <name>target</name>
     <server>&#x24;&#x7b;targetIP&#x7d;</server>
     <type>POSTGRESQL</type>
@@ -132,12 +192,104 @@
   </connection>
   <order>
   <hop> <from>Replace in string</from><to>get clientID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Microsoft Excel Input</from><to>Replace in string</to><enabled>Y</enabled> </hop>
-  <hop> <from>get clientID</from><to>get physicianID</to><enabled>Y</enabled> </hop>
-  <hop> <from>get physicianID</from><to>get ProgramID</to><enabled>Y</enabled> </hop>
-  <hop> <from>get ProgramID</from><to>Table output</to><enabled>Y</enabled> </hop>
-  <hop> <from>Table output</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output</from><to>Insert &#x2f; Update 2</to><enabled>N</enabled> </hop>
+  <hop> <from>Null if...</from><to>Select values</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input</from><to>Null if...</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values</from><to>Replace in string</to><enabled>Y</enabled> </hop>
+  <hop> <from>get ProgramID</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
+  <hop> <from>Insert &#x2f; Update</from><to>Database lookup</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>get clientID</from><to>get ProgramID</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>Database lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>referral</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>ExternalReferralID</name>
+        <field>ExternalID</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>id</name>
+        <rename>ReferralID</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>192</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#x2f; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>referral</table>
+      <key>
+        <name>ExternalReferralID</name>
+        <field>ExternalID</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>program</name>
+        <rename>ProgramID</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>client</name>
+        <rename>ClientID</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>ExternalID</name>
+        <rename>ExternalReferralID</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>192</xloc>
+      <yloc>560</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Insert &#x2f; Update 2</name>
     <type>InsertUpdate</type>
@@ -156,7 +308,7 @@
       <schema/>
       <table>client_referrals__referral_clients</table>
       <key>
-        <name>id</name>
+        <name>ReferralID</name>
         <field>client_referrals</field>
         <condition>&#x3d;</condition>
         <name2/>
@@ -169,7 +321,7 @@
       </key>
       <value>
         <name>client_referrals</name>
-        <rename>id</rename>
+        <rename>ReferralID</rename>
         <update>Y</update>
       </value>
       <value>
@@ -180,15 +332,15 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>688</yloc>
+      <xloc>192</xloc>
+      <yloc>720</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Microsoft Excel Input</name>
-    <type>ExcelInput</type>
+    <name>Null if...</name>
+    <type>NullIf</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -197,114 +349,16 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <header>Y</header>
-    <noempty>Y</noempty>
-    <stoponempty>N</stoponempty>
-    <filefield/>
-    <sheetfield/>
-    <sheetrownumfield/>
-    <rownumfield/>
-    <sheetfield/>
-    <filefield/>
-    <limit>0</limit>
-    <encoding/>
-    <add_to_result_filenames>Y</add_to_result_filenames>
-    <accept_filenames>N</accept_filenames>
-    <accept_field/>
-    <accept_stepname/>
-    <file>
-      <name>&#x2f;home&#x2f;walter&#x2f;Desktop&#x2f;referrals.xlsx</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-    </file>
     <fields>
       <field>
-        <name>MRN</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>Program</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>Doctor</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>ClaimNumber</name>
-        <type>Number</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-      <field>
-        <name>PolicyNumber</name>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-      </field>
-    </fields>
-    <sheets>
-    </sheets>
-    <strict_types>N</strict_types>
-    <error_ignored>N</error_ignored>
-    <error_line_skipped>N</error_line_skipped>
-    <bad_line_files_destination_directory/>
-    <bad_line_files_extension>warning</bad_line_files_extension>
-    <error_line_files_destination_directory/>
-    <error_line_files_extension>error</error_line_files_extension>
-    <line_number_files_destination_directory/>
-    <line_number_files_extension>line</line_number_files_extension>
-    <shortFileFieldName/>
-    <pathFieldName/>
-    <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
-    <uriNameFieldName/>
-    <rootUriNameFieldName/>
-    <extensionFieldName/>
-    <sizeFieldName/>
-    <spreadsheet_type>POI</spreadsheet_type>
+        <name>BIRTH_DATE</name>
+        <value>--</value>
+        </field>
+      </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>48</yloc>
+      <xloc>192</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -335,8 +389,201 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>160</yloc>
+      <xloc>192</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>POLICY_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>WSIB_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>REGION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LAST</name>
+        <rename>lastname</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FIRST</name>
+        <rename>firstname</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>SEX</name>
+        <rename>gender</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>BIRTH_DATE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PROGRAM</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>GROUP</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>SERVICE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DATE_REG</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>STREET</name>
+        <rename>address1</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>APT</name>
+        <rename>address2</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>CITY</name>
+        <rename>City</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PROVINCE</name>
+        <rename>Province</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>POSTAL_CODE</name>
+        <rename>PostalCode</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>HOME_PHONE</name>
+        <rename>homePhone</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LANGUAGE</name>
+        <rename>Language</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>INTERPRETER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FAMILY_DR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>DR_ADDRESS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>EMPLOYER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LAWYER</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUPATION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUP_TYPE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OCCUP_SECTOR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>OTHER_CONTACT</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>LOCATION</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>MRN</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PAYOR</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PAYOR_NO</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>COUNTRY</name>
+        <rename>Country</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>RS_NO</name>
+        <rename>ExternalReferralID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+      <meta>        <name>BIRTH_DATE</name>
+        <rename>dateOfBirth</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>true</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>192</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ANZIO</connection>
+    <sql>SELECT &#x2a;&#xa;FROM pat_file&#xa;</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>192</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -389,8 +636,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>592</yloc>
+      <xloc>560</xloc>
+      <yloc>720</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -431,8 +678,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>432</yloc>
+      <xloc>192</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -473,50 +720,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>get physicianID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>physician</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>Doctor</name>
-        <field>displayName</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>id</name>
-        <rename>PhysicianID</rename>
-        <default/>
-        <type>Number</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
-      <yloc>352</yloc>
+      <xloc>192</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
