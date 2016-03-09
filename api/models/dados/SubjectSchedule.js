@@ -20,19 +20,19 @@
       /**
        * availableFrom
        * @description Date denoting when this data capture event should begin to be available to the subject
-       * @type {Date}
+       * @type {Datetime}
        */
       availableFrom: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
        * availableTo
        * @description Date denoting when this data capture event should no longer be available to the subject
-       * @type {Date}
+       * @type {Datetime}
        */
       availableTo: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
