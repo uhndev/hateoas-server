@@ -349,7 +349,8 @@
     "model": "referral",
     "path": [
       "/api/referral",
-      "/api/referral/:id"
+      "/api/referral/:id",
+      "/api/client/:id/referrals"
     ],
     "queries": [],
     "links": [],

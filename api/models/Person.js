@@ -94,7 +94,7 @@
       address: {
         model: 'address',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'addresses', Address);
+          return BaseModel.defaultGenerator(state, 'address', Address);
         }
       },
 
