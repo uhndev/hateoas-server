@@ -24,6 +24,12 @@ apt-get install --yes chromium-browser
 apt-get install --yes pgadmin3
 apt-get install --yes sublime-text-installer
 
+wget http://download.redis.io/releases/redis-stable.tar.gz
+tar xvf redis-stable.tar.gz
+cd redis-stable
+make
+make install
+
 # install python modules for dados-pygen
 echo "-------------------------------------------------------------------------"
 echo " Installing Python Modules"
@@ -36,12 +42,12 @@ echo "-------------------------------------------------------------------------"
 echo " Installing Global Node Modules"
 echo "-------------------------------------------------------------------------"
 su - $USER -c 'sudo npm install -g phantomjs;
-sudo npm install -g http-server;
-sudo npm install -g forever;
+sudo npm install -g pm2;
 sudo npm install -g grunt-cli;
 sudo npm install -g karma;
 sudo npm install -g bower;
-sudo npm install -g sails'
+sudo npm install -g sails
+sudo npm install -g n'
 
 echo "-------------------------------------------------------------------------"
 echo " Configuring PostgreSQL"

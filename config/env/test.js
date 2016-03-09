@@ -5,6 +5,7 @@
 module.exports = {
 
   appUrl: 'http://localhost:1336',
+  hookTimeout: 9999999,
   models: {
     migrate: 'drop',
     connection: 'dados_test'
