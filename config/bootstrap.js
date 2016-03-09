@@ -8,7 +8,9 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
-var _ = require('lodash');
+
+_ = require('lodash');
+Promise = require('bluebird');
 
 module.exports.bootstrap = function (cb) {
   // Keep Bluebird warnings but don't
@@ -17,6 +19,11 @@ module.exports.bootstrap = function (cb) {
   // on policies + controllers + other
   process.env.BLUEBIRD_WARNINGS = 1;
   process.env.BLUEBIRD_W_FORGOTTEN_RETURN = 0;
+
+  knex = require('knex')({
+    client: 'pg',
+    connection: sails.config.connections[sails.config.models.connection]
+  });
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
@@ -36,5 +43,4 @@ module.exports.bootstrap = function (cb) {
   } else {
     cb();
   }
-
 };
