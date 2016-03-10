@@ -35,6 +35,15 @@
       },
 
       /**
+       * externalID
+       * @description Free text field representing some external entity (WSIB memo number)
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
+      },
+
+      /**
        * service
        * @description Reference to the service which requires approval
        * @type {Model}

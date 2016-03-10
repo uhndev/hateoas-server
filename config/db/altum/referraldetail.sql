@@ -55,7 +55,7 @@ FROM altum.referral
   LEFT JOIN altum.claim ON referral.claim = claim.id
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id
-  LEFT JOIN altum.address ON address.person = person.id
+  LEFT JOIN altum.address ON person.address = address.id
   LEFT JOIN altum.status ON referral.status = status.id
   LEFT JOIN altum.physician ON referral.physician = physician.id
   LEFT JOIN altum.staff ON referral.staff = staff.id
