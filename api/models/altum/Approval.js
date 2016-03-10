@@ -35,11 +35,11 @@
       },
 
       /**
-       * externalApprovalID
+       * externalID
        * @description Free text field representing some external entity (WSIB memo number)
        * @type {String}
        */
-      externalApprovalID: {
+      externalID: {
         type: 'string'
       },
 
