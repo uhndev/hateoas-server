@@ -5,7 +5,7 @@
  * @description model for migration process tracking importing of external referral records
  */
 
-module.exports= {
+module.exports = {
   schema: true,
   meta: {
     schemaName: 'altum'
@@ -13,12 +13,12 @@ module.exports= {
   attributes: {
 
     /**
-     * id
+     * externalID
      * @description external referral id
      * @type {String}
      */
-    id: {
-      type: 'string',
+    externalID: {
+      type: 'string'
     },
 
     /**
@@ -27,8 +27,8 @@ module.exports= {
      * @type {String}
      */
     status: {
-      type: 'string',
+      type: 'string'
     }
   }
-}
+};
 

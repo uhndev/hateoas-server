@@ -44,15 +44,13 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     person."workPhone" AS "client_workPhone",
     person."familyDoctor" AS "client_familyDoctor",
     person.language AS client_language,
-    claim.id AS claim,
-    claim."claimNum" AS "claim_claimNum",
-    claim."policyNum" AS "claim_policyNum",
+    "claimNumber",
+    "policyNumber",
     referral.owner,
     referral."createdBy",
     referral."createdAt",
     referral."updatedAt"
 FROM altum.referral
-  LEFT JOIN altum.claim ON referral.claim = claim.id
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id
   LEFT JOIN altum.address ON address.person = person.id
