@@ -32,15 +32,21 @@
       },
 
       /**
-       * claim
-       * @description A referral's client
-       * @type {Model}
+       * claimNumber
+       * @description A referral's claimNumber
+       * @type {string}
        */
-      claim: {
-        model: 'claim',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'claim', Claim);
-        }
+      claimNumber: {
+        type: 'string'
+      },
+
+      /**
+       * policyNumber
+       * @description A referral's policyNumber
+       * @type {string}
+       */
+      policyNumber: {
+        type: 'string'
       },
 
       /**
