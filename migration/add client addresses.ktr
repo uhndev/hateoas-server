@@ -198,14 +198,83 @@
   <hop> <from>Insert &#x2f; Update</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
   <hop> <from>Blocking Step</from><to>Database lookup 3</to><enabled>Y</enabled> </hop>
   <hop> <from>Database lookup 3</from><to>Insert &#x2f; Update 3</to><enabled>Y</enabled> </hop>
-  <hop> <from>Concat Fields 2</from><to>Replace in string</to><enabled>Y</enabled> </hop>
-  <hop> <from>Null if... 2</from><to>Select values 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>Replace in string</from><to>Sort rows</to><enabled>Y</enabled> </hop>
-  <hop> <from>Select values 2</from><to>Concat Fields 2</to><enabled>Y</enabled> </hop>
   <hop> <from>Sort rows</from><to>Unique rows</to><enabled>Y</enabled> </hop>
-  <hop> <from>Table input 2</from><to>Null if... 2</to><enabled>Y</enabled> </hop>
   <hop> <from>Unique rows</from><to>Database lookup</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants 2</from><to>Insert &#x2f; Update 2 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Insert &#x2f; Update 2 2 2</from><to>Database lookup 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input 2</from><to>Add constants 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants 2 2</from><to>Insert &#x2f; Update 2 2 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Insert &#x2f; Update 3</from><to>Add constants 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup 2 2</from><to>Select values 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values 2</from><to>Concat Fields</to><enabled>Y</enabled> </hop>
+  <hop> <from>Concat Fields</from><to>Sort rows</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>Add constants 2</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>add client status</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>addingClient</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>608</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Add constants 2 2</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>add client status</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>clientAddressAdded</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1152</xloc>
+      <yloc>912</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Blocking Step</name>
     <type>BlockingStep</type>
@@ -224,89 +293,8 @@
       <compress>Y</compress>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>400</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Concat Fields 2</name>
-    <type>ConcatFields</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <separator> </separator>
-    <enclosure>&#x22;</enclosure>
-    <enclosure_forced>N</enclosure_forced>
-    <enclosure_fix_disabled>N</enclosure_fix_disabled>
-    <header>N</header>
-    <footer>N</footer>
-    <format>DOS</format>
-    <compression>None</compression>
-    <encoding/>
-    <endedLine/>
-    <fileNameInField>N</fileNameInField>
-    <fileNameField/>
-    <create_parent_folder>Y</create_parent_folder>
-    <file>
-      <name>file</name>
-      <is_command>N</is_command>
-      <servlet_output>N</servlet_output>
-      <do_not_open_new_file_init>Y</do_not_open_new_file_init>
-      <extention>txt</extention>
-      <append>N</append>
-      <split>N</split>
-      <haspartno>N</haspartno>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <add_to_result_filenames>Y</add_to_result_filenames>
-      <pad>N</pad>
-      <fast_dump>N</fast_dump>
-      <splitevery>0</splitevery>
-    </file>
-    <fields>
-      <field>
-        <name>firstname</name>
-        <type>None</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>lastname</name>
-        <type>None</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-    </fields>
-    <ConcatFields>
-<targetFieldName>displayName</targetFieldName>
-<targetFieldLength>0</targetFieldLength>
-<removeSelectedFields>N</removeSelectedFields>
-    </ConcatFields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>320</yloc>
+      <xloc>960</xloc>
+      <yloc>736</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -334,7 +322,7 @@
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
         <name>MRN</name>
-        <field>MRN</field>
+        <field>externalID</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
@@ -347,8 +335,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>48</yloc>
+      <xloc>960</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -389,8 +377,332 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>224</yloc>
+      <xloc>960</xloc>
+      <yloc>544</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup 2 2</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ANZIO</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>pat_file</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>externalID</name>
+        <field>RS_NO</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>RS_NO</name>
+        <rename>RS_NO</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>POLICY_NO</name>
+        <rename>POLICY_NO</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>WSIB_NO</name>
+        <rename>WSIB_NO</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REGION</name>
+        <rename>REGION</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>LAST</name>
+        <rename>LAST</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>FIRST</name>
+        <rename>FIRST</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>SEX</name>
+        <rename>SEX</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>BIRTH_DATE</name>
+        <rename>BIRTH_DATE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>PROGRAM</name>
+        <rename>PROGRAM</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>GROUP</name>
+        <rename>GROUP</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>SERVICE</name>
+        <rename>SERVICE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_REG</name>
+        <rename>DATE_REG</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>STREET</name>
+        <rename>STREET</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>APT</name>
+        <rename>APT</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>CITY</name>
+        <rename>CITY</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>PROVINCE</name>
+        <rename>PROVINCE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>POSTAL_CODE</name>
+        <rename>POSTAL_CODE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>HOME_PHONE</name>
+        <rename>HOME_PHONE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>LANGUAGE</name>
+        <rename>LANGUAGE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>INTERPRETER</name>
+        <rename>INTERPRETER</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>FAMILY_DR</name>
+        <rename>FAMILY_DR</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DR_ADDRESS</name>
+        <rename>DR_ADDRESS</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REFERRAL_SRC</name>
+        <rename>REFERRAL_SRC</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REF_CONTACT</name>
+        <rename>REF_CONTACT</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REF_ADDRESS</name>
+        <rename>REF_ADDRESS</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REF_PHONE</name>
+        <rename>REF_PHONE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>REF_FAX</name>
+        <rename>REF_FAX</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_ACCIDENT</name>
+        <rename>DATE_ACCIDENT</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_RS</name>
+        <rename>DATE_RS</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_RR</name>
+        <rename>DATE_RR</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_RP</name>
+        <rename>DATE_RP</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_APP</name>
+        <rename>DATE_APP</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_VISIT</name>
+        <rename>DATE_VISIT</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>EARLY</name>
+        <rename>EARLY</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_DIS</name>
+        <rename>DATE_DIS</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>DATE_CLOSE</name>
+        <rename>DATE_CLOSE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>EMPLOYER</name>
+        <rename>EMPLOYER</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>LAWYER</name>
+        <rename>LAWYER</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>OCCUPATION</name>
+        <rename>OCCUPATION</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>OCCUP_TYPE</name>
+        <rename>OCCUP_TYPE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>OCCUP_SECTOR</name>
+        <rename>OCCUP_SECTOR</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>OTHER_CONTACT</name>
+        <rename>OTHER_CONTACT</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>CONTACT_PHONE</name>
+        <rename>CONTACT_PHONE</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>LOCATION</name>
+        <rename>LOCATION</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>MRN</name>
+        <rename>MRN</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>PAYOR</name>
+        <rename>PAYOR</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>PAYOR_NO</name>
+        <rename>PAYOR_NO</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>COUNTRY</name>
+        <rename>COUNTRY</rename>
+        <default/>
+        <type>String</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>608</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -431,8 +743,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>496</yloc>
+      <xloc>960</xloc>
+      <yloc>832</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -508,8 +820,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>320</yloc>
+      <xloc>960</xloc>
+      <yloc>656</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -550,8 +862,82 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>128</yloc>
+      <xloc>960</xloc>
+      <yloc>448</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#x2f; Update 2 2 2</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>referralimportindex</table>
+      <key>
+        <name>externalID</name>
+        <field>externalID</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>status</name>
+        <rename>add client status</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>608</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#x2f; Update 2 2 2 2</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>target</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>referralimportindex</table>
+      <key>
+        <name>City</name>
+        <field>externalID</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>status</name>
+        <rename>add client status</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1296</xloc>
+      <yloc>912</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -587,65 +973,8 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Null if... 2</name>
-    <type>NullIf</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>BIRTH_DATE</name>
-        <value>--</value>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Replace in string</name>
-    <type>ReplaceString</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>MRN</in_stream_name>
-        <out_stream_name/>
-        <use_regex>no</use_regex>
-        <replace_string>.0</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>416</yloc>
+      <xloc>960</xloc>
+      <yloc>912</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -662,22 +991,6 @@
            <schema_name/>
            </partitioning>
     <fields>      <field>        <name>REGION</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>LAST</name>
-        <rename>lastname</rename>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>FIRST</name>
-        <rename>firstname</rename>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>SEX</name>
-        <rename>gender</rename>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>BIRTH_DATE</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
@@ -701,46 +1014,6 @@
         <rename>PostalCode</rename>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>HOME_PHONE</name>
-        <rename>homePhone</rename>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>LANGUAGE</name>
-        <rename>Language</rename>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>INTERPRETER</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>FAMILY_DR</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>EMPLOYER</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>LAWYER</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>OCCUPATION</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>OCCUP_TYPE</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>OCCUP_SECTOR</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>OTHER_CONTACT</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
       </field>      <field>        <name>LOCATION</name>
         <rename/>
         <length>-2</length>
@@ -757,26 +1030,15 @@
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>        <select_unspecified>N</select_unspecified>
-      <meta>        <name>BIRTH_DATE</name>
-        <rename>dateOfBirth</rename>
-        <type>Date</type>
+      </field>      <field>        <name>externalID</name>
+        <rename/>
         <length>-2</length>
         <precision>-2</precision>
-        <conversion_mask>yyyy-MM-dd</conversion_mask>
-        <date_format_lenient>true</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>    </fields>     <cluster_schema/>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>224</yloc>
+      <xloc>608</xloc>
+      <yloc>544</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -801,25 +1063,13 @@
       <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>firstname</name>
+        <name>MRN</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <presorted>N</presorted>
       </field>
       <field>
-        <name>lastname</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>dateOfBirth</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>RS_no</name>
+        <name>RS_NO</name>
         <ascending>N</ascending>
         <case_sensitive>N</case_sensitive>
         <presorted>N</presorted>
@@ -827,8 +1077,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>416</yloc>
+      <xloc>704</xloc>
+      <yloc>736</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -844,17 +1094,17 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>ANZIO</connection>
-    <sql>SELECT&#xa;RS_no,&#xa; REGION&#xa;, &#x22;LAST&#x22;&#xa;, &#x22;FIRST&#x22;&#xa;, SEX&#xa;, BIRTH_DATE&#xa;, STREET&#xa;, APT&#xa;, CITY&#xa;, PROVINCE&#xa;, POSTAL_CODE&#xa;, HOME_PHONE&#xa;, &#x22;LANGUAGE&#x22;&#xa;, INTERPRETER&#xa;, FAMILY_DR&#xa;, DR_ADDRESS&#xa;, EMPLOYER&#xa;, LAWYER&#xa;, OCCUPATION&#xa;, OCCUP_TYPE&#xa;, OCCUP_SECTOR&#xa;, OTHER_CONTACT&#xa;, LOCATION&#xa;, MRN&#xa;, COUNTRY&#xa;FROM pat_file&#xa;</sql>
-    <limit>0</limit>
+    <connection>target</connection>
+    <sql>SELECT &#x22;externalID&#x22; from altum.referralimportindex where status&#x3d;&#x27;clientAdded&#x27;&#xa;&#xa;</sql>
+    <limit/>
     <lookup/>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>48</yloc>
+      <xloc>608</xloc>
+      <yloc>80</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -874,16 +1124,117 @@
       <count_field/>
       <reject_duplicate_row>N</reject_duplicate_row>
       <error_description/>
-    <fields>      <field>        <name>firstname</name>
-        <case_insensitive>Y</case_insensitive>
-        </field>      <field>        <name>lastname</name>
-        <case_insensitive>Y</case_insensitive>
-        </field>      <field>        <name>dateOfBirth</name>
+    <fields>      <field>        <name>MRN</name>
         <case_insensitive>N</case_insensitive>
         </field>      </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>304</xloc>
-      <yloc>416</yloc>
+      <xloc>800</xloc>
+      <yloc>736</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Concat Fields</name>
+    <type>ConcatFields</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator> </separator>
+    <enclosure/>
+    <enclosure_forced>N</enclosure_forced>
+    <enclosure_fix_disabled>N</enclosure_fix_disabled>
+    <header>N</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <fileNameInField>N</fileNameInField>
+    <fileNameField/>
+    <create_parent_folder>Y</create_parent_folder>
+    <file>
+      <name>file</name>
+      <is_command>N</is_command>
+      <servlet_output>N</servlet_output>
+      <do_not_open_new_file_init>Y</do_not_open_new_file_init>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+    </file>
+    <fields>
+      <field>
+        <name>address1</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>address2</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>Province</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>Country</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+    <ConcatFields>
+<targetFieldName>displayName</targetFieldName>
+<targetFieldLength>0</targetFieldLength>
+<removeSelectedFields>N</removeSelectedFields>
+    </ConcatFields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>656</xloc>
+      <yloc>656</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
