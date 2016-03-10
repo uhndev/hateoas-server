@@ -96,7 +96,11 @@
        */
       latitude: {
         type: 'string',
-        generator: faker.address.latitude
+        generator: function (state) {
+          var range = 44.145044;
+          var baseLat = 43.653226;
+          return (Math.random() * (range - baseLat) + baseLat).toFixed(5);
+        }
       },
 
       /**
@@ -106,7 +110,11 @@
        */
       longitude: {
         type: 'string',
-        generator: faker.address.longitude
+        generator: function (state) {
+          var range = -80.37509855;
+          var baseLon = -79.38318429999998;
+          return (Math.random() * (range - baseLon) + baseLon).toFixed(5);
+        }
       },
 
       /**
