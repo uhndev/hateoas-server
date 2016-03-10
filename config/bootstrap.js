@@ -9,8 +9,7 @@
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-_ = require('lodash');
-Promise = require('bluebird');
+var _ = require('lodash');
 
 module.exports.bootstrap = function (cb) {
   // Keep Bluebird warnings but don't
