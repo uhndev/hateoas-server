@@ -30,6 +30,7 @@
         .then(function (services) {
           this.referral.availableServices = services;
           return servicedetail.find({
+            referral: this.referral.id,
             statusName: 'Approved',
             visitable: true,
             altumServiceName: {
