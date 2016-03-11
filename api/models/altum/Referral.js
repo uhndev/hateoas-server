@@ -37,7 +37,10 @@
        * @type {string}
        */
       claimNumber: {
-        type: 'string'
+        type: 'string',
+        generator: function(state) {
+          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
+        }
       },
 
       /**

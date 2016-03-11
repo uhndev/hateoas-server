@@ -36,7 +36,15 @@ module.exports.bootstrap = function (cb) {
       .then(WorkStatus.generateAndCreate)
       .then(Timeframe.generateAndCreate)
       .then(Prognosis.generateAndCreate)
-      .then(ServiceType.generateAndCreate)
+      .then(function () {
+        return AltumService.findOrCreate({ name: 'Triage' }, {
+          name: 'Triage',
+          available: true,
+          visitable: true
+        }).then(function () {
+          sails.log.info("Default Triage AltumService generated");
+        });
+      })
       .then(cb)
       .catch(cb);
   } else {

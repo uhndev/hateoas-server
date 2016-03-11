@@ -123,12 +123,12 @@
       },
 
       /**
-       * serviceType
-       * @description The type of service that it falls under
+       * visitService
+       * @description Reference to the previously approved service (will be chosen from list of Approved services)
        * @type {Model}
        */
-      serviceType: {
-        model: 'servicetype'
+      visitService: {
+        model: 'service'
       },
 
       /**
