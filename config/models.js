@@ -17,7 +17,6 @@ module.exports.models = {
   },
 
   limits: {
-    claim: 5,
     program: 5,
     referral: 5
   },
@@ -36,7 +35,6 @@ module.exports.models = {
     };
 
     ProgramService.generateAndCreate()
-      .then(generateMultiple('claim'))
       .then(generateMultiple('program'))
       .then(generateMultiple('referral'))
       .catch(function (err) {

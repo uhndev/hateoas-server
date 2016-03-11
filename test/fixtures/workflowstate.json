@@ -376,9 +376,9 @@
           "value": ""
         },
         {
-          "name": "claim_claimNum",
+          "name": "claimNumber",
           "type": "string",
-          "prompt": "COMMON.MODELS.REFERRAL.CLAIM_NUM",
+          "prompt": "COMMON.MODELS.REFERRAL.CLAIM_NUMBER",
           "value": ""
         },
         {

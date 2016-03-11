@@ -52,8 +52,8 @@
       serviceDate: {
         type: 'datetime'
       },
-      serviceType: {
-        type: 'string'
+      visitService: {
+        model: 'service'
       },
       approvalNeeded: {
         type: 'boolean'
