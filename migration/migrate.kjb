@@ -171,8 +171,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>160</xloc>
-      <yloc>224</yloc>
+      <xloc>336</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add programs</name>
@@ -225,8 +225,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>224</yloc>
+      <xloc>720</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add payors</name>
@@ -279,8 +279,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>400</yloc>
+      <xloc>560</xloc>
+      <yloc>272</yloc>
       </entry>
     <entry>
       <name>add altum services</name>
@@ -333,8 +333,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>336</yloc>
+      <xloc>720</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
       <name>add sites</name>
@@ -387,8 +387,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>224</yloc>
+      <xloc>960</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add programs services</name>
@@ -441,8 +441,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>560</yloc>
+      <xloc>720</xloc>
+      <yloc>432</yloc>
       </entry>
     <entry>
       <name>add client addresses</name>
@@ -516,8 +516,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>960</xloc>
-      <yloc>384</yloc>
+      <xloc>1152</xloc>
+      <yloc>240</yloc>
       </entry>
     <entry>
       <name>add clients</name>
@@ -591,8 +591,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>960</xloc>
-      <yloc>224</yloc>
+      <xloc>1152</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>create referrals</name>
@@ -666,8 +666,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1184</xloc>
-      <yloc>224</yloc>
+      <xloc>1376</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add service categories</name>
@@ -720,8 +720,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>448</yloc>
+      <xloc>720</xloc>
+      <yloc>320</yloc>
       </entry>
     <entry>
       <name>Check Db connections</name>
@@ -742,8 +742,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>160</xloc>
-      <yloc>352</yloc>
+      <xloc>336</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -752,8 +752,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1312</xloc>
-      <yloc>352</yloc>
+      <xloc>1472</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
       <name>map services to sites</name>
@@ -806,8 +806,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>384</yloc>
+      <xloc>960</xloc>
+      <yloc>256</yloc>
       </entry>
     <entry>
       <name>add Physicians</name>
@@ -860,8 +860,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>512</yloc>
+      <xloc>560</xloc>
+      <yloc>384</yloc>
       </entry>
     <entry>
       <name>map services</name>
@@ -914,8 +914,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>672</yloc>
+      <xloc>720</xloc>
+      <yloc>544</yloc>
       </entry>
     <entry>
       <name>update import index</name>
@@ -989,8 +989,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>224</yloc>
+      <xloc>560</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>DUMMY</name>
@@ -1009,8 +1009,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>160</xloc>
-      <yloc>528</yloc>
+      <xloc>336</xloc>
+      <yloc>400</yloc>
       </entry>
   </entries>
   <hops>

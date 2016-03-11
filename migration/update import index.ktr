@@ -198,8 +198,9 @@
   </connection>
   <order>
   <hop> <from>Database join</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
   <hop> <from>Table input</from><to>Database join</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants</from><to>Filter rows</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter rows</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add constants</name>
@@ -301,7 +302,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>592</xloc>
-      <yloc>416</yloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -318,8 +319,8 @@
            <schema_name/>
            </partitioning>
     <connection>target</connection>
-    <sql>SELECT max&#x28;&#x22;externalID&#x22;&#x29; from altum.&#x22;referralimportindex&#x22;</sql>
-    <limit>0</limit>
+    <sql>SELECT max&#x28;&#x22;externalID&#x22;&#x29;, 0 as rs_no from altum.&#x22;referralimportindex&#x22;</sql>
+    <limit>1000</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
@@ -328,6 +329,35 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>592</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Filter rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Insert &#x2f; Update</send_true_to>
+<send_false_to/>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>rs_no</leftvalue>
+ <function>&#x3c;&#x3e;</function>
+ <rightvalue/>
+ <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>592</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

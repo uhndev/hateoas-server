@@ -192,17 +192,16 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Replace in string</from><to>get clientID</to><enabled>Y</enabled> </hop>
   <hop> <from>get ProgramID</from><to>Insert &#x2f; Update</to><enabled>Y</enabled> </hop>
-  <hop> <from>Insert &#x2f; Update</from><to>Database lookup</to><enabled>Y</enabled> </hop>
   <hop> <from>Database lookup</from><to>Insert &#x2f; Update 2</to><enabled>Y</enabled> </hop>
   <hop> <from>get clientID</from><to>get ProgramID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants 2</from><to>Insert &#x2f; Update 2 2 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>Insert &#x2f; Update 2 2 2</from><to>Database lookup 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>set add referral status on index</from><to>get referral data</to><enabled>Y</enabled> </hop>
   <hop> <from>Table input 2</from><to>Add constants 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>Database lookup 2 2</from><to>Replace in string</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants 2 2</from><to>Insert &#x2f; Update 2 2 2 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>Insert &#x2f; Update 2</from><to>Add constants 2 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Insert &#x2f; Update</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step</from><to>Database lookup</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants 2</from><to>Blocking Step 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step 2</from><to>set add referral status on index</to><enabled>Y</enabled> </hop>
+  <hop> <from>get referral data</from><to>get clientID</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add constants 2</name>
@@ -238,8 +237,8 @@
     </step>
 
   <step>
-    <name>Add constants 2 2</name>
-    <type>Constant</type>
+    <name>Blocking Step</name>
+    <type>BlockingStep</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -248,24 +247,39 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <fields>
-      <field>
-        <name>add client status</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>referralAdded</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
+      <pass_all_rows>Y</pass_all_rows>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>block</prefix>
+      <cache_size>5000</cache_size>
+      <compress>Y</compress>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>1040</yloc>
+      <xloc>768</xloc>
+      <yloc>704</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Blocking Step 2</name>
+    <type>BlockingStep</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <pass_all_rows>Y</pass_all_rows>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>block</prefix>
+      <cache_size>5000</cache_size>
+      <compress>Y</compress>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>768</xloc>
+      <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -307,13 +321,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>832</yloc>
+      <yloc>784</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Database lookup 2 2</name>
+    <name>get referral data</name>
     <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -688,7 +702,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>752</yloc>
+      <yloc>656</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -736,13 +750,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>912</yloc>
+      <yloc>864</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Insert &#x2f; Update 2 2 2</name>
+    <name>set add referral status on index</name>
     <type>InsertUpdate</type>
     <description/>
     <distribute>Y</distribute>
@@ -773,76 +787,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Insert &#x2f; Update 2 2 2 2</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>target</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema/>
-      <table>referralimportindex</table>
-      <key>
-        <name>City</name>
-        <field>externalID</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>status</name>
-        <rename>add client status</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>800</xloc>
-      <yloc>1040</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Replace in string</name>
-    <type>ReplaceString</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>MRN</in_stream_name>
-        <out_stream_name/>
-        <use_regex>no</use_regex>
-        <replace_string>.0</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>480</yloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -859,7 +804,7 @@
            <schema_name/>
            </partitioning>
     <connection>target</connection>
-    <sql>SELECT &#x22;externalID&#x22; from altum.referralimportindex where status&#x3d;&#x27;clientAddressAdded&#x27;&#xa;&#xa;</sql>
+    <sql>SELECT &#x22;externalID&#x22; from altum.referralimportindex where status&#x3d;&#x27;addingClient&#x27;&#xa;&#xa;</sql>
     <limit/>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -910,7 +855,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>656</yloc>
+      <yloc>560</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -952,7 +897,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>656</xloc>
-      <yloc>560</yloc>
+      <yloc>480</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
