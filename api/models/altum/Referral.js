@@ -72,7 +72,8 @@
 
       /**
        * physician
-       * @description The physician registered at this site
+       * @description Reference to the primary provider physician - will be set if primaryProviderType was
+       *              set to null in the related Program
        * @type {Model}
        */
       physician: {
@@ -84,14 +85,12 @@
 
       /**
        * staff
-       * @description The staff registered at this site
+       * @description Reference to the primary provider - will be set if primaryProviderType
+       *              was set as a particular StaffType in the related Program
        * @type {Model}
        */
       staff: {
-        model: 'staff',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'staff', Staff);
-        }
+        model: 'staff'
       },
 
       /**
