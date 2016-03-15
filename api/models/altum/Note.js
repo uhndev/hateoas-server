@@ -49,7 +49,32 @@
       noteType: {
         model: 'NoteType'
       }
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given note object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.createdBy) {
+        User.findOne(values.createdBy).exec(function (err, user) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = user.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     }
+
   });
 
 })();

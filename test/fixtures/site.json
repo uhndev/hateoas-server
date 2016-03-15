@@ -76,6 +76,19 @@
     }
   },
   {
+    "name": "Community",
+    "address": {
+      "address1": "399 Bathurst",
+      "address2": "Toronto Western Hospitial",
+      "city": 5,
+      "province": "ON",
+      "postalCode": "M5T 2S8",
+      "country": "Canada",
+      "latitude": 43.6534612,
+      "longitude": -79.4060656
+    }
+  },
+  {
     "name": "TWH",
     "address": {
       "address1": "399 Bathurst",

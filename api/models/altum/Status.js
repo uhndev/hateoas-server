@@ -78,7 +78,7 @@
         { name: 'Discharged', category: 'referral' },
         { name: 'Follow-up', category: 'referral' },
         { name: 'Pending', category: 'approval', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
-        { name: 'No response from WSIB', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
+        { name: 'Misentered', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
         { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' },
         {
           name: 'Approved',
