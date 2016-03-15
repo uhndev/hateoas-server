@@ -39,7 +39,9 @@
     "start": "node app.js",
     "watch": "forever -w app.js",
     "debug": "node debug app.js",
-    "populate": "cd config/scripts/dados-pygen; python generate-data.py"
+    "populate": "cd config/scripts/dados-pygen; python generate-data.py",
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/unit/**/*.js",
+    "coverage": "node ./node_modules/.bin/istanbul cover -x \"**/config/**\" ./node_modules/.bin/_mocha -- --timeout 5000"
   },
   "main": "app.js",
   "repository": {
@@ -56,6 +58,7 @@
     "grunt-mocha-cov": "~0.4.0",
     "grunt-mocha-test": "~0.12.7",
     "ink-docstrap": "^0.5.2",
+    "istanbul": "^0.4.2",
     "jsdoc": "^3.3.2",
     "mocha": "~2.2.1",
     "mocha-bamboo-reporter": "^1.1.0",

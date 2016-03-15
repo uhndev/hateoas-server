@@ -118,6 +118,17 @@
       "PROFILE_TITLE": "User Profile",
       "STUDIES_TITLE": "List of enrolled studies",
       "SCHEDULE_TITLE": "List of upcoming surveys"
+    },
+    "REFERRAL": {
+      "SERVICES": {
+        "SERVICE_APPROVAL": {
+          "LABELS": {
+            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
+            "APPROVAL_CONFIRMATION": "Approval Confirmation",
+            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
+          }
+        }
+      }
     }
   },
   "COMMON": {

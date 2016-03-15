@@ -19,7 +19,7 @@
         ].join('/')
       },
       {
-        'rel': sails.models.referral.identity,
+        'rel': sails.models.referraldetail.identity,
         'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
         'name': 'name',
         'href': [
@@ -27,7 +27,7 @@
         ].join('/')
       },
       {
-        'rel': 'triage',
+        'rel': sails.models.referral.identity,
         'prompt': 'APP.HEADER.SUBMENU.TRIAGE',
         'name': 'name',
         'href': [
@@ -171,13 +171,10 @@
       client_language: {
         type: 'integer'
       },
-      claim: {
-        model: 'claim'
-      },
-      claim_claimNum: {
+      claimNumber: {
         type: 'string'
       },
-      claim_policyNum: {
+      policyNumber: {
         type: 'string'
       },
       getResponseLinks: function () {

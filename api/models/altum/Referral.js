@@ -32,15 +32,24 @@
       },
 
       /**
-       * claim
-       * @description A referral's client
-       * @type {Model}
+       * claimNumber
+       * @description A referral's claimNumber
+       * @type {string}
        */
-      claim: {
-        model: 'claim',
+      claimNumber: {
+        type: 'string',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'claim', Claim);
+          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
         }
+      },
+
+      /**
+       * policyNumber
+       * @description A referral's policyNumber
+       * @type {string}
+       */
+      policyNumber: {
+        type: 'string'
       },
 
       /**
@@ -128,6 +137,15 @@
         generator: function() {
           return faker.date.past();
         }
+      },
+
+      /**
+       * externalID
+       * @description A referral's external ID (usually )
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
       },
 
       /**

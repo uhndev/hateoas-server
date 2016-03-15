@@ -21,7 +21,6 @@
        * @description an invoice's associated payor
        * @type {Model}
        */
-
       payor: {
         model: 'payor'
       },
@@ -31,7 +30,6 @@
        * @description a collection of an invoices billed for services
        * @type {Collection}
        */
-
       invoiceServices: {
         collection: 'invoiceService',
         via: 'invoice'

@@ -36,7 +36,7 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     client."updatedAt"
   FROM altum.client
     LEFT JOIN altum.person ON (client.person = person.ID)
-    LEFT JOIN altum.address on (person.id = address.person)
-    LEFT JOIN altum.city on (address.city = city.id);
+    LEFT JOIN altum.address ON (person.address = address.id)
+    LEFT JOIN altum.city ON (address.city = city.id);
 ALTER TABLE altum.clientcontact
 OWNER TO postgres;

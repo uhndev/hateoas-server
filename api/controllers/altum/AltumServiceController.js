@@ -17,6 +17,8 @@
      * @description Finds one referral's available services with site information
      */
     findAvailableServices: function (req, res) {
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.altumprogramservices.identity;
       var criteria = actionUtil.parseCriteria(req);
       referraldetail.findOne(req.param('id'))
         .then(function (referral) {
@@ -27,9 +29,41 @@
         })
         .then(function (services) {
           this.referral.availableServices = services;
-          res.ok(this.referral, {
-            links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
+          return servicedetail.find({
+            referral: this.referral.id,
+            statusName: 'Approved',
+            visitable: true,
+            altumServiceName: {
+              "!": "Triage"
+            }
           });
+        })
+        .then(function (approvedServices) {
+          var that = this;
+          if (approvedServices.length === 0) {
+            // if no approved services yet, return only the Triage service.
+            AltumService.findOne({name: "Triage"}).then(function (triageService) {
+              that.referral.approvedServices = [
+                {
+                  referral: that.referral.id,
+                  physician: that.referral.physician,
+                  altumService: triageService.id,
+                  altumServiceName: triageService.name,
+                  serviceDate: new Date(),
+                  approvalNeeded: false
+                }
+              ];
+              res.ok(that.referral, {
+                links: referraldetail.getResponseLinks(that.referral.id, that.displayName)
+              });
+            })
+
+          } else {
+            this.referral.approvedServices = approvedServices;
+            res.ok(this.referral, {
+              links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
+            });
+          }
         })
         .catch(res.badRequest);
     }
