@@ -112,6 +112,30 @@
                   criteria: [
                     { where: { subject: values.id } }
                   ]
+                },
+                {
+                  model: 'formversionsessions',
+                  action: 'read',
+                  criteria: [
+                  ]
+                },
+                {
+                  model: 'SubjectSchedule',
+                  action: 'read',
+                  criteria: [
+                  ]
+                },
+                {
+                  model: 'Session',
+                  action: 'read',
+                  criteria: [
+                  ]
+                },
+                {
+                  model: 'AnswerSet',
+                  action: 'read',
+                  criteria: [
+                  ]
                 }
               ],
               users: [ this.user.username ]
