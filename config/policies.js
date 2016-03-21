@@ -45,23 +45,7 @@ module.exports.policies = {
     'destroy': false
   },
 
-  CriteriaController: {
-    '*': false
-  },
-
   ModelController: {
-    'create': false,
-    'update': false,
-    'destroy': false
-  },
-
-  RoleController: {
-    'create': false,
-    'update': false,
-    'destroy': false
-  },
-
-  PermissionController: {
     'create': false,
     'update': false,
     'destroy': false

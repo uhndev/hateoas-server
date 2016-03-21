@@ -2,7 +2,7 @@
 
 -- DROP VIEW schedulesubjects;
 
-CREATE OR REPLACE VIEW schedulesubjects AS
+CREATE OR REPLACE VIEW dados.schedulesubjects AS
  SELECT subjectschedule.id,
     subject.id AS subject,
     "user".id AS "user",
@@ -39,5 +39,5 @@ CREATE OR REPLACE VIEW schedulesubjects AS
      LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL AND survey."expiredAt" IS NULL AND subjectenrollment."expiredAt" IS NULL;
 
-ALTER TABLE schedulesubjects
+ALTER TABLE dados.schedulesubjects
   OWNER TO postgres;

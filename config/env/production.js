@@ -17,7 +17,10 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  proxyHost: 'ws69.uhnresearch.ca',
+  appUrl: 'http://ws98.uhnresearch.ca:1337',
+  hookTimeout: 9999999,
+  proxyHost: 'ws98.uhnresearch.ca',
+  keepResponseErrors: true,
 
   models: {
     migrate: 'safe',
@@ -32,11 +35,11 @@ module.exports = {
   // port: 80,
 
   /***************************************************************************
-   * Set the log level in production environment to "silent"                 *
-   ***************************************************************************/
+  * Set the log level in production environment to "silent"                 *
+  ***************************************************************************/
 
-   log: {
-     level: "silent"
-   }
+  log: {
+    level: "silent"
+  }
 
 };

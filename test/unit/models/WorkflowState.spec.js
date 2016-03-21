@@ -4,6 +4,7 @@
  */
 
 var should = require('should');
+var workflowFixtures = require('../../fixtures/workflowstate.json');
 
 describe('The WorkflowState Model', function () {
 
@@ -22,13 +23,13 @@ describe('The WorkflowState Model', function () {
 
     it('should begin with the correct WorkflowStates', function (done) {
       WorkflowState.count(function (err, states) {
-        states.should.be.exactly(8);
+        states.should.be.exactly(workflowFixtures.length);
         done(err);
       });
     });
 
     it('should return the correct user form in template href', function (done) {
-      WorkflowState.findOne({path: '/api/user'})
+      WorkflowState.findOne({model: 'user'})
         .exec(function (err, state) {
           state.template.href.should.equal(formHrefs.user);
           done(err);
@@ -36,7 +37,7 @@ describe('The WorkflowState Model', function () {
     });
 
     it('should return the correct study form in template href', function (done) {
-      WorkflowState.findOne({path: '/api/study'})
+      WorkflowState.findOne({model: 'study'})
         .exec(function (err, state) {
           state.template.href.should.equal(formHrefs.study);
           done(err);
@@ -44,7 +45,7 @@ describe('The WorkflowState Model', function () {
     });
 
     it('should return the correct collection centre form in template href', function (done) {
-      WorkflowState.findOne({path: '/api/collectioncentre'})
+      WorkflowState.findOne({model: 'collectioncentre'})
         .exec(function (err, state) {
           state.template.href.should.equal(formHrefs.collection_centre);
           done(err);

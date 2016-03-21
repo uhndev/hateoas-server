@@ -1,11 +1,15 @@
 [
   {
-    "path": "/api/user",
+    "model": "user",
+    "path": [
+      "/api/user",
+      "/api/user/:id"
+    ],
     "links": [],
     "queries": [],
     "template": {
       "rel": "user",
-      "href": "http://localhost:1337/api/systemform/1",
+      "systemform": "user",
       "data": [
         {
           "name": "username",
@@ -53,11 +57,15 @@
     }
   },
   {
-    "path": "/api/study",
+    "model": "study",
+    "path": [
+      "/api/study",
+      "/api/study/:id"
+    ],
     "links": [],
     "queries": [],
     "template": {
-      "href": "http://localhost:1337/api/systemform/2",
+      "systemform": "study",
       "data": [
         {
           "name": "name",
@@ -75,11 +83,16 @@
     }
   },
   {
-    "path": "/api/collectioncentre",
+    "model": "collectioncentre",
+    "path": [
+      "/api/collectioncentre",
+      "/api/collectioncentre/:id",
+      "/api/study/:id/collectioncentres"
+    ],
     "links": [],
     "queries": [],
     "template": {
-      "href": "http://localhost:1337/api/systemform/3",
+      "systemform": "collection_centre",
       "data": [
         {
           "name": "name",
@@ -97,15 +110,23 @@
     }
   },
   {
-    "path": "/api/group",
+    "model": "group",
+    "path": [
+      "/api/group"
+    ],
     "links": [],
     "queries": [],
     "template": {
-      "href": "http://localhost:1337/api/systemform/4"
+      "systemform": "group"
     }
   },
   {
-    "path": "/api/subjectenrollment",
+    "model": "subjectenrollment",
+    "path": [
+      "/api/subjectenrollment",
+      "/api/subjectenrollment/:id",
+      "/api/study/:id/subjects"
+    ],
     "queries": [],
     "links": [],
     "template": {
@@ -138,7 +159,12 @@
     }
   },
   {
-    "path": "/api/form",
+    "model": "form",
+    "path": [
+      "/api/form",
+      "/api/form/:id",
+      "/api/study/:id/forms"
+    ],
     "queries": [],
     "links": [],
     "template": {
@@ -165,7 +191,12 @@
     }
   },
   {
-    "path": "/api/survey",
+    "model": "survey",
+    "path": [
+      "/api/survey",
+      "/api/survey/:id",
+      "/api/study/:id/surveys"
+    ],
     "queries": [],
     "links": [],
     "template": {
@@ -186,7 +217,12 @@
     }
   },
   {
-    "path": "/api/userenrollment",
+    "model": "userenrollment",
+    "path": [
+      "/api/userenrollment",
+      "/api/userenrollment/:id",
+      "/api/study/:id/users"
+    ],
     "queries": [],
     "links": [],
     "template": {

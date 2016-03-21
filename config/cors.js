@@ -47,7 +47,11 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-  origin: 'http://localhost:8080,http://ws69.uhnresearch.ca:8080',
+  origin: [
+    'http://localhost:8080',
+    'http://ws69.uhnresearch.ca:8080',
+    'http://ws98.uhnresearch.ca'
+  ].join(','),
 
   /***************************************************************************
   *                                                                          *

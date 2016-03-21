@@ -39,6 +39,7 @@
                 return User.findOne(options.user).populate('enrollments');
               })
               .then(function (user) {
+                this.user = user;
                 // if we were modifying an enrollment, nothing needs to be done
                 if (!_.includes(_.pluck(_.filter(user.enrollments, { expiredAt: null }), 'id'), this.enrollment.id)) {
                   return user;
@@ -48,15 +49,15 @@
                   return user.save();
                 }
               })
-              .then(function (user) {
-                res.ok(user);
-              });
+              .then(function () {
+                res.ok(this.user);
+              }).catch(res.serverError);
           } else {
             // otherwise we're trying to update an enrollment to something that already exists
             res.badRequest({
               title: 'Enrollment Error',
               status: 400,
-              message: 'Unable to enroll user, user may already be registered at another collection centre.'
+              message: 'Unable to enroll user ' + options.user + ' , user may already be registered at another collection centre.'
             });
           }
         })

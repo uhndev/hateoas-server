@@ -20,7 +20,7 @@ module.exports = function() {
   /** Start of "Path" Utils **/
   "Path" : {
     getFullUrl: function getFullUrl(req) {
-      return sails.getBaseUrl() + req.url;
+      return sails.config.appUrl + req.url;
     },
 
     getWhere: function getWhere(query) {

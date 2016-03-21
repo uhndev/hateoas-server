@@ -6,11 +6,28 @@
  */
 
 (function() {
-  var _ = require('lodash');
-  var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-
   module.exports = {
-    identity: 'session'
+    identity: 'session',
+    
+    /**
+     * findOne
+     * @description Finds one session given an id and populates formVersions
+     */
+    findOne: function (req, res) {
+      Session.findOne(req.param('id'))
+        .populate('formVersions')
+        .exec(function (err, session) {
+          if (err) {
+            return res.serverError(err);
+          }
+
+          if (_.isUndefined(session)) {
+            res.notFound();
+          } else {
+            res.ok(session);
+          }
+        });
+    },
   };
 
 })();

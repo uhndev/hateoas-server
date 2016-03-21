@@ -10,6 +10,7 @@ describe('The Survey Model', function () {
   var studyID;
 
   before(function (done) {
+    this.timeout(10000);
     Study
       .create({
         name: 'STUDY',

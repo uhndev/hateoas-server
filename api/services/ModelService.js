@@ -24,12 +24,12 @@
      * @return {Promise}      Chainable model promise after find operation
      */
     filterExpiredRecords: function (model, query) {
-      if (_.isUndefined(query)) {
+      if (_.isUndefined(query) || _.isEmpty(query.where)) {
         query = {};
       }
 
       if (_.has(sails.models[model].definition, 'expiredAt')) {
-        return sails.models[model].find(_.merge(query, {expiredAt: null}));
+        return sails.models[model].find(_.merge({expiredAt: null}, query));
       } else {
         return sails.models[model].find(query);
       }

@@ -6,9 +6,8 @@
  */
 
 (function() {
+  var _ = require('lodash');
   var Promise = require('bluebird');
-  var util = require('util');
-  var pg = require('pg');
   var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   var StudyBase = require('./../BaseControllers/ModelBaseController');
