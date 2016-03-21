@@ -182,6 +182,26 @@
         "COLLECTION_CENTRE": "Centre Collection",
         "CENTRE_ACCESS": "Rôle"
       },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Etude",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "QUESTIONS": {
+            "NAME": "nom",
+            "TITLE": "Nom de L'étude",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Entre une REB nombre",
+            "ATTRIBUTES": "Attributs",
+            "ENTER_JSON": "Entre une json valeur",
+            "ADMINISTRATOR": "Administrateur",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
+      },
       "FORM": {
         "IDENTITY": "Forme",
         "NAME": "Nom de Forme",
@@ -213,22 +233,5 @@
         }
       }
     }
-  },
-  "Create Study":"Create Etude",
-  "Submit": "Sauvegarder",
-  "Cancel": "Annuler",
-  "name": "Nom",
-  "Study Name": "Nom de L'étude",
-  "LEAP": "LEAP",
-  "missing input or invalid": "missing input or invalid",
-  "reb": "reb",
-  "Enter an REB number": "Entrer une REB nombre",
-  "attributes": "attributs",
-  "Attributes": "Attributs",
-  "Enter a json value": "Entre une json valeur",
-  "administrator": "administrateur",
-  "Administrator": "Administrateur",
-  "Select user": "Select user",
-  "pi": "pi",
-  "PI": "PI"
+  }
 }

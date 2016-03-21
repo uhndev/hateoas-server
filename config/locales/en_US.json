@@ -13,11 +13,11 @@
       "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
       "SELECTED": "Selected:",
       "MENU": {
-        "STUDIES": "Studies",
-        "MY_STUDIES": "My Studies",
+        "STUDIES": "Programs",
+        "MY_STUDIES": "My Programs",
         "MY_PROFILE": "My Profile",
-        "USER_MANAGER": "User Manager",
-        "TOOLS": "Tools",
+        "USER_MANAGER": "Client Manager",
+        "TOOLS": "Altum Tools",
         "FORM_BUILDER": "Form Builder",
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
@@ -26,8 +26,8 @@
       },
       "SUBMENU": {
         "OVERVIEW": "Overview",
-        "COLLECTION_CENTRES": "Collection Centres",
-        "SUBJECTS": "Subjects",
+        "COLLECTION_CENTRES": "Sites",
+        "SUBJECTS": "Clients",
         "USERS": "Users",
         "FORMS": "Forms",
         "SURVEYS": "Surveys"
@@ -35,25 +35,25 @@
     },
     "STUDY": {
       "OVERVIEW": {
-        "TITLE": "Study Overview: {{name}}",
+        "TITLE": "Program Overview: {{name}}",
         "ENROLLMENT": {
           "TITLE": "Enrollment",
-          "COLLECTION_CENTRES": "Collection Centres",
+          "COLLECTION_CENTRES": "Sites",
           "CONTACT": "@:COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
           "COORDINATORS": "Coordinators",
           "INTERVIEWERS": "Interviewers",
-          "SUBJECTS": "Subjects",
-          "SUBJECTS_ENROLLED": "Subjects Enrolled"
+          "SUBJECTS": "Clients",
+          "SUBJECTS_ENROLLED": "Clients Enrolled"
         },
         "STUDY_INFORMATION": {
-          "TITLE": "Study Information"
+          "TITLE": "Program Information"
         }
       },
       "SUBJECT": {
         "CONTROLS": {
-          "OPEN_BTN": "View Subject",
-          "NEW_BTN": "Add Subject",
-          "EDIT_BTN": "Edit Subject",
+          "OPEN_BTN": "View Client",
+          "NEW_BTN": "Add Client",
+          "EDIT_BTN": "Edit Client",
           "ARCHIVE_BTN": "Archive"
         }
       },
@@ -86,12 +86,12 @@
       },
       "COLLECTION_CENTRE": {
         "OVERVIEW": {
-          "TITLE": "Study Overview: {{name}}",
+          "TITLE": "Program Overview: {{name}}",
           "SUBJECTS": {
-            "TITLE": "Subjects"
+            "TITLE": "Clients"
           },
           "COORDINATORS": {
-            "TITLE": "Coordinators"
+            "TITLE": "Managers"
           }
         }
       }
@@ -140,8 +140,8 @@
     },
     "MODELS": {
       "STUDY": {
-        "IDENTITY": "Study",
-        "NAME": "Study Name",
+        "IDENTITY": "Program",
+        "NAME": "Program Name",
         "ATTRIBUTES": "Attributes",
         "REB": "REB #",
         "ADMINISTRATOR": "Administrator",
@@ -158,16 +158,16 @@
         "DOB": "Date of Birth"
       },
       "COLLECTION_CENTRE": {
-        "IDENTITY": "Collection Centre",
-        "NAME": "Collection Centre Name",
+        "IDENTITY": "Site",
+        "NAME": "Site Name",
         "CONTACT": "Contact"
       },
       "SUBJECT_ENROLLMENT": {
-        "IDENTITY": "Subject",
-        "SUBJECT_NUMBER": "Subject ID",
+        "IDENTITY": "Client",
+        "SUBJECT_NUMBER": "Client ID",
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "DOE": "Date of Event",
-        "STUDY_MAPPING": "Study Mapping",
+        "STUDY_MAPPING": "Program Mapping",
         "STATUS": "Status"
       },
       "USER_ENROLLMENT": {
@@ -181,6 +181,26 @@
         "DOB": "Date of Birth",
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "CENTRE_ACCESS": "Role"
+      },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Study",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "QUESTIONS": {
+            "NAME": "name",
+            "TITLE": "Study Name",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Enter an REB number",
+            "ATTRIBUTES": "Attributes",
+            "ENTER_JSON": "Enter a json value",
+            "ADMINISTRATOR": "Administrator",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
       },
       "FORM": {
         "IDENTITY": "Form",
@@ -213,22 +233,5 @@
         }
       }
     }
-  },
-  "Create Study":"Create Study",
-  "Submit": "Submit",
-  "Cancel": "Cancel",
-  "name": "name",
-  "Study Name": "Study Name",
-  "LEAP": "LEAP",
-  "missing input or invalid": "missing input or invalid",
-  "reb": "reb",
-  "Enter an REB number": "Enter an REB number",
-  "attributes": "attributes",
-  "Attributes": "Attributes",
-  "Enter a json value": "Enter a json value",
-  "administrator": "administrator",
-  "Administrator": "Administrator",
-  "Select user": "Select user",
-  "pi": "pi",
-  "PI": "PI"
+  }
 }
