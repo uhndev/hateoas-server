@@ -13,11 +13,11 @@
       "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
       "SELECTED": "Selected:",
       "MENU": {
-        "STUDIES": "Programs",
-        "MY_STUDIES": "My Programs",
+        "STUDIES": "Studies",
+        "MY_STUDIES": "My Studies",
         "MY_PROFILE": "My Profile",
-        "USER_MANAGER": "Client Manager",
-        "TOOLS": "Altum Tools",
+        "USER_MANAGER": "User Manager",
+        "TOOLS": "Tools",
         "FORM_BUILDER": "Form Builder",
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
@@ -26,8 +26,8 @@
       },
       "SUBMENU": {
         "OVERVIEW": "Overview",
-        "COLLECTION_CENTRES": "Sites",
-        "SUBJECTS": "Clients",
+        "COLLECTION_CENTRES": "Collection Centres",
+        "SUBJECTS": "Subjects",
         "USERS": "Users",
         "FORMS": "Forms",
         "SURVEYS": "Surveys"
@@ -35,25 +35,25 @@
     },
     "STUDY": {
       "OVERVIEW": {
-        "TITLE": "Program Overview: {{name}}",
+        "TITLE": "Study Overview: {{name}}",
         "ENROLLMENT": {
           "TITLE": "Enrollment",
-          "COLLECTION_CENTRES": "Sites",
+          "COLLECTION_CENTRES": "Collection Centres",
           "CONTACT": "@:COMMON.MODELS.COLLECTION_CENTRE.CONTACT",
           "COORDINATORS": "Coordinators",
           "INTERVIEWERS": "Interviewers",
-          "SUBJECTS": "Clients",
-          "SUBJECTS_ENROLLED": "Clients Enrolled"
+          "SUBJECTS": "Subjects",
+          "SUBJECTS_ENROLLED": "Subjects Enrolled"
         },
         "STUDY_INFORMATION": {
-          "TITLE": "Program Information"
+          "TITLE": "Study Information"
         }
       },
       "SUBJECT": {
         "CONTROLS": {
-          "OPEN_BTN": "View Client",
-          "NEW_BTN": "Add Client",
-          "EDIT_BTN": "Edit Client",
+          "OPEN_BTN": "View Subject",
+          "NEW_BTN": "Add Subject",
+          "EDIT_BTN": "Edit Subject",
           "ARCHIVE_BTN": "Archive"
         }
       },
@@ -86,12 +86,12 @@
       },
       "COLLECTION_CENTRE": {
         "OVERVIEW": {
-          "TITLE": "Program Overview: {{name}}",
+          "TITLE": "Study Overview: {{name}}",
           "SUBJECTS": {
-            "TITLE": "Clients"
+            "TITLE": "Subjects"
           },
           "COORDINATORS": {
-            "TITLE": "Managers"
+            "TITLE": "Coordinators"
           }
         }
       }
@@ -140,8 +140,8 @@
     },
     "MODELS": {
       "STUDY": {
-        "IDENTITY": "Program",
-        "NAME": "Program Name",
+        "IDENTITY": "Study",
+        "NAME": "Study Name",
         "ATTRIBUTES": "Attributes",
         "REB": "REB #",
         "ADMINISTRATOR": "Administrator",
@@ -158,16 +158,16 @@
         "DOB": "Date of Birth"
       },
       "COLLECTION_CENTRE": {
-        "IDENTITY": "Site",
-        "NAME": "Site Name",
+        "IDENTITY": "Collection Centre",
+        "NAME": "Collection Centre Name",
         "CONTACT": "Contact"
       },
       "SUBJECT_ENROLLMENT": {
-        "IDENTITY": "Client",
-        "SUBJECT_NUMBER": "Client ID",
+        "IDENTITY": "Subject",
+        "SUBJECT_NUMBER": "Subject ID",
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "DOE": "Date of Event",
-        "STUDY_MAPPING": "Program Mapping",
+        "STUDY_MAPPING": "Study Mapping",
         "STATUS": "Status"
       },
       "USER_ENROLLMENT": {

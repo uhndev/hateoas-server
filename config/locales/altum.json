@@ -184,12 +184,12 @@
       },
       "SYSTEM_FORM": {
         "STUDY":{
-          "TITLE": "Create Study",
+          "TITLE": "Create Program",
           "SUBMIT": "Submit",
           "CANCEL": "Cancel",
           "QUESTIONS": {
             "NAME": "name",
-            "TITLE": "Study Name",
+            "TITLE": "Program Name",
             "LEAP": "LEAP",
             "MISSINGINPUT": "missing input or invalid",
             "REB": "REB #",
