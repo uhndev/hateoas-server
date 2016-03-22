@@ -16,18 +16,34 @@
 
     attributes: {
 
+        /**
+         * emergency Contact First Name
+         */
+      firstName: {
+          type: 'string'
+        },
       /**
-       * contact
-       * @description A emergency contact's associated person
-       * @type {Model}
+       * Last Name
        */
-      person: {
-        model: 'person',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'person', Person);
-        }
+
+      lastName: {
+        type: 'string'
       },
 
+        /**
+         * Phone
+         */
+
+      phone: {
+          type: 'string'
+        },
+      /**
+       * client
+       *
+       */
+      person: {
+        model: 'person'
+      },
       /**
        * relationship
        * @description A emergencyContact's relationship

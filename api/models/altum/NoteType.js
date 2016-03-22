@@ -33,6 +33,13 @@
         type: 'string'
       },
 
+        /**
+         * background
+         * @description setup back ground color
+         */
+      backGroundColor: {
+          type: 'string'
+        },
       /**
        * name
        * @description note collection

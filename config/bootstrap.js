@@ -21,6 +21,15 @@ module.exports.bootstrap = function (cb) {
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
 
+  var knex = require('knex')({
+    client: 'pg',
+    connection: sails.config.connections[sails.config.models.connection]
+  });
+
+  knex.instanceId = new Date().getTime();
+
+  sails.config.knex = knex;
+
   if (sails.config.models.migrate !== 'safe') {
     WorkflowState.generateAndCreate()
       .then(Site.generateAndCreate)

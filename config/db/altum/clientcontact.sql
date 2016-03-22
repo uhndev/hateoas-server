@@ -14,13 +14,13 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     person."gender",
     person."dateOfBirth",
     person."homePhone",
-    person."workPhone",
+    person."daytimePhone",
     person."fax",
     person."otherPhone",
     person."homeEmail",
-    person."workEmail",
     person."language",
     person."requiresInterpreter",
+    person."primaryEmergencyContact",
     address."address1",
     address."address2",
     city.id AS cityId,
@@ -36,6 +36,7 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     client."createdBy",
     client."createdAt",
     client."updatedAt"
+
   FROM altum.client
     LEFT JOIN altum.person ON (client.person = person.ID)
     LEFT JOIN altum.address on (person.id = address.person)
