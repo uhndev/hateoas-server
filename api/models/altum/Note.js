@@ -6,7 +6,7 @@
  */
 
 (function () {
-    var _super = require('../BaseModel.js');
+    var _super = require('./AltumBaseModel.js');
     _.merge(exports, _super);
     _.merge(exports, {
 

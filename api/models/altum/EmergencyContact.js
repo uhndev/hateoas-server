@@ -16,30 +16,37 @@
 
     attributes: {
 
-        /**
-         * emergency Contact First Name
-         */
+      /**
+       * firstName
+       * @description A emergency contact person's first name.
+       * @type {String}
+       */
       firstName: {
           type: 'string'
         },
       /**
-       * Last Name
+       * lastName
+       * @description A emergnecy contact person's last name.
+       * @type {String}
        */
 
       lastName: {
         type: 'string'
       },
 
-        /**
-         * Phone
-         */
+      /**
+       * phone
+       * @description A emergency contact person's phone number.
+       * @type {String}
+       */
 
       phone: {
           type: 'string'
         },
       /**
-       * client
-       *
+       * person
+       * @description A person's f.
+       * @type {String}
        */
       person: {
         model: 'person'

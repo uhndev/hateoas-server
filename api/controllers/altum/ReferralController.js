@@ -20,10 +20,10 @@
       // manually override model name for pagination in ok.js
       req.options.model = sails.models.referraldetail.identity;
       var query = referraldetail.find()
-          .where(actionUtil.parseCriteria(req))
-          .limit(actionUtil.parseLimit(req))
-          .skip(actionUtil.parseSkip(req))
-          .sort(actionUtil.parseSort(req));
+        .where(actionUtil.parseCriteria(req))
+        .limit(actionUtil.parseLimit(req))
+        .skip(actionUtil.parseSkip(req))
+        .sort(actionUtil.parseSort(req));
 
       query.exec(function found(err, referrals) {
         if (err) {
@@ -51,27 +51,27 @@
       }
 
       Referral.findOne(req.param('id'))
-          .populate(populateFields)
-          .exec(function (err, referral) {
-            if (err) {
-              return res.serverError(err);
-            }
+        .populate(populateFields)
+        .exec(function (err, referral) {
+          if (err) {
+            return res.serverError(err);
+          }
 
-            if (_.isUndefined(referral)) {
-              res.notFound();
-            } else {
-              if (referral.client) { // only populate if referral has client set
-                clientcontact.findOne(referral.client).then(function (client) {
-                  referral.clientcontact = client;
-                  res.ok(referral, {
-                    links: referraldetail.getResponseLinks(referral.id, client.displayName)
-                  });
+          if (_.isUndefined(referral)) {
+            res.notFound();
+          } else {
+            if (referral.client) { // only populate if referral has client set
+              clientcontact.findOne(referral.client).then(function (client) {
+                referral.clientcontact = client;
+                res.ok(referral, {
+                  links: referraldetail.getResponseLinks(referral.id, client.displayName)
                 });
-              } else {
-                res.ok(referral);
-              }
+              });
+            } else {
+              res.ok(referral);
             }
-          });
+          }
+        });
     }
 
   });
