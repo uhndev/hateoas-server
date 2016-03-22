@@ -171,13 +171,10 @@
       client_language: {
         type: 'integer'
       },
-      claim: {
-        model: 'claim'
-      },
-      claim_claimNum: {
+      claimNumber: {
         type: 'string'
       },
-      claim_policyNum: {
+      policyNumber: {
         type: 'string'
       },
       getResponseLinks: function () {

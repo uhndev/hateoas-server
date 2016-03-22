@@ -51,6 +51,7 @@
                 via: 'clients'
             },
 
+
             /**
              * notes
              * @description Collection of client notes

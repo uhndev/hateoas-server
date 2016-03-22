@@ -27,7 +27,7 @@
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
-          return servicedetail.find({referral: referralID}).sort('serviceDate ASC');
+          return servicedetail.find({referral: referralID}).populate('visitService').sort('serviceDate ASC');
         })
         .then(function (services) {
           this.referral.recommendedServices = services;

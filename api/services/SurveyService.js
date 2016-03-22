@@ -8,10 +8,6 @@
   var _ = require('lodash');
   var moment = require('moment');
   var Promise = require('bluebird');
-  var knex = require('knex')({
-    client: 'pg',
-    connection: sails.config.connections[sails.config.models.connection]
-  });
 
   module.exports = {
 

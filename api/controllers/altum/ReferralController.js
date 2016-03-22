@@ -7,50 +7,50 @@
  */
 
 (function () {
+  var _ = require('lodash');
+  var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
+  var StudyBase = require('./../BaseControllers/ModelBaseController');
 
-    var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
-    var StudyBase = require('./../BaseControllers/ModelBaseController');
+  _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
+  _.merge(exports, {
 
-    _.merge(exports, StudyBase);      // inherits StudyBaseController.findByBaseModel
-    _.merge(exports, {
+    identity: 'Referral',
 
-      identity: 'Referral',
-
-      find: function (req, res, next) {
-        // manually override model name for pagination in ok.js
-        req.options.model = sails.models.referraldetail.identity;
-        var query = referraldetail.find()
+    find: function (req, res, next) {
+      // manually override model name for pagination in ok.js
+      req.options.model = sails.models.referraldetail.identity;
+      var query = referraldetail.find()
           .where(actionUtil.parseCriteria(req))
           .limit(actionUtil.parseLimit(req))
           .skip(actionUtil.parseSkip(req))
           .sort(actionUtil.parseSort(req));
 
-        query.exec(function found(err, referrals) {
-          if (err) {
-            return res.serverError(err);
-          }
-
-          res.ok(referrals);
-        });
-      },
-
-      /**
-       * findOne
-       * @description Finds one referral given an id
-       *              and populates program, site, physician and referralContact data
-       */
-      findOne: function (req, res) {
-        var populateFields = ['program', 'site', 'physician', 'notes'];
-
-        // if hitting findOne for Referral overview (not triage), override base model and populate additional fields
-        if (req.route.path === '/api/referral/:id') {
-          req.options.model = sails.models.referraldetail.identity;
-          ['staff', 'referralContact'].map(function (model) {
-            populateFields.push(model);
-          });
+      query.exec(function found(err, referrals) {
+        if (err) {
+          return res.serverError(err);
         }
 
-        Referral.findOne(req.param('id'))
+        res.ok(referrals);
+      });
+    },
+
+    /**
+     * findOne
+     * @description Finds one referral given an id
+     *              and populates program, site, physician and referralContact data
+     */
+    findOne: function (req, res) {
+      var populateFields = ['notes', 'program', 'site', 'physician'];
+
+      // if hitting findOne for Referral overview (not triage), override base model and populate additional fields
+      if (req.route.path === '/api/referral/:id') {
+        req.options.model = sails.models.referraldetail.identity;
+        ['staff', 'referralContact'].map(function (model) {
+          populateFields.push(model);
+        });
+      }
+
+      Referral.findOne(req.param('id'))
           .populate(populateFields)
           .exec(function (err, referral) {
             if (err) {
@@ -72,7 +72,7 @@
               }
             }
           });
-      }
+    }
 
-    });
+  });
 })();

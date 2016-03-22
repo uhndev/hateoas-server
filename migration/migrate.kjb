@@ -12,6 +12,41 @@
   <modified_date>2016&#x2f;01&#x2f;18 13&#x3a;44&#x3a;16.732</modified_date>
     <parameters>
         <parameter>
+            <name>anzioIP</name>
+            <default_value>10.3.128.58</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioInstance</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioName</name>
+            <default_value>Rehabilitation</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPass</name>
+            <default_value>399Bathurst</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioPort</name>
+            <default_value>1433</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioSchema</name>
+            <default_value/>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>anzioUser</name>
+            <default_value>arm</default_value>
+            <description/>
+        </parameter>
+        <parameter>
             <name>sourcePath</name>
             <default_value>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;source&#x2f;</default_value>
             <description/>
@@ -47,6 +82,32 @@
             <description/>
         </parameter>
     </parameters>
+  <connection>
+    <name>ANZIO</name>
+    <server>&#x24;&#x7b;anzioIP&#x7d;</server>
+    <type>MSSQL</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;anzioName&#x7d;</database>
+    <port>&#x24;&#x7b;anzioPort&#x7d;</port>
+    <username>&#x24;&#x7b;anzioUser&#x7d;</username>
+    <password>&#x24;&#x7b;anzioPass&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MSSQL.instance</code><attribute>&#x24;&#x7b;anzioInstance&#x7d;</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;anzioPort&#x7d;</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
   <connection>
     <name>target</name>
     <server>&#x24;&#x7b;targetIP&#x7d;</server>
@@ -110,8 +171,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>32</xloc>
-      <yloc>16</yloc>
+      <xloc>336</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add programs</name>
@@ -164,8 +225,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>80</yloc>
+      <xloc>720</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add payors</name>
@@ -218,8 +279,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>240</xloc>
-      <yloc>80</yloc>
+      <xloc>560</xloc>
+      <yloc>272</yloc>
       </entry>
     <entry>
       <name>add altum services</name>
@@ -272,8 +333,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>192</yloc>
+      <xloc>720</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
       <name>add sites</name>
@@ -326,8 +387,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>640</xloc>
-      <yloc>80</yloc>
+      <xloc>960</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add programs services</name>
@@ -380,8 +441,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>416</yloc>
+      <xloc>720</xloc>
+      <yloc>432</yloc>
       </entry>
     <entry>
       <name>add client addresses</name>
@@ -431,10 +492,31 @@
             </parameter>            <parameter>            <name>sourcePath</name>
             <stream_name>sourcePath</stream_name>
             <value/>
+            </parameter>            <parameter>            <name>anzioIP</name>
+            <stream_name>anzioIP</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioInstance</name>
+            <stream_name>anzioInstance</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioName</name>
+            <stream_name>anzioName</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPass</name>
+            <stream_name>anzioPass</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPort</name>
+            <stream_name>anzioPort</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioSchema</name>
+            <stream_name>anzioSchema</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioUser</name>
+            <stream_name>anzioUser</stream_name>
+            <value/>
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>800</xloc>
+      <xloc>1152</xloc>
       <yloc>240</yloc>
       </entry>
     <entry>
@@ -485,11 +567,32 @@
             </parameter>            <parameter>            <name>sourcePath</name>
             <stream_name>sourcePath</stream_name>
             <value/>
+            </parameter>            <parameter>            <name>anzioIP</name>
+            <stream_name>anzioIP</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioInstance</name>
+            <stream_name>anzioInstance</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioName</name>
+            <stream_name>anzioName</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPass</name>
+            <stream_name>anzioPass</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPort</name>
+            <stream_name>anzioPort</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioSchema</name>
+            <stream_name>anzioSchema</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioUser</name>
+            <stream_name>anzioUser</stream_name>
+            <value/>
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>800</xloc>
-      <yloc>64</yloc>
+      <xloc>1152</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>create referrals</name>
@@ -539,11 +642,32 @@
             </parameter>            <parameter>            <name>sourcePath</name>
             <stream_name>sourcePath</stream_name>
             <value/>
+            </parameter>            <parameter>            <name>anzioIP</name>
+            <stream_name>anzioIP</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioInstance</name>
+            <stream_name>anzioInstance</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioName</name>
+            <stream_name>anzioName</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPass</name>
+            <stream_name>anzioPass</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPort</name>
+            <stream_name>anzioPort</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioSchema</name>
+            <stream_name>anzioSchema</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioUser</name>
+            <stream_name>anzioUser</stream_name>
+            <value/>
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>976</xloc>
-      <yloc>64</yloc>
+      <xloc>1376</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>add service categories</name>
@@ -596,8 +720,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>304</yloc>
+      <xloc>720</xloc>
+      <yloc>320</yloc>
       </entry>
     <entry>
       <name>Check Db connections</name>
@@ -609,12 +733,17 @@
           <waitfor>0</waitfor>
           <waittime>millisecond</waittime>
         </connection>
+        <connection>
+          <name>ANZIO</name>
+          <waitfor>0</waitfor>
+          <waittime>millisecond</waittime>
+        </connection>
       </connections>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>96</xloc>
-      <yloc>80</yloc>
+      <xloc>336</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -623,8 +752,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1264</xloc>
-      <yloc>304</yloc>
+      <xloc>1472</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
       <name>map services to sites</name>
@@ -677,8 +806,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>640</xloc>
-      <yloc>240</yloc>
+      <xloc>960</xloc>
+      <yloc>256</yloc>
       </entry>
     <entry>
       <name>add Physicians</name>
@@ -731,8 +860,8 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>240</xloc>
-      <yloc>192</yloc>
+      <xloc>560</xloc>
+      <yloc>384</yloc>
       </entry>
     <entry>
       <name>map services</name>
@@ -785,8 +914,103 @@
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>528</yloc>
+      <xloc>720</xloc>
+      <yloc>544</yloc>
+      </entry>
+    <entry>
+      <name>update import index</name>
+      <description/>
+      <type>TRANS</type>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;update import index.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+            <parameter>            <name>targetDB</name>
+            <stream_name>targetDB</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>targetIP</name>
+            <stream_name>targetIP</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>targetPass</name>
+            <stream_name>targetPass</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>targetPort</name>
+            <stream_name>targetPort</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>targetUser</name>
+            <stream_name>targetUser</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>targetSchema</name>
+            <stream_name>targetSchema</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>sourcePath</name>
+            <stream_name>sourcePath</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioIP</name>
+            <stream_name>anzioIP</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioInstance</name>
+            <stream_name>anzioInstance</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioName</name>
+            <stream_name>anzioName</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPass</name>
+            <stream_name>anzioPass</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioPort</name>
+            <stream_name>anzioPort</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioSchema</name>
+            <stream_name>anzioSchema</stream_name>
+            <value/>
+            </parameter>            <parameter>            <name>anzioUser</name>
+            <stream_name>anzioUser</stream_name>
+            <value/>
+            </parameter>      </parameters>      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>560</xloc>
+      <yloc>96</yloc>
+      </entry>
+    <entry>
+      <name>DUMMY</name>
+      <description/>
+      <type>SPECIAL</type>
+      <start>N</start>
+      <dummy>Y</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>336</xloc>
+      <yloc>400</yloc>
       </entry>
   </entries>
   <hops>
@@ -811,15 +1035,6 @@
     <hop>
       <from>add programs</from>
       <to>add altum services</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Check Db connections</from>
-      <to>add payors</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -905,6 +1120,33 @@
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Check Db connections</from>
+      <to>update import index</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>update import index</from>
+      <to>add payors</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Check Db connections</from>
+      <to>DUMMY</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>

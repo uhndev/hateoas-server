@@ -94,7 +94,7 @@
       address: {
         model: 'address',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'addresses', Address);
+          return BaseModel.defaultGenerator(state, 'address', Address);
         }
       },
 
@@ -236,6 +236,15 @@
       },
 
       /**
+       * externalID
+       * @description A person's external ID (usually MRN)
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
+      },
+
+      /**
        * requiresInterperter
        * @description a persons requires interperter flag
        * @type {String}
@@ -274,8 +283,26 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
 
+    /**
+     * afterCreate
+     * @description After creating a Person model, in order to keep the one-to-one relationship between Person
+     *              and Address in sync, we include some lifecycle logic to update the Address table.
+     * @param person
+     * @param cb
+     */
+    afterCreate: function (person, cb) {
+      if (person.address) {
+        var addressID = _.isObject(person.address) ? person.address.id : person.address;
+        Address.update({id: addressID}, {person: person.id}).exec(function (err, updatedPerson) {
+          cb(err);
+        });
+      } else {
+        cb();
+      }
     }
+
   });
 })();
 
