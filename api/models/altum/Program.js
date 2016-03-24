@@ -63,7 +63,30 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
 
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given program object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.payor) {
+        Payor.findOne(values.payor).exec(function (err, payor) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = payor.displayName + ' - ' + values.name;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     }
   });
 })();
