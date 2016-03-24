@@ -200,57 +200,57 @@
   {
     "form_type": "system",
     "form_name": "study",
-    "form_title": "Create Study",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
+    "form_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.TITLE",
+    "form_submitText": "COMMON.MODELS.SYSTEM_FORM.STUDY.SUBMIT",
+    "form_cancelText": "COMMON.MODELS.SYSTEM_FORM.STUDY.CANCEL",
     "form_questions": [
       {
         "field_id": 1,
         "field_name": "name",
-        "field_title": "Study Name",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.TITLE",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "LEAP",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.LEAP",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.MISSING_INPUT",
         "field_hasOptions": false,
         "field_required": true
       },
       {
         "field_id": 2,
         "field_name": "reb",
-        "field_title": "REB #",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.REB",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "Enter an REB number",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.ENTER_REB",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.MISSING_INPUT",
         "field_required": true
       },
       {
         "field_id": 3,
         "field_name": "attributes",
-        "field_title": "Attributes",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.ATTRIBUTES",
         "field_type": "json",
         "field_value": {},
-        "field_placeholder": "Enter a json value",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.ENTER_JSON",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.MISSING_INPUT",
         "field_required": true
       },
       {
         "field_id": 4,
         "field_name": "administrator",
-        "field_title": "Administrator",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.ADMINISTRATOR",
         "field_type": "singleselect",
         "field_value": "",
         "field_placeholder": "Select user",
@@ -258,7 +258,7 @@
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.MISSING_INPUT",
         "field_hasItem": true,
         "field_required": false,
         "field_userURL": "user",
@@ -267,15 +267,15 @@
       {
         "field_id": 5,
         "field_name": "pi",
-        "field_title": "PI",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.PI",
         "field_type": "singleselect",
         "field_value": "",
-        "field_placeholder": "Select user",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.SELECT_USER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.STUDY.QUESTIONS.MISSING_INPUT",
         "field_hasItem": true,
         "field_required": false,
         "field_userURL": "user",
