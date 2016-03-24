@@ -184,6 +184,26 @@
         "COLLECTION_CENTRE": "Centre Collection",
         "CENTRE_ACCESS": "Rôle"
       },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Etude",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "QUESTIONS": {
+            "NAME": "nom",
+            "TITLE": "Nom de L'étude",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Entre une REB nombre",
+            "ATTRIBUTES": "Attributs",
+            "ENTER_JSON": "Entre une json valeur",
+            "ADMINISTRATOR": "Administrateur",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
+      },
       "FORM": {
         "IDENTITY": "Forme",
         "NAME": "Nom de Forme",

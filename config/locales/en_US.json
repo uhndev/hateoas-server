@@ -184,6 +184,26 @@
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "CENTRE_ACCESS": "Role"
       },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Study",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "QUESTIONS": {
+            "NAME": "name",
+            "TITLE": "Study Name",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Enter an REB number",
+            "ATTRIBUTES": "Attributes",
+            "ENTER_JSON": "Enter a json value",
+            "ADMINISTRATOR": "Administrator",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
+      },
       "FORM": {
         "IDENTITY": "Form",
         "NAME": "Form Name",
