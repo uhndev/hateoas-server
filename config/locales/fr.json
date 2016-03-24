@@ -129,7 +129,9 @@
         },
         "PLACEHOLDER": "Valeur de Recherche",
         "ADD_BTN": "Ajouter",
-        "RESET_BTN": "Réinitialiser"
+        "RESET_BTN": "Réinitialiser",
+        "MY_STUDIES": "Mes études",
+        "ALL_STUDIES": "Tous études"
       },
       "CONTROLS": {
         "OPEN_BTN": "Ouvert",
