@@ -165,7 +165,7 @@
       client_homePhone: {
         type: 'string'
       },
-      client_workPhone: {
+      client_daytimePhone: {
         type: 'string'
       },
       client_familyDoctor: {

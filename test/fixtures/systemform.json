@@ -15,11 +15,13 @@
         "field_placeholder": "johndoe",
         "field_validation": {
           "rule": "min_length",
-          "expression": 5
+          "expression": 5,
+          "unique": "user"
         },
-        "field_helpertext": "Username must be at least 5 characters long",
+        "field_helpertext": "Username must be unique and at least 5 characters long",
         "field_hasOptions": false,
-        "field_required": true
+        "field_required": true,
+        "field_unique": true
       },
       {
         "field_id": 2,
@@ -30,11 +32,13 @@
         "field_placeholder": "johndoe@uhn.ca",
         "field_validation": {
           "rule": "none",
-          "expression": ""
+          "expression": "",
+          "unique": "user"
         },
         "field_helpertext": "Missing or invalid email",
         "field_hasOptions": false,
-        "field_required": true
+        "field_required": true,
+        "field_unique": true
       },
       {
         "field_id": 3,
