@@ -1,11 +1,32 @@
 // api/controllers/ModelController.js
 
 (function() {
+  var _ = require('lodash');
+  var actionUtil = require('../../node_modules/sails/lib/hooks/blueprints/actionUtil');
 
   _.merge(exports, require('sails-permissions/api/controllers/ModelController'));
   _.merge(exports, {
 
-    // Extend with custom logic here by adding additional fields, methods, etc.
+    /**
+     * checkExists
+     * @description Endpoint for verifying if a particular record is unique given some waterline
+     *              criteria to verify against.  Returns number of matched rows.
+     * @param req
+     * @param res
+     */
+    checkExists: function(req, res) {
+      var model = req.param('model');
+      var query = sails.models[model].count()
+        .where(actionUtil.parseCriteria(req));
+
+      query.exec(function (err, results) {
+        if (err) {
+          res.badRequest(err);
+        } else {
+          res.json({ status: results === 0 });
+        }
+      });
+    }
 
   });
 })();
