@@ -47,10 +47,53 @@
        * @description the employed person's work number
        * @type {String}
        */
-      phoneNumber: {
+      workPhone: {
         type: 'string',
         generator: faker.phone.phoneNumber
       },
+
+      /**
+       * workEmail
+       * @description A person's work eMail
+       * @type {String}
+       */
+      workEmail: {
+        type: 'string',
+        generator: faker.internet.email
+      },
+
+
+
+      /**
+       * occupation
+       * @description A person's occupation
+       * @type {String}
+       */
+      occupation: {
+        type: 'string',
+        generator: faker.name.jobTitle
+      },
+
+      /**
+       * occupationType
+       * @description A person's occupation type
+       * @type {String}
+       */
+      occupationType: {
+        type: 'string',
+        generator: faker.name.jobType
+      },
+
+      /**
+       * occupationSector
+       * @description A person's occupation sector
+       * @type {String}
+       */
+      occupationSector: {
+        type: 'string',
+        generator: faker.name.jobArea
+      },
+
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },

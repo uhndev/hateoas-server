@@ -6,40 +6,38 @@
  */
 
 (function () {
-  var _super = require('./AltumBaseModel.js');
-  var _ = require('lodash');
+    var _super = require('./AltumBaseModel.js');
+    _.merge(exports, _super);
+    _.merge(exports, {
 
-  _.merge(exports, _super);
-  _.merge(exports, {
+        attributes: {
 
-    attributes: {
+            /**
+             * name
+             * @description note text
+             * @type {String}
+             */
+            text: {
+                type: 'string'
+            },
 
-      /**
-       * name
-       * @description note text
-       * @type {String}
-       */
-      text: {
-        type: 'string'
-      },
-
-      /**
-       * name
-       * @description A referral which the note belong to
-       * @type {Model}
-       */
-      referral: {
-        model: 'referral'
-      },
-
-      /**
-       * name
-       * @description A client which the note belong to
-       * @type {Model}
-       */
-      client: {
-        model: 'client'
-      },
+            /**
+             * name
+             * @description A referral which the note belong to
+             * @type {Model}
+             */
+            referral: {
+                model: 'referral'
+            },
+            
+            /**
+             * name
+             * @description A client which the note belong to
+             * @type {Model}
+             */
+            client: {
+                model: 'client'
+            },
 
       /**
        * name
@@ -76,6 +74,5 @@
     }
 
   });
-
 })();
 

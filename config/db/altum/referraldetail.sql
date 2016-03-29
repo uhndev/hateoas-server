@@ -41,7 +41,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     address.latitude AS client_latitude,
     address.longitude AS client_longitude,
     person."homePhone" AS "client_homePhone",
-    person."workPhone" AS "client_workPhone",
+    person."daytimePhone" AS "client_daytimePhone",
     person."familyDoctor" AS "client_familyDoctor",
     person.language AS client_language,
     "claimNumber",

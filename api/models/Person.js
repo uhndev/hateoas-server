@@ -55,7 +55,7 @@
        */
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        enum: ['Mr.', 'Mrs.', 'Miss', 'Ms.', 'Dr.'],
         generator: function() {
           return _.sample(Person.attributes.prefix.enum);
         }
@@ -109,11 +109,11 @@
       },
 
       /**
-       * workPhone
-       * @description A client's workPhone
+       * daytimePhone
+       * @description A client's daytimePhone
        * @type {String}
        */
-      workPhone: {
+      daytimePhone: {
         type: 'string',
         generator: faker.phone.phoneNumber
       },
@@ -197,16 +197,6 @@
       },
 
       /**
-       * workEmail
-       * @description A person's work eMail
-       * @type {String}
-       */
-      workEmail: {
-        type: 'string',
-        generator: faker.internet.email
-      },
-
-      /**
        * otherEmail
        * @description A person's other eMail
        * @type {String}
@@ -216,35 +206,6 @@
         generator: faker.internet.email
       },
 
-      /**
-       * occupation
-       * @description A person's occupation
-       * @type {String}
-       */
-      occupation: {
-        type: 'string',
-        generator: faker.name.jobTitle
-      },
-
-      /**
-       * occupationType
-       * @description A person's occupation type
-       * @type {String}
-       */
-      occupationType: {
-        type: 'string',
-        generator: faker.name.jobType
-      },
-
-      /**
-       * occupationSector
-       * @description A person's occupation sector
-       * @type {String}
-       */
-      occupationSector: {
-        type: 'string',
-        generator: faker.name.jobArea
-      },
 
       /**
        * employments
@@ -293,6 +254,24 @@
         defaultsTo: false
       },
 
+      /**
+       * preferred emergency contact
+       * @description Pointer to the current approval in our approval history
+       * @type {Model}
+       */
+      primaryEmergencyContact: {
+        model: 'emergencyContact'
+      },
+
+      /**
+       * approvals
+       * @description Collection of approvals linked to a specific service (history of approvals)
+       * @type {Collection}
+       */
+      emergencyContacts: {
+        collection: 'emergencyContact',
+        via: 'person'
+      },
       /**
        * users
        * @description a persons associated users
