@@ -29,7 +29,6 @@
        * @description A emergnecy contact person's last name.
        * @type {String}
        */
-
       lastName: {
         type: 'string'
       },
@@ -39,7 +38,6 @@
        * @description A emergency contact person's phone number.
        * @type {String}
        */
-
       phone: {
           type: 'string'
         },

@@ -55,7 +55,7 @@
        */
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        enum: ['Mr.', 'Mrs.', 'Miss', 'Ms.', 'Dr.'],
         generator: function() {
           return _.sample(Person.attributes.prefix.enum);
         }
