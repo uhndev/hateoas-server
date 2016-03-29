@@ -110,7 +110,7 @@
       country: {
         type: 'string'
       },
-      personid: {
+      personId: {
         type: 'integer'
       },
       latitude: {
