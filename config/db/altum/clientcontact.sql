@@ -20,6 +20,7 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     person."workEmail",
     person."language",
     person."requiresInterpreter",
+    address.id AS "address",
     address."address1",
     address."address2",
     city.name AS "city",

@@ -135,6 +135,9 @@
       client_dateOfBirth: {
         type: 'date'
       },
+      client_address: {
+        model: 'address'
+      },
       client_address1: {
         type: 'string'
       },

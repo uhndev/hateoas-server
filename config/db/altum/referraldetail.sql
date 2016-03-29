@@ -32,6 +32,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     person.prefix AS client_prefix,
     person.gender AS client_gender,
     person."dateOfBirth" AS "client_dateOfBirth",
+    address.id AS "client_address",
     address.address1 AS client_address1,
     address.address2 AS client_address2,
     address.city AS client_city,

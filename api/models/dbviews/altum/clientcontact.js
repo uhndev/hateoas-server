@@ -88,6 +88,9 @@
       requiresInterpreter: {
         type: 'boolean'
       },
+      address: {
+        model: 'address'
+      },
       address1: {
         type: 'string'
       },
