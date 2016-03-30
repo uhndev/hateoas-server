@@ -42,16 +42,6 @@
       },
 
       /**
-       * primaryProviderType
-       * @description Reference to StaffType that would denote the primary provider to a referral.
-       *              If null, assumes primary provider to be a Physician.
-       * @type {Model}
-       */
-      primaryProviderType: {
-        model: 'stafftype'
-      },
-
-      /**
        * programServices
        * @description a program's programServices
        * @type {Collection}

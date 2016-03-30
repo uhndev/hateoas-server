@@ -21,6 +21,7 @@
       req.options.model = sails.models.altumprogramservices.identity;
       var criteria = actionUtil.parseCriteria(req);
       referraldetail.findOne(req.param('id'))
+        .populate('staff')
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
