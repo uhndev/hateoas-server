@@ -21,6 +21,7 @@
       req.options.model = sails.models.altumprogramservices.identity;
       var criteria = actionUtil.parseCriteria(req);
       referraldetail.findOne(req.param('id'))
+        .populate('staff')
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
@@ -28,36 +29,41 @@
           return (!_.isEmpty(criteria) && !_.has(criteria, 'id')) ? query.where(criteria) : query;
         })
         .then(function (services) {
-          this.referral.availableServices = services;
-          return servicedetail.find({
-            referral: this.referral.id,
-            statusName: 'Approved',
-            visitable: true,
-            altumServiceName: {
-              "!": "Triage"
-            }
-          });
-        })
-        .then(function (approvedServices) {
           var that = this;
-          if (approvedServices.length === 0) {
-            // if no approved services yet, return only the Triage service.
+          this.referral.availableServices = services;
+          return [
+            servicedetail.find({
+              referral: this.referral.id,
+              statusName: 'Approved',
+              visitable: true,
+              altumServiceName: {
+                "!": "Triage"
+              }
+            }),
             AltumService.findOne({name: "Triage"}).then(function (triageService) {
-              that.referral.approvedServices = [
-                {
-                  referral: that.referral.id,
-                  physician: that.referral.physician,
-                  altumService: triageService.id,
-                  altumServiceName: triageService.name,
-                  serviceDate: new Date(),
-                  approvalNeeded: false
-                }
-              ];
-              res.ok(that.referral, {
-                links: referraldetail.getResponseLinks(that.referral.id, that.displayName)
+              return Service.findOrCreate({
+                referral: that.referral.id,
+                altumService: triageService.id
+              }, {
+                referral: that.referral.id,
+                physician: that.referral.physician,
+                altumService: triageService.id,
+                serviceDate: new Date(),
+                approvalNeeded: false
               });
             })
+          ]
+        })
+        .spread(function (approvedServices, existingTriageService) {
+          if (approvedServices.length === 0) {
+            // set initial visit service as just the starting triage service
+            this.referral.approvedServices = [
+              _.merge(existingTriageService, {altumServiceName: existingTriageService.displayName})
+            ];
 
+            res.ok(this.referral, {
+              links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
+            });
           } else {
             this.referral.approvedServices = approvedServices;
             res.ok(this.referral, {

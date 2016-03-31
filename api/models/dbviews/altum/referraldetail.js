@@ -75,6 +75,9 @@
       staff: {
         model: 'staff'
       },
+      staffType_name: {
+        type: 'string'
+      },
       staff_name: {
         type: 'string'
       },

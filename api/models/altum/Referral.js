@@ -94,6 +94,16 @@
       },
 
       /**
+       * isPhysicianPrimary
+       * @description Boolean denoting which of physician or staff on this record is the primary provider.
+       * @type {Boolean}
+       */
+      isPhysicianPrimary: {
+        type: 'boolean',
+        defaultsTo: true
+      },
+
+      /**
        * status
        * @description A referral's status
        * @type {Model}
