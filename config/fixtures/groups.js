@@ -14,7 +14,6 @@
           tabview: [
             {"href": "/client", "icon": "fa-users", "prompt": "APP.HEADER.MENU.CLIENTS"},
             {"href": "/referral", "icon": "fa-ambulance", "prompt": "APP.HEADER.MENU.REFERRALS"},
-            {"href": "/billing", "icon": "fa-usd", "prompt": "APP.HEADER.MENU.BILLING"},
             {"href": "/user", "icon": "fa-user", "prompt": "APP.HEADER.MENU.USER_MANAGER"},
             {
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-wrench", "dropdown": [
