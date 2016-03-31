@@ -153,7 +153,7 @@
      * @param  {Function} cb      callback function on completion
      */
     beforeValidate: function (values, cb) {
-      if (values.person) {
+      if (values.program) {
         Program.findOne(values.program).exec(function (err, program) {
           if (err) {
             cb(err);
@@ -163,6 +163,7 @@
           }
         });
       } else {
+        values.displayName = values.name;
         cb();
       }
     }

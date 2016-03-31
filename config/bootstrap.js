@@ -36,6 +36,7 @@ module.exports.bootstrap = function (cb) {
       .then(WorkStatus.generateAndCreate)
       .then(Timeframe.generateAndCreate)
       .then(Prognosis.generateAndCreate)
+      .then(NoteType.generateAndCreate)
       .then(function () {
         return AltumService.findOrCreate({ name: 'Triage' }, {
           name: 'Triage',

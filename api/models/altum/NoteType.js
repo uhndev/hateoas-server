@@ -73,6 +73,17 @@
           iconClass: 'soap-note'
         }
       ];
+    },
+
+    generateAndCreate: function (state) {
+      var notetypes = this.generate();
+      return Promise.all(
+        _.map(notetypes, function (notetype) {
+          return NoteType.findOrCreate({ name: notetype.name }, notetype);
+        })
+      ).then(function (notetypes) {
+        sails.log.info(notetypes.length + " noteType(s) generated");
+      });
     }
 
   });

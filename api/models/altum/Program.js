@@ -75,6 +75,7 @@
           }
         });
       } else {
+        values.displayName = values.name;
         cb();
       }
     }
