@@ -75,6 +75,9 @@
       staff: {
         model: 'staff'
       },
+      staffType_name: {
+        type: 'string'
+      },
       staff_name: {
         type: 'string'
       },
@@ -135,6 +138,9 @@
       client_dateOfBirth: {
         type: 'date'
       },
+      client_address: {
+        model: 'address'
+      },
       client_address1: {
         type: 'string'
       },
@@ -162,7 +168,7 @@
       client_homePhone: {
         type: 'string'
       },
-      client_workPhone: {
+      client_daytimePhone: {
         type: 'string'
       },
       client_familyDoctor: {

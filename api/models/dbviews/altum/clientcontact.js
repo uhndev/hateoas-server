@@ -67,9 +67,7 @@
       homePhone: {
         type: 'string'
       },
-      workPhone: {
-        type: 'string'
-      },
+
       fax: {
         type: 'string'
       },
@@ -79,14 +77,14 @@
       homeEmail: {
         type: 'string'
       },
-      workEmail: {
-        type: 'string'
-      },
       language: {
         type: 'string'
       },
       requiresInterpreter: {
         type: 'boolean'
+      },
+      address: {
+        model: 'address'
       },
       address1: {
         type: 'string'
@@ -112,11 +110,18 @@
       country: {
         type: 'string'
       },
+      personId: {
+        type: 'integer'
+      },
       latitude: {
         type: 'string'
       },
       longitude: {
         type: 'string'
+      },
+
+      primaryEmergencyContact: {
+        model: 'emergencyContact'
       },
 
       getResponseLinks: function () {

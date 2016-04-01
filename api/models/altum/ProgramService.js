@@ -84,6 +84,16 @@
         defaultsTo: true
       },
 
+      /**
+       * reprotRequired
+       * @description Boolean denoting whether this service needs a report or not
+       */
+
+      reportRequired: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -141,6 +151,31 @@
         .then(function (programService) {
           sails.log.info("ProgramService: (" + programService.name + ") generated");
         });
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given programservice object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.program) {
+        Program.findOne(values.program).exec(function (err, program) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = program.displayName + ' - ' + values.name;
+            cb();
+          }
+        });
+      } else {
+        values.displayName = values.name;
+        cb();
+      }
     }
 
   });

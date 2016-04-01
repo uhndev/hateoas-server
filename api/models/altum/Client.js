@@ -23,7 +23,7 @@
        */
       person: {
         model: 'person',
-        generator: function(state) {
+        generator: function (state) {
           return BaseModel.defaultGenerator(state, 'person', Person);
         }
       },
@@ -36,7 +36,7 @@
       MRN: {
         type: 'string',
         index: true,
-        generator: function(state) {
+        generator: function (state) {
           return _.random(100000, 999999);
         }
       },
@@ -51,15 +51,6 @@
         via: 'clients'
       },
 
-      /**
-       * notes
-       * @description Collection of client notes
-       * @type {Collection}
-       */
-      notes: {
-        collection: 'note',
-        via: 'client'
-      },
 
       /**
        * notes

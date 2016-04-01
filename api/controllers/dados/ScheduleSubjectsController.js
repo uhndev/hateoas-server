@@ -27,8 +27,6 @@
             availableTo:   { '>=': new Date() }
           },
           {
-            availableFrom: null,
-            availableTo:   null,
             type:          'non-scheduled'
           }
         ]
