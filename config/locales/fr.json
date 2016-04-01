@@ -64,6 +64,18 @@
           "NEW_BTN": "Ajouter Utilisateur",
           "EDIT_BTN": "Sauvegarder les Changements",
           "ARCHIVE_BTN": "Archiver"
+        },
+        "PANEL":{
+          "TITLE": "Utilisateur Information",
+          "MY_STUDIES": "Mes études"
+        },
+        "MODAL":{
+          "ADD": "Ajouter Utilisateur a Etude",
+          "USER": "Utilisateur",
+          "COLLECTION_CENTER":"Collection Centre",
+          "ROLE": "Role",
+          "ADD_USER":"Ajouter Utilisateur",
+          "CANCEL": "Annuler"
         }
       },
       "FORM": {
@@ -101,7 +113,11 @@
       "SURVEYS_TAB_TITLE": "Enquêtes à Venir",
       "PROFILE_TITLE": "Profil de L'utilisateur",
       "STUDIES_TITLE": "Liste des études inscrits",
-      "SCHEDULE_TITLE": "Liste des enquêtes à venir"
+      "SCHEDULE_TITLE": "Liste des enquêtes à venir",
+      "STUDY_USER": "Etude Utilisateur",
+      "STUDY_FORM": "Etude Form",
+      "STUDY_SURVEY": "Etude Enquêtes",
+      "STUDY_SUBJECT": "Etude Matieres"
     }
   },
   "COMMON": {
@@ -142,6 +158,21 @@
     },
     "MODELS": {
       "STUDY": {
+        "COLLECTIONCENTRES":{
+          "IDENTITY": "Etude Centres Collections"
+        },
+        "SUBJECTS":{
+          "IDENTITY": "Etude Matieres"
+        },
+        "USERS":{
+          "IDENTITY": "Etude Utilisateurs"
+        },
+        "FORMS":{
+          "IDENTITY": "Etude Formulaires"
+        },
+        "SURVEYS":{
+          "IDENTITY": "Etude Enquêtes"
+        },
         "IDENTITY": "Etude",
         "NAME": "Nom de L'étude",
         "ATTRIBUTES": "Attributs",
@@ -184,7 +215,43 @@
         "COLLECTION_CENTRE": "Centre Collection",
         "CENTRE_ACCESS": "Rôle"
       },
+      "LOGIN":{
+        "IDENTITY": "s'identifier"
+      },
+      "SUBJECTPORTAL":{
+        "SURVEYS":{
+          "IDENTITY":"Liste des enquêtes à venir"
+        }
+      },
       "SYSTEM_FORM": {
+        "USER": {
+          "TITLE": "Utilisateur Registeration",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "QUESTIONS": {
+            "TITLE": "Nom d'utilisateur",
+            "USERNAME_PLACEHOLDER": "johndoe",
+            "INVALID_USERNAME": "Nom d'utilisateur doit etre unique et au moins 5 caractere long",
+            "EMAIL": "Email",
+            "EMAIL_PLACEHOLDER": "johndoe@uhn.ca",
+            "INVALID_EMAIL": "Manquant ou invalide email",
+            "PASSWORD": "Mot de passe",
+            "PREFIX": "Préfixe",
+            "PREFIX_PLACEHOLDER": "Select a prefix",
+            "INVALID_INPUT": "Manquant input ou invalide",
+            "FIRST_NAME": "Prénom",
+            "FIRST_NAME_PLACEHOLDER": "John",
+            "LAST_NAME": "Nom de famille",
+            "LAST_NAME_PLACEHOLDER": "Doe",
+            "GENDER": "Sexe",
+            "GENDER_PLACEHOLDER": "Selectionner une genre",
+            "DATE_BIRTH": "Date D'anniversaire",
+            "DATE_PLACEHOLDER": "Entre une date valeur",
+            "GROUP": "Group",
+            "GROUP_PLACEHOLDER": "Selectionner une group",
+            "INVALID_PASSWORD": "Mot de passe au moins 8 characters, contenir 1 au moins lower case letter, 1 uppercase letter, et 1 non-alphanumeric caractere"
+          }
+        },
         "STUDY":{
           "TITLE": "Create Etude",
           "SUBMIT": "Sauvegarder",

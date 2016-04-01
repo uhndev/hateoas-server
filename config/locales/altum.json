@@ -64,6 +64,18 @@
           "NEW_BTN": "Add User",
           "EDIT_BTN": "Edit User",
           "ARCHIVE_BTN": "Archive"
+        },
+        "PANEL":{
+          "TITLE": "User Information",
+          "MY_STUDIES": "My Programs"
+        },
+        "MODAL":{
+          "ADD": "Add User to Program",
+          "USER": "User",
+          "COLLECTION_CENTER":"Collection Centre",
+          "ROLE": "Role",
+          "ADD_USER":"Add User",
+          "CANCEL": "Cancel"
         }
       },
       "FORM": {
@@ -101,7 +113,12 @@
       "SURVEYS_TAB_TITLE": "Upcoming Surveys",
       "PROFILE_TITLE": "User Profile",
       "STUDIES_TITLE": "List of enrolled studies",
-      "SCHEDULE_TITLE": "List of upcoming surveys"
+      "SCHEDULE_TITLE": "List of upcoming surveys",
+      "STUDY_USER": "Program User",
+      "STUDY_FORM": "Program Form",
+      "STUDY_SURVEY": "Program Survey",
+      "STUDY_SUBJECT": "Program Subject"
+
     }
   },
   "COMMON": {
@@ -130,8 +147,8 @@
         "PLACEHOLDER": "Search Value",
         "ADD_BTN": "Add",
         "RESET_BTN": "Reset",
-        "MY_STUDIES": "My Studies",
-        "ALL_STUDIES": "All Studies"
+        "MY_STUDIES": "My Programs",
+        "ALL_STUDIES": "All Programs"
       },
       "CONTROLS": {
         "OPEN_BTN": "Open",
@@ -142,6 +159,21 @@
     },
     "MODELS": {
       "STUDY": {
+        "COLLECTIONCENTRES":{
+          "IDENTITY": "Program Sites"
+        },
+        "SUBJECTS":{
+          "IDENTITY": "Program Subjects"
+        },
+        "USERS":{
+          "IDENTITY": "Program Users"
+        },
+        "FORMS":{
+          "IDENTITY": "Program Forms"
+        },
+        "SURVEYS":{
+          "IDENTITY": "Program Surveys"
+        },
         "IDENTITY": "Program",
         "NAME": "Program Name",
         "ATTRIBUTES": "Attributes",
@@ -184,7 +216,43 @@
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "CENTRE_ACCESS": "Role"
       },
+      "LOGIN":{
+        "IDENTITY": "Login"
+      },
+      "SUBJECTPORTAL":{
+        "SURVEYS":{
+          "IDENTITY":"List of upcoming surveys"
+        }
+      },
       "SYSTEM_FORM": {
+        "USER":{
+          "TITLE": "User Registration",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "QUESTIONS": {
+            "TITLE": "Username",
+            "USERNAME_PLACEHOLDER": "johndoe",
+            "INVALID_USERNAME": "Username must be unique and at least 5 characters long",
+            "EMAIL": "Email",
+            "EMAIL_PLACEHOLDER": "johndoe@uhn.ca",
+            "INVALID_EMAIL": "Missing or invalid email",
+            "PASSWORD": "Password",
+            "PREFIX": "Prefix",
+            "PREFIX_PLACEHOLDER": "Select a prefix",
+            "INVALID_INPUT": "missing input or invalid",
+            "FIRST_NAME": "Firstname",
+            "FIRST_NAME_PLACEHOLDER": "John",
+            "LAST_NAME": "Lastname",
+            "LAST_NAME_PLACEHOLDER": "Doe",
+            "GENDER": "Gender",
+            "GENDER_PLACEHOLDER": "Select a gender",
+            "DATE_BIRTH": "Date of Birth",
+            "DATE_PLACEHOLDER": "Enter a date value",
+            "GROUP": "Group",
+            "GROUP_PLACEHOLDER": "Select a group",
+            "INVALID_PASSWORD": "Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character"
+          }
+        },
         "STUDY":{
           "TITLE": "Create Program",
           "SUBMIT": "Submit",
