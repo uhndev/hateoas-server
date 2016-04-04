@@ -94,6 +94,16 @@
       },
 
       /**
+       * staffTypes
+       * @description Collection of possible staff types that can be associated with this Referral
+       * @type {Collection}
+       */
+      staffTypes: {
+        collection: 'stafftype',
+        via: 'referrals'
+      },
+
+      /**
        * isPhysicianPrimary
        * @description Boolean denoting which of physician or staff on this record is the primary provider.
        * @type {Boolean}
