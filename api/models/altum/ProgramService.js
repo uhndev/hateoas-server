@@ -17,6 +17,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    defaultPopulate: ['AHServices'],
+
     attributes: {
 
       /**
@@ -76,12 +78,21 @@
       },
 
       /**
+       * approvalNeeded
+       * @description Boolean denoting whether this service needs approval or not by default
+       */
+      approvalNeeded: {
+        type: 'boolean',
+        defaultsTo: true
+      },
+
+      /**
        * approvalRequired
-       * @description Boolean denoting whether this service needs approval or not by default and locked
+       * @description Boolean denoting whether this service requires approval or not by default and locked
        */
       approvalRequired: {
         type: 'boolean',
-        defaultsTo: true
+        defaultsTo: false
       },
 
       /**

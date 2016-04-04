@@ -36,6 +36,16 @@
         via: 'staffTypes'
       },
 
+      /**
+       * referrals
+       * @description Collection of referrals that require one or many of this type of staff
+       * @type {Collection}
+       */
+      referrals: {
+        collection: 'referral',
+        via: 'staffTypes'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
