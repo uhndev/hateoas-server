@@ -27,6 +27,16 @@
       },
 
       /**
+       * isProvider
+       * @description Boolean flag denoting whether a staff of this staffType can be a primary provider
+       * @type {Boolean}
+       */
+      isProvider: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
        * altumServices
        * @description Collection of AltumServices that require one or many of this type of staff
        * @type {Collection}

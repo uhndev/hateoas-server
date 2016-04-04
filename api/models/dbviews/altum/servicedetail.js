@@ -64,6 +64,9 @@
       currentStatus: {
         model: 'status'
       },
+      approvalDate: {
+        type: 'datetime'
+      },
       statusName: {
         type: 'string'
       },
