@@ -26,6 +26,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     referral.client,
     approval.id AS "currentApproval",
     approval.status AS "currentStatus",
+    approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
     status."iconClass",
     status."rowClass",
