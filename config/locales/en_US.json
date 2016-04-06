@@ -112,6 +112,7 @@
       "PROFILE_TAB_TITLE": "My Profile",
       "SURVEYS_TAB_TITLE": "Upcoming Surveys",
       "PROFILE_TITLE": "User Profile",
+      "SAVE_BUTTON": "Save",
       "STUDIES_TITLE": "List of enrolled studies",
       "SCHEDULE_TITLE": "List of upcoming surveys",
       "STUDY_USER": "Study User",
@@ -162,7 +163,16 @@
           "IDENTITY": "Study Sites"
         },
         "SUBJECTS":{
-          "IDENTITY": "Study Subjects"
+          "IDENTITY": "Study Subjects",
+          "ADD": "Add Subject to Study",
+          "ADD_BUTTON": "Add Subject",
+          "CANCEL": "Cancel",
+          "PROVIDERS": {
+            "IDENTITY":"Providers",
+            "STATUS":"Status",
+            "STATUS_PLACEHOLDER": "Select a status",
+            "DATE_EVENT": "Date of Event"
+          }
         },
         "USERS":{
           "IDENTITY": "Study Users"
@@ -221,6 +231,9 @@
       "SUBJECTPORTAL":{
         "SURVEYS":{
           "IDENTITY":"List of upcoming surveys"
+        },
+        "PROFILE":{
+          "IDENTITY": "My Profile"
         }
       },
       "SYSTEM_FORM": {
@@ -252,7 +265,7 @@
             "INVALID_PASSWORD": "Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character"
           }
         },
-        "STUDY":{
+        "STUDY": {
           "TITLE": "Create Study",
           "SUBMIT": "Submit",
           "CANCEL": "Cancel",
@@ -269,6 +282,42 @@
             "PI": "PI",
             "SELECT_USER": "Select user"
           }
+        },
+        "SURVEY": {
+          "TITLE": "Survey Tracking",
+          "STUDIES": "Studies",
+          "PHYSICIANS": "Physicians",
+          "MISSING_INPUT": "missing input or invalid",
+          "PHYSICIANS_PLACEHOLDER": "Select physicians",
+          "FROM": "From",
+          "FROM_PLACEHOLDER": "Enter a date value",
+          "TO": "To",
+          "TO_PLACEHOLDER": "Enter a date value",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel"
+        },
+        "GROUP": {
+          "TITLE": "Create Group",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "NAME": "Name",
+          "NAME_PLACEHOLDER": "Enter a group name",
+          "MISSING_INPUT": "missing input or invalid",
+          "LEVEL": "Level",
+          "LEVEL_PLACEHOLDER": "Enter a level between 1 and 3",
+          "LEVEL_HELPER": "Level must be between [1, 3]",
+          "MAIN_SUBMENU": "Main and Sub Menu Definitions",
+          "JSON_PLACEHOLDER": "Enter a json value"
+        },
+        "COLLECTION_CENTRE": {
+          "TITLE": "Collection Centre",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "NAME": "Name",
+          "TWH_PLACEHOLDER": "TWH",
+          "MISSING_INPUT": "missing input or invalid",
+          "CONTACT": "Contact",
+          "CONTACT_PLACEHOLDER": "Select a contact"
         }
       },
       "FORM": {
