@@ -33,6 +33,15 @@
         "SURVEYS": "Surveys"
       }
     },
+    "ACCESSMANAGEMENT":{
+      "TABS":{
+        "BY_GROUP": "By Group",
+        "BY_MODEL": "By Model",
+        "BY_ROLE": "By Role",
+        "BY_USER": "By User"
+
+      }
+    },
     "STUDY": {
       "OVERVIEW": {
         "TITLE": "Program Overview: {{name}}",
@@ -113,7 +122,7 @@
       "SURVEYS_TAB_TITLE": "Upcoming Surveys",
       "PROFILE_TITLE": "User Profile",
       "SAVE_BUTTON": "Save",
-      "STUDIES_TITLE": "List of enrolled studies",
+      "STUDIES_TITLE": "List of enrolled Programs",
       "SCHEDULE_TITLE": "List of upcoming surveys",
       "STUDY_USER": "Program User",
       "STUDY_FORM": "Program Form",
@@ -144,6 +153,17 @@
             "STARTS_WITH": "Starts With",
             "ENDS_WITH": "Ends With"
           }
+        },
+        "SEARCH":{
+          "STUDY": "Search by Program",
+          "USER": "Search by User",
+          "COLLECTIONCENTRES": "Search by Collection Centres",
+          "GROUP": "Search by Groups"
+        },
+        "SWITCH":{
+          "STUDY": "Switch To Program",
+          "USER": "Switch To User",
+          "COLLECTIONCENTRES": "Switch To Collection Centres"
         },
         "PLACEHOLDER": "Search Value",
         "ADD_BTN": "Add",
@@ -179,10 +199,60 @@
           "IDENTITY": "Program Users"
         },
         "FORMS":{
-          "IDENTITY": "Program Forms"
+          "IDENTITY": "Program Forms",
+          "CONFIGURATION":{
+            "IDENTITY": "Configuration",
+            "LOAD_FORM": "Load Form:",
+            "FORM_NAME": "Form Name:",
+            "FORM_NAME_POPOVER": "Provide a name for your form. Names must be in upper case and cannot contain any spaces.",
+            "FORM_NAME_PLACEHOLDER": "Provide a name for your form.",
+            "FORM_PLACEHOLDER": "Select a form",
+            "QUESTION": "Question",
+            "QUESTION_POPOVER": "Specify the question for this input.",
+            "QUESTION_PLACEHOLDER": "",
+            "QUESTION_TYPE": "Question Type",
+            "QUESTION_TYPE_POPOVER": "Select the question type.",
+            "QUESTION_TYPE_PLACEHOLDER": "",
+            "FIELD_NAME": "Field Name",
+            "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
+            "FIELD_NAME_PLACEHOLDER": "Field Name",
+            "TOOL_TIP": "Tool Tip",
+            "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
+            "TOOL_TIP_PLACEHOLDER": "Tool tips",
+            "DEFAULT_VALUE": "Default Value",
+            "DEFAULT_VALUE_POPOVER": "Specify the default value for this question",
+            "DEFAULT_VALUE_PLACEHOLDER": "Default value",
+            "WIDGET_SIZE": "Widget Size",
+            "WIDGET_SIZE_POPOVER": "Specify the width of the input. Size is a measure of the number of characters the input can fit.",
+            "WIDGET_SIZE_PLACEHOLDER": "Field size",
+            "MAXIMUM_INPUT": "Maximum input length",
+            "MAXIMUM_INPUT_POPOVER": "Specify the maximum number of characters that this input can take.",
+            "MAXIMUM_INPUT_PLACEHOLDER": "Maximum characters",
+            "FLAGS_NOTIFY": "Please note that using expressions may slow down the performance of the page.",
+            "FLAGS_REQUIRED": "Required",
+            "FLAGS_REQUIRED_POPOVER": "Set the question as required.",
+            "FLAGS_HIDDEN": "Hidden",
+            "FLAGS_HIDDEN_POPOVER": "",
+            "FLAGS_READONLY": "Read-only",
+            "FLAGS_READONLY_POPOVER": "Set the question as read-only.",
+            "FLAGS_DISABLED": "Disabled",
+            "FLAGS_DISABLED_POPOVER": "Set the question as disabled.",
+            "FLAGS": "Flags",
+            "OPTIONS": "Options",
+            "CONFIG": "Config",
+            "WORKSPACE": "Workspace",
+            "WORKSPACE_HELPER": "Use the panel on the left to add questions to the workspace.",
+            "SAVE": "Save Changes",
+            "ARCHIVE": "Archive"
+          },
+          "ADVANCED":{
+            "IDENTITY": "Advanced"
+          }
         },
         "SURVEYS":{
-          "IDENTITY": "Program Surveys"
+          "IDENTITY": "Program Surveys",
+          "DEFINE": "Define Survey",
+          "SELECT": "Select Forms"
         },
         "IDENTITY": "Program",
         "NAME": "Program Name",
@@ -200,6 +270,9 @@
         "LASTNAME": "Lastname",
         "GENDER": "Gender",
         "DOB": "Date of Birth"
+      },
+      "GROUP":{
+        "IDENTITY": "Group"
       },
       "COLLECTION_CENTRE": {
         "IDENTITY": "Site",
@@ -275,7 +348,7 @@
             "NAME": "name",
             "TITLE": "Program Name",
             "LEAP": "LEAP",
-            "MISSINGINPUT": "missing input or invalid",
+            "MISSING_INPUT": "missing input or invalid",
             "REB": "REB #",
             "ENTER_REB": "Enter an REB number",
             "ATTRIBUTES": "Attributes",

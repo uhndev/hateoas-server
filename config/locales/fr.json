@@ -33,6 +33,15 @@
         "SURVEYS": "Enquetes"
       }
     },
+    "ACCESSMANAGEMENT":{
+      "TABS":{
+        "BY_GROUP": "Par groupe",
+        "BY_MODEL": "Par modèle",
+        "BY_ROLE": "Par Rôle",
+        "BY_USER": "Par utilisateur"
+
+      }
+    },
     "STUDY": {
       "OVERVIEW": {
         "TITLE": "Aperçu de L'étude: {{name}}",
@@ -144,6 +153,17 @@
             "ENDS_WITH": "Se Termine Par"
           }
         },
+        "SEARCH":{
+          "STUDY": "Recherché par Etude",
+          "USER": "Recherché par Utilisateur",
+          "COLLECTIONCENTRES": "Recherché par Centres Collections",
+          "GROUP": "Recherché par Groupes"
+        },
+        "SWITCH":{
+          "STUDY": "Basculer vers Etude",
+          "USER": "Basculer vers Utilisateur",
+          "COLLECTIONCENTRES": "Basculer vers Collection Centres"
+        },
         "PLACEHOLDER": "Valeur de Recherche",
         "ADD_BTN": "Ajouter",
         "RESET_BTN": "Réinitialiser",
@@ -178,10 +198,60 @@
           "IDENTITY": "Etude Utilisateurs"
         },
         "FORMS":{
-          "IDENTITY": "Etude Formulaires"
+          "IDENTITY": "Etude Formulaires",
+          "CONFIGURATION":{
+            "IDENTITY": "Configuration",
+            "LOAD_FORM": "Charge Forme:",
+            "FORM_NAME": "Forme Nom:",
+            "FORM_NAME_POPOVER": "Fournir nom for pour votre forme. Nom doit être dans Plus haut cas et ne peut pas contient tout les espaces.",
+            "FORM_NAME_PLACEHOLDER": "Fournir nom pour votre forme.",
+            "FORM_PLACEHOLDER": "Selecionne forme",
+            "QUESTION": "Question",
+            "QUESTION_POPOVER": "Specify the question for this input.",
+            "QUESTION_PLACEHOLDER": "",
+            "QUESTION_TYPE": "Question Type",
+            "QUESTION_TYPE_POPOVER": "Select the question type.",
+            "QUESTION_TYPE_PLACEHOLDER": "",
+            "FIELD_NAME": "Champ Nom",
+            "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
+            "FIELD_NAME_PLACEHOLDER": "Champ Nom",
+            "TOOL_TIP": "Pointe de l'outil",
+            "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
+            "TOOL_TIP_PLACEHOLDER": "Pointe de l'outil",
+            "DEFAULT_VALUE": "Default Value",
+            "DEFAULT_VALUE_POPOVER": "Specify the default value for this question",
+            "DEFAULT_VALUE_PLACEHOLDER": "Default value",
+            "WIDGET_SIZE": "Un widget taille",
+            "WIDGET_SIZE_POPOVER": "Specify the width of the input. Size is a measure of the number of characters the input can fit.",
+            "WIDGET_SIZE_PLACEHOLDER": "Champ Taille",
+            "MAXIMUM_INPUT": "Maximum input longueur",
+            "MAXIMUM_INPUT_POPOVER": "Specify the maximum number of characters that this input can take.",
+            "MAXIMUM_INPUT_PLACEHOLDER": "Maximum characters",
+            "FLAGS_NOTIFY": "S'il vous plaît en utilisant expressions mai ralentissez la performance de la page.",
+            "FLAGS_REQUIRED": "Obligatoire",
+            "FLAGS_REQUIRED_POPOVER": "Set the question as required.",
+            "FLAGS_HIDDEN": "Caché",
+            "FLAGS_HIDDEN_POPOVER": "",
+            "FLAGS_READONLY": "Lecture-seulement",
+            "FLAGS_READONLY_POPOVER": "Set the question as read-only.",
+            "FLAGS_DISABLED": "Désactivé",
+            "FLAGS_DISABLED_POPOVER": "Set the question as disabled.",
+            "FLAGS": "Drapeaux",
+            "OPTIONS": "Options",
+            "CONFIG": "Config",
+            "WORKSPACE": "Espace de travail",
+            "WORKSPACE_HELPER": "Utilisation la panneau sur la à gauche a ajouter questions a Espace de travail.",
+            "SAVE": "Enregistrer Changements",
+            "ARCHIVE": "Archiver"
+          },
+          "ADVANCED":{
+            "IDENTITY": "Avancée"
+          }
         },
         "SURVEYS":{
-          "IDENTITY": "Etude Enquêtes"
+          "IDENTITY": "Etude Enquêtes",
+          "DEFINE": "Définir Enquête",
+          "SELECT": "Sélectionner Forme"
         },
         "IDENTITY": "Etude",
         "NAME": "Nom de L'étude",
@@ -199,6 +269,9 @@
         "LASTNAME": "Nom de famille",
         "GENDER": "Sexe",
         "DOB": "Date D'anniversaire"
+      },
+      "GROUP":{
+        "IDENTITY": "Groupe"
       },
       "COLLECTION_CENTRE": {
         "IDENTITY": "Centre Collection",
@@ -273,7 +346,7 @@
             "NAME": "nom",
             "TITLE": "Nom de L'étude",
             "LEAP": "LEAP",
-            "MISSINGINPUT": "Manquant ou invalide input",
+            "MISSING_INPUT": "Manquant ou invalide input",
             "REB": "REB #",
             "ENTER_REB": "Entre une REB nombre",
             "ATTRIBUTES": "Attributs",
@@ -300,7 +373,7 @@
           "TITLE": "Créer Groupe",
           "SUBMIT": "Sauvegarder",
           "CANCEL": "Annuler",
-          "NAME": "nom",
+          "NAME": "Nom",
           "NAME_PLACEHOLDER": "Entrer groupe nom",
           "MISSING_INPUT": "Manquant ou invalide input",
           "LEVEL": "Niveau",
