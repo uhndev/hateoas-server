@@ -114,13 +114,14 @@
                   ]
                 },
                 {
-                  model: 'SubjectSchedule',
+                  model: 'schedulesessions',
                   action: 'read',
                   criteria: [
+                    { where: { subjectID: values.id } }
                   ]
                 },
                 {
-                  model: 'Session',
+                  model: 'SubjectSchedule',
                   action: 'read',
                   criteria: [
                   ]
