@@ -25,7 +25,7 @@ module.exports = {
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
-    connection: 'altum_production'
+    connection: 'altum_uat'
   },
 
   /***************************************************************************
