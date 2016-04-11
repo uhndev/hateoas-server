@@ -26,7 +26,7 @@ module.exports = {
   defaultQuery: undefined,
 
   // default fields to omit from template
-  defaultTemplateOmit: ['displayName'],
+  defaultTemplateOmit: ['displayName', 'createdAt', 'createdBy', 'updatedAt'],
 
   // array of field names to concatenate into display names, override in child models to pick unique fields for displayName
   displayFields: ['name'],

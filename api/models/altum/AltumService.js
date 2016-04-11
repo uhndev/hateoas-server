@@ -89,6 +89,15 @@
       },
 
       /**
+       * serviceVariation
+       * @description Reference to an applicable variation for this AltumService
+       * @type {Model}
+       */
+      serviceVariation: {
+        model: 'serviceVariation'
+      },
+
+      /**
        * visitable
        * @description Boolean flag denoting whether
        */

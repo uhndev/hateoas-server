@@ -6,6 +6,7 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
  SELECT altumservice.id,
     altumservice.name AS "altumServiceName",
     altumservice."serviceCategory",
+    altumservice."serviceVariation",
     servicecategory.name AS "serviceCategoryName",
     programservice.id AS "programService",
     programservice.name AS "programServiceName",
@@ -21,6 +22,7 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
      LEFT JOIN altum.altumservice ON altumservice.id = altum_program_services."altumservice_programServices"
      LEFT JOIN altum.servicecategory ON servicecategory.id = altumservice."serviceCategory"
      LEFT JOIN altum.programservice ON programservice.id = altum_program_services."programservice_AHServices"
+     LEFT JOIN altum.servicevariation ON servicevariation.id = altumservice."serviceVariation"
      LEFT JOIN altum.program ON programservice.program = program.id;
 
 ALTER TABLE altum.altumprogramservices

@@ -29,6 +29,9 @@
       program: {
         model: 'program'
       },
+      serviceVariation: {
+        model: 'servicevariation'
+      },
       approvalNeeded: {
         type: 'boolean'
       },
