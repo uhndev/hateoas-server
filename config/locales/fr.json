@@ -129,6 +129,7 @@
       "SURVEYS_TAB_TITLE": "Enquêtes à Venir",
       "PROFILE_TITLE": "Profil de L'utilisateur",
       "STUDIES_TITLE": "Liste des études inscrits",
+      "SAVE_BUTTON": "Enregistrer",
       "SCHEDULE_TITLE": "Liste des enquêtes à venir",
       "STUDY_USER": "Etude Utilisateur",
       "STUDY_FORM": "Etude Form",
@@ -189,7 +190,16 @@
           "IDENTITY": "Etude Centres Collections"
         },
         "SUBJECTS":{
-          "IDENTITY": "Etude Matieres"
+          "IDENTITY": "Etude Matieres",
+          "ADD": "Ajouter Assujettir Étude",
+          "ADD_BUTTON": "Ajouter Assujettir",
+          "CANCEL": "Annuler",
+          "PROVIDERS": {
+            "IDENTITY":"Les fournisseurs",
+            "STATUS":"Statut",
+            "STATUS_PLACEHOLDER": "Selecionne statut",
+            "DATE_EVENT": "Date un événement"
+          }
         },
         "USERS":{
           "IDENTITY": "Etude Utilisateurs"
@@ -247,7 +257,10 @@
       },
       "SUBJECTPORTAL":{
         "SURVEYS":{
-          "IDENTITY":"Liste des enquêtes à venir"
+          "IDENTITY": "Liste des enquêtes à venir"
+        },
+        "PROFILE":{
+          "IDENTITY": "Mon Profil"
         }
       },
       "SYSTEM_FORM": {
@@ -265,7 +278,7 @@
             "PASSWORD": "Mot de passe",
             "PREFIX": "Préfixe",
             "PREFIX_PLACEHOLDER": "Select a prefix",
-            "INVALID_INPUT": "Manquant input ou invalide",
+            "INVALID_INPUT": "Manquant ou invalide input",
             "FIRST_NAME": "Prénom",
             "FIRST_NAME_PLACEHOLDER": "John",
             "LAST_NAME": "Nom de famille",
@@ -274,28 +287,64 @@
             "GENDER_PLACEHOLDER": "Selectionner une genre",
             "DATE_BIRTH": "Date D'anniversaire",
             "DATE_PLACEHOLDER": "Entre une date valeur",
-            "GROUP": "Group",
-            "GROUP_PLACEHOLDER": "Selectionner une group",
+            "GROUP": "Groupe",
+            "GROUP_PLACEHOLDER": "Selectionner une groupe",
             "INVALID_PASSWORD": "Mot de passe au moins 8 characters, contenir 1 au moins lower case letter, 1 uppercase letter, et 1 non-alphanumeric caractere"
           }
         },
         "STUDY":{
-          "TITLE": "Create Etude",
+          "TITLE": "Créer Etude",
           "SUBMIT": "Sauvegarder",
           "CANCEL": "Annuler",
           "QUESTIONS": {
             "NAME": "nom",
             "TITLE": "Nom de L'étude",
             "LEAP": "LEAP",
-            "MISSINGINPUT": "missing input or invalid",
+            "MISSINGINPUT": "Manquant ou invalide input",
             "REB": "REB #",
             "ENTER_REB": "Entre une REB nombre",
             "ATTRIBUTES": "Attributs",
             "ENTER_JSON": "Entre une json valeur",
             "ADMINISTRATOR": "Administrateur",
             "PI": "PI",
-            "SELECT_USER": "Select user"
+            "SELECT_USER": "Selecionne Utilisateur"
           }
+        },
+        "SURVEY":{
+          "TITLE": "Enquête Suivi",
+          "STUDIES": "Etudes",
+          "PHYSICIANS": "Médecins",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "PHYSICIANS_PLACEHOLDER": "Selecionne Médecins",
+          "FROM": "de",
+          "FROM_PLACEHOLDER": "Entrer date valeur",
+          "TO":"à",
+          "TO_PLACEHOLDER":"Entrer date valeur",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler"
+        },
+        "GROUP":{
+          "TITLE": "Créer Groupe",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "NAME": "nom",
+          "NAME_PLACEHOLDER": "Entrer groupe nom",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "LEVEL": "Niveau",
+          "LEVEL_PLACEHOLDER": "Entrer niveau entre 1 et 3",
+          "LEVEL_HELPER": "Niveau doit être entre [1, 3]",
+          "MAIN_SUBMENU": "Principal et Sub Menu Définitions",
+          "JSON_PLACEHOLDER": "Entrer une json valeur"
+        },
+        "COLLECTION_CENTRE":{
+          "TITLE": "Centres de Collecte",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "NAME": "Nom",
+          "TWH_PLACEHOLDER": "TWH",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "CONTACT": "Contact",
+          "CONTACT_PLACEHOLDER": "Selecionne contact"
         }
       },
       "FORM": {
