@@ -18,7 +18,7 @@
       subjectEnrollment: {
         model: 'subjectenrollment'
       },
-      subjectID: {
+      subjectid: {
         model: 'subject'
       },
       status: {
