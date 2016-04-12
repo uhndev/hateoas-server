@@ -52,6 +52,8 @@
             err.status = 400;
             throw err;
           } else {
+            this.subjectID = subjectEnrollment.subject;
+          
             return UserEnrollment.findOne({
               user: req.user.id,
               collectionCentre: subjectEnrollment.collectionCentre
@@ -70,6 +72,7 @@
             study : this.studySessionView.study,
             surveyVersion : this.studySessionView.surveyVersion,
             formVersion : formID,
+            subject : this.subjectID,
             subjectSchedule : scheduleID,
             subjectEnrollment : this.schedule.subjectEnrollment,
             userEnrollment : userEnrollmentID

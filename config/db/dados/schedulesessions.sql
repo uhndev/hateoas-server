@@ -7,6 +7,7 @@ CREATE OR REPLACE VIEW dados.schedulesessions AS
     subjectschedule."availableFrom",
     subjectschedule."availableTo",
     subjectschedule."subjectEnrollment",
+    subjectenrollment.subject AS subjectID,
     subjectschedule.status,
     subjectschedule.session,
     session.name,
@@ -26,6 +27,7 @@ CREATE OR REPLACE VIEW dados.schedulesessions AS
    FROM dados.subjectschedule
      LEFT JOIN dados.session ON session.id = subjectschedule.session
      LEFT JOIN dados.survey ON session.survey = survey.id
+     LEFT JOIN dados.subjectenrollment ON subjectschedule."subjectEnrollment" = subjectenrollment.id
   WHERE subjectschedule."expiredAt" IS NULL AND session."expiredAt" IS NULL AND survey."expiredAt" IS NULL;
 
 ALTER TABLE dados.schedulesessions
