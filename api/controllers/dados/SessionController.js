@@ -15,7 +15,6 @@
      */
     findOne: function (req, res) {
       Session.findOne(req.param('id'))
-        .populate('formVersions')
         .exec(function (err, session) {
           if (err) {
             return res.serverError(err);
