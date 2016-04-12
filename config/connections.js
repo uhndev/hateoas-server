@@ -93,6 +93,42 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
 
+  dados_development: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_dev'
+  },
+
+  dados_test: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_test'
+  },
+
+  dados_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
   altum_development: {
     adapter: 'sails-postgresql',
     host: 'localhost',
