@@ -18,6 +18,9 @@
       subjectEnrollment: {
         model: 'subjectenrollment'
       },
+      subjectid: {
+        model: 'subject'
+      },
       status: {
         type: 'string'
       },
