@@ -55,6 +55,13 @@ module.exports.connections = {
     database  : 'altum-mongo-test'
   },
 
+  altum_mongo_migrate: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-uat'
+  },
+
   altum_mongo_uat: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
@@ -111,6 +118,15 @@ module.exports.connections = {
     database: 'altum_test'
   },
 
+  dados_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_migrate'
+  },
+
   dados_uat: {
     adapter: 'sails-postgresql',
     host: 'localhost',
@@ -145,6 +161,15 @@ module.exports.connections = {
     user: 'postgres',
     password: 'password',
     database: 'altum_test'
+  },
+
+  altum_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_migrate'
   },
 
   altum_uat: {
