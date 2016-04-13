@@ -24,7 +24,7 @@ module.exports = {
   models: {
     migrate: 'alter',
     autoCreatedBy: true,
-    connection: 'altum_production'
+    connection: 'altum_migrate'
   },
 
   /***************************************************************************
