@@ -59,6 +59,16 @@
         type: 'string'
       },
 
+      /**
+       * requiresConfirmation
+       * @description Simple boolean flag to denote if additional information is required
+       * @type {Boolean}
+       */
+      requiresConfirmation: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -67,10 +77,16 @@
         { name: 'Open', category: 'referral' },
         { name: 'Discharged', category: 'referral' },
         { name: 'Follow-up', category: 'referral' },
-        { name: 'Approved', category: 'approval', iconClass: 'fa-check-circle', rowClass: 'success' },
         { name: 'Pending', category: 'approval', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
-        { name: 'No response from WSIB', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
-        { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' }
+        { name: 'Misentered', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
+        { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' },
+        {
+          name: 'Approved',
+          category: 'approval',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: true
+        }
       ];
     },
 

@@ -16,12 +16,12 @@
         </parameter>
         <parameter>
             <name>targetDB</name>
-            <default_value>altum_prod</default_value>
+            <default_value>altum_dev</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>targetIP</name>
-            <default_value>ws69.uhnresearch.ca</default_value>
+            <default_value>localhost</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -572,7 +572,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>384</xloc>
-      <yloc>80</yloc>
+      <yloc>64</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

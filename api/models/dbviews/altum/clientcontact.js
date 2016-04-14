@@ -15,7 +15,7 @@
         'prompt': name,
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id
         ].join('/')
       },
       {
@@ -23,7 +23,7 @@
         'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id
         ].join('/')
       },
       {
@@ -31,7 +31,7 @@
         'prompt': 'APP.HEADER.SUBMENU.REFERRALS',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'client', id, 'referrals'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'client', id, 'referrals'
         ].join('/')
       }
     ];
@@ -67,9 +67,7 @@
       homePhone: {
         type: 'string'
       },
-      workPhone: {
-        type: 'string'
-      },
+
       fax: {
         type: 'string'
       },
@@ -79,14 +77,14 @@
       homeEmail: {
         type: 'string'
       },
-      workEmail: {
-        type: 'string'
-      },
       language: {
         type: 'string'
       },
       requiresInterpreter: {
         type: 'boolean'
+      },
+      address: {
+        model: 'address'
       },
       address1: {
         type: 'string'
@@ -112,11 +110,18 @@
       country: {
         type: 'string'
       },
+      personId: {
+        type: 'integer'
+      },
       latitude: {
         type: 'string'
       },
       longitude: {
         type: 'string'
+      },
+
+      primaryEmergencyContact: {
+        model: 'emergencyContact'
       },
 
       getResponseLinks: function () {

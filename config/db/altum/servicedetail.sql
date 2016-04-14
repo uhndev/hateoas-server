@@ -10,6 +10,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     service.referral,
     altumService.id AS "altumService",
     altumService.name AS "altumServiceName",
+    altumService.visitable,
     programService.id AS "programService",
     programService.name AS "programServiceName",
     programService.program,
@@ -20,11 +21,12 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     prognosis.name AS "prognosis",
     timeframe.name AS "prognosisTimeframe",
     service."serviceDate",
-    servicetype.name AS "serviceType",
+    service."visitService",
     service."approvalNeeded",
     referral.client,
     approval.id AS "currentApproval",
     approval.status AS "currentStatus",
+    approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
     status."iconClass",
     status."rowClass",
@@ -48,7 +50,6 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id
     LEFT JOIN altum.prognosis ON service.prognosis = prognosis.id
-    LEFT JOIN altum.timeframe ON service."prognosisTimeframe" = timeframe.id
-    LEFT JOIN altum.servicetype ON service."serviceType" = servicetype.id;
+    LEFT JOIN altum.timeframe ON service."prognosisTimeframe" = timeframe.id;
 ALTER TABLE altum.referraldetail
 OWNER TO postgres;

@@ -5,7 +5,7 @@
 module.exports = {
 
   hookTimeout: 900000,
-
+  appUrl: 'http://localhost:1339',
   models: {
     migrate: 'drop',
     connection: 'altum_test'

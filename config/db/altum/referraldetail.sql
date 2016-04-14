@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     physician."displayName" AS "physician_name",
     referral.staff,
     staff."displayName" AS "staff_name",
+    stafftype."displayName" AS "staffType_name",
     referral.site,
     site."displayName" AS "site_name",
     status.id AS status,
@@ -32,6 +33,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     person.prefix AS client_prefix,
     person.gender AS client_gender,
     person."dateOfBirth" AS "client_dateOfBirth",
+    address.id AS "client_address",
     address.address1 AS client_address1,
     address.address2 AS client_address2,
     address.city AS client_city,
@@ -41,24 +43,23 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     address.latitude AS client_latitude,
     address.longitude AS client_longitude,
     person."homePhone" AS "client_homePhone",
-    person."workPhone" AS "client_workPhone",
+    person."daytimePhone" AS "client_daytimePhone",
     person."familyDoctor" AS "client_familyDoctor",
     person.language AS client_language,
-    claim.id AS claim,
-    claim."claimNum" AS "claim_claimNum",
-    claim."policyNum" AS "claim_policyNum",
+    "claimNumber",
+    "policyNumber",
     referral.owner,
     referral."createdBy",
     referral."createdAt",
     referral."updatedAt"
 FROM altum.referral
-  LEFT JOIN altum.claim ON referral.claim = claim.id
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id
-  LEFT JOIN altum.address ON address.person = person.id
+  LEFT JOIN altum.address ON person.address = address.id
   LEFT JOIN altum.status ON referral.status = status.id
   LEFT JOIN altum.physician ON referral.physician = physician.id
   LEFT JOIN altum.staff ON referral.staff = staff.id
+  LEFT JOIN altum.stafftype ON staff."staffType" = stafftype.id
   LEFT JOIN altum.site ON referral.site = site.id
   LEFT JOIN altum.program ON referral.program = program.id;
 ALTER TABLE altum.referraldetail

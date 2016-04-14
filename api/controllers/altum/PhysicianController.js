@@ -8,6 +8,7 @@
 
 (function() {
   module.exports = {
-    identity: 'Physician'
+    identity: 'Physician',
+
   };
 })();

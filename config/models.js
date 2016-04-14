@@ -17,7 +17,6 @@ module.exports.models = {
   },
 
   limits: {
-    claim: 5,
     program: 5,
     referral: 5
   },
@@ -35,16 +34,7 @@ module.exports.models = {
       });
     };
 
-    Site.generateAndCreate()
-      .then(StaffType.generateAndCreate)
-      .then(Status.generateAndCreate)
-      .then(ServiceCategory.generateAndCreate)
-      .then(WorkStatus.generateAndCreate)
-      .then(Timeframe.generateAndCreate)
-      .then(Prognosis.generateAndCreate)
-      .then(ServiceType.generateAndCreate)
-      .then(ProgramService.generateAndCreate)
-      .then(generateMultiple('claim'))
+    ProgramService.generateAndCreate()
       .then(generateMultiple('program'))
       .then(generateMultiple('referral'))
       .catch(function (err) {

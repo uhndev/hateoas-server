@@ -3,6 +3,7 @@
  * @class BaseModel
  * @description the basemodel to be inherited by all other models
  */
+var _ = require('lodash');
 
 module.exports = {
 

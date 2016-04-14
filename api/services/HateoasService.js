@@ -19,7 +19,7 @@
       // #here_be_dragons
       // Figure out how to get the model name within the model itself
       // in the future.
-      var components = [sails.getBaseUrl() + sails.config.blueprints.prefix,
+      var components = [sails.config.appUrl + sails.config.blueprints.prefix,
         modelName];
 
       if (id) {
@@ -39,7 +39,8 @@
           });
         }
         if (_.isObject(data)) {
-          return _.omit(data.toJSON(), _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
+          var dataToReturn = (_.isFunction(data.toJSON)) ? data.toJSON() : data;
+          return _.omit(dataToReturn, _.without(Utils.Model.SYSTEM_FIELDS, 'id'));
         }
       }
 
@@ -92,20 +93,7 @@
       }
 
       function addBaseUrl(link) {
-        link.href = sails.getBaseUrl() + link.href;
-      }
-
-      function checkBaseModel(state) {
-        var modelName = req.options.model || req.options.controller;
-        if (!state) {
-          // if WorkflowState not found, try again with the base model
-          var response = url.parse(HateoasService.getSelfLink(modelName)).pathname;
-          var href = decodeURIComponent(response);
-          return WorkflowState.findOne({
-            path: url.parse(href).pathname
-          });
-        }
-        return state;
+        link.href = sails.config.appUrl + link.href;
       }
 
       /**
@@ -119,7 +107,7 @@
         var response = {
           version: HATEOAS_VERSION,
           href: HateoasService.getSelfLink(modelName),
-          referrer: sails.getBaseUrl() + address.pathname,
+          referrer: sails.config.appUrl + address.pathname,
           items: dataToJson(data),
           template: {
             rel: modelName
@@ -156,10 +144,12 @@
         return response;
       }
 
-      return WorkflowState.findOne({
-        path: decodeURIComponent(address.pathname)
+      // search workflows for states whose paths contains the current route
+      return WorkflowState.find().then(function (workflowstates) {
+        return _.find(workflowstates, function (workflowstate) {
+          return _.contains(workflowstate.path, req.route.path);
+        });
       })
-      .then(checkBaseModel)
       .then(makeResponse);
     }
   };

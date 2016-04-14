@@ -10,6 +10,7 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
     programservice.id AS "programService",
     programservice.name AS "programServiceName",
     programservice.program AS program,
+    programservice."approvalNeeded",
     programservice."approvalRequired",
     program.name AS "programName",
     altumservice.owner,

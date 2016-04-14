@@ -1,4 +1,4 @@
---require should
+--require should test/bootstrap.test.js test/unit/**/*.js
 --reporter spec
 --ui bdd
 --colors

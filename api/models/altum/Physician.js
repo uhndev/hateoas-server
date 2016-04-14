@@ -17,6 +17,8 @@
 
     defaultTemplateOmit: null,
 
+    defaultPopulate: ['person'],
+
     attributes: {
 
       /**

@@ -55,7 +55,7 @@
        */
       prefix: {
         type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        enum: ['Mr.', 'Mrs.', 'Miss', 'Ms.', 'Dr.'],
         generator: function() {
           return _.sample(Person.attributes.prefix.enum);
         }
@@ -88,14 +88,13 @@
 
       /**
        * address
-       * @description A collection of a person's addresses
+       * @description A person's address
        * @type {Collection}
        */
-      addresses: {
-        collection: 'address',
-        via: 'person',
+      address: {
+        model: 'address',
         generator: function(state) {
-          return [BaseModel.defaultGenerator(state, 'addresses', Address)];
+          return BaseModel.defaultGenerator(state, 'address', Address);
         }
       },
 
@@ -110,11 +109,11 @@
       },
 
       /**
-       * workPhone
-       * @description A client's workPhone
+       * daytimePhone
+       * @description A client's daytimePhone
        * @type {String}
        */
-      workPhone: {
+      daytimePhone: {
         type: 'string',
         generator: faker.phone.phoneNumber
       },
@@ -198,16 +197,6 @@
       },
 
       /**
-       * workEmail
-       * @description A person's work eMail
-       * @type {String}
-       */
-      workEmail: {
-        type: 'string',
-        generator: faker.internet.email
-      },
-
-      /**
        * otherEmail
        * @description A person's other eMail
        * @type {String}
@@ -217,35 +206,6 @@
         generator: faker.internet.email
       },
 
-      /**
-       * occupation
-       * @description A person's occupation
-       * @type {String}
-       */
-      occupation: {
-        type: 'string',
-        generator: faker.name.jobTitle
-      },
-
-      /**
-       * occupationType
-       * @description A person's occupation type
-       * @type {String}
-       */
-      occupationType: {
-        type: 'string',
-        generator: faker.name.jobType
-      },
-
-      /**
-       * occupationSector
-       * @description A person's occupation sector
-       * @type {String}
-       */
-      occupationSector: {
-        type: 'string',
-        generator: faker.name.jobArea
-      },
 
       /**
        * employments
@@ -276,6 +236,15 @@
       },
 
       /**
+       * externalID
+       * @description A person's external ID (usually MRN)
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
+      },
+
+      /**
        * requiresInterperter
        * @description a persons requires interperter flag
        * @type {String}
@@ -285,6 +254,24 @@
         defaultsTo: false
       },
 
+      /**
+       * preferred emergency contact
+       * @description Pointer to the current approval in our approval history
+       * @type {Model}
+       */
+      primaryEmergencyContact: {
+        model: 'emergencyContact'
+      },
+
+      /**
+       * approvals
+       * @description Collection of approvals linked to a specific service (history of approvals)
+       * @type {Collection}
+       */
+      emergencyContacts: {
+        collection: 'emergencyContact',
+        via: 'person'
+      },
       /**
        * users
        * @description a persons associated users
@@ -296,8 +283,26 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
 
+    /**
+     * afterCreate
+     * @description After creating a Person model, in order to keep the one-to-one relationship between Person
+     *              and Address in sync, we include some lifecycle logic to update the Address table.
+     * @param person
+     * @param cb
+     */
+    afterCreate: function (person, cb) {
+      if (person.address) {
+        var addressID = _.isObject(person.address) ? person.address.id : person.address;
+        Address.update({id: addressID}, {person: person.id}).exec(function (err, updatedPerson) {
+          cb(err);
+        });
+      } else {
+        cb();
+      }
     }
+
   });
 })();
 

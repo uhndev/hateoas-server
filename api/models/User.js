@@ -162,7 +162,7 @@
             'prompt': Utils.User.getFullName(this),
             'name': 'name',
             'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'user', this.id
+              sails.config.appUrl + sails.config.blueprints.prefix, 'user', this.id
             ].join('/')
           },
           {
@@ -170,7 +170,7 @@
             'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
             'name': 'name',
             'href': [
-              sails.getBaseUrl() + sails.config.blueprints.prefix, 'user', this.id
+              sails.config.appUrl + sails.config.blueprints.prefix, 'user', this.id
             ].join('/')
           }
         ]

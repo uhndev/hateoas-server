@@ -43,6 +43,7 @@ config/local.js
 config/scripts/**/*.pyc
 mocha.json
 docs
+coverage
 .vagrant/**
 .floo
 .flooignore

@@ -3,7 +3,7 @@
 
 -- DROP VIEW studysubject;
 
-CREATE OR REPLACE VIEW studysubject AS
+CREATE OR REPLACE VIEW dados.studysubject AS
   SELECT subjectenrollment.id,
     subject.id AS "subject",
     "user".id AS "user",
@@ -15,7 +15,7 @@ CREATE OR REPLACE VIEW studysubject AS
     collectioncentre.name AS "collectionCentreName",
     study.attributes AS "studyAttributes",
     ( SELECT ARRAY( SELECT DISTINCT providers.provider_subjects
-                       FROM provider_subjects__subjectenrollment_providers "providers"
+                       FROM dados.provider_subjects__subjectenrollment_providers "providers"
                       WHERE providers."subjectenrollment_providers" = subjectenrollment.id AND subjectenrollment."expiredAt" IS NULL) AS "array") AS "providers",
     subjectenrollment."studyMapping",
     subjectenrollment.status,
@@ -24,12 +24,12 @@ CREATE OR REPLACE VIEW studysubject AS
     subjectenrollment."createdBy",
     subjectenrollment."createdAt",
     subjectenrollment."updatedAt"
-  FROM subjectenrollment
-    LEFT JOIN subject ON subject.id = subjectenrollment.subject
+  FROM dados.subjectenrollment
+    LEFT JOIN dados.subject ON subject.id = subjectenrollment.subject
     LEFT JOIN "user" ON subject.user = "user".id
-    LEFT JOIN collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
-    LEFT JOIN study ON collectioncentre.study = study.id
+    LEFT JOIN dados.collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
+    LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE subjectenrollment."expiredAt" IS NULL;
 
-ALTER TABLE studysubject
+ALTER TABLE dados.studysubject
   OWNER TO postgres;

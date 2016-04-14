@@ -4,6 +4,7 @@
  */
 
 (function () {
+  var _ = require('lodash');
   var ReferralModel = require('./../../altum/Referral.js');
   var _super = require('./altumBaseView.js');
 
@@ -14,23 +15,23 @@
         'prompt': 'Referral for ' + name,
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id
+        ].join('/')
+      },
+      {
+        'rel': sails.models.referraldetail.identity,
+        'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
+        'name': 'name',
+        'href': [
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id
         ].join('/')
       },
       {
         'rel': sails.models.referral.identity,
-        'prompt': 'APP.HEADER.SUBMENU.OVERVIEW',
-        'name': 'name',
-        'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id
-        ].join('/')
-      },
-      {
-        'rel': 'triage',
         'prompt': 'APP.HEADER.SUBMENU.TRIAGE',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral',id, 'triage'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral',id, 'triage'
         ].join('/')
       },
       {
@@ -38,7 +39,7 @@
         'prompt': 'APP.HEADER.SUBMENU.RECOMMENDATIONS',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'recommendations'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'recommendations'
         ].join('/')
       },
       {
@@ -46,7 +47,7 @@
         'prompt': 'APP.HEADER.SUBMENU.SERVICES',
         'name': 'name',
         'href': [
-          sails.getBaseUrl() + sails.config.blueprints.prefix, 'referral', id, 'services'
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'services'
         ].join('/')
       }
     ];
@@ -73,6 +74,9 @@
       },
       staff: {
         model: 'staff'
+      },
+      staffType_name: {
+        type: 'string'
       },
       staff_name: {
         type: 'string'
@@ -134,6 +138,9 @@
       client_dateOfBirth: {
         type: 'date'
       },
+      client_address: {
+        model: 'address'
+      },
       client_address1: {
         type: 'string'
       },
@@ -161,7 +168,7 @@
       client_homePhone: {
         type: 'string'
       },
-      client_workPhone: {
+      client_daytimePhone: {
         type: 'string'
       },
       client_familyDoctor: {
@@ -170,13 +177,10 @@
       client_language: {
         type: 'integer'
       },
-      claim: {
-        model: 'claim'
-      },
-      claim_claimNum: {
+      claimNumber: {
         type: 'string'
       },
-      claim_policyNum: {
+      policyNumber: {
         type: 'string'
       },
       getResponseLinks: function () {

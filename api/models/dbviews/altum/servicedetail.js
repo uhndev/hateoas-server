@@ -52,8 +52,8 @@
       serviceDate: {
         type: 'datetime'
       },
-      serviceType: {
-        type: 'string'
+      visitService: {
+        model: 'service'
       },
       approvalNeeded: {
         type: 'boolean'
@@ -63,6 +63,9 @@
       },
       currentStatus: {
         model: 'status'
+      },
+      approvalDate: {
+        type: 'datetime'
       },
       statusName: {
         type: 'string'

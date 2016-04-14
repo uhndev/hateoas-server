@@ -8,6 +8,7 @@
 
 (function () {
   var _super = require('./AltumBaseModel.js');
+  var _ = require('lodash');
   var faker = require('faker');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -31,15 +32,24 @@
       },
 
       /**
-       * claim
-       * @description A referral's client
-       * @type {Model}
+       * claimNumber
+       * @description A referral's claimNumber
+       * @type {string}
        */
-      claim: {
-        model: 'claim',
+      claimNumber: {
+        type: 'string',
         generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'claim', Claim);
+          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
         }
+      },
+
+      /**
+       * policyNumber
+       * @description A referral's policyNumber
+       * @type {string}
+       */
+      policyNumber: {
+        type: 'string'
       },
 
       /**
@@ -62,7 +72,8 @@
 
       /**
        * physician
-       * @description The physician registered at this site
+       * @description Reference to the primary provider physician - will be set if primaryProviderType was
+       *              set to null in the related Program
        * @type {Model}
        */
       physician: {
@@ -74,14 +85,22 @@
 
       /**
        * staff
-       * @description The staff registered at this site
+       * @description Reference to the primary provider - will be set if primaryProviderType
+       *              was set as a particular StaffType in the related Program
        * @type {Model}
        */
       staff: {
-        model: 'staff',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'staff', Staff);
-        }
+        model: 'staff'
+      },
+
+      /**
+       * isPhysicianPrimary
+       * @description Boolean denoting which of physician or staff on this record is the primary provider.
+       * @type {Boolean}
+       */
+      isPhysicianPrimary: {
+        type: 'boolean',
+        defaultsTo: true
       },
 
       /**
@@ -127,6 +146,15 @@
         generator: function() {
           return faker.date.past();
         }
+      },
+
+      /**
+       * externalID
+       * @description A referral's external ID (usually )
+       * @type {String}
+       */
+      externalID: {
+        type: 'string'
       },
 
       /**

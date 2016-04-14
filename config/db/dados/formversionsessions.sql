@@ -3,7 +3,7 @@
 
 -- DROP VIEW formversionsessions;
 
-CREATE OR REPLACE VIEW formversionsessions AS
+CREATE OR REPLACE VIEW dados.formversionsessions AS
  SELECT formsessions.formversion_sessions AS id,
     formversion.name,
     session.id AS session,
@@ -19,10 +19,10 @@ CREATE OR REPLACE VIEW formversionsessions AS
     session."createdBy",
     session."createdAt",
     session."updatedAt"
-   FROM formversion_sessions__session_formversions formsessions
-     LEFT JOIN session ON session.id = formsessions."session_formVersions"
-     LEFT JOIN formversion ON formversion.id = formsessions.formversion_sessions
+   FROM dados.formversion_sessions__session_formversions formsessions
+     LEFT JOIN dados.session ON session.id = formsessions."session_formVersions"
+     LEFT JOIN dados.formversion ON formversion.id = formsessions.formversion_sessions
   WHERE formversion."expiredAt" IS NULL AND session."expiredAt" IS NULL;
 
-ALTER TABLE formversionsessions
+ALTER TABLE dados.formversionsessions
   OWNER TO postgres;

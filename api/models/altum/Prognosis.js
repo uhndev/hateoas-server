@@ -45,6 +45,9 @@
       return [
         { name: 'Too soon to render a prognosis' },
         { name: 'Fully Recovered Now' },
+        { name: 'Maximum medical recovery achieved at this time' },
+        { name: 'Maximum medical recovery achieved with permanent restrictions' },
+        { name: 'Partially recovered and may continue to improve with recommendations' },
         { name: 'Partially Recovered Now and No Further Recovery Expected' },
         { name: 'Partially Recovered Now and Full Recovery Anticipated in ', hasTimeframe: true },
         { name: 'Partially Recovered Now and Full Recovery Not Anticipated but may continue to improve for ', hasTimeframe: true}

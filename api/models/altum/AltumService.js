@@ -26,7 +26,8 @@
        * @type {String}
        */
       name: {
-        type: 'string'
+        type: 'string',
+        unique: true
       },
 
       /**
@@ -85,6 +86,15 @@
       staffTypes: {
         collection: 'stafftype',
         via: 'altumServices'
+      },
+
+      /**
+       * visitable
+       * @description Boolean flag denoting whether
+       */
+      visitable: {
+        type: 'boolean',
+        defaultsTo: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

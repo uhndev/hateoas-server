@@ -118,6 +118,17 @@
       "PROFILE_TITLE": "User Profile",
       "STUDIES_TITLE": "List of enrolled studies",
       "SCHEDULE_TITLE": "List of upcoming surveys"
+    },
+    "REFERRAL": {
+      "SERVICES": {
+        "SERVICE_APPROVAL": {
+          "LABELS": {
+            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
+            "APPROVAL_CONFIRMATION": "Approval Confirmation",
+            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
+          }
+        }
+      }
     }
   },
   "COMMON": {
@@ -145,7 +156,9 @@
         },
         "PLACEHOLDER": "Search Value",
         "ADD_BTN": "Add",
-        "RESET_BTN": "Reset"
+        "RESET_BTN": "Reset",
+        "MY_STUDIES": "My Studies",
+        "ALL_STUDIES": "All Studies"
       },
       "CONTROLS": {
         "OPEN_BTN": "Open",
@@ -197,6 +210,26 @@
         "DOB": "Date of Birth",
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "CENTRE_ACCESS": "Role"
+      },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Program",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "QUESTIONS": {
+            "NAME": "name",
+            "TITLE": "Program Name",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Enter an REB number",
+            "ATTRIBUTES": "Attributes",
+            "ENTER_JSON": "Enter a json value",
+            "ADMINISTRATOR": "Administrator",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
       },
       "FORM": {
         "IDENTITY": "Form",

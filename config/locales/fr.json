@@ -118,6 +118,17 @@
       "PROFILE_TITLE": "Profil de L'utilisateur",
       "STUDIES_TITLE": "Liste des études inscrits",
       "SCHEDULE_TITLE": "Liste des enquêtes à venir"
+    },
+    "REFERRAL": {
+      "SERVICES": {
+        "SERVICE_APPROVAL": {
+          "LABELS": {
+            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
+            "APPROVAL_CONFIRMATION": "Approval Confirmation",
+            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
+          }
+        }
+      }
     }
   },
   "COMMON": {
@@ -145,7 +156,9 @@
         },
         "PLACEHOLDER": "Valeur de Recherche",
         "ADD_BTN": "Ajouter",
-        "RESET_BTN": "Réinitialiser"
+        "RESET_BTN": "Réinitialiser",
+        "MY_STUDIES": "Mes études",
+        "ALL_STUDIES": "Tous études"
       },
       "CONTROLS": {
         "OPEN_BTN": "Ouvert",
@@ -197,6 +210,26 @@
         "DOB": "Date D'anniversaire",
         "COLLECTION_CENTRE": "Centre Collection",
         "CENTRE_ACCESS": "Rôle"
+      },
+      "SYSTEM_FORM": {
+        "STUDY":{
+          "TITLE": "Create Etude",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "QUESTIONS": {
+            "NAME": "nom",
+            "TITLE": "Nom de L'étude",
+            "LEAP": "LEAP",
+            "MISSINGINPUT": "missing input or invalid",
+            "REB": "REB #",
+            "ENTER_REB": "Entre une REB nombre",
+            "ATTRIBUTES": "Attributs",
+            "ENTER_JSON": "Entre une json valeur",
+            "ADMINISTRATOR": "Administrateur",
+            "PI": "PI",
+            "SELECT_USER": "Select user"
+          }
+        }
       },
       "FORM": {
         "IDENTITY": "Forme",

@@ -32,6 +32,8 @@ module.exports.routes = {
     });
   },
 
+  'get /api/checkexists/:model'           : 'ModelController.checkExists',
+
   /***************************************************************************
   * Locale Routes                                                            *
   ***************************************************************************/
@@ -64,6 +66,7 @@ module.exports.routes = {
   * User Routes                                                              *
   ****************************************************************************/
   'put /api/user/:id/roles'               : 'UserController.updateRoles',
+  'get /api/user/:id/findPermissions'     : 'UserController.findPermissions',
 
   /***************************************************************************
   * Survey Session Lifecycle Routes                                          *
@@ -85,7 +88,7 @@ module.exports.routes = {
   /***************************************************************************
    * Referral Routes                                                         *
    ***************************************************************************/
-  'get /api/referral/:id/triage'        : 'ReferralController.findOne',
+  'get /api/referral/:id/triage'          : 'ReferralController.findOne',
   'get /api/referral/:id/recommendations' : 'AltumServiceController.findAvailableServices',
   'get /api/referral/:id/services'        : 'ServiceController.findRecommendedServices'
 };

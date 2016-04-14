@@ -41,30 +41,21 @@ module.exports.policies = {
   /***************************************************************************
    * Preventing Disastrous Changes                                           *
    ***************************************************************************/
+
   GroupController: {
     'destroy': false
-  },
-
-  CriteriaController: {
-    '*': false
   },
 
   ModelController: {
     'create': false,
     'update': false,
-    'destroy': false
-  },
-
-  RoleController: {
-    'create': false,
-    'update': false,
-    'destroy': false
-  },
-
-  PermissionController: {
-    'create': false,
-    'update': false,
-    'destroy': false
+    'destroy': false,
+    'checkExists': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
   },
 
   /***************************************************************************
