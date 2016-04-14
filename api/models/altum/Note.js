@@ -6,38 +6,41 @@
  */
 
 (function () {
-    var _super = require('./AltumBaseModel.js');
-    _.merge(exports, _super);
-    _.merge(exports, {
+  var _super = require('./AltumBaseModel.js');
 
-        attributes: {
+  _.merge(exports, _super);
+  _.merge(exports, {
 
-            /**
-             * name
-             * @description note text
-             * @type {String}
-             */
-            text: {
-                type: 'string'
-            },
+    defaultTemplateOmit: null,
 
-            /**
-             * name
-             * @description A referral which the note belong to
-             * @type {Model}
-             */
-            referral: {
-                model: 'referral'
-            },
-            
-            /**
-             * name
-             * @description A client which the note belong to
-             * @type {Model}
-             */
-            client: {
-                model: 'client'
-            },
+    attributes: {
+
+      /**
+       * name
+       * @description note text
+       * @type {String}
+       */
+      text: {
+        type: 'string'
+      },
+
+      /**
+       * name
+       * @description A referral which the note belong to
+       * @type {Model}
+       */
+      referral: {
+        model: 'referral'
+      },
+
+      /**
+       * name
+       * @description A client which the note belong to
+       * @type {Model}
+       */
+      client: {
+        model: 'client'
+      },
 
       /**
        * name
@@ -75,4 +78,3 @@
 
   });
 })();
-
