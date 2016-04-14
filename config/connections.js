@@ -127,6 +127,15 @@ module.exports.connections = {
     database: 'altum_migrate'
   },
 
+  dados_migrate_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
   dados_uat: {
     adapter: 'sails-postgresql',
     host: 'localhost',
@@ -172,6 +181,15 @@ module.exports.connections = {
     database: 'altum_migrate'
   },
 
+  altum_migrate_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
   altum_uat: {
     adapter: 'sails-postgresql',
     host: 'localhost',
@@ -179,6 +197,15 @@ module.exports.connections = {
     user: 'postgres',
     password: 'password',
     database: 'altum_uat'
+  },
+
+  altum_migrate_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: '399Bathurst',
+    database: 'altum_prod'
   },
 
   altum_production: {
