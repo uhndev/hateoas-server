@@ -150,7 +150,7 @@ module.exports.connections = {
     host: 'localhost',
     port: 5432,
     user: 'postgres',
-    password: 'password',
+    password: '399Bathurst',
     database: 'altum_prod'
   },
 
@@ -159,7 +159,7 @@ module.exports.connections = {
     host: 'localhost',
     port: 5432,
     user: 'postgres',
-    password: 'password',
+    password: '399Bathurst',
     database: 'altum_prod'
   },
 
