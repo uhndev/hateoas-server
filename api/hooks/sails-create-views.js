@@ -35,22 +35,26 @@
     return {
       initialize: function (next) {
         sails.after('hook:orm:loaded', function () {
-          Promise.all(
-            _.map(connections, function (connection) {
-              var createQuery = _.map(fs.readdirSync('config/db/' + connection.dbName), function(view) {
-                return fs.readFileSync('config/db/' + connection.dbName + '/' + view, 'utf-8');
-              }).join(' ');
-              return connection.pgConnection.query(createQuery);
-            }))
-            .then(function (result) {
-              sails.log.info('Create View Query executed successfully');
-              next();
-            })
-            .catch(function (err) {
-              sails.log.error('Error running query: ' + err);
-              sails.log.error(createQuery);
-              next(err);
-            });
+          if (env === 'production') {
+            next();
+          } else {
+            Promise.all(
+              _.map(connections, function (connection) {
+                var createQuery = _.map(fs.readdirSync('config/db/' + connection.dbName), function (view) {
+                  return fs.readFileSync('config/db/' + connection.dbName + '/' + view, 'utf-8');
+                }).join(' ');
+                return connection.pgConnection.query(createQuery);
+              }))
+              .then(function (result) {
+                sails.log.info('Create View Query executed successfully');
+                next();
+              })
+              .catch(function (err) {
+                sails.log.error('Error running query: ' + err);
+                sails.log.error(createQuery);
+                next(err);
+              });
+          }
         });
       }
     };
