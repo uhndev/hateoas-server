@@ -6,19 +6,23 @@
     return {
       initialize: function (next) {
         sails.after('hook:permissions:loaded', function () {
-          Model.count()
-            .then(function (count) {
-              if (count == sails.models.length) return next();
-              return initializeRoles()
-                .then(initializeGroups)
-                .then(checkAdminUser)
-                .then(initializeTranslations)
-                .then(next);
-            })
-            .catch(function (error) {
-              sails.log.error(error);
-              next(error);
-            });
+          if (sails.config.environment === 'production') {
+            next();
+          } else {
+            Model.count()
+              .then(function (count) {
+                if (count == sails.models.length) return next();
+                return initializeRoles()
+                  .then(initializeGroups)
+                  .then(checkAdminUser)
+                  .then(initializeTranslations)
+                  .then(next);
+              })
+              .catch(function (error) {
+                sails.log.error(error);
+                next(error);
+              });
+          }
         });
       }
     };

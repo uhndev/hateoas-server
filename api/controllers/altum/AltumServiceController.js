@@ -48,8 +48,10 @@
                 referral: that.referral.id,
                 physician: that.referral.physician,
                 altumService: triageService.id,
+                programService: that.referral.programService,
                 serviceDate: new Date(),
-                approvalNeeded: false
+                approvalNeeded: false,
+                createdBy: req.user.id
               });
             })
           ]

@@ -35,19 +35,23 @@
     return {
       initialize: function (next) {
         sails.after('hook:blueprints:loaded', function () {
-          Promise.all(
-            _.map(connections, function (connection) {
-              return connection.pgConnection.query(dropViewsSQL);
-            }))
-            .then(function (result) {
-              sails.log.info('Drop View Query executed successfully');
-              next();
-            })
-            .catch(function (err) {
-              sails.log.error('Error running query: ' + err);
-              sails.log.error(dropQuery);
-              next(err);
-            });
+          if (env === 'production') {
+            next();
+          } else {
+            Promise.all(
+              _.map(connections, function (connection) {
+                return connection.pgConnection.query(dropViewsSQL);
+              }))
+              .then(function (result) {
+                sails.log.info('Drop View Query executed successfully');
+                next();
+              })
+              .catch(function (err) {
+                sails.log.error('Error running query: ' + err);
+                sails.log.error(dropQuery);
+                next(err);
+              });
+          }
         })
       }
     }
