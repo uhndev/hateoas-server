@@ -50,7 +50,8 @@
                 altumService: triageService.id,
                 programService: that.referral.programService,
                 serviceDate: new Date(),
-                approvalNeeded: false
+                approvalNeeded: false,
+                createdBy: req.user.id
               });
             })
           ]
