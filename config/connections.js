@@ -145,6 +145,15 @@ module.exports.connections = {
     database: 'altum_uat'
   },
 
+  dados_migrate_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_prod'
+  },
+
   dados_production: {
     adapter: 'sails-postgresql',
     host: 'localhost',
