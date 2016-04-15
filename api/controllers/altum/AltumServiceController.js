@@ -48,7 +48,13 @@
                 referral: that.referral.id,
                 physician: that.referral.physician,
                 altumService: triageService.id,
-                programService: that.referral.programService,
+                programService: {
+                  name: "Triage",
+                  program: that.referral.program,
+                  AHServices: [triageService.id],
+                  payor: that.referral.payor,
+                  approvalNeeded: false
+                },
                 serviceDate: new Date(),
                 approvalNeeded: false,
                 createdBy: req.user.id
