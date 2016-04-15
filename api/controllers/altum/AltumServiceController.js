@@ -41,20 +41,27 @@
               }
             }),
             AltumService.findOne({name: "Triage"}).then(function (triageService) {
+              that.triageService = triageService;
+              return ProgramService.findOrCreate({
+                name: "Triage",
+                program: that.referral.program,
+                payor: that.referral.payor
+              }, {
+                name: "Triage",
+                program: that.referral.program,
+                AHServices: [triageService.id],
+                payor: that.referral.payor,
+                approvalNeeded: false
+              })
+            }).then(function (triageProgramService) {
               return Service.findOrCreate({
                 referral: that.referral.id,
-                altumService: triageService.id
+                altumService: that.triageService.id
               }, {
                 referral: that.referral.id,
                 physician: that.referral.physician,
-                altumService: triageService.id,
-                programService: {
-                  name: "Triage",
-                  program: that.referral.program,
-                  AHServices: [triageService.id],
-                  payor: that.referral.payor,
-                  approvalNeeded: false
-                },
+                altumService: that.triageService.id,
+                programService: triageProgramService.id,
                 serviceDate: new Date(),
                 approvalNeeded: false,
                 createdBy: req.user.id
