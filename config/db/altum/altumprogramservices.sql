@@ -23,7 +23,8 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
      LEFT JOIN altum.servicecategory ON servicecategory.id = altumservice."serviceCategory"
      LEFT JOIN altum.programservice ON programservice.id = altum_program_services."programservice_AHServices"
      LEFT JOIN altum.servicevariation ON servicevariation.id = altumservice."serviceVariation"
-     LEFT JOIN altum.program ON programservice.program = program.id;
+     LEFT JOIN altum.program ON programservice.program = program.id
+   WHERE altumservice.available = TRUE;
 
 ALTER TABLE altum.altumprogramservices
   OWNER TO postgres;
