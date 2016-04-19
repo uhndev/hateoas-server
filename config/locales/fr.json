@@ -13,6 +13,21 @@
       "TAGLINE": "Une plateforme ouverte pour collecte de données prospectives dans la recherche clinique et translationnelle",
       "SELECTED": "Sélectionné:",
       "MENU": {
+        "ALTUM_TOOLS": {
+          "APPROVERS": "Approvers",
+          "ADDRESS": "Address",
+          "PAYORS": "Payor",
+          "CLAIMS": "Claim",
+          "WORK_STATUS": "Work Status",
+          "PROGNOSIS": "Prognosis",
+          "ALTUM_SERVICES": "Altum Services",
+          "PROGRAM_SERVICES": "Program Services",
+          "SITES": "Sites",
+          "COMPANIES": "Companies",
+          "PROGRAMS": "Programs",
+          "SERVICE_CATEGORIES": "Service Categories",
+          "STATUS": "Statuses"
+        },
         "STUDIES": "Etudes",
         "MY_STUDIES": "Mes études",
         "MY_PROFILE": "Mon profil",
@@ -30,7 +45,8 @@
         "SUBJECTS": "Matieres",
         "USERS": "Utilisateurs",
         "FORMS": "Formulaires",
-        "SURVEYS": "Enquetes"
+        "SURVEYS": "Enquetes",
+        "SERVICES": "Services"
       }
     },
     "ACCESSMANAGEMENT":{
@@ -39,7 +55,6 @@
         "BY_MODEL": "Par modèle",
         "BY_ROLE": "Par Rôle",
         "BY_USER": "Par utilisateur"
-
       }
     },
     "STUDY": {
@@ -128,6 +143,17 @@
       "STUDY_FORM": "Etude Form",
       "STUDY_SURVEY": "Etude Enquêtes",
       "STUDY_SUBJECT": "Etude Matieres"
+    },
+    "REFERRAL": {
+      "SERVICES": {
+        "SERVICE_APPROVAL": {
+          "LABELS": {
+            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
+            "APPROVAL_CONFIRMATION": "Approval Confirmation",
+            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
+          }
+        }
+      }
     }
   },
   "COMMON": {
