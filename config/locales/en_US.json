@@ -215,6 +215,8 @@
             "FIELD_NAME": "Field Name",
             "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
             "FIELD_NAME_PLACEHOLDER": "Field Name",
+            "FIELD_NAME_REQUIRED": "Field name is required",
+            "FIELD_NAME_INVALID_UPPERCASE": "Field name must be Upper case, no space, alphanumeric",
             "TOOL_TIP": "Tool Tip",
             "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
             "TOOL_TIP_PLACEHOLDER": "Tool tips",

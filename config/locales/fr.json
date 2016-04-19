@@ -215,6 +215,8 @@
             "FIELD_NAME": "Champ Nom",
             "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
             "FIELD_NAME_PLACEHOLDER": "Champ Nom",
+            "FIELD_NAME_REQUIRED": "Champ Nom est obligatoire",
+            "FIELD_NAME_INVALID_UPPERCASE": "Champ Nom doit être haut de casse, pas d'espace, alphanumérique",
             "TOOL_TIP": "Pointe de l'outil",
             "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
             "TOOL_TIP_PLACEHOLDER": "Pointe de l'outil",
