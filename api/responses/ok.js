@@ -133,10 +133,18 @@ module.exports = function sendOK (data, options) {
       return _.reduce(permissions, function (result, permission) {
         var perm = _.first(permission);
         if (!_.isUndefined(perm) && _.has(perm, 'action')) {
-          return result.concat(_.first(permission).action);
+          var permissionObject = {
+            action: _.first(permission).action
+          };
+          // if permission has criteria with blacklisted attributes ,include in result to filter hateoas template
+          if (_.has(perm, 'criteria') && _.has(_.first(perm.criteria), 'blacklist')) {
+            permissionObject.blacklist = _.first(perm.criteria).blacklist
+          }
+
+          return result.concat(permissionObject);
         }
         return result;
-      }, []).join(',');
+      }, []);
     })
     .catch(function (err) {
       return err;
@@ -176,9 +184,23 @@ module.exports = function sendOK (data, options) {
       res.set({
         'Access-Control-Expose-Headers': 'allow,Content-Type',
         'Content-Type': 'application/collection+json; charset=utf-8',
-        'allow': permissions
+        'allow': _.pluck(permissions, 'action').join(',')
       });
-      hateoasResponse.items = hateoasResponse.items;
+
+      // create blacklist dictionary of actions to blacklist array
+      var blacklist = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.blacklist;
+        return result;
+      }, {});
+
+      // include all blacklisted attributes in template
+      hateoasResponse.template.blacklist = blacklist;
+
+      // filter template data array based on any blacklisted attributes
+      hateoasResponse.template.data = _.reject(hateoasResponse.template.data, function (field) {
+        return _.contains(blacklist.read, field.name);
+      });
+
       sendData(req, res, hateoasResponse);
     })
     .fail(function(err) {
