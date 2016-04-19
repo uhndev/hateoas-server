@@ -10,29 +10,14 @@
       "SIGN_IN_ERROR": "Incorrect username or password"
     },
     "HEADER": {
-      "TAGLINE": "Leading the New Way in Canadian Health Care",
+      "TAGLINE": "An Open Platform for Prospective Data Collection in Clinical and Translational Research",
       "SELECTED": "Selected:",
       "MENU": {
-        "ALTUM_TOOLS": {
-          "APPROVERS": "Approvers",
-          "ADDRESS": "Address",
-          "PAYORS": "Payor",
-          "CLAIMS": "Claim",
-          "WORK_STATUS": "Work Status",
-          "PROGNOSIS": "Prognosis",
-          "ALTUM_SERVICES": "Altum Services",
-          "PROGRAM_SERVICES": "Program Services",
-          "SITES": "Sites",
-          "COMPANIES": "Companies",
-          "PROGRAMS": "Programs",
-          "SERVICE_CATEGORIES": "Service Categories",
-          "STATUS": "Statuses"
-        },
         "STUDIES": "Programs",
         "MY_STUDIES": "My Programs",
         "MY_PROFILE": "My Profile",
-        "USER_MANAGER": "User Manager",
-        "TOOLS": "Admin Tools",
+        "USER_MANAGER": "Client Manager",
+        "TOOLS": "Altum Tools",
         "FORM_BUILDER": "Form Builder",
         "WORKFLOW_EDITOR": "Workflow Editor",
         "GROUPS": "Groups",
@@ -45,8 +30,16 @@
         "SUBJECTS": "Clients",
         "USERS": "Users",
         "FORMS": "Forms",
-        "SURVEYS": "Surveys",
-        "SERVICES": "Services"
+        "SURVEYS": "Surveys"
+      }
+    },
+    "ACCESSMANAGEMENT":{
+      "TABS":{
+        "BY_GROUP": "By Group",
+        "BY_MODEL": "By Model",
+        "BY_ROLE": "By Role",
+        "BY_USER": "By User"
+
       }
     },
     "STUDY": {
@@ -80,6 +73,18 @@
           "NEW_BTN": "Add User",
           "EDIT_BTN": "Edit User",
           "ARCHIVE_BTN": "Archive"
+        },
+        "PANEL":{
+          "TITLE": "User Information",
+          "MY_STUDIES": "My Programs"
+        },
+        "MODAL":{
+          "ADD": "Add User to Program",
+          "USER": "User",
+          "COLLECTION_CENTER":"Collection Centre",
+          "ROLE": "Role",
+          "ADD_USER":"Add User",
+          "CANCEL": "Cancel"
         }
       },
       "FORM": {
@@ -116,19 +121,14 @@
       "PROFILE_TAB_TITLE": "My Profile",
       "SURVEYS_TAB_TITLE": "Upcoming Surveys",
       "PROFILE_TITLE": "User Profile",
-      "STUDIES_TITLE": "List of enrolled studies",
-      "SCHEDULE_TITLE": "List of upcoming surveys"
-    },
-    "REFERRAL": {
-      "SERVICES": {
-        "SERVICE_APPROVAL": {
-          "LABELS": {
-            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
-            "APPROVAL_CONFIRMATION": "Approval Confirmation",
-            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
-          }
-        }
-      }
+      "SAVE_BUTTON": "Save",
+      "STUDIES_TITLE": "List of enrolled Programs",
+      "SCHEDULE_TITLE": "List of upcoming surveys",
+      "STUDY_USER": "Program User",
+      "STUDY_FORM": "Program Form",
+      "STUDY_SURVEY": "Program Survey",
+      "STUDY_SUBJECT": "Program Subject"
+
     }
   },
   "COMMON": {
@@ -154,11 +154,22 @@
             "ENDS_WITH": "Ends With"
           }
         },
+        "SEARCH":{
+          "STUDY": "Search by Program",
+          "USER": "Search by User",
+          "COLLECTIONCENTRES": "Search by Collection Centres",
+          "GROUP": "Search by Groups"
+        },
+        "SWITCH":{
+          "STUDY": "Switch To Program",
+          "USER": "Switch To User",
+          "COLLECTIONCENTRES": "Switch To Collection Centres"
+        },
         "PLACEHOLDER": "Search Value",
         "ADD_BTN": "Add",
         "RESET_BTN": "Reset",
-        "MY_STUDIES": "My Studies",
-        "ALL_STUDIES": "All Studies"
+        "MY_STUDIES": "My Programs",
+        "ALL_STUDIES": "All Programs"
       },
       "CONTROLS": {
         "OPEN_BTN": "Open",
@@ -169,6 +180,82 @@
     },
     "MODELS": {
       "STUDY": {
+        "COLLECTIONCENTRES":{
+          "IDENTITY": "Program Sites"
+        },
+        "SUBJECTS":{
+          "IDENTITY": "Program Subjects",
+          "ADD": "Add Subject to Program",
+          "ADD_BUTTON": "Add Subject",
+          "CANCEL": "Cancel",
+          "PROVIDERS": {
+            "IDENTITY":"Providers",
+            "STATUS":"Status",
+            "STATUS_PLACEHOLDER": "Select a status",
+            "DATE_EVENT": "Date of Event"
+          }
+        },
+        "USERS":{
+          "IDENTITY": "Program Users"
+        },
+        "FORMS":{
+          "IDENTITY": "Program Forms",
+          "CONFIGURATION":{
+            "IDENTITY": "Configuration",
+            "LOAD_FORM": "Load Form:",
+            "FORM_NAME": "Form Name:",
+            "FORM_NAME_POPOVER": "Provide a name for your form. Names must be in upper case and cannot contain any spaces.",
+            "FORM_NAME_PLACEHOLDER": "Provide a name for your form.",
+            "FORM_PLACEHOLDER": "Select a form",
+            "QUESTION": "Question",
+            "QUESTION_POPOVER": "Specify the question for this input.",
+            "QUESTION_PLACEHOLDER": "",
+            "QUESTION_TYPE": "Question Type",
+            "QUESTION_TYPE_POPOVER": "Select the question type.",
+            "QUESTION_TYPE_PLACEHOLDER": "",
+            "FIELD_NAME": "Field Name",
+            "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
+            "FIELD_NAME_PLACEHOLDER": "Field Name",
+            "FIELD_NAME_REQUIRED": "Field name is required",
+            "FIELD_NAME_INVALID_UPPERCASE": "Field name must be Upper case, no space, alphanumeric",
+            "TOOL_TIP": "Tool Tip",
+            "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
+            "TOOL_TIP_PLACEHOLDER": "Tool tips",
+            "DEFAULT_VALUE": "Default Value",
+            "DEFAULT_VALUE_POPOVER": "Specify the default value for this question",
+            "DEFAULT_VALUE_PLACEHOLDER": "Default value",
+            "WIDGET_SIZE": "Widget Size",
+            "WIDGET_SIZE_POPOVER": "Specify the width of the input. Size is a measure of the number of characters the input can fit.",
+            "WIDGET_SIZE_PLACEHOLDER": "Field size",
+            "MAXIMUM_INPUT": "Maximum input length",
+            "MAXIMUM_INPUT_POPOVER": "Specify the maximum number of characters that this input can take.",
+            "MAXIMUM_INPUT_PLACEHOLDER": "Maximum characters",
+            "FLAGS_NOTIFY": "Please note that using expressions may slow down the performance of the page.",
+            "FLAGS_REQUIRED": "Required",
+            "FLAGS_REQUIRED_POPOVER": "Set the question as required.",
+            "FLAGS_HIDDEN": "Hidden",
+            "FLAGS_HIDDEN_POPOVER": "",
+            "FLAGS_READONLY": "Read-only",
+            "FLAGS_READONLY_POPOVER": "Set the question as read-only.",
+            "FLAGS_DISABLED": "Disabled",
+            "FLAGS_DISABLED_POPOVER": "Set the question as disabled.",
+            "FLAGS": "Flags",
+            "OPTIONS": "Options",
+            "CONFIG": "Config",
+            "WORKSPACE": "Workspace",
+            "WORKSPACE_HELPER": "Use the panel on the left to add questions to the workspace.",
+            "SAVE": "Save Changes",
+            "ARCHIVE": "Archive"
+          },
+          "ADVANCED":{
+            "IDENTITY": "Advanced"
+          }
+        },
+        "SURVEYS":{
+          "IDENTITY": "Program Surveys",
+          "DEFINE": "Define Survey",
+          "SELECT": "Select Forms"
+        },
         "IDENTITY": "Program",
         "NAME": "Program Name",
         "ATTRIBUTES": "Attributes",
@@ -185,6 +272,9 @@
         "LASTNAME": "Lastname",
         "GENDER": "Gender",
         "DOB": "Date of Birth"
+      },
+      "GROUP":{
+        "IDENTITY": "Group"
       },
       "COLLECTION_CENTRE": {
         "IDENTITY": "Site",
@@ -211,7 +301,47 @@
         "COLLECTION_CENTRE": "@:COMMON.MODELS.COLLECTION_CENTRE.IDENTITY",
         "CENTRE_ACCESS": "Role"
       },
+      "LOGIN":{
+        "IDENTITY": "Login"
+      },
+      "SUBJECTPORTAL":{
+        "SURVEYS":{
+          "IDENTITY":"List of upcoming surveys"
+        },
+        "PROFILE":{
+          "IDENTITY": "My Profile"
+
+        }
+      },
       "SYSTEM_FORM": {
+        "USER":{
+          "TITLE": "User Registration",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "QUESTIONS": {
+            "TITLE": "Username",
+            "USERNAME_PLACEHOLDER": "johndoe",
+            "INVALID_USERNAME": "Username must be unique and at least 5 characters long",
+            "EMAIL": "Email",
+            "EMAIL_PLACEHOLDER": "johndoe@uhn.ca",
+            "INVALID_EMAIL": "Missing or invalid email",
+            "PASSWORD": "Password",
+            "PREFIX": "Prefix",
+            "PREFIX_PLACEHOLDER": "Select a prefix",
+            "INVALID_INPUT": "missing input or invalid",
+            "FIRST_NAME": "Firstname",
+            "FIRST_NAME_PLACEHOLDER": "John",
+            "LAST_NAME": "Lastname",
+            "LAST_NAME_PLACEHOLDER": "Doe",
+            "GENDER": "Gender",
+            "GENDER_PLACEHOLDER": "Select a gender",
+            "DATE_BIRTH": "Date of Birth",
+            "DATE_PLACEHOLDER": "Enter a date value",
+            "GROUP": "Group",
+            "GROUP_PLACEHOLDER": "Select a group",
+            "INVALID_PASSWORD": "Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character"
+          }
+        },
         "STUDY":{
           "TITLE": "Create Program",
           "SUBMIT": "Submit",
@@ -220,7 +350,7 @@
             "NAME": "name",
             "TITLE": "Program Name",
             "LEAP": "LEAP",
-            "MISSINGINPUT": "missing input or invalid",
+            "MISSING_INPUT": "missing input or invalid",
             "REB": "REB #",
             "ENTER_REB": "Enter an REB number",
             "ATTRIBUTES": "Attributes",
@@ -229,6 +359,42 @@
             "PI": "PI",
             "SELECT_USER": "Select user"
           }
+        },
+        "SURVEY":{
+          "TITLE": "Survey Tracking",
+          "STUDIES": "Programs",
+          "PHYSICIANS": "Physicians",
+          "MISSING_INPUT": "missing input or invalid",
+          "PHYSICIANS_PLACEHOLDER": "Select physicians",
+          "FROM": "From",
+          "FROM_PLACEHOLDER": "Enter a date value",
+          "TO":"To",
+          "TO_PLACEHOLDER":"Enter a date value",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel"
+        },
+        "GROUP":{
+          "TITLE": "Create Group",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "NAME": "Name",
+          "NAME_PLACEHOLDER": "Enter a group name",
+          "MISSING_INPUT": "missing input or invalid",
+          "LEVEL": "Level",
+          "LEVEL_PLACEHOLDER": "Enter a level between 1 and 3",
+          "LEVEL_HELPER": "Level must be between [1, 3]",
+          "MAIN_SUBMENU": "Main and Sub Menu Definitions",
+          "JSON_PLACEHOLDER": "Enter a json value"
+        },
+        "COLLECTION_CENTRE":{
+          "TITLE": "Collection Centre",
+          "SUBMIT": "Submit",
+          "CANCEL": "Cancel",
+          "NAME": "Name",
+          "TWH_PLACEHOLDER": "TWH",
+          "MISSING_INPUT": "missing input or invalid",
+          "CONTACT": "Contact",
+          "CONTACT_PLACEHOLDER": "Select a contact"
         }
       },
       "FORM": {

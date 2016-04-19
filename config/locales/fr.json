@@ -13,21 +13,6 @@
       "TAGLINE": "Une plateforme ouverte pour collecte de données prospectives dans la recherche clinique et translationnelle",
       "SELECTED": "Sélectionné:",
       "MENU": {
-        "ALTUM_TOOLS": {
-          "APPROVERS": "Approvers",
-          "ADDRESS": "Address",
-          "PAYORS": "Payor",
-          "CLAIMS": "Claim",
-          "WORK_STATUS": "Work Status",
-          "PROGNOSIS": "Prognosis",
-          "ALTUM_SERVICES": "Altum Services",
-          "PROGRAM_SERVICES": "Program Services",
-          "SITES": "Sites",
-          "COMPANIES": "Companies",
-          "PROGRAMS": "Programs",
-          "SERVICE_CATEGORIES": "Service Categories",
-          "STATUS": "Statuses"
-        },
         "STUDIES": "Etudes",
         "MY_STUDIES": "Mes études",
         "MY_PROFILE": "Mon profil",
@@ -45,8 +30,16 @@
         "SUBJECTS": "Matieres",
         "USERS": "Utilisateurs",
         "FORMS": "Formulaires",
-        "SURVEYS": "Enquetes",
-        "SERVICES": "Services"
+        "SURVEYS": "Enquetes"
+      }
+    },
+    "ACCESSMANAGEMENT":{
+      "TABS":{
+        "BY_GROUP": "Par groupe",
+        "BY_MODEL": "Par modèle",
+        "BY_ROLE": "Par Rôle",
+        "BY_USER": "Par utilisateur"
+
       }
     },
     "STUDY": {
@@ -80,6 +73,18 @@
           "NEW_BTN": "Ajouter Utilisateur",
           "EDIT_BTN": "Sauvegarder les Changements",
           "ARCHIVE_BTN": "Archiver"
+        },
+        "PANEL":{
+          "TITLE": "Utilisateur Information",
+          "MY_STUDIES": "Mes études"
+        },
+        "MODAL":{
+          "ADD": "Ajouter Utilisateur a Etude",
+          "USER": "Utilisateur",
+          "COLLECTION_CENTER":"Collection Centre",
+          "ROLE": "Role",
+          "ADD_USER":"Ajouter Utilisateur",
+          "CANCEL": "Annuler"
         }
       },
       "FORM": {
@@ -117,18 +122,12 @@
       "SURVEYS_TAB_TITLE": "Enquêtes à Venir",
       "PROFILE_TITLE": "Profil de L'utilisateur",
       "STUDIES_TITLE": "Liste des études inscrits",
-      "SCHEDULE_TITLE": "Liste des enquêtes à venir"
-    },
-    "REFERRAL": {
-      "SERVICES": {
-        "SERVICE_APPROVAL": {
-          "LABELS": {
-            "EXTERNAL_ID_PLACEHOLDER": "(Leave blank if not applicable)",
-            "APPROVAL_CONFIRMATION": "Approval Confirmation",
-            "EXTERNAL_APPROVAL_ID": "Please enter the external approval ID for this approval:"
-          }
-        }
-      }
+      "SAVE_BUTTON": "Enregistrer",
+      "SCHEDULE_TITLE": "Liste des enquêtes à venir",
+      "STUDY_USER": "Etude Utilisateur",
+      "STUDY_FORM": "Etude Form",
+      "STUDY_SURVEY": "Etude Enquêtes",
+      "STUDY_SUBJECT": "Etude Matieres"
     }
   },
   "COMMON": {
@@ -154,6 +153,17 @@
             "ENDS_WITH": "Se Termine Par"
           }
         },
+        "SEARCH":{
+          "STUDY": "Recherché par Etude",
+          "USER": "Recherché par Utilisateur",
+          "COLLECTIONCENTRES": "Recherché par Centres Collections",
+          "GROUP": "Recherché par Groupes"
+        },
+        "SWITCH":{
+          "STUDY": "Basculer vers Etude",
+          "USER": "Basculer vers Utilisateur",
+          "COLLECTIONCENTRES": "Basculer vers Collection Centres"
+        },
         "PLACEHOLDER": "Valeur de Recherche",
         "ADD_BTN": "Ajouter",
         "RESET_BTN": "Réinitialiser",
@@ -169,6 +179,82 @@
     },
     "MODELS": {
       "STUDY": {
+        "COLLECTIONCENTRES":{
+          "IDENTITY": "Etude Centres Collections"
+        },
+        "SUBJECTS":{
+          "IDENTITY": "Etude Matieres",
+          "ADD": "Ajouter Assujettir Étude",
+          "ADD_BUTTON": "Ajouter Assujettir",
+          "CANCEL": "Annuler",
+          "PROVIDERS": {
+            "IDENTITY":"Les fournisseurs",
+            "STATUS":"Statut",
+            "STATUS_PLACEHOLDER": "Selecionne statut",
+            "DATE_EVENT": "Date un événement"
+          }
+        },
+        "USERS":{
+          "IDENTITY": "Etude Utilisateurs"
+        },
+        "FORMS":{
+          "IDENTITY": "Etude Formulaires",
+          "CONFIGURATION":{
+            "IDENTITY": "Configuration",
+            "LOAD_FORM": "Charge Forme:",
+            "FORM_NAME": "Forme Nom:",
+            "FORM_NAME_POPOVER": "Fournir nom for pour votre forme. Nom doit être dans Plus haut cas et ne peut pas contient tout les espaces.",
+            "FORM_NAME_PLACEHOLDER": "Fournir nom pour votre forme.",
+            "FORM_PLACEHOLDER": "Selecionne forme",
+            "QUESTION": "Question",
+            "QUESTION_POPOVER": "Specify the question for this input.",
+            "QUESTION_PLACEHOLDER": "",
+            "QUESTION_TYPE": "Question Type",
+            "QUESTION_TYPE_POPOVER": "Select the question type.",
+            "QUESTION_TYPE_PLACEHOLDER": "",
+            "FIELD_NAME": "Champ Nom",
+            "FIELD_NAME_POPOVER": "Specify the field name for this input. Field names cannot contain spaces and must be in uppercase.",
+            "FIELD_NAME_PLACEHOLDER": "Champ Nom",
+            "FIELD_NAME_REQUIRED": "Champ Nom est obligatoire",
+            "FIELD_NAME_INVALID_UPPERCASE": "Champ Nom doit être haut de casse, pas d'espace, alphanumérique",
+            "TOOL_TIP": "Pointe de l'outil",
+            "TOOL_TIP_POPVER": "Specify the tool tip for this input. Tool tips will appear when the user hovers over an input. As well, empty inputs willautomatically show the tool tip within the input.",
+            "TOOL_TIP_PLACEHOLDER": "Pointe de l'outil",
+            "DEFAULT_VALUE": "Default Value",
+            "DEFAULT_VALUE_POPOVER": "Specify the default value for this question",
+            "DEFAULT_VALUE_PLACEHOLDER": "Default value",
+            "WIDGET_SIZE": "Un widget taille",
+            "WIDGET_SIZE_POPOVER": "Specify the width of the input. Size is a measure of the number of characters the input can fit.",
+            "WIDGET_SIZE_PLACEHOLDER": "Champ Taille",
+            "MAXIMUM_INPUT": "Maximum input longueur",
+            "MAXIMUM_INPUT_POPOVER": "Specify the maximum number of characters that this input can take.",
+            "MAXIMUM_INPUT_PLACEHOLDER": "Maximum characters",
+            "FLAGS_NOTIFY": "S'il vous plaît en utilisant expressions mai ralentissez la performance de la page.",
+            "FLAGS_REQUIRED": "Obligatoire",
+            "FLAGS_REQUIRED_POPOVER": "Set the question as required.",
+            "FLAGS_HIDDEN": "Caché",
+            "FLAGS_HIDDEN_POPOVER": "",
+            "FLAGS_READONLY": "Lecture-seulement",
+            "FLAGS_READONLY_POPOVER": "Set the question as read-only.",
+            "FLAGS_DISABLED": "Désactivé",
+            "FLAGS_DISABLED_POPOVER": "Set the question as disabled.",
+            "FLAGS": "Drapeaux",
+            "OPTIONS": "Options",
+            "CONFIG": "Config",
+            "WORKSPACE": "Espace de travail",
+            "WORKSPACE_HELPER": "Utilisation la panneau sur la à gauche a ajouter questions a Espace de travail.",
+            "SAVE": "Enregistrer Changements",
+            "ARCHIVE": "Archiver"
+          },
+          "ADVANCED":{
+            "IDENTITY": "Avancée"
+          }
+        },
+        "SURVEYS":{
+          "IDENTITY": "Etude Enquêtes",
+          "DEFINE": "Définir Enquête",
+          "SELECT": "Sélectionner Forme"
+        },
         "IDENTITY": "Etude",
         "NAME": "Nom de L'étude",
         "ATTRIBUTES": "Attributs",
@@ -185,6 +271,9 @@
         "LASTNAME": "Nom de famille",
         "GENDER": "Sexe",
         "DOB": "Date D'anniversaire"
+      },
+      "GROUP":{
+        "IDENTITY": "Groupe"
       },
       "COLLECTION_CENTRE": {
         "IDENTITY": "Centre Collection",
@@ -211,24 +300,99 @@
         "COLLECTION_CENTRE": "Centre Collection",
         "CENTRE_ACCESS": "Rôle"
       },
+      "LOGIN":{
+        "IDENTITY": "s'identifier"
+      },
+      "SUBJECTPORTAL":{
+        "SURVEYS":{
+          "IDENTITY": "Liste des enquêtes à venir"
+        },
+        "PROFILE":{
+          "IDENTITY": "Mon Profil"
+        }
+      },
       "SYSTEM_FORM": {
+        "USER": {
+          "TITLE": "Utilisateur Registeration",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "QUESTIONS": {
+            "TITLE": "Nom d'utilisateur",
+            "USERNAME_PLACEHOLDER": "johndoe",
+            "INVALID_USERNAME": "Nom d'utilisateur doit etre unique et au moins 5 caractere long",
+            "EMAIL": "Email",
+            "EMAIL_PLACEHOLDER": "johndoe@uhn.ca",
+            "INVALID_EMAIL": "Manquant ou invalide email",
+            "PASSWORD": "Mot de passe",
+            "PREFIX": "Préfixe",
+            "PREFIX_PLACEHOLDER": "Select a prefix",
+            "INVALID_INPUT": "Manquant ou invalide input",
+            "FIRST_NAME": "Prénom",
+            "FIRST_NAME_PLACEHOLDER": "John",
+            "LAST_NAME": "Nom de famille",
+            "LAST_NAME_PLACEHOLDER": "Doe",
+            "GENDER": "Sexe",
+            "GENDER_PLACEHOLDER": "Selectionner une genre",
+            "DATE_BIRTH": "Date D'anniversaire",
+            "DATE_PLACEHOLDER": "Entre une date valeur",
+            "GROUP": "Groupe",
+            "GROUP_PLACEHOLDER": "Selectionner une groupe",
+            "INVALID_PASSWORD": "Mot de passe au moins 8 characters, contenir 1 au moins lower case letter, 1 uppercase letter, et 1 non-alphanumeric caractere"
+          }
+        },
         "STUDY":{
-          "TITLE": "Create Etude",
+          "TITLE": "Créer Etude",
           "SUBMIT": "Sauvegarder",
           "CANCEL": "Annuler",
           "QUESTIONS": {
             "NAME": "nom",
             "TITLE": "Nom de L'étude",
             "LEAP": "LEAP",
-            "MISSINGINPUT": "missing input or invalid",
+            "MISSING_INPUT": "Manquant ou invalide input",
             "REB": "REB #",
             "ENTER_REB": "Entre une REB nombre",
             "ATTRIBUTES": "Attributs",
             "ENTER_JSON": "Entre une json valeur",
             "ADMINISTRATOR": "Administrateur",
             "PI": "PI",
-            "SELECT_USER": "Select user"
+            "SELECT_USER": "Selecionne Utilisateur"
           }
+        },
+        "SURVEY":{
+          "TITLE": "Enquête Suivi",
+          "STUDIES": "Etudes",
+          "PHYSICIANS": "Médecins",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "PHYSICIANS_PLACEHOLDER": "Selecionne Médecins",
+          "FROM": "de",
+          "FROM_PLACEHOLDER": "Entrer date valeur",
+          "TO":"à",
+          "TO_PLACEHOLDER":"Entrer date valeur",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler"
+        },
+        "GROUP":{
+          "TITLE": "Créer Groupe",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "NAME": "Nom",
+          "NAME_PLACEHOLDER": "Entrer groupe nom",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "LEVEL": "Niveau",
+          "LEVEL_PLACEHOLDER": "Entrer niveau entre 1 et 3",
+          "LEVEL_HELPER": "Niveau doit être entre [1, 3]",
+          "MAIN_SUBMENU": "Principal et Sub Menu Définitions",
+          "JSON_PLACEHOLDER": "Entrer une json valeur"
+        },
+        "COLLECTION_CENTRE":{
+          "TITLE": "Centres de Collecte",
+          "SUBMIT": "Sauvegarder",
+          "CANCEL": "Annuler",
+          "NAME": "Nom",
+          "TWH_PLACEHOLDER": "TWH",
+          "MISSING_INPUT": "Manquant ou invalide input",
+          "CONTACT": "Contact",
+          "CONTACT_PLACEHOLDER": "Selecionne contact"
         }
       },
       "FORM": {
