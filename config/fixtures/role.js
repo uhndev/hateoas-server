@@ -27,15 +27,19 @@
               action: 'read',
               criteria: [
                 {
-                  where: { group: { '!': 'subject' } },
-                  blacklist: ['group']
+                  where: { group: { '!': 'subject' } }
                 }
               ]
             },
             {
               model: 'user',
               action: 'update',
-              relation: 'owner'
+              relation: 'owner',
+              criteria: [
+                {
+                  blacklist: ['group']
+                }
+              ]
             }
           ];
 
