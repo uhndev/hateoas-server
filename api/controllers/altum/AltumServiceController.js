@@ -25,7 +25,7 @@
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
-          var query = altumprogramservices.find({ program: referral.program });
+          var query = altumprogramservices.find({ program: referral.program }).sort('altumServiceName ASC');
           return (!_.isEmpty(criteria) && !_.has(criteria, 'id')) ? query.where(criteria) : query;
         })
         .then(function (services) {
