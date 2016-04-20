@@ -1,7 +1,7 @@
 /**
- * Migrate environment settings
+ * Migrate -> UAT environment settings
  *
- * This file can include shared settings for a production environment,
+ * This file can include shared settings for a UAT environment,
  * such as API keys or remote database passwords.  If you're using
  * a version control solution for your Sails app, this file will
  * be committed to your repository unless you add it to your .gitignore
@@ -17,14 +17,15 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://ws69.uhnresearch.ca:1338',
+  appUrl: 'http://altumuat.uhn.ca:1338',
+  proxyHost: 'altumuat.uhn.ca',
   hookTimeout: 9999999,
-  proxyHost: 'ws69.uhnresearch.ca',
+  keepResponseErrors: true,
 
   models: {
     migrate: 'alter',
     autoCreatedBy: true,
-    connection: 'altum_migrate'
+    connection: 'altum_uat'
   },
 
   /***************************************************************************

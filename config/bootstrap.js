@@ -40,7 +40,7 @@ module.exports.bootstrap = function (cb) {
       .then(function () {
         return AltumService.findOrCreate({ name: 'Triage' }, {
           name: 'Triage',
-          available: true,
+          available: false,
           visitable: true
         }).then(function () {
           sails.log.info("Default Triage AltumService generated");

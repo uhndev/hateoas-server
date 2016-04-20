@@ -2,23 +2,23 @@
   {
     "form_type": "system",
     "form_name": "user",
-    "form_title": "User Registration",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
+    "form_title": "COMMON.MODELS.SYSTEM_FORM.USER.TITLE",
+    "form_submitText": "COMMON.MODELS.SYSTEM_FORM.USER.SUBMIT",
+    "form_cancelText": "COMMON.MODELS.SYSTEM_FORM.USER.CANCEL",
     "form_questions": [
       {
         "field_id": 1,
         "field_name": "username",
-        "field_title": "Username",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.TITLE",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "johndoe",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.USERNAME_PLACEHOLDER",
         "field_validation": {
           "rule": "min_length",
           "expression": 5,
           "unique": "user"
         },
-        "field_helpertext": "Username must be unique and at least 5 characters long",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_USERNAME",
         "field_hasOptions": false,
         "field_required": true,
         "field_unique": true
@@ -26,16 +26,16 @@
       {
         "field_id": 2,
         "field_name": "email",
-        "field_title": "Email",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.EMAIL",
         "field_type": "email",
         "field_value": "",
-        "field_placeholder": "johndoe@uhn.ca",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.EMAIL_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": "",
           "unique": "user"
         },
-        "field_helpertext": "Missing or invalid email",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_EMAIL",
         "field_hasOptions": false,
         "field_required": true,
         "field_unique": true
@@ -43,7 +43,7 @@
       {
         "field_id": 3,
         "field_name": "password",
-        "field_title": "Password",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.PASSWORD",
         "field_type": "password",
         "field_value": "",
         "field_placeholder": "",
@@ -51,22 +51,22 @@
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "Password must be at least 8 characters, contain 1 at least lower case letter, 1 uppercase letter, and 1 non-alphanumeric character",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_PASSWORD",
         "field_hasOptions": false,
         "field_required": false
       },
       {
         "field_id": 4,
         "field_name": "prefix",
-        "field_title": "Prefix",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.PREFIX",
         "field_type": "dropdown",
         "field_value": "",
-        "field_placeholder": "Select a prefix",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.PREFIX_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_hasOptions": true,
         "field_required": true,
         "field_options": [
@@ -95,43 +95,43 @@
       {
         "field_id": 5,
         "field_name": "firstname",
-        "field_title": "Firstname",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.FIRST_NAME",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "John",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.FIRST_NAME_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_required": true
       },
       {
         "field_id": 6,
         "field_name": "lastname",
-        "field_title": "Lastname",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.LAST_NAME",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "Doe",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.LAST_NAME_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_required": true
       },
       {
         "field_id": 7,
         "field_name": "gender",
-        "field_title": "Gender",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GENDER",
         "field_type": "radio",
         "field_value": "",
-        "field_placeholder": "Select a gender",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GENDER_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_hasOptions": true,
         "field_required": false,
         "field_options": [
@@ -150,30 +150,30 @@
       {
         "field_id": 8,
         "field_name": "dob",
-        "field_title": "Date of Birth",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.DATE_BIRTH",
         "field_type": "date",
         "field_value": "",
-        "field_placeholder": "Enter a date value",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.DATE_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_hasOptions": false,
         "field_required": false
       },
       {
         "field_id": 9,
         "field_name": "group",
-        "field_title": "Group",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GROUP",
         "field_type": "dropdown",
         "field_value": "",
-        "field_placeholder": "Select a group",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GROUP_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
         "field_hasOptions": true,
         "field_required": true,
         "field_options": [
@@ -280,36 +280,36 @@
   {
     "form_type": "system",
     "form_name": "collection_centre",
-    "form_title": "Collection Centre",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
+    "form_title": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.TITLE",
+    "form_submitText": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.SUBMIT",
+    "form_cancelText": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.CANCEL",
     "form_questions": [
       {
         "field_id": 1,
         "field_name": "name",
-        "field_title": "Name",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.NAME",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "TWH",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.NAME.TWH_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.MISSING_INPUT",
         "field_required": true
       },
       {
         "field_id": 2,
         "field_name": "contact",
-        "field_title": "Contact",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.CONTACT",
         "field_type": "singleselect",
         "field_value": "",
-        "field_placeholder": "Select a contact",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.CONTACT_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.COLLECTION_CENTRE.MISSING_INPUT",
         "field_hasItem": true,
         "field_required": true,
         "field_userURL": "user",
@@ -320,30 +320,30 @@
   {
     "form_type": "system",
     "form_name": "group",
-    "form_title": "Create Group",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
+    "form_title": "COMMON.MODELS.SYSTEM_FORM.GROUP.TITLE",
+    "form_submitText": "COMMON.MODELS.SYSTEM_FORM.GROUP.SUBMIT",
+    "form_cancelText": "COMMON.MODELS.SYSTEM_FORM.GROUP.CANCEL",
     "form_questions": [
       {
         "field_id": 1,
         "field_name": "name",
-        "field_title": "Name",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.GROUP.NAME",
         "field_type": "textfield",
         "field_value": "",
-        "field_placeholder": "Enter a group name",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.GROUP.NAME_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.GROUP.MISSING_INPUT",
         "field_required": true
       },
       {
         "field_id": 2,
         "field_name": "level",
-        "field_title": "Level",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.GROUP.LEVEL",
         "field_type": "number",
-        "field_placeholder": "Enter a level between 1 and 3",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.GROUP.LEVEL_PLACEHOLDER",
         "field_validation": {
           "rule": "between",
           "expression": {
@@ -351,21 +351,21 @@
             "max": 3
           }
         },
-        "field_helpertext": "Level must be between [1, 3]",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.GROUP.LEVEL_HELPER",
         "field_required": true
       },
       {
         "field_id": 3,
         "field_name": "menu",
-        "field_title": "Main and Sub Menu Definitions",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.GROUP.MAIN_SUBMENU",
         "field_type": "json",
         "field_value": "",
-        "field_placeholder": "Enter a json value",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.GROUP.JSON_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.GROUP.MISSING_INPUT",
         "field_required": true
       }
     ]
@@ -373,14 +373,14 @@
   {
     "form_type": "system",
     "form_name": "survey_tracking",
-    "form_title": "Survey Tracking",
-    "form_submitText": "Submit",
-    "form_cancelText": "Cancel",
+    "form_title": "COMMON.MODELS.SYSTEM_FORM.SURVEY.TITLE",
+    "form_submitText": "COMMON.MODELS.SYSTEM_FORM.SURVEY.SUBMIT",
+    "form_cancelText": "COMMON.MODELS.SYSTEM_FORM.SURVEY.CANCEL",
     "form_questions": [
       {
         "field_id": 1,
         "field_name": "studies",
-        "field_title": "Studies",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.SURVEY.STUDIES",
         "field_type": "multiselect",
         "field_value": [],
         "field_placeholder": "Select studies",
@@ -388,7 +388,7 @@
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.SURVEY.MISSING_INPUT",
         "field_hasItems": true,
         "field_required": true,
         "field_userURL": "study",
@@ -397,15 +397,15 @@
       {
         "field_id": 2,
         "field_name": "physicians",
-        "field_title": "Physicians",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.SURVEY.PHYSICIANS",
         "field_type": "multiselect",
         "field_value": [],
-        "field_placeholder": "Select physicians",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.SURVEY.PHYSICIANS_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.SURVEY.MISSING_INPUT",
         "field_hasItems": true,
         "field_required": true,
         "field_userURL": "user",
@@ -414,29 +414,29 @@
       {
         "field_id": 3,
         "field_name": "from_date",
-        "field_title": "From",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.SURVEY.FROM",
         "field_type": "date",
         "field_value": "",
-        "field_placeholder": "Enter a date value",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.SURVEY.FROM_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.SURVEY.MISSING_INPUT",
         "field_required": true
       },
       {
         "field_id": 4,
         "field_name": "to_date",
-        "field_title": "To",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.SURVEY.TO",
         "field_type": "date",
         "field_value": "",
-        "field_placeholder": "Enter a date value",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.SURVEY.TO_PLACEHOLDER",
         "field_validation": {
           "rule": "none",
           "expression": ""
         },
-        "field_helpertext": "missing input or invalid",
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.SURVEY.MISSING_INPUT",
         "field_required": true
       }
     ]

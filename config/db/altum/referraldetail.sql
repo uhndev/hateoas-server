@@ -18,6 +18,8 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     site."displayName" AS "site_name",
     status.id AS status,
     status.name AS "statusName",
+    program.payor,
+    payor."displayName" AS "payor_displayName",
     referral."referralDate",
     referral."clinicDate",
     referral."accidentDate",
@@ -61,6 +63,7 @@ FROM altum.referral
   LEFT JOIN altum.staff ON referral.staff = staff.id
   LEFT JOIN altum.stafftype ON staff."staffType" = stafftype.id
   LEFT JOIN altum.site ON referral.site = site.id
-  LEFT JOIN altum.program ON referral.program = program.id;
+  LEFT JOIN altum.program ON referral.program = program.id
+  LEFT JOIN altum.payor ON program.payor = payor.id;
 ALTER TABLE altum.referraldetail
 OWNER TO postgres;

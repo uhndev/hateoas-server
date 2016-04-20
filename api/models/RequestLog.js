@@ -15,7 +15,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    connection: 'dados_cache'
+    connection: 'altum_mongo_' + sails.config.environment
 
   });
 })();

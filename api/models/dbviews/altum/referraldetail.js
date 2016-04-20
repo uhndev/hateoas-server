@@ -93,6 +93,12 @@
       statusName: {
         type: 'string'
       },
+      payor: {
+        model: 'payor'
+      },
+      payor_displayName: {
+        type: 'string'
+      },
       referralDate: {
         type: 'date'
       },

@@ -114,9 +114,10 @@
                   ]
                 },
                 {
-                  model: 'formversionsessions',
+                  model: 'schedulesessions',
                   action: 'read',
                   criteria: [
+                    { where: { subjectID: values.id } }
                   ]
                 },
                 {
@@ -126,15 +127,17 @@
                   ]
                 },
                 {
-                  model: 'Session',
+                  model: 'AnswerSet',
                   action: 'read',
                   criteria: [
+                    { where: { subject: values.id } }  
                   ]
                 },
                 {
                   model: 'AnswerSet',
-                  action: 'read',
+                  action: 'update',
                   criteria: [
+                    { where: { subject: values.id } }                    
                   ]
                 }
               ],

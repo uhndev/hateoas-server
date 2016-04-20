@@ -1,7 +1,7 @@
 /**
- * Migrate -> Production environment settings
+ * UAT environment settings
  *
- * This file can include shared settings for a production environment,
+ * This file can include shared settings for a UAT environment,
  * such as API keys or remote database passwords.  If you're using
  * a version control solution for your Sails app, this file will
  * be committed to your repository unless you add it to your .gitignore
@@ -23,9 +23,9 @@ module.exports = {
   keepResponseErrors: true,
 
   models: {
-    migrate: 'alter',
+    migrate: 'safe',
     autoCreatedBy: true,
-    connection: 'altum_production'
+    connection: 'altum_uat'
   },
 
   /***************************************************************************
@@ -35,11 +35,11 @@ module.exports = {
   port: 1338,
 
   /***************************************************************************
-  * Set the log level in production environment to "silent"                 *
-  ***************************************************************************/
+   * Set the log level in production environment to "silent"                 *
+   ***************************************************************************/
 
   log: {
-    level: "verbose"
+    level: "info"
   }
 
 };

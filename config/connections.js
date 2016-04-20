@@ -22,65 +22,84 @@
 module.exports.connections = {
 
   /***************************************************************************
-  *                                                                          *
-  * Local disk storage for DEVELOPMENT ONLY                                  *
-  *                                                                          *
-  * Installed by default.                                                    *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Local disk storage for DEVELOPMENT ONLY                                  *
+   *                                                                          *
+   * Installed by default.                                                    *
+   *                                                                          *
+   ***************************************************************************/
   localDiskDb: {
     adapter: 'sails-disk'
   },
 
   /***************************************************************************
-  *                                                                          *
-  * MySQL is the world's most popular relational database.                   *
-  * http://en.wikipedia.org/wiki/MySQL                                       *
-  *                                                                          *
-  * Run: npm install sails-mysql                                             *
-  *                                                                          *
-  ***************************************************************************/
-  altum_mysql: {
-    adapter: 'sails-mysql',
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'password',
-    database: 'altum_dev'
-  },
+   *                                                                          *
+   * MongoDB is the leading NoSQL database.                                   *
+   * http://en.wikipedia.org/wiki/MongoDB                                     *
+   *                                                                          *
+   * Run: npm install sails-mongo                                             *
+   *                                                                          *
+   ***************************************************************************/
 
-  /***************************************************************************
-  *                                                                          *
-  * MongoDB is the leading NoSQL database.                                   *
-  * http://en.wikipedia.org/wiki/MongoDB                                     *
-  *                                                                          *
-  * Run: npm install sails-mongo                                             *
-  *                                                                          *
-  ***************************************************************************/
-
-  altum_audit: {
-      adapter   : 'sails-mongo',
-      host      : 'localhost',
-      port      : 27017,
-      database  : 'dados-cache'
-    },
-
-  dados_cache: {
+  altum_mongo_development: {
     adapter   : 'sails-mongo',
     host      : 'localhost',
     port      : 27017,
-    database  : 'dados-cache'
+    database  : 'altum-mongo-dev'
+  },
+
+  altum_mongo_test: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-test'
+  },
+
+  altum_mongo_migrate: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-uat'
+  },
+
+  altum_mongo_uat: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-uat'
+  },
+
+  altum_mongo_migrate_uat: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-uat'
+  },
+
+  altum_mongo_migrate_production: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-prod'
+  },
+
+  altum_mongo_production: {
+    adapter   : 'sails-mongo',
+    host      : 'localhost',
+    port      : 27017,
+    database  : 'altum-mongo-prod'
   },
 
   /***************************************************************************
-  *                                                                          *
-  * PostgreSQL is another officially supported relational database.          *
-  * http://en.wikipedia.org/wiki/PostgreSQL                                  *
-  *                                                                          *
-  * Run: npm install sails-postgresql                                        *
-  *                                                                          *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * PostgreSQL is another officially supported relational database.          *
+   * http://en.wikipedia.org/wiki/PostgreSQL                                  *
+   *                                                                          *
+   * Run: npm install sails-postgresql                                        *
+   *                                                                          *
+   *                                                                          *
+   ***************************************************************************/
+
   dados_development: {
     adapter: 'sails-postgresql',
     host: 'localhost',
@@ -88,24 +107,6 @@ module.exports.connections = {
     user: 'postgres',
     password: 'password',
     database: 'altum_dev'
-  },
-
-  dados_migrate: {
-    adapter: 'sails-postgresql',
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: 'password',
-    database: 'altum_prod'
-  },
-
-  dados_production: {
-    adapter: 'sails-postgresql',
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: 'password',
-    database: 'altum_prod'
   },
 
   dados_test: {
@@ -117,31 +118,58 @@ module.exports.connections = {
     database: 'altum_test'
   },
 
+  dados_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_migrate'
+  },
+
+  dados_migrate_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
+  dados_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
+  dados_migrate_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: '399Bathurst',
+    database: 'altum_prod'
+  },
+
+  dados_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: '399Bathurst',
+    database: 'altum_prod'
+  },
+
   altum_development: {
     adapter: 'sails-postgresql',
-      host: 'localhost',
-      port: 5432,
-      user: 'postgres',
-      password: 'password',
-      database: 'altum_dev'
-  },
-
-  altum_migrate: {
-    adapter: 'sails-postgresql',
     host: 'localhost',
     port: 5432,
     user: 'postgres',
     password: 'password',
-    database: 'altum_prod'
-  },
-
-  altum_production: {
-    adapter: 'sails-postgresql',
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: 'password',
-    database: 'altum_prod'
+    database: 'altum_dev'
   },
 
   altum_test: {
@@ -151,12 +179,57 @@ module.exports.connections = {
     user: 'postgres',
     password: 'password',
     database: 'altum_test'
+  },
+
+  altum_migrate: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_migrate'
+  },
+
+  altum_migrate_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
+  altum_uat: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'password',
+    database: 'altum_uat'
+  },
+
+  altum_migrate_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: '399Bathurst',
+    database: 'altum_prod'
+  },
+
+  altum_production: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: '399Bathurst',
+    database: 'altum_prod'
   }
 
   /***************************************************************************
-  *                                                                          *
-  * More adapters: https://github.com/balderdashy/sails                      *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * More adapters: https://github.com/balderdashy/sails                      *
+   *                                                                          *
+   ***************************************************************************/
 
 };

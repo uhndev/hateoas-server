@@ -17,8 +17,8 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://altumuat.uhn.ca:1338',
-  proxyHost: 'altumuat.uhn.ca',
+  appUrl: 'http://altum.uhn.ca:1338',
+  proxyHost: 'altum.uhn.ca',
   hookTimeout: 9999999,
   keepResponseErrors: true,
 

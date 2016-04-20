@@ -17,7 +17,7 @@
 
     displayFields: ['language', 'translationKey'],
 
-    connection: 'dados_cache',
+    connection: 'altum_mongo_' + sails.config.environment,
 
     attributes: {
 
