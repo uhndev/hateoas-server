@@ -6,7 +6,7 @@
     return {
       initialize: function (next) {
         sails.after('hook:permissions:loaded', function () {
-          if (sails.config.environment === 'production') {
+          if (sails.config.environment === 'production' || sails.config.environment === 'uat') {
             next();
           } else {
             Model.count()

@@ -21,7 +21,11 @@ module.exports.bootstrap = function (cb) {
 
   knex = require('knex')({
     client: 'pg',
-    connection: sails.config.connections[sails.config.models.connection]
+    connection: sails.config.connections[sails.config.models.connection],
+    pool: {
+      min: 0,
+      max: 1
+    }
   });
 
   // It's very important to trigger this callback method when you are finished

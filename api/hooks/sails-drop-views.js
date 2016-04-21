@@ -35,7 +35,7 @@
     return {
       initialize: function (next) {
         sails.after('hook:blueprints:loaded', function () {
-          if (env === 'production') {
+          if (env === 'production' || env === 'uat') {
             next();
           } else {
             Promise.all(
