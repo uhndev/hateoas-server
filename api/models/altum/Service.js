@@ -170,6 +170,66 @@
         via: 'services'
       },
 
+      /**
+       * numberDetail
+       * @description Optional number detail that is captured from service variation
+       * @type {Number}
+       */
+      numberDetail: {
+        type: 'integer',
+        defaultsTo: null
+      },
+
+      /**
+       * textDetail
+       * @description Optional text detail that is captured from service variation
+       * @type {String}
+       */
+      textDetail: {
+        type: 'string',
+        defaultsTo: null
+      },
+
+      /**
+       * dateDetail
+       * @description Optional date detail that is captured from service variation
+       * @type {Date}
+       */
+      dateDetail: {
+        type: 'date',
+        defaultsTo: null
+      },
+
+      /**
+       * physicianDetail
+       * @description Optional physician detail that is captured from service variation
+       * @type {Model}
+       */
+      physicianDetail: {
+        model: 'physician',
+        defaultsTo: null
+      },
+
+      /**
+       * staffDetail
+       * @description Optional staff detail that is captured from service variation
+       * @type {Model}
+       */
+      staffDetail: {
+        model: 'staff',
+        defaultsTo: null
+      },
+
+      /**
+       * measureDetail
+       * @description Optional measure detail that is captured from service variation
+       * @type {JSON}
+       */
+      measureDetail: {
+        type: 'json',
+        defaultsTo: null
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     },
