@@ -37,7 +37,8 @@
         type: 'string',
         enum: [
           'referral',
-          'approval'
+          'approval',
+          'completion'
         ]
       },
 
@@ -83,6 +84,22 @@
         {
           name: 'Approved',
           category: 'approval',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: true
+        },
+        { name: 'Incomplete', category: 'completion', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
+        { name: 'No Show', category: 'completion', iconClass: 'fa-question-circle', rowClass: 'info' },
+        {
+          name: 'Cancellation',
+          category: 'completion',
+          iconClass: 'fa-ban',
+          rowClass: 'danger',
+          requiresConfirmation: true
+        },
+        {
+          name: 'Completed',
+          category: 'completion',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
           requiresConfirmation: true

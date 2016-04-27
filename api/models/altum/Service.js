@@ -161,6 +161,25 @@
       },
 
       /**
+       * currentCompletion
+       * @description Pointer to the current status in our status history
+       * @type {Model}
+       */
+      currentCompletion: {
+        model: 'completion'
+      },
+
+      /**
+       * completion
+       * @description Collection of completion linked to a specific service (history of completion)
+       * @type {Collection}
+       */
+      completion: {
+        collection: 'completion',
+        via: 'service'
+      },
+
+      /**
        * programSupplyItems
        * @description Collection of supplies related to this service
        * @type {Collection}
@@ -277,13 +296,19 @@
      */
     afterCreate: function (service, cb) {
       var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.findOneByName(startingState).then(function (status) {
-        return Approval.create({
-          status: status.id,
-          service: service.id
-        });
+      Status.find({ name: [startingState, 'Incomplete'] }).then(function (statuses) {
+        return [
+          Approval.create({
+            status: _.find(statuses, {name: startingState}).id,
+            service: service.id
+          }),
+          Completion.create({
+            status: _.find(statuses, {name: 'Incomplete'}).id,
+            service: service.id
+          })
+        ];
       })
-      .then(function () {
+      .spread(function (createdApproval, createdCompletion) {
         cb();
       }).catch(cb);
     }
