@@ -171,6 +171,15 @@
       },
 
       /**
+       * telemedicine
+       * @description Boolean flag denoting whether this service will be performed via telemedicine
+       */
+      telemedicine: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
        * numberDetail
        * @description Optional number detail that is captured from service variation
        * @type {Number}

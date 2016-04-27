@@ -106,6 +106,15 @@
         defaultsTo: true
       },
 
+      /**
+       * hasTelemedicine
+       * @description Boolean flag denoting whether this service can be performed via telemedicine
+       */
+      hasTelemedicine: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     }

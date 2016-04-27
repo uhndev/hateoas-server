@@ -32,6 +32,9 @@
       serviceVariation: {
         model: 'servicevariation'
       },
+      hasTelemedicine: {
+        type: 'boolean'
+      },
       approvalNeeded: {
         type: 'boolean'
       },

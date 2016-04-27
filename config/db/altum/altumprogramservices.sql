@@ -7,6 +7,7 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
     altumservice.name AS "altumServiceName",
     altumservice."serviceCategory",
     altumservice."serviceVariation",
+    altumservice."hasTelemedicine",
     servicecategory.name AS "serviceCategoryName",
     programservice.id AS "programService",
     programservice.name AS "programServiceName",

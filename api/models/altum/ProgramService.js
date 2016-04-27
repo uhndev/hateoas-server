@@ -96,10 +96,9 @@
       },
 
       /**
-       * reprotRequired
+       * reportRequired
        * @description Boolean denoting whether this service needs a report or not
        */
-
       reportRequired: {
         type: 'boolean',
         defaultsTo: false
