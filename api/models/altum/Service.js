@@ -300,11 +300,15 @@
         return [
           Approval.create({
             status: _.find(statuses, {name: startingState}).id,
-            service: service.id
+            service: service.id,
+            createdBy: service.createdBy,
+            owner: service.owner
           }),
           Completion.create({
             status: _.find(statuses, {name: 'Incomplete'}).id,
-            service: service.id
+            service: service.id,
+            createdBy: service.createdBy,
+            owner: service.owner
           })
         ];
       })
