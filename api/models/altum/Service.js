@@ -373,7 +373,9 @@
       Status.findOneByName(startingState).then(function (status) {
         return Approval.create({
           status: status.id,
-          service: service.id
+          service: service.id,
+          createdBy: service.createdBy,
+          owner: service.owner
         });
       })
       .then(function () {
