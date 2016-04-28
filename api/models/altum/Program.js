@@ -52,6 +52,16 @@
         dominant: true
       },
 
+      /**
+       * canBeTriaged
+       * @description Boolean flag denoting whether or not a program should be able to be triaged to
+       * @type {Boolean}
+       */
+      canBeTriaged: {
+        type: 'boolean',
+        defaultsTo: true
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
