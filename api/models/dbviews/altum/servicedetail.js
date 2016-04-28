@@ -64,10 +64,19 @@
       currentStatus: {
         model: 'status'
       },
+      currentCompletion: {
+        model: 'completion'
+      },
+      currentCompletionStatus: {
+        model: 'status'
+      },
       approvalDate: {
         type: 'datetime'
       },
       statusName: {
+        type: 'string'
+      },
+      completionStatusName: {
         type: 'string'
       },
       iconClass: {

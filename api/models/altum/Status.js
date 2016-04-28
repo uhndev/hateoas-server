@@ -62,12 +62,12 @@
 
       /**
        * requiresConfirmation
-       * @description Simple boolean flag to denote if additional information is required
-       * @type {Boolean}
+       * @description JSON object containing attributes on Approval that need to be entered
+       * @type {JSON}
        */
       requiresConfirmation: {
-        type: 'boolean',
-        defaultsTo: false
+        type: 'json',
+        defaultsTo: null
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -86,23 +86,33 @@
           category: 'approval',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
-          requiresConfirmation: true
+          requiresConfirmation: ["externalID"]
         },
-        { name: 'Incomplete', category: 'completion', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
-        { name: 'No Show', category: 'completion', iconClass: 'fa-question-circle', rowClass: 'info' },
+        {
+          name: 'Incomplete',
+          category: 'completion',
+          iconClass: 'fa-exclamation-circle',
+          rowClass: 'warning'
+        },
+        {
+          name: 'No Show',
+          category: 'completion',
+          iconClass: 'fa-question-circle',
+          rowClass: 'info'
+        },
         {
           name: 'Cancellation',
           category: 'completion',
           iconClass: 'fa-ban',
           rowClass: 'danger',
-          requiresConfirmation: true
+          requiresConfirmation: ["cancellationDate"]
         },
         {
           name: 'Completed',
           category: 'completion',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
-          requiresConfirmation: true
+          requiresConfirmation: ["completionDate"]
         }
       ];
     },
