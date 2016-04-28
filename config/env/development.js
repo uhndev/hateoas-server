@@ -9,6 +9,7 @@
  * any private information to this file!
  *
  */
+var fs = require('fs');
 
 module.exports = {
 
@@ -16,7 +17,7 @@ module.exports = {
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-  appUrl: 'http://localhost:1337',
+  appUrl: 'https://localhost:1337',
   hookTimeout: 9999999,
   log: {
     level: 'verbose'
@@ -24,5 +25,9 @@ module.exports = {
   models: {
     migrate: 'safe',
     connection: 'dados_development'
+  },
+  ssl: {
+    key: fs.readFileSync('config/ssl/dev/server.key'),
+    cert: fs.readFileSync('config/ssl/dev/server.crt')
   }
 };
