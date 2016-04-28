@@ -199,6 +199,15 @@
       },
 
       /**
+       * numberDetailName
+       * @description Optional number detail name describing what numberDetail refers to
+       * @type {String}
+       */
+      numberDetailName: {
+        type: 'string'
+      },
+
+      /**
        * numberDetail
        * @description Optional number detail that is captured from service variation
        * @type {Number}
@@ -206,6 +215,15 @@
       numberDetail: {
         type: 'integer',
         defaultsTo: null
+      },
+
+      /**
+       * textDetailName
+       * @description Optional text detail name describing what textDetail refers to
+       * @type {String}
+       */
+      textDetailName: {
+        type: 'string'
       },
 
       /**
@@ -219,6 +237,15 @@
       },
 
       /**
+       * dateDetailName
+       * @description Optional date detail name describing what dateDetail refers to
+       * @type {String}
+       */
+      dateDetailName: {
+        type: 'string'
+      },
+
+      /**
        * dateDetail
        * @description Optional date detail that is captured from service variation
        * @type {Date}
@@ -226,6 +253,15 @@
       dateDetail: {
         type: 'date',
         defaultsTo: null
+      },
+
+      /**
+       * physicianDetailName
+       * @description Optional physician detail name describing what physicianDetail refers to
+       * @type {String}
+       */
+      physicianDetailName: {
+        type: 'string'
       },
 
       /**
@@ -239,6 +275,15 @@
       },
 
       /**
+       * staffDetailName
+       * @description Optional staff detail name describing what staffDetail refers to
+       * @type {String}
+       */
+      staffDetailName: {
+        type: 'string'
+      },
+
+      /**
        * staffDetail
        * @description Optional staff detail that is captured from service variation
        * @type {Model}
@@ -246,6 +291,54 @@
       staffDetail: {
         model: 'staff',
         defaultsTo: null
+      },
+
+      /**
+       * followupPhysicianDetail
+       * @description Optional physician detail that is captured from service variation
+       * @type {String}
+       */
+      followupPhysicianDetail: {
+        model: 'physician',
+        defaultsTo: null
+      },
+
+      /**
+       * followupTimeframeDetail
+       * @description Optional timeframe detail that is captured from service variation
+       * @type {Model}
+       */
+      followupTimeframeDetail: {
+        model: 'timeframe',
+        defaultsTo: null
+      },
+
+      /**
+       * timeframeDetailName
+       * @description Optional timeframe detail name describing what timeframeDetail refers to
+       * @type {String}
+       */
+      timeframeDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * timeframeDetail
+       * @description Optional timeframe detail that is captured from service variation
+       * @type {Model}
+       */
+      timeframeDetail: {
+        model: 'timeframe',
+        defaultsTo: null
+      },
+
+      /**
+       * measureDetailName
+       * @description Optional measure detail name describing what measureDetail refers to
+       * @type {String}
+       */
+      measureDetailName: {
+        type: 'string'
       },
 
       /**
