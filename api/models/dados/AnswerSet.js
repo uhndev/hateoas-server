@@ -84,6 +84,16 @@
       },
 
       /**
+       * signed
+       * @description Reference to the Subject model to limit subject's access when updating answers
+       * @type {Association} one-way association to Subject model
+       */
+      signed: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
+      /**
        * answers
        * @description Key-value mapping of unique field names in a particular version of a form to answers
        * @type {Object}
