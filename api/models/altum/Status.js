@@ -62,12 +62,24 @@
 
       /**
        * requiresConfirmation
-       * @description JSON object containing attributes on Approval that need to be entered
-       * @type {JSON}
+       * @description Boolean flag denoting whether or not this status change will required confirmation
+       * @type {Boolean}
        */
       requiresConfirmation: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
+       * rules
+       * @description JSON object containing various rules for which status changes are disabled/hidden
+       * @type {JSON}
+       */
+      rules: {
         type: 'json',
-        defaultsTo: null
+        defaultsTo: {
+          "requires": {}
+        }
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -75,44 +87,89 @@
 
     generate: function (state) {
       return [
-        { name: 'Open', category: 'referral' },
-        { name: 'Discharged', category: 'referral' },
-        { name: 'Follow-up', category: 'referral' },
-        { name: 'Pending', category: 'approval', iconClass: 'fa-exclamation-circle', rowClass: 'warning' },
-        { name: 'Misentered', category: 'approval', iconClass: 'fa-question-circle', rowClass: 'info' },
-        { name: 'Denied', category: 'approval', iconClass: 'fa-ban', rowClass: 'danger' },
+        {
+          name: 'Open',
+          category: 'referral'
+        },
+        {
+          name: 'Discharged',
+          category: 'referral'
+        },
+        {
+          name: 'Follow-up',
+          category: 'referral'
+        },
+        {
+          name: 'Pending',
+          category: 'approval',
+          iconClass: 'fa-exclamation-circle',
+          rowClass: 'warning'
+        },
+        {
+          name: 'Misentered',
+          category: 'approval',
+          iconClass: 'fa-question-circle',
+          rowClass: 'info'
+        },
+        {
+          name: 'Denied',
+          category: 'approval',
+          iconClass: 'fa-ban',
+          rowClass: 'danger'
+        },
         {
           name: 'Approved',
           category: 'approval',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
-          requiresConfirmation: ["externalID"]
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              approval: ["externalID"]
+            }
+          }
         },
         {
           name: 'Incomplete',
           category: 'completion',
           iconClass: 'fa-exclamation-circle',
-          rowClass: 'warning'
+          rowClass: 'warning',
+          rules: {
+            requires: {}
+          }
         },
         {
           name: 'No Show',
           category: 'completion',
           iconClass: 'fa-question-circle',
-          rowClass: 'info'
+          rowClass: 'info',
+          rules: {
+            requires: {}
+          }
         },
         {
           name: 'Cancellation',
           category: 'completion',
           iconClass: 'fa-ban',
           rowClass: 'danger',
-          requiresConfirmation: ["cancellationDate"]
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "completion": ["cancellationDate"]
+            }
+          }
         },
         {
           name: 'Completed',
           category: 'completion',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
-          requiresConfirmation: ["completionDate"]
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "completion": ["completionDate"]
+            }
+          }
         }
       ];
     },
@@ -121,7 +178,7 @@
       var statuses = this.generate();
       return Promise.all(
         _.map(statuses, function (status) {
-          return Status.findOrCreate({ name: status.name }, status);
+          return Status.findOrCreate({name: status.name}, status);
         })
       ).then(function (statuses) {
         sails.log.info(statuses.length + " status(s) generated");
