@@ -48,9 +48,8 @@
           if(formVersion === undefined) {
             res.notFound();
           } else {
-            var validSets = _.filter(this.schedule.answerSets, function(as){ return _.isNull(as.expiredAt); });
-            var answerSet = _.find(validSets, function (answers) {
-              return answers.formVersion == formVersionID;
+            var answerSet = _.filter(this.schedule.answerSets, function (answer) {
+              return _.isNull(answer.expiredAt) && answer.formVersion === formVersionID;
             });
             if (answerSet !== undefined) {
               formVersion.answerSetID = answerSet.id;

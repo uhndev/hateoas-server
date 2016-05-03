@@ -85,8 +85,8 @@
 
       /**
        * signed
-       * @description Reference to the Subject model to limit subject's access when updating answers
-       * @type {Association} one-way association to Subject model
+       * @description Flag that is set when form is signed and locked from editing
+       * @type {boolean}
        */
       signed: {
         type: 'boolean',
