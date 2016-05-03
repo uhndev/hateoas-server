@@ -48,7 +48,13 @@ module.exports.policies = {
   ModelController: {
     'create': false,
     'update': false,
-    'destroy': false
+    'destroy': false,
+    'checkExists': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
   },
 
   /***************************************************************************
