@@ -214,16 +214,6 @@
       },
 
       /**
-       * clients
-       * @description A referral's clients
-       * @type {Collection}
-       */
-      clients: {
-        collection: 'client',
-        via: 'referrals'
-      },
-
-      /**
        * payors
        * @description A referral's payors
        * @type {Collection}
