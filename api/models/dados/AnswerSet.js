@@ -84,6 +84,16 @@
       },
 
       /**
+       * signed
+       * @description Flag that is set when form is signed and locked from editing
+       * @type {boolean}
+       */
+      signed: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
+      /**
        * answers
        * @description Key-value mapping of unique field names in a particular version of a form to answers
        * @type {Object}
