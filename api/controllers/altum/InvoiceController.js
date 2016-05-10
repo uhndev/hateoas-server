@@ -15,20 +15,27 @@
     identity: 'Invoice',
 
     /**
-     * findRecommendedServices
+     * findBillableServices
      * @description Find method for returning services that were recommended for a referral
      * @param req
      * @param res
      * @returns {*}
      */
-    findRecommendedServices: function (req, res) {
+    findBillableServices: function (req, res) {
       var referralID = req.param('id');
       return referraldetail.findOne(referralID)
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
           return [
-            servicedetail.find({referral: referralID}).populate('visitService').sort('serviceDate ASC'),
+            altumprogramservices.find({ program: referral.program }).sort('altumServiceName ASC'),
+            servicedetail.find({
+              referral: referralID,
+              statusName: 'Approved',
+              completionStatusName: {
+                '!': 'Incomplete'
+              }
+            }).populate('visitService').sort('serviceDate ASC'),
             servicedetail.find({
               referral: referralID,
               statusName: 'Approved',
@@ -36,7 +43,8 @@
             })
           ];
         })
-        .spread(function (services, approvedServices) {
+        .spread(function (availableServices, services, approvedServices) {
+          this.referral.availableServices = availableServices;
           this.referral.recommendedServices = services;
           this.referral.approvedServices = approvedServices;
           return res.ok(this.referral, {
