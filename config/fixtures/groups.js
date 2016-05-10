@@ -56,7 +56,7 @@
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
             'user': ['name', 'user'],
             'client': ['name', 'client', 'referral'],
-            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service']
+            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service', 'invoice']
           }
         }
       },
@@ -101,7 +101,7 @@
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
             'user': ['name', 'user'],
             'client': ['name', 'client', 'referral'],
-            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service']
+            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service', 'invoice']
           }
         }
       },

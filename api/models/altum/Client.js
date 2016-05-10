@@ -48,9 +48,8 @@
        */
       referrals: {
         collection: 'referral',
-        via: 'clients'
+        via: 'client'
       },
-
 
       /**
        * notes
