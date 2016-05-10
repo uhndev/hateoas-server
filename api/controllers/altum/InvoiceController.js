@@ -28,7 +28,9 @@
           this.referral = referral;
           this.displayName = referral.client_displayName;
           return [
+            // fetching available services
             altumprogramservices.find({ program: referral.program }).sort('altumServiceName ASC'),
+            // fetching billable services
             servicedetail.find({
               referral: referralID,
               statusName: 'Approved',
@@ -36,6 +38,7 @@
                 '!': 'Incomplete'
               }
             }).populate('visitService').sort('serviceDate ASC'),
+            // fetching visitable services
             servicedetail.find({
               referral: referralID,
               statusName: 'Approved',
