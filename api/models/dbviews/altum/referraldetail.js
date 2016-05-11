@@ -49,6 +49,14 @@
         'href': [
           sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'services'
         ].join('/')
+      },
+      {
+        'rel': sails.models.invoice.identity,
+        'prompt': 'APP.HEADER.SUBMENU.BILLING',
+        'name': 'name',
+        'href': [
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'billing'
+        ].join('/')
       }
     ];
   };

@@ -15,10 +15,16 @@
         data,
         options,
         function (err) {
-          console.log(err || "Email is sent");
+          if (err) {
+            return res.badRequest(err);
+          }
+          else {
+            return res.send(200);
+          }
+          return res.send('Email Test');
         }
-      )
-      return res.send('Email Test');
+      );
+
     }
   };
 })();

@@ -41,12 +41,21 @@
         type: 'string'
       },
       workStatus: {
+        model: 'workstatus'
+      },
+      workStatusName: {
         type: 'string'
       },
       prognosis: {
+        model: 'prognosis'
+      },
+      prognosisName: {
         type: 'string'
       },
       prognosisTimeframe: {
+        model: 'timeframe'
+      },
+      prognosisTimeframeName: {
         type: 'string'
       },
       serviceDate: {
