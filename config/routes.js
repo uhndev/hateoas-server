@@ -95,5 +95,5 @@ module.exports.routes = {
   /***************************************************************************
    * Email Routes
    ***************************************************************************/
-  'post /email'                            : 'EmailController.sendEmail'
+  'post /api/email'                            : 'EmailController.sendEmail'
 };

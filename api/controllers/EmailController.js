@@ -4,23 +4,17 @@
  * @description :: Server-side logic for managing Emails
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-(function(){
+(function () {
   module.exports = {
-    sendEmail: function(req, res) {
-      // sails.hooks.email.send(template, data, options, cb)
+    sendEmail: function (req, res) {
+      var template = req.body.template;
+      var data = req.body.data;
+      var options = req.body.options;
       sails.hooks.email.send(
-        "testEmail",
-        {
-          recipientName: "Steve",
-          senderName: "yamasnax",
-          senderEmail: "hello@yamasnax.com"
-        },
-        {
-          from: "Admin <admin@yamasnax.com>",
-          to: "calvin.su@uhn.ca",
-          subject: "SailsJS email test"
-        },
-        function(err) {
+        template,
+        data,
+        options,
+        function (err) {
           console.log(err || "Email is sent");
         }
       )
