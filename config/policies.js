@@ -58,6 +58,15 @@ module.exports.policies = {
     ]
   },
 
+  EmailController: {
+    sendEmail: [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
+  },
+
   /***************************************************************************
    * Translation Policies                                                    *
    ***************************************************************************/
