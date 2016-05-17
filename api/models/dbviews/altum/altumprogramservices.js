@@ -26,6 +26,9 @@
       programServiceName: {
         type: 'string'
       },
+      programServiceCode: {
+        type: 'string'
+      },
       program: {
         model: 'program'
       },
