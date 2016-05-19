@@ -35,6 +35,7 @@
             servicedetail.find({
               referral: this.referral.id,
               statusName: 'Approved',
+              completionStatusName: 'Incomplete',
               visitable: true,
               altumServiceName: {
                 "!": "Triage"
