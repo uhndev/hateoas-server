@@ -22,6 +22,9 @@
       altumServiceName: {
         type: 'string'
       },
+      visitable: {
+        type: 'boolean'
+      },
       programService: {
         model: 'programservice'
       },
