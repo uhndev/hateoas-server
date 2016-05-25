@@ -199,6 +199,34 @@
       },
 
       /**
+       * billingGroup
+       * @description Reference to the BillingGroup for which this service belongs to
+       * @type {Model}
+       */
+      billingGroup: {
+        model: 'billinggroup'
+      },
+
+      /**
+       * billingGroupItemLabel
+       * @description Text representing this service's state in a BillingGroup
+       * @type {String}
+       */
+      billingGroupItemLabel: {
+        type: 'string'
+      },
+
+      /**
+       * itemCount
+       * @description Number denoting the optional sequence in the BillingGroup
+       * @type {Number}
+       */
+      itemCount: {
+        type: 'integer',
+        defaultsTo: 1
+      },
+
+      /**
        * numberDetailName
        * @description Optional number detail name describing what numberDetail refers to
        * @type {String}
