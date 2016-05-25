@@ -26,7 +26,8 @@
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""}
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""}
               ]
             },
             {
@@ -55,7 +56,7 @@
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
             'user': ['name', 'user'],
             'client': ['name', 'client', 'referral'],
-            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service']
+            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service', 'invoice']
           }
         }
       },
@@ -79,7 +80,8 @@
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""}
+              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""},
+              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""}
             ]
             },
             {
@@ -99,7 +101,7 @@
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
             'user': ['name', 'user'],
             'client': ['name', 'client', 'referral'],
-            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service']
+            'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service', 'invoice']
           }
         }
       },

@@ -89,12 +89,30 @@
       },
 
       /**
+       * serviceVariation
+       * @description Reference to an applicable variation for this AltumService
+       * @type {Model}
+       */
+      serviceVariation: {
+        model: 'serviceVariation'
+      },
+
+      /**
        * visitable
        * @description Boolean flag denoting whether
        */
       visitable: {
         type: 'boolean',
         defaultsTo: true
+      },
+
+      /**
+       * hasTelemedicine
+       * @description Boolean flag denoting whether this service can be performed via telemedicine
+       */
+      hasTelemedicine: {
+        type: 'boolean',
+        defaultsTo: false
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

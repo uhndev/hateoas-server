@@ -22,6 +22,9 @@
       altumServiceName: {
         type: 'string'
       },
+      visitable: {
+        type: 'boolean'
+      },
       programService: {
         model: 'programservice'
       },
@@ -41,12 +44,21 @@
         type: 'string'
       },
       workStatus: {
+        model: 'workstatus'
+      },
+      workStatusName: {
         type: 'string'
       },
       prognosis: {
+        model: 'prognosis'
+      },
+      prognosisName: {
         type: 'string'
       },
       prognosisTimeframe: {
+        model: 'timeframe'
+      },
+      prognosisTimeframeName: {
         type: 'string'
       },
       serviceDate: {
@@ -64,10 +76,19 @@
       currentStatus: {
         model: 'status'
       },
+      currentCompletion: {
+        model: 'completion'
+      },
+      currentCompletionStatus: {
+        model: 'status'
+      },
       approvalDate: {
         type: 'datetime'
       },
       statusName: {
+        type: 'string'
+      },
+      completionStatusName: {
         type: 'string'
       },
       iconClass: {

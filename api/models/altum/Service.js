@@ -161,6 +161,25 @@
       },
 
       /**
+       * currentCompletion
+       * @description Pointer to the current status in our status history
+       * @type {Model}
+       */
+      currentCompletion: {
+        model: 'completion'
+      },
+
+      /**
+       * completion
+       * @description Collection of completion linked to a specific service (history of completion)
+       * @type {Collection}
+       */
+      completion: {
+        collection: 'completion',
+        via: 'service'
+      },
+
+      /**
        * programSupplyItems
        * @description Collection of supplies related to this service
        * @type {Collection}
@@ -168,6 +187,168 @@
       programSupplyItems: {
         collection: 'programsupplyitem',
         via: 'services'
+      },
+
+      /**
+       * telemedicine
+       * @description Boolean flag denoting whether this service will be performed via telemedicine
+       */
+      telemedicine: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
+       * numberDetailName
+       * @description Optional number detail name describing what numberDetail refers to
+       * @type {String}
+       */
+      numberDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * numberDetail
+       * @description Optional number detail that is captured from service variation
+       * @type {Number}
+       */
+      numberDetail: {
+        type: 'integer',
+        defaultsTo: null
+      },
+
+      /**
+       * textDetailName
+       * @description Optional text detail name describing what textDetail refers to
+       * @type {String}
+       */
+      textDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * textDetail
+       * @description Optional text detail that is captured from service variation
+       * @type {String}
+       */
+      textDetail: {
+        type: 'string',
+        defaultsTo: null
+      },
+
+      /**
+       * dateDetailName
+       * @description Optional date detail name describing what dateDetail refers to
+       * @type {String}
+       */
+      dateDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * dateDetail
+       * @description Optional date detail that is captured from service variation
+       * @type {Date}
+       */
+      dateDetail: {
+        type: 'date',
+        defaultsTo: null
+      },
+
+      /**
+       * physicianDetailName
+       * @description Optional physician detail name describing what physicianDetail refers to
+       * @type {String}
+       */
+      physicianDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * physicianDetail
+       * @description Optional physician detail that is captured from service variation
+       * @type {Model}
+       */
+      physicianDetail: {
+        model: 'physician',
+        defaultsTo: null
+      },
+
+      /**
+       * staffDetailName
+       * @description Optional staff detail name describing what staffDetail refers to
+       * @type {String}
+       */
+      staffDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * staffDetail
+       * @description Optional staff detail that is captured from service variation
+       * @type {Model}
+       */
+      staffDetail: {
+        model: 'staff',
+        defaultsTo: null
+      },
+
+      /**
+       * followupPhysicianDetail
+       * @description Optional physician detail that is captured from service variation
+       * @type {String}
+       */
+      followupPhysicianDetail: {
+        model: 'physician',
+        defaultsTo: null
+      },
+
+      /**
+       * followupTimeframeDetail
+       * @description Optional timeframe detail that is captured from service variation
+       * @type {Model}
+       */
+      followupTimeframeDetail: {
+        model: 'timeframe',
+        defaultsTo: null
+      },
+
+      /**
+       * timeframeDetailName
+       * @description Optional timeframe detail name describing what timeframeDetail refers to
+       * @type {String}
+       */
+      timeframeDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * timeframeDetail
+       * @description Optional timeframe detail that is captured from service variation
+       * @type {Model}
+       */
+      timeframeDetail: {
+        model: 'timeframe',
+        defaultsTo: null
+      },
+
+      /**
+       * measureDetailName
+       * @description Optional measure detail name describing what measureDetail refers to
+       * @type {String}
+       */
+      measureDetailName: {
+        type: 'string'
+      },
+
+      /**
+       * measureDetail
+       * @description Optional measure detail that is captured from service variation
+       * @type {JSON}
+       */
+      measureDetail: {
+        type: 'json',
+        defaultsTo: null
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -208,15 +389,23 @@
      */
     afterCreate: function (service, cb) {
       var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.findOneByName(startingState).then(function (status) {
-        return Approval.create({
-          status: status.id,
-          service: service.id,
-          createdBy: service.createdBy,
-          owner: service.owner
-        });
+      Status.find({ name: [startingState, 'Incomplete'] }).then(function (statuses) {
+        return [
+          Approval.create({
+            status: _.find(statuses, {name: startingState}).id,
+            service: service.id,
+            createdBy: service.createdBy,
+            owner: service.owner
+          }),
+          Completion.create({
+            status: _.find(statuses, {name: 'Incomplete'}).id,
+            service: service.id,
+            createdBy: service.createdBy,
+            owner: service.owner
+          })
+        ];
       })
-      .then(function () {
+      .spread(function (createdApproval, createdCompletion) {
         cb();
       }).catch(cb);
     }

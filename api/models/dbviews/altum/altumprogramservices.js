@@ -26,8 +26,17 @@
       programServiceName: {
         type: 'string'
       },
+      programServiceCode: {
+        type: 'string'
+      },
       program: {
         model: 'program'
+      },
+      serviceVariation: {
+        model: 'servicevariation'
+      },
+      hasTelemedicine: {
+        type: 'boolean'
       },
       approvalNeeded: {
         type: 'boolean'

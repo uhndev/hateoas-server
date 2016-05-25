@@ -17,17 +17,23 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     program.name AS "programName",
     service.site,
     site.name AS "siteName",
-    workstatus.name AS "workStatus",
-    prognosis.name AS "prognosis",
-    timeframe.name AS "prognosisTimeframe",
+    service."workStatus" AS "workStatus",
+    workstatus.name AS "workStatusName",
+    service.prognosis AS "prognosis",
+    prognosis.name AS "prognosisName",
+    service."prognosisTimeframe" AS "prognosisTimeframe",
+    timeframe.name AS "prognosisTimeframeName",
     service."serviceDate",
     service."visitService",
     service."approvalNeeded",
     referral.client,
     approval.id AS "currentApproval",
     approval.status AS "currentStatus",
+    completion.id AS "currentCompletion",
+    completion.status AS "currentCompletionStatus",
     approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
+    completion_status.name AS "completionStatusName",
     status."iconClass",
     status."rowClass",
     client."displayName" AS "client_displayName",
@@ -46,6 +52,8 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.referral ON service.referral = referral.id
     LEFT JOIN altum.approval ON service."currentApproval" = approval.id
     LEFT JOIN altum.status ON approval.status = status.id
+    LEFT JOIN altum.completion ON service."currentCompletion" = completion.id
+    LEFT JOIN altum.status completion_status ON completion.status = completion_status.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id
