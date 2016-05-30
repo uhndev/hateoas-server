@@ -77,32 +77,37 @@
     afterCreate: function(billingGroup, cb) {
       if (billingGroup.templateService && billingGroup.totalItems) {
         return Service.findOne({id: billingGroup.templateService})
-          .populate('staff')
+          .populate(['staff', 'approvals', 'completion'])
           .then(function (templateService) {
             var services = [];
             var templatedService = {};
 
             // only create services after 1st service, so we don't get redundant services
-            // service with itemCount === 1 will come from templateService
-            for (var i=2; i <= billingGroup.totalItems; i++) {
+            for (var i=1; i <= billingGroup.totalItems; i++) {
               delete templatedService.id;
               templatedService = _.cloneDeep(templateService);
               templatedService.itemCount = i;
               templatedService.billingGroupItemLabel = templateService.displayName + " " + i;
               templatedService.billingGroup = billingGroup.id;
-              delete templatedService.id;
+              // service with itemCount === 1 will come from templateService
+              if (i > 1) {
+                delete templatedService.id;
+              }
               services.push(templatedService);
             }
 
             return [
-              templateService,
-              Service.create(services),
+              // update itemCount, labels for first service coming from templateService
+              Service.update({id: billingGroup.templateService}, _.first(services)),
+              // create repeated services if applicable
+              services.length ? Service.create(_.tail(services)) : [],
+              // return referral to add services to
               Referral.findOne(templateService.referral)
             ];
           })
           .spread(function (templateService, createdServices, referral) {
             // create list of created services with original template service prepended to array
-            var serviceIDs = [templateService.id].concat(_.map(createdServices, 'id'));
+            var serviceIDs = [_.first(templateService).id].concat(_.map(createdServices, 'id'));
             referral.services.add(serviceIDs);
 
             return [

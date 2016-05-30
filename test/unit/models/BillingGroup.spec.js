@@ -33,6 +33,7 @@ describe('The BillingGroup Model', function () {
       Service.findOne({numberDetailName: 'singlebillingservice'})
         .exec(function (err, service) {
           service.itemCount.should.equal(1);
+          service.billingGroupItemLabel.should.equal('altumservice 1');
           done(err);
         });
     });
@@ -65,7 +66,7 @@ describe('The BillingGroup Model', function () {
           referral: {
             claimNumber: 123
           },
-          altumService: 1,
+          altumService: 2,
           programService: 1,
           numberDetailName: 'multiplebillingservice'
         },
@@ -79,6 +80,9 @@ describe('The BillingGroup Model', function () {
     it('should have set correct itemCount in Service', function (done) {
       Service.find().exec(function (err, services) {
         _.xor(_.map(services, 'itemCount'), [1,2,3,4,5]).length.should.equal(0);
+        _.each(services, function (service) {
+          service.billingGroupItemLabel.should.equal('altumservice ' + service.itemCount);
+        });
         done(err);
       });
     });
