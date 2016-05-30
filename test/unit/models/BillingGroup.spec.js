@@ -15,6 +15,9 @@ describe('The BillingGroup Model', function () {
       BillingGroup.create({
         billingGroupName: 'Test Billing Group',
         templateService: {
+          referral: {
+            claimNumber: 123
+          },
           altumService: {name: 'altumservice'},
           programService: {name: 'programservice'},
           numberDetailName: 'singlebillingservice'
@@ -45,7 +48,9 @@ describe('The BillingGroup Model', function () {
     after(function (done) {
       BillingGroup.destroy({billingGroupName: 'Test Billing Group'}).exec(function (err) {
         Service.destroy({numberDetailName: 'singlebillingservice'}).exec(function (err) {
-          done(err);
+          Referral.destroy({claimNumber: 123}).exec(function (err) {
+            done(err);
+          });
         });
       });
     });
@@ -57,6 +62,9 @@ describe('The BillingGroup Model', function () {
       BillingGroup.create({
         billingGroupName: 'Test Billing Groups x5',
         templateService: {
+          referral: {
+            claimNumber: 123
+          },
           altumService: 1,
           programService: 1,
           numberDetailName: 'multiplebillingservice'
@@ -84,10 +92,19 @@ describe('The BillingGroup Model', function () {
       });
     });
 
+    it('should have added all created services to the underlying referral', function (done) {
+      Referral.findOne({claimNumber: 123}).populate('services').exec(function (err, referral) {
+        referral.services.length.should.equal(5);
+        done(err);
+      });
+    });
+
     after(function (done) {
       BillingGroup.destroy({billingGroupName: 'Test Billing Groups x5'}).exec(function (err) {
         Service.destroy({numberDetailName: 'multiplebillingservice'}).exec(function (err) {
-          done(err);
+          Referral.destroy({claimNumber: 123}).exec(function (err) {
+            done(err);
+          });
         });
       });
     });

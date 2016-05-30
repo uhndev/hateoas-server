@@ -76,29 +76,44 @@
      */
     afterCreate: function(billingGroup, cb) {
       if (billingGroup.templateService && billingGroup.totalItems) {
-        return BillingGroup.findOne({id: billingGroup.id})
-          .populate(['templateService', 'services'])
-          .then(function (billingGroup) {
+        return Service.findOne({id: billingGroup.templateService})
+          .populate('staff')
+          .then(function (templateService) {
             var services = [];
-            for (var i=1; i <= billingGroup.totalItems; i++) {
-              templatedService = _.clone(billingGroup.templateService);
-              templatedService.itemCount = i;
-              templatedService.billingGroupItemLabel = billingGroup.templateService.displayName + " " + i;
-              templatedService.billingGroup = billingGroup.id;
+            var templatedService = {};
 
-              // only for the 1st service, we add existing service instead of creating new so we don't get redundant services
-              if (i !== 1) {
-                delete templatedService.id;
-              }
+            // only create services after 1st service, so we don't get redundant services
+            // service with itemCount === 1 will come from templateService
+            for (var i=2; i <= billingGroup.totalItems; i++) {
+              delete templatedService.id;
+              templatedService = _.cloneDeep(templateService);
+              templatedService.itemCount = i;
+              templatedService.billingGroupItemLabel = templateService.displayName + " " + i;
+              templatedService.billingGroup = billingGroup.id;
+              delete templatedService.id;
               services.push(templatedService);
             }
 
-            return BillingGroup.update({id: billingGroup.id}, {
-              name: billingGroup.templateService.displayName,
-              services: services
-            });
+            return [
+              templateService,
+              Service.create(services),
+              Referral.findOne(templateService.referral)
+            ];
           })
-          .then(function () {
+          .spread(function (templateService, createdServices, referral) {
+            // create list of created services with original template service prepended to array
+            var serviceIDs = [templateService.id].concat(_.map(createdServices, 'id'));
+            referral.services.add(serviceIDs);
+
+            return [
+              BillingGroup.update({id: billingGroup.id}, {
+                name: templateService.displayName,
+                services: serviceIDs
+              }),
+              referral.save()
+            ];
+          })
+          .spread(function(updatedBillingGroup, updatedReferral) {
             return cb();
           })
           .catch(cb);

@@ -99,7 +99,7 @@
 
       /**
        * visitable
-       * @description Boolean flag denoting whether
+       * @description Boolean flag denoting whether this service can show up as a visit service
        */
       visitable: {
         type: 'boolean',
