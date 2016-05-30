@@ -12,6 +12,7 @@ describe('The BillingGroup Model', function () {
   describe('after the billing group with a single service is created', function () {
 
     before(function (done) {
+      this.timeout(10000);
       BillingGroup.create({
         billingGroupName: 'Test Billing Group',
         templateService: {
@@ -60,6 +61,7 @@ describe('The BillingGroup Model', function () {
 
   describe('after the billing group with multiple services is created', function () {
     before(function (done) {
+      this.timeout(10000);
       BillingGroup.create({
         billingGroupName: 'Test Billing Groups x5',
         templateService: {
@@ -99,6 +101,16 @@ describe('The BillingGroup Model', function () {
     it('should have added all created services to the underlying referral', function (done) {
       Referral.findOne({claimNumber: 123}).populate('services').exec(function (err, referral) {
         referral.services.length.should.equal(5);
+        done(err);
+      });
+    });
+
+    it('should have the same approval/completion histories for generated services', function (done) {
+      Service.find().populate(['approvals', 'completion']).exec(function (err, services) {
+        _.each(services, function (service) {
+          service.approvals.length.should.equal(1);
+          service.completion.length.should.equal(1);
+        });
         done(err);
       });
     });
