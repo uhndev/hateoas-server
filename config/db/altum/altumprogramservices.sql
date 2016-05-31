@@ -13,6 +13,7 @@ CREATE OR REPLACE VIEW altum.altumprogramservices AS
     programservice."displayName" AS "programServiceName",
     programservice.code AS "programServiceCode",
     programservice.program AS program,
+    programService."repeatable",
     programservice."approvalNeeded",
     programservice."approvalRequired",
     program.name AS "programName",

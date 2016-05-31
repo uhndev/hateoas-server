@@ -78,6 +78,15 @@
       },
 
       /**
+       * repeatable
+       * @description Boolean flag denoting whether this service can be repeated
+       */
+      repeatable: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
        * approvalNeeded
        * @description Boolean denoting whether this service needs approval or not by default
        */
