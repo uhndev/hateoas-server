@@ -31,9 +31,12 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     approval.status AS "currentStatus",
     completion.id AS "currentCompletion",
     completion.status AS "currentCompletionStatus",
+    billing_status.id AS "currentBillingStatus",
+    billingstatus.status AS "currentBillingStatusStatus",
     approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
     completion_status.name AS "completionStatusName",
+    billing_status.name AS "billingStatusName",
     status."iconClass",
     status."rowClass",
     client."displayName" AS "client_displayName",
@@ -54,6 +57,8 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.status ON approval.status = status.id
     LEFT JOIN altum.completion ON service."currentCompletion" = completion.id
     LEFT JOIN altum.status completion_status ON completion.status = completion_status.id
+    LEFT JOIN altum.billingstatus ON service."currentBillingStatus" = billingstatus.id
+    LEFT JOIN altum.status billing_status ON billingstatus.status = billing_status.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id

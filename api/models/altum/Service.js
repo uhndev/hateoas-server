@@ -180,6 +180,25 @@
       },
 
       /**
+       * currentBillingStatus
+       * @description Pointer to the current billing status in our status history
+       * @type {Model}
+       */
+      currentBillingStatus: {
+        model: 'billingstatus'
+      },
+
+      /**
+       * billingStatuses
+       * @description Collection of billingStatuses linked to a specific service (history of billingStatuses)
+       * @type {Collection}
+       */
+      billingStatuses: {
+        collection: 'billingstatus',
+        via: 'service'
+      },
+
+      /**
        * programSupplyItems
        * @description Collection of supplies related to this service
        * @type {Collection}

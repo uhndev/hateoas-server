@@ -38,7 +38,8 @@
         enum: [
           'referral',
           'approval',
-          'completion'
+          'completion',
+          'billing'
         ]
       },
 
@@ -168,6 +169,86 @@
           rules: {
             requires: {
               "completion": ["completionDate"]
+            }
+          }
+        },
+        {
+          name: 'Service Complete/Pre-Paid',
+          category: 'billing',
+          iconClass: 'fa-check-circle',
+          rowClass: 'info',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Suspended',
+          category: 'billing',
+          iconClass: 'fa-exclamation-circle',
+          rowClass: 'warning',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Ready To Send To Payor',
+          category: 'billing',
+          iconClass: 'fa-share',
+          rowClass: 'info',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["readySendDate"]
+            }
+          }
+        },
+        {
+          name: 'Issued To Payor',
+          category: 'billing',
+          iconClass: 'fa-reply',
+          rowClass: 'info',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["payorIssueDate"]
+            }
+          }
+        },
+        {
+          name: 'Paid',
+          category: 'billing',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["paidDate"]
+            }
+          }
+        },
+        {
+          name: 'Denied',
+          category: 'billing',
+          iconClass: 'fa-ban',
+          rowClass: 'danger',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["deniedDate"]
+            }
+          }
+        },
+        {
+          name: 'Rejected',
+          category: 'billing',
+          iconClass: 'fa-times',
+          rowClass: 'danger',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["rejectedDate"]
             }
           }
         }
