@@ -436,7 +436,7 @@
      */
     afterCreate: function (service, cb) {
       var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.find({ name: [startingState, 'Incomplete'] }).then(function (statuses) {
+      Status.find({ name: [startingState, 'Incomplete', 'Suspended'] }).then(function (statuses) {
         return [
           Approval.create({
             status: _.find(statuses, {name: startingState}).id,
@@ -446,6 +446,12 @@
           }),
           Completion.create({
             status: _.find(statuses, {name: 'Incomplete'}).id,
+            service: service.id,
+            createdBy: service.createdBy,
+            owner: service.owner
+          }),
+          BillingStatus.create({
+            status: _.find(statuses, {name: 'Suspended'}).id,
             service: service.id,
             createdBy: service.createdBy,
             owner: service.owner

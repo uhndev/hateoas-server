@@ -83,6 +83,15 @@
         }
       },
 
+      /**
+       * overrideForm
+       * @description Optional setting for overriding auto generated template systemform
+       * @type {Model}
+       */
+      overrideForm: {
+        model: 'systemform'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -197,11 +206,9 @@
           category: 'billing',
           iconClass: 'fa-share',
           rowClass: 'info',
-          requiresConfirmation: true,
+          requiresConfirmation: false,
           rules: {
-            requires: {
-              "billing": ["readySendDate"]
-            }
+            requires: {}
           }
         },
         {
@@ -209,11 +216,9 @@
           category: 'billing',
           iconClass: 'fa-reply',
           rowClass: 'info',
-          requiresConfirmation: true,
+          requiresConfirmation: false,
           rules: {
-            requires: {
-              "billing": ["payorIssueDate"]
-            }
+            requires: {}
           }
         },
         {
@@ -229,7 +234,7 @@
           }
         },
         {
-          name: 'Denied',
+          name: 'Payor Denied',
           category: 'billing',
           iconClass: 'fa-ban',
           rowClass: 'danger',

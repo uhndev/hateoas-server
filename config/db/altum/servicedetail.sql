@@ -31,7 +31,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     approval.status AS "currentStatus",
     completion.id AS "currentCompletion",
     completion.status AS "currentCompletionStatus",
-    billing_status.id AS "currentBillingStatus",
+    billingstatus.id AS "currentBillingStatus",
     billingstatus.status AS "currentBillingStatusStatus",
     approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
