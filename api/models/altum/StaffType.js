@@ -51,8 +51,8 @@
 
     generate: function (state) {
       return [
-        { name: 'Clinician' },
-        { name: 'Kinesiologist' }
+        { name: 'Clinician', isProvider: true },
+        { name: 'Kinesiologist', isProvider: true }
       ];
     },
 
