@@ -10,10 +10,16 @@
   _.merge(exports, {
 
     attributes: {
+      displayName: {
+        type: 'string'
+      },
       referral: {
         model: 'referral'
       },
-      displayName: {
+      client: {
+        model: 'client'
+      },
+      client_displayName: {
         type: 'string'
       },
       altumService: {
@@ -34,7 +40,19 @@
       program: {
         model: 'program'
       },
+      code: {
+        type: 'string'
+      },
+      price: {
+        type: 'integer'
+      },
       programName: {
+        type: 'string'
+      },
+      payor: {
+        model: 'payor'
+      },
+      payorName: {
         type: 'string'
       },
       site: {
@@ -95,12 +113,6 @@
         type: 'string'
       },
       rowClass: {
-        type: 'string'
-      },
-      client: {
-        model: 'client'
-      },
-      client_displayName: {
         type: 'string'
       },
       physician: {
