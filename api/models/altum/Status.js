@@ -38,7 +38,8 @@
         enum: [
           'referral',
           'approval',
-          'completion'
+          'completion',
+          'billing'
         ]
       },
 
@@ -80,6 +81,15 @@
         defaultsTo: {
           "requires": {}
         }
+      },
+
+      /**
+       * overrideForm
+       * @description Optional setting for overriding auto generated template systemform
+       * @type {Model}
+       */
+      overrideForm: {
+        model: 'systemform'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -168,6 +178,82 @@
           rules: {
             requires: {
               "completion": ["completionDate"]
+            }
+          }
+        },
+        {
+          name: 'Service Complete/Pre-Paid',
+          category: 'billing',
+          iconClass: 'fa-check-circle',
+          rowClass: 'info',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Suspended',
+          category: 'billing',
+          iconClass: 'fa-exclamation-circle',
+          rowClass: 'warning',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Ready To Send To Payor',
+          category: 'billing',
+          iconClass: 'fa-share',
+          rowClass: 'info',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Issued To Payor',
+          category: 'billing',
+          iconClass: 'fa-reply',
+          rowClass: 'info',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Paid',
+          category: 'billing',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["paidDate"]
+            }
+          }
+        },
+        {
+          name: 'Payor Denied',
+          category: 'billing',
+          iconClass: 'fa-ban',
+          rowClass: 'danger',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["deniedDate"]
+            }
+          }
+        },
+        {
+          name: 'Rejected',
+          category: 'billing',
+          iconClass: 'fa-times',
+          rowClass: 'danger',
+          requiresConfirmation: true,
+          rules: {
+            requires: {
+              "billing": ["rejectedDate"]
             }
           }
         }

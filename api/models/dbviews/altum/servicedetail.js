@@ -100,6 +100,12 @@
       currentCompletionStatus: {
         model: 'status'
       },
+      currentBillingStatus: {
+        model: 'billingstatus'
+      },
+      currentBillingStatusStatus: {
+        model: 'status'
+      },
       approvalDate: {
         type: 'datetime'
       },
@@ -107,6 +113,9 @@
         type: 'string'
       },
       completionStatusName: {
+        type: 'string'
+      },
+      billingStatusName: {
         type: 'string'
       },
       iconClass: {
