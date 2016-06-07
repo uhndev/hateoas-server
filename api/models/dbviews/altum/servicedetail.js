@@ -106,6 +106,24 @@
       currentBillingStatusStatus: {
         model: 'status'
       },
+      billingGroup: {
+        model: 'billinggroup'
+      },
+      billingGroupName: {
+        type: 'string'
+      },
+      billingGroupItemLabel: {
+        type: 'string'
+      },
+      itemCount: {
+        type: 'integer'
+      },
+      totalItems: {
+        type: 'integer'
+      },
+      billingCount: {
+        type: 'string'
+      },
       approvalDate: {
         type: 'datetime'
       },

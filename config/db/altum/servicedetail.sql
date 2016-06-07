@@ -38,6 +38,12 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     completion.status AS "currentCompletionStatus",
     billingstatus.id AS "currentBillingStatus",
     billingstatus.status AS "currentBillingStatusStatus",
+    service."billingGroup",
+    billinggroup."billingGroupName",
+    service."billingGroupItemLabel",
+    service."itemCount",
+    billinggroup."totalItems",
+    concat_ws('/'::text, service."itemCount", billinggroup."totalItems") AS "billingCount",
     approval."createdAt" AS "approvalDate",
     status.name AS "statusName",
     completion_status.name AS "completionStatusName",
@@ -64,6 +70,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.status completion_status ON completion.status = completion_status.id
     LEFT JOIN altum.billingstatus ON service."currentBillingStatus" = billingstatus.id
     LEFT JOIN altum.status billing_status ON billingstatus.status = billing_status.id
+    LEFT OUTER JOIN altum.billinggroup ON service."billingGroup" = billinggroup.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id
