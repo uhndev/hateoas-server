@@ -32,6 +32,7 @@
         .then(function (services) {
           this.referral.recommendedServices = services;
           return res.ok(this.referral, {
+            templateOverride: 'servicedetail',
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
           });
         })
