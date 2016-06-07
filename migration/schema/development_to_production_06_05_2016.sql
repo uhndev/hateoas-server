@@ -1,40 +1,48 @@
 -- Database Migration Script between dev branch @d99c533f517 and prod @f99da8e5749
 -- Created June 5th 2016
 
+BEGIN;
+
 -- Add serviceVariation, hasTelemedicine column to AltumService
-alter table altum.altumservice add column "serviceVariation" integer;
-alter table altum.altumservice add column "hasTelemedicine" boolean default false;
+alter table altum.altumservice
+add column "serviceVariation" integer,
+add column "hasTelemedicine" boolean default false;
 
 -- Add repeatable boolean flag to ProgramService
-alter table altum.programservice add column "repeatable" boolean default false;
+alter table altum.programservice
+add column "repeatable" boolean default false;
 
--- Add additional statuses to Service
-alter table altum.service add column "currentCompletion" integer;
-alter table altum.service add column "currentBillingStatus" integer;
-alter table altum.service add column "telemedicine" boolean default false;
-alter table altum.service add column "billingGroup" integer;
-alter table altum.service add column "billingGroupItemLabel" text;
-alter table altum.service add column "itemCount" integer;
-alter table altum.service add column "numberDetail" integer;
-alter table altum.service add column "numberDetailName" text;
-alter table altum.service add column "textDetail" text;
-alter table altum.service add column "textDetailName" text;
-alter table altum.service add column "dateDetail" date;
-alter table altum.service add column "dateDetailName" text;
-alter table altum.service add column "physicianDetail" integer;
-alter table altum.service add column "physicianDetailName" text;
-alter table altum.service add column "staffDetail" integer;
-alter table altum.service add column "staffDetailName" text;
-alter table altum.service add column "followupPhysicianDetail" integer;
-alter table altum.service add column "followupTimeframeDetail" integer;
-alter table altum.service add column "timeframeDetail" integer;
-alter table altum.service add column "timeframeDetailName" text;
-alter table altum.service add column "measureDetail" json;
-alter table altum.service add column "measureDetailName" text;
+-- Add additional statuses and variations to Service
+alter table altum.service
+add column "currentCompletion" integer,
+add column "currentBillingStatus" integer,
+add column "telemedicine" boolean default false,
+add column "billingGroup" integer,
+add column "billingGroupItemLabel" text,
+add column "itemCount" integer,
+add column "numberDetail" integer,
+add column "numberDetailName" text,
+add column "textDetail" text,
+add column "textDetailName" text,
+add column "dateDetail" date,
+add column "dateDetailName" text,
+add column "physicianDetail" integer,
+add column "physicianDetailName" text,
+add column "staffDetail" integer,
+add column "staffDetailName" text,
+add column "followupPhysicianDetail" integer,
+add column "followupTimeframeDetail" integer,
+add column "timeframeDetail" integer,
+add column "timeframeDetailName" text,
+add column "measureDetail" json,
+add column "measureDetailName" text;
 
 -- Add additional rules, overrideForm to Status
-alter table altum.status add column "rules" JSON;
-alter table altum.status add column "overrideForm" integer;
+alter table altum.status
+add column "rules" JSON,
+add column "overrideForm" integer;
+
+-- Add in new statuses for completion and billing status
 update altum.status set "rules" = '{"requires":{"approval":["externalID"]}}'::JSON where name = 'Approved';
 insert into altum.status ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "name", "category", "iconClass", "rowClass", "requiresConfirmation", "rules") values
 (1, 1, NOW(), NOW(), 'Incomplete', 'Incomplete', 'completion', 'fa-exclamation-circle', 'warning', FALSE, '{"requires":{}}'::JSON),
@@ -154,3 +162,5 @@ update altum.service set "currentBillingStatus" = curr_billingstatus.id from (se
 insert into altum.billinggroup ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "billingGroupName", "name", "templateService", "totalItems")
 select 1, 1, NOW(), NOW(), service."displayName", service."displayName", service."displayName" || ' Billing Group', service.id, 1 from altum.service;
 update altum.service set "billingGroup" = bg.id, "itemCount" = 1, "billingGroupItemLabel" = bg.name || ' 1' from (select * from altum.billinggroup) bg where service.id = bg."templateService";
+
+COMMIT;
