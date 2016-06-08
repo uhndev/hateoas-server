@@ -31,6 +31,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     timeframe.name AS "prognosisTimeframeName",
     service."serviceDate",
     service."visitService",
+    visitservice."displayName" AS "visitServiceName",
     service."approvalNeeded",
     approval.id AS "currentApproval",
     approval.status AS "currentStatus",
@@ -71,6 +72,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.billingstatus ON service."currentBillingStatus" = billingstatus.id
     LEFT JOIN altum.status billing_status ON billingstatus.status = billing_status.id
     LEFT OUTER JOIN altum.billinggroup ON service."billingGroup" = billinggroup.id
+    LEFT JOIN altum.service visitservice ON service."visitService" = visitservice.id
     LEFT JOIN altum.client ON referral.client = client.id
     LEFT JOIN altum.physician ON service.physician = physician.id
     LEFT JOIN altum.workstatus ON service."workStatus" = workstatus.id
