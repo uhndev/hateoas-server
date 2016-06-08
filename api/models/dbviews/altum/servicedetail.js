@@ -85,6 +85,9 @@
       visitService: {
         model: 'service'
       },
+      visitServiceName: {
+        type: 'string'
+      },
       approvalNeeded: {
         type: 'boolean'
       },
