@@ -38,6 +38,9 @@
       hasTelemedicine: {
         type: 'boolean'
       },
+      repeatable: {
+        type: 'boolean'
+      },
       approvalNeeded: {
         type: 'boolean'
       },

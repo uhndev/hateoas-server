@@ -10,10 +10,16 @@
   _.merge(exports, {
 
     attributes: {
+      displayName: {
+        type: 'string'
+      },
       referral: {
         model: 'referral'
       },
-      displayName: {
+      client: {
+        model: 'client'
+      },
+      client_displayName: {
         type: 'string'
       },
       altumService: {
@@ -34,7 +40,19 @@
       program: {
         model: 'program'
       },
+      code: {
+        type: 'string'
+      },
+      price: {
+        type: 'integer'
+      },
       programName: {
+        type: 'string'
+      },
+      payor: {
+        model: 'payor'
+      },
+      payorName: {
         type: 'string'
       },
       site: {
@@ -67,6 +85,9 @@
       visitService: {
         model: 'service'
       },
+      visitServiceName: {
+        type: 'string'
+      },
       approvalNeeded: {
         type: 'boolean'
       },
@@ -82,6 +103,30 @@
       currentCompletionStatus: {
         model: 'status'
       },
+      currentBillingStatus: {
+        model: 'billingstatus'
+      },
+      currentBillingStatusStatus: {
+        model: 'status'
+      },
+      billingGroup: {
+        model: 'billinggroup'
+      },
+      billingGroupName: {
+        type: 'string'
+      },
+      billingGroupItemLabel: {
+        type: 'string'
+      },
+      itemCount: {
+        type: 'integer'
+      },
+      totalItems: {
+        type: 'integer'
+      },
+      billingCount: {
+        type: 'string'
+      },
       approvalDate: {
         type: 'datetime'
       },
@@ -91,16 +136,13 @@
       completionStatusName: {
         type: 'string'
       },
+      billingStatusName: {
+        type: 'string'
+      },
       iconClass: {
         type: 'string'
       },
       rowClass: {
-        type: 'string'
-      },
-      client: {
-        model: 'client'
-      },
-      client_displayName: {
         type: 'string'
       },
       physician: {
