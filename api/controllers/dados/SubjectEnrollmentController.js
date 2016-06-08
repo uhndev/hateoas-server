@@ -135,10 +135,7 @@
               });
 
             case (validMapping && enrollmentOptions.subject !== undefined) :
-
-             return User.findOne(enrollmentOptions.subject.user).then(function(user){
                   return SubjectEnrollment.create(enrollmentOptions);
-              });
 
             default :
 
