@@ -187,6 +187,8 @@
           "ADD": "Ajouter Assujettir Étude",
           "ADD_BUTTON": "Ajouter Assujettir",
           "CANCEL": "Annuler",
+          "EXISTENT_SUBJECT": "Enroll Existent Assujettir",
+          "SUBJECT": "Assujettir",
           "PROVIDERS": {
             "IDENTITY":"Les fournisseurs",
             "STATUS":"Statut",
