@@ -17,7 +17,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: ['AHServices'],
+    defaultPopulate: ['AHServices', 'statusForms'],
 
     attributes: {
 
@@ -57,6 +57,16 @@
         collection: 'altumservice',
         via: 'programServices',
         dominant: true
+      },
+
+      /**
+       * statusForms
+       * @description A programService's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
+        via: 'programservice'
       },
 
       /**

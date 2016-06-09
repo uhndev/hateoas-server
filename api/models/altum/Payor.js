@@ -14,7 +14,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'company' ],
+    defaultPopulate: [ 'company', 'statusForms' ],
 
     attributes: {
 
@@ -57,6 +57,16 @@
        */
       programs: {
         collection: 'program',
+        via: 'payor'
+      },
+
+      /**
+       * statusForms
+       * @description A payor's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
         via: 'payor'
       },
 
