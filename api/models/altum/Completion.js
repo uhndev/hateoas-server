@@ -53,6 +53,15 @@
       },
 
       /**
+       * additionalData
+       * @description JSON bucket where data collected from payor/programservice forms will reside
+       * @type {JSON}
+       */
+      additionalData: {
+        type: 'json'
+      },
+
+      /**
        * service
        * @description Reference to the service which requires completion
        * @type {Model}

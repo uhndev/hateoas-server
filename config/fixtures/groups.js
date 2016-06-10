@@ -28,7 +28,8 @@
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""}
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""},
+                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STATUS_FORMS", "href": "/statusform", "icon": ""}
               ]
             },
             {
@@ -47,6 +48,7 @@
               prompt: 'APP.HEADER.MENU.TOOLS', icon: 'fa-cog', dropdown: [
                 {prompt: 'APP.HEADER.MENU.FORM_BUILDER', href: '/formbuilder', icon: 'fa-wrench'},
                 {prompt: 'APP.HEADER.MENU.WORKFLOW_EDITOR', href: '/workflow', icon: 'fa-code'},
+                {prompt: 'APP.HEADER.MENU.SYSTEM_FORM_BUILDER', href: '/systemform', icon: 'fa-folder-o'},
                 {prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
                 {prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
                 {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
@@ -83,7 +85,8 @@
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""}
+              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""},
+              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STATUS_FORMS", "href": "/statusform", "icon": ""}
             ]
             },
             {
