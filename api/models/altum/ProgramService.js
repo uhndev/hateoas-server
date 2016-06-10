@@ -60,6 +60,16 @@
       },
 
       /**
+       * statusForms
+       * @description A programService's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
+        via: 'programservice'
+      },
+
+      /**
        * payor
        * @description a programService's payor
        * @type {String}

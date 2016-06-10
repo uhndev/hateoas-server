@@ -3,6 +3,10 @@
 
 BEGIN;
 
+-- Add additionaldata to Approval
+alter table altum.approval
+add column "additionalData" json;
+
 -- Add serviceVariation, hasTelemedicine column to AltumService
 alter table altum.altumservice
 add column "serviceVariation" integer,
@@ -112,6 +116,7 @@ CREATE TABLE altum.billingstatus
   "paidDate" date,
   "deniedDate" date,
   "rejectedDate" date,
+  "additionalData" json,
   service integer,
   "createdBy" integer,
   owner integer,
@@ -135,6 +140,7 @@ CREATE TABLE altum.completion
   status integer,
   "cancellationDate" date,
   "completionDate" date,
+  "additionalData" json,
   service integer,
   "createdBy" integer,
   owner integer,
@@ -147,6 +153,30 @@ ALTER TABLE altum.completion OWNER TO postgres;
 CREATE INDEX "completion_createdBy" ON altum.completion USING btree ("createdBy");
 CREATE INDEX completion_id ON altum.completion USING btree (id);
 CREATE INDEX completion_owner ON altum.completion USING btree (owner);
+
+-- Create StatusForm Table
+CREATE TABLE altum.statusform
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  status integer,
+  payor integer,
+  programservice integer,
+  systemform integer,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT statusform_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE altum.statusform OWNER TO postgres;
+CREATE INDEX "statusform_createdBy" ON altum.statusform USING btree ("createdBy");
+CREATE INDEX statusform_id ON altum.statusform USING btree (id);
+CREATE INDEX statusform_owner ON altum.statusform USING btree (owner);
 
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")

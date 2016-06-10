@@ -60,6 +60,16 @@
         via: 'payor'
       },
 
+      /**
+       * statusForms
+       * @description A payor's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
+        via: 'payor'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 
