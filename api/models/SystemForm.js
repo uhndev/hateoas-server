@@ -24,7 +24,6 @@
       // system, user generated form
       form_type: {
         type: 'string',
-        enum: ['system', 'status'],
         required: true
       },
 

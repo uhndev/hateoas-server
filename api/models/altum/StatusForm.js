@@ -79,6 +79,7 @@
         }
       });
 
+      // builds displayName via: <STATUS> | (<PAYOR> || <PROGRAMSERVICE>) | <SYSTEMFORM>
       return Promise.all(promises).spread(function (status, payor, programService, systemform) {
         values.displayName = _.map(_.filter([
           status,

@@ -14,7 +14,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultPopulate: [ 'company', 'statusForms' ],
+    defaultPopulate: [ 'company' ],
 
     attributes: {
 
