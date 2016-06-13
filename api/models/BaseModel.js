@@ -4,6 +4,7 @@
  * @description the basemodel to be inherited by all other models
  */
 var _ = require('lodash');
+var Promise = require('bluebird');
 
 module.exports = {
 
@@ -56,6 +57,28 @@ module.exports = {
   beforeValidate: function (values, cb) {
     // for each field listed in default, check values for those fields and add to display
     var display = _.values(_.pick(values, this.displayFields)).join(' ');
+
+
+
+      //var fhir=FhirService.search({type: 'Patient', query: {'birthdate': '1974'}})
+      //  .then(function (res) {
+      //    var bundle = res.data;
+      //    var count = (bundle.entry && bundle.entry.length) || 0;
+      //    console.log("# Patients born in 1974: ", count);
+      //    return bundle.entry.length;
+      //  })
+      //  .catch(function (res) {
+      //    //Error responses
+      //    if (res.status) {
+      //      console.log('Error', res.status);
+      //    }
+      //
+      //    //Errors
+      //    if (res.message) {
+      //      console.log('Error', res.message);
+      //    }
+      //  });
+
 
     // if display fields are found in values set the displayName, otherwise set default
     values.displayName = display ? display : 'No Display Name';
