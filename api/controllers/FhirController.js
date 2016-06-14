@@ -36,13 +36,12 @@ module.exports = {
         })
         .catch(function (resp) {
           //Error responses
-          if (res.status) {
-            console.log('Error', resp.status);
+          if (resp.status) {
+            res.badRequest(res.status);
           }
-
           //Errors
           if (resp.message) {
-            console.log('Error', resp.message);
+            res.badRequest(resp.message);
           }
         })
     );
