@@ -69,6 +69,11 @@ module.exports.policies = {
    ***************************************************************************/
 
   FhirController: {
-    'init': true
+    'init': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
   }
 };
