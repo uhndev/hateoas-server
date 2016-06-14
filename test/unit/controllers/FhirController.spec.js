@@ -3,11 +3,20 @@ var _ = require('lodash');
 
 describe('The Fhir Controller', function () {
 
+  before(function (done) {
+    auth.authenticate('admin', function (resp) {
+      resp.statusCode.should.be.exactly(200);
+      globals.users.adminUserId = JSON.parse(resp.text).user.id;
+      done();
+    });
+  });
+
   describe('Fhir Patient Resource', function () {
     this.timeout(40000);
+
     it('Should verify if patient resource have all required properties', function (done) {
       request.get('/api/fhir?type=Patient&query={"name":"smith"}')
-        .expect('Content-Type', /json/)
+        .set('Authorization', 'Bearer ' + globals.token)
         .expect(200)
         .end(function (err, res) {
           var collection = res.body.data;

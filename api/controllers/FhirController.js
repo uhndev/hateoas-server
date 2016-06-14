@@ -37,7 +37,7 @@ module.exports = {
         .catch(function (resp) {
           //Error responses
           if (resp.status) {
-            res.badRequest(res.status);
+            res.badRequest(resp.status);
           }
           //Errors
           if (resp.message) {
