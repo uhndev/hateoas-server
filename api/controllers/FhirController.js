@@ -6,7 +6,6 @@
  */
 
 var Promise = require('bluebird');
-var querystring = require('querystring');
 var _ = require('lodash');
 
 module.exports = {
@@ -16,7 +15,7 @@ module.exports = {
    */
   init: function (req, res) {
 
-    var params = querystring.parse(require('url').parse(req.url).query);
+    var params = req.query;
 
     new Promise(function() {
       _.forOwn(params, function(value, key) {
