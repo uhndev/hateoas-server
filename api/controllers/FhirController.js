@@ -33,17 +33,7 @@ module.exports = {
          // object response to dados-client
           return res.json({data:bundle.entry});
 
-        })
-        .catch(function (resp) {
-          //Error responses
-          if (resp.status) {
-            res.badRequest(resp.status);
-          }
-          //Errors
-          if (resp.message) {
-            res.badRequest(resp.message);
-          }
-        })
+        }).catch(res.badRequest)
     );
   },
 
