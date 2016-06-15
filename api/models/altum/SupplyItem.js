@@ -67,9 +67,18 @@
         via: 'supplyItems'
       },
 
+      /**
+       * supplier
+       * @description A program supply item's supplier
+       * @type {string}
+       */
+      cost: {
+        type: 'integer',
+        generator: faker.commerce.company
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 
   });
 })();
-

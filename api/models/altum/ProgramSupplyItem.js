@@ -52,12 +52,63 @@
 
       /**
        * cost
-       * @description A program supply item's billing max cost for a service
-       * @type {Number}
+       * @description a service's cost
+       * @type {float}
        */
       cost: {
         type: 'float',
-        generator: faker.commerce.price
+        defaultsTo: null
+      },
+
+      /**
+       * shippingCost
+       * @description service's shippingCost
+       * @type {Model}
+       */
+      costShipping: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costSubtotal
+       * @description a service's sub-total
+       * @type {float}
+       */
+      costSubtotal: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+
+      /**
+       * costTax
+       * @description
+       * @type {float} a service's taxes
+       */
+      costTax: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costTotal
+       * @description
+       * @type {float} a service's total
+       */
+      costTotal : {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * payorPrice
+       * @description
+       * @type {float}
+       */
+      payorPrice: {
+        type: 'float',
+        defaultsTo: null
       },
 
       /**
