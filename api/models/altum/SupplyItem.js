@@ -102,9 +102,8 @@
        * @description Collection of program supply items this supply refers to
        * @type {Collection}
        */
-      programSupplyItems: {
-        collection: 'programsupplyitem',
-        via: 'supplyItems'
+      programSupplyItem: {
+        model: 'programSupplyItem'
       },
 
       /**

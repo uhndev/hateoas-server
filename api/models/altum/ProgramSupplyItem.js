@@ -62,7 +62,7 @@
       },
 
       /**
-       * supplyItems
+       * supplyItem
        * @description Collection of supply items for this program supply item
        * @type {model}
        */
