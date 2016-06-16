@@ -49,7 +49,7 @@
 
       /**
        * cost
-       * @description a service's cost
+       * @description a supplyItem's cost
        * @type {float}
        */
       cost: {
@@ -59,7 +59,7 @@
 
       /**
        * costShipping
-       * @description service's shippingCost
+       * @description supplyItem's shippingCost
        * @type {float}
        */
       costShipping: {
@@ -69,7 +69,7 @@
 
       /**
        * costSubtotal
-       * @description a service's sub-total
+       * @description a supplyItem's sub-total
        * @type {float}
        */
       costSubtotal: {
@@ -80,7 +80,7 @@
       /**
        * costTax
        * @description
-       * @type {float} a service's taxes
+       * @type {float} a supplyItem's taxes
        */
       costTax: {
         type: 'float',
@@ -90,7 +90,7 @@
       /**
        * costTotal
        * @description
-       * @type {float} a service's total
+       * @type {float} a supplyItem's total
        */
       costTotal : {
         type: 'float',
