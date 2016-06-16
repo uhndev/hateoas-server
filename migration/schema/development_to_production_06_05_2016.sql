@@ -20,7 +20,7 @@ add column "repeatable" boolean default false;
 alter table altum.programsupplyitem
 rename column cost to "payorPrice",
 add column "supplyItem" integer,
-add column "overridenSubtotal" real,
+add column "overriddenSubtotal" real,
 add column "overrideTax" real;
 
 -- Modify cost column to float on SupplyItem

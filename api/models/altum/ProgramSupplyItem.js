@@ -62,7 +62,7 @@
       },
 
       /**
-       * overridenSubtotal
+       * overriddenSubtotal
        * @description overridden subtotal if set on programSupplyItem
        * @type {float}
        */
