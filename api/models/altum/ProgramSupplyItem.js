@@ -66,7 +66,7 @@
        * @description overridden subtotal if set of programSupplyItem
        * @type {float}
        */
-      overriddenSsubtotal: {
+      overriddenSubtotal: {
         type: 'float',
         defaultsTo: null
       },
