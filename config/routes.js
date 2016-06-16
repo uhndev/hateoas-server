@@ -94,6 +94,7 @@ module.exports.routes = {
   'get /api/referral/:id/billing'         : 'InvoiceController.findBillableServices',
   
   'post /api/service/bulkStatusChange'    : 'ServiceController.bulkStatusChange',
+  'post /api/billinggroup/bulkRecommend'  : 'BillingGroupController.bulkRecommendServices',
 
   /***************************************************************************
    * Email Routes

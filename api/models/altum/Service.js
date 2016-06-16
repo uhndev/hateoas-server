@@ -9,6 +9,7 @@
 (function () {
   var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
+  var faker = require('faker');
   var HateoasService = require('../../services/HateoasService.js');
 
   _.merge(exports, _super);
@@ -25,7 +26,7 @@
        */
       referral: {
         model: 'referral',
-        generator: function(state) {
+        generator: function (state) {
           return BaseModel.defaultGenerator(state, 'referral', Referral);
         }
       },
@@ -380,6 +381,87 @@
       },
 
       /**
+       * programSupplyItem
+       * @description model association to a service's programSupplyItem detail if the service is a supply service
+       * @type {Model}
+       */
+      programSupplyItem: {
+        model: 'programSupplyItem',
+        defaultsTo: null
+      },
+
+      /**
+       * supplyItem
+       * @description model association to a service's supplyItem detail if the service is a supply service
+       * @type {Model}
+       */
+      supplyItem: {
+        model: 'supplyItem',
+        defaultsTo: null
+      },
+
+      /**
+       * cost
+       * @description a service's cost
+       * @type {float}
+       */
+      cost: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+      /**
+       * costShipping
+       * @description service's shippingCost
+       * @type {Model}
+       */
+      costShipping: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+      /**
+       * costSubtotal
+       * @description a service's sub-total
+       * @type {float}
+       */
+      costSubtotal: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+
+      /**
+       * costTax
+       * @description
+       * @type {float} a service's taxes
+       */
+      costTax: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+      /**
+       * costTotal
+       * @description
+       * @type {float} a service's total
+       */
+      costTotal: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+      /**
+       * payorPrice
+       * @description a service's payorprice
+       * @type {float}
+       */
+      payorPrice: {
+        type: 'float',
+        generator: faker.commerce.price
+      },
+
+      /**
        * measureDetailName
        * @description Optional measure detail name describing what measureDetail refers to
        * @type {String}
@@ -436,7 +518,7 @@
      */
     afterCreate: function (service, cb) {
       var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.find({ name: [startingState, 'Incomplete', 'Suspended'] }).then(function (statuses) {
+      Status.find({name: [startingState, 'Incomplete', 'Suspended']}).then(function (statuses) {
         return [
           Approval.create({
             status: _.find(statuses, {name: startingState}).id,
@@ -458,9 +540,9 @@
           })
         ];
       })
-      .spread(function (createdApproval, createdCompletion) {
-        cb();
-      }).catch(cb);
+        .spread(function (createdApproval, createdCompletion) {
+          cb();
+        }).catch(cb);
     }
 
   });
