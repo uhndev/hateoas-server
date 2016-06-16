@@ -27,10 +27,26 @@
         .then(function (referral) {
           this.referral = referral;
           this.displayName = referral.client_displayName;
-          return servicedetail.find({referral: referralID}).populate('visitService').sort('serviceDate ASC');
+          return [
+            // fetching available services
+            altumprogramservices.find({ program: referral.program }).sort('altumServiceName ASC'),
+            // fetching billable services
+            servicedetail.find({
+              referral: referralID,
+              statusName: 'Approved'
+            }).populate('visitService').sort('serviceDate ASC'),
+            // fetching visitable services
+            servicedetail.find({
+              referral: referralID,
+              statusName: 'Approved',
+              visitable: true
+            })
+          ];
         })
-        .then(function (services) {
+        .spread(function (availableServices, services, approvedServices) {
+          this.referral.availableServices = availableServices;
           this.referral.recommendedServices = services;
+          this.referral.approvedServices = approvedServices;
           return res.ok(this.referral, {
             templateOverride: 'servicedetail',
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
