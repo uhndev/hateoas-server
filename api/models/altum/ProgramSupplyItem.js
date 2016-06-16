@@ -50,14 +50,15 @@
         }
       },
 
+
       /**
-       * cost
-       * @description A program supply item's billing max cost for a service
-       * @type {Number}
+       * payorPrice
+       * @description
+       * @type {float}
        */
-      cost: {
+      payorPrice: {
         type: 'float',
-        generator: faker.commerce.price
+        defaultsTo: null
       },
 
       /**

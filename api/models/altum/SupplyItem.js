@@ -39,22 +39,62 @@
       },
 
       /**
-       * cost
-       * @description A program supply item's billing max cost for a service
-       * @type {Number}
-       */
-      cost: {
-        type: 'integer',
-        generator: faker.commerce.price
-      },
-
-      /**
        * supplyCategory
        * @description Denoted categorization for this supply item
        * @type {Model}
        */
       supplyCategory: {
         model: 'supplycategory'
+      },
+
+      /**
+       * cost
+       * @description a supplyItem's cost
+       * @type {float}
+       */
+      cost: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costShipping
+       * @description supplyItem's shippingCost
+       * @type {float}
+       */
+      costShipping: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costSubtotal
+       * @description a supplyItem's sub-total
+       * @type {float}
+       */
+      costSubtotal: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costTax
+       * @description
+       * @type {float} a supplyItem's taxes
+       */
+      costTax: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costTotal
+       * @description
+       * @type {float} a supplyItem's total
+       */
+      costTotal : {
+        type: 'float',
+        defaultsTo: null
       },
 
       /**
@@ -67,9 +107,18 @@
         via: 'supplyItems'
       },
 
+      /**
+       * supplier
+       * @description A program supply item's supplier
+       * @type {string}
+       */
+      supplier: {
+        type: 'string',
+        generator: faker.commerce.company
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 
   });
 })();
-
