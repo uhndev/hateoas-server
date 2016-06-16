@@ -53,10 +53,29 @@
 
       /**
        * payorPrice
-       * @description
+       * @description price of programSupplyItem
        * @type {float}
        */
       payorPrice: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * overrideSubtotal
+       * @description overridden subtotal if set of programSupplyItem
+       * @type {float}
+       */
+      overriddenSsubtotal: {
+        type: 'float',
+        defaultsTo: null
+      },
+      /**
+       * overriddenTax
+       * @description overridden tax if set of programSupplyItem
+       * @type {float}
+       */
+      overrideTax: {
         type: 'float',
         defaultsTo: null
       },
