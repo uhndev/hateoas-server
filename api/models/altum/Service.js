@@ -453,7 +453,7 @@
 
       /**
        * payorPrice
-       * @description
+       * @description a service's payorprice
        * @type {float}
        */
       payorPrice: {
