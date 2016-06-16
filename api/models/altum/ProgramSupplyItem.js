@@ -62,8 +62,8 @@
       },
 
       /**
-       * overrideSubtotal
-       * @description overridden subtotal if set of programSupplyItem
+       * overridenSubtotal
+       * @description overridden subtotal if set on programSupplyItem
        * @type {float}
        */
       overriddenSubtotal: {
@@ -72,7 +72,7 @@
       },
       /**
        * overriddenTax
-       * @description overridden tax if set of programSupplyItem
+       * @description overridden tax if set on programSupplyItem
        * @type {float}
        */
       overrideTax: {
