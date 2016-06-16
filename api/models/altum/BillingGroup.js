@@ -100,25 +100,19 @@
               // update itemCount, labels for first service coming from templateService
               Service.update({id: billingGroup.templateService}, _.first(services)),
               // create repeated services if applicable
-              services.length ? Service.create(_.tail(services)) : [],
-              // return referral to add services to
-              Referral.findOne(templateService.referral)
+              services.length ? Service.create(_.tail(services)) : []
             ];
           })
-          .spread(function (templateService, createdServices, referral) {
+          .spread(function (templateService, createdServices) {
             // create list of created services with original template service prepended to array
             var serviceIDs = [_.first(templateService).id].concat(_.map(createdServices, 'id'));
-            referral.services.add(serviceIDs);
 
-            return [
-              BillingGroup.update({id: billingGroup.id}, {
-                name: templateService.displayName,
-                services: serviceIDs
-              }),
-              referral.save()
-            ];
+            return BillingGroup.update({id: billingGroup.id}, {
+              name: templateService.displayName,
+              services: serviceIDs
+            });
           })
-          .spread(function(updatedBillingGroup, updatedReferral) {
+          .then(function(updatedBillingGroup) {
             return cb();
           })
           .catch(cb);
