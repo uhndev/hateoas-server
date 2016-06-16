@@ -19,7 +19,9 @@ add column "repeatable" boolean default false;
 -- Rename cost to payorPrice on ProgramSupplyItem
 alter table altum.programsupplyitem
 rename column cost to "payorPrice",
-add column "supplyItem" integer;
+add column "supplyItem" integer,
+add column "overrideSubtotal" real,
+add column "overrideTax" real;
 
 -- Modify cost column to float on SupplyItem
 alter table altum.supplyitem
