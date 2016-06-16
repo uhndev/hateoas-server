@@ -48,6 +48,56 @@
       },
 
       /**
+       * cost
+       * @description a service's cost
+       * @type {float}
+       */
+      cost: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costShipping
+       * @description service's shippingCost
+       * @type {float}
+       */
+      costShipping: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costSubtotal
+       * @description a service's sub-total
+       * @type {float}
+       */
+      costSubtotal: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costTax
+       * @description
+       * @type {float} a service's taxes
+       */
+      costTax: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * costTotal
+       * @description
+       * @type {float} a service's total
+       */
+      costTotal : {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
        * programSupplyItems
        * @description Collection of program supply items this supply refers to
        * @type {Collection}
