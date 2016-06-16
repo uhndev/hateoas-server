@@ -64,11 +64,10 @@
       /**
        * supplyItems
        * @description Collection of supply items for this program supply item
-       * @type {Collection}
+       * @type {model}
        */
-      supplyItems: {
-        collection: 'supplyitem',
-        via: 'programSupplyItems'
+      supplyItem: {
+        model: 'supplyItem'
       },
 
       /**
