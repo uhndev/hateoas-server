@@ -16,6 +16,19 @@ add column "hasTelemedicine" boolean default false;
 alter table altum.programservice
 add column "repeatable" boolean default false;
 
+-- Rename cost to payorPrice on ProgramSupplyItem
+alter table altum.programsupplyitem
+rename column cost to "payorPrice";
+
+-- Modify cost column to float on SupplyItem
+alter table altum.supplyItem
+alter column cost type real using cost::real,
+add column "costShipping" real,
+add column "costSubtotal" real,
+add column "costTax" real,
+add column "costTotal" real,
+add column "supplier" text;
+
 -- Add additional statuses and variations to Service
 alter table altum.service
 add column "currentCompletion" integer,
@@ -39,7 +52,15 @@ add column "followupTimeframeDetail" integer,
 add column "timeframeDetail" integer,
 add column "timeframeDetailName" text,
 add column "measureDetail" json,
-add column "measureDetailName" text;
+add column "measureDetailName" text,
+add column "programSupplyItem" integer,
+add column "supplyItem" integer,
+add column "cost" real,
+add column "costShipping" real,
+add column "costSubtotal" real,
+add column "costTax" real,
+add column "costTotal" real,
+add column "payorPrice" real;
 
 -- Add additional rules, overrideForm to Status
 alter table altum.status
