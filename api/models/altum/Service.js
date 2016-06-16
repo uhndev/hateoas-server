@@ -411,7 +411,7 @@
       },
 
       /**
-       * shippingCost
+       * costShipping
        * @description service's shippingCost
        * @type {Model}
        */

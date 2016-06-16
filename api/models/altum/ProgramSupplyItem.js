@@ -61,9 +61,9 @@
       },
 
       /**
-       * shippingCost
+       * costShipping
        * @description service's shippingCost
-       * @type {Model}
+       * @type {float}
        */
       costShipping: {
         type: 'float',

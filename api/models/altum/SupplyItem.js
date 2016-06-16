@@ -39,16 +39,6 @@
       },
 
       /**
-       * cost
-       * @description A program supply item's billing max cost for a service
-       * @type {Number}
-       */
-      cost: {
-        type: 'integer',
-        generator: faker.commerce.price
-      },
-
-      /**
        * supplyCategory
        * @description Denoted categorization for this supply item
        * @type {Model}
@@ -72,8 +62,8 @@
        * @description A program supply item's supplier
        * @type {string}
        */
-      cost: {
-        type: 'integer',
+      supplier: {
+        type: 'string',
         generator: faker.commerce.company
       },
 
