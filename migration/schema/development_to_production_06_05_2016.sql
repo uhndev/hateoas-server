@@ -18,15 +18,17 @@ add column "repeatable" boolean default false;
 
 -- Rename cost to payorPrice on ProgramSupplyItem
 alter table altum.programsupplyitem
-rename column cost to "payorPrice";
+rename column cost to "payorPrice",
+add column "supplyItem" integer;
 
 -- Modify cost column to float on SupplyItem
-alter table altum.supplyItem
+alter table altum.supplyitem
 alter column cost type real using cost::real,
 add column "costShipping" real,
 add column "costSubtotal" real,
 add column "costTax" real,
 add column "costTotal" real,
+add column "programSupplyItem" integer,
 add column "supplier" text;
 
 -- Add additional statuses and variations to Service
