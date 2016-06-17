@@ -44,7 +44,7 @@
         type: 'string'
       },
       price: {
-        type: 'integer'
+        type: 'float'
       },
       programName: {
         type: 'string'

@@ -45,7 +45,7 @@
        * @type {Integer}
        */
       price: {
-        type: 'integer'
+        type: 'float'
       },
 
       /**

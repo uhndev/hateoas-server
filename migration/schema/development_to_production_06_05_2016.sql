@@ -7,6 +7,10 @@ BEGIN;
 alter table altum.approval
 add column "additionalData" json;
 
+-- Change price to float in ProgramService
+alter table altum.programservice
+alter column price type real using price::real;
+
 -- Add serviceVariation, hasTelemedicine column to AltumService
 alter table altum.altumservice
 add column "serviceVariation" integer,
