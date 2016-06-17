@@ -23,11 +23,16 @@ module.exports = {
     level: 'verbose'
   },
   models: {
-    migrate: 'safe',
+    migrate: 'alter',
     connection: 'dados_development'
   },
   ssl: {
     key: fs.readFileSync('config/ssl/dev/server.key'),
     cert: fs.readFileSync('config/ssl/dev/server.crt')
+  },
+  fhir: {
+    //'http://try-fhirplace.hospital-systems.com'
+    //'http://fhirtest.uhn.ca/baseDstu2'
+    baseUrl: 'http://fhirtest.uhn.ca/baseDstu2'
   }
 };

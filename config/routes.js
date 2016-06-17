@@ -78,5 +78,9 @@ module.exports.routes = {
   /***************************************************************************
   * Study Routes                                                             *
   ***************************************************************************/
-  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm'
+  'get /api/subjectschedule/:id/form/:formID'     : 'SubjectSchedule.findScheduledForm',
+  /***************************************************************************
+   * Fhir Routes                                                          *
+   ***************************************************************************/
+  'get /api/fhir'                              : 'FhirController.init'
 };
