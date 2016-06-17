@@ -30,23 +30,16 @@
           return [
             // fetching available services
             altumprogramservices.find({ program: referral.program }).sort('altumServiceName ASC'),
-            // fetching billable services
+            // fetching recommended services
             servicedetail.find({
-              referral: referralID,
-              statusName: 'Approved'
-            }).populate('visitService').sort('serviceDate ASC'),
-            // fetching visitable services
-            servicedetail.find({
-              referral: referralID,
-              statusName: 'Approved',
-              visitable: true
-            })
+              referral: referralID
+            }).populate('visitService').sort('serviceDate ASC')
           ];
         })
-        .spread(function (availableServices, services, approvedServices) {
+        .spread(function (availableServices, services) {
           this.referral.availableServices = availableServices;
           this.referral.recommendedServices = services;
-          this.referral.approvedServices = approvedServices;
+          this.referral.approvedServices = _.filter(services, {visitable: true});
           return res.ok(this.referral, {
             templateOverride: 'servicedetail',
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
