@@ -150,6 +150,48 @@
       },
       physician_displayName: {
         type: 'string'
+      },      
+      numberDetailName: {
+        type: 'string'
+      },
+      numberDetail: {
+        type: 'integer'
+      },
+      textDetailName: {
+        type: 'string'
+      },
+      textDetail: {
+        type: 'string'
+      },
+      dateDetailName: {
+        type: 'string'
+      },
+      dateDetail: {
+        type: 'date'
+      },
+      physicianDetailName: {
+        type: 'string'
+      },
+      physicianDetail: {
+        model: 'physician'
+      },
+      staffDetailName: {
+        type: 'string'
+      },
+      staffDetail: {
+        model: 'staff'
+      },
+      timeframeDetailName: {
+        type: 'string'
+      },
+      timeframeDetail: {
+        model: 'timeframe'
+      },
+      measureDetailName: {
+        type: 'string'
+      },
+      measureDetail: {
+        type: 'json'
       },
       toJSON: ServiceModel.attributes.toJSON
     }
