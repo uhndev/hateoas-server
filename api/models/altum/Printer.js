@@ -1,5 +1,8 @@
 /**
- * printer model for Altum printers
+ * Printer
+ *
+ * @class Printer
+ * @description Model representation of a Printer
  */
 
 (function () {
