@@ -104,13 +104,7 @@
             ];
           })
           .spread(function (templateService, createdServices) {
-            // create list of created services with original template service prepended to array
-            var serviceIDs = [_.first(templateService).id].concat(_.map(createdServices, 'id'));
-
-            return BillingGroup.update({id: billingGroup.id}, {
-              name: templateService.displayName,
-              services: serviceIDs
-            });
+            return BillingGroup.update({id: billingGroup.id}, {name: templateService.displayName});
           })
           .then(function(updatedBillingGroup) {
             return cb();
