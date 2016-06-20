@@ -17,10 +17,18 @@
     identity: 'Referral',
 
     find: function (req, res, next) {
+      var searchQuery = actionUtil.parseCriteria(req);
+      if (_.has(searchQuery, 'or') && _.isArray(searchQuery.or)) {
+        searchQuery.or.push({
+          'displayName': {
+            'contains': _.first(_.values(searchQuery.or))
+          }
+        });
+      }
       // manually override model name for pagination in ok.js
       req.options.model = sails.models.referraldetail.identity;
       var query = referraldetail.find()
-        .where(actionUtil.parseCriteria(req))
+        .where(searchQuery)
         .limit(actionUtil.parseLimit(req))
         .skip(actionUtil.parseSkip(req))
         .sort(actionUtil.parseSort(req));

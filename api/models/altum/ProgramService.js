@@ -45,7 +45,7 @@
        * @type {Integer}
        */
       price: {
-        type: 'integer'
+        type: 'float'
       },
 
       /**
@@ -57,6 +57,16 @@
         collection: 'altumservice',
         via: 'programServices',
         dominant: true
+      },
+
+      /**
+       * statusForms
+       * @description A programService's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
+        via: 'programservice'
       },
 
       /**

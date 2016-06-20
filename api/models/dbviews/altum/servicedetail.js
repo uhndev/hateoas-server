@@ -44,7 +44,7 @@
         type: 'string'
       },
       price: {
-        type: 'integer'
+        type: 'float'
       },
       programName: {
         type: 'string'
@@ -84,6 +84,9 @@
       },
       visitService: {
         model: 'service'
+      },
+      visitServiceName: {
+        type: 'string'
       },
       approvalNeeded: {
         type: 'boolean'

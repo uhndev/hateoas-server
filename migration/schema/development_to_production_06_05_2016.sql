@@ -3,6 +3,14 @@
 
 BEGIN;
 
+-- Add additionaldata to Approval
+alter table altum.approval
+add column "additionalData" json;
+
+-- Change price to float in ProgramService
+alter table altum.programservice
+alter column price type real using price::real;
+
 -- Add serviceVariation, hasTelemedicine column to AltumService
 alter table altum.altumservice
 add column "serviceVariation" integer,
@@ -11,6 +19,23 @@ add column "hasTelemedicine" boolean default false;
 -- Add repeatable boolean flag to ProgramService
 alter table altum.programservice
 add column "repeatable" boolean default false;
+
+-- Rename cost to payorPrice on ProgramSupplyItem
+alter table altum.programsupplyitem
+rename column cost to "payorPrice",
+add column "supplyItem" integer,
+add column "overriddenSubtotal" real,
+add column "overrideTax" real;
+
+-- Modify cost column to float on SupplyItem
+alter table altum.supplyitem
+alter column cost type real using cost::real,
+add column "costShipping" real,
+add column "costSubtotal" real,
+add column "costTax" real,
+add column "costTotal" real,
+add column "programSupplyItem" integer,
+add column "supplier" text;
 
 -- Add additional statuses and variations to Service
 alter table altum.service
@@ -35,7 +60,15 @@ add column "followupTimeframeDetail" integer,
 add column "timeframeDetail" integer,
 add column "timeframeDetailName" text,
 add column "measureDetail" json,
-add column "measureDetailName" text;
+add column "measureDetailName" text,
+add column "programSupplyItem" integer,
+add column "supplyItem" integer,
+add column "cost" real,
+add column "costShipping" real,
+add column "costSubtotal" real,
+add column "costTax" real,
+add column "costTotal" real,
+add column "payorPrice" real;
 
 -- Add additional rules, overrideForm to Status
 alter table altum.status
@@ -112,6 +145,7 @@ CREATE TABLE altum.billingstatus
   "paidDate" date,
   "deniedDate" date,
   "rejectedDate" date,
+  "additionalData" json,
   service integer,
   "createdBy" integer,
   owner integer,
@@ -135,6 +169,7 @@ CREATE TABLE altum.completion
   status integer,
   "cancellationDate" date,
   "completionDate" date,
+  "additionalData" json,
   service integer,
   "createdBy" integer,
   owner integer,
@@ -147,6 +182,30 @@ ALTER TABLE altum.completion OWNER TO postgres;
 CREATE INDEX "completion_createdBy" ON altum.completion USING btree ("createdBy");
 CREATE INDEX completion_id ON altum.completion USING btree (id);
 CREATE INDEX completion_owner ON altum.completion USING btree (owner);
+
+-- Create StatusForm Table
+CREATE TABLE altum.statusform
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  status integer,
+  payor integer,
+  programservice integer,
+  systemform integer,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT statusform_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE altum.statusform OWNER TO postgres;
+CREATE INDEX "statusform_createdBy" ON altum.statusform USING btree ("createdBy");
+CREATE INDEX statusform_id ON altum.statusform USING btree (id);
+CREATE INDEX statusform_owner ON altum.statusform USING btree (owner);
 
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
