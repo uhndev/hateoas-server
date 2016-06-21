@@ -200,6 +200,25 @@
       },
 
       /**
+       * currentReportStatus
+       * @description Pointer to the current report status in our status history
+       * @type {Model}
+       */
+      currentReportStatus: {
+        model: 'reportstatus'
+      },
+
+      /**
+       * billingStatuses
+       * @description Collection of reportStatuses linked to a specific service (history of reportStatuses)
+       * @type {Collection}
+       */
+      reportStatuses: {
+        collection: 'reportstatus',
+        via: 'service'
+      },
+
+      /**
        * programSupplyItems
        * @description Collection of supplies related to this service
        * @type {Collection}
@@ -518,7 +537,7 @@
      */
     afterCreate: function (service, cb) {
       var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.find({name: [startingState, 'Incomplete', 'Suspended']}).then(function (statuses) {
+      Status.find({name: [startingState, 'Incomplete', 'Suspended', 'Report Not Required', 'Report Pending']}).then(function (statuses) {
         return [
           Approval.create({
             status: _.find(statuses, {name: startingState}).id,
@@ -537,10 +556,19 @@
             service: service.id,
             createdBy: service.createdBy,
             owner: service.owner
+          }),
+          ProgramService.findOne(service.programService).then(function (programService) {
+            var startingReportStatus = programService.reportRequired ? 'Report Pending' : 'Report Not Required';
+            return ReportStatus.create({
+              status: _.find(statuses, {name: startingReportStatus}).id,
+              service: service.id,
+              createdBy: service.createdBy,
+              owner: service.owner
+            });
           })
         ];
       })
-        .spread(function (createdApproval, createdCompletion) {
+        .spread(function (createdApproval, createdCompletion, createdBilling, createdReport) {
           cb();
         }).catch(cb);
     }

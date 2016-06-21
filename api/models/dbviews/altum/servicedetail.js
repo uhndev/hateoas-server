@@ -109,6 +109,12 @@
       currentBillingStatusStatus: {
         model: 'status'
       },
+      currentReportStatus: {
+        model: 'reportstatus'
+      },
+      currentReportStatusStatus: {
+        model: 'status'
+      },
       billingGroup: {
         model: 'billinggroup'
       },
@@ -137,6 +143,9 @@
         type: 'string'
       },
       billingStatusName: {
+        type: 'string'
+      },
+      reportStatusName: {
         type: 'string'
       },
       iconClass: {

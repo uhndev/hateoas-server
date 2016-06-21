@@ -77,7 +77,7 @@
     afterCreate: function(billingGroup, cb) {
       if (billingGroup.templateService && billingGroup.totalItems) {
         return Service.findOne({id: billingGroup.templateService})
-          .populate(['staff', 'approvals', 'completion', 'billingStatuses'])
+          .populate(['staff', 'approvals', 'completion', 'billingStatuses', 'reportStatuses'])
           .then(function (templateService) {
             var services = [];
             var templatedService = {};

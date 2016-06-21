@@ -1,8 +1,8 @@
 /**
- * Completion
+ * ReportStatus
  *
- * @class Completion
- * @description Model representation of a Completion
+ * @class ReportStatus
+ * @description Model representation of a ReportStatus
  */
 
 (function () {
@@ -18,7 +18,7 @@
 
       /**
        * approver
-       * @description A completion's approver
+       * @description A reportStatus's approver
        * @type {Model}
        */
       approver: {
@@ -27,37 +27,11 @@
 
       /**
        * status
-       * @description Status of completion for service
+       * @description Status of reportStatus for service
        * @type {Model}
        */
       status: {
         model: 'status'
-      },
-
-      /**
-       * cancellationDate
-       * @description Cancellation date if applicable for this completion
-       * @type {Date}
-       */
-      cancellationDate: {
-        type: 'date'
-      },
-
-      /**
-       * completionDate
-       * @description Completion date if applicable for this completion
-       * @type {Date}
-       */
-      completionDate: {
-        type: 'date'
-      },
-      
-      physician: {
-        model: 'physician'
-      },
-      
-      staff: {
-        model: 'staff'
       },
 
       /**
@@ -71,7 +45,7 @@
 
       /**
        * service
-       * @description Reference to the service which requires completion
+       * @description Reference to the service which requires reportStatus
        * @type {Model}
        */
       service: {
@@ -87,8 +61,8 @@
      *              from fields listed in the defaultsTo attribute of displayName
      *              this can be overridden in child models inheriting from the
      *              basemodel to pick specific fields
-     * @param  {Object}   values  given completion object for creation
-     * @param  {Function} cb      callback function on completion
+     * @param  {Object}   values  given reportStatus object for creation
+     * @param  {Function} cb      callback function on reportStatus
      */
     beforeValidate: function (values, cb) {
       if (values.status) {
@@ -107,24 +81,24 @@
 
     /**
      * afterCreate
-     * @description After creating a new service, determine the default starting completion state
-     * @param completion
+     * @description After creating a new service, determine the default starting reportStatus state
+     * @param reportStatus
      * @param cb
      */
-    afterCreate: function (completion, cb) {
-      Service.update({ id: completion.service }, { currentCompletion: completion.id }).exec(function (err, updatedService) {
+    afterCreate: function (reportStatus, cb) {
+      Service.update({ id: reportStatus.service }, { currentReportStatus: reportStatus.id }).exec(function (err, updatedService) {
         cb(err);
       });
     },
 
     /**
      * afterUpdate
-     * @description After adding a new completion to a service via blueprint, we update the currentCompletion
-     * @param completion
+     * @description After adding a new reportStatus to a service via blueprint, we update the currentReportStatus
+     * @param reportStatus
      * @param cb
      */
-    afterUpdate: function (completion, cb) {
-      Service.update({ id: completion.service }, { currentCompletion: completion.id }).exec(function (err, updatedService) {
+    afterUpdate: function (reportStatus, cb) {
+      Service.update({ id: reportStatus.service }, { currentReportStatus: reportStatus.id }).exec(function (err, updatedService) {
         cb(err);
       });
     }

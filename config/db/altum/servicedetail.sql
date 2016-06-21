@@ -39,6 +39,8 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     completion.status AS "currentCompletionStatus",
     billingstatus.id AS "currentBillingStatus",
     billingstatus.status AS "currentBillingStatusStatus",
+    reportstatus.id AS "currentReportStatus",
+    reportstatus.status AS "currentReportStatusStatus",
     service."billingGroup",
     billinggroup."billingGroupName",
     service."billingGroupItemLabel",
@@ -49,6 +51,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     status.name AS "statusName",
     completion_status.name AS "completionStatusName",
     billing_status.name AS "billingStatusName",
+    report_status.name AS "reportStatusName",
     status."iconClass",
     status."rowClass",
     service.physician,
@@ -85,6 +88,8 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.status completion_status ON completion.status = completion_status.id
     LEFT JOIN altum.billingstatus ON service."currentBillingStatus" = billingstatus.id
     LEFT JOIN altum.status billing_status ON billingstatus.status = billing_status.id
+    LEFT JOIN altum.reportstatus ON service."currentReportStatus" = reportstatus.id
+    LEFT JOIN altum.status report_status ON reportstatus.status = report_status.id
     LEFT OUTER JOIN altum.billinggroup ON service."billingGroup" = billinggroup.id
     LEFT JOIN altum.service visitservice ON service."visitService" = visitservice.id
     LEFT JOIN altum.client ON referral.client = client.id
