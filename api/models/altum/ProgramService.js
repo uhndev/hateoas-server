@@ -123,6 +123,15 @@
         defaultsTo: false
       },
 
+      /**
+       * payor
+       * @description a programService's related program supply item, if one exists
+       * @type {String}
+       */
+      programSupplyItem: {
+        model: 'programSupplyItem'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
