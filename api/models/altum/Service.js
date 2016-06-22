@@ -448,8 +448,7 @@
         type: 'float',
         generator: faker.commerce.price
       },
-
-
+      
       /**
        * costTax
        * @description

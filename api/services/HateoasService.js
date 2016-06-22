@@ -133,11 +133,7 @@
         if (!_.has(response.template, 'data')) {
           // if templateOverride was passed along with res.ok, use given template instead of req.options.model
           var startingModel = !_.has(options, 'templateOverride') ? modelName: options.templateOverride;
-          var dict = {};
-          dict[startingModel] = [];
           response.template = _.merge(response.template, makeTemplate(startingModel, []));
-          // response.template = _.merge(response.template, makeTemplate(startingModel, dict));
-          // console.log(dict);
           response.template.rel = startingModel;
         }
 
