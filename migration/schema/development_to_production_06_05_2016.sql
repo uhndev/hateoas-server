@@ -70,6 +70,21 @@ add column "costTax" real,
 add column "costTotal" real,
 add column "payorPrice" real;
 
+-- Add columns for supply relationships
+
+alter table altum.programservice
+add column "programSupplyItem" integer;
+CREATE INDEX "programSupplyItemIndex" ON altum.programservice USING btree ("programSupplyItem");
+
+alter table altum.altumservice
+add column "supplyItem";
+CREATE INDEX "supplyItemIndex" ON altum.altumservice USING btree ("supplyItem");
+
+alter table altum.programsupplyitem
+  add column "payorPrice" real,
+  add column "overriddenSubtotal" real,
+  add column "overrideTax" real;
+
 -- Add additional rules, overrideForm to Status
 alter table altum.status
 add column "rules" JSON,
