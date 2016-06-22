@@ -43,7 +43,7 @@
       code: {
         type: 'string'
       },
-      price: {
+      payorPrice: {
         type: 'float'
       },
       programName: {

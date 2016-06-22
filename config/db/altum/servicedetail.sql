@@ -17,7 +17,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     programservice.name AS "programServiceName",
     programservice.program,
     programservice.code AS "code",
-    programservice.price AS "price",
+    service."payorPrice",
     program.name AS "programName",
     program.payor AS "payor",
     payor.name AS "payorName",
