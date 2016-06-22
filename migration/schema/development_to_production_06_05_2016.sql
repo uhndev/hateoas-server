@@ -22,7 +22,8 @@ add column "repeatable" boolean default false;
 
 -- Rename cost to payorPrice on ProgramSupplyItem
 alter table altum.programsupplyitem
-rename column cost to "payorPrice",
+rename column cost to "payorPrice";
+alter table altum.programsupplyitem
 add column "supplyItem" integer,
 add column "overriddenSubtotal" real,
 add column "overrideTax" real;
@@ -67,8 +68,7 @@ add column "cost" real,
 add column "costShipping" real,
 add column "costSubtotal" real,
 add column "costTax" real,
-add column "costTotal" real,
-add column "payorPrice" real;
+add column "costTotal" real;
 
 -- Add columns for supply relationships
 
@@ -80,10 +80,6 @@ alter table altum.altumservice
 add column "supplyItem" integer;
 CREATE INDEX "supplyItemIndex" ON altum.altumservice USING btree ("supplyItem");
 
-alter table altum.programsupplyitem
-  add column "payorPrice" real,
-  add column "overriddenSubtotal" real,
-  add column "overrideTax" real;
 
 -- Add additional rules, overrideForm to Status
 alter table altum.status
