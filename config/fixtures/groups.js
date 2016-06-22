@@ -20,7 +20,6 @@
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-wrench", "dropdown": [
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": ""},
-                {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIMS", "href": "/claim", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PHYSICIANS", "href": "/physician", "icon": ""},
@@ -37,7 +36,6 @@
                 {"prompt": "APP.HEADER.MENU.SETTINGS.CITY", "href": "/city", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.SETTINGS.PROGNOSIS", "href": "/prognosis", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": ""},
-                {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_TYPES", "href": "/servicetype", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.SETTINGS.STAFF_TYPES", "href": "/stafftype", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.SETTINGS.STATUS", "href": "/status", "icon": ""},
                 {"prompt": "APP.HEADER.MENU.SETTINGS.TIMEFRAME", "href": "/timeframe", "icon": ""},
@@ -77,7 +75,6 @@
               "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-wrench", "dropdown": [
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.CLAIMS", "href": "/claim", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": ""},
               {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PHYSICIANS", "href": "/physician", "icon": ""},
@@ -94,7 +91,6 @@
               {"prompt": "APP.HEADER.MENU.SETTINGS.CITY", "href": "/city", "icon": ""},
               {"prompt": "APP.HEADER.MENU.SETTINGS.PROGNOSIS", "href": "/prognosis", "icon": ""},
               {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_TYPES", "href": "/servicetype", "icon": ""},
               {"prompt": "APP.HEADER.MENU.SETTINGS.STAFF_TYPES", "href": "/stafftype", "icon": ""},
               {"prompt": "APP.HEADER.MENU.SETTINGS.STATUS", "href": "/status", "icon": ""},
               {"prompt": "APP.HEADER.MENU.SETTINGS.TIMEFRAME", "href": "/timeframe", "icon": ""},

@@ -14,16 +14,16 @@
         type: 'string'
       },
       referral: {
-        model: 'referral'
+        type: 'integer'
       },
       client: {
-        model: 'client'
+        type: 'integer'
       },
       client_displayName: {
         type: 'string'
       },
       altumService: {
-        model: 'altumservice'
+        type: 'integer'
       },
       altumServiceName: {
         type: 'string'
@@ -32,13 +32,13 @@
         type: 'boolean'
       },
       programService: {
-        model: 'programservice'
+        type: 'integer'
       },
       programServiceName: {
         type: 'string'
       },
       program: {
-        model: 'program'
+        type: 'integer'
       },
       code: {
         type: 'string'
@@ -50,31 +50,31 @@
         type: 'string'
       },
       payor: {
-        model: 'payor'
+        type: 'integer'
       },
       payorName: {
         type: 'string'
       },
       site: {
-        model: 'site'
+        type: 'integer'
       },
       siteName: {
         type: 'string'
       },
       workStatus: {
-        model: 'workstatus'
+        type: 'integer'
       },
       workStatusName: {
         type: 'string'
       },
       prognosis: {
-        model: 'prognosis'
+        type: 'integer'
       },
       prognosisName: {
         type: 'string'
       },
       prognosisTimeframe: {
-        model: 'timeframe'
+        type: 'integer'
       },
       prognosisTimeframeName: {
         type: 'string'
@@ -95,28 +95,40 @@
         model: 'approval'
       },
       currentStatus: {
-        model: 'status'
+        type: 'integer'
       },
       currentCompletion: {
         model: 'completion'
       },
       currentCompletionStatus: {
-        model: 'status'
+        type: 'integer'
+      },
+      currentCompletionPhysician: {
+        type: 'integer'
+      },
+      currentCompletionPhysicianName: {
+        type: 'string'
+      },
+      currentCompletionStaff: {
+        type: 'integer'
+      },
+      currentCompletionStaffName: {
+        type: 'string'
       },
       currentBillingStatus: {
         model: 'billingstatus'
       },
       currentBillingStatusStatus: {
-        model: 'status'
+        type: 'integer'
       },
       currentReportStatus: {
         model: 'reportstatus'
       },
       currentReportStatusStatus: {
-        model: 'status'
+        type: 'integer'
       },
       billingGroup: {
-        model: 'billinggroup'
+        type: 'integer'
       },
       billingGroupName: {
         type: 'string'
@@ -155,11 +167,11 @@
         type: 'string'
       },
       physician: {
-        model: 'physician'
+        type: 'integer'
       },
       physician_displayName: {
         type: 'string'
-      },      
+      },
       numberDetailName: {
         type: 'string'
       },
@@ -182,19 +194,19 @@
         type: 'string'
       },
       physicianDetail: {
-        model: 'physician'
+        type: 'integer'
       },
       staffDetailName: {
         type: 'string'
       },
       staffDetail: {
-        model: 'staff'
+        type: 'integer'
       },
       timeframeDetailName: {
         type: 'string'
       },
       timeframeDetail: {
-        model: 'timeframe'
+        type: 'integer'
       },
       measureDetailName: {
         type: 'string'

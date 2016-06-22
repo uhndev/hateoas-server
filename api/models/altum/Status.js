@@ -90,7 +90,8 @@
        * @type {Model}
        */
       overrideForm: {
-        model: 'systemform'
+        model: 'systemform',
+        preventCreate: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

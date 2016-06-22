@@ -15,7 +15,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    defaultTemplateOmit: null,
+    defaultTemplateOmit: ['createdAt', 'createdBy', 'updatedAt'],
 
     defaultPopulate: ['person'],
 

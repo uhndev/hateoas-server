@@ -52,10 +52,8 @@
         var attributes = [];
         var models = sails.models;
 
-        if (_.has(models, modelName)
-             && _.has(models[modelName], '_attributes')) {
-          var schema = Utils.Model.removeSystemFields(
-                         models[modelName].definition);
+        if (_.has(models, modelName) && _.has(models[modelName], '_attributes')) {
+          var schema = Utils.Model.removeSystemFields(models[modelName].definition);
 
           attributes = _.reduce(schema, function (result, definition, field) {
             // if field wants to be omitted from template definition, skip
@@ -64,26 +62,23 @@
             }
 
             // if not a model field or is a model field that we've already built
-            if (!definition.model || definition.model && !_.contains(previousModels, definition.model)) {
+            if (!definition.model || (definition.model && !_.contains(previousModels,  definition.model))) {
               var template = {
                 'name': field,
                 'type': definition.model || definition.type,
                 'prompt': Utils.String.camelCaseToText(field),
-                'value': '',
+                'value': definition.enum ? definition.enum : '',
+                'preventCreate': models[modelName]._attributes[field].preventCreate,
                 'required': sails.models[modelName]._attributes.required || false
               };
 
-              if (definition.enum) {
-                template.value = definition.enum;
-              }
-
-              if (definition.model) { // haven't recursed on this model yet, so safe to recurse
+              // haven't recursed on this model yet, so safe to recurse
+              if (definition.model) {
                 previousModels.push(modelName);
-                template = _.merge(template, makeTemplate(definition.model, previousModels));
+                template = _.merge(template, makeTemplate(definition.model, _.tail(previousModels)));
               }
 
               return result.concat(template);
-
             } else {
               return result;
             }
@@ -132,14 +127,17 @@
         if (state) {
           _.each(state.links, addBaseUrl);
           _.each(state.queries, addBaseUrl);
-          response = _.merge(response,
-                       Utils.Model.removeSystemFields(state));
+          response = _.merge(response, Utils.Model.removeSystemFields(state));
         }
 
         if (!_.has(response.template, 'data')) {
           // if templateOverride was passed along with res.ok, use given template instead of req.options.model
           var startingModel = !_.has(options, 'templateOverride') ? modelName: options.templateOverride;
-          response.template = _.merge(response.template, makeTemplate(startingModel, [startingModel]));
+          var dict = {};
+          dict[startingModel] = [];
+          response.template = _.merge(response.template, makeTemplate(startingModel, []));
+          // response.template = _.merge(response.template, makeTemplate(startingModel, dict));
+          // console.log(dict);
           response.template.rel = startingModel;
         }
 
@@ -148,11 +146,11 @@
 
       // search workflows for states whose paths contains the current route
       return WorkflowState.find().then(function (workflowstates) {
-        return _.find(workflowstates, function (workflowstate) {
-          return _.contains(workflowstate.path, req.route.path);
-        });
-      })
-      .then(makeResponse);
+          return _.find(workflowstates, function (workflowstate) {
+            return _.contains(workflowstate.path, req.route.path);
+          });
+        })
+        .then(makeResponse);
     }
   };
 

@@ -22,7 +22,8 @@
        * @type {Model}
        */
       approver: {
-        model: 'approver'
+        model: 'approver',
+        preventCreate: true
       },
 
       /**
@@ -31,7 +32,8 @@
        * @type {Model}
        */
       status: {
-        model: 'status'
+        model: 'status',
+        preventCreate: true
       },
 
       /**
@@ -51,13 +53,25 @@
       completionDate: {
         type: 'date'
       },
-      
+
+      /**
+       * physician
+       * @description Physician who completed this service
+       * @type {Model}
+       */
       physician: {
-        model: 'physician'
+        model: 'physician',
+        preventCreate: true
       },
-      
+
+      /**
+       * staff
+       * @description Staff who completed this service
+       * @type {Model}
+       */
       staff: {
-        model: 'staff'
+        model: 'staff',
+        preventCreate: true
       },
 
       /**
@@ -75,7 +89,8 @@
        * @type {Model}
        */
       service: {
-        model: 'service'
+        model: 'service',
+        preventCreate: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
