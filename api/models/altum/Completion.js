@@ -22,7 +22,8 @@
        * @type {Model}
        */
       approver: {
-        model: 'approver'
+        model: 'approver',
+        preventCreate: true
       },
 
       /**
@@ -31,7 +32,8 @@
        * @type {Model}
        */
       status: {
-        model: 'status'
+        model: 'status',
+        preventCreate: true
       },
 
       /**
@@ -53,6 +55,26 @@
       },
 
       /**
+       * physician
+       * @description Physician who completed this service
+       * @type {Model}
+       */
+      physician: {
+        model: 'physician',
+        preventCreate: true
+      },
+
+      /**
+       * staff
+       * @description Staff who completed this service
+       * @type {Model}
+       */
+      staff: {
+        model: 'staff',
+        preventCreate: true
+      },
+
+      /**
        * additionalData
        * @description JSON bucket where data collected from payor/programservice forms will reside
        * @type {JSON}
@@ -67,7 +89,8 @@
        * @type {Model}
        */
       service: {
-        model: 'service'
+        model: 'service',
+        preventCreate: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

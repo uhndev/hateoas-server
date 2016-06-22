@@ -29,6 +29,9 @@
       programServiceCode: {
         type: 'string'
       },
+      programServicePrice: {
+        type: 'float'
+      },
       program: {
         model: 'program'
       },
@@ -45,6 +48,9 @@
         type: 'boolean'
       },
       approvalRequired: {
+        type: 'boolean'
+      },
+      reportRequired: {
         type: 'boolean'
       },
       programName: {

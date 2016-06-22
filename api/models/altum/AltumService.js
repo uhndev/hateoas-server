@@ -115,6 +115,15 @@
         defaultsTo: false
       },
 
+      /**
+       * supplyItem
+       * @description Reference to an service's related supplyItem, if any exists
+       * @type {Model}
+       */
+      supplyItem: {
+        model: 'supplyItem'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
 
     }
