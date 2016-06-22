@@ -246,6 +246,27 @@ CREATE INDEX "reportstatus_createdBy" ON altum.reportstatus USING btree ("create
 CREATE INDEX reportstatus_id ON altum.reportstatus USING btree (id);
 CREATE INDEX reportstatus_owner ON altum.reportstatus USING btree (owner);
 
+-- Create ServicePreset Table
+CREATE TABLE altum.servicepreset
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  name text,
+  preset json,
+  program integer,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT servicepreset_pkey PRIMARY KEY (id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE altum.servicepreset OWNER TO postgres;
+CREATE INDEX "servicepreset_createdBy" ON altum.servicepreset USING btree ("createdBy");
+CREATE INDEX servicepreset_id ON altum.servicepreset USING btree (id);
+CREATE INDEX servicepreset_owner ON altum.servicepreset USING btree (owner);
+
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
 select 1, 1, NOW(), NOW(), 'Incomplete', (select status.id from altum.status where name = 'Incomplete'), service.id from altum.service;
