@@ -77,7 +77,7 @@ add column "programSupplyItem" integer;
 CREATE INDEX "programSupplyItemIndex" ON altum.programservice USING btree ("programSupplyItem");
 
 alter table altum.altumservice
-add column "supplyItem";
+add column "supplyItem" integer;
 CREATE INDEX "supplyItemIndex" ON altum.altumservice USING btree ("supplyItem");
 
 alter table altum.programsupplyitem
