@@ -39,7 +39,8 @@
           'referral',
           'approval',
           'completion',
-          'billing'
+          'billing',
+          'report'
         ]
       },
 
@@ -89,7 +90,8 @@
        * @type {Model}
        */
       overrideForm: {
-        model: 'systemform'
+        model: 'systemform',
+        preventCreate: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
@@ -255,6 +257,36 @@
             requires: {
               "billing": ["rejectedDate"]
             }
+          }
+        },
+        {
+          name: 'Report Not Required',
+          category: 'report',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Report Pending',
+          category: 'report',
+          iconClass: 'fa-question-circle',
+          rowClass: 'warning',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
+          }
+        },
+        {
+          name: 'Report Complete',
+          category: 'report',
+          iconClass: 'fa-check-circle',
+          rowClass: 'success',
+          requiresConfirmation: false,
+          rules: {
+            requires: {}
           }
         }
       ];

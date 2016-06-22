@@ -13,7 +13,11 @@ module.exports.models = {
 
   // elements in this array will be ignored as Model attributes
   validations: {
-    ignoreProperties: ['generator']
+    ignoreProperties: [
+      'generator',    // function for generating fake data - see BaseModel for more info
+      'preventCreate' // boolean flag for determining if the 'Create New' toggle will be available on auto-generated
+                      // forms on client-side in form-builder/singleselect.
+    ]
   },
 
   limits: {
