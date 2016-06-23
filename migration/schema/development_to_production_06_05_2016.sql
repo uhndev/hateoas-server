@@ -274,6 +274,29 @@ CREATE INDEX "servicepreset_createdBy" ON altum.servicepreset USING btree ("crea
 CREATE INDEX servicepreset_id ON altum.servicepreset USING btree (id);
 CREATE INDEX servicepreset_owner ON altum.servicepreset USING btree (owner);
 
+-- Create Printer Table
+CREATE TABLE altum.printer
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  name text,
+  "IP" text,
+  site integer,
+  "printerType" text,
+  location text,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT printer_pkey PRIMARY KEY (id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE altum.printer OWNER TO postgres;
+CREATE INDEX "printer_createdBy" ON altum.printer USING btree ("createdBy");
+CREATE INDEX printer_id ON altum.printer USING btree (id);
+CREATE INDEX printer_owner ON altum.printer USING btree (owner);
+
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
 select 1, 1, NOW(), NOW(), 'Incomplete', (select status.id from altum.status where name = 'Incomplete'), service.id from altum.service;
