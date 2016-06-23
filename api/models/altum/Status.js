@@ -29,6 +29,20 @@
       },
 
       /**
+       * systemName
+       * @description An internal system name for the status
+       * @type {String}
+       */
+      systemName: {
+        type: 'string',
+        enum: [
+          'PENDING', 'APPROVED',
+          'INCOMPLETE', 'SUSPENDED', 'COMPLETED',
+          'REPORT_NOT_REQUIRED', 'REPORT_PENDING'
+        ]
+      },
+
+      /**
        * category
        * @description A status's category
        * @type {String}
@@ -60,6 +74,16 @@
        */
       rowClass: {
         type: 'string'
+      },
+
+      /**
+       * visitable
+       * @description Boolean for controling which services show up in the visit service drop down
+       * @type {Boolean}
+       */
+      visitable: {
+        type: 'boolean',
+        defaultsTo: false
       },
 
       /**
@@ -113,6 +137,7 @@
         },
         {
           name: 'Pending',
+          systemName: 'PENDING',
           category: 'approval',
           iconClass: 'fa-exclamation-circle',
           rowClass: 'warning'
@@ -131,7 +156,9 @@
         },
         {
           name: 'Approved',
+          systemName: 'APPROVED',
           category: 'approval',
+          visitable: true,
           iconClass: 'fa-check-circle',
           rowClass: 'success',
           requiresConfirmation: true,
@@ -143,7 +170,9 @@
         },
         {
           name: 'Incomplete',
+          systemName: 'INCOMPLETE',
           category: 'completion',
+          visitable: true,
           iconClass: 'fa-exclamation-circle',
           rowClass: 'warning',
           rules: {
@@ -173,6 +202,7 @@
         },
         {
           name: 'Completed',
+          systemName: 'COMPLETED',
           category: 'completion',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
@@ -195,6 +225,7 @@
         },
         {
           name: 'Suspended',
+          systemName: 'SUSPENDED',
           category: 'billing',
           iconClass: 'fa-exclamation-circle',
           rowClass: 'warning',
@@ -261,6 +292,7 @@
         },
         {
           name: 'Report Not Required',
+          systemName: 'REPORT_NOT_REQUIRED',
           category: 'report',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
@@ -271,6 +303,7 @@
         },
         {
           name: 'Report Pending',
+          systemName: 'REPORT_PENDING',
           category: 'report',
           iconClass: 'fa-question-circle',
           rowClass: 'warning',

@@ -97,11 +97,17 @@
       currentStatus: {
         type: 'integer'
       },
+      approvalVisitable: {
+        type: 'boolean'
+      },
       currentCompletion: {
         model: 'completion'
       },
       currentCompletionStatus: {
         type: 'integer'
+      },
+      completionVisitable: {
+        type: 'boolean'
       },
       currentCompletionPhysician: {
         type: 'integer'
@@ -121,11 +127,17 @@
       currentBillingStatusStatus: {
         type: 'integer'
       },
+      billingStatusVisitable: {
+        type: 'boolean'
+      },
       currentReportStatus: {
         model: 'reportstatus'
       },
       currentReportStatusStatus: {
         type: 'integer'
+      },
+      reportStatusVisitable: {
+        type: 'boolean'
       },
       billingGroup: {
         type: 'integer'
