@@ -65,6 +65,7 @@ add column "measureDetail" json,
 add column "measureDetailName" text,
 add column "programSupplyItem" integer,
 add column "supplyItem" integer,
+add column "payorPrice" real,
 add column "cost" real,
 add column "costShipping" real,
 add column "costSubtotal" real,
@@ -72,7 +73,6 @@ add column "costTax" real,
 add column "costTotal" real;
 
 -- Add columns for supply relationships
-
 alter table altum.programservice
 add column "programSupplyItem" integer;
 CREATE INDEX "programSupplyItemIndex" ON altum.programservice USING btree ("programSupplyItem");
@@ -81,29 +81,36 @@ alter table altum.altumservice
 add column "supplyItem" integer;
 CREATE INDEX "supplyItemIndex" ON altum.altumservice USING btree ("supplyItem");
 
-
--- Add additional rules, overrideForm to Status
+-- Add additional systemName, visitable, rules, overrideForm to Status
 alter table altum.status
+add column "systemName" text,
+add column "visitable" boolean default false,
 add column "rules" JSON,
 add column "overrideForm" integer;
 
+-- Set status rules
+update altum.status set "systemName" = 'PENDING' where name = 'Pending';
+update altum.status
+set visitable = true, "systemName" = 'APPROVED', "rules" = '{"requires":{"approval":["externalID"]}}'::JSON
+where name = 'Approved';
+update altum.status set "rules" = '{"requires":{"completion":["completionDate","physician","staff"]}}'::JSON where name = 'Completed';
+
 -- Add in new statuses for completion and billing status
-update altum.status set "rules" = '{"requires":{"approval":["externalID"]}}'::JSON where name = 'Approved';
-insert into altum.status ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "name", "category", "iconClass", "rowClass", "requiresConfirmation", "rules") values
-(1, 1, NOW(), NOW(), 'Incomplete', 'Incomplete', 'completion', 'fa-exclamation-circle', 'warning', FALSE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'No Show', 'No Show', 'completion', 'fa-question-circle', 'info', FALSE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Cancellation', 'Cancellation', 'completion', 'fa-ban', 'danger', TRUE, '{"requires":{"completion":["cancellationDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Completed', 'Completed', 'completion', 'fa-check-circle', 'success', TRUE, '{"requires":{"completion":["completionDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Service Complete/Pre-Paid', 'Service Complete/Pre-Paid', 'billing', 'fa-check-circle', 'info', TRUE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Suspended', 'Suspended', 'billing', 'fa-exclamation-circle', 'warning', FALSE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Ready To Send To Payor', 'Ready To Send To Payor', 'billing', 'fa-share', 'info', FALSE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Issued To Payor', 'Issued To Payor', 'billing', 'fa-reply', 'info', FALSE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Paid', 'Paid', 'billing', 'fa-check-circle', 'success', TRUE, '{"requires":{"billing":["paidDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Payor Denied', 'Payor Denied', 'billing', 'fa-ban', 'danger', TRUE, '{"requires":{"billing":["deniedDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Rejected', 'Rejected', 'billing', 'fa-times', 'danger', TRUE, '{"requires":{"billing":["rejectedDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Report Not Required', 'Report Not Required', 'report', 'fa-check-circle', 'success', TRUE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Report Pending', 'Report Pending', 'report', 'fa-question-circle', 'warning', TRUE, '{"requires":{}}'::JSON),
-(1, 1, NOW(), NOW(), 'Report Complete', 'Report Complete', 'report', 'fa-check-circle', 'success', TRUE, '{"requires":{}}'::JSON);
+insert into altum.status ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "name", "systemName", "category", "iconClass", "rowClass", "visitable", "requiresConfirmation", "rules") values
+(1, 1, NOW(), NOW(), 'Incomplete', 'Incomplete', 'INCOMPLETE', 'completion', 'fa-exclamation-circle', 'warning', TRUE, FALSE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'No Show', 'No Show', null, 'completion', 'fa-question-circle', 'info', FALSE, FALSE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Cancellation', 'Cancellation', null, 'completion', 'fa-ban', 'danger', FALSE, TRUE, '{"requires":{"completion":["cancellationDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Completed', 'Completed', 'COMPLETED', 'completion', 'fa-check-circle', 'success', FALSE, TRUE, '{"requires":{"completion":["completionDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Service Complete/Pre-Paid', 'Service Complete/Pre-Paid', null, 'billing', 'fa-check-circle', 'info', FALSE, TRUE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Suspended', 'Suspended', 'SUSPENDED', 'billing', 'fa-exclamation-circle', 'warning', FALSE, FALSE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Ready To Send To Payor', 'Ready To Send To Payor', null, 'billing', 'fa-share', 'info', FALSE, FALSE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Issued To Payor', 'Issued To Payor', null, 'billing', 'fa-reply', 'info', FALSE, FALSE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Paid', 'Paid', null, 'billing', 'fa-check-circle', 'success', FALSE, TRUE, '{"requires":{"billing":["paidDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Payor Denied', 'Payor Denied', null, 'billing', 'fa-ban', 'danger', FALSE, TRUE, '{"requires":{"billing":["deniedDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Rejected', 'Rejected', null, 'billing', 'fa-times', 'danger', FALSE, TRUE, '{"requires":{"billing":["rejectedDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Not Required', 'Report Not Required', 'REPORT_NOT_REQUIRED', 'report', 'fa-check-circle', 'success', FALSE, TRUE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Pending', 'Report Pending', 'REPORT_PENDING', 'report', 'fa-question-circle', 'warning', FALSE, TRUE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Complete', 'Report Complete', null, 'report', 'fa-check-circle', 'success', FALSE, TRUE, '{"requires":{}}'::JSON);
 
 -- Create ServiceVariation Table
 CREATE TABLE altum.servicevariation
@@ -266,6 +273,29 @@ ALTER TABLE altum.servicepreset OWNER TO postgres;
 CREATE INDEX "servicepreset_createdBy" ON altum.servicepreset USING btree ("createdBy");
 CREATE INDEX servicepreset_id ON altum.servicepreset USING btree (id);
 CREATE INDEX servicepreset_owner ON altum.servicepreset USING btree (owner);
+
+-- Create Printer Table
+CREATE TABLE altum.printer
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  name text,
+  "IP" text,
+  site integer,
+  "printerType" text,
+  location text,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT printer_pkey PRIMARY KEY (id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE altum.printer OWNER TO postgres;
+CREATE INDEX "printer_createdBy" ON altum.printer USING btree ("createdBy");
+CREATE INDEX printer_id ON altum.printer USING btree (id);
+CREATE INDEX printer_owner ON altum.printer USING btree (owner);
 
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")

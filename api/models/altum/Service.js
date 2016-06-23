@@ -448,7 +448,7 @@
         type: 'float',
         generator: faker.commerce.price
       },
-      
+
       /**
        * costTax
        * @description
@@ -535,31 +535,31 @@
      * @param cb
      */
     afterCreate: function (service, cb) {
-      var startingState = (service.approvalNeeded) ? 'Pending' : 'Approved';
-      Status.find({name: [startingState, 'Incomplete', 'Suspended', 'Report Not Required', 'Report Pending']}).then(function (statuses) {
+      var startingState = (service.approvalNeeded) ? 'PENDING' : 'APPROVED';
+      Status.find({systemName: [startingState, 'INCOMPLETE', 'SUSPENDED', 'REPORT_NOT_REQUIRED', 'REPORT_PENDING']}).then(function (statuses) {
         return [
           Approval.create({
-            status: _.find(statuses, {name: startingState}).id,
+            status: _.find(statuses, {systemName: startingState}).id,
             service: service.id,
             createdBy: service.createdBy,
             owner: service.owner
           }),
           Completion.create({
-            status: _.find(statuses, {name: 'Incomplete'}).id,
+            status: _.find(statuses, {systemName: 'INCOMPLETE'}).id,
             service: service.id,
             createdBy: service.createdBy,
             owner: service.owner
           }),
           BillingStatus.create({
-            status: _.find(statuses, {name: 'Suspended'}).id,
+            status: _.find(statuses, {systemName: 'SUSPENDED'}).id,
             service: service.id,
             createdBy: service.createdBy,
             owner: service.owner
           }),
           ProgramService.findOne(service.programService).then(function (programService) {
-            var startingReportStatus = programService.reportRequired ? 'Report Pending' : 'Report Not Required';
+            var startingReportStatus = programService.reportRequired ? 'REPORT_PENDING' : 'REPORT_NOT_REQUIRED';
             return ReportStatus.create({
-              status: _.find(statuses, {name: startingReportStatus}).id,
+              status: _.find(statuses, {systemName: startingReportStatus}).id,
               service: service.id,
               createdBy: service.createdBy,
               owner: service.owner
