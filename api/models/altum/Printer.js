@@ -15,33 +15,43 @@
     attributes: {
 
       /**
-       * printer name
+       * name
+       * @description a printer's name
+       * @type {String}
        */
       name: {
         type: 'string'
       },
       /**
-       * printer IP Address
+       * IP
+       * @description a printer's IP
+       * @type {String}
        */
       IP: {
         type: 'string'
       },
 
       /**
-       * site which the printer in
+       * name
+       * @description which Altum site the printer in
+       * @type {String}
        */
       site: {
         model: 'site'
       },
 
       /**
-       * printer type
+       * name
+       * @description a printer's type
+       * @type {String}
        */
       printerType: {
         type: 'string'
       },
       /**
-       * printer location
+       * name
+       * @description a printer's location
+       * @type {String}
        */
       location: {
         type: 'string'
