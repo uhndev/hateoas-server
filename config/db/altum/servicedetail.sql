@@ -17,7 +17,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     programservice.name AS "programServiceName",
     programservice.program,
     programservice.code AS "code",
-    programservice.price AS "price",
+    service."payorPrice",
     program.name AS "programName",
     program.payor AS "payor",
     payor.name AS "payorName",
@@ -37,8 +37,14 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     approval.status AS "currentStatus",
     completion.id AS "currentCompletion",
     completion.status AS "currentCompletionStatus",
+    completion.physician AS "currentCompletionPhysician",
+    completion_physician."displayName" AS "currentCompletionPhysicianName",
+    completion.staff AS "currentCompletionStaff",
+    completion_staff."displayName" AS "currentCompletionStaffName",
     billingstatus.id AS "currentBillingStatus",
     billingstatus.status AS "currentBillingStatusStatus",
+    reportstatus.id AS "currentReportStatus",
+    reportstatus.status AS "currentReportStatusStatus",
     service."billingGroup",
     billinggroup."billingGroupName",
     service."billingGroupItemLabel",
@@ -49,10 +55,25 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     status.name AS "statusName",
     completion_status.name AS "completionStatusName",
     billing_status.name AS "billingStatusName",
+    report_status.name AS "reportStatusName",
     status."iconClass",
     status."rowClass",
     service.physician,
     physician."displayName" AS "physician_displayName",
+    service."numberDetailName",
+    service."numberDetail",
+    service."textDetailName",
+    service."textDetail",
+    service."dateDetailName",
+    service."dateDetail",
+    service."physicianDetailName",
+    service."physicianDetail",
+    service."staffDetailName",
+    service."staffDetail",
+    service."timeframeDetailName",
+    service."timeframeDetail",
+    service."measureDetailName",
+    service."measureDetail",
     service.owner,
     service."createdAt",
     service."createdBy",
@@ -68,9 +89,13 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     LEFT JOIN altum.approval ON service."currentApproval" = approval.id
     LEFT JOIN altum.status ON approval.status = status.id
     LEFT JOIN altum.completion ON service."currentCompletion" = completion.id
+    LEFT JOIN altum.physician completion_physician ON completion.physician = completion_physician.id
+    LEFT JOIN altum.staff completion_staff ON completion.staff = completion_staff.id
     LEFT JOIN altum.status completion_status ON completion.status = completion_status.id
     LEFT JOIN altum.billingstatus ON service."currentBillingStatus" = billingstatus.id
     LEFT JOIN altum.status billing_status ON billingstatus.status = billing_status.id
+    LEFT JOIN altum.reportstatus ON service."currentReportStatus" = reportstatus.id
+    LEFT JOIN altum.status report_status ON reportstatus.status = report_status.id
     LEFT OUTER JOIN altum.billinggroup ON service."billingGroup" = billinggroup.id
     LEFT JOIN altum.service visitservice ON service."visitService" = visitservice.id
     LEFT JOIN altum.client ON referral.client = client.id

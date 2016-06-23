@@ -22,7 +22,8 @@ add column "repeatable" boolean default false;
 
 -- Rename cost to payorPrice on ProgramSupplyItem
 alter table altum.programsupplyitem
-rename column cost to "payorPrice",
+rename column cost to "payorPrice";
+alter table altum.programsupplyitem
 add column "supplyItem" integer,
 add column "overriddenSubtotal" real,
 add column "overrideTax" real;
@@ -41,6 +42,7 @@ add column "supplier" text;
 alter table altum.service
 add column "currentCompletion" integer,
 add column "currentBillingStatus" integer,
+add column "currentReportStatus" integer,
 add column "telemedicine" boolean default false,
 add column "billingGroup" integer,
 add column "billingGroupItemLabel" text,
@@ -67,8 +69,18 @@ add column "cost" real,
 add column "costShipping" real,
 add column "costSubtotal" real,
 add column "costTax" real,
-add column "costTotal" real,
-add column "payorPrice" real;
+add column "costTotal" real;
+
+-- Add columns for supply relationships
+
+alter table altum.programservice
+add column "programSupplyItem" integer;
+CREATE INDEX "programSupplyItemIndex" ON altum.programservice USING btree ("programSupplyItem");
+
+alter table altum.altumservice
+add column "supplyItem" integer;
+CREATE INDEX "supplyItemIndex" ON altum.altumservice USING btree ("supplyItem");
+
 
 -- Add additional rules, overrideForm to Status
 alter table altum.status
@@ -88,7 +100,10 @@ insert into altum.status ("createdBy", "owner", "createdAt", "updatedAt", "displ
 (1, 1, NOW(), NOW(), 'Issued To Payor', 'Issued To Payor', 'billing', 'fa-reply', 'info', FALSE, '{"requires":{}}'::JSON),
 (1, 1, NOW(), NOW(), 'Paid', 'Paid', 'billing', 'fa-check-circle', 'success', TRUE, '{"requires":{"billing":["paidDate"]}}'::JSON),
 (1, 1, NOW(), NOW(), 'Payor Denied', 'Payor Denied', 'billing', 'fa-ban', 'danger', TRUE, '{"requires":{"billing":["deniedDate"]}}'::JSON),
-(1, 1, NOW(), NOW(), 'Rejected', 'Rejected', 'billing', 'fa-times', 'danger', TRUE, '{"requires":{"billing":["rejectedDate"]}}'::JSON);
+(1, 1, NOW(), NOW(), 'Rejected', 'Rejected', 'billing', 'fa-times', 'danger', TRUE, '{"requires":{"billing":["rejectedDate"]}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Not Required', 'Report Not Required', 'report', 'fa-check-circle', 'success', TRUE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Pending', 'Report Pending', 'report', 'fa-question-circle', 'warning', TRUE, '{"requires":{}}'::JSON),
+(1, 1, NOW(), NOW(), 'Report Complete', 'Report Complete', 'report', 'fa-check-circle', 'success', TRUE, '{"requires":{}}'::JSON);
 
 -- Create ServiceVariation Table
 CREATE TABLE altum.servicevariation
@@ -169,6 +184,8 @@ CREATE TABLE altum.completion
   status integer,
   "cancellationDate" date,
   "completionDate" date,
+  physician integer,
+  staff integer,
   "additionalData" json,
   service integer,
   "createdBy" integer,
@@ -207,6 +224,49 @@ CREATE INDEX "statusform_createdBy" ON altum.statusform USING btree ("createdBy"
 CREATE INDEX statusform_id ON altum.statusform USING btree (id);
 CREATE INDEX statusform_owner ON altum.statusform USING btree (owner);
 
+-- Create ReportStatus Table
+CREATE TABLE altum.reportstatus
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  approver integer,
+  status integer,
+  "additionalData" json,
+  service integer,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT reportstatus_pkey PRIMARY KEY (id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE altum.reportstatus OWNER TO postgres;
+CREATE INDEX "reportstatus_createdBy" ON altum.reportstatus USING btree ("createdBy");
+CREATE INDEX reportstatus_id ON altum.reportstatus USING btree (id);
+CREATE INDEX reportstatus_owner ON altum.reportstatus USING btree (owner);
+
+-- Create ServicePreset Table
+CREATE TABLE altum.servicepreset
+(
+  "deletedBy" integer,
+  "displayName" text,
+  id serial NOT NULL,
+  name text,
+  preset json,
+  program integer,
+  "createdBy" integer,
+  owner integer,
+  "createdAt" timestamp with time zone,
+  "updatedAt" timestamp with time zone,
+  CONSTRAINT servicepreset_pkey PRIMARY KEY (id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE altum.servicepreset OWNER TO postgres;
+CREATE INDEX "servicepreset_createdBy" ON altum.servicepreset USING btree ("createdBy");
+CREATE INDEX servicepreset_id ON altum.servicepreset USING btree (id);
+CREATE INDEX servicepreset_owner ON altum.servicepreset USING btree (owner);
+
 -- Add in starting completion statuses for previous services
 insert into altum.completion ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
 select 1, 1, NOW(), NOW(), 'Incomplete', (select status.id from altum.status where name = 'Incomplete'), service.id from altum.service;
@@ -216,6 +276,22 @@ update altum.service set "currentCompletion" = curr_completion.id from (select *
 insert into altum.billingstatus ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
 select 1, 1, NOW(), NOW(), 'Suspended', (select status.id from altum.status where name = 'Suspended'), service.id from altum.service;
 update altum.service set "currentBillingStatus" = curr_billingstatus.id from (select * from altum.billingstatus) curr_billingstatus where service.id = curr_billingstatus.service;
+
+-- Add in starting report statuses for previous services
+insert into altum.reportstatus ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "status", "service")
+select 1, 1, NOW(), NOW(), 'Report Not Required', (select status.id from altum.status where name = 'Report Not Required'), service.id from altum.service;
+update altum.service set "currentReportStatus" = curr_reportstatus.id from (select * from altum.reportstatus) curr_reportstatus where service.id = curr_reportstatus.service;
+
+-- Update to report pending for services with programService.reportRequired is true
+update altum.reportstatus set
+status = (select status.id from altum.status where name = 'Report Pending'),
+"displayName" = 'Report Pending'
+from (
+select service.id, "currentReportStatus"
+from altum.service
+left join altum.programservice on service."programService" = programservice.id
+where "reportRequired" is true) as subquery
+where subquery."currentReportStatus" = reportstatus.id;
 
 -- Create BillingGroups for previous services
 insert into altum.billinggroup ("createdBy", "owner", "createdAt", "updatedAt", "displayName", "billingGroupName", "name", "templateService", "totalItems")
