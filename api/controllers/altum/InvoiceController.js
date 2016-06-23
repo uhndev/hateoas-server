@@ -33,7 +33,7 @@
             // fetching billable services
             servicedetail.find({
               referral: referralID,
-              statusName: 'Approved'
+              approvalVisitable: true
             }).populate('visitService').sort('serviceDate ASC'),
             // fetching visitable services
             servicedetail.find({
