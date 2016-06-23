@@ -38,6 +38,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     address.id AS "client_address",
     address.address1 AS client_address1,
     address.address2 AS client_address2,
+    city.name AS "client_cityName",
     address.city AS client_city,
     address.province AS client_province,
     address."postalCode" AS "client_postalCode",
@@ -48,6 +49,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     person."daytimePhone" AS "client_daytimePhone",
     person."familyDoctor" AS "client_familyDoctor",
     person.language AS client_language,
+    person."requiresInterpreter" AS "client_interpreter",
     "claimNumber",
     "policyNumber",
     referral.owner,
@@ -58,6 +60,7 @@ FROM altum.referral
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id
   LEFT JOIN altum.address ON person.address = address.id
+  LEFT JOIN altum.city ON address.city = city.id
   LEFT JOIN altum.status ON referral.status = status.id
   LEFT JOIN altum.physician ON referral.physician = physician.id
   LEFT JOIN altum.staff ON referral.staff = staff.id

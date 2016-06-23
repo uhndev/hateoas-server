@@ -164,6 +164,9 @@
       client_city: {
         model: 'city'
       },
+      client_cityName: {
+        type: 'string'
+      },
       client_province: {
         type: 'string'
       },
@@ -190,6 +193,9 @@
       },
       client_language: {
         type: 'integer'
+      },
+      client_interpreter: {
+        type: 'boolean'
       },
       claimNumber: {
         type: 'string'
