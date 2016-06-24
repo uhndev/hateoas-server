@@ -15,7 +15,7 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
-    connection: 'altum_mongo_' + sails.config.environment
+    connection: 'altum_mongo'
 
   });
 })();
