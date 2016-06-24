@@ -10,43 +10,73 @@
   _.merge(exports, {
 
     attributes: {
-      referral: {
-        model: 'referral'
-      },
       displayName: {
         type: 'string'
       },
+      referral: {
+        type: 'integer'
+      },
+      client: {
+        type: 'integer'
+      },
+      client_displayName: {
+        type: 'string'
+      },
       altumService: {
-        model: 'altumservice'
+        type: 'integer'
       },
       altumServiceName: {
         type: 'string'
       },
+      visitable: {
+        type: 'boolean'
+      },
       programService: {
-        model: 'programservice'
+        type: 'integer'
       },
       programServiceName: {
         type: 'string'
       },
       program: {
-        model: 'program'
+        type: 'integer'
+      },
+      code: {
+        type: 'string'
+      },
+      payorPrice: {
+        type: 'float'
       },
       programName: {
         type: 'string'
       },
+      payor: {
+        type: 'integer'
+      },
+      payorName: {
+        type: 'string'
+      },
       site: {
-        model: 'site'
+        type: 'integer'
       },
       siteName: {
         type: 'string'
       },
       workStatus: {
+        type: 'integer'
+      },
+      workStatusName: {
         type: 'string'
       },
       prognosis: {
+        type: 'integer'
+      },
+      prognosisName: {
         type: 'string'
       },
       prognosisTimeframe: {
+        type: 'integer'
+      },
+      prognosisTimeframeName: {
         type: 'string'
       },
       serviceDate: {
@@ -55,6 +85,9 @@
       visitService: {
         model: 'service'
       },
+      visitServiceName: {
+        type: 'string'
+      },
       approvalNeeded: {
         type: 'boolean'
       },
@@ -62,12 +95,81 @@
         model: 'approval'
       },
       currentStatus: {
-        model: 'status'
+        type: 'integer'
+      },
+      approvalVisitable: {
+        type: 'boolean'
+      },
+      currentCompletion: {
+        model: 'completion'
+      },
+      currentCompletionStatus: {
+        type: 'integer'
+      },
+      completionVisitable: {
+        type: 'boolean'
+      },
+      currentCompletionPhysician: {
+        type: 'integer'
+      },
+      currentCompletionPhysicianName: {
+        type: 'string'
+      },
+      currentCompletionStaff: {
+        type: 'integer'
+      },
+      currentCompletionStaffName: {
+        type: 'string'
+      },
+      currentBillingStatus: {
+        model: 'billingstatus'
+      },
+      currentBillingStatusStatus: {
+        type: 'integer'
+      },
+      billingStatusVisitable: {
+        type: 'boolean'
+      },
+      currentReportStatus: {
+        model: 'reportstatus'
+      },
+      currentReportStatusStatus: {
+        type: 'integer'
+      },
+      reportStatusVisitable: {
+        type: 'boolean'
+      },
+      billingGroup: {
+        type: 'integer'
+      },
+      billingGroupName: {
+        type: 'string'
+      },
+      billingGroupItemLabel: {
+        type: 'string'
+      },
+      itemCount: {
+        type: 'integer'
+      },
+      totalItems: {
+        type: 'integer'
+      },
+      billingCount: {
+        type: 'string'
       },
       approvalDate: {
         type: 'datetime'
       },
       statusName: {
+        type: 'string'
+      },
+      completionStatusName: {
+        type: 'string'
+      },
+      billingStatusName: {
+        type: 'string'
+      },
+      reportStatusName: {
         type: 'string'
       },
       iconClass: {
@@ -76,17 +178,53 @@
       rowClass: {
         type: 'string'
       },
-      client: {
-        model: 'client'
-      },
-      client_displayName: {
-        type: 'string'
-      },
       physician: {
-        model: 'physician'
+        type: 'integer'
       },
       physician_displayName: {
         type: 'string'
+      },
+      numberDetailName: {
+        type: 'string'
+      },
+      numberDetail: {
+        type: 'integer'
+      },
+      textDetailName: {
+        type: 'string'
+      },
+      textDetail: {
+        type: 'string'
+      },
+      dateDetailName: {
+        type: 'string'
+      },
+      dateDetail: {
+        type: 'date'
+      },
+      physicianDetailName: {
+        type: 'string'
+      },
+      physicianDetail: {
+        type: 'integer'
+      },
+      staffDetailName: {
+        type: 'string'
+      },
+      staffDetail: {
+        type: 'integer'
+      },
+      timeframeDetailName: {
+        type: 'string'
+      },
+      timeframeDetail: {
+        type: 'integer'
+      },
+      measureDetailName: {
+        type: 'string'
+      },
+      measureDetail: {
+        type: 'json'
       },
       toJSON: ServiceModel.attributes.toJSON
     }

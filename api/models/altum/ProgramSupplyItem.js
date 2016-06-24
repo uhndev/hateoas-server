@@ -49,25 +49,43 @@
           return [faker.address.countryCode(), _.random(100, 999)].join('-');
         }
       },
-
+      
       /**
-       * cost
-       * @description A program supply item's billing max cost for a service
-       * @type {Number}
+       * payorPrice
+       * @description price of programSupplyItem
+       * @type {float}
        */
-      cost: {
+      payorPrice: {
         type: 'float',
-        generator: faker.commerce.price
+        defaultsTo: null
       },
 
       /**
-       * supplyItems
-       * @description Collection of supply items for this program supply item
-       * @type {Collection}
+       * overriddenSubtotal
+       * @description overridden subtotal if set on programSupplyItem
+       * @type {float}
        */
-      supplyItems: {
-        collection: 'supplyitem',
-        via: 'programSupplyItems'
+      overriddenSubtotal: {
+        type: 'float',
+        defaultsTo: null
+      },
+      /**
+       * overriddenTax
+       * @description overridden tax if set on programSupplyItem
+       * @type {float}
+       */
+      overrideTax: {
+        type: 'float',
+        defaultsTo: null
+      },
+
+      /**
+       * supplyItem
+       * @description Collection of supply items for this program supply item
+       * @type {model}
+       */
+      supplyItem: {
+        model: 'supplyItem'
       },
 
       /**

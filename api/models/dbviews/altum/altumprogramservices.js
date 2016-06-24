@@ -26,13 +26,31 @@
       programServiceName: {
         type: 'string'
       },
+      programServiceCode: {
+        type: 'string'
+      },
+      programServicePrice: {
+        type: 'float'
+      },
       program: {
         model: 'program'
+      },
+      serviceVariation: {
+        model: 'servicevariation'
+      },
+      hasTelemedicine: {
+        type: 'boolean'
+      },
+      repeatable: {
+        type: 'boolean'
       },
       approvalNeeded: {
         type: 'boolean'
       },
       approvalRequired: {
+        type: 'boolean'
+      },
+      reportRequired: {
         type: 'boolean'
       },
       programName: {

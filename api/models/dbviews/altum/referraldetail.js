@@ -49,6 +49,14 @@
         'href': [
           sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'services'
         ].join('/')
+      },
+      {
+        'rel': sails.models.invoice.identity,
+        'prompt': 'APP.HEADER.SUBMENU.BILLING',
+        'name': 'name',
+        'href': [
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'billing'
+        ].join('/')
       }
     ];
   };
@@ -156,6 +164,9 @@
       client_city: {
         model: 'city'
       },
+      client_cityName: {
+        type: 'string'
+      },
       client_province: {
         type: 'string'
       },
@@ -182,6 +193,9 @@
       },
       client_language: {
         type: 'integer'
+      },
+      client_interpreter: {
+        type: 'boolean'
       },
       claimNumber: {
         type: 'string'

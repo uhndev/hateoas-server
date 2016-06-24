@@ -45,7 +45,7 @@
        * @type {Integer}
        */
       price: {
-        type: 'integer'
+        type: 'float'
       },
 
       /**
@@ -57,6 +57,16 @@
         collection: 'altumservice',
         via: 'programServices',
         dominant: true
+      },
+
+      /**
+       * statusForms
+       * @description A programService's collection of forms per status
+       * @type {Collection}
+       */
+      statusForms: {
+        collection: 'statusform',
+        via: 'programservice'
       },
 
       /**
@@ -78,6 +88,15 @@
       },
 
       /**
+       * repeatable
+       * @description Boolean flag denoting whether this service can be repeated
+       */
+      repeatable: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
        * approvalNeeded
        * @description Boolean denoting whether this service needs approval or not by default
        */
@@ -96,13 +115,21 @@
       },
 
       /**
-       * reprotRequired
+       * reportRequired
        * @description Boolean denoting whether this service needs a report or not
        */
-
       reportRequired: {
         type: 'boolean',
         defaultsTo: false
+      },
+
+      /**
+       * payor
+       * @description a programService's related program supply item, if one exists
+       * @type {String}
+       */
+      programSupplyItem: {
+        model: 'programSupplyItem'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

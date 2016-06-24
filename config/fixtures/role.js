@@ -49,7 +49,8 @@
             'note', 'notetype', 'payor', 'physician', 'prognosis', 'program',
             'programservice', 'referral', 'service', 'servicecategory', 'site',
             'staff', 'stafftype', 'status', 'timeframe', 'workstatus', 'person',
-            'altumprogramservices', 'clientcontact', 'referraldetail', 'servicedetail'
+            'altumprogramservices', 'clientcontact', 'referraldetail', 'servicedetail',
+            'completion', 'billingstatus', 'reportstatus', 'servicepreset'
           ], function (result, model) {
             return result.concat(_.map(['create', 'read', 'update', 'delete'], function (action) {
               return {
