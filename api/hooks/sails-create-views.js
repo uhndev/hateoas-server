@@ -22,7 +22,7 @@
 
     var connections = [];
     _.each(fs.readdirSync('config/db'), function(db) {
-      var connection = sails.config.connections[db];
+      var connection = sails.config.connections[(env === 'test') ? db + '_test' : db];
       if (connection) {
         var connectionStr = [
           'postgres://', connection.user, ':', connection.password,
