@@ -12,6 +12,7 @@
         if (!role) {
           var permissions = [
             { model: 'systemform',        action: 'read' },
+            { model: 'statusform',        action: 'read' },
             { model: 'translation',       action: 'read' },
             {
               model: 'group',
@@ -50,9 +51,9 @@
             'programservice', 'referral', 'service', 'servicecategory', 'site',
             'staff', 'stafftype', 'status', 'timeframe', 'workstatus', 'person',
             'altumprogramservices', 'clientcontact', 'referraldetail', 'servicedetail',
-            'completion', 'billingstatus', 'reportstatus', 'servicepreset'
+            'billinggroup', 'completion', 'billingstatus', 'reportstatus', 'servicepreset'
           ], function (result, model) {
-            return result.concat(_.map(['create', 'read', 'update', 'delete'], function (action) {
+            return result.concat(_.map(['create', 'read', 'update'], function (action) {
               return {
                 model: model,
                 action: action
