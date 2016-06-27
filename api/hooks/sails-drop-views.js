@@ -28,7 +28,6 @@
           'postgres://', connection.user, ':', connection.password,
           '@', connection.host, ':', connection.port, '/', connection.database
         ].join('');
-        console.log(connectionStr);
         connections.push({ dbName: db, pgConnection: pgp(connectionStr) });
       }
     });
