@@ -100,6 +100,12 @@
       currentCompletion: {
         model: 'completion'
       },
+      currentCompletionTimeIn: {
+        type: 'datetime'
+      },
+      currentCompletionTimeOut: {
+        type: 'datetime'
+      },
       currentCompletionStatus: {
         model: 'status'
       },
@@ -150,7 +156,7 @@
       },
       physician_displayName: {
         type: 'string'
-      },      
+      },
       numberDetailName: {
         type: 'string'
       },
