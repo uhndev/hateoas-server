@@ -103,6 +103,12 @@
       currentCompletion: {
         model: 'completion'
       },
+      currentCompletionTimeIn: {
+        type: 'datetime'
+      },
+      currentCompletionTimeOut: {
+        type: 'datetime'
+      },
       currentCompletionStatus: {
         type: 'integer'
       },
