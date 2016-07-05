@@ -41,7 +41,7 @@
        * @type {Date}
        */
       paidDate: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
@@ -51,7 +51,7 @@
        * @type {Date}
        */
       deniedDate: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
@@ -62,7 +62,7 @@
        * @type {Date}
        */
       rejectedDate: {
-        type: 'date'
+        type: 'datetime'
       },
 
       /**
