@@ -103,6 +103,9 @@
       currentCompletion: {
         model: 'completion'
       },
+      completionDate: {
+        type: 'datetime'
+      },
       currentCompletionTimeIn: {
         type: 'datetime'
       },
