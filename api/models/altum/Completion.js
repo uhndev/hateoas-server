@@ -42,7 +42,7 @@
        * @type {Date}
        */
       cancellationDate: {
-        type: 'datetime'
+        type: 'date'
       },
 
       /**
@@ -51,7 +51,7 @@
        * @type {Date}
        */
       completionDate: {
-        type: 'datetime'
+        type: 'date'
       },
 
       /**
