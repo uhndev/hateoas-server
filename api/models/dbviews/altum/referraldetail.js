@@ -203,6 +203,9 @@
       policyNumber: {
         type: 'string'
       },
+      referralComments: {
+        type: 'string'
+      },
       getResponseLinks: function () {
         return getResponseLinks(this.id, this.displayName);
       },
@@ -228,4 +231,3 @@
     }
   });
 })();
-
