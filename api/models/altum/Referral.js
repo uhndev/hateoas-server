@@ -234,8 +234,8 @@
       },
       /**
        * referralComments
-       * @description Collection of referral notes
-       * @type {Collection}
+       * @description Comments for a specific referral
+       * @type {string}
        */
        referralComments: {
          type: 'string'
