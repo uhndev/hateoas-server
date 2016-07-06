@@ -232,7 +232,14 @@
         collection: 'note',
         via: 'referral'
       },
-
+      /**
+       * referralComments
+       * @description Collection of referral notes
+       * @type {Collection}
+       */
+       referralComments: {
+         type: 'string'
+       },
       /**
        * referralContact
        * @description A referral's referralContact
