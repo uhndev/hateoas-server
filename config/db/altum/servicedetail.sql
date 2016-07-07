@@ -1,7 +1,7 @@
 -- View: servicedetail
 -- returns referral, altumservice, programservice, program, site, physician, and client info
 
--- DROP VIEW servicedetail;
+-- DROP VIEW altum.servicedetail;
 
 CREATE OR REPLACE VIEW altum.servicedetail AS
   SELECT
