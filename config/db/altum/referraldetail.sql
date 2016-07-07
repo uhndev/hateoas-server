@@ -1,7 +1,7 @@
 -- View: referraldetail
 -- returns referral, program, client, site, physician data
 
--- DROP VIEW referraldetail;
+-- DROP VIEW altum.referraldetail;
 
 CREATE OR REPLACE VIEW altum.referraldetail AS
  SELECT
