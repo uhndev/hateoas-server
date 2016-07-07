@@ -3,4 +3,6 @@
 
 BEGIN;
 
+alter table altum.referral add column "referralComments" text;
+
 COMMIT;

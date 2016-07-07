@@ -1,7 +1,7 @@
 -- View: altumprogramservices
 -- returns payor, company, altum/program service data
 
--- DROP VIEW altumprogramservices;
+-- DROP VIEW altum.altumprogramservices;
 CREATE OR REPLACE VIEW altum.altumprogramservices AS
  SELECT altumservice.id,
     altumservice.name AS "altumServiceName",
