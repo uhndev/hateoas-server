@@ -3,4 +3,7 @@
 
 BEGIN;
 
+alter table altum.referral add column "referralComments" text;
+alter table altum.notetype rename "backGroundColor" to "backgroundColour"
+
 COMMIT;

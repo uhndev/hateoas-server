@@ -49,7 +49,9 @@
        */
       noteType: {
         model: 'NoteType'
-      }
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
     /**
