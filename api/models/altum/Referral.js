@@ -269,6 +269,30 @@
             links: this.links
           };
         });
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given referral object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.client) {
+        Client.findOne(values.client).exec(function (err, client) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = client.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     }
 
   });
