@@ -36,9 +36,10 @@
       systemName: {
         type: 'string',
         enum: [
-          'PENDING', 'APPROVED',
-          'INCOMPLETE', 'SUSPENDED', 'COMPLETED',
-          'REPORT_NOT_REQUIRED', 'REPORT_PENDING'
+          'PENDING', 'APPROVED', 'MISENTERED', 'DENIED',
+          'INCOMPLETE', 'SUSPENDED', 'COMPLETED', 'NO_SHOW', 'CANCELLATION',
+          'SERVICE_COMPLETE', 'READY_TO_SEND_TO_PAYOR', 'ISSUED_TO_PAYOR', 'PAID', 'PAYOR_DENIED', 'REJECTED',
+          'REPORT_NOT_REQUIRED', 'REPORT_PENDING', 'REPORT_COMPLETE'
         ]
       },
 
@@ -144,12 +145,14 @@
         },
         {
           name: 'Misentered',
+          systemName: 'MISENTERED',
           category: 'approval',
           iconClass: 'fa-question-circle',
           rowClass: 'info'
         },
         {
           name: 'Denied',
+          systemName: 'DENIED',
           category: 'approval',
           iconClass: 'fa-ban',
           rowClass: 'danger'
@@ -181,6 +184,7 @@
         },
         {
           name: 'No Show',
+          systemName: 'NO_SHOW',
           category: 'completion',
           iconClass: 'fa-question-circle',
           rowClass: 'info',
@@ -190,6 +194,7 @@
         },
         {
           name: 'Cancellation',
+          systemName: 'CANCELLATION',
           category: 'completion',
           iconClass: 'fa-ban',
           rowClass: 'danger',
@@ -215,6 +220,7 @@
         },
         {
           name: 'Service Complete/Pre-Paid',
+          systemName: 'SERVICE_COMPLETE',
           category: 'billing',
           iconClass: 'fa-check-circle',
           rowClass: 'info',
@@ -236,6 +242,7 @@
         },
         {
           name: 'Ready To Send To Payor',
+          systemName: 'READY_TO_SEND_TO_PAYOR',
           category: 'billing',
           iconClass: 'fa-share',
           rowClass: 'info',
@@ -246,6 +253,7 @@
         },
         {
           name: 'Issued To Payor',
+          systemName: 'ISSUED_TO_PAYOR',
           category: 'billing',
           iconClass: 'fa-reply',
           rowClass: 'info',
@@ -256,6 +264,7 @@
         },
         {
           name: 'Paid',
+          systemName: 'PAID',
           category: 'billing',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
@@ -268,6 +277,7 @@
         },
         {
           name: 'Payor Denied',
+          systemName: 'PAYOR_DENIED',
           category: 'billing',
           iconClass: 'fa-ban',
           rowClass: 'danger',
@@ -280,6 +290,7 @@
         },
         {
           name: 'Rejected',
+          systemName: 'REJECTED',
           category: 'billing',
           iconClass: 'fa-times',
           rowClass: 'danger',
@@ -314,6 +325,7 @@
         },
         {
           name: 'Report Complete',
+          systemName: 'REPORT_COMPLETE',
           category: 'report',
           iconClass: 'fa-check-circle',
           rowClass: 'success',

@@ -1,7 +1,7 @@
 -- View: referraldetail
 -- returns referral, program, client, site, physician data
 
--- DROP VIEW referraldetail;
+-- DROP VIEW altum.referraldetail;
 
 CREATE OR REPLACE VIEW altum.referraldetail AS
  SELECT
@@ -55,7 +55,8 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     referral.owner,
     referral."createdBy",
     referral."createdAt",
-    referral."updatedAt"
+    referral."updatedAt",
+    referral."referralComments"
 FROM altum.referral
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id

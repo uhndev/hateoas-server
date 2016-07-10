@@ -1,7 +1,7 @@
 -- View: clientcontact
 -- returns client and person data
 
--- DROP VIEW clientcontact;
+-- DROP VIEW altum.clientcontact;
 CREATE OR REPLACE VIEW altum.clientcontact AS
   SELECT
     client.id,
