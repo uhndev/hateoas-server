@@ -17,13 +17,13 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://localhost:1337',
+  appUrl: process.env.APP_URL,
   hookTimeout: 9999999,
   log: {
     level: 'verbose'
   },
   models: {
     migrate: 'alter',
-    connection: 'altum_development'
+    connection: 'altum'
   }
 };

@@ -33,13 +33,14 @@
         type: 'string'
       },
 
-        /**
-         * background
-         * @description setup back ground color
-         */
-      backGroundColor: {
-          type: 'string'
-        },
+      /**
+       * backgroundColour
+       * @description Background colour of the notetype
+       */
+      backgroundColour: {
+        type: 'string'
+      },
+
       /**
        * name
        * @description note collection
@@ -48,8 +49,9 @@
       notes: {
         collection: 'note',
         via: 'noteType'
-      }
+      },
 
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
     /**
@@ -79,7 +81,7 @@
       var notetypes = this.generate();
       return Promise.all(
         _.map(notetypes, function (notetype) {
-          return NoteType.findOrCreate({ name: notetype.name }, notetype);
+          return NoteType.findOrCreate({name: notetype.name}, notetype);
         })
       ).then(function (notetypes) {
         sails.log.info(notetypes.length + " noteType(s) generated");

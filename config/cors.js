@@ -47,16 +47,7 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-  origin: [
-    'http://localhost:8080',
-    'http://ws69.uhnresearch.ca:8080',
-    'http://ws69.uhnresearch.ca:8081',
-    'http://ws98.uhnresearch.ca',
-    'http://10.3.128.49',
-    'http://altumuat.uhn.ca',
-    'http://10.3.128.48',
-    'http://altum.uhn.ca'
-  ].join(','),
+  origin: process.env.CORS_ORIGIN,
 
   /***************************************************************************
   *                                                                          *

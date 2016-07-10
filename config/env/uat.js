@@ -17,22 +17,22 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  appUrl: 'http://altumuat.uhn.ca:1338',
-  proxyHost: 'altumuat.uhn.ca',
+  appUrl: process.env.APP_URL,
   hookTimeout: 9999999,
+  proxyHost: process.env.PROXY_HOST,
   keepResponseErrors: true,
 
   models: {
     migrate: 'safe',
     autoCreatedBy: true,
-    connection: 'altum_uat'
+    connection: 'altum'
   },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 1338,
+  port: process.env.PORT,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *

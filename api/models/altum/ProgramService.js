@@ -19,6 +19,9 @@
 
     defaultPopulate: ['AHServices'],
 
+    // default fields to omit from template
+    defaultTemplateOmit: ['createdAt', 'createdBy', 'updatedAt'],
+
     attributes: {
 
       /**

@@ -17,7 +17,7 @@
 
     displayFields: ['language', 'translationKey'],
 
-    connection: 'altum_mongo_' + sails.config.environment,
+    connection: 'altum_mongo',
 
     attributes: {
 

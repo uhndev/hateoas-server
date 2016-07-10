@@ -55,6 +55,12 @@ module.exports.policies = {
       'passport',
       'tokenAuth',
       'sessionAuth'
+    ],
+    'fetchTemplate': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
     ]
   },
 

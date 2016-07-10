@@ -1,7 +1,7 @@
 -- View: servicedetail
 -- returns referral, altumservice, programservice, program, site, physician, and client info
 
--- DROP VIEW servicedetail;
+-- DROP VIEW altum.servicedetail;
 
 CREATE OR REPLACE VIEW altum.servicedetail AS
   SELECT
@@ -37,6 +37,9 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     approval.status AS "currentStatus",
     status.visitable AS "approvalVisitable",
     completion.id AS "currentCompletion",
+    completion."completionDate",
+    completion."additionalData"->>'timeIn' AS "currentCompletionTimeIn",
+    completion."additionalData"->>'timeOut' AS "currentCompletionTimeOut",
     completion.status AS "currentCompletionStatus",
     completion_status.visitable AS "completionVisitable",
     completion.physician AS "currentCompletionPhysician",
