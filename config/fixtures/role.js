@@ -11,15 +11,15 @@
       Role.findOneByName('altumadmin').then(function (role) {
         if (!role) {
           var permissions = [
-            { model: 'systemform',        action: 'read' },
-            { model: 'statusform',        action: 'read' },
-            { model: 'translation',       action: 'read' },
+            {model: 'systemform', action: 'read'},
+            {model: 'statusform', action: 'read'},
+            {model: 'translation', action: 'read'},
             {
               model: 'group',
               action: 'read',
               criteria: [
                 {
-                  where: { level: 2 }
+                  where: {level: 2}
                 }
               ]
             },
@@ -28,7 +28,7 @@
               action: 'read',
               criteria: [
                 {
-                  where: { group: { '!': 'subject' } }
+                  where: {group: {'!': 'subject'}}
                 }
               ]
             },
@@ -44,7 +44,7 @@
             }
           ];
 
-          var altumPermissions = _.reduce([
+          var altumPermissions = _.map([
             'address', 'altumservice', 'approval', 'approver', 'city', 'client',
             'company', 'emergencycontact', 'employee', 'invoice', 'language',
             'note', 'notetype', 'payor', 'physician', 'prognosis', 'program',
@@ -52,14 +52,31 @@
             'staff', 'stafftype', 'status', 'timeframe', 'workstatus', 'person',
             'altumprogramservices', 'clientcontact', 'referraldetail', 'servicedetail',
             'billinggroup', 'completion', 'billingstatus', 'reportstatus', 'servicepreset'
-          ], function (result, model) {
-            return result.concat(_.map(['create', 'read', 'update'], function (action) {
-              return {
-                model: model,
-                action: action
-              }
-            }));
-          }, []);
+          ], function (model) {
+            return {
+              model: model,
+              action: 'read'
+            };
+          });
+
+          altumPermissions.concat(_.map([
+            'address', 'approval', 'client', 'company', 'emergencycontact', 'employee', 'referral', 
+            'note', 'service', 'person', 'billinggroup', 'completion', 'billingstatus', 'reportstatus'
+          ], function (model) {
+            return {
+              model: model,
+              action: 'create'
+            }
+          }));
+          
+          altumPermissions.concat(_.map([
+            'address', 'client', 'emergencycontact', 'employee', 'referral', 'service', 'person'
+          ], function (model) {
+            return {
+              model: model,
+              action: 'update'
+            };
+          }));
 
           return PermissionService.createRole({
             name: 'altumadmin',
@@ -73,18 +90,18 @@
           return PermissionService.createRole({
             name: 'coordinator',
             permissions: [
-              { model: 'studysubject',      action: 'read' },
-              { model: 'schedulesubjects',  action: 'read' },
-              { model: 'systemform',        action: 'read' },
-              { model: 'form',              action: 'read' },
-              { model: 'translation',       action: 'read' },
-              { model: 'answerset',         action: 'create' },
+              {model: 'studysubject', action: 'read'},
+              {model: 'schedulesubjects', action: 'read'},
+              {model: 'systemform', action: 'read'},
+              {model: 'form', action: 'read'},
+              {model: 'translation', action: 'read'},
+              {model: 'answerset', action: 'create'},
               {
                 model: 'group',
                 action: 'read',
                 criteria: [
                   {
-                    where: { level: 2 }
+                    where: {level: 2}
                   }
                 ]
               },
@@ -93,7 +110,7 @@
                 action: 'read',
                 criteria: [
                   {
-                    where: { group: { '!': 'subject' } }
+                    where: {group: {'!': 'subject'}}
                   }
                 ]
               },
@@ -112,7 +129,7 @@
                 action: 'create',
                 criteria: [
                   {
-                    where: { group: { '!': 'admin' } }
+                    where: {group: {'!': 'admin'}}
                   }
                 ]
               }
@@ -126,18 +143,18 @@
           return PermissionService.createRole({
             name: 'provider',
             permissions: [
-              { model: 'studysubject',      action: 'read' },
-              { model: 'schedulesubjects',  action: 'read' },
-              { model: 'systemform',        action: 'read' },
-              { model: 'form',              action: 'read' },
-              { model: 'translation',       action: 'read' },
-              { model: 'answerset',         action: 'create' },
+              {model: 'studysubject', action: 'read'},
+              {model: 'schedulesubjects', action: 'read'},
+              {model: 'systemform', action: 'read'},
+              {model: 'form', action: 'read'},
+              {model: 'translation', action: 'read'},
+              {model: 'answerset', action: 'create'},
               {
                 model: 'group',
                 action: 'read',
                 criteria: [
                   {
-                    where: { level: 2 }
+                    where: {level: 2}
                   }
                 ]
               },
@@ -146,7 +163,7 @@
                 action: 'read',
                 criteria: [
                   {
-                    where: { group: { '!': 'subject' } }
+                    where: {group: {'!': 'subject'}}
                   }
                 ]
               },
@@ -165,7 +182,7 @@
                 action: 'create',
                 criteria: [
                   {
-                    where: { group: { '!': 'admin' } }
+                    where: {group: {'!': 'admin'}}
                   }
                 ]
               }
@@ -179,18 +196,18 @@
           return PermissionService.createRole({
             name: 'interviewer',
             permissions: [
-              { model: 'studysubject',      action: 'read' },
-              { model: 'schedulesubjects',  action: 'read' },
-              { model: 'systemform',        action: 'read' },
-              { model: 'form',              action: 'read' },
-              { model: 'translation',       action: 'read' },
-              { model: 'answerset',         action: 'create' },
+              {model: 'studysubject', action: 'read'},
+              {model: 'schedulesubjects', action: 'read'},
+              {model: 'systemform', action: 'read'},
+              {model: 'form', action: 'read'},
+              {model: 'translation', action: 'read'},
+              {model: 'answerset', action: 'create'},
               {
                 model: 'group',
                 action: 'read',
                 criteria: [
                   {
-                    where: { level: 2 }
+                    where: {level: 2}
                   }
                 ]
               },
@@ -199,7 +216,7 @@
                 action: 'read',
                 criteria: [
                   {
-                    where: { group: { '!': 'subject' } }
+                    where: {group: {'!': 'subject'}}
                   }
                 ]
               },
@@ -223,16 +240,16 @@
           return PermissionService.createRole({
             name: 'subject',
             permissions: [
-              { model: 'systemform',        action: 'read' },
-              { model: 'form',              action: 'read' },
-              { model: 'translation',       action: 'read' },
-              { model: 'answerset',         action: 'create' },
+              {model: 'systemform', action: 'read'},
+              {model: 'form', action: 'read'},
+              {model: 'translation', action: 'read'},
+              {model: 'answerset', action: 'create'},
               {
                 model: 'group',
                 action: 'read',
                 criteria: [
                   {
-                    where: { level: 3 }
+                    where: {level: 3}
                   }
                 ]
               },

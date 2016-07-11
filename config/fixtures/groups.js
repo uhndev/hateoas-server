@@ -49,7 +49,8 @@
                 {prompt: 'APP.HEADER.MENU.SYSTEM_FORM_BUILDER', href: '/systemform', icon: 'fa-folder-o'},
                 {prompt: 'APP.HEADER.MENU.GROUPS', href: '/group', icon: 'fa-users'},
                 {prompt: 'APP.HEADER.MENU.TRANSLATIONS', href: '/translation', icon: 'fa-globe'},
-                {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'}
+                {prompt: 'APP.HEADER.MENU.ACCESS_MANAGEMENT', href: '/access', icon: 'fa-lock'},
+                {prompt: 'APP.HEADER.MENU.SERVICE_MAPPER', href: '/servicemapper', icon: 'fa-arrows-h'}
               ]
             }
           ],
@@ -70,33 +71,7 @@
             {"href": "/client", "icon": "fa-users", "prompt": "APP.HEADER.MENU.CLIENTS"},
             {"href": "/referral", "icon": "fa-ambulance", "prompt": "APP.HEADER.MENU.REFERRALS"},
             {"href": "/billing", "icon": "fa-usd", "prompt": "APP.HEADER.MENU.BILLING"},
-            {"href": "/user", "icon": "fa-user", "prompt": "APP.HEADER.MENU.USER_MANAGER"},
-            {
-              "prompt": "APP.HEADER.MENU.ALTUM_TOOLS", "icon": "fa-wrench", "dropdown": [
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.ALTUM_SERVICES", "href": "/altumservice", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.APPROVERS", "href": "/approver", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.COMPANIES", "href": "/company", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PAYORS", "href": "/payor", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PHYSICIANS", "href": "/physician", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAM_SERVICES", "href": "/programservice", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SITES", "href": "/site", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STAFF", "href": "/staff", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.PROGRAMS", "href": "/program", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.SERVICE_VARIATIONS", "href": "/servicevariation", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.ALTUM_TOOLS.STATUS_FORMS", "href": "/statusform", "icon": ""}
-            ]
-            },
-            {
-              "prompt": "APP.HEADER.MENU.SETTINGS", "icon": "fa-bars", "dropdown": [
-              {"prompt": "APP.HEADER.MENU.SETTINGS.CITY", "href": "/city", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.PROGNOSIS", "href": "/prognosis", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.SERVICE_CATEGORIES", "href": "/servicecategory", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.STAFF_TYPES", "href": "/stafftype", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.STATUS", "href": "/status", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.TIMEFRAME", "href": "/timeframe", "icon": ""},
-              {"prompt": "APP.HEADER.MENU.SETTINGS.WORK_STATUS", "href": "/workstatus", "icon": ""}
-            ]
-            }
+            {"href": "/user", "icon": "fa-user", "prompt": "APP.HEADER.MENU.USER_MANAGER"}
           ],
           subview: {
             'study': ['name', 'study', 'collectioncentre', 'subject', 'user', 'form', 'survey'],
