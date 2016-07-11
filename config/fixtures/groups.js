@@ -80,6 +80,98 @@
             'referral': ['name', 'referraldetail', 'referral', 'altumprogramservices', 'service', 'invoice']
           }
         }
+      },
+      {
+        name: 'coordinator',
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains(['registered', 'coordinator'], role.name);
+        }), 'id'),
+        level: 2,
+        menu: {
+          tabview: [
+            {prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal.surveys',
+              href: '/subjectportal/surveys',
+              icon: 'fa-arrow-right'
+            }
+          ],
+          subview: {
+            'study': ['name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment'],
+            'user': ['name', 'user']
+          }
+        }
+      },
+      {
+        name: 'provider',
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains(['registered', 'provider'], role.name);
+        }), 'id'),
+        level: 2,
+        menu: {
+          tabview: [
+            {prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.USER_MANAGER', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
+          ],
+          subview: {
+            'study': ['name', 'study', 'collectioncentre', 'subjectenrollment', 'userenrollment'],
+            'user': ['name', 'user']
+          }
+        }
+      },
+      {
+        name: 'interviewer',
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains(['registered', 'interviewer'], role.name);
+        }), 'id'),
+        level: 2,
+        menu: {
+          tabview: [
+            {prompt: 'APP.HEADER.MENU.STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
+          ],
+          subview: {
+            'study': ['name', 'study', 'subject'],
+            'user': ['name', 'user']
+          }
+        }
+      },
+      {
+        name: 'subject',
+        roles: _.pluck(_.filter(roles, function (role) {
+          return _.contains(['registered', 'subject'], role.name);
+        }), 'id'),
+        level: 3,
+        menu: {
+          tabview: [
+            {prompt: 'APP.HEADER.MENU.MY_STUDIES', href: '/study', icon: 'fa-group'},
+            {prompt: 'APP.HEADER.MENU.MY_PROFILE', href: '/user', icon: 'fa-user'},
+            {
+              prompt: 'APP.HEADER.MENU.SUBJECT_PORTAL',
+              sref: 'subjectportal',
+              href: '/subjectportal',
+              icon: 'fa-arrow-right'
+            }
+          ],
+          subview: {
+            'study': ['name', 'study'],
+            'user': ['name', 'user']
+          }
+        }
       }
     ];
 
