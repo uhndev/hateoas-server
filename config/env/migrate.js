@@ -27,6 +27,12 @@ module.exports = {
     connection: 'altum'
   },
 
+  // ssl: {
+  //   key: fs.readFileSync(process.env.SSL_KEY),
+  //   cert: fs.readFileSync(process.env.SSL_CERT),
+  //   passphrase: process.env.SSL_PASSPHRASE
+  // },
+
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/

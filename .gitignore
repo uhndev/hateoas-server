@@ -41,6 +41,7 @@
 
 config/local.js
 config/scripts/**/*.pyc
+config/ssl/**
 mocha.json
 docs
 coverage
