@@ -28,7 +28,7 @@
             err.status = 400;
             throw err;
           } else {
-            this.schedule = schedule;
+            this.schedule = schedule;            
 
             return Session.findOne({id: schedule.session}).populate('formVersions');
           }
@@ -48,8 +48,8 @@
           if(formVersion === undefined) {
             res.notFound();
           } else {
-            var answerSet = _.find(this.schedule.answerSets, function (answers) {
-              return answers.formVersion == formVersionID;
+            var answerSet = _.filter(this.schedule.answerSets, function (answer) {
+              return _.isNull(answer.expiredAt) && answer.formVersion === formVersionID;
             });
             if (answerSet !== undefined) {
               formVersion.answerSetID = answerSet.id;

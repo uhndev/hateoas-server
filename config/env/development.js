@@ -34,5 +34,11 @@ module.exports = {
 
   log: {
     level: 'verbose'
+  },
+  
+  fhir: {
+    //'http://try-fhirplace.hospital-systems.com'
+    //'http://fhirtest.uhn.ca/baseDstu2'
+    baseUrl: 'http://fhirtest.uhn.ca/baseDstu2'
   }
 };
