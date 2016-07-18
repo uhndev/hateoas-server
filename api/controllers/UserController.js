@@ -127,32 +127,25 @@
      */
     create: function (req, res, next) {
       var userOptions = _.pick(_.pick(req.body,
-        'username', 'email', 'password'
+        'username', 'email', 'password', 'group', 'userType'
       ), _.identity);
-      var personInfo = _.pick(_.pick(req.body,
+      userOptions.person = _.pick(_.pick(req.body,
         'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
       ), _.identity);
-      var userGroup = req.param('group');
 
-      User
-        .register(userOptions)
-        .then(function (createdUser) {
-          return Group.findOne(userGroup).then(function (newGroup) {
-            if (!newGroup) {
-              err = new Error('Group '+userGroup+' does not exist.');
-              err.status = 400;
-              throw err;
-            }
-            return User.update({id: createdUser.id}, {
-              person: personInfo,
-              group: userGroup
-            });
-          });
+      Group.findOne(userOptions.group)
+        .then(function (group) {
+          if (!group) {
+            err = new Error('Group '+userOptions.group+' does not exist.');
+            err.status = 400;
+            throw err;
+          }
+          return User.register(userOptions);
         })
-        .then(function (updatedUser) {
-          return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
+        .then(function (createdUser) {
+          return PermissionService.setDefaultGroupRoles(createdUser)
             .then(function () {
-              res.ok(_.first(updatedUser));
+              res.ok(createdUser);
             })
             .catch(function (err) {
               user.destroy(function (destroyErr) {

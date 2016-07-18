@@ -246,13 +246,13 @@
           "value": ""
         },
         {
-          "name": "firstname",
+          "name": "firstName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER_ENROLLMENT.FIRSTNAME",
           "value": ""
         },
         {
-          "name": "lastname",
+          "name": "lastName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER_ENROLLMENT.LASTNAME",
           "value": ""

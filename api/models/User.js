@@ -8,7 +8,7 @@
  */
 
 
-(function() {
+(function () {
   var _super = require('./BaseModel.js');
   var faker = require('faker');
 
@@ -32,8 +32,8 @@
        */
       group: {
         model: 'group',
-        generator: function(state) {
-          return (state && _.has(state, 'group')) ? state.group: 'coordinator';
+        generator: function (state) {
+          return (state && _.has(state, 'group')) ? state.group : 'coordinator';
         }
       },
 
@@ -43,7 +43,17 @@
        * @type {Association}
        */
       person: {
-        model:'person'
+        model: 'person'
+      },
+
+      /**
+       * userType
+       * @description Fixed enum of login-able user types that can be created
+       * @type {Enum}
+       */
+      userType: {
+        type: 'string',
+        enum: ['approver', 'staff', 'physician']
       },
 
       /**
@@ -77,7 +87,7 @@
        * @param  {ID} id Study ID
        * @return {Array} Array of response links
        */
-      getResponseLinks: function(id) {
+      getResponseLinks: function (id) {
         return [
           {
             'rel': 'name',
@@ -143,13 +153,12 @@
           })
           .catch(cb);
       },
-      function setProvider(user, cb) {
-        if (user.group == 'provider') { // if desired group is provider, create associated provider
-          Provider.create({ user: user.id })
-            .then(function (user) {
-              cb();
-            })
-            .catch(cb);
+      function createUserType(user, cb) {
+        if (user.userType) {
+          sails.models[user.userType].findOrCreate({person: user.person}, {person: user.person})
+            .exec(function (err, createdUserType) {
+              cb(err);
+            });
         } else {
           cb();
         }
@@ -165,27 +174,27 @@
      * @param  {Object}   updated updated user object
      * @param  {Function} cb      callback function on completion
      */
-    afterUpdate: function(updated, cb) {
+    afterUpdate: function (updated, cb) {
       if (!_.isNull(updated.expiredAt)) {
-        UserEnrollment.update({ user: updated.id }, { expiredAt: new Date() })
-        .then(function (userEnrollments) {
-          // find if deleted user was a subject
-          return Subject.find({ user: updated.id });
-        })
-        .then(function (subjects) {
-          // update any possible subject enrollments
-          return SubjectEnrollment.update({ subject: _.pluck(subjects, 'id') }, { expiredAt: new Date() });
-        })
-        .then(function (subjectEnrollments) {
-          cb();
-        })
-        .catch(cb);
+        UserEnrollment.update({user: updated.id}, {expiredAt: new Date()})
+          .then(function (userEnrollments) {
+            // find if deleted user was a subject
+            return Subject.find({user: updated.id});
+          })
+          .then(function (subjects) {
+            // update any possible subject enrollments
+            return SubjectEnrollment.update({subject: _.pluck(subjects, 'id')}, {expiredAt: new Date()});
+          })
+          .then(function (subjectEnrollments) {
+            cb();
+          })
+          .catch(cb);
       } else if (updated.group == 'provider') {
-        Provider.findOne({ user: updated.id }).exec(function (err, provider) {
+        Provider.findOne({user: updated.id}).exec(function (err, provider) {
           if (err) {
             cb(err);
           } else {
-            var promise = (!provider) ? Provider.create({ user: updated.id }) : Provider.update({ id: provider.id }, { user: updated.id });
+            var promise = (!provider) ? Provider.create({user: updated.id}) : Provider.update({id: provider.id}, {user: updated.id});
             promise.then(function (updatedProvider) {
               cb();
             }).catch(cb);
