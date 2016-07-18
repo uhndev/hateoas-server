@@ -105,7 +105,7 @@ describe('The User Controller', function () {
           .end(function (err, res) {
             var collection = JSON.parse(res.text);
             _.all(collection.items.slice(1), function (item) {
-              return _.has(item, 'prefix') && _.has(item, 'firstname') && _.has(item, 'lastname')
+              return _.has(item, 'prefix') && _.has(item, 'firstName') && _.has(item, 'lastName')
             }).should.be.ok;
             done(err);
           });

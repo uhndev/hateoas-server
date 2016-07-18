@@ -22,16 +22,16 @@
       prefix: {
         type: 'string'
       },
-      firstname: {
+      firstName: {
         type: 'string'
       },
-      lastname: {
+      lastName: {
         type: 'string'
       },
       gender: {
         type: 'string'
       },
-      dob: {
+      dateOfBirth: {
         type: 'date'
       },
       userenrollment: {
