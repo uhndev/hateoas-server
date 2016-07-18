@@ -8,11 +8,11 @@ CREATE OR REPLACE VIEW dados.collectioncentreuser AS
     collectioncentre.id AS "collectionCentre",
     "user".username,
     "user".email,
-    "user".prefix,
-    "user".firstname,
-    "user".lastname,
-    "user".gender,
-    "user".dob,
+    person.prefix,
+    person."firstName",
+    person."lastName",
+    person.gender,
+    person."dateOfBirth",
     userenrollment.id AS "userenrollment",
     userenrollment."centreAccess",
     userenrollment."owner",
@@ -21,6 +21,7 @@ CREATE OR REPLACE VIEW dados.collectioncentreuser AS
     userenrollment."updatedAt"
    FROM dados.userenrollment
      LEFT JOIN "user" ON "user".id = userenrollment."user"
+     LEFT JOIN altum.person on "user".person = person.id
      LEFT JOIN dados.collectioncentre ON userenrollment."collectionCentre" = collectioncentre.id
      LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE userenrollment."expiredAt" IS NULL;
