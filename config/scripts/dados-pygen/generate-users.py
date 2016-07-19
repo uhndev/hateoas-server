@@ -23,9 +23,9 @@ class User:
     sanitized_lastname = sanitize_input(lastname)
     self.username = sanitized_firstname + '.' + sanitized_lastname
     self.email = sanitized_firstname + '.' + sanitized_lastname + '@uhn.ca'
-    self.firstName = firstname
-    self.lastName = lastname
-    self.dateOfBirth = fake.iso8601()
+    self.firstname = firstname
+    self.lastname = lastname
+    self.dob = fake.iso8601()
     self.password = "Password123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])

@@ -24,19 +24,24 @@
         whereQuery = _.merge(actionUtil.parseCriteria(req), {group: {'!': 'subject'}});
       }
 
-      userperson.count(whereQuery)
+      ModelService.filterExpiredRecords('user').where( whereQuery )
         .exec(function (err, totalUsers) {
-          var query = userperson.find();
+          var query = ModelService.filterExpiredRecords('user');
           query
             .where( whereQuery )
             .limit( actionUtil.parseLimit(req) )
             .skip( actionUtil.parseSkip(req) )
             .sort( actionUtil.parseSort(req) );
+          query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
               res.serverError(err);
             }
-            res.ok(users, { filteredTotal: totalUsers });
+            if (req.user.group == 'admin') {
+              res.ok(users, { filteredTotal: totalUsers.length });
+            } else {
+              res.ok(users);
+            }
           });
         });
     },
@@ -45,24 +50,22 @@
      * findOne
      * @description finds one user by id and returns single user with populated collection centre association
      */
-    findOne: function (req, res) {
-      var query = userperson.findOne(req.param('id'));
+    findOne: function (req, res, next) {
+      var query = User.findOne(req.param('id'));
       query = actionUtil.populateRequest(query, req);
+      query.populate('enrollments');
       query.then(function (user) {
-          if (!user) {
-            return res.notFound({
-              title: 'Not Found',
-              code: 404,
-              message: 'No record found with the specified id.'
-            });
-          }
+        if(!user) {
+          return res.notFound({
+            title: 'Not Found',
+            code: 404,
+            message: 'No record found with the specified id.'
+          });
+        }
 
-          this.user = user;
-          return UserEnrollment.find().where({user: user.id, expiredAt: null});
-        })
-      .then(function (enrollments) {
+        this.user = user;
         return Promise.all(
-          _.map(enrollments, function (enrollment) {
+          _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
             return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
               .then(function (centre) {
                 enrollment.collectionCentre = centre.id;
@@ -130,23 +133,19 @@
         'username', 'email', 'password'
       ), _.identity);
       var personInfo = _.pick(_.pick(req.body,
-        'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
+        'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
-      var userGroup = req.param('group');
 
       User
         .register(userOptions)
         .then(function (createdUser) {
-          return Group.findOne(userGroup).then(function (newGroup) {
+          return Group.findOne(personInfo.group).then(function (newGroup) {
             if (!newGroup) {
-              err = new Error('Group '+userGroup+' does not exist.');
+              err = new Error('Group '+personInfo.group+' does not exist.');
               err.status = 400;
               throw err;
             }
-            return User.update({id: createdUser.id}, {
-              person: personInfo,
-              group: userGroup
-            });
+            return User.update({id: createdUser.id}, personInfo);
           });
         })
         .then(function (updatedUser) {
@@ -171,27 +170,23 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
-      var userOptions = _.pick(_.pick(req.body,
-        'username', 'email', 'group'
-      ), _.identity);
-
-      userOptions.person = _.pick(_.pick(req.body,
-        'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
+      var options = _.pick(_.pick(req.body,
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
 
       if (req.user.group !== 'admin') { // prevent all non-admin users from updating group
-        delete userOptions.group;
+        delete options.group;
       }
 
       User.findOne(userId)
         .then(function (user) { // update user fields
           this.previousGroup = user.group;
-          return User.update({id: user.id}, userOptions);
+          return User.update({id: user.id}, options);
         })
         .then(function (user) { // updating group, apply new permissions
           this.user = user;
-          if (this.previousGroup !== userOptions.group && req.user.group === 'admin') {
-            return PermissionService.swapRoles(userId, this.previousGroup, userOptions.group);
+          if (this.previousGroup !== options.group && req.user.group === 'admin') {
+            return PermissionService.swapRoles(userId, this.previousGroup, options.group);
           } else {
             return user;
           }
@@ -210,6 +205,50 @@
         .catch(function (err) {
           res.badRequest(err);
         });
+    },
+
+    /**
+     * updateRoles
+     * @description Route for handling role updates from access management page
+     */
+    updateRoles: function (req, res, next) {
+      // user params
+      var userId = req.param('id');
+      // access control params
+      var roles = req.param('roles'),
+          updateGroup = req.param('updateGroup');
+
+      // Update user role from access management
+      if (!_.isUndefined(updateGroup)) {
+        return User.findOne(userId).populate('roles')
+        .then(function (user) {
+          user.group = updateGroup;
+          this.user = user;
+          return user.save();
+        })
+        .then(function () {
+          return PermissionService.setDefaultGroupRoles(this.user);
+        })
+        .then(function () {
+          res.ok(this.user);
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
+      }
+      // Update user access matrix
+      else if (!_.isUndefined(roles)) {
+        return User.findOne(userId)
+        .then(function (user) {
+          return PermissionService.grantPermissions(user, roles);
+        })
+        .then(function (user) {
+          res.ok(user);
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        });
+      }
     }
 
   });

@@ -12,7 +12,7 @@ CREATE OR REPLACE VIEW dados.collectioncentresubjectoverview AS
     study.name AS study,
     collectioncentre.name,
     collectioncentre.contact,
-    concat_ws(' '::text, person.prefix, person."firstName", person."lastName") AS "contactName",
+    concat_ws(' '::text, collectioncentreuser.prefix, collectioncentreuser.firstname, collectioncentreuser.lastname) AS "contactName",
     collectioncentre.owner,
     collectioncentre."createdBy",
     collectioncentre."createdAt",
@@ -22,7 +22,6 @@ CREATE OR REPLACE VIEW dados.collectioncentresubjectoverview AS
      LEFT JOIN dados.subjectenrollment ON subject.id = subjectenrollment.subject
      LEFT JOIN dados.collectioncentre ON subjectenrollment."collectionCentre" = collectioncentre.id
      LEFT JOIN "user" collectioncentreuser ON collectioncentre.contact = collectioncentreuser.id
-     LEFT JOIN altum.person ON collectioncentreuser.person = person.id
      LEFT JOIN dados.userenrollment ON userenrollment."collectionCentre" = collectioncentre.id
      LEFT JOIN dados.study ON study.id = collectioncentre.study
      LEFT JOIN ( SELECT count(1) AS coordinators_count,

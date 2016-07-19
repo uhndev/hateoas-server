@@ -10,7 +10,7 @@ CREATE OR REPLACE VIEW dados.studycollectioncentre AS
     study.name AS "studyName",
     collectioncentre.name,
     collectioncentre.contact,
-    concat_ws(' '::text, person.prefix, person."firstName", person."lastName") AS "contactName",
+    concat_ws(' '::text, "user".prefix, "user".firstname, "user".lastname) AS "contactName",
     collectioncentre."owner",
     collectioncentre."createdBy",
     collectioncentre."createdAt",
@@ -18,7 +18,6 @@ CREATE OR REPLACE VIEW dados.studycollectioncentre AS
    FROM dados.collectioncentre
 	LEFT JOIN dados.userenrollment ON userenrollment."collectionCentre" = collectioncentre.id
 	LEFT JOIN "user" ON "user".id = collectioncentre.contact
-	LEFT JOIN altum.person ON "user".person = person.id
 	LEFT JOIN dados.study ON collectioncentre.study = study.id
   WHERE collectioncentre."expiredAt" IS NULL;
 

@@ -22,7 +22,71 @@
 
     defaultSortBy: 'displayName ASC',
 
+    displayFields: [ 'prefix', 'firstname', 'lastname' ],
+
     attributes: {
+      /**
+       * firstname
+       * @description A user's first name.
+       * @type {String}
+       */
+      firstname: {
+        type: 'string',
+        generator: faker.name.firstName
+      },
+
+      /**
+       * lastname
+       * @description A user's last name.
+       * @type {String}
+       */
+      lastname: {
+        type: 'string',
+        generator: faker.name.lastName
+      },
+
+
+      /**
+       * prefix
+       * @description Enumeration of allowable prefixes for a user.
+       * @type {Enum}
+       */
+
+      prefix: {
+        type: 'string',
+        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
+        generator: function () {
+          return _.sample(User.attributes.prefix.enum);
+        }
+      },
+
+
+      /**
+       * gender
+       * @description Enumeration of allowable genders of a user.
+       * @type {Enum}
+       */
+      gender: {
+        type: 'string',
+        enum: ['Male', 'Female'],
+        generator: function() {
+          return _.sample(User.attributes.gender.enum);
+        }
+      },
+
+
+      /**
+       * dob
+       * @description A user's date of birth.
+       * @type {Date}
+       */
+      dob: {
+        type: 'date',
+        generator: function(state) {
+          return faker.date.past();
+        }
+      },
+
 
       /**
        * group
@@ -37,11 +101,25 @@
         }
       },
 
+
       /**
-       * person
-       * @description Reference to who the 'person' of this is
+       * owner
+       * @description Reference to who the 'owner' of this is - is used in the owner
+       *              relation in roles like readUserOwner/updateUserOwner which are
+       *              roles specifically for handling read/updates of themselves.
        * @type {Association}
        */
+      owner: {
+        model: 'user'
+      },
+
+      /**
+       * owner
+       * @description Reference to who the 'person' of this is -
+       *
+       * @type {Association}
+       */
+
       person: {
         model:'person'
       },
@@ -81,7 +159,7 @@
         return [
           {
             'rel': 'name',
-            'prompt': this.displayName,
+            'prompt': Utils.User.getFullName(this),
             'name': 'name',
             'href': [
               sails.config.appUrl + sails.config.blueprints.prefix, 'user', this.id
@@ -99,30 +177,6 @@
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
-    },
-
-    /**
-     * beforeValidate
-     * @description After validation/creation displayName is updated with values
-     *              from fields listed in the defaultsTo attribute of displayName
-     *              this can be overridden in child models inheriting from the
-     *              basemodel to pick specific fields
-     * @param  {Object}   values  given User object for creation
-     * @param  {Function} cb      callback function on completion
-     */
-    beforeValidate: function (values, cb) {
-      if (values.person) {
-        Person.findOne(values.person).exec(function (err, person) {
-          if (err) {
-            cb(err);
-          } else {
-            values.displayName = person.displayName;
-            cb();
-          }
-        });
-      } else {
-        cb();
-      }
     },
 
     /**

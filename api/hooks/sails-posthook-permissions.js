@@ -55,13 +55,11 @@
       .then(function (user) {
         if (_.isUndefined(user.group) || _.isNull(user.group)) {
           return User.update({ id: user.id }, {
-            person: {
-              prefix: 'Mr.',
-              firstName: 'Admin',
-              lastName: 'Admin',
-              gender: 'Male',
-              dateOfBirth: new Date()  
-            },            
+            prefix: 'Mr.',
+            firstname: 'Admin',
+            lastname: 'Admin',
+            gender: 'Male',
+            dob: new Date(),
             group: 'admin'
           });
         } else {

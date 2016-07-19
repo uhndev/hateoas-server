@@ -28,16 +28,16 @@
       prefix: {
         type: 'string'
       },
-      firstName: {
+      firstname: {
         type: 'string'
       },
-      lastName: {
+      lastname: {
         type: 'string'
       },
       gender: {
         type: 'string'
       },
-      dateOfBirth: {
+      dob: {
         type: 'date'
       },
       study: {

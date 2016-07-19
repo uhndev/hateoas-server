@@ -24,8 +24,8 @@ var Auth = {
         password: 'subject1234',
         group: 'subject',
         prefix: 'Mr.',
-        firstName: 'Sub',
-        lastName: 'Ject'
+        firstname: 'Sub',
+        lastname: 'Ject'
       },
       login: {
         identifier: 'subject',
@@ -39,8 +39,8 @@ var Auth = {
         password: 'interviewer1234',
         group: 'interviewer',
         prefix: 'Mr.',
-        firstName: 'Inter',
-        lastName: 'Viewer'
+        firstname: 'Inter',
+        lastname: 'Viewer'
       },
       login: {
         identifier: 'interviewer',
@@ -54,8 +54,8 @@ var Auth = {
         password: 'coordinator1234',
         group: 'coordinator',
         prefix: 'Dr.',
-        firstName: 'Coord',
-        lastName: 'Inator'
+        firstname: 'Coord',
+        lastname: 'Inator'
       },
       login: {
         identifier: 'coordinator',
@@ -69,8 +69,8 @@ var Auth = {
         password: 'admin1234',
         group: 'admin',
         prefix: 'Dr.',
-        firstName: 'John',
-        lastName: 'Admin'
+        firstname: 'John',
+        lastname: 'Admin'
       },
       login: {
         identifier: 'admin',
