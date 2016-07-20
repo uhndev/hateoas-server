@@ -206,7 +206,6 @@
         generator: faker.internet.email
       },
 
-
       /**
        * employments
        * @description A collection of a person's employments at various companies
@@ -272,6 +271,7 @@
         collection: 'emergencyContact',
         via: 'person'
       },
+      
       /**
        * users
        * @description a persons associated users
