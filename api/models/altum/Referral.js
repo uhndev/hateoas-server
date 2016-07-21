@@ -232,6 +232,7 @@
         collection: 'note',
         via: 'referral'
       },
+      
       /**
        * referralComments
        * @description Comments for a specific referral
@@ -240,16 +241,15 @@
        referralComments: {
          type: 'string'
        },
+      
       /**
-       * referralContact
-       * @description A referral's referralContact
+       * referralContacts
+       * @description A referral's referralContacts
        * @type {Model}
        */
-      referralContact: {
-        model: 'employee',
-        generator: function(state) {
-          return BaseModel.defaultGenerator(state, 'referralContact', Employee);
-        }
+      referralContacts: {
+        collection: 'employee',
+        via: 'referral'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
