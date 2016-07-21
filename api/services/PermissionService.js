@@ -69,6 +69,39 @@
     },
 
     /**
+     * swapGroups
+     * @description Convenience function for removing a user from a given group, then adding them to another
+     * @param userID
+     * @param previousGroup
+     * @param newGroup
+     */
+    swapGroups: function (userID, previousGroup, newGroup) {
+      return User.findOne(userID).populate('roles')
+        .then(function (user) {
+          this.user = user;
+          return [
+            Group.findOne(previousGroup).populate('roles'),
+            Group.findOne(newGroup).populate('roles')
+          ];
+        })
+        .spread(function (fromGroup, toGroup) {
+          this.toGroup = toGroup;
+          var that = this;
+          _.each(fromGroup.roles, function (roleToRemove) {
+            that.user.roles.remove(roleToRemove.id);
+          });
+          return that.user.save();
+        })
+        .then(function () {
+          var that = this;
+          _.each(this.toGroup.roles, function (roleToAdd) {
+            that.user.roles.add(roleToAdd.id);
+          });
+          return that.user.save();
+        });
+    },
+
+    /**
      * setDefaultGroupRoles
      * @description On create/updates of user role, set appropriate permissions
      * @memberOf PermissionService
