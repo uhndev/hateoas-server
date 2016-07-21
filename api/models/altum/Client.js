@@ -42,11 +42,11 @@
       },
 
       /**
-       * policy
+       * policies
        * @description A client's policies
        * @type {Collection}
        */
-      policy:{
+      policies:{
         collection:'policy',
         via:'client'
       },
