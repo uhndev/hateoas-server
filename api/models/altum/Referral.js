@@ -44,12 +44,12 @@
       },
 
       /**
-       * policyNumber
-       * @description A referral's policyNumber
-       * @type {string}
+       * policy
+       * @description A referral's policy
+       * @type {Model}
        */
-      policyNumber: {
-        type: 'string'
+      policy: {
+        model: 'policy'
       },
 
       /**

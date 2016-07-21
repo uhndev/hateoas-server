@@ -42,6 +42,16 @@
       },
 
       /**
+       * policy
+       * @description A client's policies
+       * @type {Collection}
+       */
+      policy:{
+        collection:'policy',
+        via:'client'
+      },
+
+      /**
        * referrals
        * @description A client's referrals
        * @type {Collection}
@@ -89,4 +99,3 @@
 
   });
 })();
-
