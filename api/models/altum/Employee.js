@@ -32,7 +32,7 @@
 
       /**
        * person
-       * @description the person who's employed
+       * @description Reference to the person this Employee refers to
        * @type {Model}
        */
       person: {
@@ -40,6 +40,15 @@
         generator: function(state) {
           return BaseModel.defaultGenerator(state, 'person', Person);
         }
+      },
+
+      /**
+       * referral
+       * @description Reference to the referral where this Employee is a contact for
+       * @type {Model}
+       */
+      referral: {
+        model: 'referral'
       },
 
       /**
@@ -61,9 +70,7 @@
         type: 'string',
         generator: faker.internet.email
       },
-
-
-
+      
       /**
        * occupation
        * @description A person's occupation
@@ -93,8 +100,7 @@
         type: 'string',
         generator: faker.name.jobArea
       },
-
-
+      
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

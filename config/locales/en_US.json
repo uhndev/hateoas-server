@@ -213,6 +213,8 @@
           "ADD": "Add Subject to Study",
           "ADD_BUTTON": "Add Subject",
           "CANCEL": "Cancel",
+          "EXISTENT_SUBJECT": "Enroll Existent Subject",
+          "SUBJECT": "Subject",
           "PROVIDERS": {
             "IDENTITY":"Providers",
             "STATUS":"Status",
