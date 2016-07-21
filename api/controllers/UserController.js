@@ -186,7 +186,7 @@
         .then(function (user) { // updating group, apply new permissions
           this.user = user;
           if (this.previousGroup !== options.group && req.user.group === 'admin') {
-            return PermissionService.swapRoles(userId, this.previousGroup, options.group);
+            return PermissionService.swapGroups(userId, this.previousGroup, options.group);
           } else {
             return user;
           }

@@ -168,8 +168,9 @@ module.exports = function sendOK (data, options) {
   HateoasService.create(req, res, data, options)
     .then(function(hateoasResponse) {
       var modelName = req.options.model || req.options.controller;
+      var permissionModel = !_.has(options, 'permissionModel') ? modelName: options.permissionModel;
       var query = Utils.Path.getWhere(req.query);
-      var modelPromise = Model.findOne({name: modelName})
+      var modelPromise = Model.findOne({name: permissionModel})
         .then(function (model) {
           return fetchPermissions(model, req.user);
         });
