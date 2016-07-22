@@ -200,8 +200,8 @@
       claimNumber: {
         type: 'string'
       },
-      policyNumber: {
-        type: 'string'
+      policy: {
+        model: 'policy'
       },
       referralComments: {
         type: 'string'
