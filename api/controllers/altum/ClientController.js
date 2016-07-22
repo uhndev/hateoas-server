@@ -18,7 +18,7 @@
       // manually override model name for pagination in ok.js
       req.options.model = sails.models.clientcontact.identity;
       clientcontact.findOne(req.param('id'))
-        .populate('primaryEmergencyContact')
+        .populate(['familyDoctor', 'primaryEmergencyContact'])
         .exec(function (err, client) {
           if (err) {
             return res.serverError(err);
