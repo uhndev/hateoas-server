@@ -6,7 +6,7 @@
  * @help        See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-(function() {
+(function () {
   var moment = require('moment'); // I need a minute
   var _ = require('lodash');
   var actionUtil = require('../../../node_modules/sails/lib/hooks/blueprints/actionUtil');
@@ -19,17 +19,17 @@
 
     identity: 'subjectenrollment',
 
-    findOne: function(req, res, next) {
+    findOne: function (req, res, next) {
       studysubject.findOne(req.param('id')).exec(function (err, enrollment) {
         if (_.isUndefined(enrollment)) {
           res.notFound();
         } else {
           // find subject schedule with session information
-          schedulesessions.find({ subjectEnrollment: enrollment.id })
+          schedulesessions.find({subjectEnrollment: enrollment.id})
             .then(function (schedules) {
               this.schedules = _.sortBy(schedules, 'timepoint');
               // get flattened dictionary of possible formVersions in each schedule
-              return FormVersion.find({ id: _.flatten(_.pluck(schedules, 'formVersions'))})
+              return FormVersion.find({id: _.flatten(_.pluck(schedules, 'formVersions'))})
                 .then(function (formVersions) {
                   return _.indexBy(_.map(formVersions, function (form) {
                     return _.pick(form, 'id', 'name', 'revision', 'form');
@@ -68,12 +68,12 @@
             })
             .then(function (answers) {
               if (enrollment.providers) {
-                Provider.find({ id: enrollment.providers }).then(function (providers) {
+                Provider.find({id: enrollment.providers}).then(function (providers) {
                   enrollment.providers = providers;
-                  res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
+                  res.ok(enrollment, {links: Study.getResponseLinks(enrollment.study, enrollment.studyName)});
                 });
               } else {
-                res.ok(enrollment, { links: Study.getResponseLinks(enrollment.study, enrollment.studyName) });
+                res.ok(enrollment, {links: Study.getResponseLinks(enrollment.study, enrollment.studyName)});
               }
             })
             .catch(function (err) {
@@ -83,20 +83,20 @@
       });
     },
 
-    create: function(req, res, next) {
+    create: function (req, res, next) {
       var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob'
       ), _.identity);
       options.group = 'subject';
       options.passports = [
         {
-          protocol : 'local',
-          password : req.param('password')
+          protocol: 'local',
+          password: req.param('password')
         }
       ];
 
       var enrollmentOptions = _.pick(_.pick(req.body,
-        'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
+        'subject', 'study', 'collectionCentre', 'providers', 'studyMapping', 'doe', 'status'
       ), _.identity);
 
       Study.findOne(enrollmentOptions.study)
@@ -119,28 +119,31 @@
         })
         .then(function (validMapping) { // if valid, create subject enrollment
           var that = this;
-          if (validMapping) {
-            return User.create(options).then(function (user) {
-              that.user = user;
-              return PermissionService.setDefaultGroupRoles(user);
-            }).then(function () {
-              enrollmentOptions.subject = {
-                user: that.user.id
-              };
+
+          switch (true) {
+            case (validMapping && enrollmentOptions.subject === undefined):
+              return User.create(options).then(function (user) {
+                that.user = user;
+                return PermissionService.setDefaultGroupRoles(user);
+              }).then(function () {
+                enrollmentOptions.subject = {
+                  user: that.user.id
+                };
+                return SubjectEnrollment.create(enrollmentOptions);
+              });
+            case (validMapping && enrollmentOptions.subject !== undefined):
               return SubjectEnrollment.create(enrollmentOptions);
-            });
-          } else {
-            return null;
+            default:
+              return null;
           }
-        })
-        .then(function (enrollment) {
+        }).then(function (enrollment) {
           if (enrollment) {
             return res.ok(enrollment);
           } else {
             return res.badRequest({
               title: 'Subject Enrollment Error',
               code: 400,
-              message: 'Study mapping is invalid, please ensure options match study ' + this.study.name+ ' attributes.'
+              message: 'Study mapping is invalid, please ensure options match study ' + this.study.name + ' attributes.'
             });
           }
         })

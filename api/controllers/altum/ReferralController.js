@@ -53,7 +53,7 @@
       // if hitting findOne for Referral overview (not triage), override base model and populate additional fields
       if (req.route.path === '/api/referral/:id') {
         req.options.model = sails.models.referraldetail.identity;
-        ['referralContact'].map(function (model) {
+        ['referralContacts'].map(function (model) {
           populateFields.push(model);
         });
       }

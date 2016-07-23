@@ -43,7 +43,19 @@ module.exports.policies = {
    ***************************************************************************/
 
   GroupController: {
-    'destroy': false
+    'destroy': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth',
+      'ModelPolicy',
+      'AuditPolicy',
+      'OwnerPolicy',
+      'PermissionPolicy',
+      'RolePolicy',
+      'CriteriaPolicy',
+      'groupPolicy'
+    ]
   },
 
   ModelController: {
@@ -78,6 +90,18 @@ module.exports.policies = {
    ***************************************************************************/
   TranslationController: {
     'getLocale': true
-  }
+  },
 
+  /***************************************************************************
+   * Fhir Policies                                                        *
+   ***************************************************************************/
+
+  FhirController: {
+    'init': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
+  }
 };

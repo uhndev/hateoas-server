@@ -19,11 +19,26 @@ module.exports = {
 
   appUrl: process.env.APP_URL,
   hookTimeout: 9999999,
-  log: {
-    level: 'verbose'
-  },
+  proxyHost: process.env.PROXY_HOST,
+  
   models: {
     migrate: 'alter',
     connection: 'altum'
+  },
+  
+  // ssl: {
+  //   key: fs.readFileSync(process.env.SSL_KEY),
+  //   cert: fs.readFileSync(process.env.SSL_CERT),
+  //   passphrase: process.env.SSL_PASSPHRASE
+  // },
+
+  log: {
+    level: 'verbose'
+  },
+  
+  fhir: {
+    //'http://try-fhirplace.hospital-systems.com'
+    //'http://fhirtest.uhn.ca/baseDstu2'
+    baseUrl: 'http://fhirtest.uhn.ca/baseDstu2'
   }
 };
