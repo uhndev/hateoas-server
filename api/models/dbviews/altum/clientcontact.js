@@ -61,7 +61,7 @@
         type: 'string'
       },
       dateOfBirth: {
-        type: 'dateTime'
+        type: 'date'
       },
       homePhone: {
         type: 'string'
