@@ -6,7 +6,6 @@
  */
 
 (function () {
-
   var _super = require('./AltumBaseModel.js');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
@@ -60,6 +59,7 @@
         collection: 'note',
         via: 'client'
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
