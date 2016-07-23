@@ -60,6 +60,7 @@
         collection: 'note',
         via: 'client'
       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -78,7 +79,7 @@
           if (err) {
             cb(err);
           } else {
-            values.displayName = person.displayName;
+            values.displayName = person.displayName + person.dateOfBirth ? ' (' + person.dateOfBirth + ')' : '';
             cb();
           }
         });
