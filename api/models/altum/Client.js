@@ -79,7 +79,7 @@
           if (err) {
             cb(err);
           } else {
-            values.displayName = person.displayName + person.dateOfBirth ? ' (' + person.dateOfBirth + ')' : '';
+            values.displayName = person.displayName + person.dateOfBirth ? ' (' + moment(person.dateOfBirth).utc().format('MMM D, YYYY') + ')' : '';
             cb();
           }
         });
