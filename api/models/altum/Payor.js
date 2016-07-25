@@ -70,9 +70,17 @@
         via: 'payor'
       },
 
+      /**
+       * claimNumber
+       * @description A payor's claim number
+       * @type {model}
+       */
+      claimNumber:{
+        model:'claimNumber'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
 
   });
 })();
-

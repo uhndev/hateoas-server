@@ -34,13 +34,10 @@
       /**
        * claimNumber
        * @description A referral's claimNumber
-       * @type {string}
+       * @type {model}
        */
       claimNumber: {
-        type: 'string',
-        generator: function(state) {
-          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
-        }
+        model:'claimNumber'
       },
 
       /**
@@ -232,7 +229,7 @@
         collection: 'note',
         via: 'referral'
       },
-      
+
       /**
        * referralComments
        * @description Comments for a specific referral
@@ -241,7 +238,7 @@
        referralComments: {
          type: 'string'
        },
-      
+
       /**
        * referralContacts
        * @description A referral's referralContacts

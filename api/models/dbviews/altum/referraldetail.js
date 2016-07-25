@@ -198,7 +198,7 @@
         type: 'boolean'
       },
       claimNumber: {
-        type: 'string'
+        model: 'claimNumber'
       },
       policy: {
         model: 'policy'
