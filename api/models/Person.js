@@ -298,7 +298,7 @@
     beforeValidate: function (values, cb) {
       // for each field listed in default, check values for those fields and add to display
       var displayName = _.values(_.pick(values, this.displayFields)).join(' ');
-      values.displayName = displayName + (values.dateOfBirth ? ' (' + moment(values.dateOfBirth).utc().format('MMM D, YYYY') + ')' : '')
+      values.displayName = displayName + (values.dateOfBirth ? ' (' + moment(values.dateOfBirth).format('YYYY-MM-DD') + ')' : '');
       cb();
     },
 
