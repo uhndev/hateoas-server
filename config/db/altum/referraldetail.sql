@@ -20,14 +20,15 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     status.name AS "statusName",
     program.payor,
     payor."displayName" AS "payor_displayName",
+    referral.policy,
+    referral.claim,
+    claim."claimNumber" AS "claimNumber",
     referral."referralDate",
     referral."clinicDate",
     referral."accidentDate",
     referral."receiveDate",
     referral."sentDate",
     referral."dischargeDate",
-    referral."policy",
-    referral."clainNumber",
     referral."recommendationsMade",
     referral.client,
     client."MRN" AS client_mrn,
@@ -59,6 +60,7 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     referral."referralComments"
 FROM altum.referral
   LEFT JOIN altum.client ON referral.client = client.id
+  LEFT JOIN altum.claim ON referral.claim = claim.id
   LEFT JOIN altum.person ON client.person = person.id
   LEFT JOIN altum.address ON person.address = address.id
   LEFT JOIN altum.city ON address.city = city.id

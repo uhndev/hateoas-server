@@ -75,8 +75,8 @@
        * @description A payor's claim number
        * @type {model}
        */
-      claimNumber:{
-        model:'claimNumber'
+      claim:{
+        model:'claim'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

@@ -5,7 +5,7 @@
 CREATE OR REPLACE VIEW altum.recommendationreport AS
  SELECT client."displayName" AS "Client Name",
     client."MRN",
-    referral."claimNumber",
+    referral."claim",
     service."displayName" AS service,
     "user"."displayName" AS "User",
     referral."referralDate",

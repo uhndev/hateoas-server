@@ -197,8 +197,11 @@
       client_interpreter: {
         type: 'boolean'
       },
+      claim:{
+        model:'claim'
+      },
       claimNumber: {
-        model: 'claimNumber'
+        type: 'string'
       },
       policy: {
         model: 'policy'

@@ -21,7 +21,7 @@
      * @description A referral's claim number
      * @type {string}
      */
-    number: {
+    claimNumber: {
       type: 'string',
       generator: function(state) {
         return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
@@ -39,11 +39,11 @@
     /**
      * referral
      * @description the referrals for a claim number
-     * @type {string}
+     * @type {collection}
      */
     referrals: {
       collection:'referral',
-      via:'claimNumber'
+      via:'claim'
     },
 
     toJSON: HateoasService.makeToHATEOAS.call(this, module)

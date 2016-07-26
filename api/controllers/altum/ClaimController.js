@@ -6,5 +6,5 @@
  */
 
 module.exports = {
-  identity: 'ClaimNumber'
+  identity: 'Claim'
 };
