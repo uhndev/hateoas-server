@@ -15,7 +15,11 @@
   _.merge(exports, {
     attributes:{
 
-      //ohipNumber
+      /**
+       * number
+       * @description A policy's OHIP number
+       * @type {string}
+       */
       number:{
         type:'string'
       },
