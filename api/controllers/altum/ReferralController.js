@@ -48,7 +48,7 @@
      *              and populates program, site, physician and referralContact data
      */
     findOne: function (req, res) {
-      var populateFields = ['program', 'site', 'physician', 'staff', 'payors'];
+      var populateFields = ['program', 'site', 'physician', 'staff', 'payors', 'policy', 'claim'];
 
       // if hitting findOne for Referral overview (not triage), override base model and populate additional fields
       if (req.route.path === '/api/referral/:id') {

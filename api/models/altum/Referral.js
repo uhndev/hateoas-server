@@ -32,24 +32,21 @@
       },
 
       /**
-       * claimNumber
-       * @description A referral's claimNumber
-       * @type {string}
+       * claim
+       * @description A referral's claim
+       * @type {model}
        */
-      claimNumber: {
-        type: 'string',
-        generator: function(state) {
-          return [_.random(100000, 999999), faker.address.countryCode(), faker.address.countryCode()].join('-');
-        }
+      claim: {
+        model:'claim'
       },
 
       /**
-       * policyNumber
-       * @description A referral's policyNumber
-       * @type {string}
+       * policy
+       * @description A referral's policy
+       * @type {Model}
        */
-      policyNumber: {
-        type: 'string'
+      policy: {
+        model: 'policy'
       },
 
       /**
@@ -232,7 +229,7 @@
         collection: 'note',
         via: 'referral'
       },
-      
+
       /**
        * referralComments
        * @description Comments for a specific referral
@@ -241,7 +238,7 @@
        referralComments: {
          type: 'string'
        },
-      
+
       /**
        * referralContacts
        * @description A referral's referralContacts

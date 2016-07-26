@@ -197,11 +197,14 @@
       client_interpreter: {
         type: 'boolean'
       },
+      claim:{
+        model:'claim'
+      },
       claimNumber: {
         type: 'string'
       },
-      policyNumber: {
-        type: 'string'
+      policy: {
+        model: 'policy'
       },
       referralComments: {
         type: 'string'
