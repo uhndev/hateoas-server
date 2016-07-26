@@ -232,7 +232,7 @@
         collection: 'note',
         via: 'referral'
       },
-      
+
       /**
        * referralComments
        * @description Comments for a specific referral
@@ -241,15 +241,15 @@
        referralComments: {
          type: 'string'
        },
-      
+
       /**
        * referralContacts
        * @description A referral's referralContacts
-       * @type {Model}
+       * @type {collection}
        */
       referralContacts: {
         collection: 'employee',
-        via: 'referral'
+        via: 'referrals'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
