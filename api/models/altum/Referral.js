@@ -32,8 +32,8 @@
       },
 
       /**
-       * claimNumber
-       * @description A referral's claimNumber
+       * claim
+       * @description A referral's claim
        * @type {model}
        */
       claim: {

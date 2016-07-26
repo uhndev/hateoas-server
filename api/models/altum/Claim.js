@@ -17,7 +17,7 @@
 
     attributes:{
     /**
-     * number
+     * claimNumber
      * @description A referral's claim number
      * @type {string}
      */
@@ -37,7 +37,7 @@
     },
 
     /**
-     * referral
+     * referrals
      * @description the referrals for a claim number
      * @type {collection}
      */

@@ -20,7 +20,7 @@
         type:'string'
       },
       /**
-       * name
+       * client
        * @description A client which the policy number belongs to
        * @type {Model}
        */
