@@ -171,7 +171,7 @@
     update: function (req, res) {
       var userId = req.param('id');
       var options = _.pick(_.pick(req.body,
-        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group', 'firstLogin'
       ), _.identity);
 
       if (req.user.group !== 'admin') { // prevent all non-admin users from updating group
@@ -181,6 +181,9 @@
       User.findOne(userId)
         .then(function (user) { // update user fields
           this.previousGroup = user.group;
+          if (options.firstLogin){
+            options.firstLogin = false;
+          }
           return User.update({id: user.id}, options);
         })
         .then(function (user) { // updating group, apply new permissions
