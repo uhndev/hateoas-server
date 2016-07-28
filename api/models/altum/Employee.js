@@ -117,11 +117,14 @@
     beforeValidate: function (values, cb) {
       if (values.person) {
         Person.findOne(values.person).exec(function (err, person) {
-          if (err) {
-            cb(err);
+          if (values.company) {
+            Company.findOne(values.company).exec(function (err, company) {
+              values.displayName = person.displayName + ', ' + values.occupation + ', ' + company.name;
+              cb();
+            });
           } else {
-            values.displayName = person.displayName;
-            cb();
+            values.displayName = person.displayName + ', ' + values.occupation;
+            cb(err);
           }
         });
       } else {
