@@ -1,3 +1,4 @@
+  var bcrypt = require('../../node_modules/sails-auth/node_modules/bcryptjs');
 /**
  * UserController
  *
@@ -191,7 +192,17 @@
             return user;
           }
         })
-        .then(function (user) { // find and update user's associated passport
+        .then(function (user) { // compares the curret password to the changed one, if different update expiredPassword
+          var password = req.param('password');
+          if (!_.isEmpty(password)) {
+            return Passport.findOne({ user : userId }).then(function (passport) {
+              var expired = bcrypt.compareSync(password, passport.password);
+              return User.update({id: user[0].id}, {expiredPassword: expired});
+            });
+          }
+          return user;
+        })
+        .then(function(user){ //updates the users passport and changes the email if there was a change
           if (!_.isEmpty(req.param('password'))) {
             return Passport.findOne({ user : userId }).then(function (passport) {
               return Passport.update(passport.id, { password : req.param('password') });

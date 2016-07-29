@@ -22,7 +22,7 @@
 
     defaultSortBy: 'displayName ASC',
 
-    displayFields: [ 'prefix', 'firstname', 'lastname' ],
+    displayFields: [ 'prefix', 'firstname', 'lastname'],
 
     attributes: {
       /**
@@ -176,6 +176,16 @@
         ]
       },
 
+      /**
+       * expiredPassword
+       * @description flag put in place to see if the user has an expired password
+       * @type {Boolean} flag
+       */
+       expiredPassword: {
+         type:'boolean',
+         defaultsTo: true
+       },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -283,4 +293,3 @@
     }
   });
 })();
-
