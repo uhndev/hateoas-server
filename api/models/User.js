@@ -177,11 +177,11 @@
       },
 
       /**
-       * firstLogin
-       * @description flag put in place to see if the user is logging in for the first time
+       * expiredPassword
+       * @description flag put in place to see if the user has an expired password
        * @type {Boolean} flag
        */
-       firstLogin: {
+       expiredPassword: {
          type:'boolean',
          defaultsTo: true
        },
