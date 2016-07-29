@@ -22,6 +22,12 @@
       group: {
         model: 'group'
       },
+      userType: {
+        type: 'string'
+      },
+      person: {
+        model: 'person'
+      },
       prefix: {
         type: 'string'
       },

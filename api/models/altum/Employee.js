@@ -32,7 +32,7 @@
 
       /**
        * person
-       * @description the person who's employed
+       * @description Reference to the person this Employee refers to
        * @type {Model}
        */
       person: {
@@ -40,6 +40,16 @@
         generator: function(state) {
           return BaseModel.defaultGenerator(state, 'person', Person);
         }
+      },
+
+      /**
+       * referral
+       * @description Reference to the referrals this Employee is a contact for
+       * @type {collection}
+       */
+      referrals: {
+        collection: 'referral',
+        via: 'referralContacts'
       },
 
       /**
@@ -61,8 +71,6 @@
         type: 'string',
         generator: faker.internet.email
       },
-
-
 
       /**
        * occupation
@@ -94,7 +102,6 @@
         generator: faker.name.jobArea
       },
 
-
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -110,11 +117,14 @@
     beforeValidate: function (values, cb) {
       if (values.person) {
         Person.findOne(values.person).exec(function (err, person) {
-          if (err) {
-            cb(err);
+          if (values.company) {
+            Company.findOne(values.company).exec(function (err, company) {
+              values.displayName = person.displayName + ', ' + values.occupation + ', ' + company.name;
+              cb();
+            });
           } else {
-            values.displayName = person.displayName;
-            cb();
+            values.displayName = person.displayName + ', ' + values.occupation;
+            cb(err);
           }
         });
       } else {

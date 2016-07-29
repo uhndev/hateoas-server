@@ -165,6 +165,30 @@
       }
     ],
 
+      /**
+       * beforeUpdate
+       * @description Before updating a user with possibly changed userType, find or create the associated
+       *              model if it doesn't exist yet
+       */
+    beforeUpdate: function updateUserType(values, cb) {
+      if (values.userType) {
+        return User.findOne({ username: values.username })
+          .then(function (user) {
+            console.log(user.userType);
+            return (user.userType !== values.userType) ? sails.models[values.userType].findOrCreate({person: user.person}, {person: user.person}) : cb();
+          })
+          .then(function (userType) {
+            console.log(userType);
+            return cb();
+          })
+          .catch(function (err) {
+            return cb(err);
+          });
+      } else {
+        cb();
+      }
+    },
+
     /**
      * afterUpdate
      * @description Lifecycle callback meant to handle deletions in our system; if at
@@ -225,16 +249,17 @@
         }
       });
 
-      return _.merge({
+      return {
         username: faker.internet.userName(),
         email: faker.internet.email(),
+        person: userInfo,
         passports: [
           {
             protocol: 'local',
             password: 'Password123'
           }
         ]
-      }, userInfo);
+      };
     }
   });
 })();

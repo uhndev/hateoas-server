@@ -62,12 +62,11 @@
         type: 'string'
       },
       dateOfBirth: {
-        type: 'dateTime'
+        type: 'date'
       },
       homePhone: {
         type: 'string'
       },
-
       fax: {
         type: 'string'
       },
@@ -104,9 +103,6 @@
       region: {
         type: 'string'
       },
-      company: {
-        model: 'company'
-      },
       country: {
         type: 'string'
       },
@@ -119,15 +115,18 @@
       longitude: {
         type: 'string'
       },
-
+      familyDoctor: {
+        model: 'physician'
+      },
       primaryEmergencyContact: {
         model: 'emergencyContact'
       },
-
+      personComments: {
+        type: 'string'
+      },
       getResponseLinks: function () {
         return getResponseLinks(this.id, this.displayName);
       },
-
       toJSON: ClientModel.attributes.toJSON
     },
 

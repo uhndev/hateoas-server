@@ -1,5 +1,5 @@
 -- Database Migration Script between dev branch and prod
--- Created July 15th 2016
+-- Created July 20th 2016
 
 BEGIN;
 
@@ -62,6 +62,10 @@ BEGIN
     EXECUTE 'DROP VIEW IF EXISTS ' || r.schemaname || '.' || r.viewname || ';';
   END LOOP;
 END$$;
+
 alter table "user" drop prefix, drop firstname, drop lastname, drop gender, drop dob;
+alter table "user" add column "userType" text;
+
+-- after alter, update workflowstate with person fieldsNames and update user systemform
 
 COMMIT;

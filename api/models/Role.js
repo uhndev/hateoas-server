@@ -7,7 +7,6 @@
  * @extends https://github.com/tjwebb/sails-permissions/blob/master/api/models/Role.js
  */
 
-
 (function() {
   var _super = require('./BaseModel.js');
 
@@ -52,7 +51,9 @@
       groups: {
         collection: 'group',
         via: 'roles'
-      }
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
   });
 })();

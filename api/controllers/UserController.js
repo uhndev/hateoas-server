@@ -165,10 +165,10 @@
     update: function (req, res) {
       var userId = req.param('id');
       var userOptions = _.pick(_.pick(req.body,
-        'username', 'email', 'group'
+        'username', 'email', 'group', 'userType'
       ), _.identity);
 
-      userOptions.person = _.pick(_.pick(req.body,
+      var personOptions = _.pick(_.pick(req.body,
         'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
       ), _.identity);
 
@@ -179,12 +179,15 @@
       User.findOne(userId)
         .then(function (user) { // update user fields
           this.previousGroup = user.group;
-          return User.update({id: user.id}, userOptions);
+          return [
+            User.update({id: user.id}, userOptions),
+            Person.update({id: user.person}, personOptions)
+          ];
         })
-        .then(function (user) { // updating group, apply new permissions
+        .spread(function (user, person) { // updating group, apply new permissions
           this.user = user;
           if (this.previousGroup !== userOptions.group && req.user.group === 'admin') {
-            return PermissionService.swapRoles(userId, this.previousGroup, userOptions.group);
+            return PermissionService.swapGroups(userId, this.previousGroup, userOptions.group);
           } else {
             return user;
           }

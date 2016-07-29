@@ -14,6 +14,8 @@
   _.merge(exports, _super);
   _.merge(exports, {
 
+    displayFields: ['firstName', 'lastName', 'relationship'],
+
     attributes: {
 
       /**
@@ -22,11 +24,12 @@
        * @type {String}
        */
       firstName: {
-          type: 'string'
-        },
+        type: 'string'
+      },
+
       /**
        * lastName
-       * @description A emergnecy contact person's last name.
+       * @description A emergency contact person's last name.
        * @type {String}
        */
       lastName: {
@@ -39,16 +42,18 @@
        * @type {String}
        */
       phone: {
-          type: 'string'
-        },
+        type: 'string'
+      },
+
       /**
        * person
-       * @description A person's f.
+       * @description The person this is an emergency contact for
        * @type {String}
        */
       person: {
         model: 'person'
       },
+
       /**
        * relationship
        * @description A emergencyContact's relationship
