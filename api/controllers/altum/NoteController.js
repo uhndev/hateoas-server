@@ -1,5 +1,9 @@
 (function () {
   module.exports = {
-    identity: 'Note'
+    identity: 'Note',
+
+    _config: {
+      defaultLimit: 1000
+    }
   };
 })();
