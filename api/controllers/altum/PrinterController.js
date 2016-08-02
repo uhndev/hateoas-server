@@ -1,5 +1,5 @@
 /**
- * PhysicianController
+ * PrinterController
  *
  * @module  controllers/printer
  * @description Server-side logic for managing printer
