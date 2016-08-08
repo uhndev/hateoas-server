@@ -1,11 +1,8 @@
 /**
- * Created by calvinsu on 2016-08-02.
- */
-/**
- * This the label type
+ * LabelType
  *
- * @class Printer
- * @description Model representation of a Printer
+ * @class LabelType
+ * @description Model representation of a LabelType
  */
 
 (function () {
@@ -19,7 +16,7 @@
 
       /**
        * name
-       * @description a labe type name
+       * @description A label type name
        * @type {String}
        */
       name: {
@@ -33,7 +30,9 @@
        */
       ZPL: {
         type: 'string'
-      }
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
   })
 })();

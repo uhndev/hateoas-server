@@ -25,6 +25,7 @@
     displayFields: [ 'prefix', 'firstname', 'lastname'],
 
     attributes: {
+      
       /**
        * firstname
        * @description A user's first name.
@@ -45,7 +46,6 @@
         generator: faker.name.lastName
       },
 
-
       /**
        * prefix
        * @description Enumeration of allowable prefixes for a user.
@@ -60,7 +60,6 @@
         }
       },
 
-
       /**
        * gender
        * @description Enumeration of allowable genders of a user.
@@ -73,8 +72,7 @@
           return _.sample(User.attributes.gender.enum);
         }
       },
-
-
+      
       /**
        * dob
        * @description A user's date of birth.
@@ -86,8 +84,7 @@
           return faker.date.past();
         }
       },
-
-
+      
       /**
        * group
        * @description A user's registered group which in turn dictates what actions
@@ -100,8 +97,7 @@
           return (state && _.has(state, 'group')) ? state.group: 'coordinator';
         }
       },
-
-
+      
       /**
        * owner
        * @description Reference to who the 'owner' of this is - is used in the owner
@@ -133,6 +129,16 @@
       enrollments: {
         collection: 'userenrollment',
         via: 'user'
+      },
+
+      /**
+       * expiredPassword
+       * @description flag put in place to see if the user has an expired password
+       * @type {Boolean} flag
+       */
+      expiredPassword: {
+        type:'boolean',
+        defaultsTo: true
       },
 
       /**
@@ -175,17 +181,7 @@
           }
         ]
       },
-
-      /**
-       * expiredPassword
-       * @description flag put in place to see if the user has an expired password
-       * @type {Boolean} flag
-       */
-       expiredPassword: {
-         type:'boolean',
-         defaultsTo: true
-       },
-
+      
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
