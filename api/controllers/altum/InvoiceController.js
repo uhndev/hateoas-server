@@ -49,7 +49,7 @@
           this.referral.approvedServices = approvedServices;
           return res.ok(this.referral, {
             templateOverride: 'servicedetail',
-            permissionModel: 'service',
+            permissionModel: 'servicedetail',
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
           });
         })

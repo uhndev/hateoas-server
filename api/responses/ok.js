@@ -136,9 +136,15 @@ module.exports = function sendOK (data, options) {
           var permissionObject = {
             action: _.first(permission).action
           };
-          // if permission has criteria with blacklisted attributes ,include in result to filter hateoas template
-          if (_.has(perm, 'criteria') && _.has(_.first(perm.criteria), 'blacklist')) {
-            permissionObject.blacklist = _.first(perm.criteria).blacklist
+
+          // if permission has criteria with blacklisted attributes or where clause, include in result to filter hateoas template
+          if (_.has(perm, 'criteria')) {
+            if (_.has(_.first(perm.criteria), 'blacklist')) {
+              permissionObject.blacklist = _.first(perm.criteria).blacklist;
+            }
+            if (_.has(_.first(perm.criteria), 'where')) {
+              permissionObject.where = _.first(perm.criteria).where;
+            }
           }
 
           return result.concat(permissionObject);
@@ -194,8 +200,14 @@ module.exports = function sendOK (data, options) {
         return result;
       }, {});
 
+      var where = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.where;
+        return result;
+      }, {});
+
       // include all blacklisted attributes in template
       hateoasResponse.template.blacklist = blacklist;
+      hateoasResponse.template.where = where;
 
       // filter template data array based on any blacklisted attributes
       hateoasResponse.template.data = _.reject(hateoasResponse.template.data, function (field) {
