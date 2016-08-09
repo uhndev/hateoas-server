@@ -10,6 +10,7 @@
 
   _.merge(exports, _super);
   _.merge(exports, {
+    
     defaultTemplateOmit: null,
 
     attributes: {
@@ -22,6 +23,7 @@
       name: {
         type: 'string'
       },
+      
       /**
        * IP
        * @description a printer's IP
@@ -48,6 +50,7 @@
       printerType: {
         type: 'string'
       },
+      
       /**
        * name
        * @description a printer's location
@@ -55,7 +58,9 @@
        */
       location: {
         type: 'string'
-      }
+      },
+
+      toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
   })
 })();

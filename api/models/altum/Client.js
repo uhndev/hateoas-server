@@ -7,6 +7,7 @@
 
 (function () {
   var _super = require('./AltumBaseModel.js');
+  var moment = require('moment');
   var _ = require('lodash');
   var HateoasService = require('../../services/HateoasService.js');
 
@@ -78,7 +79,7 @@
           if (err) {
             cb(err);
           } else {
-            values.displayName = person.displayName;
+            values.displayName = person.displayName + (person.dateOfBirth ? ' (' + moment(person.dateOfBirth).utc().format('YYYY-MM-DD') + ')' : '');
             cb();
           }
         });
