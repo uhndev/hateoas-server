@@ -7,7 +7,7 @@ CREATE OR REPLACE VIEW altum.clientcontact AS
     client.id,
     client."MRN",
     person.ID AS "personId",
-    person."displayName",
+    client."displayName",
     person."firstName",
     person."middleName",
     person."lastName",

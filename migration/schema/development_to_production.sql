@@ -3,22 +3,31 @@
 
 BEGIN;
 
--- Table: altum.employee_referrals__referral_referralcontacts
+  alter table "user" add column "expiredPassword" boolean default true;
 
--- DROP TABLE altum.employee_referrals__referral_referralcontacts;
+  CREATE TABLE altum.labeltype
+  (
+    "deletedBy" integer,
+    "displayName" text,
+    id serial NOT NULL,
+    name text,
+    "ZPL" text,
+    "createdBy" integer,
+    owner integer,
+    "createdAt" timestamp with time zone,
+    "updatedAt" timestamp with time zone,
+    CONSTRAINT labeltype_pkey PRIMARY KEY (id)
+  )
+  WITH (OIDS=FALSE);
+  ALTER TABLE altum.labeltype OWNER TO postgres;
+  CREATE INDEX "labeltype_createdBy" ON altum.labeltype USING btree ("createdBy");
+  CREATE INDEX labeltype_id ON altum.labeltype USING btree (id);
+  CREATE INDEX labeltype_owner ON altum.labeltype USING btree (owner);
 
-CREATE TABLE altum.employee_referrals__referral_referralcontacts
-(
-  id serial NOT NULL,
-  employee_referrals integer,
-  "referral_referralContacts" integer,
-  CONSTRAINT employee_referrals__referral_referralcontacts_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE altum.employee_referrals__referral_referralcontacts
-  OWNER TO postgres;
+  update altum.status set category = 'billingstatus' where category = 'billing';
+  update altum.status set category = 'reportstatus' where category = 'report';
 
-ALTER TABLE altum.employee drop COLUMN referral;
+  -- update altum.status rules to new categories
+  -- update any service presets
+
 COMMIT;

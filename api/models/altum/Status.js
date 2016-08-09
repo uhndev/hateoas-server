@@ -54,8 +54,8 @@
           'referral',
           'approval',
           'completion',
-          'billing',
-          'report'
+          'billingstatus',
+          'reportstatus'
         ]
       },
 
