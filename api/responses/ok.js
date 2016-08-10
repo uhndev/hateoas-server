@@ -197,16 +197,22 @@ module.exports = function sendOK (data, options) {
         return result;
       }, {});
 
-      // include all blacklisted attributes in template
-      hateoasResponse.template.blacklist = blacklist;
+      var where = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.where;
+        return result;
+      }, {});
 
       // create relations dictionary of actions into relations array
       var relations = _.reduce(permissions, function (result, permission) {
         result[permission.action] = permission.relation;
         return result;
       }, {});
+
+      // includes different attributes into the template object
+      hateoasResponse.template.blacklist = blacklist;
+      hateoasResponse.template.where = where;
       hateoasResponse.template.relations = relations;
-      
+
       // filter template data array based on any blacklisted attributes
       hateoasResponse.template.data = _.reject(hateoasResponse.template.data, function (field) {
         return _.contains(blacklist.read, field.name);
