@@ -1,3 +1,4 @@
+  var bcrypt = require('../../node_modules/sails-auth/node_modules/bcryptjs');
 /**
  * UserController
  *
@@ -184,22 +185,30 @@
           return User.update({id: user.id}, options);
         })
         .then(function (user) { // updating group, apply new permissions
-          this.user = user;
+          this.user = _.first(user);
           if (this.previousGroup !== options.group && req.user.group === 'admin') {
             return PermissionService.swapGroups(userId, this.previousGroup, options.group);
-          } else {
-            return user;
           }
+          return null;
         })
-        .then(function (user) { // find and update user's associated passport
-          if (!_.isEmpty(req.param('password'))) {
+        .then(function () { // compares the current password to the changed one, if different update expiredPassword
+          var password = req.param('password');
+          if (!_.isEmpty(password)) {
             return Passport.findOne({ user : userId }).then(function (passport) {
-              return Passport.update(passport.id, { password : req.param('password') });
+              var expired = bcrypt.compareSync(password, passport.password);
+              return User.update({id: userId}, {expiredPassword: expired}).then(function (user) {
+                return passport;
+              });
             });
           }
-          return this.user;
+          return null;
         })
-        .then(function (user) {
+        .then(function(passport){ // updates the users passport and changes the email if there was a change
+          if (!_.isEmpty(req.param('password')) && passport) {
+            return Passport.update(passport.id, { password : req.param('password') });
+          }
+        })
+        .then(function () {
           res.ok(this.user);
         })
         .catch(function (err) {

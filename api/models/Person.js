@@ -7,7 +7,6 @@
 
 (function () {
   var _ = require('lodash');
-  var moment = require('moment');
   var _super = require('./altum/AltumBaseModel.js');
   var faker = require('faker');
   var HateoasService = require('../services/HateoasService.js');
@@ -285,23 +284,7 @@
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
-
-    /**
-     * beforeValidate
-     * @description After validation/creation displayName is updated with values
-     *              from fields listed in the defaultsTo attribute of displayName
-     *              this can be overridden in child models inheriting from the
-     *              basemodel to pick specific fields
-     * @param  {Object}   values  given physician object for creation
-     * @param  {Function} cb      callback function on completion
-     */
-    beforeValidate: function (values, cb) {
-      // for each field listed in default, check values for those fields and add to display
-      var displayName = _.values(_.pick(values, this.displayFields)).join(' ');
-      values.displayName = displayName + (values.dateOfBirth ? ' (' + moment(values.dateOfBirth).utc().format('YYYY-MM-DD') + ')' : '');
-      cb();
-    },
-
+    
     /**
      * afterCreate
      * @description After creating a Person model, in order to keep the one-to-one relationship between Person
