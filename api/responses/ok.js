@@ -136,12 +136,16 @@ module.exports = function sendOK (data, options) {
           var permissionObject = {
             action: _.first(permission).action
           };
-          // if permission has criteria with blacklisted attributes ,include in result to filter hateoas template
-          if (_.has(perm, 'criteria') && _.has(_.first(perm.criteria), 'blacklist')) {
-            permissionObject.blacklist = _.first(perm.criteria).blacklist;
+          // if permission has criteria with blacklisted attributes or where clause, include in result to filter hateoas template
+          if (_.has(perm, 'criteria')) {
+            if (_.has(_.first(perm.criteria), 'blacklist')) {
+              permissionObject.blacklist = _.first(perm.criteria).blacklist;
+            }
+            if (_.has(_.first(perm.criteria), 'where')) {
+              permissionObject.where = _.first(perm.criteria).where;
+            }
           }
-          //adds relations into request object
-          if (_.has(perm, 'relation')){
+          if (_.has(perm, 'relation')) {
             permissionObject.relation = perm.relation;
           }
           return result.concat(permissionObject);
