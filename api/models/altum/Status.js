@@ -221,7 +221,7 @@
         {
           name: 'Service Complete/Pre-Paid',
           systemName: 'SERVICE_COMPLETE',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-check-circle',
           rowClass: 'info',
           requiresConfirmation: false,
@@ -232,7 +232,7 @@
         {
           name: 'Suspended',
           systemName: 'SUSPENDED',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-exclamation-circle',
           rowClass: 'warning',
           requiresConfirmation: false,
@@ -243,7 +243,7 @@
         {
           name: 'Ready To Send To Payor',
           systemName: 'READY_TO_SEND_TO_PAYOR',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-share',
           rowClass: 'info',
           requiresConfirmation: false,
@@ -254,7 +254,7 @@
         {
           name: 'Issued To Payor',
           systemName: 'ISSUED_TO_PAYOR',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-reply',
           rowClass: 'info',
           requiresConfirmation: false,
@@ -265,7 +265,7 @@
         {
           name: 'Paid',
           systemName: 'PAID',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
           requiresConfirmation: true,
@@ -278,7 +278,7 @@
         {
           name: 'Payor Denied',
           systemName: 'PAYOR_DENIED',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-ban',
           rowClass: 'danger',
           requiresConfirmation: true,
@@ -291,7 +291,7 @@
         {
           name: 'Rejected',
           systemName: 'REJECTED',
-          category: 'billing',
+          category: 'billingstatus',
           iconClass: 'fa-times',
           rowClass: 'danger',
           requiresConfirmation: true,
@@ -304,7 +304,7 @@
         {
           name: 'Report Not Required',
           systemName: 'REPORT_NOT_REQUIRED',
-          category: 'report',
+          category: 'reportstatus',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
           requiresConfirmation: false,
@@ -315,7 +315,7 @@
         {
           name: 'Report Pending',
           systemName: 'REPORT_PENDING',
-          category: 'report',
+          category: 'reportstatus',
           iconClass: 'fa-question-circle',
           rowClass: 'warning',
           requiresConfirmation: false,
@@ -326,7 +326,7 @@
         {
           name: 'Report Complete',
           systemName: 'REPORT_COMPLETE',
-          category: 'report',
+          category: 'reportstatus',
           iconClass: 'fa-check-circle',
           rowClass: 'success',
           requiresConfirmation: false,
