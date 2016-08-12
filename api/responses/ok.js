@@ -136,7 +136,6 @@ module.exports = function sendOK (data, options) {
           var permissionObject = {
             action: _.first(permission).action
           };
-
           // if permission has criteria with blacklisted attributes or where clause, include in result to filter hateoas template
           if (_.has(perm, 'criteria')) {
             if (_.has(_.first(perm.criteria), 'blacklist')) {
@@ -146,7 +145,9 @@ module.exports = function sendOK (data, options) {
               permissionObject.where = _.first(perm.criteria).where;
             }
           }
-
+          if (_.has(perm, 'relation')) {
+            permissionObject.relation = perm.relation;
+          }
           return result.concat(permissionObject);
         }
         return result;
@@ -205,9 +206,16 @@ module.exports = function sendOK (data, options) {
         return result;
       }, {});
 
-      // include all blacklisted attributes in template
+      // create relations dictionary of actions into relations array
+      var relations = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.relation;
+        return result;
+      }, {});
+
+      // includes different attributes into the template object
       hateoasResponse.template.blacklist = blacklist;
       hateoasResponse.template.where = where;
+      hateoasResponse.template.relations = relations;
 
       // filter template data array based on any blacklisted attributes
       hateoasResponse.template.data = _.reject(hateoasResponse.template.data, function (field) {
