@@ -171,6 +171,7 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
+      var password = req.param('password');
       var options = _.pick(_.pick(req.body,
         'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
       ), _.identity);
@@ -179,9 +180,17 @@
         delete options.group;
       }
 
-      User.findOne(userId)
+      Passport.findOne({ user : userId })
+        .then(function (passport) {
+          this.passport = passport;
+          return User.findOne(userId);
+        })
         .then(function (user) { // update user fields
           this.previousGroup = user.group;
+          // compares the current password to the changed one, if different update expiredPassword
+          if (!_.isEmpty(password)) {
+            options.expiredPassword = bcrypt.compareSync(password, this.passport.password);
+          }
           return User.update({id: user.id}, options);
         })
         .then(function (user) { // updating group, apply new permissions
@@ -191,21 +200,9 @@
           }
           return null;
         })
-        .then(function () { // compares the current password to the changed one, if different update expiredPassword
-          var password = req.param('password');
-          if (!_.isEmpty(password)) {
-            return Passport.findOne({ user : userId }).then(function (passport) {
-              var expired = bcrypt.compareSync(password, passport.password);
-              return User.update({id: userId}, {expiredPassword: expired}).then(function (user) {
-                return passport;
-              });
-            });
-          }
-          return null;
-        })
         .then(function(passport){ // updates the users passport and changes the email if there was a change
-          if (!_.isEmpty(req.param('password')) && passport) {
-            return Passport.update(passport.id, { password : req.param('password') });
+          if (!_.isEmpty(password) && this.passport) {
+            return Passport.update(this.passport.id, { password: password });
           }
         })
         .then(function () {
