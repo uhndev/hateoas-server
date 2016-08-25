@@ -3,6 +3,7 @@
 
 BEGIN;
 
+  alter table altum.invoice add column "number" text;
   alter table altum.invoice add column "referral" integer;
   alter table altum.invoice add column "status" text default 'Pending';
 
