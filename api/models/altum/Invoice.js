@@ -51,7 +51,8 @@
        */
       status: {
         type: 'string',
-        enum: ['Pending', 'Processing', 'Processed']
+        enum: ['Pending', 'Processing', 'Processed'],
+        defaultsTo: 'Pending'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
