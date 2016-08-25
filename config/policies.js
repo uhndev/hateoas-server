@@ -85,6 +85,20 @@ module.exports.policies = {
     ]
   },
 
+  NotificationController: {
+    subscribedUsers: [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ],
+    sendNotification: [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
+  },
   /***************************************************************************
    * Translation Policies                                                    *
    ***************************************************************************/
