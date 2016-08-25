@@ -59,6 +59,16 @@
       },
 
       /**
+       * invoiceServices
+       * @description Collection of invoices that this service could be attached to
+       * @type {Collection}
+       */
+      invoiceServices: {
+        collection: 'invoiceservice',
+        via: 'service'
+      },
+
+      /**
        * serviceProviders
        * @description a collection of a service's associated providers
        * @type {Collection}

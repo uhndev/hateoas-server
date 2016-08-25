@@ -17,6 +17,15 @@
     attributes: {
 
       /**
+       * referral
+       * @description Reference to the referral for which this invoice refers to
+       * @type {Model}
+       */
+      referral: {
+        model: 'referral'
+      },
+
+      /**
        * payor
        * @description an invoice's associated payor
        * @type {Model}
@@ -33,6 +42,17 @@
       invoiceServices: {
         collection: 'invoiceService',
         via: 'invoice'
+      },
+
+      /**
+       * status
+       * @description Status of Invoice stages - will be managed by an external process
+       * @type {String}
+       */
+      status: {
+        type: 'string',
+        enum: ['Pending', 'Processing', 'Processed', 'Voided'],
+        defaultsTo: 'Pending'
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)

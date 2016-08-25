@@ -21,17 +21,15 @@
        * @description an invoiceService's associated invoice
        * @type {Model}
        */
-
       invoice: {
         model: 'invoice'
       },
 
       /**
        * service
-       * @description an invoiceSerivce's associated service
+       * @description an invoiceService's associated service
        * @type {Model}
        */
-
       service: {
         model: 'service'
       },
