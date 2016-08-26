@@ -65,6 +65,18 @@
         defaultsTo: 'Pending'
       },
 
+      /**
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
+       */
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -95,6 +107,25 @@
     },
 
     /**
+     * afterUpdate
+     * @description Lifecycle callback meant to handle deletions in our system; if at
+     *              any point we set this user's expiredAt attribute, this function
+     *              will check and invalidate any active InvoiceServices.
+     *
+     * @param  {Object}   updated updated invoice object
+     * @param  {Function} cb      callback function on completion
+     */
+    afterUpdate: function(updated, cb) {
+      if (!_.isNull(updated.expiredAt)) {
+        InvoiceService.update({ invoice: updated.id }, { expiredAt: new Date() }).exec(function (err, invoiceServices) {
+          cb(err);
+        });
+      } else {
+        cb();
+      }
+    },
+
+    /**
      * findByBaseModel
      * @description Endpoint for returning Invoices for a given Referral
      */
@@ -104,7 +135,7 @@
       delete query.where.id;
       return referraldetail.findOne(referralID).then(function (referral) {
           this.links = referral.getResponseLinks();
-          return Invoice.find(query).populate(['referral', 'payor']).where({referral: referralID});
+          return Invoice.find(query).populate(['referral', 'payor']).where({referral: referralID, expiredAt: null});
         })
         .then(function (referrals) {
           return {

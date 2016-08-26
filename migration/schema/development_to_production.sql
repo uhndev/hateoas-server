@@ -9,4 +9,7 @@ BEGIN;
 
   alter table altum.referral add column "readyToProcess" boolean default FALSE;
 
+  alter table altum.invoice add column "expiredAt" timestamp with time zone;
+  alter table altum.invoiceservice add column "expiredAt" timestamp with time zone;
+
 COMMIT;
