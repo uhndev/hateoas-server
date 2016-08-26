@@ -93,7 +93,6 @@ module.exports.routes = {
   'get /api/referral/:id/recommendations' : 'AltumServiceController.findAvailableServices',
   'get /api/referral/:id/services'        : 'ServiceController.findRecommendedServices',
   'get /api/referral/:id/billing'         : 'InvoiceController.findBillableServices',
-  
   'post /api/service/bulkStatusChange'    : 'ServiceController.bulkStatusChange',
   'post /api/billinggroup/bulkRecommend'  : 'BillingGroupController.bulkRecommendServices',
 
@@ -105,5 +104,11 @@ module.exports.routes = {
   /***************************************************************************
    * Fhir Routes                                                          *
    ***************************************************************************/
-  'get /api/fhir'                              : 'FhirController.init'
+  'get /api/fhir'                              : 'FhirController.init',
+
+  /***************************************************************************
+   * Notification Routes                                                         *
+   ***************************************************************************/
+  'post /api/notifications'                    : 'NotificationController.subscribedUsers',
+  'post /api/sendNotification'                 : 'NotificationController.sendNotification'
 };
