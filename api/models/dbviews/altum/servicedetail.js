@@ -22,6 +22,9 @@
       client_displayName: {
         type: 'string'
       },
+      MRN: {
+        type: 'string'
+      },
       altumService: {
         type: 'integer'
       },
