@@ -92,8 +92,9 @@ module.exports.routes = {
   'get /api/referral/:id/triage'          : 'ReferralController.findOne',
   'get /api/referral/:id/recommendations' : 'AltumServiceController.findAvailableServices',
   'get /api/referral/:id/services'        : 'ServiceController.findRecommendedServices',
-  'get /api/referral/:id/billing'         : 'InvoiceController.findBillableServices',
-  
+  'get /api/referral/:id/billing'         : 'InvoiceServiceController.findBillableServices',
+  'get /api/referral/:id/invoices'        : 'InvoiceController.findByBaseModel',
+
   'post /api/service/bulkStatusChange'    : 'ServiceController.bulkStatusChange',
   'post /api/billinggroup/bulkRecommend'  : 'BillingGroupController.bulkRecommendServices',
 

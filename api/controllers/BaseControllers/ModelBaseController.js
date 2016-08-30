@@ -35,10 +35,20 @@
         })
         .then(function(collection) {
           var filteredTotal = PermissionService.filterByCriteria(req.criteria, this.totalCollection).length;
-          return res.ok(collection.data, {
+          var responseOptions = {
             filteredTotal: filteredTotal,
             links: collection.links
-          });
+          };
+
+          if (_.has(collection, 'templateOverride')) {
+            responseOptions.templateOverride = collection.templateOverride;
+          }
+
+          if (_.has(collection, 'permissionModel')) {
+            responseOptions.permissionModel = collection.permissionModel;
+          }
+
+          return res.ok(collection.data, responseOptions);
         })
         .catch(function (err) {
           return res.badRequest(err);

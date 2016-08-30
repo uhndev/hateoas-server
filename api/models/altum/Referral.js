@@ -113,6 +113,16 @@
       },
 
       /**
+       * readyToProcess
+       * @description Boolean flag denoting whether or not a referral and its services are ready to invoice
+       * @type {Boolean}
+       */
+      readyToProcess: {
+        type: 'boolean',
+        defaultsTo: false
+      },
+
+      /**
        * referralDate
        * @description A referral's date
        * @type {date}
@@ -230,6 +240,16 @@
        */
       notes: {
         collection: 'note',
+        via: 'referral'
+      },
+
+      /**
+       * invoices
+       * @description Collection of invoices created for this referral
+       * @type {Collection}
+       */
+      invoices: {
+        collection: 'invoice',
         via: 'referral'
       },
 

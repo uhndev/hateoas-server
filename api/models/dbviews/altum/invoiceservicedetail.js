@@ -10,6 +10,12 @@
   _.merge(exports, {
 
     attributes: {
+      invoice: {
+        type: 'integer'
+      },
+      invoiceNumber: {
+        type: 'string'
+      },
       displayName: {
         type: 'string'
       },
@@ -20,9 +26,6 @@
         type: 'integer'
       },
       client_displayName: {
-        type: 'string'
-      },
-      MRN: {
         type: 'string'
       },
       altumService: {
@@ -64,32 +67,11 @@
       siteName: {
         type: 'string'
       },
-      workStatus: {
-        type: 'integer'
-      },
-      workStatusName: {
-        type: 'string'
-      },
-      prognosis: {
-        type: 'integer'
-      },
-      prognosisName: {
-        type: 'string'
-      },
-      prognosisTimeframe: {
-        type: 'integer'
-      },
-      prognosisTimeframeName: {
-        type: 'string'
-      },
       serviceDate: {
         type: 'datetime'
       },
       visitService: {
         model: 'service'
-      },
-      visitServiceName: {
-        type: 'string'
       },
       approvalNeeded: {
         type: 'boolean'
@@ -195,48 +177,6 @@
       },
       physician_displayName: {
         type: 'string'
-      },
-      numberDetailName: {
-        type: 'string'
-      },
-      numberDetail: {
-        type: 'integer'
-      },
-      textDetailName: {
-        type: 'string'
-      },
-      textDetail: {
-        type: 'string'
-      },
-      dateDetailName: {
-        type: 'string'
-      },
-      dateDetail: {
-        type: 'date'
-      },
-      physicianDetailName: {
-        type: 'string'
-      },
-      physicianDetail: {
-        type: 'integer'
-      },
-      staffDetailName: {
-        type: 'string'
-      },
-      staffDetail: {
-        type: 'integer'
-      },
-      timeframeDetailName: {
-        type: 'string'
-      },
-      timeframeDetail: {
-        type: 'integer'
-      },
-      measureDetailName: {
-        type: 'string'
-      },
-      measureDetail: {
-        type: 'json'
       },
       toJSON: ServiceModel.attributes.toJSON
     }

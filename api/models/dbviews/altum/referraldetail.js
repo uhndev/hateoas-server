@@ -51,11 +51,19 @@
         ].join('/')
       },
       {
-        'rel': sails.models.invoice.identity,
+        'rel': sails.models.invoiceservice.identity,
         'prompt': 'APP.HEADER.SUBMENU.BILLING',
         'name': 'name',
         'href': [
           sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'billing'
+        ].join('/')
+      },
+      {
+        'rel': sails.models.invoice.identity,
+        'prompt': 'APP.HEADER.SUBMENU.INVOICES',
+        'name': 'name',
+        'href': [
+          sails.config.appUrl + sails.config.blueprints.prefix, 'referral', id, 'invoices'
         ].join('/')
       }
     ];

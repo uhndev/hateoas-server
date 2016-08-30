@@ -21,20 +21,30 @@
        * @description an invoiceService's associated invoice
        * @type {Model}
        */
-
       invoice: {
         model: 'invoice'
       },
 
       /**
        * service
-       * @description an invoiceSerivce's associated service
+       * @description an invoiceService's associated service
        * @type {Model}
        */
-
       service: {
         model: 'service'
       },
+
+      /**
+       * expiredAt
+       * @description Instead of strictly deleting objects from our system, we set a date such
+       *              that if it is not null, we do not include this entity in our response.
+       * @type {Date} Date of expiry
+       */
+      expiredAt: {
+        type: 'datetime',
+        defaultsTo: null,
+        datetime: true
+      },      
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     }
