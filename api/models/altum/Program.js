@@ -62,6 +62,15 @@
         defaultsTo: true
       },
 
+      /**
+       * costCenter
+       * @description string contains the cost center for a given program
+       * @type {String}
+       */
+      costCenter: {
+        type: 'String'
+      },
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
