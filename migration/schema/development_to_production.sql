@@ -12,4 +12,7 @@ BEGIN;
   alter table altum.invoice add column "expiredAt" timestamp with time zone;
   alter table altum.invoiceservice add column "expiredAt" timestamp with time zone;
 
+  ALTER TABLE altum.program ADD COLUMN "costCenter" text;
+
+
 COMMIT;
