@@ -5,6 +5,7 @@ BEGIN;
 
   alter table altum.invoice add column "number" text;
   alter table altum.invoice add column "referral" integer;
+  alter table altum.invoice add column "comments" text;
   alter table altum.invoice add column "status" text default 'Pending';
 
   alter table altum.referral add column "readyToProcess" boolean default FALSE;

@@ -55,6 +55,15 @@
       },
 
       /**
+       * comments
+       * @description Simple text field for capturing invoice related comments
+       * @type {String}
+       */
+      comments: {
+        type: 'string'
+      },
+
+      /**
        * status
        * @description Status of Invoice stages - will be managed by an external process
        * @type {String}
@@ -116,12 +125,36 @@
      * @param  {Function} cb      callback function on completion
      */
     afterUpdate: function(updated, cb) {
-      if (!_.isNull(updated.expiredAt)) {
-        InvoiceService.update({ invoice: updated.id }, { expiredAt: new Date() }).exec(function (err, invoiceServices) {
-          cb(err);
-        });
-      } else {
-        cb();
+      switch (true) {
+        case !_.isNull(updated.expiredAt):
+          return InvoiceService.update({ invoice: updated.id }, { expiredAt: new Date() })
+            .then(function (invoiceServices) {
+              cb();
+            }).catch(cb);
+          break;
+        case updated.status === 'Voided':
+          return InvoiceService.find({invoice: updated.id})
+            .then(function (invoiceServices) {
+              return [
+                Service.find({id: _.map(invoiceServices, 'service')}),
+                Status.findOne({systemName: 'SUSPENDED'})
+              ];
+            })
+            .spread(function (services, suspendedStatus) {
+              return Promise.all(_.map(services, function (service) {
+                return BillingStatus.create({
+                  status: suspendedStatus.id,
+                  service: service.id,
+                  createdBy: 1,
+                  owner: 1
+                });
+              }));
+            })
+            .then(function (servicePromises) {
+              cb();
+            }).catch(cb);
+        default: 
+          return cb();
       }
     },
 
