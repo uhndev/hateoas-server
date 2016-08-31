@@ -55,6 +55,15 @@
       },
 
       /**
+       * comments
+       * @description Simple text field for capturing invoice related comments
+       * @type {String}
+       */
+      comments: {
+        type: 'string'
+      },
+
+      /**
        * status
        * @description Status of Invoice stages - will be managed by an external process
        * @type {String}
