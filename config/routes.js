@@ -34,6 +34,7 @@ module.exports.routes = {
 
   'get /api/checkexists/:model'           : 'ModelController.checkExists',
   'get /api/fetchtemplate/:model'         : 'ModelController.fetchTemplate',
+  'get /api/fetchpermissions/:model'      : 'PermissionController.fetchPermissions',
 
   /***************************************************************************
   * Locale Routes                                                            *
