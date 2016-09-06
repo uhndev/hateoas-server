@@ -112,52 +112,6 @@ module.exports = function sendOK (data, options) {
     return Promise.resolve(0);
   }
 
-  /**
-   * Private method for fetching which CRUD operations are permitted
-   * for the given model and user.
-   * @param  {model}
-   * @param  {user}
-   * @return {promise}
-   */
-  function fetchPermissions(model, user) {
-    // find for current model/user, which CRUD operations are permitted
-    return Promise.all(
-      _.map(['GET','POST','PUT','DELETE'], function(method) {
-        return PermissionService.findModelPermissions({
-          method: method,
-          model: model,
-          user: user
-        });
-      })
-    ).then(function (permissions) {
-      return _.reduce(permissions, function (result, permission) {
-        var perm = _.first(permission);
-        if (!_.isUndefined(perm) && _.has(perm, 'action')) {
-          var permissionObject = {
-            action: _.first(permission).action
-          };
-          // if permission has criteria with blacklisted attributes or where clause, include in result to filter hateoas template
-          if (_.has(perm, 'criteria')) {
-            if (_.has(_.first(perm.criteria), 'blacklist')) {
-              permissionObject.blacklist = _.first(perm.criteria).blacklist;
-            }
-            if (_.has(_.first(perm.criteria), 'where')) {
-              permissionObject.where = _.first(perm.criteria).where;
-            }
-          }
-          if (_.has(perm, 'relation')) {
-            permissionObject.relation = perm.relation;
-          }
-          return result.concat(permissionObject);
-        }
-        return result;
-      }, []);
-    })
-    .catch(function (err) {
-      return err;
-    });
-  }
-
   function sanitize(data) {
     var entityMap = {
       '<': '&lt;',
@@ -179,7 +133,7 @@ module.exports = function sendOK (data, options) {
       var query = Utils.Path.getWhere(req.query);
       var modelPromise = Model.findOne({name: permissionModel})
         .then(function (model) {
-          return fetchPermissions(model, req.user);
+          return PermissionService.fetchPermissions(model, req.user);
         });
       return [hateoasResponse, data.length, fetchResultCount(req, query, modelName), modelPromise];
     })
