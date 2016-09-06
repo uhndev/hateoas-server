@@ -15,5 +15,12 @@ BEGIN;
 
   ALTER TABLE altum.program ADD COLUMN "costCenter" text;
 
+-- Column: "number"
+
+ALTER TABLE altum.invoice DROP COLUMN "number";
+
+ALTER TABLE altum.invoice ADD COLUMN "number" integer;
+ALTER TABLE altum.invoice ALTER COLUMN "number" SET NOT NULL;
+ALTER TABLE altum.invoice ALTER COLUMN "number" SET DEFAULT nextval('altum.invoice_number_seq'::regclass);
 
 COMMIT;
