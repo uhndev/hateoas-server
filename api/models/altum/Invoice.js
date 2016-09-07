@@ -19,11 +19,12 @@
       /**
        * number
        * @description String denoting the Invoice number
-       * @type {String}
+       * @type {integer}
        */
       number: {
-        type: 'string',
-        unique: true
+        type: 'integer',
+        unique: true,
+        autoIncrement: true
       },
 
       /**
@@ -153,7 +154,7 @@
             .then(function (servicePromises) {
               cb();
             }).catch(cb);
-        default: 
+        default:
           return cb();
       }
     },
