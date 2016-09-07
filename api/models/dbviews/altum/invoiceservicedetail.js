@@ -14,7 +14,7 @@
         type: 'integer'
       },
       invoiceNumber: {
-        type: 'string'
+        type: 'integer'
       },
       displayName: {
         type: 'string'
