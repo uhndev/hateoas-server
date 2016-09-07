@@ -29,8 +29,7 @@
 
       /**
        * payor
-       * @description Only one of programService or payor should be set, if payor set, this
-       *              is a payor statusForm.
+       * @description Reference to the payor for which this statusform should be active.
        * @type {Model}
        */
       payor: {
@@ -39,8 +38,8 @@
 
       /**
        * altumservice
-       * @description Only one of programService or payor should be set, if programService set, this
-       *              is a programService statusForm.
+       * @description Reference to the altumservice for which this statusform should be active.
+       *              If set, takes precedence over payor.
        * @type {Model}
        */
       altumservice: {
@@ -49,8 +48,8 @@
 
       /**
        * programservice
-       * @description Only one of programService or payor should be set, if programService set, this
-       *              is a programService statusForm.
+       * @description Reference to the programservice for which this statusform should be active.
+       *              If set, takes precedence over altumservice.
        * @type {Model}
        */
       programservice: {
@@ -81,7 +80,7 @@
     beforeValidate: function (values, cb) {
       var promises = [];
 
-      _.each(['status', 'payor', 'programservice', 'systemform'], function (key) {
+      _.each(['status', 'payor', 'altumservice', 'programservice', 'systemform'], function (key) {
         if (values[key]) {
           promises.push(sails.models[key].findOne(_.has(values[key], 'id') ? values[key].id : values[key]));
         } else {
@@ -89,11 +88,12 @@
         }
       });
 
-      // builds displayName via: <STATUS> | (<PAYOR> || <PROGRAMSERVICE>) | <SYSTEMFORM>
-      return Promise.all(promises).spread(function (status, payor, programService, systemform) {
+      // builds displayName via: <STATUS> | (<PAYOR> || <ALTUMSERVICE> || <PROGRAMSERVICE>) | <SYSTEMFORM>
+      return Promise.all(promises).spread(function (status, payor, altumService, programService, systemform) {
         values.displayName = _.map(_.filter([
           status,
           payor,
+          altumService,
           programService,
           systemform
         ]), 'displayName').join(' | ');
