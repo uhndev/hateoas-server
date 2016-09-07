@@ -38,6 +38,16 @@
       },
 
       /**
+       * altumservice
+       * @description Only one of programService or payor should be set, if programService set, this
+       *              is a programService statusForm.
+       * @type {Model}
+       */
+      altumservice: {
+        model: 'altumservice'
+      },
+
+      /**
        * programservice
        * @description Only one of programService or payor should be set, if programService set, this
        *              is a programService statusForm.

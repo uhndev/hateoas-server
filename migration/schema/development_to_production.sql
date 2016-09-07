@@ -15,5 +15,6 @@ BEGIN;
 
   ALTER TABLE altum.program ADD COLUMN "costCenter" text;
 
+  alter table altum.statusform add column "altumservice" integer;
 
 COMMIT;
