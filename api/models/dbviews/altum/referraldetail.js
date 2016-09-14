@@ -217,6 +217,9 @@
       getResponseLinks: function () {
         return getResponseLinks(this.id, this.displayName);
       },
+      readyToProcess: {
+        type: 'boolean'
+      },
       toJSON: ReferralModel.attributes.toJSON
     },
 
