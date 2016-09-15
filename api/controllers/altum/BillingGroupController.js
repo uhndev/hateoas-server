@@ -24,7 +24,9 @@
         return Promise.all(_.map(newBillingGroups, function (newBillingGroup) {
           if (billingGroupID) {
             var services = [];
-            var templatedService = {};
+            var templatedService = {
+              createdBy: req.user.id
+            };
 
             // create however many service objects as was determined by totalItems
             for (var i=1; i <= newBillingGroup.totalItems; i++) {
@@ -38,6 +40,7 @@
             // create repeated services if applicable
             return services.length ? Service.create(services) : null;
           } else {
+            newBillingGroup.createdBy = req.user.id;
             return BillingGroup.create(newBillingGroup);
           }
         })).then(function (newBillingGroups) {

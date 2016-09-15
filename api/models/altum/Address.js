@@ -123,7 +123,8 @@
        * @type {Model}
        */
       person: {
-        model: 'person'
+        model: 'person',
+        preventCreate: true
       },
 
       /**
@@ -133,6 +134,7 @@
        */
       company: {
         model: 'company',
+        preventCreate: true,
         generator: function(state) {
           return BaseModel.defaultGenerator(state, 'company', Company);
         }
@@ -144,7 +146,8 @@
        * @type {Model}
        */
       site: {
-        model: 'site'
+        model: 'site',
+        preventCreate: true
       },
 
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
