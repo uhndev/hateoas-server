@@ -74,7 +74,6 @@
               'prompt': Utils.String.camelCaseToText(field),
               'value': definition.enum ? definition.enum : '',
               'preventCreate': models[modelName]._attributes[field].preventCreate,
-              'rules': models[modelName]._attributes[field].rules,
               'required': models[modelName]._attributes[field].required || false
             };
 
