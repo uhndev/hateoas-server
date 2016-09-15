@@ -89,6 +89,7 @@
               templatedService.itemCount = i;
               templatedService.billingGroupItemLabel = templateService.displayName + " " + i;
               templatedService.billingGroup = billingGroup.id;
+              templatedService.createdBy = billingGroup.createdBy;
               // service with itemCount === 1 will come from templateService
               if (i > 1) {
                 delete templatedService.id;
