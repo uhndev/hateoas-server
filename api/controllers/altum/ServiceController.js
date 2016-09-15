@@ -61,6 +61,7 @@
 
       if (newStatuses.length && model) {
         return Promise.all(_.map(newStatuses, function (newStatus) {
+          newStatus.createdBy = req.user.id;
           return sails.models[model].create(newStatus);
         })).then(function (newCreatedStatuses) {
           return res.ok(newCreatedStatuses);

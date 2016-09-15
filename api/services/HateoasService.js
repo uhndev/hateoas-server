@@ -5,7 +5,7 @@
       client = redis.createClient();
 
   module.exports = {
-    
+
     /**
      * makeToHATEOAS
      * @description Adds hateoas metadata to a bare sails item
@@ -27,7 +27,7 @@
 
     /**
      * getSelfLink
-     * @description Returns the URL endpoint for a given model name 
+     * @description Returns the URL endpoint for a given model name
      * @param modelName
      * @param id
      * @returns {string}
@@ -45,10 +45,10 @@
 
       return components.join('/');
     },
-    
+
     /**
      * makeTemplate
-     * @description Public method that creates the data object based on the schema of the given model 
+     * @description Public method that creates the data object based on the schema of the given model
      * @param modelName
      * @param previousModels
      */
@@ -74,7 +74,8 @@
               'prompt': Utils.String.camelCaseToText(field),
               'value': definition.enum ? definition.enum : '',
               'preventCreate': models[modelName]._attributes[field].preventCreate,
-              'required': sails.models[modelName]._attributes.required || false
+              'rules': models[modelName]._attributes[field].rules,
+              'required': models[modelName]._attributes[field].required || false
             };
 
             // haven't recursed on this model yet, so safe to recurse
