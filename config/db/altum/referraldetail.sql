@@ -56,7 +56,8 @@ CREATE OR REPLACE VIEW altum.referraldetail AS
     referral."createdBy",
     referral."createdAt",
     referral."updatedAt",
-    referral."referralComments"
+    referral."referralComments",
+    referral."readyToProcess"
 FROM altum.referral
   LEFT JOIN altum.client ON referral.client = client.id
   LEFT JOIN altum.person ON client.person = person.id

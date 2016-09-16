@@ -51,7 +51,7 @@
    */
   function checkAdminUser() {
     sails.log('checking admin user');
-    return User.findOne({ email: sails.config.permissions.adminEmail })
+    return User.findOne(1)
       .then(function (user) {
         if (_.isUndefined(user.group) || _.isNull(user.group)) {
           return User.update({ id: user.id }, {
@@ -107,4 +107,3 @@
       });
   }
 })();
-

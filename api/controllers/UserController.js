@@ -1,3 +1,4 @@
+  var bcrypt = require('../../node_modules/sails-auth/node_modules/bcryptjs');
 /**
  * UserController
  *
@@ -164,6 +165,7 @@
      */
     update: function (req, res) {
       var userId = req.param('id');
+      var password = req.param('password');
       var userOptions = _.pick(_.pick(req.body,
         'username', 'email', 'group', 'userType'
       ), _.identity);
@@ -176,9 +178,17 @@
         delete userOptions.group;
       }
 
-      User.findOne(userId)
+      Passport.findOne({ user : userId })
+        .then(function (passport) {
+          this.passport = passport;
+          return User.findOne(userId);
+        })
         .then(function (user) { // update user fields
           this.previousGroup = user.group;
+          // compares the current password to the changed one, if different update expiredPassword
+          if (!_.isEmpty(password)) {
+            userOptions.expiredPassword = bcrypt.compareSync(password, this.passport.password);
+          }
           return [
             User.update({id: user.id}, userOptions),
             Person.update({id: user.person}, personOptions)
@@ -192,15 +202,19 @@
             return user;
           }
         })
-        .then(function (user) { // find and update user's associated passport
-          if (!_.isEmpty(req.param('password'))) {
-            return Passport.findOne({ user : userId }).then(function (passport) {
-              return Passport.update(passport.id, { password : req.param('password') });
-            });
+        .then(function (user) { // updating group, apply new permissions
+          this.user = _.first(user);
+          if (this.previousGroup !== options.group && req.user.group === 'admin') {
+            return PermissionService.swapGroups(userId, this.previousGroup, options.group);
           }
-          return this.user;
+          return null;
         })
-        .then(function (user) {
+        .then(function(passport){ // updates the users passport and changes the email if there was a change
+          if (!_.isEmpty(password) && this.passport) {
+            return Passport.update(this.passport.id, { password: password });
+          }
+        })
+        .then(function () {
           res.ok(this.user);
         })
         .catch(function (err) {

@@ -68,6 +68,16 @@
       },
 
       /**
+       * expiredPassword
+       * @description flag put in place to see if the user has an expired password
+       * @type {Boolean} flag
+       */
+      expiredPassword: {
+        type:'boolean',
+        defaultsTo: true
+      },
+
+      /**
        * expiredAt
        * @description Instead of strictly deleting objects from our system, we set a date such
        *              that if it is not null, we do not include this entity in our response.
@@ -107,7 +117,7 @@
           }
         ]
       },
-
+      
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -263,4 +273,3 @@
     }
   });
 })();
-

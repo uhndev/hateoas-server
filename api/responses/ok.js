@@ -112,45 +112,6 @@ module.exports = function sendOK (data, options) {
     return Promise.resolve(0);
   }
 
-  /**
-   * Private method for fetching which CRUD operations are permitted
-   * for the given model and user.
-   * @param  {model}
-   * @param  {user}
-   * @return {promise}
-   */
-  function fetchPermissions(model, user) {
-    // find for current model/user, which CRUD operations are permitted
-    return Promise.all(
-      _.map(['GET','POST','PUT','DELETE'], function(method) {
-        return PermissionService.findModelPermissions({
-          method: method,
-          model: model,
-          user: user
-        });
-      })
-    ).then(function (permissions) {
-      return _.reduce(permissions, function (result, permission) {
-        var perm = _.first(permission);
-        if (!_.isUndefined(perm) && _.has(perm, 'action')) {
-          var permissionObject = {
-            action: _.first(permission).action
-          };
-          // if permission has criteria with blacklisted attributes ,include in result to filter hateoas template
-          if (_.has(perm, 'criteria') && _.has(_.first(perm.criteria), 'blacklist')) {
-            permissionObject.blacklist = _.first(perm.criteria).blacklist
-          }
-
-          return result.concat(permissionObject);
-        }
-        return result;
-      }, []);
-    })
-    .catch(function (err) {
-      return err;
-    });
-  }
-
   function sanitize(data) {
     var entityMap = {
       '<': '&lt;',
@@ -172,7 +133,7 @@ module.exports = function sendOK (data, options) {
       var query = Utils.Path.getWhere(req.query);
       var modelPromise = Model.findOne({name: permissionModel})
         .then(function (model) {
-          return fetchPermissions(model, req.user);
+          return PermissionService.fetchPermissions(model, req.user);
         });
       return [hateoasResponse, data.length, fetchResultCount(req, query, modelName), modelPromise];
     })
@@ -194,8 +155,21 @@ module.exports = function sendOK (data, options) {
         return result;
       }, {});
 
-      // include all blacklisted attributes in template
+      var where = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.where;
+        return result;
+      }, {});
+
+      // create relations dictionary of actions into relations array
+      var relations = _.reduce(permissions, function (result, permission) {
+        result[permission.action] = permission.relation;
+        return result;
+      }, {});
+
+      // includes different attributes into the template object
       hateoasResponse.template.blacklist = blacklist;
+      hateoasResponse.template.where = where;
+      hateoasResponse.template.relations = relations;
 
       // filter template data array based on any blacklisted attributes
       hateoasResponse.template.data = _.reject(hateoasResponse.template.data, function (field) {

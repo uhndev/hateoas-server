@@ -42,7 +42,7 @@
           this.referral.approvedServices = _.filter(services, {visitable: true});
           return res.ok(this.referral, {
             templateOverride: 'servicedetail',
-            permissionModel: 'service',
+            permissionModel: 'servicedetail',
             links: referraldetail.getResponseLinks(this.referral.id, this.displayName)
           });
         })
@@ -61,6 +61,7 @@
 
       if (newStatuses.length && model) {
         return Promise.all(_.map(newStatuses, function (newStatus) {
+          newStatus.createdBy = req.user.id;
           return sails.models[model].create(newStatus);
         })).then(function (newCreatedStatuses) {
           return res.ok(newCreatedStatuses);
