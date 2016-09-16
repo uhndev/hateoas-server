@@ -1,33 +1,33 @@
 -- Database Migration Script between dev branch and prod
--- Created July 20th 2016
+-- Updated Aug 25th 2016
 
 BEGIN;
 
-  alter table "user" add column "expiredPassword" boolean default true;
+  alter table altum.invoice add column "number" text;
+  alter table altum.invoice add column "referral" integer;
+  alter table altum.invoice add column "comments" text;
+  alter table altum.invoice add column "status" text default 'Pending';
 
-  CREATE TABLE altum.labeltype
-  (
-    "deletedBy" integer,
-    "displayName" text,
-    id serial NOT NULL,
-    name text,
-    "ZPL" text,
-    "createdBy" integer,
-    owner integer,
-    "createdAt" timestamp with time zone,
-    "updatedAt" timestamp with time zone,
-    CONSTRAINT labeltype_pkey PRIMARY KEY (id)
-  )
-  WITH (OIDS=FALSE);
-  ALTER TABLE altum.labeltype OWNER TO postgres;
-  CREATE INDEX "labeltype_createdBy" ON altum.labeltype USING btree ("createdBy");
-  CREATE INDEX labeltype_id ON altum.labeltype USING btree (id);
-  CREATE INDEX labeltype_owner ON altum.labeltype USING btree (owner);
+  alter table altum.referral add column "readyToProcess" boolean default FALSE;
 
-  update altum.status set category = 'billingstatus' where category = 'billing';
-  update altum.status set category = 'reportstatus' where category = 'report';
+  alter table altum.invoice add column "expiredAt" timestamp with time zone;
+  alter table altum.invoiceservice add column "expiredAt" timestamp with time zone;
 
-  -- update altum.status rules to new categories
-  -- update any service presets
+  ALTER TABLE altum.program ADD COLUMN "costCenter" text;
+
+  alter table altum.statusform add column "altumservice" integer;
+
+  ALTER TABLE altum.invoice DROP COLUMN "number";
+  ALTER TABLE altum.invoice ADD COLUMN "number" integer;
+  UPDATE altum.invoice SET "number" = 0 WHERE "number" IS NULL;
+  ALTER TABLE altum.invoice ALTER COLUMN "number" SET NOT NULL;
+  CREATE SEQUENCE altum.invoice_number_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+  ALTER TABLE altum.invoice_number_seq OWNER TO postgres;
+  ALTER TABLE altum.invoice ALTER COLUMN "number" SET DEFAULT nextval('altum.invoice_number_seq'::regclass);
 
 COMMIT;

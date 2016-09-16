@@ -76,6 +76,15 @@ module.exports.policies = {
     ]
   },
 
+  PermissionController: {
+    'fetchPermissions': [
+      'basicAuth',
+      'passport',
+      'tokenAuth',
+      'sessionAuth'
+    ]
+  },
+  
   EmailController: {
     sendEmail: [
       'basicAuth',

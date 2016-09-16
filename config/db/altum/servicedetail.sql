@@ -10,6 +10,7 @@ CREATE OR REPLACE VIEW altum.servicedetail AS
     service.referral,
     referral.client,
     client."displayName" AS "client_displayName",
+    client."MRN",
     altumservice.id AS "altumService",
     altumservice.name AS "altumServiceName",
     altumservice.visitable,
