@@ -5,41 +5,41 @@ BEGIN;
 
 -- Update User table with Staff people
 update "user" set person = subquery.staffperson from (select
-	staff.id,
-	staff.person staffperson,
-	"user".id "userID",
-	person."displayName",
-	person."firstName",
-	person."lastName",
-	"user".firstname,
-	"user".lastname,
-	"user".person
-from altum.staff
-	left join altum.person on person.id = staff.person
-	left join "user" on
-		"user".firstname like person."firstName" and
-		"user".lastname like person."lastName") as subquery
-where "user".id = subquery."userID" and
-	"user".firstname like subquery."firstName" and
-	"user".lastname like subquery."lastName";
+    staff.id,
+    staff.person staffperson,
+    "user".id "userID",
+    person."displayName",
+    person."firstName",
+    person."lastName",
+    "user".firstname "userFirstName",
+    "user".lastname "userLastName",
+    "user".person "userPerson"
+  from altum.staff
+    left join altum.person on person.id = staff.person
+    left join "user" on
+      "user".firstname like person."firstName" || '%' and
+      "user".lastname like person."lastName" || '%'
+  where staff.person is not null and person."firstName" is not null and person."lastName" is not null) as subquery
+where "user".id = subquery."userID";
 
 -- Update User table with Physician people
-update "user" set person = subquery."personID" from (select
-	physician.id,
-	person.id "personID",
-	"user".id "userID",
-	person."displayName",
-	person."firstName",
-	person."lastName",
-	"user"."displayName",
-	"user".firstname,
-	"user".lastname,
-	"user".person
-from altum.physician
-	left join altum.person on person.id = physician.person
-	left join "user" on
-		"user".firstname like person."firstName" and
-		"user".lastname like person."lastName") as subquery
+update "user" set person = subquery.physicianperson from (select
+    physician.id,
+    physician.person physicianperson,
+    "user".id "userID",
+    person."displayName",
+    person."firstName",
+    person."lastName",
+    "user"."displayName" "userDisplayName",
+    "user".firstname "userFirstName",
+    "user".lastname "userLastName",
+    "user".person "userPerson"
+  from altum.physician
+    left join altum.person on person.id = physician.person
+    left join "user" on
+      "user".firstname like person."firstName" || '%' and
+      "user".lastname like person."lastName" || '%'
+  where physician.person is not null and person."firstName" is not null and person."lastName" is not null) as subquery
 where "user".id = subquery."userID";
 
 -- Create Persons for Users who don't have Person and update User table with newly created Persons in

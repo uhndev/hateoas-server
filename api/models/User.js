@@ -53,7 +53,8 @@
        */
       userType: {
         type: 'string',
-        enum: ['approver', 'staff', 'physician']
+        enum: ['system', 'approver', 'staff', 'physician'],
+        defaultsTo: 'system'
       },
 
       /**
@@ -117,7 +118,7 @@
           }
         ]
       },
-      
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 
@@ -164,7 +165,7 @@
           .catch(cb);
       },
       function createUserType(user, cb) {
-        if (user.userType) {
+        if (user.userType && sails.models[user.userType]) {
           sails.models[user.userType].findOrCreate({person: user.person}, {person: user.person})
             .exec(function (err, createdUserType) {
               cb(err);
@@ -175,20 +176,18 @@
       }
     ],
 
-      /**
-       * beforeUpdate
-       * @description Before updating a user with possibly changed userType, find or create the associated
-       *              model if it doesn't exist yet
-       */
+    /**
+     * beforeUpdate
+     * @description Before updating a user with possibly changed userType, find or create the associated
+     *              model if it doesn't exist yet
+     */
     beforeUpdate: function updateUserType(values, cb) {
       if (values.userType) {
         return User.findOne({ username: values.username })
           .then(function (user) {
-            console.log(user.userType);
-            return (user.userType !== values.userType) ? sails.models[values.userType].findOrCreate({person: user.person}, {person: user.person}) : cb();
+            return (user.userType !== values.userType) ? sails.models[values.userType].findOrCreate({person: user.person}, {person: user.person}) : null;
           })
           .then(function (userType) {
-            console.log(userType);
             return cb();
           })
           .catch(function (err) {

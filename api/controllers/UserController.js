@@ -204,8 +204,8 @@
         })
         .then(function (user) { // updating group, apply new permissions
           this.user = _.first(user);
-          if (this.previousGroup !== options.group && req.user.group === 'admin') {
-            return PermissionService.swapGroups(userId, this.previousGroup, options.group);
+          if (this.previousGroup !== userOptions.group && req.user.group === 'admin') {
+            return PermissionService.swapGroups(userId, this.previousGroup, userOptions.group);
           }
           return null;
         })
