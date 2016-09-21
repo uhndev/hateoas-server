@@ -182,7 +182,7 @@
      *              model if it doesn't exist yet
      */
     beforeUpdate: function updateUserType(values, cb) {
-      if (values.userType) {
+      if (values.userType && sails.models[values.userType]) {
         return User.findOne({ username: values.username })
           .then(function (user) {
             return (user.userType !== values.userType) ? sails.models[values.userType].findOrCreate({person: user.person}, {person: user.person}) : null;
