@@ -8,9 +8,9 @@ class User:
   def __init__(self):
     self.username = fake.user_name()
     self.email = fake.company_email()
-    self.firstname = fake.first_name()
-    self.lastname = fake.last_name()
-    self.dob = fake.iso8601()
+    self.firstName = fake.first_name()
+    self.lastName = fake.last_name()
+    self.dateOfBirth = fake.iso8601()
     self.password = "Password123"
     self.prefix = random.choice(['Mr.', 'Mrs.', 'Ms.', 'Dr.'])
     self.gender = random.choice(['Male', 'Female'])

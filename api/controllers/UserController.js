@@ -25,24 +25,19 @@
         whereQuery = _.merge(actionUtil.parseCriteria(req), {group: {'!': 'subject'}});
       }
 
-      ModelService.filterExpiredRecords('user').where( whereQuery )
+      userperson.count(whereQuery)
         .exec(function (err, totalUsers) {
-          var query = ModelService.filterExpiredRecords('user');
+          var query = userperson.find();
           query
             .where( whereQuery )
             .limit( actionUtil.parseLimit(req) )
             .skip( actionUtil.parseSkip(req) )
             .sort( actionUtil.parseSort(req) );
-          query.populate('roles');
           query.exec(function found(err, users) {
             if (err) {
               res.serverError(err);
             }
-            if (req.user.group == 'admin') {
-              res.ok(users, { filteredTotal: totalUsers.length });
-            } else {
-              res.ok(users);
-            }
+            res.ok(users, { filteredTotal: totalUsers });
           });
         });
     },
@@ -51,22 +46,24 @@
      * findOne
      * @description finds one user by id and returns single user with populated collection centre association
      */
-    findOne: function (req, res, next) {
-      var query = User.findOne(req.param('id'));
+    findOne: function (req, res) {
+      var query = userperson.findOne(req.param('id'));
       query = actionUtil.populateRequest(query, req);
-      query.populate('enrollments');
       query.then(function (user) {
-        if(!user) {
-          return res.notFound({
-            title: 'Not Found',
-            code: 404,
-            message: 'No record found with the specified id.'
-          });
-        }
+          if (!user) {
+            return res.notFound({
+              title: 'Not Found',
+              code: 404,
+              message: 'No record found with the specified id.'
+            });
+          }
 
-        this.user = user;
+          this.user = user;
+          return UserEnrollment.find().where({user: user.id, expiredAt: null});
+        })
+      .then(function (enrollments) {
         return Promise.all(
-          _.map(_.filter(this.user.enrollments, { expiredAt: null }), function (enrollment) {
+          _.map(enrollments, function (enrollment) {
             return CollectionCentre.findOne(enrollment.collectionCentre).populate('study')
               .then(function (centre) {
                 enrollment.collectionCentre = centre.id;
@@ -131,28 +128,25 @@
      */
     create: function (req, res, next) {
       var userOptions = _.pick(_.pick(req.body,
-        'username', 'email', 'password'
+        'username', 'email', 'password', 'group', 'userType'
       ), _.identity);
-      var personInfo = _.pick(_.pick(req.body,
-        'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      userOptions.person = _.pick(_.pick(req.body,
+        'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
       ), _.identity);
 
-      User
-        .register(userOptions)
-        .then(function (createdUser) {
-          return Group.findOne(personInfo.group).then(function (newGroup) {
-            if (!newGroup) {
-              err = new Error('Group '+personInfo.group+' does not exist.');
-              err.status = 400;
-              throw err;
-            }
-            return User.update({id: createdUser.id}, personInfo);
-          });
+      Group.findOne(userOptions.group)
+        .then(function (group) {
+          if (!group) {
+            err = new Error('Group '+userOptions.group+' does not exist.');
+            err.status = 400;
+            throw err;
+          }
+          return User.register(userOptions);
         })
-        .then(function (updatedUser) {
-          return PermissionService.setDefaultGroupRoles(_.first(updatedUser))
+        .then(function (createdUser) {
+          return PermissionService.setDefaultGroupRoles(createdUser)
             .then(function () {
-              res.ok(_.first(updatedUser));
+              res.ok(createdUser);
             })
             .catch(function (err) {
               user.destroy(function (destroyErr) {
@@ -172,12 +166,16 @@
     update: function (req, res) {
       var userId = req.param('id');
       var password = req.param('password');
-      var options = _.pick(_.pick(req.body,
-        'username', 'email', 'prefix', 'firstname', 'lastname', 'gender', 'dob', 'group'
+      var userOptions = _.pick(_.pick(req.body,
+        'username', 'email', 'group', 'userType'
+      ), _.identity);
+
+      var personOptions = _.pick(_.pick(req.body,
+        'prefix', 'firstName', 'lastName', 'gender', 'dateOfBirth'
       ), _.identity);
 
       if (req.user.group !== 'admin') { // prevent all non-admin users from updating group
-        delete options.group;
+        delete userOptions.group;
       }
 
       Passport.findOne({ user : userId })
@@ -189,14 +187,25 @@
           this.previousGroup = user.group;
           // compares the current password to the changed one, if different update expiredPassword
           if (!_.isEmpty(password)) {
-            options.expiredPassword = bcrypt.compareSync(password, this.passport.password);
+            userOptions.expiredPassword = bcrypt.compareSync(password, this.passport.password);
           }
-          return User.update({id: user.id}, options);
+          return [
+            User.update({id: user.id}, userOptions),
+            Person.update({id: user.person}, personOptions)
+          ];
+        })
+        .spread(function (user, person) { // updating group, apply new permissions
+          this.user = user;
+          if (this.previousGroup !== userOptions.group && req.user.group === 'admin') {
+            return PermissionService.swapGroups(userId, this.previousGroup, userOptions.group);
+          } else {
+            return user;
+          }
         })
         .then(function (user) { // updating group, apply new permissions
           this.user = _.first(user);
-          if (this.previousGroup !== options.group && req.user.group === 'admin') {
-            return PermissionService.swapGroups(userId, this.previousGroup, options.group);
+          if (this.previousGroup !== userOptions.group && req.user.group === 'admin') {
+            return PermissionService.swapGroups(userId, this.previousGroup, userOptions.group);
           }
           return null;
         })
@@ -211,50 +220,6 @@
         .catch(function (err) {
           res.badRequest(err);
         });
-    },
-
-    /**
-     * updateRoles
-     * @description Route for handling role updates from access management page
-     */
-    updateRoles: function (req, res, next) {
-      // user params
-      var userId = req.param('id');
-      // access control params
-      var roles = req.param('roles'),
-          updateGroup = req.param('updateGroup');
-
-      // Update user role from access management
-      if (!_.isUndefined(updateGroup)) {
-        return User.findOne(userId).populate('roles')
-        .then(function (user) {
-          user.group = updateGroup;
-          this.user = user;
-          return user.save();
-        })
-        .then(function () {
-          return PermissionService.setDefaultGroupRoles(this.user);
-        })
-        .then(function () {
-          res.ok(this.user);
-        })
-        .catch(function (err) {
-          res.serverError(err);
-        });
-      }
-      // Update user access matrix
-      else if (!_.isUndefined(roles)) {
-        return User.findOne(userId)
-        .then(function (user) {
-          return PermissionService.grantPermissions(user, roles);
-        })
-        .then(function (user) {
-          res.ok(user);
-        })
-        .catch(function (err) {
-          res.serverError(err);
-        });
-      }
     }
 
   });

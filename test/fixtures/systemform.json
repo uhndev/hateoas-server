@@ -108,7 +108,7 @@
       },
       {
         "field_id": 6,
-        "field_name": "lastname",
+        "field_name": "lastName",
         "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.LAST_NAME",
         "field_type": "textfield",
         "field_value": "",
@@ -149,7 +149,7 @@
       },
       {
         "field_id": 8,
-        "field_name": "dob",
+        "field_name": "dateOfBirth",
         "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.DATE_BIRTH",
         "field_type": "date",
         "field_value": "",
@@ -164,6 +164,38 @@
       },
       {
         "field_id": 9,
+        "field_name": "userType",
+        "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.USER_TYPE",
+        "field_type": "dropdown",
+        "field_value": "",
+        "field_placeholder": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.USER_TYPE_PLACEHOLDER",
+        "field_validation": {
+          "rule": "none",
+          "expression": ""
+        },
+        "field_helpertext": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.INVALID_INPUT",
+        "field_hasOptions": true,
+        "field_required": true,
+        "field_options": [
+          {
+            "option_id": 1,
+            "option_title": "Approver",
+            "option_value": "approver"
+          },
+          {
+            "option_id": 2,
+            "option_title": "Staff",
+            "option_value": "staff"
+          },
+          {
+            "option_id": 3,
+            "option_title": "Physician",
+            "option_value": "physician"
+          }
+        ]
+      },
+      {
+        "field_id": 10,
         "field_name": "group",
         "field_title": "COMMON.MODELS.SYSTEM_FORM.USER.QUESTIONS.GROUP",
         "field_type": "dropdown",

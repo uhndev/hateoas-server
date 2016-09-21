@@ -75,7 +75,7 @@
           );
 
           User.findOne(user.id).exec(function (err, data) {
-            var userObj = _.pick(user, 'id', 'username', 'prefix', 'firstname', 'lastname', 'group','expiredPassword');
+            var userObj = _.pick(user, 'id', 'username', 'displayName', 'group', 'expiredPassword');
             var resp = {
               user: userObj,
               token: {

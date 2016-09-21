@@ -41,6 +41,7 @@
   _.merge(exports, {
 
     attributes: {
+
       MRN: {
         type: 'string',
         index: true

@@ -8,7 +8,7 @@
     "links": [],
     "queries": [],
     "template": {
-      "rel": "user",
+      "rel": "userperson",
       "systemform": "user",
       "data": [
         {
@@ -30,13 +30,13 @@
           "value": ""
         },
         {
-          "name": "firstname",
+          "name": "firstName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER.FIRSTNAME",
           "value": ""
         },
         {
-          "name": "lastname",
+          "name": "lastName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER.LASTNAME",
           "value": ""
@@ -48,7 +48,7 @@
           "value": ""
         },
         {
-          "name": "dob",
+          "name": "dateOfBirth",
           "type": "date",
           "prompt": "COMMON.MODELS.USER.DOB",
           "value": ""
@@ -246,13 +246,13 @@
           "value": ""
         },
         {
-          "name": "firstname",
+          "name": "firstName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER_ENROLLMENT.FIRSTNAME",
           "value": ""
         },
         {
-          "name": "lastname",
+          "name": "lastName",
           "type": "string",
           "prompt": "COMMON.MODELS.USER_ENROLLMENT.LASTNAME",
           "value": ""

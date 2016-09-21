@@ -6,6 +6,7 @@
  */
 
 (function () {
+
   var _super = require('./AltumBaseModel.js');
   var moment = require('moment');
   var _ = require('lodash');
@@ -60,7 +61,6 @@
         collection: 'note',
         via: 'client'
       },
-
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
     },
 

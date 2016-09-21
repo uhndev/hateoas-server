@@ -8,7 +8,7 @@
  */
 
 
-(function() {
+(function () {
   var _super = require('./BaseModel.js');
   var faker = require('faker');
 
@@ -22,69 +22,8 @@
 
     defaultSortBy: 'displayName ASC',
 
-    displayFields: [ 'prefix', 'firstname', 'lastname'],
-
     attributes: {
-      
-      /**
-       * firstname
-       * @description A user's first name.
-       * @type {String}
-       */
-      firstname: {
-        type: 'string',
-        generator: faker.name.firstName
-      },
 
-      /**
-       * lastname
-       * @description A user's last name.
-       * @type {String}
-       */
-      lastname: {
-        type: 'string',
-        generator: faker.name.lastName
-      },
-
-      /**
-       * prefix
-       * @description Enumeration of allowable prefixes for a user.
-       * @type {Enum}
-       */
-
-      prefix: {
-        type: 'string',
-        enum: ['Mr.', 'Mrs.', 'Ms.', 'Dr.'],
-        generator: function () {
-          return _.sample(User.attributes.prefix.enum);
-        }
-      },
-
-      /**
-       * gender
-       * @description Enumeration of allowable genders of a user.
-       * @type {Enum}
-       */
-      gender: {
-        type: 'string',
-        enum: ['Male', 'Female'],
-        generator: function() {
-          return _.sample(User.attributes.gender.enum);
-        }
-      },
-      
-      /**
-       * dob
-       * @description A user's date of birth.
-       * @type {Date}
-       */
-      dob: {
-        type: 'date',
-        generator: function(state) {
-          return faker.date.past();
-        }
-      },
-      
       /**
        * group
        * @description A user's registered group which in turn dictates what actions
@@ -93,31 +32,29 @@
        */
       group: {
         model: 'group',
-        generator: function(state) {
-          return (state && _.has(state, 'group')) ? state.group: 'coordinator';
+        generator: function (state) {
+          return (state && _.has(state, 'group')) ? state.group : 'coordinator';
         }
       },
-      
+
       /**
-       * owner
-       * @description Reference to who the 'owner' of this is - is used in the owner
-       *              relation in roles like readUserOwner/updateUserOwner which are
-       *              roles specifically for handling read/updates of themselves.
+       * person
+       * @description Reference to who the 'person' of this is
        * @type {Association}
        */
-      owner: {
-        model: 'user'
+      person: {
+        model: 'person'
       },
 
       /**
-       * owner
-       * @description Reference to who the 'person' of this is -
-       *
-       * @type {Association}
+       * userType
+       * @description Fixed enum of login-able user types that can be created
+       * @type {Enum}
        */
-
-      person: {
-        model:'person'
+      userType: {
+        type: 'string',
+        enum: ['system', 'approver', 'staff', 'physician'],
+        defaultsTo: 'system'
       },
 
       /**
@@ -161,11 +98,11 @@
        * @param  {ID} id Study ID
        * @return {Array} Array of response links
        */
-      getResponseLinks: function(id) {
+      getResponseLinks: function (id) {
         return [
           {
             'rel': 'name',
-            'prompt': Utils.User.getFullName(this),
+            'prompt': this.displayName,
             'name': 'name',
             'href': [
               sails.config.appUrl + sails.config.blueprints.prefix, 'user', this.id
@@ -181,8 +118,32 @@
           }
         ]
       },
-      
+
       toJSON: HateoasService.makeToHATEOAS.call(this, module)
+    },
+
+    /**
+     * beforeValidate
+     * @description After validation/creation displayName is updated with values
+     *              from fields listed in the defaultsTo attribute of displayName
+     *              this can be overridden in child models inheriting from the
+     *              basemodel to pick specific fields
+     * @param  {Object}   values  given User object for creation
+     * @param  {Function} cb      callback function on completion
+     */
+    beforeValidate: function (values, cb) {
+      if (values.person) {
+        Person.findOne(values.person).exec(function (err, person) {
+          if (err) {
+            cb(err);
+          } else {
+            values.displayName = person.displayName;
+            cb();
+          }
+        });
+      } else {
+        cb();
+      }
     },
 
     /**
@@ -203,18 +164,39 @@
           })
           .catch(cb);
       },
-      function setProvider(user, cb) {
-        if (user.group == 'provider') { // if desired group is provider, create associated provider
-          Provider.create({ user: user.id })
-            .then(function (user) {
-              cb();
-            })
-            .catch(cb);
+      function createUserType(user, cb) {
+        if (user.userType && sails.models[user.userType]) {
+          sails.models[user.userType].findOrCreate({person: user.person}, {person: user.person})
+            .exec(function (err, createdUserType) {
+              cb(err);
+            });
         } else {
           cb();
         }
       }
     ],
+
+    /**
+     * beforeUpdate
+     * @description Before updating a user with possibly changed userType, find or create the associated
+     *              model if it doesn't exist yet
+     */
+    beforeUpdate: function updateUserType(values, cb) {
+      if (values.userType) {
+        return User.findOne({ username: values.username })
+          .then(function (user) {
+            return (user.userType !== values.userType) ? sails.models[values.userType].findOrCreate({person: user.person}, {person: user.person}) : null;
+          })
+          .then(function (userType) {
+            return cb();
+          })
+          .catch(function (err) {
+            return cb(err);
+          });
+      } else {
+        cb();
+      }
+    },
 
     /**
      * afterUpdate
@@ -225,27 +207,27 @@
      * @param  {Object}   updated updated user object
      * @param  {Function} cb      callback function on completion
      */
-    afterUpdate: function(updated, cb) {
+    afterUpdate: function (updated, cb) {
       if (!_.isNull(updated.expiredAt)) {
-        UserEnrollment.update({ user: updated.id }, { expiredAt: new Date() })
-        .then(function (userEnrollments) {
-          // find if deleted user was a subject
-          return Subject.find({ user: updated.id });
-        })
-        .then(function (subjects) {
-          // update any possible subject enrollments
-          return SubjectEnrollment.update({ subject: _.pluck(subjects, 'id') }, { expiredAt: new Date() });
-        })
-        .then(function (subjectEnrollments) {
-          cb();
-        })
-        .catch(cb);
+        UserEnrollment.update({user: updated.id}, {expiredAt: new Date()})
+          .then(function (userEnrollments) {
+            // find if deleted user was a subject
+            return Subject.find({user: updated.id});
+          })
+          .then(function (subjects) {
+            // update any possible subject enrollments
+            return SubjectEnrollment.update({subject: _.pluck(subjects, 'id')}, {expiredAt: new Date()});
+          })
+          .then(function (subjectEnrollments) {
+            cb();
+          })
+          .catch(cb);
       } else if (updated.group == 'provider') {
-        Provider.findOne({ user: updated.id }).exec(function (err, provider) {
+        Provider.findOne({user: updated.id}).exec(function (err, provider) {
           if (err) {
             cb(err);
           } else {
-            var promise = (!provider) ? Provider.create({ user: updated.id }) : Provider.update({ id: provider.id }, { user: updated.id });
+            var promise = (!provider) ? Provider.create({user: updated.id}) : Provider.update({id: provider.id}, {user: updated.id});
             promise.then(function (updatedProvider) {
               cb();
             }).catch(cb);
@@ -276,16 +258,17 @@
         }
       });
 
-      return _.merge({
+      return {
         username: faker.internet.userName(),
         email: faker.internet.email(),
+        person: userInfo,
         passports: [
           {
             protocol: 'local',
             password: 'Password123'
           }
         ]
-      }, userInfo);
+      };
     }
   });
 })();
